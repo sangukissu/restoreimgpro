@@ -94,70 +94,73 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
           </div>
 
           {/* Image Comparison Container */}
-          <div
-            ref={containerRef}
-            className="relative w-full aspect-[4/3] bg-gray-50 rounded-md overflow-hidden cursor-col-resize select-none border border-gray-100"
-            onMouseDown={handleMouseDown}
-            onTouchStart={handleMouseDown}
-          >
-            {/* Restored Image (Background) */}
-            <img
-              src={restoredUrl || "/placeholder.svg"}
-              alt="Restored image"
-              className="absolute inset-0 w-full h-full object-contain"
-              draggable={false}
-            />
-
-            {/* Original Image (Clipped) */}
+          <div className="flex justify-center">
             <div
-              className="absolute inset-0 overflow-hidden"
-              style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+              ref={containerRef}
+              className="relative max-w-full max-h-[600px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
+              onMouseDown={handleMouseDown}
+              onTouchStart={handleMouseDown}
             >
+              {/* Restored Image (Background) */}
               <img
-                src={originalUrl || "/placeholder.svg"}
-                alt="Original image"
-                className="w-full h-full object-contain"
+                src={restoredUrl || "/placeholder.svg"}
+                alt="Restored image"
+                className="block max-w-full max-h-[600px] w-auto h-auto object-contain"
                 draggable={false}
               />
-            </div>
 
-            <AnimatePresence initial={false}>
-              <motion.div
-                className="h-full w-px absolute top-0 m-auto z-30 bg-gradient-to-b from-transparent from-[5%] to-[95%] via-indigo-500 to-transparent"
-                style={{
-                  left: `${sliderPosition}%`,
-                  top: "0",
-                  zIndex: 40,
-                }}
-                transition={{ duration: 0 }}
+              {/* Original Image (Clipped) */}
+              <div
+                className="absolute inset-0 overflow-hidden"
+                style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
               >
-                <div className="w-36 h-full [mask-image:radial-gradient(100px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-indigo-400 via-transparent to-transparent z-20 opacity-50" />
-                <div className="w-10 h-1/2 [mask-image:radial-gradient(50px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-cyan-400 via-transparent to-transparent z-10 opacity-100" />
-                <div className="w-10 h-3/4 top-1/2 -translate-y-1/2 absolute -right-10 [mask-image:radial-gradient(100px_at_left,white,transparent)]">
-                  <SparklesCore
-                    background="transparent"
-                    minSize={0.4}
-                    maxSize={1}
-                    particleDensity={1200}
-                    className="w-full h-full"
-                    particleColor="#FFFFFF"
-                  />
-                </div>
-                <div className="h-5 w-5 rounded-md top-1/2 -translate-y-1/2 bg-white z-30 -right-2.5 absolute flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40]">
-                  <IconDotsVertical className="h-4 w-4 text-black" />
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                <img
+                  src={originalUrl || "/placeholder.svg"}
+                  alt="Original image"
+                  className="w-full h-full object-contain"
+                  draggable={false}
+                />
+              </div>
 
-            {/* Labels */}
-            <div className="absolute top-3 left-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
-              Original
-            </div>
-            <div className="absolute top-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
-              Restored
+              <AnimatePresence initial={false}>
+                <motion.div
+                  className="h-full w-px absolute top-0 m-auto z-30 bg-gradient-to-b from-transparent from-[5%] to-[95%] via-indigo-500 to-transparent"
+                  style={{
+                    left: `${sliderPosition}%`,
+                    top: "0",
+                    zIndex: 40,
+                  }}
+                  transition={{ duration: 0 }}
+                >
+                  <div className="w-36 h-full [mask-image:radial-gradient(100px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-indigo-400 via-transparent to-transparent z-20 opacity-50" />
+                  <div className="w-10 h-1/2 [mask-image:radial-gradient(50px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-cyan-400 via-transparent to-transparent z-10 opacity-100" />
+                  <div className="w-10 h-3/4 top-1/2 -translate-y-1/2 absolute -right-10 [mask-image:radial-gradient(100px_at_left,white,transparent)]">
+                    <SparklesCore
+                      background="transparent"
+                      minSize={0.4}
+                      maxSize={1}
+                      particleDensity={1200}
+                      className="w-full h-full"
+                      particleColor="#FFFFFF"
+                    />
+                  </div>
+                  <div className="h-5 w-5 rounded-md top-1/2 -translate-y-1/2 bg-white z-30 -right-2.5 absolute flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40]">
+                    <IconDotsVertical className="h-4 w-4 text-black" />
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Labels */}
+              <div className="absolute top-3 left-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
+                Original
+              </div>
+              <div className="absolute top-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
+                Restored
+              </div>
             </div>
           </div>
 
+          {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center pt-2">
             <Button
               onClick={handleDownload}
