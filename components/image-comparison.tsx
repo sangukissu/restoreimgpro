@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { SparklesCore } from "@/components/ui/sparkles"
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, motion } from "framer-motion"
 import { IconDotsVertical } from "@tabler/icons-react"
 
 interface ImageComparisonProps {
