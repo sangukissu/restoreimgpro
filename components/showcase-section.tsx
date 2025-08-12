@@ -1,0 +1,111 @@
+"use client"
+
+import { Compare } from "@/components/ui/compare"
+import { Cover } from "@/components/ui/cover"
+
+export default function ShowcaseSection() {
+  const showcaseItems = [
+    {
+      title: "Torn & Ripped Photos",
+      description: "Seamlessly repair tears and missing pieces",
+      beforeImage: "/placeholder.svg?height=300&width=480&text=Torn+Photo+Before",
+      afterImage: "/placeholder.svg?height=300&width=480&text=Restored+Photo+After",
+    },
+    {
+      title: "Faded & Yellowed",
+      description: "Restore original colors and vibrancy",
+      beforeImage: "/placeholder.svg?height=300&width=480&text=Faded+Photo+Before",
+      afterImage: "/placeholder.svg?height=300&width=480&text=Vibrant+Photo+After",
+    },
+    {
+      title: "Water Damaged",
+      description: "Remove stains and water marks completely",
+      beforeImage: "/placeholder.svg?height=300&width=480&text=Water+Damaged+Before",
+      afterImage: "/placeholder.svg?height=300&width=480&text=Clean+Photo+After",
+    },
+    {
+      title: "Scratched & Cracked",
+      description: "Eliminate scratches and surface damage",
+      beforeImage: "/placeholder.svg?height=300&width=480&text=Scratched+Photo+Before",
+      afterImage: "/placeholder.svg?height=300&width=480&text=Smooth+Photo+After",
+    },
+    {
+      title: "Blurred & Out of Focus",
+      description: "Sharpen details and enhance clarity",
+      beforeImage: "/placeholder.svg?height=300&width=480&text=Blurred+Photo+Before",
+      afterImage: "/placeholder.svg?height=300&width=480&text=Sharp+Photo+After",
+    },
+    {
+      title: "Dark & Underexposed",
+      description: "Brighten shadows and recover hidden details",
+      beforeImage: "/placeholder.svg?height=300&width=480&text=Dark+Photo+Before",
+      afterImage: "/placeholder.svg?height=300&width=480&text=Bright+Photo+After",
+    },
+  ]
+
+  return (
+    <section className="px-4 py-20 bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+                  <p className="text-gray-500 italic text-lg mb-4">Real Transformations</p>
+          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
+            Every type of damage,
+            <br />
+            <span className="text-gray-600"><Cover>perfectly restored</Cover>
+</span>
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            From torn family portraits to faded wedding photos, see how BringBack handles every type of photo damage
+            with precision and care.
+          </p>
+        </div>
+
+        {/* Showcase Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {showcaseItems.map((item, index) => (
+            <div key={index} className="group">
+              <div className="bg-white rounded-2xl p-6 border-6 border-gray-200 bg-transparent">
+                {/* Header */}
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-bold text-black mb-2">{item.title}</h3>
+                  <p className="text-gray-600 text-sm">{item.description}</p>
+                </div>
+
+                {/* Compare Slider */}
+                <div className="flex justify-center">
+                  <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
+                    <Compare
+                      firstImage={item.beforeImage}
+                      secondImage={item.afterImage}
+                      firstImageClassName="object-cover"
+                      secondImageClassname="object-cover"
+                      className="h-[220px] w-[320px] rounded-lg"
+                      slideMode="hover"
+                      showHandlebar={true}
+                    />
+                  </div>
+                </div>
+
+         
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="text-center mt-16">
+          <div className="max-w-2xl mx-auto">
+            <p className="text-gray-600 mb-6">
+              Our AI handles even the most unique photo restoration challenges. Upload your photo and see the magic
+              happen.
+            </p>
+            <button className="bg-black text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200 shadow-sm hover:shadow-md">
+              Restore Your Photo Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
