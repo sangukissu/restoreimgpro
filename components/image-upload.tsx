@@ -199,6 +199,6 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     </div>
   </div>
 </div>
-    </div>
+  
   )
 }
