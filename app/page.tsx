@@ -8,7 +8,7 @@ import { Compare } from "@/components/ui/compare" // Added Compare import
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <FloatingHeader />
       {/* Hero Section */}
       <section className="px-6 py-20 pt-32 max-w-6xl mx-auto text-center">
         <div className="space-y-6">
