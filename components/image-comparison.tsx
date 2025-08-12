@@ -2,6 +2,9 @@
 
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
+import { SparklesCore } from "@/components/ui/sparkles"
+import { AnimatePresence, motion } from "motion/react"
+import { IconDotsVertical } from "@tabler/icons-react"
 
 interface ImageComparisonProps {
   originalUrl: string
@@ -82,18 +85,18 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-white/60 backdrop-blur-sm border-2 border-gray-200 rounded-2xl p-8">
-        <div className="space-y-6">
+      <div className="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+        <div className="space-y-8">
           {/* Header */}
           <div className="text-center">
-            <h3 className="font-inter font-semibold text-2xl text-black mb-2">Restoration Complete!</h3>
-            <p className="text-gray-600">Drag the slider to compare before and after</p>
+            <h3 className="font-medium text-xl text-gray-900 mb-1">Restoration Complete</h3>
+            <p className="text-gray-500 text-sm">Drag the slider to compare before and after</p>
           </div>
 
           {/* Image Comparison Container */}
           <div
             ref={containerRef}
-            className="relative w-full aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden cursor-col-resize select-none"
+            className="relative w-full aspect-[4/3] bg-gray-50 rounded-md overflow-hidden cursor-col-resize select-none border border-gray-100"
             onMouseDown={handleMouseDown}
             onTouchStart={handleMouseDown}
           >
@@ -118,41 +121,72 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
               />
             </div>
 
-            {/* Slider Line */}
-            <div
-              className="absolute top-0 bottom-0 w-1 bg-white shadow-lg z-10 cursor-col-resize"
-              style={{ left: `${sliderPosition}%`, transform: "translateX(-50%)" }}
-            >
-              {/* Slider Handle */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg border-2 border-gray-300 flex items-center justify-center">
-                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-                </svg>
-              </div>
-            </div>
+            <AnimatePresence initial={false}>
+              <motion.div
+                className="h-full w-px absolute top-0 m-auto z-30 bg-gradient-to-b from-transparent from-[5%] to-[95%] via-indigo-500 to-transparent"
+                style={{
+                  left: `${sliderPosition}%`,
+                  top: "0",
+                  zIndex: 40,
+                }}
+                transition={{ duration: 0 }}
+              >
+                <div className="w-36 h-full [mask-image:radial-gradient(100px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-indigo-400 via-transparent to-transparent z-20 opacity-50" />
+                <div className="w-10 h-1/2 [mask-image:radial-gradient(50px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-cyan-400 via-transparent to-transparent z-10 opacity-100" />
+                <div className="w-10 h-3/4 top-1/2 -translate-y-1/2 absolute -right-10 [mask-image:radial-gradient(100px_at_left,white,transparent)]">
+                  <SparklesCore
+                    background="transparent"
+                    minSize={0.4}
+                    maxSize={1}
+                    particleDensity={1200}
+                    className="w-full h-full"
+                    particleColor="#FFFFFF"
+                  />
+                </div>
+                <div className="h-5 w-5 rounded-md top-1/2 -translate-y-1/2 bg-white z-30 -right-2.5 absolute flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40]">
+                  <IconDotsVertical className="h-4 w-4 text-black" />
+                </div>
+              </motion.div>
+            </AnimatePresence>
 
             {/* Labels */}
-            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
+            <div className="absolute top-3 left-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
               Original
             </div>
-            <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
+            <div className="absolute top-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
               Restored
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center pt-2">
             <Button
               onClick={handleDownload}
-              className="bg-green-600 text-white hover:bg-green-700 px-8 py-3 text-base font-medium rounded-full"
+              className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
             >
-              Download Restored
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              Download
             </Button>
+
             <Button
               onClick={onStartOver}
               variant="outline"
-              className="px-6 py-3 text-base font-medium rounded-full bg-transparent"
+              className="border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 hover:text-gray-900 px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center bg-transparent"
             >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
               Restore Another
             </Button>
           </div>
