@@ -87,7 +87,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
   if (selectedFile instanceof File && typeof selectedImageUrl === "string" && selectedImageUrl) {
     return (
       <div className="w-full max-w-lg mx-auto px-4">
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <div className="bg-white border rounded-xl p-6 shadow-sm">
           <div className="space-y-6">
             {/* Image Preview */}
             <div className="w-full aspect-square max-w-xs mx-auto overflow-hidden rounded-lg border border-gray-100">
@@ -175,21 +175,6 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
         </div>
       </div>
 
-      {/* Sample Images */}
-      <div className="mt-6 text-center">
-        <p className="text-gray-600 mb-4 text-xs sm:text-sm">No image? Try one of these</p>
-        <div className="flex justify-center gap-2 sm:gap-3">
-          {sampleImages.map((src, index) => (
-            <button
-              key={index}
-              onClick={() => handleSampleImageClick(src)}
-              className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-gray-300 transition-colors shadow-sm"
-            >
-              <img src={src || "/placeholder.svg"} alt={`Sample ${index + 1}`} className="w-full h-full object-cover" />
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
