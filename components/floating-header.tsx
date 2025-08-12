@@ -56,7 +56,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   })
 
   return (
-    <motion.div className={cn("fixed inset-x-0 top-0 z-40 w-full", className)}>
+    <motion.div className={cn("fixed inset-x-0 top-0 z-40 w-full px-6", className)}>
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
           ? React.cloneElement(child as React.ReactElement<{ visible?: boolean }>, { visible })
