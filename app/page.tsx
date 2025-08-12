@@ -1,8 +1,8 @@
 import Link from "next/link"
 import FloatingHeader from "@/components/floating-header"
-
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles, Clock, Shield, Heart } from "lucide-react"
+import Header from "@/components/header" // Added header import
 import { PointerHighlight } from "@/components/pointer-highlight" // Added PointerHighlight import
 import { Compare } from "@/components/ui/compare" // Added Compare import
 
@@ -10,35 +10,41 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       <FloatingHeader />
-    
+      {/* Hero Section */}
       <section className="px-6 py-20 pt-32 max-w-6xl mx-auto text-center">
-        {" "}
-        {/* Increased max-width for better layout */}
         <div className="space-y-12">
-          {" "}
-          {/* Increased spacing */}
           <div className="space-y-6">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-black leading-tight">
-              {" "}
-              {/* Fixed mobile responsiveness */}
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-4">
+              <Sparkles className="w-3 h-3 mr-1" />
+              AI Powered
+            </div>
+            <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
               Bring back{" "}
-              <PointerHighlight rectangleClassName="bg-purple-100 border-purple-300" pointerClassName="text-purple-500">
-                <span className="bg-purple-100 px-2 py-1 rounded">memories</span>
-              </PointerHighlight>{" "}
-              to boost life
-              <br />
-              and increase{" "}
-              <PointerHighlight rectangleClassName="bg-blue-100 border-blue-300" pointerClassName="text-blue-500">
-                <span className="bg-blue-100 px-2 py-1 rounded">happiness</span>
+              <PointerHighlight
+                rectangleClassName="bg-purple-100 dark:bg-purple-900 border-purple-300 dark:border-purple-700 leading-tight px-1"
+                pointerClassName="text-purple-500 h-3 w-3"
+                containerClassName="inline-block mx-1"
+              >
+                <span className="relative z-10">old photos</span>
               </PointerHighlight>
+              <br />
+              and
+              <br />
+              <PointerHighlight
+                rectangleClassName="bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-tight px-1"
+                pointerClassName="text-blue-500 h-3 w-3"
+                containerClassName="inline-block mx-1"
+              >
+                <span className="relative z-10">faded memories</span>
+              </PointerHighlight>{" "}
+              to life
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              {" "}
-              {/* Improved mobile text size */}
-              Transform damaged, faded photos into stunning memories - pay once, stay restored forever.
+              Restore your old, faded, torn or damaged photos into vibrant memories again. Quick restoration simple
+              process and a lifetime of preserved moments.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-row gap-4 justify-center items-center">
             <Link href="/dashboard">
             <Button
               size="lg"
@@ -61,26 +67,10 @@ export default function Page() {
           <div className="flex flex-col items-center space-y-4 pt-8">
             <div className="flex items-center space-x-2">
               <div className="flex -space-x-2">
-                <img
-                  className="w-8 h-8 rounded-full border-2 border-white"
-                  src="/happy-user-1.png"
-                  alt="User"
-                />
-                <img
-                  className="w-8 h-8 rounded-full border-2 border-white"
-                  src="/happy-user-2.png"
-                  alt="User"
-                />
-                <img
-                  className="w-8 h-8 rounded-full border-2 border-white"
-                  src="/happy-user-3.png"
-                  alt="User"
-                />
-                <img
-                  className="w-8 h-8 rounded-full border-2 border-white"
-                  src="/happy-user-4.png"
-                  alt="User"
-                />
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-1.png" alt="User" />
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-2.png" alt="User" />
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-3.png" alt="User" />
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-4.png" alt="User" />
                 <div className="w-8 h-8 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
                   <span className="text-white text-xs font-bold">+</span>
                 </div>
@@ -124,7 +114,7 @@ export default function Page() {
         </div>
       </section>
       {/* Features Section */}
-      <section id="features" className="px-6 py-20 max-w-5xl mx-auto">
+      <section className="px-6 py-20 max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-black mb-4">Why BringBack works like magic</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
