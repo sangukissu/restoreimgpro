@@ -98,10 +98,19 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
             </div>
 
             {/* File Info */}
-            <div className="text-center space-y-1">
-              <h3 className="font-inter font-medium text-black text-sm truncate">{selectedFile.name}</h3>
-              <p className="text-gray-500 text-xs">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
-            </div>
+            <div className="flex items-center justify-between gap-2 rounded-xl border px-4 py-2">
+  <div className="flex items-center gap-3 overflow-hidden">
+    <PaperclipIcon className="size-4 shrink-0 opacity-60" aria-hidden="true" />
+    <div className="min-w-0">
+      <p className="truncate text-[13px] font-medium text-black">
+        {selectedFile.name}
+      </p>
+      <p className="text-gray-500 text-xs">
+        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+      </p>
+    </div>
+  </div>
+</div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
