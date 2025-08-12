@@ -2,6 +2,7 @@
 
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
+import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -18,7 +19,8 @@ function MagicLinkSubmit() {
   )
 }
 
-export default function LoginPage() {
+// Separate component for search params logic
+function LoginFormWithSearchParams() {
   const [state, formAction] = useActionState<AuthState, FormData>(signInWithMagicLink, {} as AuthState)
   const searchParams = useSearchParams()
   const [urlError, setUrlError] = useState<string | null>(null)
@@ -89,5 +91,21 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Main component with Suspense boundary
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-600" />
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <LoginFormWithSearchParams />
+    </Suspense>
   )
 }

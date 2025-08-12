@@ -156,6 +156,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    
     console.log('[Restore API] Final input object:', { 
       hasInputImage: !!input.input_image,
       inputImageType: typeof input.input_image,
@@ -342,6 +343,7 @@ export async function POST(request: NextRequest) {
     // Download the restored image and save it to Supabase storage
     console.log('[Restore API] Downloading restored image from:', restoredImageUrl)
     let finalImageUrl: string
+    let restoredBucket: any = null
     
     try {
       // Download the image from Replicate
@@ -361,28 +363,35 @@ export async function POST(request: NextRequest) {
       
       console.log('[Restore API] Uploading to Supabase storage:', fileName)
       
-      // Check if the bucket exists, create it if it doesn't
-      const { data: buckets } = await supabase.storage.listBuckets()
-      const bucketExists = buckets?.some(bucket => bucket.name === 'restored-photos')
-      
-      if (!bucketExists) {
-        console.log('[Restore API] Creating restored-photos bucket...')
-        const { error: createBucketError } = await supabase.storage.createBucket('restored-photos', {
-          public: true,
-          fileSizeLimit: 52428800, // 50MB
-          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp']
-        })
-        
-        if (createBucketError) {
-          console.error('[Restore API] Failed to create bucket:', createBucketError)
-          throw new Error(`Failed to create storage bucket: ${createBucketError.message}`)
-        }
+      // First, check what storage buckets are available
+      const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets()
+      if (bucketsError) {
+        console.error('[Restore API] Error listing buckets:', bucketsError)
+        throw new Error(`Failed to list storage buckets: ${bucketsError.message}`)
       }
       
-      // Upload to Supabase storage bucket "restored-photos" (note the hyphen, not underscore)
-      console.log('[Restore API] Starting upload to bucket: restored-photos')
+      console.log('[Restore API] Available buckets:', buckets?.map(b => b.name))
+      
+      // Find the correct bucket for restored photos
+      restoredBucket = buckets?.find(b => 
+        b.name === 'restored_photos' || 
+        b.name === 'restored-photos' || 
+        b.name.includes('restored') || 
+        b.name.includes('photos')
+      )
+      
+      if (!restoredBucket) {
+        console.error('[Restore API] No suitable bucket found for restored photos')
+        console.log('[Restore API] Available buckets:', buckets?.map(b => ({ name: b.name, public: b.public })))
+        throw new Error('No storage bucket found for restored photos')
+      }
+      
+      console.log('[Restore API] Using bucket:', restoredBucket.name)
+      
+      // Upload to the found bucket
+      console.log('[Restore API] Starting upload to bucket:', restoredBucket.name)
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('restored-photos')
+        .from(restoredBucket.name)
         .upload(fileName, imageBlob, {
           contentType: imageResponse.headers.get('content-type') || 'image/png',
           cacheControl: '3600'
@@ -395,7 +404,8 @@ export async function POST(request: NextRequest) {
           details: uploadError,
           fileName,
           fileSize: imageBlob.size,
-          contentType: imageResponse.headers.get('content-type')
+          contentType: imageResponse.headers.get('content-type'),
+          bucketName: restoredBucket.name
         })
         throw new Error(`Storage upload failed: ${uploadError.message}`)
       }
@@ -404,18 +414,46 @@ export async function POST(request: NextRequest) {
       
       // Get the public URL for the uploaded image
       const { data: urlData } = supabase.storage
-        .from('restored-photos')
+        .from(restoredBucket.name)
         .getPublicUrl(fileName)
       
       finalImageUrl = urlData.publicUrl
       console.log('[Restore API] Image uploaded successfully to storage:', finalImageUrl)
       console.log('[Restore API] Public URL generated:', urlData.publicUrl)
       
+      // Verify the file actually exists in storage
+      const { data: fileExists, error: checkError } = await supabase.storage
+        .from(restoredBucket.name)
+        .list(user.id)
+      
+      if (checkError) {
+        console.error('[Restore API] Error checking if file exists:', checkError)
+      } else {
+        console.log('[Restore API] Files in user folder:', fileExists)
+        const uploadedFile = fileExists?.find(f => f.name.includes(timestamp.toString()))
+        if (uploadedFile) {
+          console.log('[Restore API] File confirmed in storage:', uploadedFile)
+        } else {
+          console.warn('[Restore API] Warning: File not found in storage after upload')
+        }
+      }
+      
     } catch (storageError) {
       console.error('[Restore API] Error saving to storage:', storageError)
+      
+      // Try to understand what went wrong
+      if (storageError instanceof Error) {
+        if (storageError.message.includes('policy') || storageError.message.includes('permission')) {
+          console.error('[Restore API] This appears to be a storage policy issue')
+          console.error('[Restore API] User ID:', user.id)
+          console.error('[Restore API] Bucket name:', restoredBucket?.name)
+        }
+      }
+      
       // Fallback: use the original Replicate URL if storage fails
       finalImageUrl = restoredImageUrl
-      console.log('[Restore API] Using fallback URL:', finalImageUrl)
+      console.log('[Restore API] Using fallback URL due to storage error:', finalImageUrl)
+      console.log('[Restore API] Note: Image is NOT saved to Supabase storage, only Replicate URL saved')
     }
 
     // Save restoration record to database (matching your actual schema)
