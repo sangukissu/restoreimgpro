@@ -6,7 +6,6 @@ import ImageUpload from "@/components/image-upload"
 import ImageComparison from "@/components/image-comparison"
 import PaymentModal from "@/components/payment-modal"
 import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
-import { signOut } from "@/lib/actions"
 
 type AppState = "upload" | "loading" | "comparison" | "error"
 
@@ -57,10 +56,7 @@ export default function DashboardClient({ user, credits }: DashboardClientProps)
     setError(null)
 
     try {
-      const response: RestoreImageResponse = await restoreImage(selectedFile, {
-        outputFormat: "png",
-        safetyTolerance: 1,
-      })
+      const response: RestoreImageResponse = await restoreImage(selectedFile)
 
       if (response.success && response.restoredImageUrl) {
         setRestorationData({
@@ -169,14 +165,7 @@ export default function DashboardClient({ user, credits }: DashboardClientProps)
                   >
                     Buy credits
                   </button>
-                  <form action={signOut}>
-                    <button
-                      type="submit"
-                      className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      Sign out
-                    </button>
-                  </form>
+              
                 </div>
               </div>
             </div>

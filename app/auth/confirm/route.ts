@@ -10,6 +10,8 @@ export async function GET(request: NextRequest) {
   const type = searchParams.get('type') as EmailOtpType | null
   const next = searchParams.get('next') ?? '/'
 
+  console.log('[Confirm] Incoming', { hasTokenHash: !!token_hash, type, next })
+
   if (token_hash && type) {
     const supabase = await createClient()
 
@@ -18,11 +20,15 @@ export async function GET(request: NextRequest) {
       token_hash,
     })
     if (!error) {
+      console.log('[Confirm] verifyOtp success → redirect', { next })
       // redirect user to specified redirect URL or root of app
       redirect(next)
+    } else {
+      console.error('[Confirm] verifyOtp error', error)
     }
   }
 
   // redirect the user to an error page with some instructions
+  console.error('[Confirm] Missing token_hash/type, redirecting to /error')
   redirect('/error')
 }

@@ -10,10 +10,8 @@ export default async function Dashboard() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/auth/login")
+    redirect("/login")
   }
 
-  const { data: credits } = await supabase.from("credits").select("credits_remaining").eq("user_id", user.id).single()
-
-  return <DashboardClient user={user} credits={credits?.credits_remaining || 0} />
+  return <DashboardClient user={{ email: user.email || "", id: user.id }} />
 }

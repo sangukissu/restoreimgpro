@@ -1,5 +1,3 @@
--- Enable RLS (Row Level Security)
-ALTER DATABASE postgres SET "app.jwt_secret" TO 'your-jwt-secret';
 
 -- Create credits table
 CREATE TABLE IF NOT EXISTS public.credits (
@@ -78,3 +76,10 @@ CREATE OR REPLACE TRIGGER update_credits_updated_at
 CREATE OR REPLACE TRIGGER update_image_restorations_updated_at
     BEFORE UPDATE ON public.image_restorations
     FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+-- Create storage bucket for images
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('restored-images', 'restored-images', false)
+ON CONFLICT (id) DO NOTHING;
+
