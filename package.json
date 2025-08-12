@@ -65,7 +65,7 @@
     "framer-motion": "^12.23.12",
     "@tabler/icons-react": "^3.34.1",
     "@tsparticles/react": "^3.0.0",
-    "@tsparticles/slim": "^2.12.0"
+    "@tsparticles/slim": "^3.9.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.9",
