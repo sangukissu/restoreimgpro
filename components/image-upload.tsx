@@ -137,44 +137,68 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
 
   return (
     <div className="w-full max-w-lg mx-auto px-4">
-      {/* Main Upload Area */}
-      <div
-        className={`relative bg-white border-2 border-dashed rounded-xl p-8 sm:p-12 text-center transition-all duration-200 shadow-sm ${
-          dragActive ? "border-gray-400 bg-gray-50" : "border-gray-300 hover:border-gray-400"
-        }`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-      >
-        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleChange} className="hidden" />
+  {/* Main Upload Area */}
+  <div
+    className={`relative bg-white border-2 border-dashed rounded-xl p-8 sm:p-12 text-center transition-all duration-200 shadow-sm ${
+      dragActive ? "border-gray-400 bg-gray-50" : "border-gray-300 hover:border-gray-400"
+    }`}
+    onDragEnter={handleDrag}
+    onDragLeave={handleDrag}
+    onDragOver={handleDrag}
+    onDrop={handleDrop}
+  >
+    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleChange} className="hidden" />
 
-        {/* Upload Interface */}
-        <div className="space-y-6">
-          {/* Cloud Upload Icon */}
-          <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto">
-            <svg className="w-full h-full text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3-3m0 0l3 3m-3-3v12"
-              />
-            </svg>
-          </div>
-
-          <div className="space-y-3">
-            <Button
-              onClick={handleButtonClick}
-              className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 h-11 px-8 text-sm font-medium rounded-lg transition-colors"
-            >
-              Upload image
-            </Button>
-            <p className="text-gray-500 text-xs sm:text-sm">Drag & drop files here or Ctrl + V to paste image</p>
-          </div>
-        </div>
+    {/* Modern Upload Interface */}
+    <div className="space-y-6">
+      {/* Upload Icon with Animation */}
+      <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 group">
+        <div
+          className={`absolute inset-0 rounded-full bg-gray-100 opacity-50 transition-all duration-300 ${
+            dragActive ? "opacity-75 scale-110" : "group-hover:opacity-75 group-hover:scale-105"
+          }`}
+        ></div>
+        <svg
+          className="relative w-full h-full text-gray-700"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3-3m0 0l3 3m-3-3v12"
+          />
+        </svg>
       </div>
 
+      {/* Text and Button Section */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900">
+          {dragActive ? "Drop your image here!" : "Upload your image"}
+        </h3>
+        <p className="text-sm text-gray-500 max-w-xs mx-auto">
+          Drag and drop an image, paste with Ctrl + V, or click below to browse files.
+        </p>
+        <Button
+          onClick={handleButtonClick}
+          className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 h-12 px-8 text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+        >
+          Choose Image
+        </Button>
+      </div>
+
+      {/* Supported Formats */}
+      <div className="mt-4">
+        <p className="text-xs text-gray-400">
+          Supported formats: JPG, PNG, GIF (Max size: 10MB)
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
   )
 }
