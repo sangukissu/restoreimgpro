@@ -43,7 +43,7 @@ interface MobileNavMenuProps {
   onClose: () => void
 }
 
-export const FloatingHeader = ({ children, className }: NavbarProps) => {
+export const Navbar = ({ children, className }: NavbarProps) => {
   const { scrollY } = useScroll()
   const [visible, setVisible] = useState<boolean>(false)
 
@@ -185,7 +185,7 @@ export const MobileNavToggle = ({
   )
 }
 
-export default function Header() {
+export default function FloatingHeader() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
