@@ -2,8 +2,9 @@
 
 import { cn } from "@/lib/utils"
 import { IconMenu2, IconX } from "@tabler/icons-react"
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion"
-import React, { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import type React from "react"
+import { useState } from "react"
 
 interface NavbarProps {
   children: React.ReactNode
@@ -13,7 +14,6 @@ interface NavbarProps {
 interface NavBodyProps {
   children: React.ReactNode
   className?: string
-  visible?: boolean
 }
 
 interface NavItemsProps {
@@ -28,7 +28,6 @@ interface NavItemsProps {
 interface MobileNavProps {
   children: React.ReactNode
   className?: string
-  visible?: boolean
 }
 
 interface MobileNavHeaderProps {
@@ -44,45 +43,14 @@ interface MobileNavMenuProps {
 }
 
 export const Navbar = ({ children, className }: NavbarProps) => {
-  const { scrollY } = useScroll()
-  const [visible, setVisible] = useState<boolean>(false)
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest > 100) {
-      setVisible(true)
-    } else {
-      setVisible(false)
-    }
-  })
-
-  return (
-    <motion.div className={cn("fixed inset-x-0 top-0 z-40 w-full px-6", className)}>
-      {React.Children.map(children, (child) =>
-        React.isValidElement(child)
-          ? React.cloneElement(child as React.ReactElement<{ visible?: boolean }>, { visible })
-          : child,
-      )}
-    </motion.div>
-  )
+  return <motion.div className={cn("fixed inset-x-0 top-0 z-40 w-full pt-2", className)}>{children}</motion.div>
 }
 
-export const NavBody = ({ children, className, visible }: NavBodyProps) => {
+export const NavBody = ({ children, className }: NavBodyProps) => {
   return (
     <motion.div
-      animate={{
-        backdropFilter: visible ? "blur(10px)" : "none",
-        boxShadow: visible ? "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)" : "none",
-        width: visible ? "70%" : "100%",
-        y: visible ? 8 : 0,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 200,
-        damping: 50,
-      }}
       className={cn(
-        "relative z-[60] mx-auto hidden w-full max-w-6xl flex-row items-center justify-between self-start rounded-lg bg-transparent px-6 py-3 lg:flex",
-        visible && "bg-white/95 border border-gray-200",
+        "relative z-[60] mx-auto w-[70%] max-w-6xl flex-row items-center justify-between self-start rounded-lg bg-white/95 border border-gray-200 px-6 py-3 hidden backdrop-blur-lg lg:flex",
         className,
       )}
     >
@@ -119,26 +87,11 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   )
 }
 
-export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
+export const MobileNav = ({ children, className }: MobileNavProps) => {
   return (
     <motion.div
-      animate={{
-        backdropFilter: visible ? "blur(10px)" : "none",
-        boxShadow: visible ? "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)" : "none",
-        width: visible ? "95%" : "100%",
-        paddingRight: visible ? "16px" : "0px",
-        paddingLeft: visible ? "16px" : "0px",
-        borderRadius: visible ? "8px" : "0px",
-        y: visible ? 8 : 0,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 200,
-        damping: 50,
-      }}
       className={cn(
-        "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between bg-transparent px-4 py-3 lg:hidden",
-        visible && "bg-white/95 border border-gray-200",
+        "relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] flex-col items-center justify-between bg-white/95 border border-gray-200 rounded-lg backdrop-blur-lg py-3 px-4 lg:hidden",
         className,
       )}
     >
@@ -160,7 +113,7 @@ export const MobileNavMenu = ({ children, className, isOpen, onClose }: MobileNa
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-2 rounded-lg bg-white border border-gray-200 px-4 py-6 shadow-lg",
+            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-2 rounded-lg bg-white border border-gray-200 px-4 py-6",
             className,
           )}
         >
@@ -185,7 +138,7 @@ export const MobileNavToggle = ({
   )
 }
 
-export default function FloatingHeader() {
+export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
