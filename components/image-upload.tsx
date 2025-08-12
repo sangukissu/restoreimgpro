@@ -114,7 +114,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex gap-3">
               <Button
                 onClick={onRestore}
                 className="flex-1 bg-black text-white hover:bg-gray-800 h-11 text-sm font-medium rounded-lg transition-colors"
