@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
+import { Paperclip } from "lucide-react"
 
 interface ImageUploadProps {
   onImageSelect: (file: File) => void
@@ -72,10 +73,10 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
   const handleSampleImageClick = async (imageSrc: string) => {
     try {
       const response = await fetch(imageSrc)
+      if (!response.ok) throw new Error("Failed to fetch sample image")
       const blob = await response.blob()
       const filename = imageSrc.split("/").pop() || "sample-image.png"
       const file = new File([blob], filename, { type: blob.type })
-
       onImageSelect(file)
     } catch (error) {
       console.error("Error loading sample image:", error)
@@ -83,7 +84,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     }
   }
 
-  if (selectedFile && selectedImageUrl) {
+  if (selectedFile instanceof File && typeof selectedImageUrl === "string" && selectedImageUrl) {
     return (
       <div className="w-full max-w-lg mx-auto px-4">
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
@@ -99,18 +100,18 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
 
             {/* File Info */}
             <div className="flex items-center justify-between gap-2 rounded-xl border px-4 py-2">
-  <div className="flex items-center gap-3 overflow-hidden">
-    <PaperclipIcon className="size-4 shrink-0 opacity-60" aria-hidden="true" />
-    <div className="min-w-0">
-      <p className="truncate text-[13px] font-medium text-black">
-        {selectedFile.name}
-      </p>
-      <p className="text-gray-500 text-xs">
-        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-      </p>
-    </div>
-  </div>
-</div>
+              <div className="flex items-center gap-3 overflow-hidden">
+                <Paperclip className="size-4 shrink-0 opacity-60" aria-hidden="true" />
+                <div className="min-w-0">
+                  <p className="truncate text-[13px] font-medium text-black">
+                    {selectedFile.name || "Unknown File"}
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+              </div>
+            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
