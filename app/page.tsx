@@ -2,17 +2,16 @@ import Link from "next/link"
 import FloatingHeader from "@/components/floating-header"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles, Clock, Shield, Heart } from "lucide-react"
-import Header from "@/components/header" // Added header import
 import { PointerHighlight } from "@/components/pointer-highlight" // Added PointerHighlight import
 import { Compare } from "@/components/ui/compare" // Added Compare import
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
-      <FloatingHeader />
+      <Header />
       {/* Hero Section */}
       <section className="px-6 py-20 pt-32 max-w-6xl mx-auto text-center">
-        <div className="space-y-12">
+        <div className="space-y-6">
           <div className="space-y-6">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-4">
               <Sparkles className="w-3 h-3 mr-1" />
@@ -21,7 +20,7 @@ export default function Page() {
             <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
               Bring back{" "}
               <PointerHighlight
-                rectangleClassName="bg-purple-100 dark:bg-purple-900 border-purple-300 dark:border-purple-700 leading-tight px-1"
+                rectangleClassName="bg-purple-100 dark:bg-purple-900 border-purple-300 dark:border-purple-700 leading-tight px-2"
                 pointerClassName="text-purple-500 h-3 w-3"
                 containerClassName="inline-block mx-1"
               >
@@ -31,7 +30,7 @@ export default function Page() {
               and
               <br />
               <PointerHighlight
-                rectangleClassName="bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-tight px-1"
+                rectangleClassName="bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-tight px-2"
                 pointerClassName="text-blue-500 h-3 w-3"
                 containerClassName="inline-block mx-1"
               >
@@ -39,32 +38,28 @@ export default function Page() {
               </PointerHighlight>{" "}
               to life
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
               Restore your old, faded, torn or damaged photos into vibrant memories again. Quick restoration simple
               process and a lifetime of preserved moments.
             </p>
           </div>
-          <div className="flex flex-row gap-4 justify-center items-center">
-            <Link href="/dashboard">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
             <Button
               size="lg"
-              className="bg-black text-white hover:bg-gray-800 px-8 py-4 text-lg font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+              className="bg-black text-white hover:bg-gray-800 px-8 py-6 text-md font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md w-full sm:w-auto"
             >
               Restore Your Photo Now
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-              </Link>
-            <Link href="#features">
             <Button
               variant="outline"
               size="lg"
-              className="px-8 py-4 text-lg font-medium rounded-lg border-gray-200 hover:bg-gray-50 bg-transparent"
+              className="px-8 py-6 text-md font-medium rounded-lg border-gray-200 hover:bg-gray-50 bg-transparent w-full sm:w-auto"
             >
               Explore Examples
             </Button>
-              </Link>
           </div>
-          <div className="flex flex-col items-center space-y-4 pt-8">
+          <div className="flex flex-col items-center space-y-2 pt-8">
             <div className="flex items-center space-x-2">
               <div className="flex -space-x-2">
                 <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-1.png" alt="User" />
@@ -87,7 +82,7 @@ export default function Page() {
           </div>
           <div className="pt-12">
             <div className="flex justify-center">
-              <div className="p-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
+              <div className="p-4 border rounded-3xl bg-neutral-50 border-neutral-200">
                 <Compare
                   firstImage="/placeholder-1bjxl.png"
                   secondImage="/restored-family-photo.png"
@@ -238,3 +233,4 @@ export default function Page() {
     </div>
   )
 }
+ 
