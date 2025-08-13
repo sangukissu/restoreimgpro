@@ -20,8 +20,8 @@ export default function ShowcaseSection() {
     {
       title: "Water Damaged",
       description: "Remove stains and water marks completely",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Water+Damaged+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Clean+Photo+After",
+      beforeImage: "/water-damaged.webp",
+      afterImage: "/water-damaged-restored.webp",
     },
     {
       title: "Scratched & Cracked",
