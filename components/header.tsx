@@ -154,7 +154,7 @@ export default function Header() {
       <NavBody>
         {/* Logo */}
         <div className="flex items-center">
-          <a href="#" className="text-xl font-bold text-black">
+          <a href="/" className="text-xl font-bold text-black">
             BringBack
           </a>
         </div>
@@ -164,9 +164,11 @@ export default function Header() {
 
         {/* CTA Button */}
         <div className="flex items-center">
+          <Link href="/dashboard">
           <button className="bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors">
             Try Now
           </button>
+          </Link>
         </div>
       </NavBody>
 
