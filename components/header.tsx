@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { IconMenu2, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -145,7 +146,7 @@ export default function Header() {
     { name: "Features", link: "#features" },
     { name: "How it works", link: "#how-it-works" },
     { name: "Pricing", link: "#pricing" },
-    { name: "Examples", link: "#examples" },
+    { name: "Examples", link: "#showcase" },
   ]
 
   return (
@@ -172,7 +173,7 @@ export default function Header() {
       <MobileNav>
         <MobileNavHeader>
           <div className="flex items-center">
-            <a href="#" className="text-xl font-bold text-black">
+            <a href="/" className="text-xl font-bold text-black">
               BringBack
             </a>
           </div>
@@ -190,9 +191,11 @@ export default function Header() {
               {item.name}
             </a>
           ))}
+          <Link href="/login">
           <button className="w-full bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors mt-2">
-            Try Now
+            Sign In
           </button>
+            </Link>
         </MobileNavMenu>
       </MobileNav>
     </Navbar>
