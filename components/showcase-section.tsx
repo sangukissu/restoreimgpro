@@ -8,8 +8,8 @@ export default function ShowcaseSection() {
     {
       title: "Torn & Ripped Photos",
       description: "Seamlessly repair tears and missing pieces",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Torn+Photo+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Restored+Photo+After",
+      beforeImage: "/ripped.webp",
+      afterImage: "/ripped-restored.webp",
     },
     {
       title: "Faded & Yellowed",
