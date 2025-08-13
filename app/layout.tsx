@@ -13,7 +13,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Restore.me - AI-Powered Image Restoration",
+  title: "BringBack - AI-Powered Image Restoration",
   description: "Transform your old, damaged photos into stunning restored images with our advanced AI technology.",
   generator: "v0.dev",
 }

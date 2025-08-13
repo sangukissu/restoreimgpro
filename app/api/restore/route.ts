@@ -515,7 +515,7 @@ export async function GET() {
   
   return NextResponse.json({
     status: "healthy",
-    service: "Restore.me API",
+    service: "BringBack API",
     timestamp: new Date().toISOString(),
     replicateConfigured: hasToken,
     tokenPreview,

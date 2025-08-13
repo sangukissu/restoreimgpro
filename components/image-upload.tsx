@@ -234,17 +234,13 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
             </div>
 
             {/* AI Disclaimer Notice */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <div className="text-sm">
-                  <p className="font-medium text-blue-800 mb-1">AI Restoration Notice</p>
-                  <p className="text-blue-700 leading-relaxed">
+            
+                
+                  <p className="text-xs text-center mt-2 leading-tight">
                     Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
                   </p>
-                </div>
-              </div>
-            </div>
+         
+            
 
             {/* Action Buttons */}
             <div className="flex gap-3">
@@ -270,14 +266,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
 
   return (
     <div className="w-full max-w-lg mx-auto px-4">
-      {/* Security Notice */}
-      <div className="mb-4 bg-green-50 border border-green-200 rounded-lg p-3">
-        <div className="flex items-center gap-2 text-sm text-green-700">
-          <Shield className="w-4 h-4" />
-          <span className="font-medium">Secure Upload</span>
-          <span>• 10MB max • JPG/PNG/WebP only • Anti-spam protected</span>
-        </div>
-      </div>
+  
 
       {/* Error Display */}
       {uploadError && (
@@ -320,7 +309,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
         {/* Modern Upload Interface */}
         <div className="space-y-6">
           {/* Upload Icon with Animation */}
-          <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 group">
+          <div className="relative mx-auto w-20 h-20 p-2 sm:w-24 sm:h-24 group">
             <div
               className={`absolute inset-0 rounded-full bg-gray-100 opacity-50 transition-all duration-300 ${
                 dragActive ? "opacity-75 scale-110" : "group-hover:opacity-75 group-hover:scale-105"
@@ -364,34 +353,27 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
               disabled={isProcessing}
               className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 h-12 px-8 text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isProcessing ? "Processing..." : "Choose Image"}
+              {isProcessing ? "Processing..." : "Click to Upload"}
             </Button>
           </div>
 
           {/* Supported Formats and Security Info */}
           <div className="mt-4 space-y-2">
             <p className="text-xs text-gray-400">
-              Supported: JPG, PNG, WebP • Max: 10MB • Min: 100x100px • Max: 4096x4096px
+              Supported: JPG, PNG, WebP • Max: 10MB
             </p>
-            <p className="text-xs text-gray-400">
-              Anti-spam: Max 5 uploads per minute
-            </p>
+     
           </div>
         </div>
       </div>
 
       {/* AI Disclaimer Notice */}
-      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-          <div className="text-sm">
-            <p className="font-medium text-blue-800 mb-1">AI Restoration Notice</p>
-            <p className="text-blue-700 leading-relaxed">
+     
+         
+      <p className="text-xs text-center text-gray-500 mt-4 leading-tight">
               Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
             </p>
-          </div>
-        </div>
-      </div>
+       
     </div>
   )
 }

@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import type { User } from "@supabase/supabase-js"
 import ImageUpload from "@/components/image-upload"
 import ImageComparison from "@/components/image-comparison"
 import PaymentModal from "@/components/payment-modal"
+import DashboardHeader from "@/components/dashboard-header"
 import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
 
@@ -17,7 +17,10 @@ interface RestorationData {
 }
 
 interface DashboardClientProps {
-  user: User
+  user: {
+    email: string
+    id: string
+  }
   initialCredits: number
   isPaymentSuccess: boolean
 }
@@ -134,17 +137,25 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     setShowPaymentModal(true)
   }
 
-  // Credit status indicator
-  const getCreditStatusColor = () => {
-    if (userCredits === 0) return "bg-red-500"
-    if (userCredits <= 2) return "bg-yellow-500"
-    return "bg-green-500"
-  }
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch('/api/auth/signout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
-  const getCreditStatusText = () => {
-    if (userCredits === 0) return "No credits"
-    if (userCredits <= 2) return "Low credits"
-    return "Credits available"
+      if (response.ok) {
+        // Redirect to login page
+        window.location.href = '/login'
+      } else {
+        toast.error('Failed to sign out. Please try again.')
+      }
+    } catch (error) {
+      console.error('Sign out error:', error)
+      toast.error('Failed to sign out. Please try again.')
+    }
   }
 
   // If user has no credits, show payment modal and block dashboard
@@ -163,36 +174,16 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
           />
         </div>
 
-        {/* Header */}
-        <header className="relative z-10 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center">
-                <h1 className="font-inter font-bold text-xl text-black">Restore.me</h1>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                    <span className="font-medium text-red-600">0 credits</span>
-                    <span className="text-xs text-gray-500">(No credits)</span>
-                  </div>
-                </div>
-                <div className="relative group">
-                  <button className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors">
-                    <span className="text-sm font-medium text-gray-700">
-                      {user.email?.charAt(0).toUpperCase() || "U"}
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
+        {/* Dashboard Header */}
+        <DashboardHeader 
+          user={user} 
+          credits={userCredits} 
+          onBuyCredits={handleBuyCredits} 
+        />
 
         {/* Payment Success Banner */}
         {showPaymentSuccess && (
-          <div className="relative z-10 bg-green-50 border-b border-green-200">
+          <div className="relative z-10 bg-green-50 border-b border-green-200 mt-24">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -216,7 +207,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         )}
 
         {/* Main Content - Blocked State */}
-        <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-24">
           <div className="text-center">
             <div className="w-24 h-24 bg-red-100 rounded-full mx-auto mb-6 flex items-center justify-center">
               <svg className="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -275,56 +266,16 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         />
       </div>
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="font-inter font-bold text-xl text-black">Restore.me</h1>
-            </div>
-            <div className="flex items-center gap-4">
-              {/* Enhanced credits display with buy button */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <div className={`w-2 h-2 rounded-full ${getCreditStatusColor()}`}></div>
-                  <span className={`font-medium ${userCredits === 0 ? 'text-red-600' : 'text-gray-600'}`}>
-                    {userCredits} credits
-                  </span>
-                  <span className="text-xs text-gray-500">({getCreditStatusText()})</span>
-                </div>
-                <button
-                  onClick={handleBuyCredits}
-                  className="text-xs px-3 py-1.5 rounded font-medium transition-colors bg-black text-white hover:bg-gray-800"
-                >
-                  Buy More
-                </button>
-              </div>
-              <div className="relative group">
-                <button className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors">
-                  <span className="text-sm font-medium text-gray-700">
-                    {user.email?.charAt(0).toUpperCase() || "U"}
-                  </span>
-                </button>
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded border border-gray-200 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                  <div className="p-3 border-b border-gray-100">
-                    <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
-                  </div>
-                  <button
-                    onClick={handleBuyCredits}
-                    className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    Buy credits
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Dashboard Header */}
+      <DashboardHeader 
+        user={user} 
+        credits={userCredits} 
+        onBuyCredits={handleBuyCredits} 
+      />
 
       {/* Payment Success Banner */}
       {showPaymentSuccess && (
-        <div className="relative z-10 bg-green-50 border-b border-green-200">
+        <div className="relative z-10 bg-green-50 border-b border-green-200 mt-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -348,7 +299,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
       )}
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-24">
         <div className="text-center mb-12">
           <h1 className="font-inter font-bold text-3xl text-black mb-4">Restore Your Images</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">

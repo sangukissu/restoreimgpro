@@ -5,7 +5,7 @@ import DashboardClient from "@/components/dashboard-client"
 export default async function Dashboard({
   searchParams,
 }: {
-  searchParams: { payment?: string }
+  searchParams: Promise<{ payment?: string }>
 }) {
   const supabase = await createClient()
 
@@ -25,7 +25,8 @@ export default async function Dashboard({
     .single()
 
   const credits = profile?.credits || 0
-  const isPaymentSuccess = searchParams.payment === "success"
+  const resolvedSearchParams = await searchParams
+  const isPaymentSuccess = resolvedSearchParams.payment === "success"
 
   return (
     <DashboardClient 
