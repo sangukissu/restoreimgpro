@@ -14,8 +14,8 @@ export default function ShowcaseSection() {
     {
       title: "Faded & Yellowed",
       description: "Restore original colors and vibrancy",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Faded+Photo+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Vibrant+Photo+After",
+      beforeImage: "/yellowandfaded.webp",
+      afterImage: "/yellowandfaded-restored.webp",
     },
     {
       title: "Water Damaged",
