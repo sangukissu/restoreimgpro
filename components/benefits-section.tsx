@@ -9,7 +9,7 @@ export default function BenefitsSection() {
         {/* Header */}
         <div className="text-center mb-20">
           <p className="text-gray-500 italic text-lg mb-4">Why Choose Us</p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">Why trust this <Cover>photo restorer</Cover>
+          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">Why trust this <Cover>AI Photo Restorer</Cover>
 </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Professional photo restoration that brings damaged photos back to life without losing their original charm

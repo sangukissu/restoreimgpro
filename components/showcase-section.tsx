@@ -80,7 +80,7 @@ export default function ShowcaseSection() {
                       secondImage={item.afterImage}
                       firstImageClassName="object-cover"
                       secondImageClassname="object-cover"
-                      className="h-[220px] w-[320px] rounded-lg"
+                      className="sm:h-[220px] sm:w-[300px] h-[190px] w-[280px] rounded-lg"
                       slideMode="hover"
                       showHandlebar={true}
                     />

@@ -6,6 +6,7 @@ import ImageUpload from "@/components/image-upload"
 import ImageComparison from "@/components/image-comparison"
 import PaymentModal from "@/components/payment-modal"
 import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
+import { useToast } from "@/hooks/use-toast"
 
 type AppState = "upload" | "loading" | "comparison" | "error"
 
@@ -17,25 +18,38 @@ interface RestorationData {
 
 interface DashboardClientProps {
   user: User
-  credits: number
+  initialCredits: number
+  isPaymentSuccess: boolean
 }
 
-export default function DashboardClient({ user, credits }: DashboardClientProps) {
+export default function DashboardClient({ user, initialCredits, isPaymentSuccess }: DashboardClientProps) {
   const [appState, setAppState] = useState<AppState>("upload")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [restorationData, setRestorationData] = useState<RestorationData | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [userCredits, setUserCredits] = useState(credits)
-  // Add payment modal state
+  const [userCredits, setUserCredits] = useState(initialCredits)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(isPaymentSuccess)
+  const { toast } = useToast()
 
-  // Show payment modal when user has no credits
+  // Show payment modal immediately if user has no credits
   useEffect(() => {
-    if (userCredits === 0) {
+    if (userCredits <= 0) {
       setShowPaymentModal(true)
     }
   }, [userCredits])
+
+  // Show success message if payment was successful
+  useEffect(() => {
+    if (isPaymentSuccess && userCredits > 0) {
+      setShowPaymentSuccess(true)
+      // Auto-hide success message after 5 seconds
+      const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [isPaymentSuccess, userCredits])
 
   const handleImageSelect = (file: File) => {
     setSelectedFile(file)
@@ -47,11 +61,6 @@ export default function DashboardClient({ user, credits }: DashboardClientProps)
   const handleRestore = async () => {
     if (!selectedFile) return
 
-    if (userCredits <= 0) {
-      setShowPaymentModal(true)
-      return
-    }
-
     setAppState("loading")
     setError(null)
 
@@ -59,13 +68,19 @@ export default function DashboardClient({ user, credits }: DashboardClientProps)
       const response: RestoreImageResponse = await restoreImage(selectedFile)
 
       if (response.success && response.restoredImageUrl) {
+        // Deduct credit after successful restoration
+        const newCredits = userCredits - 1
+        setUserCredits(newCredits)
+        
         setRestorationData({
           originalFile: selectedFile,
           originalUrl: selectedImageUrl!,
           restoredUrl: response.restoredImageUrl,
         })
-        setUserCredits((prev) => prev - 1)
         setAppState("comparison")
+        
+        // Show success toast
+        toast.success(`Image Restored Successfully! 1 credit deducted. ${newCredits} credits remaining.`)
       } else {
         setError(response.error || "Failed to restore image")
         setAppState("error")
@@ -102,16 +117,150 @@ export default function DashboardClient({ user, credits }: DashboardClientProps)
     setShowPaymentModal(false)
   }
 
-  const handlePaymentPurchase = () => {
-    // For now, just give 5 credits and close modal
-    setUserCredits(5)
+  const handlePaymentSuccess = (newCredits: number) => {
+    setUserCredits(newCredits)
     setShowPaymentModal(false)
+    setIsProcessingPayment(false)
+    
+    toast.success(`Credits Added Successfully! You now have ${newCredits} credits to restore images.`)
+  }
+
+  const handlePaymentError = (error: string) => {
+    setIsProcessingPayment(false)
+    toast.error(`Payment Failed: ${error}`)
   }
 
   const handleBuyCredits = () => {
     setShowPaymentModal(true)
   }
 
+  // Credit status indicator
+  const getCreditStatusColor = () => {
+    if (userCredits === 0) return "bg-red-500"
+    if (userCredits <= 2) return "bg-yellow-500"
+    return "bg-green-500"
+  }
+
+  const getCreditStatusText = () => {
+    if (userCredits === 0) return "No credits"
+    if (userCredits <= 2) return "Low credits"
+    return "Credits available"
+  }
+
+  // If user has no credits, show payment modal and block dashboard
+  if (userCredits <= 0) {
+    return (
+      <div className="min-h-screen bg-white relative">
+        {/* Dotted Background Pattern */}
+        <div className="absolute inset-0 opacity-30">
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage: `radial-gradient(circle, #000 1px, transparent 1px)`,
+              backgroundSize: "24px 24px",
+              backgroundPosition: "0 0, 12px 12px",
+            }}
+          />
+        </div>
+
+        {/* Header */}
+        <header className="relative z-10 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center">
+                <h1 className="font-inter font-bold text-xl text-black">Restore.me</h1>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                    <span className="font-medium text-red-600">0 credits</span>
+                    <span className="text-xs text-gray-500">(No credits)</span>
+                  </div>
+                </div>
+                <div className="relative group">
+                  <button className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors">
+                    <span className="text-sm font-medium text-gray-700">
+                      {user.email?.charAt(0).toUpperCase() || "U"}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Payment Success Banner */}
+        {showPaymentSuccess && (
+          <div className="relative z-10 bg-green-50 border-b border-green-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-green-800 font-medium">Payment Successful!</span>
+                  <span className="text-green-700">Your credits will be added shortly. Please refresh the page.</span>
+                </div>
+                <button
+                  onClick={() => setShowPaymentSuccess(false)}
+                  className="text-green-600 hover:text-green-800 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Main Content - Blocked State */}
+        <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <div className="w-24 h-24 bg-red-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+              <svg className="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            
+            <h1 className="font-inter font-bold text-3xl text-black mb-4">Get Credits to Start</h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+              You need credits to restore images. Purchase our premium plan to get started with AI-powered image restoration.
+            </p>
+
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={handleBuyCredits}
+                className="bg-red-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors text-lg"
+              >
+                Get Credits Now
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors text-lg"
+              >
+                Refresh Page
+              </button>
+            </div>
+          </div>
+        </main>
+
+        {/* Payment Modal */}
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          onSkip={handlePaymentSkip}
+          onSuccess={handlePaymentSuccess}
+          onError={handlePaymentError}
+          isProcessing={isProcessingPayment}
+          setIsProcessing={setIsProcessingPayment}
+        />
+      </div>
+    )
+  }
+
+  // Normal dashboard when user has credits
   return (
     <div className="min-h-screen bg-white relative">
       {/* Dotted Background Pattern */}
@@ -135,19 +284,20 @@ export default function DashboardClient({ user, credits }: DashboardClientProps)
             </div>
             <div className="flex items-center gap-4">
               {/* Enhanced credits display with buy button */}
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <div className={`w-2 h-2 rounded-full ${userCredits > 0 ? "bg-green-500" : "bg-red-500"}`}></div>
-                  <span>{userCredits} credits</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <div className={`w-2 h-2 rounded-full ${getCreditStatusColor()}`}></div>
+                  <span className={`font-medium ${userCredits === 0 ? 'text-red-600' : 'text-gray-600'}`}>
+                    {userCredits} credits
+                  </span>
+                  <span className="text-xs text-gray-500">({getCreditStatusText()})</span>
                 </div>
-                {userCredits === 0 && (
-                  <button
-                    onClick={handleBuyCredits}
-                    className="text-xs bg-black text-white hover:bg-gray-800 px-2 py-1 rounded transition-colors"
-                  >
-                    Buy
-                  </button>
-                )}
+                <button
+                  onClick={handleBuyCredits}
+                  className="text-xs px-3 py-1.5 rounded font-medium transition-colors bg-black text-white hover:bg-gray-800"
+                >
+                  Buy More
+                </button>
               </div>
               <div className="relative group">
                 <button className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors">
@@ -165,13 +315,37 @@ export default function DashboardClient({ user, credits }: DashboardClientProps)
                   >
                     Buy credits
                   </button>
-              
                 </div>
               </div>
             </div>
           </div>
         </div>
       </header>
+
+      {/* Payment Success Banner */}
+      {showPaymentSuccess && (
+        <div className="relative z-10 bg-green-50 border-b border-green-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-green-800 font-medium">Payment Successful!</span>
+                <span className="text-green-700">You now have {userCredits} credits to restore images.</span>
+              </div>
+              <button
+                onClick={() => setShowPaymentSuccess(false)}
+                className="text-green-600 hover:text-green-800 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -280,7 +454,10 @@ export default function DashboardClient({ user, credits }: DashboardClientProps)
         isOpen={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
         onSkip={handlePaymentSkip}
-        onPurchase={handlePaymentPurchase}
+        onSuccess={handlePaymentSuccess}
+        onError={handlePaymentError}
+        isProcessing={isProcessingPayment}
+        setIsProcessing={setIsProcessingPayment}
       />
     </div>
   )

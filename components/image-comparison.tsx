@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { SparklesCore } from "@/components/ui/sparkles"
 import { AnimatePresence, motion } from "framer-motion"
@@ -16,8 +16,29 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  
+  // Performance optimization refs
+  const rafRef = useRef<number | null>(null)
+  const lastUpdateRef = useRef<number>(0)
 
-  const handleMouseDown = useCallback(() => {
+  // Throttle slider updates to improve performance
+  const updateSliderPosition = useCallback((percentage: number) => {
+    const now = Date.now()
+    if (now - lastUpdateRef.current < 16) return // ~60fps max
+    
+    lastUpdateRef.current = now
+    
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+    }
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setSliderPosition(Math.max(0, Math.min(100, percentage)))
+    })
+  }, [])
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
     setIsDragging(true)
   }, [])
 
@@ -25,35 +46,39 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
     setIsDragging(false)
   }, [])
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!isDragging || !containerRef.current) return
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging || !containerRef.current) return
 
-      const rect = containerRef.current.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
-      setSliderPosition(percentage)
-    },
-    [isDragging],
-  )
+    const rect = containerRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const percentage = (x / rect.width) * 100
+    updateSliderPosition(percentage)
+  }, [isDragging, updateSliderPosition])
 
-  const handleTouchMove = useCallback(
-    (e: TouchEvent) => {
-      if (!isDragging || !containerRef.current) return
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isDragging || !containerRef.current) return
 
-      const rect = containerRef.current.getBoundingClientRect()
-      const x = e.touches[0].clientX - rect.left
-      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
-      setSliderPosition(percentage)
-    },
-    [isDragging],
-  )
+    const rect = containerRef.current.getBoundingClientRect()
+    const x = e.touches[0].clientX - rect.left
+    const percentage = (x / rect.width) * 100
+    updateSliderPosition(percentage)
+  }, [isDragging, updateSliderPosition])
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }, [])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }, [])
 
   useEffect(() => {
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove)
       document.addEventListener("mouseup", handleMouseUp)
-      document.addEventListener("touchmove", handleTouchMove)
+      document.addEventListener("touchmove", handleTouchMove, { passive: false })
       document.addEventListener("touchend", handleMouseUp)
     }
 
@@ -64,6 +89,15 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
       document.removeEventListener("touchend", handleMouseUp)
     }
   }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+    }
+  }, [])
 
   const handleDownload = async () => {
     try {
@@ -83,6 +117,11 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
     }
   }
 
+  // Memoize the clip path to prevent unnecessary recalculations
+  const clipPathStyle = useMemo(() => ({
+    clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
+  }), [sliderPosition])
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
@@ -99,7 +138,8 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
               ref={containerRef}
               className="relative max-w-full max-h-[600px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
               onMouseDown={handleMouseDown}
-              onTouchStart={handleMouseDown}
+              onTouchStart={handleTouchStart}
+              style={{ touchAction: "none" }} // Prevent default touch behaviors
             >
               {/* Restored Image (Background) */}
               <img
@@ -107,18 +147,20 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
                 alt="Restored image"
                 className="block max-w-full max-h-[600px] w-auto h-auto object-contain"
                 draggable={false}
+                loading="lazy"
               />
 
               {/* Original Image (Clipped) */}
               <div
                 className="absolute inset-0 overflow-hidden"
-                style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                style={clipPathStyle}
               >
                 <img
                   src={originalUrl || "/placeholder.svg"}
                   alt="Original image"
                   className="w-full h-full object-contain"
                   draggable={false}
+                  loading="lazy"
                 />
               </div>
 
@@ -139,7 +181,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
                       background="transparent"
                       minSize={0.4}
                       maxSize={1}
-                      particleDensity={1200}
+                      particleDensity={600} // Reduced for mobile performance
                       className="w-full h-full"
                       particleColor="#FFFFFF"
                     />

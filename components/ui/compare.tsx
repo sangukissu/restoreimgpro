@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { IconDotsVertical } from "@tabler/icons-react";
+import { GripVertical } from "lucide-react";
 
 interface CompareProps {
   firstImage?: string;
@@ -17,6 +17,7 @@ interface CompareProps {
   autoplay?: boolean;
   autoplayDuration?: number;
 }
+
 export const Compare = ({
   firstImage = "",
   secondImage = "",
@@ -31,12 +32,28 @@ export const Compare = ({
 }: CompareProps) => {
   const [sliderXPercent, setSliderXPercent] = useState(initialSliderPercentage);
   const [isDragging, setIsDragging] = useState(false);
-
-  const sliderRef = useRef<HTMLDivElement>(null);
-
   const [isMouseOver, setIsMouseOver] = useState(false);
 
+  const sliderRef = useRef<HTMLDivElement>(null);
   const autoplayRef = useRef<NodeJS.Timeout | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const lastUpdateRef = useRef<number>(0);
+
+  // Throttle slider updates to improve performance
+  const updateSliderPosition = useCallback((percentage: number) => {
+    const now = Date.now();
+    if (now - lastUpdateRef.current < 16) return; // ~60fps max
+    
+    lastUpdateRef.current = now;
+    
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setSliderXPercent(Math.max(0, Math.min(100, percentage)));
+    });
+  }, []);
 
   const startAutoplay = useCallback(() => {
     if (!autoplay) return;
@@ -44,16 +61,15 @@ export const Compare = ({
     const startTime = Date.now();
     const animate = () => {
       const elapsedTime = Date.now() - startTime;
-      const progress =
-        (elapsedTime % (autoplayDuration * 2)) / autoplayDuration;
+      const progress = (elapsedTime % (autoplayDuration * 2)) / autoplayDuration;
       const percentage = progress <= 1 ? progress * 100 : (2 - progress) * 100;
 
-      setSliderXPercent(percentage);
-      autoplayRef.current = setTimeout(animate, 16); // ~60fps
+      updateSliderPosition(percentage);
+      autoplayRef.current = setTimeout(animate, 32); // Reduced to 30fps for better performance
     };
 
     animate();
-  }, [autoplay, autoplayDuration]);
+  }, [autoplay, autoplayDuration, updateSliderPosition]);
 
   const stopAutoplay = useCallback(() => {
     if (autoplayRef.current) {
@@ -64,33 +80,35 @@ export const Compare = ({
 
   useEffect(() => {
     startAutoplay();
-    return () => stopAutoplay();
+    return () => {
+      stopAutoplay();
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, [startAutoplay, stopAutoplay]);
 
-  function mouseEnterHandler() {
+  const mouseEnterHandler = useCallback(() => {
     setIsMouseOver(true);
     stopAutoplay();
-  }
+  }, [stopAutoplay]);
 
-  function mouseLeaveHandler() {
+  const mouseLeaveHandler = useCallback(() => {
     setIsMouseOver(false);
     if (slideMode === "hover") {
-      setSliderXPercent(initialSliderPercentage);
+      updateSliderPosition(initialSliderPercentage);
     }
     if (slideMode === "drag") {
       setIsDragging(false);
     }
     startAutoplay();
-  }
+  }, [slideMode, initialSliderPercentage, updateSliderPosition, startAutoplay]);
 
-  const handleStart = useCallback(
-    (clientX: number) => {
-      if (slideMode === "drag") {
-        setIsDragging(true);
-      }
-    },
-    [slideMode]
-  );
+  const handleStart = useCallback((clientX: number) => {
+    if (slideMode === "drag") {
+      setIsDragging(true);
+    }
+  }, [slideMode]);
 
   const handleEnd = useCallback(() => {
     if (slideMode === "drag") {
@@ -98,54 +116,67 @@ export const Compare = ({
     }
   }, [slideMode]);
 
-  const handleMove = useCallback(
-    (clientX: number) => {
-      if (!sliderRef.current) return;
-      if (slideMode === "hover" || (slideMode === "drag" && isDragging)) {
-        const rect = sliderRef.current.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const percent = (x / rect.width) * 100;
-        requestAnimationFrame(() => {
-          setSliderXPercent(Math.max(0, Math.min(100, percent)));
-        });
-      }
-    },
-    [slideMode, isDragging]
-  );
+  const handleMove = useCallback((clientX: number) => {
+    if (!sliderRef.current) return;
+    if (slideMode === "hover" || (slideMode === "drag" && isDragging)) {
+      const rect = sliderRef.current.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const percent = (x / rect.width) * 100;
+      updateSliderPosition(percent);
+    }
+  }, [slideMode, isDragging, updateSliderPosition]);
 
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => handleStart(e.clientX),
-    [handleStart]
-  );
-  const handleMouseUp = useCallback(() => handleEnd(), [handleEnd]);
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => handleMove(e.clientX),
-    [handleMove]
-  );
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    handleStart(e.clientX);
+  }, [handleStart]);
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      if (!autoplay) {
-        handleStart(e.touches[0].clientX);
-      }
-    },
-    [handleStart, autoplay]
-  );
+  const handleMouseUp = useCallback(() => {
+    handleEnd();
+  }, [handleEnd]);
 
-  const handleTouchEnd = useCallback(() => {
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    handleMove(e.clientX);
+  }, [handleMove]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    if (!autoplay) {
+      handleStart(e.touches[0].clientX);
+    }
+  }, [handleStart, autoplay]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
     if (!autoplay) {
       handleEnd();
     }
   }, [handleEnd, autoplay]);
 
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (!autoplay) {
-        handleMove(e.touches[0].clientX);
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    if (!autoplay) {
+      handleMove(e.touches[0].clientX);
+    }
+  }, [handleMove, autoplay]);
+
+  // Memoize the clip path to prevent unnecessary recalculations
+  const clipPathStyle = useMemo(() => ({
+    clipPath: `inset(0 ${100 - sliderXPercent}% 0 0)`,
+  }), [sliderXPercent]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
       }
-    },
-    [handleMove, autoplay]
-  );
+      if (autoplayRef.current) {
+        clearTimeout(autoplayRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -154,6 +185,7 @@ export const Compare = ({
       style={{
         position: "relative",
         cursor: slideMode === "drag" ? "grab" : "col-resize",
+        touchAction: "none", // Prevent default touch behaviors
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={mouseLeaveHandler}
@@ -181,18 +213,19 @@ export const Compare = ({
               background="transparent"
               minSize={0.4}
               maxSize={1}
-              particleDensity={1200}
+              particleDensity={600} // Reduced for mobile performance
               className="w-full h-full"
               particleColor="#FFFFFF"
             />
           </div>
           {showHandlebar && (
-            <div className="h-5 w-5 rounded-md top-1/2 -translate-y-1/2 bg-white z-30 -right-2.5 absolute   flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40]">
-              <IconDotsVertical className="h-4 w-4 text-black" />
-            </div>
+            <div className="w-5 h-10 rounded top-1/2 -translate-y-1/2 bg-white z-30 -right-2.5 absolute   flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40]">
+            <GripVertical className="h-4 w-4 text-black select-none" />
+          </div>
           )}
         </motion.div>
       </AnimatePresence>
+      
       <div className="overflow-hidden w-full h-full relative z-20 pointer-events-none">
         <AnimatePresence initial={false}>
           {firstImage ? (
@@ -201,19 +234,18 @@ export const Compare = ({
                 "absolute inset-0 z-20 rounded-2xl shrink-0 w-full h-full select-none overflow-hidden",
                 firstImageClassName
               )}
-              style={{
-                clipPath: `inset(0 ${100 - sliderXPercent}% 0 0)`,
-              }}
+              style={clipPathStyle}
               transition={{ duration: 0 }}
             >
               <img
                 alt="first image"
                 src={firstImage}
                 className={cn(
-                  "absolute inset-0  z-20 rounded-2xl shrink-0 w-full h-full select-none",
+                  "absolute inset-0 z-20 rounded-2xl shrink-0 w-full h-full select-none",
                   firstImageClassName
                 )}
                 draggable={false}
+                loading="lazy"
               />
             </motion.div>
           ) : null}
@@ -224,12 +256,13 @@ export const Compare = ({
         {secondImage ? (
           <motion.img
             className={cn(
-              "absolute top-0 left-0 z-[19]  rounded-2xl w-full h-full select-none",
+              "absolute top-0 left-0 z-[19] rounded-2xl w-full h-full select-none",
               secondImageClassname
             )}
             alt="second image"
             src={secondImage}
             draggable={false}
+            loading="lazy"
           />
         ) : null}
       </AnimatePresence>

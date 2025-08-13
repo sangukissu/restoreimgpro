@@ -25,6 +25,11 @@ function GridPattern({
 }: GridPatternProps) {
   const id = useId();
 
+  // Deduplicate squares array to prevent duplicate keys
+  const uniqueSquares = squares ? Array.from(
+    new Map(squares.map(([x, y]) => [`${x}-${y}`, [x, y]])).values()
+  ) : undefined;
+
   return (
     <svg
       aria-hidden="true"
@@ -51,12 +56,12 @@ function GridPattern({
         </pattern>
       </defs>
       <rect width="100%" height="100%" strokeWidth={0} fill={`url(#${id})`} />
-      {squares && (
+      {uniqueSquares && (
         <svg x={x} y={y} className="overflow-visible">
-          {squares.map(([x, y]) => (
+          {uniqueSquares.map(([x, y], index) => (
             <rect
               strokeWidth="0"
-              key={`${x}-${y}`}
+              key={`${x}-${y}-${index}`}
               width={width - 1}
               height={height - 1}
               x={x * width + 1}

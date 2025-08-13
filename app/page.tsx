@@ -19,9 +19,9 @@ export default function Page() {
     <div className="min-h-screen bg-white">
       <Header />
       {/* Hero Section */}
-      <section className="relative px-4 py-20 pt-32 max-w-6xl mx-auto text-center overflow-hidden">
-        {/* Grid Pattern Background - positioned at the very top */}
-        <GridPattern
+      <section className="relative  overflow-hidden">
+          {/* Grid Pattern Background - positioned at the very top */}
+          <GridPattern
           squares={[
             [4, 4],
             [5, 1],
@@ -41,6 +41,8 @@ export default function Page() {
             "absolute inset-x-0 top-0 h-full skew-y-12 fill-gray-200/70 stroke-gray-300/70",
           )}
         />
+      <div className="px-4 py-20 pt-32 max-w-6xl mx-auto text-center" >
+      
 
         <div className="relative z-10 space-y-6">
           <div className="space-y-6">
@@ -48,10 +50,10 @@ export default function Page() {
               <Sparkles className="w-3 h-3 mr-1" />
               AI Powered
             </div>
-            <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
+            <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">
               Bring back{" "}
               <PointerHighlight
-                rectangleClassName="bg-purple-100 dark:bg-purple-900 border-purple-300 dark:border-purple-700 leading-tight px-2"
+                rectangleClassName="bg-purple-100 border-purple-300 leading-tight px-2"
                 pointerClassName="text-purple-500 h-3 w-3"
                 containerClassName="inline-block mx-1"
               >
@@ -61,7 +63,7 @@ export default function Page() {
               and
               <br />
               <PointerHighlight
-                rectangleClassName="bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-tight px-2"
+                rectangleClassName="bg-blue-100 border-blue-300 leading-tight px-2"
                 pointerClassName="text-blue-500 h-3 w-3"
                 containerClassName="inline-block mx-1"
               >
@@ -126,6 +128,7 @@ export default function Page() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </section>
 
