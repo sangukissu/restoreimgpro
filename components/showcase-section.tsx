@@ -38,8 +38,8 @@ export default function ShowcaseSection() {
     {
       title: "Dark & Underexposed",
       description: "Brighten shadows and recover hidden details",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Dark+Photo+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Bright+Photo+After",
+      beforeImage: "/under-exposed.webp",
+      afterImage: "/under-exposed-restored.webp",
     },
   ]
 
