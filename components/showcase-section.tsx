@@ -26,14 +26,14 @@ export default function ShowcaseSection() {
     {
       title: "Scratched & Cracked",
       description: "Eliminate scratches and surface damage",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Scratched+Photo+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Smooth+Photo+After",
+      beforeImage: "/scratched.webp",
+      afterImage: "/scratched-restored.webp",
     },
     {
       title: "Blurred & Out of Focus",
       description: "Sharpen details and enhance clarity",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Blurred+Photo+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Sharp+Photo+After",
+      beforeImage: "/blurred.webp",
+      afterImage: "/blurred-restored.webp",
     },
     {
       title: "Dark & Underexposed",
