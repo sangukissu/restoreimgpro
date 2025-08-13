@@ -118,3 +118,152 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Essential cursor styles for good UX - High priority */
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  a,
+  .cursor-pointer,
+  [data-slot="button"],
+  .btn,
+  .button {
+    cursor: pointer !important;
+  }
+  
+  /* Disable cursor for disabled elements */
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  input:disabled,
+  .cursor-not-allowed,
+  .disabled {
+    cursor: not-allowed !important;
+  }
+  
+  /* Text selection cursor */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  input[type="tel"],
+  textarea,
+  [contenteditable="true"],
+  .cursor-text,
+  .text-input {
+    cursor: text !important;
+  }
+  
+  /* Resize cursors for interactive elements */
+  .cursor-resize,
+  .resize {
+    cursor: resize !important;
+  }
+  
+  .cursor-grab,
+  .grab {
+    cursor: grab !important;
+  }
+  
+  .cursor-grabbing,
+  .grabbing {
+    cursor: grabbing !important;
+  }
+  
+  /* Default cursor for non-interactive elements */
+  .cursor-default,
+  .default {
+    cursor: default !important;
+  }
+  
+  /* Hover effects for better UX */
+  button:hover,
+  [role="button"]:hover,
+  a:hover,
+  .cursor-pointer:hover {
+    cursor: pointer !important;
+  }
+  
+  /* Ensure links always show pointer */
+  a[href],
+  a[href]:hover,
+  a[href]:focus {
+    cursor: pointer !important;
+  }
+  
+  /* Form elements */
+  select,
+  select:hover,
+  select:focus {
+    cursor: pointer !important;
+  }
+  
+  /* Checkboxes and radio buttons */
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer !important;
+  }
+  
+  /* Labels for form controls */
+  label[for] {
+    cursor: pointer !important;
+  }
+}
+
+/* Additional high-priority cursor styles to override any conflicts */
+*[onclick],
+*[onclick]:hover,
+*[onclick]:focus {
+  cursor: pointer !important;
+}
+
+/* Force pointer cursor for all interactive elements */
+.interactive,
+.clickable,
+.hover-pointer {
+  cursor: pointer !important;
+}
+
+/* Override any conflicting cursor styles */
+button *,
+[role="button"] *,
+a * {
+  cursor: inherit !important;
+}
+
+/* Test utility - add this class to any element to test cursor */
+.test-cursor {
+  cursor: pointer !important;
+}
+
+/* Ensure all form elements have proper cursors */
+input,
+textarea,
+select {
+  cursor: text !important;
+}
+
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select {
+  cursor: pointer !important;
+}
+
+/* Override any global cursor resets */
+* {
+  cursor: auto;
+}
+
+/* Then apply our specific cursor rules */
+button,
+[role="button"],
+a,
+.clickable {
+  cursor: pointer !important;
+}
