@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { Paperclip } from "lucide-react"
+import { Paperclip, AlertTriangle, Shield } from "lucide-react"
 
 interface ImageUploadProps {
   onImageSelect: (file: File) => void
@@ -12,9 +12,19 @@ interface ImageUploadProps {
   selectedImageUrl: string | null
 }
 
+// Security constants
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+const MAX_DIMENSIONS = 4096 // Max width/height in pixels
+const MIN_DIMENSIONS = 100 // Min width/height in pixels
+
 export default function ImageUpload({ onImageSelect, onRestore, selectedFile, selectedImageUrl }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [isProcessing, setIsProcessing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const uploadAttempts = useRef(0)
+  const lastUploadTime = useRef(0)
 
   const sampleImages = [
     "/vintage-family-photo.png",
@@ -23,17 +33,102 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     "/scratched-childhood-photo.png",
   ]
 
+  // Anti-spam protection
+  const checkSpamProtection = () => {
+    const now = Date.now()
+    const timeSinceLastUpload = now - lastUploadTime.current
+    
+    // Prevent more than 5 uploads per minute
+    if (uploadAttempts.current >= 5 && timeSinceLastUpload < 60000) {
+      throw new Error("Too many upload attempts. Please wait a moment before trying again.")
+    }
+    
+    // Prevent uploads faster than 2 seconds apart
+    if (timeSinceLastUpload < 2000) {
+      throw new Error("Please wait a moment before uploading another image.")
+    }
+    
+    return true
+  }
+
+  // File validation
+  const validateFile = async (file: File): Promise<boolean> => {
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error(`File size must be less than ${(MAX_FILE_SIZE / 1024 / 1024).toFixed(0)}MB`)
+    }
+
+    // Check file type
+    if (!ALLOWED_TYPES.includes(file.type.toLowerCase())) {
+      throw new Error("Only JPG, PNG, and WebP images are supported")
+    }
+
+    // Check file extension
+    const extension = file.name.split('.').pop()?.toLowerCase()
+    if (!['jpg', 'jpeg', 'png', 'webp'].includes(extension || '')) {
+      throw new Error("Invalid file extension. Please use JPG, PNG, or WebP files")
+    }
+
+    // Validate image dimensions
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      const url = URL.createObjectURL(file)
+      
+      img.onload = () => {
+        URL.revokeObjectURL(url)
+        
+        if (img.width > MAX_DIMENSIONS || img.height > MAX_DIMENSIONS) {
+          reject(new Error(`Image dimensions must be less than ${MAX_DIMENSIONS}x${MAX_DIMENSIONS} pixels`))
+          return
+        }
+        
+        if (img.width < MIN_DIMENSIONS || img.height < MIN_DIMENSIONS) {
+          reject(new Error(`Image dimensions must be at least ${MIN_DIMENSIONS}x${MIN_DIMENSIONS} pixels`))
+          return
+        }
+        
+        resolve(true)
+      }
+      
+      img.onerror = () => {
+        URL.revokeObjectURL(url)
+        reject(new Error("Invalid image file. Please check the file and try again"))
+      }
+      
+      img.src = url
+    })
+  }
+
   const handleFiles = useCallback(
-    (files: FileList | null) => {
+    async (files: FileList | null) => {
       if (!files || files.length === 0) return
 
-      const file = files[0]
-      if (!file.type.startsWith("image/")) {
-        alert("Please select an image file")
-        return
+      try {
+        setIsProcessing(true)
+        setUploadError(null)
+        
+        // Anti-spam check
+        checkSpamProtection()
+        
+        const file = files[0]
+        
+        // Validate file
+        await validateFile(file)
+        
+        // Update spam protection
+        uploadAttempts.current++
+        lastUploadTime.current = Date.now()
+        
+        // Success - process file
+        onImageSelect(file)
+        
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Upload failed. Please try again."
+        setUploadError(errorMessage)
+        console.error("Upload error:", error)
+      } finally {
+        setIsProcessing(false)
       }
-
-      onImageSelect(file)
     },
     [onImageSelect],
   )
@@ -67,21 +162,46 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
   )
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click()
+    if (!isProcessing) {
+      fileInputRef.current?.click()
+    }
   }
 
   const handleSampleImageClick = async (imageSrc: string) => {
     try {
+      setIsProcessing(true)
+      setUploadError(null)
+      
+      // Anti-spam check for sample images too
+      checkSpamProtection()
+      
       const response = await fetch(imageSrc)
       if (!response.ok) throw new Error("Failed to fetch sample image")
+      
       const blob = await response.blob()
       const filename = imageSrc.split("/").pop() || "sample-image.png"
       const file = new File([blob], filename, { type: blob.type })
+      
+      // Validate sample image
+      await validateFile(file)
+      
+      // Update spam protection
+      uploadAttempts.current++
+      lastUploadTime.current = Date.now()
+      
       onImageSelect(file)
+      
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to load sample image"
+      setUploadError(errorMessage)
       console.error("Error loading sample image:", error)
-      alert("Failed to load sample image")
+    } finally {
+      setIsProcessing(false)
     }
+  }
+
+  const clearError = () => {
+    setUploadError(null)
   }
 
   if (selectedFile instanceof File && typeof selectedImageUrl === "string" && selectedImageUrl) {
@@ -113,6 +233,19 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
               </div>
             </div>
 
+            {/* AI Disclaimer Notice */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm">
+                  <p className="font-medium text-blue-800 mb-1">AI Restoration Notice</p>
+                  <p className="text-blue-700 leading-relaxed">
+                    Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Action Buttons */}
             <div className="flex gap-3">
               <Button
@@ -137,68 +270,128 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
 
   return (
     <div className="w-full max-w-lg mx-auto px-4">
-  {/* Main Upload Area */}
-  <div
-    className={`relative bg-white border-2 border-dashed rounded-xl p-8 sm:p-12 text-center transition-all duration-200 shadow-sm ${
-      dragActive ? "border-gray-400 bg-gray-50" : "border-gray-300 hover:border-gray-400"
-    }`}
-    onDragEnter={handleDrag}
-    onDragLeave={handleDrag}
-    onDragOver={handleDrag}
-    onDrop={handleDrop}
-  >
-    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleChange} className="hidden" />
-
-    {/* Modern Upload Interface */}
-    <div className="space-y-6">
-      {/* Upload Icon with Animation */}
-      <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 group">
-        <div
-          className={`absolute inset-0 rounded-full bg-gray-100 opacity-50 transition-all duration-300 ${
-            dragActive ? "opacity-75 scale-110" : "group-hover:opacity-75 group-hover:scale-105"
-          }`}
-        ></div>
-        <svg
-          className="relative w-full h-full text-gray-700"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3-3m0 0l3 3m-3-3v12"
-          />
-        </svg>
+      {/* Security Notice */}
+      <div className="mb-4 bg-green-50 border border-green-200 rounded-lg p-3">
+        <div className="flex items-center gap-2 text-sm text-green-700">
+          <Shield className="w-4 h-4" />
+          <span className="font-medium">Secure Upload</span>
+          <span>• 10MB max • JPG/PNG/WebP only • Anti-spam protected</span>
+        </div>
       </div>
 
-      {/* Text and Button Section */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900">
-          {dragActive ? "Drop your image here!" : "Upload your image"}
-        </h3>
-        <p className="text-sm text-gray-500 max-w-xs mx-auto">
-          Drag and drop an image, paste with Ctrl + V, or click below to browse files.
-        </p>
-        <Button
-          onClick={handleButtonClick}
-          className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 h-12 px-8 text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-        >
-          Choose Image
-        </Button>
+      {/* Error Display */}
+      {uploadError && (
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-red-800 mb-1">Upload Error</p>
+              <p className="text-sm text-red-700 mb-3">{uploadError}</p>
+              <button
+                onClick={clearError}
+                className="text-xs text-red-600 hover:text-red-800 underline"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Upload Area */}
+      <div
+        className={`relative bg-white border-2 border-dashed rounded-xl p-8 sm:p-12 text-center transition-all duration-200 shadow-sm ${
+          dragActive ? "border-gray-400 bg-gray-50" : "border-gray-300 hover:border-gray-400"
+        } ${isProcessing ? "opacity-75 pointer-events-none" : ""}`}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+      >
+        <input 
+          ref={fileInputRef} 
+          type="file" 
+          accept="image/jpeg,image/jpg,image/png,image/webp" 
+          onChange={handleChange} 
+          className="hidden"
+          disabled={isProcessing}
+        />
+
+        {/* Modern Upload Interface */}
+        <div className="space-y-6">
+          {/* Upload Icon with Animation */}
+          <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 group">
+            <div
+              className={`absolute inset-0 rounded-full bg-gray-100 opacity-50 transition-all duration-300 ${
+                dragActive ? "opacity-75 scale-110" : "group-hover:opacity-75 group-hover:scale-105"
+              }`}
+            ></div>
+            {isProcessing ? (
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+              </div>
+            ) : (
+              <svg
+                className="relative w-full h-full text-gray-700"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3-3m0 0l3 3m-3-3v12"
+                />
+              </svg>
+            )}
+          </div>
+
+          {/* Text and Button Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {isProcessing ? "Processing..." : dragActive ? "Drop your image here!" : "Upload your image"}
+            </h3>
+            <p className="text-sm text-gray-500 max-w-xs mx-auto">
+              {isProcessing 
+                ? "Please wait while we validate your image..."
+                : "Drag and drop an image, or click below to browse files."
+              }
+            </p>
+            <Button
+              onClick={handleButtonClick}
+              disabled={isProcessing}
+              className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 h-12 px-8 text-sm font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isProcessing ? "Processing..." : "Choose Image"}
+            </Button>
+          </div>
+
+          {/* Supported Formats and Security Info */}
+          <div className="mt-4 space-y-2">
+            <p className="text-xs text-gray-400">
+              Supported: JPG, PNG, WebP • Max: 10MB • Min: 100x100px • Max: 4096x4096px
+            </p>
+            <p className="text-xs text-gray-400">
+              Anti-spam: Max 5 uploads per minute
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Supported Formats */}
-      <div className="mt-4">
-        <p className="text-xs text-gray-400">
-          Supported formats: JPG, PNG, GIF (Max size: 10MB)
-        </p>
+      {/* AI Disclaimer Notice */}
+      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <div className="text-sm">
+            <p className="font-medium text-blue-800 mb-1">AI Restoration Notice</p>
+            <p className="text-blue-700 leading-relaxed">
+              Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-  
   )
 }
