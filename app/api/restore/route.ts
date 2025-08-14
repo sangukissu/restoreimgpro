@@ -62,29 +62,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Authentication required" }, { status: 401 })
     }
 
-    // Check user credits
+    // Check user credits from user_profiles table
     console.log('[Restore API] Checking credits for user:', user.id)
-    const { data: credits, error: creditsError } = await supabase
-      .from("credits")
-      .select("credits_remaining")
+    const { data: userProfile, error: profileError } = await supabase
+      .from("user_profiles")
+      .select("credits")
       .eq("user_id", user.id)
       .single()
 
     console.log('[Restore API] Credits check result:', { 
-      credits, 
-      creditsError, 
-      hasCredits: credits?.credits_remaining > 0 
+      userProfile, 
+      profileError, 
+      hasCredits: userProfile?.credits > 0 
     })
 
-    if (creditsError) {
-      console.error('[Restore API] Credits query error:', creditsError)
+    if (profileError) {
+      console.error('[Restore API] Profile query error:', profileError)
       return NextResponse.json({ error: "Failed to check credits" }, { status: 500 })
     }
 
-    if (!credits || credits.credits_remaining <= 0) {
+    if (!userProfile || userProfile.credits <= 0) {
       console.log('[Restore API] Insufficient credits:', { 
         userId: user.id, 
-        creditsRemaining: credits?.credits_remaining || 0 
+        creditsRemaining: userProfile?.credits || 0 
       })
       return NextResponse.json({ error: "Insufficient credits" }, { status: 402 })
     }
@@ -470,10 +470,10 @@ export async function POST(request: NextRequest) {
 
     console.log('[Restore API] Restoration record saved to database')
 
-    // Update user credits
+    // Update user credits in user_profiles table
     const { error: updateError } = await supabase
-      .from("credits")
-      .update({ credits_remaining: credits.credits_remaining - 1 })
+      .from("user_profiles")
+      .update({ credits: userProfile.credits - 1 })
       .eq("user_id", user.id)
 
     if (updateError) {
@@ -486,7 +486,7 @@ export async function POST(request: NextRequest) {
       restoredImageUrl: finalImageUrl,
       originalFileName: file.name,
       processedAt: new Date().toISOString(),
-      creditsRemaining: credits.credits_remaining - 1,
+      creditsRemaining: userProfile.credits - 1,
     })
   } catch (error) {
     console.error("Error in image restoration:", error)

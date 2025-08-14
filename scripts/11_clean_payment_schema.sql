@@ -63,6 +63,10 @@ BEGIN
   END IF;
 END $$;
 
+-- Ensure email field is never empty and add constraint
+ALTER TABLE public.user_profiles ALTER COLUMN email SET NOT NULL;
+ALTER TABLE public.user_profiles ADD CONSTRAINT user_profiles_email_not_empty CHECK (email != '' AND email IS NOT NULL);
+
 -- Create indexes for performance (using IF NOT EXISTS to be safe)
 CREATE INDEX IF NOT EXISTS idx_payments_user_id ON public.payments(user_id);
 CREATE INDEX IF NOT EXISTS idx_payments_dodo_payment_id ON public.payments(dodo_payment_id);
@@ -121,8 +125,8 @@ BEGIN
   INSERT INTO public.user_profiles (user_id, email, name, credits, created_at)
   VALUES (
     NEW.id,
-    NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'name', NEW.email),
+    COALESCE(NEW.email, ''), -- Ensure email is always populated
+    COALESCE(NEW.raw_user_meta_data->>'name', NEW.email, 'User'),
     0, -- Start with 0 credits
     now()
   );
@@ -145,3 +149,33 @@ GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO authenticated;
 
 -- Grant service role permissions for webhooks
 GRANT ALL ON public.webhook_events TO service_role;
+
+-- Function to update existing user profiles with missing emails
+CREATE OR REPLACE FUNCTION public.update_missing_emails()
+RETURNS void AS $$
+DECLARE
+  user_record RECORD;
+BEGIN
+  -- Update user profiles that have empty or NULL emails
+  FOR user_record IN 
+    SELECT up.user_id, up.id
+    FROM public.user_profiles up
+    WHERE up.email IS NULL OR up.email = ''
+  LOOP
+    -- Get email from auth.users table
+    UPDATE public.user_profiles 
+    SET email = (
+      SELECT email 
+      FROM auth.users 
+      WHERE id = user_record.user_id
+    )
+    WHERE id = user_record.id;
+  END LOOP;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Execute the function to fix existing data
+SELECT public.update_missing_emails();
+
+-- Clean up the temporary function
+DROP FUNCTION public.update_missing_emails();

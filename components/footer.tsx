@@ -27,19 +27,19 @@ export default function Footer() {
 
             {/* Navigation */}
             <nav className="flex flex-wrap justify-center gap-6 leading-tight">
-              <a href="#features" className="text-gray-600 hover:text-black transition-colors">
+              <a href="/privacy" className="text-gray-600 hover:text-black transition-colors">
                 Privacy
               </a>
-              <a href="#how-it-works" className="text-gray-600 hover:text-black transition-colors">
+              <a href="/terms" className="text-gray-600 hover:text-black transition-colors">
                 Terms
               </a>
-              <a href="#pricing" className="text-gray-600 hover:text-black transition-colors">
+              <a href="/pricing" className="text-gray-600 hover:text-black transition-colors">
                 Pricing
               </a>
-              <a href="#examples" className="text-gray-600 hover:text-black transition-colors">
-                Contact
+              <a href="/refunds" className="text-gray-600 hover:text-black transition-colors">
+                Refunds
               </a>
-              <a href="#contact" className="text-gray-600 hover:text-black transition-colors">
+              <a href="/blog" className="text-gray-600 hover:text-black transition-colors">
                 Blog
               </a>
             </nav>

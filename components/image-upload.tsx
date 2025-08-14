@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Paperclip, AlertTriangle, Shield } from "lucide-react"
 
@@ -22,9 +22,27 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
   const [dragActive, setDragActive] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [isRestoring, setIsRestoring] = useState(false) // Add state to prevent duplicate restore calls
   const fileInputRef = useRef<HTMLInputElement>(null)
   const uploadAttempts = useRef(0)
   const lastUploadTime = useRef(0)
+  const componentId = useRef(Math.random().toString(36).substring(2, 15))
+  const renderCount = useRef(0)
+  
+  // Increment render count on every render
+  renderCount.current += 1
+
+  // Debug logging to track component instances
+  useEffect(() => {
+    console.log(`ImageUpload component mounted/rendered:`, { 
+      componentId: componentId.current, 
+      renderCount: renderCount.current,
+      selectedFile: selectedFile?.name, 
+      selectedImageUrl: !!selectedImageUrl,
+      timestamp: Date.now(),
+      stack: new Error().stack?.split('\n').slice(1, 4).join('\n')
+    })
+  }, [selectedFile, selectedImageUrl])
 
   const sampleImages = [
     "/vintage-family-photo.png",
@@ -167,6 +185,31 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     }
   }
 
+  // Protected restore handler to prevent duplicate calls
+  const handleRestoreClick = () => {
+    console.log("Restore button clicked", { 
+      componentId: componentId.current, 
+      renderCount: renderCount.current,
+      isRestoring, 
+      timestamp: Date.now() 
+    })
+    
+    if (isRestoring) {
+      console.log("Restore already in progress, ignoring duplicate click")
+      return
+    }
+    
+    setIsRestoring(true)
+    console.log("Calling onRestore from ImageUpload component")
+    onRestore()
+    
+    // Reset the restoring state after a delay to allow the API call to complete
+    setTimeout(() => {
+      setIsRestoring(false)
+      console.log("Restoring state reset after timeout")
+    }, 5000) // 5 second protection
+  }
+
   const handleSampleImageClick = async (imageSrc: string) => {
     try {
       setIsProcessing(true)
@@ -204,6 +247,8 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     setUploadError(null)
   }
 
+  // CRITICAL FIX: Only render ONE UI state at a time
+  // When a file is selected, show ONLY the preview state
   if (selectedFile instanceof File && typeof selectedImageUrl === "string" && selectedImageUrl) {
     return (
       <div className="w-full max-w-lg mx-auto px-4">
@@ -234,21 +279,18 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
             </div>
 
             {/* AI Disclaimer Notice */}
-            
-                
-                  <p className="text-xs text-center mt-2 leading-tight">
-                    Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
-                  </p>
-         
-            
+            <p className="text-xs text-center mt-2 leading-tight">
+              Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
+            </p>
 
             {/* Action Buttons */}
             <div className="flex gap-3">
               <Button
-                onClick={onRestore}
-                className="flex-1 bg-black text-white hover:bg-gray-800 h-11 text-sm font-medium rounded-lg transition-colors"
+                onClick={handleRestoreClick}
+                disabled={isRestoring}
+                className="flex-1 bg-black text-white hover:bg-gray-800 h-11 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Restore Image
+                {isRestoring ? "Restoring..." : "Restore Image"}
               </Button>
               <Button
                 onClick={() => window.location.reload()}
@@ -264,10 +306,9 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     )
   }
 
+  // When NO file is selected, show ONLY the upload area
   return (
     <div className="w-full max-w-lg mx-auto px-4">
-  
-
       {/* Error Display */}
       {uploadError && (
         <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
@@ -362,18 +403,14 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
             <p className="text-xs text-gray-400">
               Supported: JPG, PNG, WebP • Max: 10MB
             </p>
-     
           </div>
         </div>
       </div>
 
       {/* AI Disclaimer Notice */}
-     
-         
       <p className="text-xs text-center text-gray-500 mt-4 leading-tight">
-              Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
-            </p>
-       
+        Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
+      </p>
     </div>
   )
 }

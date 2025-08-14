@@ -180,18 +180,39 @@ async function handlePaymentSucceeded(webhookData: any) {
       .single()
 
     if (profileError) {
+      // Get user email from auth.users table
+      const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(payment.user_id)
+      
+      if (authError) {
+        console.error("Failed to get auth user:", authError)
+        return
+      }
+      
+      const userEmail = authUser.user?.email || ""
+      const userName = authUser.user?.user_metadata?.name || authUser.user?.email || "User"
+      
+      // Validate email before creating profile
+      if (!userEmail || userEmail.trim() === "") {
+        console.error("Cannot create user profile: No email found for user", payment.user_id)
+        return
+      }
+      
+      console.log(`Creating new user profile for user ${payment.user_id} with email: ${userEmail}`)
+      
       // Create new user profile if it doesn't exist
       const { error: createError } = await supabase.from("user_profiles").insert({
         user_id: payment.user_id,
         credits: creditsToAdd,
-        email: paymentData.metadata?.email || "",
-        name: paymentData.metadata?.name || "User",
+        email: userEmail.trim(),
+        name: userName,
       })
 
       if (createError) {
         console.error("Failed to create user profile:", createError)
         return
       }
+      
+      console.log(`Successfully created user profile for user ${payment.user_id}`)
     } else {
       // Update existing user credits
       const newCredits = (profile.credits || 0) + creditsToAdd

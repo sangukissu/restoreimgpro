@@ -57,7 +57,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
       <motion.div className="relative z-[60] mx-auto w-[70%] max-w-6xl flex items-center justify-between rounded-lg bg-white/95 border border-gray-200 px-6 py-3 hidden backdrop-blur-lg lg:flex">
         {/* Logo */}
         <div className="flex items-center">
-          <h1 className="font-inter font-bold text-xl text-black">BringBack</h1>
+          <a href="/" className="font-inter font-bold text-xl text-black">BringBack</a>
         </div>
 
         {/* Credits Display */}
@@ -111,7 +111,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
       {/* Mobile Header */}
       <motion.div className="relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] items-center justify-between bg-white/95 border border-gray-200 rounded-lg backdrop-blur-lg py-3 px-4 lg:hidden">
         <div className="flex items-center">
-          <h1 className="font-inter font-bold text-xl text-black">BringBack</h1>
+          <a href="/" className="font-inter font-bold text-xl text-black">BringBack</a>
         </div>
         
         <div className="flex items-center gap-3">

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import ImageUpload from "@/components/image-upload"
 import ImageComparison from "@/components/image-comparison"
 import PaymentModal from "@/components/payment-modal"
@@ -36,6 +36,9 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   const [isProcessingPayment, setIsProcessingPayment] = useState(false)
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(isPaymentSuccess)
   const { toast } = useToast()
+  
+  // Add ref to track current restoration request
+  const isRestoringRef = useRef(false)
 
   // Show payment modal immediately if user has no credits
   useEffect(() => {
@@ -54,6 +57,15 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     }
   }, [isPaymentSuccess, userCredits])
 
+  // Cleanup on unmount
+  useEffect(() => {
+    console.log("DashboardClient component mounted")
+    return () => {
+      console.log("DashboardClient component unmounting")
+      isRestoringRef.current = false
+    }
+  }, [])
+
   const handleImageSelect = (file: File) => {
     setSelectedFile(file)
     const imageUrl = URL.createObjectURL(file)
@@ -64,10 +76,30 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   const handleRestore = async () => {
     if (!selectedFile) return
 
+    console.log("handleRestore called", { 
+      appState, 
+      isRestoring: isRestoringRef.current, 
+      timestamp: Date.now() 
+    })
+
+    // Prevent duplicate API calls
+    if (appState === "loading" || isRestoringRef.current) {
+      console.log("Restore already in progress, ignoring duplicate call", { 
+        appState, 
+        isRestoring: isRestoringRef.current 
+      })
+      return
+    }
+
+    // Set restoring flag
+    isRestoringRef.current = true
+
+    console.log("Starting image restoration...", { fileName: selectedFile.name, timestamp: Date.now() })
     setAppState("loading")
     setError(null)
 
     try {
+      console.log("Making API call to restore image...", { timestamp: Date.now() })
       const response: RestoreImageResponse = await restoreImage(selectedFile)
 
       if (response.success && response.restoredImageUrl) {
@@ -93,6 +125,9 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
       const errorMessage = error instanceof Error ? error.message : "Failed to restore image"
       setError(errorMessage)
       setAppState("error")
+    } finally {
+      // Clean up the restoring flag
+      isRestoringRef.current = false
     }
   }
 
@@ -101,6 +136,9 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     if (selectedImageUrl) {
       URL.revokeObjectURL(selectedImageUrl)
     }
+
+    // Reset restoring flag
+    isRestoringRef.current = false
 
     setAppState("upload")
     setSelectedFile(null)
@@ -111,6 +149,8 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
   const handleRetry = () => {
     if (selectedFile) {
+      // Reset restoring flag before retry
+      isRestoringRef.current = false
       handleRestore()
     }
   }
@@ -311,6 +351,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         {/* Upload State */}
         {appState === "upload" && (
           <ImageUpload
+            key={`image-upload-${appState}-${selectedFile?.name || 'no-file'}`}
             onImageSelect={handleImageSelect}
             onRestore={handleRestore}
             selectedFile={selectedFile}

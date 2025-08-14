@@ -12,6 +12,8 @@ import FeaturesSection from "@/components/features-section"
 import ShowcaseSection from "@/components/showcase-section"
 import FAQSection from "@/components/faq-section"
 import MemoriesSection from "@/components/memories-section"
+import TestimonialsSection from "@/components/testimonials-section"
+
 import { cn } from "@/lib/utils"
 
 export default function Page() {
@@ -136,56 +138,8 @@ export default function Page() {
       <BenefitsSection />
       <ShowcaseSection />
       <FeaturesSection />
-
-      {/* Social Proof Section */}
-      <section className="px-4 py-16 bg-gray-50/50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-black mb-4">Trusted by families worldwide</h2>
-            <p className="text-lg text-gray-600">Join thousands who've already brought their memories back to life</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="flex text-black">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                "I thought my grandmother's wedding photo was lost forever. BringBack didn't just restore it—it brought
-                her back to life in that moment. I actually cried."
-              </p>
-              <p className="text-sm font-medium text-black">Sarah M.</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="flex text-black">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                "Incredible results in seconds. My old family photos look like they were taken yesterday. This is the
-                future of photo restoration."
-              </p>
-              <p className="text-sm font-medium text-black">Michael R.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <TestimonialsSection />
       <FAQSection />
-
-      {/* Emotional Memories Section */}
       <MemoriesSection />
 
       {/* Final CTA Section */}
