@@ -223,7 +223,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
         {/* Payment Success Banner */}
         {showPaymentSuccess && (
-          <div className="relative z-10 bg-green-50 border-b border-green-200 mt-24">
+          <div className="relative z-10 bg-green-50 border-b border-green-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -247,7 +247,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         )}
 
         {/* Main Content - Blocked State */}
-        <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-24">
+        <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
           <div className="text-center">
             <div className="w-24 h-24 bg-red-100 rounded-full mx-auto mb-6 flex items-center justify-center">
               <svg className="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,7 +293,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
   // Normal dashboard when user has credits
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen relative">
       {/* Dotted Background Pattern */}
       <div className="absolute inset-0 opacity-30">
         <div
@@ -315,7 +315,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
       {/* Payment Success Banner */}
       {showPaymentSuccess && (
-        <div className="relative z-10 bg-green-50 border-b border-green-200 mt-24">
+        <div className="relative z-10 bg-green-50 border-b border-green-200 ">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -339,7 +339,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
       )}
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-24">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="text-center mb-12">
           <h1 className="font-inter font-bold text-3xl text-black mb-4">Restore Your Images</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -362,7 +362,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         {/* Loading State */}
         {appState === "loading" && (
           <div className="w-full max-w-2xl mx-auto">
-            <div className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-2xl p-16 text-center shadow-sm">
+            <div className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-2xl p-16 text-center">
               <div className="space-y-6">
                 {/* Animated restoration icon */}
                 <div className="w-20 h-20 mx-auto relative">
@@ -403,7 +403,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         {/* Error State */}
         {appState === "error" && (
           <div className="w-full max-w-2xl mx-auto">
-            <div className="bg-red-50/60 backdrop-blur-sm border border-red-200 rounded-2xl p-12 text-center shadow-sm">
+            <div className="bg-red-50/60 backdrop-blur-sm border border-red-200 rounded-2xl p-6 text-center">
               <div className="space-y-6">
                 <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
                   <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -252,7 +252,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
   if (selectedFile instanceof File && typeof selectedImageUrl === "string" && selectedImageUrl) {
     return (
       <div className="w-full max-w-lg mx-auto px-4">
-        <div className="bg-white border rounded-xl p-6">
+        <div className="bg-white/60 backdrop-blur-sm border rounded-xl p-6">
           <div className="space-y-6">
             {/* Image Preview */}
             <div className="w-full aspect-square max-w-xs mx-auto overflow-hidden rounded-lg border border-gray-100">
