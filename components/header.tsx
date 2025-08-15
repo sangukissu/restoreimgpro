@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { IconMenu2, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -154,8 +155,14 @@ export default function Header() {
       <NavBody>
         {/* Logo */}
         <div className="flex items-center">
-          <a href="/" className="text-xl font-bold text-black">
-            BringBack
+          <a href="/" className="flex items-center gap-2">
+            <Image 
+              src="/bringback-logo.png" 
+              alt="BringBack Logo" 
+              width={80} 
+              height={32} 
+              className="w-36 h-8"
+            />
           </a>
         </div>
 
@@ -175,8 +182,15 @@ export default function Header() {
       <MobileNav>
         <MobileNavHeader>
           <div className="flex items-center">
-            <a href="/" className="text-xl font-bold text-black">
-              BringBack
+            <a href="/" className="flex items-center gap-2">
+              <Image 
+                src="/bringback-logo.png" 
+                alt="BringBack Logo" 
+                width={32} 
+                height={32} 
+                className="w-8 h-8"
+              />
+              <span className="text-xl font-bold text-black">BringBack</span>
             </a>
           </div>
           <MobileNavToggle isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />

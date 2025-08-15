@@ -8,6 +8,8 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Loader2, Mail } from "lucide-react"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
 import { signInWithMagicLink, signInWithGoogle, type AuthState } from "./actions"
 
 function MagicLinkSubmit() {
@@ -77,50 +79,56 @@ function LoginFormWithSearchParams() {
   const displayError = state?.error || urlError
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div className="space-y-2 text-center">
-          <h1 className="text-4xl font-semibold tracking-tight text-black">Welcome to BringBack</h1>
-          <p className="text-lg text-gray-600">Sign in to start restoring your photos</p>
-        </div>
-
-        <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
-          {displayError && (
-            <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-red-50 border border-red-200 text-red-700">
-              {displayError}
-              {displayError.includes('expired') && (
-                <p className="mt-2 text-xs text-red-600">
-                  💡 Simply enter your email below to request a new authentication link.
-                </p>
-              )}
-            </div>
-          )}
-          {state?.success && (
-            <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-green-50 border border-green-200 text-green-700">{state.success}</div>
-          )}
-
-          <form action={formAction} className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-900">Email</label>
-              <Input id="email" name="email" type="email" placeholder="you@example.com" required className="bg-white border-gray-300 text-black placeholder:text-gray-500 rounded-lg h-12" />
-            </div>
-            <MagicLinkSubmit />
-          </form>
-
-          <div className="mt-6 space-y-4">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-300" /></div>
-              <div className="relative flex justify-center text-sm"><span className="bg-white px-2 text-gray-500">Or</span></div>
-            </div>
-
-            <GoogleSignInButton />
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Header />
+      
+      <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24">
+        <div className="w-full max-w-md space-y-8">
+          <div className="space-y-2 text-center">
+            <h1 className="text-4xl font-semibold tracking-tight text-black">Welcome to BringBack</h1>
+            <p className="text-lg text-gray-600">Sign in to start restoring your photos</p>
           </div>
 
-          <div className="mt-6 text-center text-gray-600">
-            <p className="text-sm">By continuing, you agree to our terms of service and privacy policy.</p>
+          <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+            {displayError && (
+              <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-red-50 border border-red-200 text-red-700">
+                {displayError}
+                {displayError.includes('expired') && (
+                  <p className="mt-2 text-xs text-red-600">
+                    💡 Simply enter your email below to request a new authentication link.
+                  </p>
+                )}
+              </div>
+            )}
+            {state?.success && (
+              <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-green-50 border border-green-200 text-green-700">{state.success}</div>
+            )}
+
+            <form action={formAction} className="space-y-6">
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-900">Email</label>
+                <Input id="email" name="email" type="email" placeholder="you@example.com" required className="bg-white border-gray-300 text-black placeholder:text-gray-500 rounded-lg h-12" />
+              </div>
+              <MagicLinkSubmit />
+            </form>
+
+            <div className="mt-6 space-y-4">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-300" /></div>
+                <div className="relative flex justify-center text-sm"><span className="bg-white px-2 text-gray-500">Or</span></div>
+              </div>
+
+              <GoogleSignInButton />
+            </div>
+
+            <div className="mt-6 text-center text-gray-600">
+              <p className="text-sm">By continuing, you agree to our terms of service and privacy policy.</p>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
+      
+      <Footer />
     </div>
   )
 }
@@ -129,11 +137,15 @@ function LoginFormWithSearchParams() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-600" />
-          <p className="mt-2 text-gray-600">Loading...</p>
-        </div>
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-600" />
+            <p className="mt-2 text-gray-600">Loading...</p>
+          </div>
+        </main>
+        <Footer />
       </div>
     }>
       <LoginFormWithSearchParams />
