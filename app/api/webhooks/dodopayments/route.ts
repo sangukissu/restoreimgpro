@@ -30,8 +30,7 @@ export async function POST(request: NextRequest) {
     // Parse the webhook payload
     const webhookData = JSON.parse(body)
 
-    // Log the incoming webhook for debugging
-    console.log(`Processing webhook: ${webhookData.type}`, { webhookId, timestamp: webhookTimestamp })
+    // Process webhook event
 
     // Process the webhook based on event type
     if (webhookData.type === "payment.succeeded") {
@@ -41,12 +40,11 @@ export async function POST(request: NextRequest) {
     } else if (webhookData.type === "payment.cancelled") {
       await handlePaymentCancelled(webhookData)
     } else {
-      console.log(`Unhandled webhook type: ${webhookData.type}`)
+      // Unhandled webhook type - no action needed
     }
 
     return NextResponse.json({ received: true })
   } catch (error) {
-    console.error("Webhook processing failed:", error)
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
   }
 }
@@ -125,17 +123,14 @@ async function handlePaymentSucceeded(webhookData: any) {
       const userId = paymentData.metadata?.user_id
 
       if (amountCents === 0 || isNaN(amountCents)) {
-        console.error("Invalid amount_cents in webhook data:", paymentData.metadata)
         return
       }
 
       if (credits === 0 || isNaN(credits)) {
-        console.error("Invalid credits in webhook data:", paymentData.metadata)
         return
       }
 
       if (!userId) {
-        console.error("Missing user_id in webhook metadata:", paymentData.metadata)
         return
       }
 
@@ -153,7 +148,6 @@ async function handlePaymentSucceeded(webhookData: any) {
         .single()
 
       if (createError) {
-        console.error("Failed to create payment record:", createError)
         return
       }
 
@@ -168,7 +162,6 @@ async function handlePaymentSucceeded(webhookData: any) {
     const creditsToAdd = payment.credits_purchased
 
     if (!creditsToAdd || creditsToAdd <= 0) {
-      console.error("Invalid credits_purchased in payment record:", payment)
       return
     }
 
@@ -184,7 +177,6 @@ async function handlePaymentSucceeded(webhookData: any) {
       const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(payment.user_id)
       
       if (authError) {
-        console.error("Failed to get auth user:", authError)
         return
       }
       
@@ -193,11 +185,8 @@ async function handlePaymentSucceeded(webhookData: any) {
       
       // Validate email before creating profile
       if (!userEmail || userEmail.trim() === "") {
-        console.error("Cannot create user profile: No email found for user", payment.user_id)
         return
       }
-      
-      console.log(`Creating new user profile for user ${payment.user_id} with email: ${userEmail}`)
       
       // Create new user profile if it doesn't exist
       const { error: createError } = await supabase.from("user_profiles").insert({
@@ -208,11 +197,8 @@ async function handlePaymentSucceeded(webhookData: any) {
       })
 
       if (createError) {
-        console.error("Failed to create user profile:", createError)
         return
       }
-      
-      console.log(`Successfully created user profile for user ${payment.user_id}`)
     } else {
       // Update existing user credits
       const newCredits = (profile.credits || 0) + creditsToAdd
@@ -225,7 +211,6 @@ async function handlePaymentSucceeded(webhookData: any) {
         .eq("user_id", payment.user_id)
 
       if (creditsError) {
-        console.error("Failed to update user credits:", creditsError)
         return
       }
     }
@@ -233,9 +218,8 @@ async function handlePaymentSucceeded(webhookData: any) {
     // Log the webhook event for tracking using the proper webhook_events table
     await logWebhookEvent(webhookData.type, payment.id, webhookData.business_id)
 
-    console.log(`Successfully processed payment ${paymentId}: Added ${creditsToAdd} credits to user ${payment.user_id}`)
   } catch (error) {
-    console.error("Error in handlePaymentSucceeded:", error)
+    // Payment processing failed
   }
 }
 
@@ -252,7 +236,6 @@ async function handlePaymentFailed(webhookData: any) {
       .single()
 
     if (paymentError || !payment) {
-      console.error("Payment not found for failed webhook:", paymentId)
       return
     }
 
@@ -265,16 +248,14 @@ async function handlePaymentFailed(webhookData: any) {
       .eq("dodo_payment_id", paymentId)
 
     if (updateError) {
-      console.error("Failed to update payment status to failed:", updateError)
       return
     }
 
     // Log the webhook event for tracking
     await logWebhookEvent(webhookData.type, payment.id, webhookData.business_id)
 
-    console.log(`Payment ${paymentId} marked as failed`)
   } catch (error) {
-    console.error("Error in handlePaymentFailed:", error)
+    // Payment failed handling error
   }
 }
 
@@ -291,7 +272,6 @@ async function handlePaymentCancelled(webhookData: any) {
       .single()
 
     if (paymentError || !payment) {
-      console.error("Payment not found for cancelled webhook:", paymentId)
       return
     }
 
@@ -304,16 +284,14 @@ async function handlePaymentCancelled(webhookData: any) {
       .eq("dodo_payment_id", paymentId)
 
     if (updateError) {
-      console.error("Failed to update payment status to cancelled:", updateError)
       return
     }
 
     // Log the webhook event for tracking
     await logWebhookEvent(webhookData.type, payment.id, webhookData.business_id)
 
-    console.log(`Payment ${paymentId} marked as cancelled`)
   } catch (error) {
-    console.error("Error in handlePaymentCancelled:", error)
+    // Payment cancelled handling error
   }
 }
 
@@ -330,13 +308,11 @@ async function logWebhookEvent(eventType: string, paymentId: string, businessId?
     })
 
     if (logError) {
-      console.error("Failed to log webhook event:", logError)
       return false
     }
 
     return true
   } catch (error) {
-    console.error("Error logging webhook event:", error)
     return false
   }
 }

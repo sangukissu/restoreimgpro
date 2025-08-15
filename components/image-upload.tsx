@@ -34,16 +34,9 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
   // Increment render count on every render
   renderCount.current += 1
 
-  // Debug logging to track component instances
+  // Track component instances
   useEffect(() => {
-    console.log(`ImageUpload component mounted/rendered:`, { 
-      componentId: componentId.current, 
-      renderCount: renderCount.current,
-      selectedFile: selectedFile?.name, 
-      selectedImageUrl: !!selectedImageUrl,
-      timestamp: Date.now(),
-      stack: new Error().stack?.split('\n').slice(1, 4).join('\n')
-    })
+    // Component mounted/rendered
   }, [selectedFile, selectedImageUrl])
 
   const sampleImages = [
@@ -145,7 +138,6 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "Upload failed. Please try again."
         setUploadError(errorMessage)
-        console.error("Upload error:", error)
       } finally {
         setIsProcessing(false)
       }
@@ -189,26 +181,16 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
 
   // Protected restore handler to prevent duplicate calls
   const handleRestoreClick = () => {
-    console.log("Restore button clicked", { 
-      componentId: componentId.current, 
-      renderCount: renderCount.current,
-      isRestoring, 
-      timestamp: Date.now() 
-    })
-    
     if (isRestoring) {
-      console.log("Restore already in progress, ignoring duplicate click")
       return
     }
     
     setIsRestoring(true)
-    console.log("Calling onRestore from ImageUpload component")
     onRestore()
     
     // Reset the restoring state after a delay to allow the API call to complete
     setTimeout(() => {
       setIsRestoring(false)
-      console.log("Restoring state reset after timeout")
     }, 5000) // 5 second protection
   }
 
@@ -239,7 +221,6 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Failed to load sample image"
       setUploadError(errorMessage)
-      console.error("Error loading sample image:", error)
     } finally {
       setIsProcessing(false)
     }

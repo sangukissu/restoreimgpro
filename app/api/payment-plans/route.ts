@@ -11,7 +11,6 @@ export async function GET() {
       .order("credits", { ascending: true })
 
     if (error) {
-      console.error("Payment plans fetch error:", error)
       return NextResponse.json({ error: "Failed to fetch payment plans" }, { status: 500 })
     }
 
@@ -24,7 +23,6 @@ export async function GET() {
     
     return response
   } catch (error) {
-    console.error("Payment plans API error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

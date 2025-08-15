@@ -59,9 +59,9 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
   // Cleanup on unmount
   useEffect(() => {
-    console.log("DashboardClient component mounted")
+    // Component lifecycle tracking
     return () => {
-      console.log("DashboardClient component unmounting")
+      // Component cleanup
       isRestoringRef.current = false
     }
   }, [])
@@ -76,32 +76,24 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   const handleRestore = async () => {
     if (!selectedFile) return
 
-    console.log("handleRestore called", { 
-      appState, 
-      isRestoring: isRestoringRef.current, 
-      timestamp: Date.now() 
-    })
+    // Handle restore request
 
     // Prevent duplicate API calls
     if (appState === "loading" || isRestoringRef.current) {
-      console.log("Restore already in progress, ignoring duplicate call", { 
-        appState, 
-        isRestoring: isRestoringRef.current 
-      })
       return
     }
 
     // Set restoring flag
     isRestoringRef.current = true
 
-    console.log("Starting image restoration...", { fileName: selectedFile.name, timestamp: Date.now() })
+    // Start image restoration
     setAppState("loading")
     setError(null)
 
     let finalCredits = userCredits
     
     try {
-      console.log("Making API call to restore image...", { timestamp: Date.now() })
+      // Make API call to restore image
       const response: RestoreImageResponse = await restoreImage(selectedFile)
       
       if (response.success && response.restoredImageUrl) {
@@ -125,7 +117,6 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         setAppState("error")
       }
     } catch (error) {
-      console.error("Error restoring image:", error)
       const errorMessage = error instanceof Error ? error.message : "Failed to restore image"
       setError(errorMessage)
       setAppState("error")
@@ -211,7 +202,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         toast.error('Failed to sign out. Please try again.')
       }
     } catch (error) {
-      console.error('Sign out error:', error)
+      // Sign out error occurred
       toast.error('Failed to sign out. Please try again.')
     }
   }
@@ -246,71 +237,141 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
       />
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
         {/* Feature Selection State */}
         {appState === "feature-selection" && (
           <>
             <div className="text-center mb-16">
-              <h1 className="font-inter font-bold text-4xl lg:text-5xl text-black mb-4">Choose Your Enhancement</h1>
+              <h1 className="font-inter font-bold text-4xl sm:text-5xl text-black mb-4">Choose Your Enhancement</h1>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
                 Select the type of AI enhancement you'd like to apply to your photos
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-12 relative">
               {/* Restore Feature */}
-              <div 
+                <div
                 onClick={() => handleFeatureSelect("restore")}
-                className="bg-white lg:mt-8 rounded-2xl p-8 shadow-sm border-4 border-gray-200 backdrop-blur transform -rotate-2 hover:rotate-0 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-black group relative z-10"
+                className="bg-white sm:mt-8 rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-6 borer-gray-200 sm:border-4 sm:border-gray-200 backdrop-blur sm:transform sm:-rotate-2 sm:hover:rotate-0 transition-all duration-300 cursor-pointer hover:border-gray-400 sm:hover:border-black group relative z-10 active:scale-95 sm:active:scale-100"
               >
-                <div className="mb-6">
-                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
-                    </svg>
+                {/* Mobile Layout */}
+                <div className="sm:hidden">
+                  <div className="flex items-start gap-5">
+                    <div className="flex-shrink-0 mt-1">
+                      <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-2xl font-bold text-black mb-3 tracking-tight">Restore</h3>
+                      <p className="text-gray-700 leading-relaxed text-base font-medium">
+                        Fix damaged, torn, or faded photos with AI precision.
+                      </p>
+                    
+                    </div>
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-black mb-4">Restore</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Fix damaged, torn, or faded photos. Repair scratches, water damage, and bring back original colors.
-                </p>
+
+                {/* Desktop Layout */}
+                <div className="hidden sm:block">
+                  <div className="mb-6">
+                    <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-black mb-4">Restore</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Fix damaged, torn, or faded photos. Repair scratches, water damage, and bring back original colors.
+                  </p>
+                </div>
               </div>
 
               {/* Denoise Feature */}
-              <div 
+              <div
                 onClick={() => handleFeatureSelect("denoise")}
-                className="bg-white rounded-2xl p-8 shadow-sm border-4 border-gray-200 backdrop-blur transform rotate-2 hover:rotate-0 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-black group relative z-10"
+                className="bg-white rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-6 border-gray-200 sm:border-4 sm:border-gray-200 backdrop-blur sm:transform sm:rotate-2 sm:hover:rotate-0 transition-all duration-300 cursor-pointer hover:border-gray-400 sm:hover:border-black group relative z-10 active:scale-95 sm:active:scale-100"
               >
-                <div className="mb-6">
-                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
+                {/* Mobile Layout */}
+                <div className="sm:hidden">
+                  <div className="flex items-start gap-5">
+                    <div className="flex-shrink-0 mt-1">
+                      <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
+                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-2xl font-bold text-black mb-3 tracking-tight">Denoise</h3>
+                      <p className="text-gray-700 leading-relaxed text-base font-medium">
+                        Remove grain, noise, and digital artifacts from photos.
+                      </p>
+                     
+                    </div>
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-black mb-4">Denoise</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Remove grain, noise, and digital artifacts from photos. Perfect for low-light or high-ISO images.
-                </p>
+
+                {/* Desktop Layout */}
+                <div className="hidden sm:block">
+                  <div className="mb-6">
+                    <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-black mb-4">Denoise</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Remove grain, noise, and digital artifacts from photos. Perfect for low-light or high-ISO images.
+                  </p>
+                </div>
               </div>
 
               {/* Deblur Feature */}
-              <div 
+              <div
                 onClick={() => handleFeatureSelect("deblur")}
-                className="bg-white rounded-2xl p-8 shadow-sm border-4 border-gray-200 backdrop-blur transform -rotate-2 hover:rotate-0 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-black group relative z-10"
+                className="bg-white sm:mt-8 rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-6 border-gray-200 sm:border-4 sm:border-gray-200 backdrop-blur sm:transform sm:-rotate-2 sm:hover:rotate-0 transition-all duration-300 cursor-pointer hover:border-gray-400 sm:hover:border-black group relative z-10 active:scale-95 sm:active:scale-100"
               >
-                <div className="mb-6">
-                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
+                {/* Mobile Layout */}
+                <div className="sm:hidden">
+                  <div className="flex items-start gap-5">
+                    <div className="flex-shrink-0 mt-1">
+                      <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
+                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-2xl font-bold text-black mb-3 tracking-tight">Deblur</h3>
+                      <p className="text-gray-700 leading-relaxed text-base font-medium">
+                        Sharpen blurry photos and bring back crisp details.
+                      </p>
+                    
+                    </div>
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-black mb-4">Deblur</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Sharpen blurry photos caused by camera shake or motion. Bring back crisp details and clarity.
-                </p>
+
+                {/* Desktop Layout */}
+                <div className="hidden sm:block">
+                  <div className="mb-6">
+                    <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-black mb-4">Deblur</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Sharpen blurry photos caused by camera shake or motion. Bring back crisp details and clarity.
+                  </p>
+                </div>
               </div>
             </div>
           </>

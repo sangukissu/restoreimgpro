@@ -163,13 +163,11 @@ async function fetchGraphQL(query: string, variables: Record<string, any> = {}) 
     const json = await response.json()
     
     if (json.errors) {
-      console.error('GraphQL errors:', json.errors)
       throw new Error('GraphQL query failed')
     }
 
     return json
   } catch (error) {
-    console.error('WordPress API error:', error)
     throw error
   }
 }

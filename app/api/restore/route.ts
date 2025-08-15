@@ -63,29 +63,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Check user credits from user_profiles table
-    console.log('[Restore API] Checking credits for user:', user.id)
+  
     const { data: userProfile, error: profileError } = await supabase
       .from("user_profiles")
       .select("credits")
       .eq("user_id", user.id)
       .single()
 
-    console.log('[Restore API] Credits check result:', { 
-      userProfile, 
-      profileError, 
-      hasCredits: userProfile?.credits > 0 
-    })
-
     if (profileError) {
-      console.error('[Restore API] Profile query error:', profileError)
       return NextResponse.json({ error: "Failed to check credits" }, { status: 500 })
     }
 
     if (!userProfile || userProfile.credits <= 0) {
-      console.log('[Restore API] Insufficient credits:', { 
-        userId: user.id, 
-        creditsRemaining: userProfile?.credits || 0 
-      })
       return NextResponse.json({ error: "Insufficient credits" }, { status: 402 })
     }
 
@@ -111,13 +100,6 @@ export async function POST(request: NextRequest) {
     if (!fileValidation.valid) {
       return NextResponse.json({ error: fileValidation.error }, { status: 400 })
     }
-
-    // Upload file to Fal AI for processing
-    console.log('[Restore API] Processing file:', { 
-      fileName: file.name, 
-      fileSize: file.size, 
-      fileType: file.type 
-    })
     
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
@@ -128,8 +110,6 @@ export async function POST(request: NextRequest) {
     // Upload file to Fal AI storage
     const uploadedFile = await fal.storage.upload(blob)
     
-    console.log('[Restore API] File uploaded to Fal AI:', uploadedFile)
-
     // Prepare input for Fal AI photo restoration API with sanitization
     const input: any = {
       image_url: uploadedFile,
@@ -157,18 +137,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    
-    console.log('[Restore API] Final input object:', { 
-      hasImageUrl: !!input.image_url,
-      imageUrl: input.image_url,
-      allParams: Object.keys(input),
-      seed: input.seed,
-      outputFormat: input.output_format,
-      safetyTolerance: input.safety_tolerance
-    })
 
-    // Call Fal AI photo restoration API
-    console.log('[Restore API] Calling Fal AI photo restoration with input:', input)
     
     let output: any
     try {
@@ -177,17 +146,13 @@ export async function POST(request: NextRequest) {
         input: input,
         logs: true,
         onQueueUpdate: (update) => {
-          if (update.status === "IN_PROGRESS") {
-            console.log('[Restore API] Fal AI processing update:', update.logs?.map(log => log.message))
-          }
+          // Processing updates handled silently in production
         },
       })
       
       output = result.data
-      console.log('[Restore API] Fal AI response:', output)
       
     } catch (falError) {
-      console.error('[Restore API] Fal AI API call failed:', falError)
       if (falError instanceof Error) {
         if (falError.message.includes('authentication') || falError.message.includes('401')) {
           return NextResponse.json({ error: "Authentication failed with restoration service. Please check your API key." }, { status: 401 })
@@ -205,37 +170,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Restoration service temporarily unavailable. Please try again." }, { status: 503 })
     }
 
-    console.log('[Restore API] Fal AI response:', { 
-      output, 
-      outputType: typeof output,
-      hasImages: output?.images && Array.isArray(output.images),
-      imagesLength: output?.images?.length || 0
-    })
+
 
     // Validate output - According to Fal AI docs, output should have images array
     if (!output || !output.images || !Array.isArray(output.images) || output.images.length === 0) {
-      console.error('[Restore API] No valid output from Fal AI:', output)
       return NextResponse.json({ error: "No response from restoration service" }, { status: 500 })
     }
 
     // Extract the restored image URL from Fal AI response
     const restoredImageUrl = output.images[0].url
-    console.log('[Restore API] Extracted restored image URL:', restoredImageUrl)
 
     // Validate that the restored image URL is a valid URI
     if (!restoredImageUrl || typeof restoredImageUrl !== "string") {
-      console.error('[Restore API] Invalid restored image URL:', restoredImageUrl)
       return NextResponse.json({ error: "Invalid response from restoration service" }, { status: 500 })
     }
 
     // Check if it's a valid URI (should start with http:// or https://)
     if (!restoredImageUrl.startsWith('http://') && !restoredImageUrl.startsWith('https://')) {
-      console.error('[Restore API] Invalid URI format:', restoredImageUrl)
       return NextResponse.json({ error: "Invalid URI format from restoration service" }, { status: 500 })
     }
 
     // Download the restored image and save it to Supabase storage
-    console.log('[Restore API] Downloading restored image from:', restoredImageUrl)
     let finalImageUrl: string
 
     
@@ -256,10 +211,7 @@ export async function POST(request: NextRequest) {
       const fileExtension = restoredImageUrl.split('.').pop() || 'png'
       const fileName = `${user.id}/${timestamp}_${randomId}.${fileExtension}`
       
-      console.log('[Restore API] Uploading to Supabase storage:', fileName)
-      
       // Upload directly to the restored_photos bucket (bucket already exists with policies)
-      console.log('[Restore API] Starting upload to restored_photos bucket')
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('restored_photos')
         .upload(fileName, imageBlob, {
@@ -268,19 +220,8 @@ export async function POST(request: NextRequest) {
         })
       
       if (uploadError) {
-        console.error('[Restore API] Storage upload error:', uploadError)
-        console.error('[Restore API] Upload error details:', {
-          code: uploadError.message,
-          details: uploadError,
-          fileName,
-          fileSize: imageBlob.size,
-          contentType: contentType,
-          bucketName: 'restored_photos'
-        })
         throw new Error(`Storage upload failed: ${uploadError.message}`)
       }
-      
-      console.log('[Restore API] Upload successful, upload data:', uploadData)
       
       // Get the public URL for the uploaded image
       const { data: urlData } = supabase.storage
@@ -288,42 +229,10 @@ export async function POST(request: NextRequest) {
         .getPublicUrl(fileName)
       
       finalImageUrl = urlData.publicUrl
-      console.log('[Restore API] Image uploaded successfully to storage:', finalImageUrl)
-      console.log('[Restore API] Public URL generated:', urlData.publicUrl)
-      
-      // Verify the file actually exists in storage
-      const { data: fileExists, error: checkError } = await supabase.storage
-        .from('restored_photos')
-        .list(user.id)
-      
-      if (checkError) {
-        console.error('[Restore API] Error checking if file exists:', checkError)
-      } else {
-        console.log('[Restore API] Files in user folder:', fileExists)
-        const uploadedFile = fileExists?.find(f => f.name.includes(timestamp.toString()))
-        if (uploadedFile) {
-          console.log('[Restore API] File confirmed in storage:', uploadedFile)
-        } else {
-          console.warn('[Restore API] Warning: File not found in storage after upload')
-        }
-      }
       
     } catch (storageError) {
-      console.error('[Restore API] Error saving to storage:', storageError)
-      
-      // Try to understand what went wrong
-      if (storageError instanceof Error) {
-        if (storageError.message.includes('policy') || storageError.message.includes('permission')) {
-          console.error('[Restore API] This appears to be a storage policy issue')
-          console.error('[Restore API] User ID:', user.id)
-          console.error('[Restore API] Bucket name: restored_photos')
-        }
-      }
-      
       // Fallback: use the original Fal AI URL if storage fails
       finalImageUrl = restoredImageUrl
-      console.log('[Restore API] Using fallback URL due to storage error:', finalImageUrl)
-      console.log('[Restore API] Note: Image is NOT saved to Supabase storage, only Fal AI URL saved')
     }
 
     // Save restoration record to database (matching your actual schema)
@@ -334,11 +243,8 @@ export async function POST(request: NextRequest) {
     })
 
     if (insertError) {
-      console.error("Error saving restoration record:", insertError)
       return NextResponse.json({ error: "Failed to save restoration record" }, { status: 500 })
     }
-
-    console.log('[Restore API] Restoration record saved to database')
 
     // Update user credits in user_profiles table
     const { error: updateError } = await supabase
@@ -347,7 +253,7 @@ export async function POST(request: NextRequest) {
       .eq("user_id", user.id)
 
     if (updateError) {
-      console.error("Error updating credits:", updateError)
+      // Credits update failed but continue with response
     }
 
     // Return the final image URL (from Supabase storage)
@@ -359,7 +265,6 @@ export async function POST(request: NextRequest) {
       creditsRemaining: userProfile.credits - 1,
     })
   } catch (error) {
-    console.error("Error in image restoration:", error)
 
     // Handle specific Fal AI errors
     if (error instanceof Error) {

@@ -48,7 +48,6 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
         toast.error('Failed to sign out. Please try again.')
       }
     } catch (error) {
-      console.error('Sign out error:', error)
       toast.error('Failed to sign out. Please try again.')
     }
   }

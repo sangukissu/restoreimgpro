@@ -8,18 +8,10 @@ export async function GET(request: Request) {
   const error = searchParams.get('error')
   const errorDescription = searchParams.get('error_description')
 
-  console.log('[Callback] Received', { 
-    codePresent: !!code, 
-    next, 
-    origin,
-    error,
-    errorDescription,
-    fullUrl: request.url 
-  })
+  // Process callback parameters
 
   // Handle authentication errors (expired links, access denied, etc.)
   if (error) {
-    console.log('[Callback] Authentication error detected:', { error, errorDescription })
     
     // Redirect to login with error information
     const loginUrl = new URL('/login', origin)
@@ -42,7 +34,6 @@ export async function GET(request: Request) {
       const { data: sessionData } = await supabase.auth.getSession()
       
       if (sessionData.session) {
-        console.log('[Callback] Session already exists, redirecting to dashboard')
         return NextResponse.redirect(`${origin}${next}`)
       }
       
@@ -50,7 +41,6 @@ export async function GET(request: Request) {
       const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
       
       if (exchangeError) {
-        console.error('[Callback] exchangeCodeForSession error', exchangeError)
         
         // Check if it's an expired/invalid code error
         if (exchangeError.message?.includes('expired') || 
@@ -66,7 +56,6 @@ export async function GET(request: Request) {
         const { data: retrySessionData } = await supabase.auth.getSession()
         
         if (retrySessionData.session) {
-          console.log('[Callback] Session found after retry, redirecting to dashboard')
           return NextResponse.redirect(`${origin}${next}`)
         }
         
@@ -77,11 +66,9 @@ export async function GET(request: Request) {
       }
 
       if (data.session) {
-        console.log('[Callback] Session created successfully, redirecting to:', next)
         return NextResponse.redirect(`${origin}${next}`)
       }
     } catch (err) {
-      console.error('[Callback] Unexpected error:', err)
       const loginUrl = new URL('/login', origin)
       loginUrl.searchParams.set('error', 'An unexpected error occurred. Please try again.')
       return NextResponse.redirect(loginUrl)
@@ -89,7 +76,6 @@ export async function GET(request: Request) {
   }
 
   // No code and no error - redirect to login
-  console.log('[Callback] No code provided, redirecting to login')
   const loginUrl = new URL('/login', origin)
   loginUrl.searchParams.set('error', 'Invalid authentication request. Please try logging in again.')
   return NextResponse.redirect(loginUrl)
