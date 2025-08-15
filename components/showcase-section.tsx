@@ -1,5 +1,7 @@
 "use client"
-
+import { Button } from "@/components/ui/button"
+import { ChevronRight } from "lucide-react"
+import Link from "next/link"
 import { Compare } from "@/components/ui/compare"
 import { Cover } from "@/components/ui/cover"
 
@@ -55,7 +57,7 @@ export default function ShowcaseSection() {
             <span className="text-gray-600"><Cover>perfectly restored</Cover>
 </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
             From torn family portraits to faded wedding photos, see how BringBack handles every type of photo damage
             with precision and care.
           </p>
@@ -96,13 +98,18 @@ export default function ShowcaseSection() {
         {/* Bottom CTA */}
         <div className="text-center mt-16">
           <div className="max-w-2xl mx-auto">
-            <p className="text-gray-600 mb-6">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight mb-4">
               Our AI handles even the most unique photo restoration challenges. Upload your photo and see the magic
               happen.
             </p>
-            <button className="bg-black text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200 shadow-sm hover:shadow-md">
-              Restore Your Photo Now
-            </button>
+              <Link href="/dashboard">
+            <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
+              <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Restore Your Photo</span>
+              <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
+              </i>
+            </Button>
+            </Link>
           </div>
         </div>
       </div>

@@ -157,7 +157,7 @@ export default function Header() {
         <div className="flex items-center">
           <a href="/" className="flex items-center gap-2">
             <Image 
-              src="/bringback-logo.png" 
+              src="/header-logo.webp" 
               alt="BringBack Logo" 
               width={80} 
               height={32} 
@@ -184,13 +184,13 @@ export default function Header() {
           <div className="flex items-center">
             <a href="/" className="flex items-center gap-2">
               <Image 
-                src="/bringback-logo.png" 
+                src="/header-logo.webp" 
                 alt="BringBack Logo" 
-                width={32} 
+                width={80} 
                 height={32} 
-                className="w-8 h-8"
+                className="w-36 h-8"
               />
-              <span className="text-xl font-bold text-black">BringBack</span>
+            
             </a>
           </div>
           <MobileNavToggle isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />

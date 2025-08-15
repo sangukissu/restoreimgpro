@@ -3,7 +3,7 @@
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 import { Suspense } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,6 +11,7 @@ import { Loader2, Mail } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { signInWithMagicLink, signInWithGoogle, type AuthState } from "./actions"
+import { createClient } from "@/utils/supabase/client"
 
 function MagicLinkSubmit() {
   const { pending } = useFormStatus()
@@ -61,7 +62,22 @@ function GoogleSignInButton() {
 function LoginFormWithSearchParams() {
   const [state, formAction] = useActionState<AuthState, FormData>(signInWithMagicLink, {} as AuthState)
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [urlError, setUrlError] = useState<string | null>(null)
+
+  // Check if user is already authenticated and redirect to dashboard
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (session) {
+        router.replace('/dashboard')
+      }
+    }
+    
+    checkAuth()
+  }, [router])
 
   // Check for error messages in URL parameters (from callback redirects)
   useEffect(() => {

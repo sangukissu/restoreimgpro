@@ -60,7 +60,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
         <div className="flex items-center">
           <a href="/" className="flex items-center gap-2">
             <Image 
-              src="/bringback-logo.png" 
+              src="/header-logo.webp" 
               alt="BringBack Logo" 
              width={80} 
               height={32} 
@@ -122,13 +122,12 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
         <div className="flex items-center">
           <a href="/" className="flex items-center gap-2">
             <Image 
-              src="/bringback-logo.png" 
+              src="/header-logo.webp" 
               alt="BringBack Logo" 
               width={28} 
               height={28} 
               className="w-7 h-7"
             />
-            <span className="font-inter font-bold text-xl text-black">BringBack</span>
           </a>
         </div>
         

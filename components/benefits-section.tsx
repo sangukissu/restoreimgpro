@@ -11,7 +11,7 @@ export default function BenefitsSection() {
           <p className="text-gray-500 italic text-lg mb-4">Why Choose Us</p>
           <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">Why trust this <Cover>AI Photo Restorer</Cover>
 </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
             Professional photo restoration that brings damaged photos back to life without losing their original charm
           </p>
         </div>

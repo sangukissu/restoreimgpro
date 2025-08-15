@@ -1,0 +1,299 @@
+/* Blog Content Rich Text Styling */
+
+.blog-content {
+  @apply text-gray-800 leading-relaxed;
+}
+
+/* Headings */
+.blog-content h1 {
+  @apply text-4xl md:text-5xl font-bold text-gray-900 mt-12 mb-6 leading-tight;
+  border-bottom: 3px solid #3b82f6;
+  padding-bottom: 0.5rem;
+}
+
+.blog-content h2 {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 mt-10 mb-5 leading-tight;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.blog-content h3 {
+  @apply text-2xl md:text-3xl font-semibold text-gray-900 mt-8 mb-4 leading-tight;
+}
+
+.blog-content h4 {
+  @apply text-xl md:text-2xl font-semibold text-gray-900 mt-6 mb-3 leading-tight;
+}
+
+.blog-content h5 {
+  @apply text-lg md:text-xl font-semibold text-gray-900 mt-6 mb-3 leading-tight;
+}
+
+.blog-content h6 {
+  @apply text-base md:text-lg font-semibold text-gray-900 mt-4 mb-2 leading-tight;
+}
+
+/* Paragraphs */
+.blog-content p {
+  @apply text-base md:text-lg text-gray-700 mb-6 leading-relaxed;
+}
+
+.blog-content p:last-child {
+  @apply mb-0;
+}
+
+/* Links */
+.blog-content a {
+  @apply text-blue-600 hover:text-blue-800 underline decoration-2 underline-offset-2 transition-colors duration-200;
+}
+
+.blog-content a:hover {
+  @apply decoration-blue-800;
+}
+
+/* Lists */
+.blog-content ul {
+  @apply list-disc list-inside mb-6 space-y-2 text-gray-700;
+}
+
+.blog-content ol {
+  @apply list-decimal list-inside mb-6 space-y-2 text-gray-700;
+}
+
+.blog-content li {
+  @apply text-base md:text-lg leading-relaxed;
+}
+
+.blog-content ul ul,
+.blog-content ol ol,
+.blog-content ul ol,
+.blog-content ol ul {
+  @apply ml-6 mt-2 mb-2;
+}
+
+/* Blockquotes */
+.blog-content blockquote {
+  @apply border-l-4 border-blue-500 bg-blue-50 pl-6 pr-4 py-4 mb-6 italic text-gray-800 rounded-r-lg;
+}
+
+.blog-content blockquote p {
+  @apply mb-0 text-lg;
+}
+
+.blog-content blockquote cite {
+  @apply block mt-2 text-sm text-gray-600 not-italic font-medium;
+}
+
+/* Code */
+.blog-content code {
+  @apply bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm font-mono;
+}
+
+.blog-content pre {
+  @apply bg-gray-900 text-gray-100 p-4 rounded-lg mb-6 overflow-x-auto;
+}
+
+.blog-content pre code {
+  @apply bg-transparent text-gray-100 p-0;
+}
+
+/* Tables */
+.blog-content table {
+  @apply w-full border-collapse border border-gray-300 mb-6 rounded-lg overflow-hidden;
+}
+
+.blog-content th {
+  @apply bg-gray-100 border border-gray-300 px-4 py-3 text-left font-semibold text-gray-900;
+}
+
+.blog-content td {
+  @apply border border-gray-300 px-4 py-3 text-gray-700;
+}
+
+.blog-content tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+/* Images */
+.blog-content img {
+  @apply max-w-full h-auto rounded-lg shadow-md mb-6 mx-auto;
+}
+
+.blog-content figure {
+  @apply mb-6 text-center;
+}
+
+.blog-content figcaption {
+  @apply text-sm text-gray-600 mt-2 italic;
+}
+
+/* WordPress specific classes */
+.blog-content .wp-block-image {
+  @apply mb-6 text-center;
+}
+
+.blog-content .wp-block-image img {
+  @apply rounded-lg shadow-md;
+}
+
+.blog-content .wp-block-quote {
+  @apply border-l-4 border-blue-500 bg-blue-50 pl-6 pr-4 py-4 mb-6 rounded-r-lg;
+}
+
+.blog-content .wp-block-quote p {
+  @apply text-lg italic text-gray-800 mb-0;
+}
+
+.blog-content .wp-block-quote cite {
+  @apply block mt-2 text-sm text-gray-600 not-italic font-medium;
+}
+
+/* Embedded content */
+.blog-content iframe {
+  @apply w-full rounded-lg mb-6;
+  aspect-ratio: 16/9;
+}
+
+.blog-content .wp-block-embed {
+  @apply mb-6;
+}
+
+.blog-content .wp-block-embed iframe {
+  @apply w-full rounded-lg;
+}
+
+/* YouTube embeds */
+.blog-content .wp-block-embed-youtube iframe,
+.blog-content .wp-embed-responsive iframe {
+  @apply w-full rounded-lg;
+  aspect-ratio: 16/9;
+}
+
+/* Buttons and CTAs */
+.blog-content .wp-block-button {
+  @apply mb-6;
+}
+
+.blog-content .wp-block-button__link {
+  @apply inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 no-underline;
+}
+
+/* Separators */
+.blog-content hr {
+  @apply border-0 border-t-2 border-gray-200 my-8;
+}
+
+/* Strong and emphasis */
+.blog-content strong {
+  @apply font-bold text-gray-900;
+}
+
+.blog-content em {
+  @apply italic;
+}
+
+/* Mark/highlight */
+.blog-content mark {
+  @apply bg-yellow-200 px-1 rounded;
+}
+
+/* Small text */
+.blog-content small {
+  @apply text-sm text-gray-600;
+}
+
+/* Subscript and superscript */
+.blog-content sub,
+.blog-content sup {
+  @apply text-xs;
+}
+
+/* WordPress gallery */
+.blog-content .wp-block-gallery {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6;
+}
+
+.blog-content .wp-block-gallery img {
+  @apply w-full h-auto object-cover rounded-lg;
+}
+
+/* WordPress columns */
+.blog-content .wp-block-columns {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6 mb-6;
+}
+
+.blog-content .wp-block-column {
+  @apply space-y-4;
+}
+
+/* WordPress cover block */
+.blog-content .wp-block-cover {
+  @apply relative rounded-lg overflow-hidden mb-6 min-h-[300px] flex items-center justify-center;
+}
+
+.blog-content .wp-block-cover__inner-container {
+  @apply text-center text-white z-10;
+}
+
+/* WordPress pullquote */
+.blog-content .wp-block-pullquote {
+  @apply border-t-4 border-b-4 border-blue-500 py-6 my-8 text-center;
+}
+
+.blog-content .wp-block-pullquote blockquote {
+  @apply border-l-0 bg-transparent pl-0 text-xl font-medium;
+}
+
+/* WordPress verse */
+.blog-content .wp-block-verse {
+  @apply bg-gray-50 p-4 rounded-lg mb-6 font-mono text-sm whitespace-pre-wrap;
+}
+
+/* WordPress preformatted */
+.blog-content .wp-block-preformatted {
+  @apply bg-gray-100 p-4 rounded-lg mb-6 font-mono text-sm whitespace-pre-wrap overflow-x-auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .blog-content h1 {
+    @apply text-3xl mt-8 mb-4;
+  }
+  
+  .blog-content h2 {
+    @apply text-2xl mt-6 mb-4;
+  }
+  
+  .blog-content h3 {
+    @apply text-xl mt-6 mb-3;
+  }
+  
+  .blog-content blockquote {
+    @apply pl-4 pr-2 py-3;
+  }
+  
+  .blog-content table {
+    @apply text-sm;
+  }
+  
+  .blog-content th,
+  .blog-content td {
+    @apply px-2 py-2;
+  }
+}
+
+/* Print styles */
+@media print {
+  .blog-content {
+    @apply text-black;
+  }
+  
+  .blog-content a {
+    @apply text-black no-underline;
+  }
+  
+  .blog-content a:after {
+    content: " (" attr(href) ")";
+    @apply text-sm;
+  }
+}

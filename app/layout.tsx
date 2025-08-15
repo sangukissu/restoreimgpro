@@ -13,9 +13,159 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "BringBack - AI-Powered Image Restoration",
-  description: "Transform your old, damaged photos into stunning restored images with our advanced AI technology.",
-  generator: "v0.dev",
+  title: "BringBack - AI-Powered Photo Restoration | Restore Old & Damaged Photos",
+  description: "BringBack restores old, damaged photos, repairs faded colors, and revives torn memories in seconds. Preserve your history with stunning clarity.",
+  keywords: "photo restoration, AI photo repair, old photo restoration, damaged photo fix, vintage photo restoration, image enhancement, photo recovery, digital photo restoration",
+  authors: [{ name: "BringBack Team" }],
+  creator: "BringBack",
+  publisher: "BringBack",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://bringback.pro'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "BringBack - AI-Powered Photo Restoration",
+    description: "BringBack restores old, damaged photos, repairs faded colors, and revives torn memories in seconds. Preserve your history with stunning clarity.",
+    url: 'https://bringback.pro',
+    siteName: 'BringBack',
+    images: [
+      {
+        url: '/screenshot.png',
+        width: 1200,
+        height: 630,
+        alt: 'BringBack Photo Restoration Before and After',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "BringBack - AI-Powered Photo Restoration",
+    description: "Transform your old, damaged photos into stunning restored images with our advanced AI technology.",
+    images: ['/screenshot.png'],
+
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'your-google-verification-code',
+  },
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://bringback.pro/#website',
+      url: 'https://bringback.pro/',
+      name: 'BringBack',
+      description: 'AI-Powered Photo Restoration Service',
+      publisher: {
+        '@id': 'https://bringback.pro/#organization'
+      },
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': 'https://bringback.pro/#webapp',
+      name: 'BringBack Photo Restoration',
+      description: 'Transform your old, damaged photos into stunning restored images with our advanced AI technology.',
+      url: 'https://bringback.pro/',
+      applicationCategory: 'MultimediaApplication',
+      operatingSystem: 'Web Browser',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+        description: 'Free photo restoration service with premium options available'
+      },
+      featureList: [
+        'AI-powered photo restoration',
+        'Repair damaged photos',
+        'Enhance old and faded images',
+        'Remove scratches and tears',
+        'Color restoration',
+        'High-quality output'
+      ],
+      screenshot: 'https://bringback.pro/blurred-restored.webp'
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://bringback.pro/#organization',
+      name: 'BringBack',
+      url: 'https://bringback.pro/',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://bringback.pro/bringback-logo.png',
+        width: 512,
+        height: 512
+      },
+      description: 'Leading AI-powered photo restoration service helping people preserve their precious memories.',
+      foundingDate: '2024',
+      serviceArea: {
+        '@type': 'Place',
+        name: 'Worldwide'
+      },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Photo Restoration Services',
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'AI Photo Restoration',
+              description: 'Restore old, damaged, or faded photos using advanced AI technology'
+            }
+          }
+        ]
+      }
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://bringback.pro/#service',
+      name: 'AI Photo Restoration',
+      description: 'Professional photo restoration service using advanced artificial intelligence to repair and enhance old, damaged, or faded photographs.',
+      provider: {
+        '@id': 'https://bringback.pro/#organization'
+      },
+      areaServed: {
+        '@type': 'Place',
+        name: 'Worldwide'
+      },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Photo Restoration Options',
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            name: 'Basic Restoration',
+            description: 'Standard AI-powered photo restoration'
+          },
+          {
+            '@type': 'Offer',
+            name: 'Premium Restoration',
+            description: 'Advanced restoration with manual touch-ups'
+          }
+        ]
+      }
+    }
+  ]
 }
 
 export default function RootLayout({
@@ -25,6 +175,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.youtube.com" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="color-scheme" content="light" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+      </head>
       <body className={`font-sans antialiased`}>
         {children}
         <Toaster />

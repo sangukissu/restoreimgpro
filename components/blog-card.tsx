@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 import { Calendar, Clock, ArrowRight } from "lucide-react"
 
 interface BlogCardProps {
@@ -23,11 +24,11 @@ export default function BlogCard({
   featured = false,
 }: BlogCardProps) {
   return (
-    <article className={`group ${featured ? "md:col-span-2" : ""}`}>
+    <article className="group">
       <Link href={`/blog/${slug}`} className="block">
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden ">
           {/* Image */}
-          <div className={`relative overflow-hidden ${featured ? "h-64" : "h-48"}`}>
+          <div className="relative overflow-hidden h-48">
             <img
               src={image || "/placeholder.svg"}
               alt={title}
@@ -48,15 +49,11 @@ export default function BlogCard({
               <span>{readTime}</span>
             </div>
 
-            <h2
-              className={`font-bold text-black mb-3 group-hover:text-gray-700 transition-colors ${
-                featured ? "text-2xl" : "text-xl"
-              }`}
-            >
+            <h2 className="font-bold text-black mb-3 group-hover:text-gray-700 transition-colors text-lg leading-tight">
               {title}
             </h2>
 
-            <p className="text-gray-600 mb-4 leading-relaxed">{excerpt}</p>
+            <p className="text-gray-600 mb-4 leading-relaxed line-clamp-3">{excerpt}</p>
 
             <div className="flex items-center text-black font-medium group-hover:text-gray-700 transition-colors">
               <span>Read more</span>

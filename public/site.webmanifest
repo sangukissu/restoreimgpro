@@ -1,0 +1,72 @@
+{
+  "name": "BringBack - AI Photo Restoration",
+  "short_name": "BringBack",
+  "description": "Transform your old, damaged photos into stunning restored images with our advanced AI technology.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["photo", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshot.png",
+      "sizes": "1200x630",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Photo restoration screenshot"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/bringback-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Restore Photo",
+      "short_name": "Restore",
+      "description": "Start restoring your photos",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/bringback-logo.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "View Examples",
+      "short_name": "Examples",
+      "description": "See photo restoration examples",
+      "url": "/#examples",
+      "icons": [
+        {
+          "src": "/bringback-logo.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

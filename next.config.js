@@ -35,6 +35,7 @@ const nextConfig = {
           "font-src 'self' data:",
           "connect-src 'self' https://api.supabase.co https://*.supabase.co https://fal.ai https://*.fal.ai https://dodopayments.com https://*.dodopayments.com", // API endpoints
           "media-src 'self' blob:",
+          "frame-src 'self' https://www.youtube.com https://youtube.com", // Allow YouTube iframes
           "object-src 'none'",
           "base-uri 'self'",
           "form-action 'self'",
@@ -92,7 +93,7 @@ const nextConfig = {
             value: 'http'
           }
         ],
-        destination: 'https://bringback.pro/:path*',
+        destination: 'https://yourdomain.com/:path*',
         permanent: true
       } : null
     ].filter(Boolean)
@@ -103,7 +104,44 @@ const nextConfig = {
   
   // Image optimization security
   images: {
-    domains: [], // Restrict external image domains
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'secure.gravatar.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'blog.bringback.pro',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'wordpress.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.wordpress.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
   }

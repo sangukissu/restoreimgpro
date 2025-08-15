@@ -1,235 +1,206 @@
 import type { Metadata } from "next"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import { Calendar, Clock, Share2, ArrowLeft, User } from "lucide-react"
+import BlogContentRenderer from "@/components/blog-content-renderer"
+import ShareButton from "@/components/share-button"
+import { Calendar, Clock, ArrowLeft, User } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { getPostBySlug, getAllPostSlugs, formatDate, calculateReadingTime, type WordPressPost } from "@/lib/wordpress"
+import { notFound } from "next/navigation"
+import Image from "next/image"
 
-// This would typically come from a CMS or database
-const getBlogPost = (slug: string) => {
-  const posts = {
-    "ai-revolutionizing-photo-restoration": {
-      title: "How AI is Revolutionizing Photo Restoration",
-      excerpt:
-        "Discover how artificial intelligence is making professional photo restoration accessible to everyone, transforming damaged memories in seconds.",
-      content: `
-        <p>For decades, photo restoration was an art form reserved for skilled professionals with steady hands and endless patience. A single damaged photograph could take weeks to restore, costing hundreds of dollars and requiring specialized expertise that few possessed.</p>
-
-        <p>Today, artificial intelligence is changing everything.</p>
-
-        <h2>The Traditional Challenge</h2>
-        <p>Traditional photo restoration required painstaking manual work. Restorers would spend hours carefully painting over scratches, reconstructing missing pieces, and color-correcting faded areas. The process was:</p>
-        <ul>
-          <li>Extremely time-consuming (weeks per photo)</li>
-          <li>Expensive ($50-200+ per restoration)</li>
-          <li>Limited by human skill and availability</li>
-          <li>Inconsistent in quality and approach</li>
-        </ul>
-
-        <h2>Enter Artificial Intelligence</h2>
-        <p>Modern AI photo restoration uses deep learning algorithms trained on millions of photographs to understand how images degrade over time and how to reverse that damage. These systems can:</p>
-
-        <blockquote>
-          <p>"Analyze patterns in damaged photos and intelligently reconstruct missing information based on surrounding context and learned patterns from thousands of similar images."</p>
-        </blockquote>
-
-        <h2>The BringBack Approach</h2>
-        <p>At BringBack, we've developed proprietary AI models specifically trained for photo restoration. Our system:</p>
-        <ul>
-          <li>Processes photos in under 30 seconds</li>
-          <li>Maintains the authentic character of original photos</li>
-          <li>Handles multiple types of damage simultaneously</li>
-          <li>Preserves facial features and important details</li>
-        </ul>
-
-        <h2>Real Results, Real Stories</h2>
-        <p>We've restored over 100,000 photos, from faded wedding albums to torn family portraits. Each restoration preserves not just the image, but the memory itself.</p>
-
-        <p>The future of photo restoration is here, and it's accessible to everyone. Your precious memories deserve to be preserved with the same care and quality that was once reserved for museums and archives.</p>
-
-        <h2>Getting Started</h2>
-        <p>Ready to see what AI can do for your old photos? Upload your damaged images and watch decades of wear disappear in seconds. Your memories are waiting to be brought back to life.</p>
-      `,
-      publishedAt: "January 15, 2025",
-      readTime: "5 min read",
-      category: "Technology",
-      author: "Sarah Chen",
-      authorRole: "AI Research Lead",
-      image: "/placeholder.svg?height=400&width=800&text=AI+Photo+Restoration+Hero",
-    },
+// Generate static paths for all blog posts
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  try {
+    const slugs = await getAllPostSlugs()
+    return slugs.map((slug) => ({
+      slug,
+    }))
+  } catch (error) {
+    console.error('Error generating static params:', error)
+    return []
   }
-
-  return posts[slug as keyof typeof posts] || null
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = getBlogPost(params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  try {
+    const post = await getPostBySlug(slug)
 
-  if (!post) {
+    if (!post) {
+      return {
+        title: "Post Not Found - BringBack Blog",
+        description: "The requested blog post could not be found.",
+      }
+    }
+
+    const seoTitle = post.title
+    const seoDescription = post.excerpt || "Read this article on BringBack Blog"
+    const ogImage = post.featuredImage?.node?.sourceUrl || "/placeholder.svg"
+
     return {
-      title: "Article Not Found - BringBack Blog",
-      description: "The requested article could not be found.",
+      title: `${seoTitle} - BringBack Blog`,
+      description: seoDescription,
+      openGraph: {
+        title: seoTitle,
+        description: seoDescription,
+        type: "article",
+        publishedTime: post.date,
+        modifiedTime: post.modified,
+        authors: [post.author.node.name],
+        images: [{
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.featuredImage?.node?.altText || post.title,
+        }],
+        url: `https://bringback.pro/blog/${post.slug}`,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: seoTitle,
+        description: seoDescription,
+        images: [ogImage],
+      },
+      alternates: {
+        canonical: `https://bringback.pro/blog/${post.slug}`,
+      },
+    }
+  } catch (error) {
+    console.error('Error generating metadata:', error)
+    return {
+      title: "Blog Post - BringBack",
+      description: "Read the latest articles about photo restoration and preservation.",
     }
   }
+}
 
-  return {
-    title: `${post.title} - BringBack Blog`,
-    description: post.excerpt,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      type: "article",
-      publishedTime: post.publishedAt,
-      authors: [post.author],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
-    },
+export default async function BlogArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  try {
+    const post = await getPostBySlug(slug)
+
+    if (!post) {
+      notFound()
+    }
+
+    return <BlogPostContent post={post} />
+  } catch (error) {
+    console.error('Error fetching blog post:', error)
+    notFound()
   }
 }
 
-export default function BlogArticlePage({ params }: { params: { slug: string } }) {
-  const post = getBlogPost(params.slug)
-
-  if (!post) {
-    return (
-      <div className="min-h-screen bg-white">
-        <Header />
-        <main className="pt-32 pb-20">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <h1 className="text-4xl font-bold text-black mb-4">Article Not Found</h1>
-            <p className="text-gray-600 mb-8">The article you're looking for doesn't exist.</p>
-            <Link href="/blog">
-              <Button>Back to Blog</Button>
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
-  }
+function BlogPostContent({ post }: { post: WordPressPost }) {
+  const readTime = calculateReadingTime(post.content)
+  const publishedDate = formatDate(post.date)
+  const category = post.categories.nodes[0]?.name || "General"
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
+      <main className="pb-20">
+        {/* Hero Section */}
+        <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 pt-24 pb-12">
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="mb-8">
+              <Link href="/blog" className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
 
-      <main className="pt-32 pb-20">
-        <div className="max-w-4xl mx-auto px-4">
-          {/* Back Button */}
-          <Link href="/blog" className="inline-flex items-center text-gray-600 hover:text-black transition-colors mb-8">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Blog
-          </Link>
-
-          {/* Article Header */}
-          <header className="mb-12">
-            <div className="mb-6">
-              <span className="bg-black text-white px-3 py-1 rounded-full text-sm font-medium">{post.category}</span>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Blog
+              </Link>
             </div>
-
-            <h1 className="text-4xl lg:text-5xl font-bold text-black mb-6 leading-tight">{post.title}</h1>
-
-            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600 mb-8">
-              <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
-                {post.publishedAt}
-              </div>
-              <div className="flex items-center">
-                <Clock className="w-4 h-4 mr-2" />
-                {post.readTime}
-              </div>
-              <div className="flex items-center">
-                <User className="w-4 h-4 mr-2" />
-                {post.author}
-              </div>
-            </div>
-
-            {/* Hero Image */}
-            <div className="relative h-64 md:h-96 rounded-2xl overflow-hidden mb-8">
-              <img src={post.image || "/placeholder.svg"} alt={post.title} className="w-full h-full object-cover" />
-            </div>
-
-            {/* Share Button */}
-            <div className="flex justify-between items-center py-4 border-y border-gray-200">
-              <div className="flex items-center space-x-4">
-                <img
-                  src="/placeholder.svg?height=40&width=40&text=Author"
-                  alt={post.author}
-                  className="w-10 h-10 rounded-full"
-                />
-                <div>
-                  <div className="font-medium text-black">{post.author}</div>
-                  <div className="text-sm text-gray-600">{post.authorRole}</div>
+            
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">{category}</span>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  <span>{publishedDate}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span>{readTime}</span>
                 </div>
               </div>
-              <Button variant="outline" size="sm" className="flex items-center bg-transparent">
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-            </div>
-          </header>
-
-          {/* Article Content */}
-          <article className="prose prose-lg max-w-none">
-            <div
-              className="text-gray-700 leading-relaxed space-y-6"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-          </article>
-
-          {/* Article Footer */}
-          <div className="mt-16 pt-8 border-t border-gray-200">
-            <div className="bg-gray-50 rounded-2xl p-8 text-center">
-              <h3 className="text-2xl font-bold text-black mb-4">Ready to restore your photos?</h3>
-              <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                Transform your damaged memories into vibrant photos in seconds with AI-powered restoration.
-              </p>
-              <Button className="bg-black text-white hover:bg-gray-800">Start Restoring Now</Button>
+              
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">{post.title}</h1>
+              
+              {post.excerpt && (
+                <div className="text-xl text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: post.excerpt }} suppressHydrationWarning />
+              )}
+              
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  {post.author.node.avatar?.url ? (
+                    <Image
+                      src={post.author.node.avatar.url}
+                      alt={post.author.node.name}
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-gray-600" />
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-medium text-gray-900">{post.author.node.name}</p>
+                    <p className="text-sm text-gray-600">Author</p>
+                  </div>
+                </div>
+                
+                <div className="ml-auto">
+                  <ShareButton 
+                    title={post.title}
+                    url={`https://bringback.pro/blog/${post.slug}`}
+                    text={post.excerpt || `Check out this article: ${post.title}`}
+                  />
+                </div>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Related Articles */}
-          <section className="mt-16">
-            <h2 className="text-2xl font-bold text-black mb-8">Related Articles</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Link href="/blog/preserving-old-family-photos" className="group">
-                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
-                  <img
-                    src="/placeholder.svg?height=200&width=400&text=Family+Photos"
-                    alt="Preserving Family Photos"
-                    className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-semibold text-black group-hover:text-gray-700 transition-colors">
-                      5 Tips for Preserving Old Family Photos
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-2">4 min read</p>
-                  </div>
-                </div>
-              </Link>
+        {/* Featured Image */}
+        {post.featuredImage?.node?.sourceUrl && (
+          <div className="max-w-4xl mx-auto px-4 relative mt-10 z-10">
+            <div className="bg-white rounded-lg overflow-hidden">
 
-              <Link href="/blog/science-behind-photo-fading" className="group">
-                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
-                  <img
-                    src="/placeholder.svg?height=200&width=400&text=Photo+Science"
-                    alt="Photo Fading Science"
-                    className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-semibold text-black group-hover:text-gray-700 transition-colors">
-                      The Science Behind Photo Fading
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-2">6 min read</p>
-                  </div>
-                </div>
-              </Link>
+              <Image
+                src={post.featuredImage.node.sourceUrl}
+                alt={post.featuredImage.node.altText || post.title}
+                width={1200}
+                height={800}
+                className="w-full h-64 md:h-120 object-cover"
+                priority
+              />
             </div>
-          </section>
+          </div>
+        )}
+
+        {/* Article Content */}
+        <div className="max-w-4xl mx-auto px-4 mt-16">
+          <div className="bg-white">
+            <BlogContentRenderer content={post.content} />
+          </div>
+        </div>
+
+        {/* Call to Action */}
+        <div className="max-w-4xl mx-auto px-4 mt-16">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Restore Your Photos?</h2>
+            <p className="text-lg mb-6 opacity-90">Join thousands of satisfied customers who have brought their memories back to life.</p>
+            <Link href="/dashboard">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                Start Restoring Now
+              </Button>
+            </Link>
+          </div>
         </div>
       </main>
-
       <Footer />
     </div>
   )

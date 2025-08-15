@@ -4,7 +4,7 @@ import { Sparkles, ChevronRight } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { PointerHighlight } from "@/components/pointer-highlight"
-import { Compare } from "@/components/ui/compare"
+import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
 import { GridPattern } from "@/components/grid-pattern"
 import HowItWorksSection from "@/components/how-it-works-section"
 import BenefitsSection from "@/components/benefits-section"
@@ -13,15 +13,40 @@ import ShowcaseSection from "@/components/showcase-section"
 import FAQSection from "@/components/faq-section"
 import MemoriesSection from "@/components/memories-section"
 import TestimonialsSection from "@/components/testimonials-section"
+import type { Metadata } from "next"
 
 import { cn } from "@/lib/utils"
+
+export const metadata: Metadata = {
+  title: "BringBack - AI Photo Restoration | Restore Old & Damaged Photos Online",
+  description: "Transform your old, faded, torn or damaged photos into vibrant memories with our advanced AI technology. Quick restoration, simple process, and lifetime preserved moments. Start restoring your precious photos today!",
+  keywords: "photo restoration, AI photo repair, old photo restoration, damaged photo fix, vintage photo restoration, image enhancement, photo recovery, digital photo restoration, restore photos online, fix old photos",
+  openGraph: {
+    title: "BringBack - AI Photo Restoration | Restore Old & Damaged Photos Online",
+    description: "Transform your old, faded, torn or damaged photos into vibrant memories with our advanced AI technology. Quick restoration, simple process, and lifetime preserved moments.",
+    images: [
+      {
+        url: '/blurred-restored.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Before and after photo restoration example showing damaged photo transformed into vibrant memory',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "BringBack - AI Photo Restoration | Restore Old & Damaged Photos Online",
+    description: "Transform your old, faded, torn or damaged photos into vibrant memories with our advanced AI technology.",
+    images: ['/blurred-restored.webp'],
+  },
+}
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
       {/* Hero Section */}
-      <section className="relative  overflow-hidden">
+      <section className="relative pb-12 overflow-hidden">
           {/* Grid Pattern Background - positioned at the very top */}
           <GridPattern
           squares={[
@@ -43,16 +68,15 @@ export default function Page() {
             "absolute inset-x-0 top-0 h-full skew-y-12 fill-gray-200/70 stroke-gray-300/70",
           )}
         />
-      <div className="px-4 py-20 pt-32 max-w-6xl mx-auto text-center" >
+      <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
       
-
         <div className="relative z-10 space-y-6">
           <div className="space-y-6">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-4">
               <Sparkles className="w-3 h-3 mr-1" />
               AI Powered
             </div>
-            <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">
+            <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-800 leading-tight">
               Bring back{" "}
               <PointerHighlight
                 rectangleClassName="bg-purple-100 border-purple-300 leading-tight px-2"
@@ -87,23 +111,18 @@ export default function Page() {
               </i>
             </Button>
             </Link>
-            <Button
-              variant="outline"
-              size="lg"
-              className="px-8 py-6 text-md font-medium rounded-lg border-gray-200 hover:bg-gray-50 w-full sm:w-auto bg-transparent"
-            >
-              Explore Examples
-            </Button>
+          
           </div>
           <div className="flex flex-col items-center space-y-2 pt-2">
             <div className="flex items-center space-x-2">
               <div className="flex -space-x-2">
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-1.png" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-2.png" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-3.png" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/happy-user-4.png" alt="User" />
-                <div className="w-8 h-8 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">+</span>
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />  
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
+                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
+                <div className="w-8 h-8 rounded-full bg-gray-900 border-2 border-white flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">17+</span>
                 </div>
               </div>
               <div className="flex text-yellow-400">
@@ -114,24 +133,24 @@ export default function Page() {
                 ))}
               </div>
             </div>
-            <p className="text-gray-600 font-medium">Join 50,000+ Builders</p>
+            <p className="text-gray-600 font-medium">Loved by Everyone</p>
           </div>
-          <div className="pt-4">
+        
+        </div>
+        </div>
+          <div>
             <div className="flex justify-center">
               <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
-                <Compare
-                  firstImage="/placeholder-1bjxl.png"
-                  secondImage="/restored-family-photo.png"
-                  firstImageClassName="object-cover"
-                  secondImageClassname="object-cover"
-                  className="h-[200px] w-[320px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px]" // Responsive sizing
-                  slideMode="hover"
+                <HeroVideoDialog
+                  animationStyle="from-center"
+                  videoSrc="https://youtu.be/u3tc96poZ6Q?si=v_NauGytkfuvjQf0"
+                  thumbnailSrc="/blurred-restored.webp"
+                  thumbnailAlt="Photo restoration demo video"
+                  className="h-[250px] w-[400px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
                 />
               </div>
             </div>
           </div>
-        </div>
-        </div>
       </section>
 
       <HowItWorksSection />
@@ -142,25 +161,7 @@ export default function Page() {
       <FAQSection />
       <MemoriesSection />
 
-      {/* Final CTA Section */}
-      <section className="px-4 py-20 max-w-6xl mx-auto text-center">
-        <div className="text-center mt-16">
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
-            <h3 className="text-2xl font-bold text-black mb-4">Which memories are you ready to bring back?</h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Don't let time steal the clarity from your most precious moments. Every photo has a story worth preserving
-              perfectly.
-            </p>
-          
-            <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-              <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Start Restoring Now</span>
-              <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-              </i>
-            </Button>
-          </div>
-        </div>
-      </section>
+   
 
       {/* Footer */}
       <Footer />

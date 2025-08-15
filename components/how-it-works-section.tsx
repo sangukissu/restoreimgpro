@@ -91,7 +91,7 @@ export default function HowItWorksSection() {
 
         {/* Bottom Text */}
         <div className="text-center mt-16">
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
             No complicated settings, no waiting around. Just upload your old photos and watch decades of damage
             disappear in seconds.
           </p>

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Check, Star, Zap, Shield, Clock } from "lucide-react"
+import { Check, Star, Zap, Shield, Clock, Link } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Pricing - BringBack | AI Photo Restoration",
@@ -68,10 +68,11 @@ export default function PricingPage() {
                   <Check className="w-5 h-5 text-green-500" />
                 </div>
               </div>
-
+              <Link href="/dashboard">
               <Button className="w-full bg-black text-white py-4 text-lg font-medium hover:bg-gray-800 transition-colors duration-200">
                 Restore 5 Photos for $2
               </Button>
+              </Link>
 
               <p className="text-xs text-gray-500 mt-3">Secure payment • Instant access</p>
             </div>
