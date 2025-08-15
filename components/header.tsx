@@ -160,8 +160,8 @@ export default function Header() {
               src="/header-logo.webp" 
               alt="BringBack Logo" 
               width={80} 
-              height={32} 
-              className="w-36 h-8"
+              height={36} 
+              className="w-36 h-9"
             />
           </a>
         </div>
@@ -187,8 +187,8 @@ export default function Header() {
                 src="/header-logo.webp" 
                 alt="BringBack Logo" 
                 width={80} 
-                height={32} 
-                className="w-36 h-8"
+                height={36} 
+                className="w-36 h-9"
               />
             
             </a>

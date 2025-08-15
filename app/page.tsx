@@ -41,9 +41,39 @@ export const metadata: Metadata = {
   },
 }
 
+const homePageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  '@id': 'https://bringback.pro/#webapp',
+  name: 'BringBack Photo Restoration',
+  description: 'Transform your old, damaged photos into stunning restored images with our advanced AI technology.',
+  url: 'https://bringback.pro/',
+  applicationCategory: 'MultimediaApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    description: 'Free photo restoration service with premium options available'
+  },
+  featureList: [
+    'AI-powered photo restoration',
+    'Repair damaged photos',
+    'Enhance old and faded images',
+    'Remove scratches and tears',
+    'Color restoration',
+    'High-quality output'
+  ],
+  screenshot: 'https://bringback.pro/blurred-restored.webp'
+}
+
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
+      />
       <Header />
       {/* Hero Section */}
       <section className="relative pb-12 overflow-hidden">

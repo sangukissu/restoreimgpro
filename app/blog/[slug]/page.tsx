@@ -97,8 +97,49 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
   const publishedDate = formatDate(post.date)
   const category = post.categories.nodes[0]?.name || "General"
 
+  const blogPostJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `https://bringback.pro/blog/${post.slug}`,
+    headline: post.title,
+    description: post.excerpt || post.title,
+    image: post.featuredImage?.node?.sourceUrl || 'https://bringback.pro/placeholder.svg',
+    datePublished: post.date,
+    dateModified: post.modified,
+    author: {
+      '@type': 'Organization',
+      name: 'BringBack Team',
+      url: 'https://bringback.pro'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'BringBack',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://bringback.pro/bringback-logo.png'
+      }
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://bringback.pro/blog/${post.slug}`
+    },
+    articleSection: category,
+    wordCount: post.content.split(' ').length,
+    timeRequired: `PT${readTime}M`,
+    inLanguage: 'en-US',
+    isPartOf: {
+      '@type': 'Blog',
+      '@id': 'https://bringback.pro/blog',
+      name: 'BringBack Blog'
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostJsonLd) }}
+      />
       <Header />
       <main className="pb-20">
         {/* Hero Section */}

@@ -9,12 +9,15 @@ import DashboardHeader from "@/components/dashboard-header"
 import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
 
-type AppState = "upload" | "loading" | "comparison" | "error"
+type AppState = "feature-selection" | "upload" | "loading" | "comparison" | "error"
+
+type FeatureType = "restore" | "denoise" | "deblur"
 
 interface RestorationData {
   originalFile: File
   originalUrl: string
   restoredUrl: string
+  featureType: FeatureType
 }
 
 interface DashboardClientProps {
@@ -27,7 +30,8 @@ interface DashboardClientProps {
 }
 
 export default function DashboardClient({ user, initialCredits, isPaymentSuccess }: DashboardClientProps) {
-  const [appState, setAppState] = useState<AppState>("upload")
+  const [appState, setAppState] = useState<AppState>("feature-selection")
+  const [selectedFeature, setSelectedFeature] = useState<FeatureType | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [restorationData, setRestorationData] = useState<RestorationData | null>(null)
@@ -110,6 +114,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
           originalFile: selectedFile,
           originalUrl: selectedImageUrl!,
           restoredUrl: response.restoredImageUrl,
+          featureType: selectedFeature!,
         })
         setAppState("comparison")
         
@@ -139,7 +144,8 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     // Reset restoring flag
     isRestoringRef.current = false
 
-    setAppState("upload")
+    setAppState("feature-selection")
+    setSelectedFeature(null)
     setSelectedFile(null)
     setSelectedImageUrl(null)
     setRestorationData(null)
@@ -174,6 +180,19 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
   const handleBuyCredits = () => {
     setShowPaymentModal(true)
+  }
+
+  const handleFeatureSelect = (feature: FeatureType) => {
+    setSelectedFeature(feature)
+    setAppState("upload")
+  }
+
+  const handleBackToFeatures = () => {
+    setAppState("feature-selection")
+    setSelectedFeature(null)
+    setSelectedFile(null)
+    setSelectedImageUrl(null)
+    setError(null)
   }
 
   const handleSignOut = async () => {
@@ -228,13 +247,103 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
       {/* Main Content */}
       <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
-        <div className="text-center mb-12">
-          <h1 className="font-inter font-bold text-3xl text-black mb-4">Restore Your Images</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Upload your old, damaged, or low-quality photos and watch our AI transform them into stunning restored
-            images.
-          </p>
-        </div>
+        {/* Feature Selection State */}
+        {appState === "feature-selection" && (
+          <>
+            <div className="text-center mb-16">
+              <h1 className="font-inter font-bold text-4xl lg:text-5xl text-black mb-4">Choose Your Enhancement</h1>
+              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
+                Select the type of AI enhancement you'd like to apply to your photos
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 relative">
+              {/* Restore Feature */}
+              <div 
+                onClick={() => handleFeatureSelect("restore")}
+                className="bg-white lg:mt-8 rounded-2xl p-8 shadow-sm border-4 border-gray-200 backdrop-blur transform -rotate-2 hover:rotate-0 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-black group relative z-10"
+              >
+                <div className="mb-6">
+                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-black mb-4">Restore</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Fix damaged, torn, or faded photos. Repair scratches, water damage, and bring back original colors.
+                </p>
+              </div>
+
+              {/* Denoise Feature */}
+              <div 
+                onClick={() => handleFeatureSelect("denoise")}
+                className="bg-white rounded-2xl p-8 shadow-sm border-4 border-gray-200 backdrop-blur transform rotate-2 hover:rotate-0 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-black group relative z-10"
+              >
+                <div className="mb-6">
+                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-black mb-4">Denoise</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Remove grain, noise, and digital artifacts from photos. Perfect for low-light or high-ISO images.
+                </p>
+              </div>
+
+              {/* Deblur Feature */}
+              <div 
+                onClick={() => handleFeatureSelect("deblur")}
+                className="bg-white rounded-2xl p-8 shadow-sm border-4 border-gray-200 backdrop-blur transform -rotate-2 hover:rotate-0 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-black group relative z-10"
+              >
+                <div className="mb-6">
+                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-black mb-4">Deblur</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Sharpen blurry photos caused by camera shake or motion. Bring back crisp details and clarity.
+                </p>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Upload State Header */}
+        {(appState === "upload" || appState === "loading" || appState === "comparison" || appState === "error") && (
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <button
+                onClick={handleBackToFeatures}
+                className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Features
+              </button>
+              <div className="w-px h-6 bg-gray-300" />
+              <span className="text-sm text-gray-500 capitalize">{selectedFeature} Mode</span>
+            </div>
+            <h1 className="font-inter font-bold text-3xl text-black mb-4">
+              {selectedFeature === "restore" && "Restore Your Images"}
+              {selectedFeature === "denoise" && "Denoise Your Images"}
+              {selectedFeature === "deblur" && "Deblur Your Images"}
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {selectedFeature === "restore" && "Upload your old, damaged, or low-quality photos and watch our AI transform them into stunning restored images."}
+              {selectedFeature === "denoise" && "Upload your noisy or grainy photos and let our AI remove unwanted noise while preserving important details."}
+              {selectedFeature === "deblur" && "Upload your blurry photos and watch our AI sharpen them to crystal clear quality."}
+            </p>
+          </div>
+        )}
 
         {/* Upload State */}
         {appState === "upload" && (
@@ -272,9 +381,15 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
                 <div>
                   <h3 className="font-inter font-semibold text-xl text-black mb-2">
-                    Giving one more life to your past...
+                    {selectedFeature === "restore" && "Giving one more life to your past..."}
+                    {selectedFeature === "denoise" && "Cleaning up your image..."}
+                    {selectedFeature === "deblur" && "Sharpening your image..."}
                   </h3>
-                  <p className="text-gray-600">Our AI is carefully restoring your image</p>
+                  <p className="text-gray-600">
+                    {selectedFeature === "restore" && "Our AI is carefully restoring your image"}
+                    {selectedFeature === "denoise" && "Our AI is removing noise and artifacts"}
+                    {selectedFeature === "deblur" && "Our AI is enhancing clarity and sharpness"}
+                  </p>
                 </div>
               </div>
             </div>

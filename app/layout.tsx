@@ -81,30 +81,6 @@ const jsonLd = {
       },
     },
     {
-      '@type': 'WebApplication',
-      '@id': 'https://bringback.pro/#webapp',
-      name: 'BringBack Photo Restoration',
-      description: 'Transform your old, damaged photos into stunning restored images with our advanced AI technology.',
-      url: 'https://bringback.pro/',
-      applicationCategory: 'MultimediaApplication',
-      operatingSystem: 'Web Browser',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-        description: 'Free photo restoration service with premium options available'
-      },
-      featureList: [
-        'AI-powered photo restoration',
-        'Repair damaged photos',
-        'Enhance old and faded images',
-        'Remove scratches and tears',
-        'Color restoration',
-        'High-quality output'
-      ],
-      screenshot: 'https://bringback.pro/blurred-restored.webp'
-    },
-    {
       '@type': 'Organization',
       '@id': 'https://bringback.pro/#organization',
       name: 'BringBack',
