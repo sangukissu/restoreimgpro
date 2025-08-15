@@ -28,7 +28,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 - Copy your API key to `DODO_PAYMENTS_API_KEY`
 
 ### 3. Configure Webhook
-- Set webhook URL to: `https://yourdomain.com/api/webhooks/dodopayments`
+- Set webhook URL to: `https://bringback.pro/api/webhooks/dodopayments`
 - Copy webhook secret to `DODO_WEBHOOK_SECRET`
 
 ## How It Works

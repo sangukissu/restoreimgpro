@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import ImageUpload from "@/components/image-upload"
 import ImageComparison from "@/components/image-comparison"
 import PaymentModal from "@/components/payment-modal"
+import PaymentSuccessModal from "@/components/payment-success-modal"
 import DashboardHeader from "@/components/dashboard-header"
 import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
@@ -40,12 +41,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   // Add ref to track current restoration request
   const isRestoringRef = useRef(false)
 
-  // Show payment modal immediately if user has no credits
-  useEffect(() => {
-    if (userCredits <= 0) {
-      setShowPaymentModal(true)
-    }
-  }, [userCredits])
+  // Removed automatic payment modal trigger - users should manually buy credits
 
   // Show success message if payment was successful
   useEffect(() => {
@@ -98,13 +94,16 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     setAppState("loading")
     setError(null)
 
+    let finalCredits = userCredits
+    
     try {
       console.log("Making API call to restore image...", { timestamp: Date.now() })
       const response: RestoreImageResponse = await restoreImage(selectedFile)
-
+      
       if (response.success && response.restoredImageUrl) {
         // Deduct credit after successful restoration
         const newCredits = userCredits - 1
+        finalCredits = newCredits
         setUserCredits(newCredits)
         
         setRestorationData({
@@ -198,100 +197,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     }
   }
 
-  // If user has no credits, show payment modal and block dashboard
-  if (userCredits <= 0) {
-    return (
-      <div className="min-h-screen bg-white relative">
-        {/* Dotted Background Pattern */}
-        <div className="absolute inset-0 opacity-30">
-          <div
-            className="w-full h-full"
-            style={{
-              backgroundImage: `radial-gradient(circle, #000 1px, transparent 1px)`,
-              backgroundSize: "24px 24px",
-              backgroundPosition: "0 0, 12px 12px",
-            }}
-          />
-        </div>
-
-        {/* Dashboard Header */}
-        <DashboardHeader 
-          user={user} 
-          credits={userCredits} 
-          onBuyCredits={handleBuyCredits} 
-        />
-
-        {/* Payment Success Banner */}
-        {showPaymentSuccess && (
-          <div className="relative z-10 bg-green-50 border-b border-green-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-green-800 font-medium">Payment Successful!</span>
-                  <span className="text-green-700">Your credits will be added shortly. Please refresh the page.</span>
-                </div>
-                <button
-                  onClick={() => setShowPaymentSuccess(false)}
-                  className="text-green-600 hover:text-green-800 transition-colors"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Main Content - Blocked State */}
-        <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
-          <div className="text-center">
-            <div className="w-24 h-24 bg-red-100 rounded-full mx-auto mb-6 flex items-center justify-center">
-              <svg className="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-              </svg>
-            </div>
-            
-            <h1 className="font-inter font-bold text-3xl text-black mb-4">Get Credits to Start</h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-              You need credits to restore images. Purchase our premium plan to get started with AI-powered image restoration.
-            </p>
-
-            <div className="flex gap-4 justify-center">
-              <button
-                onClick={handleBuyCredits}
-                className="bg-red-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors text-lg"
-              >
-                Get Credits Now
-              </button>
-              <button
-                onClick={() => window.location.reload()}
-                className="bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors text-lg"
-              >
-                Refresh Page
-              </button>
-            </div>
-          </div>
-        </main>
-
-        {/* Payment Modal */}
-        <PaymentModal
-          isOpen={showPaymentModal}
-          onClose={() => setShowPaymentModal(false)}
-          onSkip={handlePaymentSkip}
-          onSuccess={handlePaymentSuccess}
-          onError={handlePaymentError}
-          isProcessing={isProcessingPayment}
-          setIsProcessing={setIsProcessingPayment}
-        />
-      </div>
-    )
-  }
-
-  // Normal dashboard when user has credits
+  // Normal dashboard for all users
   return (
     <div className="min-h-screen relative">
       {/* Dotted Background Pattern */}
@@ -313,30 +219,12 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         onBuyCredits={handleBuyCredits} 
       />
 
-      {/* Payment Success Banner */}
-      {showPaymentSuccess && (
-        <div className="relative z-10 bg-green-50 border-b border-green-200 ">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="text-green-800 font-medium">Payment Successful!</span>
-                <span className="text-green-700">You now have {userCredits} credits to restore images.</span>
-              </div>
-              <button
-                onClick={() => setShowPaymentSuccess(false)}
-                className="text-green-600 hover:text-green-800 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Payment Success Modal */}
+      <PaymentSuccessModal 
+        isOpen={showPaymentSuccess}
+        onClose={() => setShowPaymentSuccess(false)}
+        userCredits={userCredits}
+      />
 
       {/* Main Content */}
       <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
@@ -356,6 +244,8 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
             onRestore={handleRestore}
             selectedFile={selectedFile}
             selectedImageUrl={selectedImageUrl}
+            userCredits={userCredits}
+            onBuyCredits={handleBuyCredits}
           />
         )}
 

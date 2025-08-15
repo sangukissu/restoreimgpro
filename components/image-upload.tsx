@@ -10,6 +10,8 @@ interface ImageUploadProps {
   onRestore: () => void
   selectedFile: File | null
   selectedImageUrl: string | null
+  userCredits: number
+  onBuyCredits: () => void
 }
 
 // Security constants
@@ -18,7 +20,7 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const MAX_DIMENSIONS = 4096 // Max width/height in pixels
 const MIN_DIMENSIONS = 100 // Min width/height in pixels
 
-export default function ImageUpload({ onImageSelect, onRestore, selectedFile, selectedImageUrl }: ImageUploadProps) {
+export default function ImageUpload({ onImageSelect, onRestore, selectedFile, selectedImageUrl, userCredits, onBuyCredits }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -278,19 +280,15 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
               </div>
             </div>
 
-            {/* AI Disclaimer Notice */}
-            <p className="text-xs text-center mt-2 leading-tight">
-              Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
-            </p>
 
             {/* Action Buttons */}
             <div className="flex gap-3">
               <Button
-                onClick={handleRestoreClick}
+                onClick={userCredits > 0 ? handleRestoreClick : onBuyCredits}
                 disabled={isRestoring}
                 className="flex-1 bg-black text-white hover:bg-gray-800 h-11 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isRestoring ? "Restoring..." : "Restore Image"}
+                {isRestoring ? "Restoring..." : userCredits > 0 ? "Restore Image" : "Buy Credits"}
               </Button>
               <Button
                 onClick={() => window.location.reload()}
