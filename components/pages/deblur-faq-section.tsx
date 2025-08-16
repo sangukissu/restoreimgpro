@@ -9,6 +9,81 @@ export default function DeblurFAQSection() {
 
   const faqs = [
     {
+      question: "How can I deblur a photo online?",
+      answer:
+        "You can deblur a photo online instantly using BringBack. Simply upload your blurry photo, and our AI automatically restores it with improved sharpness and clarity.",
+    },
+    {
+      question: "Is BringBack free to use for photo deblurring?",
+      answer:
+        "BringBack offers a free trial to deblur photos. For higher resolution results and batch processing, you can choose from affordable paid plans.",
+    },
+    {
+      question: "What types of blurry photos can BringBack fix?",
+      answer:
+        "BringBack can fix motion blur, out-of-focus images, low-light photos, and old scanned pictures that appear soft or unclear.",
+    },
+    {
+      question: "Do I need to download any software to deblur photos?",
+      answer:
+        "No downloads are required. BringBack is a web app that works directly in your browser.",
+    },
+    {
+      question: "Can BringBack deblur old scanned family photos?",
+      answer:
+        "Yes. BringBack specializes in restoring and deblurring old scanned photos, making them look clearer and more detailed.",
+    },
+    {
+      question: "How fast does it take to deblur a photo?",
+      answer:
+        "Most photos are processed in under 30 seconds, depending on image size and resolution.",
+    },
+    {
+      question: "Is my uploaded photo safe on BringBack?",
+      answer:
+        "Yes. Uploaded photos are processed securely and can be deleted after restoration to protect your privacy.",
+    },
+    {
+      question: "Does BringBack work on mobile?",
+      answer:
+        "Yes. You can upload and deblur photos directly from your phone using BringBack's mobile-friendly web app.",
+    },
+    {
+      question: "Can I deblur multiple photos at once?",
+      answer:
+        "Yes. With a paid plan, BringBack supports batch deblurring so you can restore multiple images in one go.",
+    },
+    {
+      question: "What image formats does BringBack support?",
+      answer:
+        "BringBack supports JPEG, PNG, and WebP image formats for photo deblurring and restoration.",
+    },
+    {
+      question: "Will deblurring reduce the quality of my photo?",
+      answer:
+        "No. BringBack enhances sharpness and details while preserving the original photo quality.",
+    },
+    {
+      question: "Can BringBack fix both blur and noise in photos?",
+      answer:
+        "Yes. The AI engine reduces noise while deblurring, giving you a cleaner, sharper final image.",
+    },
+    {
+      question: "Is AI deblurring better than manual editing?",
+      answer:
+        "For most cases, AI deblurring is faster, easier, and more effective than manual Photoshop edits, especially for everyday photos.",
+    },
+    {
+      question: "Does BringBack support high-resolution photo deblurring?",
+      answer:
+        "Yes. BringBack can deblur photos up to very high resolutions, making it ideal for prints and professional use.",
+    },
+    {
+      question: "Can I use BringBack to deblur photos for commercial projects?",
+      answer:
+        "Yes. You are free to use deblurred and restored photos from BringBack for both personal and commercial purposes.",
+    },
+    {
       question: "How does AI photo deblurring actually work?",
       answer:
         "Our AI analyzes the type and pattern of blur in your photo, then applies sophisticated algorithms to reverse the blurring process. It understands the physics of how motion blur, focus blur, and camera shake affect images, allowing it to reconstruct sharp details from blurry areas while preserving the natural look of your photo.",

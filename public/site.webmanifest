@@ -48,7 +48,7 @@
       "name": "Restore Photo",
       "short_name": "Restore",
       "description": "Start restoring your photos",
-      "url": "/dashboard",
+      "url": "/login",
       "icons": [
         {
           "src": "/bringback-logo.png",

@@ -58,6 +58,66 @@ export default function FAQSection() {
       answer:
         "Yes! Our AI excels at restoring even severely damaged photos from decades ago. The more of the original photo that's visible, the better the results. Even if large portions are missing or damaged, our AI can often reconstruct them based on surrounding context and learned patterns.",
     },
+    {
+      question: "What is old photo restoration?",
+      answer:
+        "Old photo restoration uses AI to automatically repair faded, torn, scratched, or discolored photographs—returning them to vibrant, clear versions.",
+    },
+    {
+      question: "How much does it cost to restore an old photo using BringBack?",
+      answer:
+        "BringBack offers a free trial to restore your first photo. Paid plans for higher resolution or batch processing are available through our pricing page.",
+    },
+    {
+      question: "Can BringBack repair water-damaged or sun-faded photos?",
+      answer:
+        "Yes—our AI module is trained to handle common damage like water stains, fading, scratches, and sun-exposure effects.",
+    },
+    {
+      question: "Is the restoration fully automatic?",
+      answer:
+        "Absolutely. Upload your image, and our AI automatically restores color, sharpness, and detail—no manual intervention needed.",
+    },
+    {
+      question: "How long does it take to restore a photo?",
+      answer:
+        "Most photos are fully restored in under 60 seconds, depending on image size and server load.",
+    },
+    {
+      question: "Can BringBack restore scratched or torn old photos?",
+      answer:
+        "Yes. Our AI handles structured defects like scratches and tears and recovers details while maintaining realism.",
+    },
+    {
+      question: "Is the restoration quality better than manual editing?",
+      answer:
+        "AI restoration is faster and highly effective for most photos. It automates complex tasks—yet keeps sentimental accuracy—often in seconds rather than hours.",
+    },
+    {
+      question: "Are my uploaded photos kept private?",
+      answer:
+        "Yes. Photos are processed securely, and you may choose to delete them from our servers after download for privacy.",
+    },
+    {
+      question: "What image formats does BringBack support?",
+      answer:
+        "We support common formats like JPEG, PNG, and TIFF to ensure compatibility with scanned or digital old photographs.",
+    },
+    {
+      question: "Can I restore multiple old photos at once?",
+      answer:
+        "Yes—with a paid plan, batch restoration is available so you can process multiple images together.",
+    },
+    {
+      question: "Can I print or enlarge restored photos?",
+      answer:
+        "Definitely. Restored images maintain high resolution and quality, ideal for printing or enlargements.",
+    },
+    {
+      question: "Are restored photos usable for commercial purposes?",
+      answer:
+        "Yes. You retain full rights to restored images and may use them for personal, editorial, or commercial purposes.",
+    },
   ]
 
   return (

@@ -21,7 +21,13 @@ export default function PrivacyPage() {
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Your privacy is important to us. This policy explains how we collect, use, and protect your information.
             </p>
-            <div className="mt-4 text-sm text-gray-500">Last updated: January 15, 2025</div>
+            <div className="mt-4 text-sm text-gray-500">
+              Last updated: {new Date().toLocaleDateString('en-US', { 
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </div>
           </div>
 
           {/* Content */}
@@ -116,11 +122,9 @@ export default function PrivacyPage() {
                   <p>If you have questions about this Privacy Policy or how we handle your data, contact us at:</p>
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                     <p>
-                      <strong>Email:</strong> privacy@bringback.pro
+                      <strong>Email:</strong> support@bringback.pro
                     </p>
-                    <p>
-                      <strong>Address:</strong> BringBack Privacy Team, 123 Tech Street, San Francisco, CA 94105
-                    </p>
+            
                   </div>
                 </div>
               </section>

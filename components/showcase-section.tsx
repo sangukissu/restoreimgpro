@@ -102,7 +102,7 @@ export default function ShowcaseSection() {
               Our AI handles even the most unique photo restoration challenges. Upload your photo and see the magic
               happen.
             </p>
-              <Link href="/dashboard">
+              <Link href="/login">
             <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
               <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Restore Your Photo</span>
               <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">

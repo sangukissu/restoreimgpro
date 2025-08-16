@@ -21,7 +21,13 @@ export default function TermsPage() {
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Please read these terms carefully before using BringBack's photo restoration service.
             </p>
-            <div className="mt-4 text-sm text-gray-500">Last updated: January 15, 2025</div>
+             <div className="mt-4 text-sm text-gray-500">
+              Last updated: {new Date().toLocaleDateString('en-US', { 
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </div>
           </div>
 
           {/* Content */}
@@ -141,11 +147,9 @@ export default function TermsPage() {
                   <p>Questions about these Terms of Service? Contact us:</p>
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                     <p>
-                      <strong>Email:</strong> legal@bringback.pro
+                      <strong>Email:</strong> support@bringback.pro
                     </p>
-                    <p>
-                      <strong>Address:</strong> BringBack Legal Team, 123 Tech Street, San Francisco, CA 94105
-                    </p>
+                 
                   </div>
                 </div>
               </section>

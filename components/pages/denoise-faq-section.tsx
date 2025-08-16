@@ -48,6 +48,66 @@ export default function DenoiseFAQSection() {
       answer:
         "We offer a 30-day money-back guarantee. If you're not satisfied with the denoising results, we'll refund your purchase - no questions asked. We're confident in our AI's ability to clean your photos, but we stand behind every enhancement.",
     },
+    {
+      question: "What does denoising a photo mean?",
+      answer:
+        "Denoising removes unwanted grain or noise from photos—especially from low-light or high-ISO images—while preserving fine details.",
+    },
+    {
+      question: "How does AI denoising work on BringBack?",
+      answer:
+        "BringBack's AI denoising uses advanced deep learning models to differentiate noise from real detail, delivering clean, sharp images quickly via our cloud-based engine.",
+    },
+    {
+      question: "Do I need to denoise before editing?",
+      answer:
+        "Yes—denoising first is recommended. Applying noise reduction before adding contrast or sharpening helps avoid amplifying noise.",
+    },
+    {
+      question: "How long does denoising take?",
+      answer:
+        "Most images are denoised in under a minute, depending on size and resolution. Larger RAW files may take slightly longer.",
+    },
+    {
+      question: "Is my uploaded photo secure?",
+      answer:
+        "Absolutely—photos are processed securely in the cloud and can be deleted from our servers after download to ensure privacy.",
+    },
+    {
+      question: "Does BringBack preserve fine details when denoising?",
+      answer:
+        "Yes. Our AI is trained to remove noise while intelligently retaining key details like textures and edges, avoiding oversmoothing.",
+    },
+    {
+      question: "Can I batch denoise multiple photos?",
+      answer:
+        "Yes—with a paid plan, you can upload and denoise multiple photos in a single batch for faster workflow.",
+    },
+    {
+      question: "What image formats are supported?",
+      answer:
+        "BringBack supports JPEG, PNG, and RAW formats for denoising to accommodate various user needs.",
+    },
+    {
+      question: "Will denoising affect image quality?",
+      answer:
+        "No—instead of degrading quality, denoising enhances clarity and usability, especially for noisy, underexposed, or high ISO shots.",
+    },
+    {
+      question: "Is the web app mobile-friendly?",
+      answer:
+        "Yes—you can upload and denoise photos directly from your phone using our responsive web interface.",
+    },
+    {
+      question: "Can I use BringBack for commercial photos?",
+      answer:
+        "Yes—denoised photos can be used for editorial, commercial, or personal projects, with full usage rights included.",
+    },
+    {
+      question: "Do I lose color or dynamic range during denoising?",
+      answer:
+        "No—our AI preserves color fidelity and dynamic range while effectively reducing noise.",
+    },
   ]
 
   return (

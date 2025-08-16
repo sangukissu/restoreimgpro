@@ -230,17 +230,20 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
         </div>
 
         {/* Call to Action */}
-        <div className="max-w-4xl mx-auto px-4 mt-16">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Restore Your Photos?</h2>
-            <p className="text-lg mb-6 opacity-90">Join thousands of satisfied customers who have brought their memories back to life.</p>
-            <Link href="/dashboard">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                Start Restoring Now
+        <div className="text-center mt-16">
+            <div className="bg-black text-white rounded-2xl p-8 max-w-2xl mx-auto">
+              <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
+              <p className="text-gray-300 mb-6">
+                Join thousands of families who've already brought their precious photos back to life.
+              </p>
+              <Link href="/login">
+
+              <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
+                Get Started for $2
               </Button>
-            </Link>
+              </Link>
+            </div>
           </div>
-        </div>
       </main>
       <Footer />
     </div>

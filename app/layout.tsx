@@ -112,35 +112,7 @@ const jsonLd = {
         ]
       }
     },
-    {
-      '@type': 'Service',
-      '@id': 'https://bringback.pro/#service',
-      name: 'AI Photo Restoration',
-      description: 'Professional photo restoration service using advanced artificial intelligence to repair and enhance old, damaged, or faded photographs.',
-      provider: {
-        '@id': 'https://bringback.pro/#organization'
-      },
-      areaServed: {
-        '@type': 'Place',
-        name: 'Worldwide'
-      },
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: 'Photo Restoration Options',
-        itemListElement: [
-          {
-            '@type': 'Offer',
-            name: 'Basic Restoration',
-            description: 'Standard AI-powered photo restoration'
-          },
-          {
-            '@type': 'Offer',
-            name: 'Premium Restoration',
-            description: 'Advanced restoration with manual touch-ups'
-          }
-        ]
-      }
-    }
+
   ]
 }
 

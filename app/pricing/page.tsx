@@ -1,8 +1,10 @@
 import type { Metadata } from "next"
+import Link from "next/link"
+
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Check, Star, Zap, Shield, Clock, Link } from "lucide-react"
+import { Check, Star, Zap, Shield, Clock, ChevronRight } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Pricing - BringBack | AI Photo Restoration",
@@ -68,11 +70,12 @@ export default function PricingPage() {
                   <Check className="w-5 h-5 text-green-500" />
                 </div>
               </div>
-              <Link href="/dashboard">
-              <Button className="w-full bg-black text-white py-4 text-lg font-medium hover:bg-gray-800 transition-colors duration-200">
-                Restore 5 Photos for $2
-              </Button>
-              </Link>
+              <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
+              <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Restore Your Photos for $2</span>
+              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
+              </i>
+            </Button>
 
               <p className="text-xs text-gray-500 mt-3">Secure payment • Instant access</p>
             </div>
@@ -111,7 +114,7 @@ export default function PricingPage() {
                 <thead>
                   <tr className="border-b border-gray-200">
                     <th className="text-left py-4 px-4 font-semibold text-black">Feature</th>
-                    <th className="text-center py-4 px-4 font-semibold text-black">BringBack</th>
+                    <th className="text-center py-4 px-4 font-semibold text-black">BringBack AI</th>
                     <th className="text-center py-4 px-4 font-semibold text-gray-600">Traditional Service</th>
                   </tr>
                 </thead>

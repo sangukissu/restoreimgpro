@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import BlogCard from "@/components/blog-card"
+import Link from "next/link"
+
 
 import { Button } from "@/components/ui/button"
 import { getAllPosts, formatDate, calculateReadingTime, extractExcerpt, type WordPressPost } from "@/lib/wordpress"
@@ -99,6 +101,20 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
             </div>
           )}
         </div>
+        <div className="text-center mt-16">
+            <div className="bg-black text-white rounded-2xl p-8 max-w-2xl mx-auto">
+              <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
+              <p className="text-gray-300 mb-6">
+                Join thousands of families who've already brought their precious photos back to life.
+              </p>
+              <Link href="/login">
+
+              <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
+                Get Started for $2
+              </Button>
+              </Link>
+            </div>
+          </div>
       </main>
 
       <Footer />

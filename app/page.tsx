@@ -45,16 +45,21 @@ const homePageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/#webapp',
-  name: 'BringBack Photo Restoration',
-  description: 'Transform your old, damaged photos into stunning restored images with our advanced AI technology.',
+  name: 'BringBack – AI Old Photo Restoration Web App',
+  description: 'BringBack is an AI-powered web app where users upload old, faded, or damaged photos and instantly receive restored, vibrant images automatically. Users can also use the app to denoise, deblur, and remove grain from photos.',
   url: 'https://bringback.pro/',
-  applicationCategory: 'MultimediaApplication',
-  operatingSystem: 'Web Browser',
+  applicationCategory: 'PhotoEditingApplication',
+  operatingSystem: 'Web',
   offers: {
     '@type': 'Offer',
-    price: '0',
+    name: 'BringBack Restoration Plans',
+    url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
-    description: 'Free photo restoration service with premium options available'
+    price: '2',
+    eligibleRegion: {
+      '@type': 'Place',
+      name: 'Worldwide'
+    }
   },
   featureList: [
     'AI-powered photo restoration',
@@ -62,9 +67,198 @@ const homePageJsonLd = {
     'Enhance old and faded images',
     'Remove scratches and tears',
     'Color restoration',
-    'High-quality output'
+    'High-quality output',
+    'Denoise photo online',
+    'Remove grain from photos',
+    'Remove noise from photos',
+    'Deblur photos online',
+    'Restore old photos',
+    'Restore faded photos',
   ],
-  screenshot: 'https://bringback.pro/blurred-restored.webp'
+  screenshot: 'https://bringback.pro/screenshot.png'
+}
+
+const homeFAQPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How does AI photo restoration actually work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our AI analyzes millions of photo patterns to understand how damage occurs and how to reverse it. It identifies faces, textures, and objects, then intelligently reconstructs missing or damaged areas while preserving the original character of your photo. The process happens in seconds, but the technology behind it represents years of machine learning development.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What types of photo damage can BringBack fix?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We can restore virtually any type of damage: tears, scratches, water stains, fading, yellowing, blur, darkness, cracks, and missing pieces. Our AI handles both physical damage (like tears) and quality issues (like blur or low resolution). If you can see some of the original photo, we can likely restore it.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How much does photo restoration cost?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We offer 5 high-quality photo restorations for just $2 - no subscription required. This one-time payment gives you professional-grade results in seconds. Compare that to traditional photo restoration services that charge $50-200 per photo and take weeks to complete.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Is my personal data and photos safe?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely. Your photos are processed securely and automatically deleted from our servers within 30 minutes. We never store, share, or use your personal photos for any purpose other than restoration. Your memories remain completely private and belong only to you.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does the restoration process take?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most photos are restored in under 30 seconds. Upload your photo, and watch the transformation happen in real-time. No waiting days or weeks like traditional restoration services - you get professional results instantly.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What if I\'m not satisfied with the results?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We\'re confident you\'ll love the results, but if you\'re not completely satisfied, we offer a full refund within 30 days. Our AI produces consistently high-quality results, but we stand behind every restoration with our satisfaction guarantee.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I use restored photos commercially?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! Once restored, the photos are yours to use however you\'d like - personal use, commercial projects, printing, sharing, or selling. We don\'t retain any rights to your restored images. They\'re your memories, enhanced and returned to you.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What file formats do you support?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We support all common image formats including JPG, PNG, TIFF, and BMP. You can upload photos up to 50MB in size. The restored photo will be delivered in high-resolution PNG format, perfect for printing or digital use.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How does this compare to manual photo restoration?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Traditional restoration can take weeks and cost $50-200 per photo. Our AI delivers comparable or better results in seconds for a fraction of the cost. While manual restoration has its place for extremely rare or historically significant photos, our AI is perfect for family photos and personal memories.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can you restore very old or severely damaged photos?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! Our AI excels at restoring even severely damaged photos from decades ago. The more of the original photo that\'s visible, the better the results. Even if large portions are missing or damaged, our AI can often reconstruct them based on surrounding context and learned patterns.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What is old photo restoration?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Old photo restoration uses AI to automatically repair faded, torn, scratched, or discolored photographs—returning them to vibrant, clear versions.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How much does it cost to restore an old photo using BringBack?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'BringBack offers a free trial to restore your first photo. Paid plans for higher resolution or batch processing are available through our pricing page.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can BringBack repair water-damaged or sun-faded photos?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes—our AI module is trained to handle common damage like water stains, fading, scratches, and sun-exposure effects.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Is the restoration fully automatic?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely. Upload your image, and our AI automatically restores color, sharpness, and detail—no manual intervention needed.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does it take to restore a photo?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most photos are fully restored in under 60 seconds, depending on image size and server load.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can BringBack restore scratched or torn old photos?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Our AI handles structured defects like scratches and tears and recovers details while maintaining realism.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Is the restoration quality better than manual editing?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'AI restoration is faster and highly effective for most photos. It automates complex tasks—yet keeps sentimental accuracy—often in seconds rather than hours.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my uploaded photos kept private?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Photos are processed securely, and you may choose to delete them from our servers after download for privacy.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What image formats does BringBack support?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We support common formats like JPEG, PNG, and TIFF to ensure compatibility with scanned or digital old photographs.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I restore multiple old photos at once?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes—with a paid plan, batch restoration is available so you can process multiple images together.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I print or enlarge restored photos?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Definitely. Restored images maintain high resolution and quality, ideal for printing or enlargements.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Are restored photos usable for commercial purposes?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. You retain full rights to restored images and may use them for personal, editorial, or commercial purposes.'
+      }
+    }
+  ]
 }
 
 export default function Page() {
@@ -73,6 +267,10 @@ export default function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFAQPageJsonLd) }}
       />
       <Header />
       {/* Hero Section */}
@@ -136,7 +334,7 @@ export default function Page() {
             <Link href="/dashboard">
             <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
               <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Restore Your Photo</span>
-              <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
                 <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
               </i>
             </Button>
