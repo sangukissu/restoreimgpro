@@ -28,7 +28,7 @@ export default function Footer() {
           </Link>
             </div>
 
-            {/* Navigation */}
+           
             <nav className="flex flex-wrap justify-center gap-6 leading-tight">
               <a href="/privacy" className="text-gray-600 hover:text-black transition-colors">
                 Privacy
