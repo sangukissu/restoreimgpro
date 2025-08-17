@@ -9,7 +9,6 @@ import ColorizeHowItWorksSection from "@/components/pages/colorize-how-it-works-
 import ColorizeBenefitsSection from "@/components/pages/colorize-benefits-section"
 import ColorizeShowcaseSection from "@/components/pages/colorize-showcase-section"
 import ColorizeFeaturesSection from "@/components/pages/colorize-features-section"
-import ColorizeTestimonialsSection from "@/components/pages/colorize-testimonials-section"
 import ColorizeFAQSection from "@/components/pages/colorize-faq-section"
 import ColorizeMemoriesSection from "@/components/pages/colorize-memories-section"
 import Link from "next/link"
@@ -184,7 +183,7 @@ const colorizeFAQPageJsonLd = {
       "name": "Is the colorization mobile-friendly?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes—you can upload and colorize black and white photos directly from your phone using our responsive web interface, perfect for colorizing photos on the go."
+        "text": "Yes, you can upload and colorize black and white photos directly from your phone using our responsive web interface, perfect for colorizing photos on the go."
       }
     },
     {
@@ -192,7 +191,7 @@ const colorizeFAQPageJsonLd = {
       "name": "Can I use colorized photos commercially?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes—colorized photos can be used for editorial, commercial, or personal projects, with full usage rights included in your purchase."
+        "text": "Yes, colorized photos can be used for editorial, commercial, or personal projects, with full usage rights included in your purchase."
       }
     },
     {
@@ -200,7 +199,7 @@ const colorizeFAQPageJsonLd = {
       "name": "Does colorization preserve the original photo quality?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes—our AI maintains the original resolution and detail while adding colors, ensuring your colorized photos retain all the sharpness and quality of the original black and white image."
+        "text": "Yes, our AI maintains the original resolution and detail while adding colors, ensuring your colorized photos retain all the sharpness and quality of the original black and white image."
       }
     },
     {
@@ -272,7 +271,7 @@ export default function ColorizePage() {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
+              <div className="flex flex-col gap-4 justify-center items-center w-full">
                 
               
               <Link href="/login">
@@ -285,8 +284,9 @@ export default function ColorizePage() {
                 </>
               </Button>
             </Link>
-              </div>
-              <div className="flex flex-col items-center space-y-2 pt-2">
+            <p className="text-xs text-gray-500">
+                Only $0.40 per photo 
+                </p>
                 <div className="flex flex-col items-center space-y-2 pt-2">
              <div className="flex items-center space-x-2">
               <div className="flex -space-x-2">
@@ -321,7 +321,7 @@ export default function ColorizePage() {
                         secondImage="/placeholder.svg?height=400&width=600&text=Colorized+Photo"
                         firstImageClassName="object-cover"
                         secondImageClassname="object-cover"
-                        className="h-[280px] w-[400px] md:h-[400px] md:w-[600px] rounded-lg"
+                        className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"
                         slideMode="hover"
                         firstImageAlt="Before: black and white family photo" 
                         secondImageAlt="After: Colorized family photo with bringback ai"
@@ -346,53 +346,47 @@ export default function ColorizePage() {
       <ColorizeBenefitsSection />
       <ColorizeShowcaseSection />
       <ColorizeFeaturesSection />
-      <ColorizeTestimonialsSection />
-
-      {/* Social Proof Section */}
-      <section className="px-4 py-16 bg-gray-50/50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-black mb-4">Trusted by history lovers worldwide</h2>
-            <p className="text-lg text-gray-600">Join thousands who've already brought color to their vintage photos</p>
+          {/* Colorization Quality Section */}
+      <section className="px-6 py-20 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">Colorization quality & accuracy</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Understanding what makes AI colorization realistic and when it works best
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="flex text-black">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                "My great-grandmother's wedding photo from 1920 was beautiful but colorless. BringBack made it look like
-                it was taken yesterday - the colors are so realistic!"
+          {/* Quality Factors */}
+          <div className="space-y-12 mb-16">
+            <div className="border-l-4 border-black pl-6">
+              <h3 className="text-xl font-bold text-black mb-3">Image Quality Matters</h3>
+              <p className="text-gray-600">
+                Sharp, well-exposed photos with clear details produce the most realistic colorization. Blurry or very
+                dark images may have less accurate color predictions.
               </p>
-              <p className="text-sm font-medium text-black">Emma Thompson</p>
             </div>
 
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="flex text-black">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                "I colorized my entire family's vintage photo collection. The AI understood skin tones, clothing, and
-                even the background perfectly. It's like time travel!"
+            <div className="border-l-4 border-black pl-6">
+              <h3 className="text-xl font-bold text-black mb-3">Common Objects Work Best</h3>
+              <p className="text-gray-600">
+                The AI performs exceptionally well on familiar subjects like people, nature, buildings, and everyday
+                objects that appear frequently in training data.
               </p>
-              <p className="text-sm font-medium text-black">Robert Chen</p>
+            </div>
+
+            <div className="border-l-4 border-black pl-6">
+              <h3 className="text-xl font-bold text-black mb-3">Context Helps Accuracy</h3>
+              <p className="text-gray-600">
+                Photos with clear context clues - like outdoor settings, recognizable clothing styles, or familiar
+                objects - help the AI make more accurate color choices.
+              </p>
             </div>
           </div>
+
+
         </div>
       </section>
+
 
       <ColorizeFAQSection />
       <ColorizeMemoriesSection />

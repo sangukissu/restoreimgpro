@@ -3,12 +3,12 @@ import { Cover } from "@/components/ui/cover"
 
 export default function HowItWorksSection() {
   return (
-    <section className="px-4 py-20 bg-gray-100">
+    <section id="how-it-works" className="px-4 py-20 bg-gray-100">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
           <p className="text-gray-500 italic text-lg mb-4">Our Process, Explained</p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-black">Here's how it             <Cover>works</Cover>
+          <h2 className="text-4xl lg:text-5xl font-bold text-black">Here's how BringBack             <Cover>works</Cover>
 </h2>
         </div>
 

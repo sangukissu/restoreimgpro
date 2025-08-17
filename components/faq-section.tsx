@@ -71,7 +71,7 @@ export default function FAQSection() {
     {
       question: "Can BringBack repair water-damaged or sun-faded photos?",
       answer:
-        "Yes—our AI module is trained to handle common damage like water stains, fading, scratches, and sun-exposure effects.",
+        "Yes, our AI module is trained to handle common damage like water stains, fading, scratches, and sun-exposure effects.",
     },
     {
       question: "Is the restoration fully automatic?",
@@ -106,7 +106,7 @@ export default function FAQSection() {
     {
       question: "Can I restore multiple old photos at once?",
       answer:
-        "Yes—with a paid plan, batch restoration is available so you can process multiple images together.",
+        "Yes, with a paid plan, batch restoration is available so you can process multiple images together.",
     },
     {
       question: "Can I print or enlarge restored photos?",

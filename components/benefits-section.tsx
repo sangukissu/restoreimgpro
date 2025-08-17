@@ -4,7 +4,7 @@ import { Cover } from "@/components/ui/cover"
 
 export default function BenefitsSection() {
   return (
-    <section className="px-4 py-20 bg-white">
+    <section id="pricing" className="px-4 py-20 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20">

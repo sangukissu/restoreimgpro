@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "../styles/blog-content.css";
 
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Line clamp utilities */
 .line-clamp-2 {
   overflow: hidden;

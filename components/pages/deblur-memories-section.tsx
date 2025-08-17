@@ -26,7 +26,7 @@ export default function DeblurMemoriesSection() {
           <div className="max-w-3xl mx-auto space-y-6">
             <p className="text-lg text-gray-600">
               Every blurry concert photo, every out-of-focus family portrait, every shaky moment that seemed lost
-              forever—they all deserve to be seen in perfect clarity.
+              forever, they all deserve to be seen in perfect clarity.
             </p>
 
             <p className="text-lg text-gray-600">

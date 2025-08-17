@@ -13,7 +13,7 @@ export default function DenoiseFeaturesSection() {
     },
     {
       title: "Handles Any Noise Type",
-      description: "Color noise, luminance grain, digital artifacts — our AI understands all forms of image noise.",
+      description: "Color noise, luminance grain, digital artifacts - our AI understands all forms of image noise.",
       icon: <Zap className="h-6 w-6" />,
     },
     {

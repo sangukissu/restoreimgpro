@@ -1,18 +1,15 @@
 import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
-import { Sparkles, ChevronRight } from "lucide-react"
+import { Sparkles, ChevronRight, CheckCircle, Target, Zap, TrendingUp } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { PointerHighlight } from "@/components/pointer-highlight"
-import { GridPattern } from "@/components/grid-pattern"
 import DeblurHowItWorksSection from "@/components/pages/deblur-how-it-works-section"
 import DeblurBenefitsSection from "@/components/pages/deblur-benefits-section"
 import DeblurShowcaseSection from "@/components/pages/deblur-showcase-section"
 import DeblurFeaturesSection from "@/components/pages/deblur-features-section"
-import DeblurTestimonialsSection from "@/components/pages/deblur-testimonials-section"
 import DeblurFAQSection from "@/components/pages/deblur-faq-section"
 import DeblurMemoriesSection from "@/components/pages/deblur-memories-section"
-import { cn } from "@/lib/utils"
 import { Compare } from "@/components/ui/compare"
 import Link from "next/link"
 
@@ -302,7 +299,7 @@ export default function DeblurPage() {
                 process, and a second chance at a perfect shot.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
+            <div className="flex flex-col gap-4 justify-center items-center w-full">
               <Link href="/login">
 
               <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
@@ -314,6 +311,9 @@ export default function DeblurPage() {
                 </>
               </Button>
             </Link>
+            <p className="text-xs text-gray-500">
+                Only $0.40 per photo
+              </p>
             </div>
             <div className="flex flex-col items-center space-y-2 pt-2">
              <div className="flex items-center space-x-2">
@@ -349,7 +349,7 @@ export default function DeblurPage() {
                         secondImage="/placeholder.svg?height=400&width=600&text=Colorized+Photo"
                         firstImageClassName="object-cover"
                         secondImageClassname="object-cover"
-                        className="h-[280px] w-[400px] md:h-[400px] md:w-[600px] rounded-lg"
+                        className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"
                         slideMode="hover"
                         firstImageAlt="Before: Blurred family photo" 
                         secondImageAlt="After: Deblurred and restored family photo with bringback ai"
@@ -372,78 +372,101 @@ export default function DeblurPage() {
       <DeblurBenefitsSection />
       <DeblurShowcaseSection />
       <DeblurFeaturesSection />
-      <DeblurTestimonialsSection />
-
-      {/* Social Proof Section */}
-      <section className="px-4 py-16 bg-gray-50/50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-black mb-4">Trusted by photographers worldwide</h2>
-            <p className="text-lg text-gray-600">Join thousands who've already sharpened their blurry shots</p>
+      {/* Results Quality Section */}
+      <section className="px-6 py-20 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">Professional-grade results every time</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Our AI doesn't just sharpen, it intelligently reconstructs lost detail with precision
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="flex text-black">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
+          {/* Metrics Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+            <div className="text-center group">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+                <Target className="w-8 h-8 text-gray-600 group-hover:text-white transition-colors duration-300" />
               </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                "My concert photos were all blurry from the excitement. BringBack made them sharp enough to print and
-                frame. The details came back perfectly!"
-              </p>
-              <p className="text-sm font-medium text-black">Alex P.</p>
+              <div className="text-3xl font-bold text-black mb-1">98%</div>
+              <div className="text-sm text-gray-600">Detail Recovery</div>
             </div>
 
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="flex text-black">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
+            <div className="text-center group">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+                <Zap className="w-8 h-8 text-gray-600 group-hover:text-white transition-colors duration-300" />
               </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                "I thought my wedding photos were ruined by camera shake. This AI brought them back to life - they look
-                professional now!"
-              </p>
-              <p className="text-sm font-medium text-black">Maria S.</p>
+              <div className="text-3xl font-bold text-black mb-1">30s</div>
+              <div className="text-sm text-gray-600">Avg Processing</div>
             </div>
+
+            <div className="text-center group">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+                <CheckCircle className="w-8 h-8 text-gray-600 group-hover:text-white transition-colors duration-300" />
+              </div>
+              <div className="text-3xl font-bold text-black mb-1">Zero</div>
+              <div className="text-sm text-gray-600">Artifacts</div>
+            </div>
+
+            <div className="text-center group">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+                <TrendingUp className="w-8 h-8 text-gray-600 group-hover:text-white transition-colors duration-300" />
+              </div>
+              <div className="text-3xl font-bold text-black mb-1">100%</div>
+              <div className="text-sm text-gray-600">Success Rate</div>
+            </div>
+          </div>
+
+          {/* Quality Types */}
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-black mb-2">What we fix</h3>
+              <p className="text-gray-600">Our AI handles every type of blur with surgical precision</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="border-t-2 border-gray-200 pt-6">
+                <h4 className="text-lg font-bold text-black mb-2">📸 Motion Blur</h4>
+                <p className="text-gray-600 text-sm">
+                  Camera shake, moving subjects, or unstable shots—we reconstruct the sharp image underneath
+                </p>
+              </div>
+
+              <div className="border-t-2 border-gray-200 pt-6">
+                <h4 className="text-lg font-bold text-black mb-2">🎯 Focus Issues</h4>
+                <p className="text-gray-600 text-sm">
+                  Missed autofocus, shallow depth problems, or lens focusing errors—we bring everything into sharp focus
+                </p>
+              </div>
+
+              <div className="border-t-2 border-gray-200 pt-6">
+                <h4 className="text-lg font-bold text-black mb-2">🌊 Lens Blur</h4>
+                <p className="text-gray-600 text-sm">
+                  Optical blur from lens imperfections or atmospheric conditions—we correct and clarify
+                </p>
+              </div>
+
+              <div className="border-t-2 border-gray-200 pt-6">
+                <h4 className="text-lg font-bold text-black mb-2">⚡ Speed Blur</h4>
+                <p className="text-gray-600 text-sm">
+                  Fast-moving subjects or panning shots—we freeze the motion and restore crisp details
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center border-t border-gray-200 pt-8">
+            <p className="text-gray-600 italic">
+              "If our AI can't significantly improve your blurry photo, we'll refund your credit—no questions asked."
+            </p>
           </div>
         </div>
       </section>
+    
 
       <DeblurFAQSection />
       <DeblurMemoriesSection />
 
-      {/* Final CTA Section */}
-      <section className="px-4 py-20 max-w-6xl mx-auto text-center">
-        <div className="text-center mt-16">
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
-            <h3 className="text-2xl font-bold text-black mb-4">Ready to bring your blurry photos into focus?</h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Don't let blur steal the clarity from your precious moments. Every photo deserves to be seen in perfect
-              focus.
-            </p>
-
-            <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-              <>
-                <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Start Deblurring Now</span>
-                <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                  <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-                </i>
-              </>
-            </Button>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>

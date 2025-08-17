@@ -27,7 +27,7 @@ export default function DenoiseMemoriesSection() {
           <div className="max-w-3xl mx-auto space-y-6">
             <p className="text-lg text-gray-600">
               Every grainy night shot, every noisy indoor moment, every high-ISO memory that seemed too rough to
-              share—they all deserve to look their absolute best.
+              share, they all deserve to look their absolute best.
             </p>
 
             <p className="text-lg text-gray-600">

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Sparkles, ChevronRight } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import { Cover } from "@/components/ui/cover" 
 import { PointerHighlight } from "@/components/pointer-highlight"
 import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
 import { GridPattern } from "@/components/grid-pattern"
@@ -183,7 +184,7 @@ const homeFAQPageJsonLd = {
       name: 'Can BringBack repair water-damaged or sun-faded photos?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes—our AI module is trained to handle common damage like water stains, fading, scratches, and sun-exposure effects.'
+        text: 'Yes, our AI module is trained to handle common damage like water stains, fading, scratches, and sun-exposure effects.'
       }
     },
     {
@@ -239,7 +240,7 @@ const homeFAQPageJsonLd = {
       name: 'Can I restore multiple old photos at once?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes—with a paid plan, batch restoration is available so you can process multiple images together.'
+        text: 'Yes, with a paid plan, batch restoration is available so you can process multiple images together.'
       }
     },
     {
@@ -330,7 +331,7 @@ export default function Page() {
               process and a lifetime of preserved moments.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
+          <div className="flex flex-col gap-4 justify-center items-center w-full">
             <Link href="/dashboard">
             <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
               <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Restore Your Photo</span>
@@ -339,6 +340,9 @@ export default function Page() {
               </i>
             </Button>
             </Link>
+            <p className="text-xs text-gray-500">
+                Only $0.40 per photo
+              </p>
           
           </div>
           <div className="flex flex-col items-center space-y-2 pt-2">
@@ -385,7 +389,59 @@ export default function Page() {
       <BenefitsSection />
       <ShowcaseSection />
       <FeaturesSection />
-      <TestimonialsSection />
+            {/* Our Promise Section - Matching existing design patterns */}
+      <section className="px-4 py-20 bg-white">
+        <div className="max-w-6xl mx-auto">
+          {/* Header - matching other sections */}
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
+              <Cover>Our Promise</Cover> to You
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Built on trust, transparency, and technical excellence
+            </p>
+          </div>
+
+          {/* Content - matching the border-left style from benefits section */}
+          <div className="space-y-12 max-w-4xl mx-auto">
+            <div className="border-l-2 border-gray-200 pl-8">
+              <h3 className="text-2xl font-bold text-black mb-3">100% Privacy Guaranteed</h3>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                Your photos are processed securely and automatically deleted from our servers within 30 minutes. We
+                never store, share, or use your personal photos for any purpose other than restoration.
+              </p>
+              <div className="text-sm text-gray-500">🔒 Your memories remain completely private</div>
+            </div>
+
+            <div className="border-l-2 border-gray-200 pl-8">
+              <h3 className="text-2xl font-bold text-black mb-3">Lightning Fast Results</h3>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                Most photos are restored in under 30 seconds. No waiting days or weeks like traditional restoration
+                services - you get professional results instantly.
+              </p>
+              <div className="text-sm text-gray-500">⚡ Results in under 30 seconds</div>
+            </div>
+
+            <div className="border-l-2 border-gray-200 pl-8">
+              <h3 className="text-2xl font-bold text-black mb-3">Quality Guarantee</h3>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                Not satisfied with the results? Get a full refund within 30 days. We're confident in our AI's ability to
+                restore your memories perfectly.
+              </p>
+              <div className="text-sm text-gray-500">💰 30-day money-back guarantee</div>
+            </div>
+          </div>
+
+          {/* Bottom message - matching memories section style */}
+          <div className="text-center mt-16 pt-8 border-t border-gray-100">
+            <p className="text-lg text-gray-600 italic">
+              "We built BringBack because we believe every memory deserves to be preserved perfectly."
+            </p>
+            <p className="text-gray-500 mt-2">— The BringBack Team</p>
+          </div>
+        </div>
+      </section>
+
       <FAQSection />
       <MemoriesSection />
 

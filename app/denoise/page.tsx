@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
-import { Sparkles, ChevronRight } from "lucide-react"
+import { Sparkles, ChevronRight, Search, Brain, Filter, Sparkle } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import Link from "next/link"
@@ -9,10 +9,11 @@ import DenoiseHowItWorksSection from "@/components/pages/denoise-how-it-works-se
 import DenoiseBenefitsSection from "@/components/pages/denoise-benefits-section"
 import DenoiseShowcaseSection from "@/components/pages/denoise-showcase-section"
 import DenoiseFeaturesSection from "@/components/pages/denoise-features-section"
-import DenoiseTestimonialsSection from "@/components/pages/denoise-testimonials-section"
 import DenoiseFAQSection from "@/components/pages/denoise-faq-section"
 import DenoiseMemoriesSection from "@/components/pages/denoise-memories-section"
 import { Compare } from "@/components/ui/compare"
+
+
 export const metadata: Metadata = {
   title: "AI Photo Denoise - Remove Grain & Noise Instantly | BringBack",
   description:
@@ -149,7 +150,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Do I need to denoise before editing?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes—denoising first is recommended. Applying noise reduction before adding contrast or sharpening helps avoid amplifying noise."
+        "text": "Yes, denoising first is recommended. Applying noise reduction before adding contrast or sharpening helps avoid amplifying noise."
       }
     },
     {
@@ -165,7 +166,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Is my uploaded photo secure?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely—photos are processed securely in the cloud and can be deleted from our servers after download to ensure privacy."
+        "text": "Absolutely, photos are processed securely in the cloud and can be deleted from our servers after download to ensure privacy."
       }
     },
     {
@@ -181,7 +182,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Can I batch denoise multiple photos?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes—with a paid plan, you can upload and denoise multiple photos in a single batch for faster workflow."
+        "text": "Yes, with a paid plan, you can upload and denoise multiple photos in a single batch for faster workflow."
       }
     },
     {
@@ -197,7 +198,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Will denoising affect image quality?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No—instead of degrading quality, denoising enhances clarity and usability, especially for noisy, underexposed, or high ISO shots."
+        "text": "No, instead of degrading quality, denoising enhances clarity and usability, especially for noisy, underexposed, or high ISO shots."
       }
     },
     {
@@ -205,7 +206,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Is the web app mobile-friendly?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes—you can upload and denoise photos directly from your phone using our responsive web interface."
+        "text": "Yes, you can upload and denoise photos directly from your phone using our responsive web interface."
       }
     },
     {
@@ -213,7 +214,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Can I use BringBack for commercial photos?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes—denoised photos can be used for editorial, commercial, or personal projects, with full usage rights included."
+        "text": "Yes, denoised photos can be used for editorial, commercial, or personal projects, with full usage rights included."
       }
     },
     {
@@ -221,7 +222,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Do I lose color or dynamic range during denoising?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No—our AI preserves color fidelity and dynamic range while effectively reducing noise."
+        "text": "No, our AI preserves color fidelity and dynamic range while effectively reducing noise."
       }
     }
   ]
@@ -281,7 +282,7 @@ export default function DenoisePage() {
                 underneath. Quick processing, simple to use, and a lifetime of clean shots.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
+            <div className="flex flex-col gap-4 justify-center items-center w-full">
                 <Link href="/login">
 
               <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
@@ -293,6 +294,9 @@ export default function DenoisePage() {
                 </>
               </Button>
             </Link>
+            <p className="text-xs text-gray-500">
+                Only $0.40 per photo
+              </p>
             </div>
             <div className="flex flex-col items-center space-y-2 pt-2">
               <div className="flex items-center space-x-2">
@@ -328,7 +332,7 @@ export default function DenoisePage() {
                         secondImage="/placeholder.svg?height=400&width=600&text=Colorized+Photo"
                         firstImageClassName="object-cover"
                         secondImageClassname="object-cover"
-                        className="h-[280px] w-[400px] md:h-[400px] md:w-[600px] rounded-lg"
+                        className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"
                         slideMode="hover"
                         firstImageAlt="Before: grainy family photo" 
                         secondImageAlt="After: Denoised family photo with bringback ai"
@@ -351,53 +355,103 @@ export default function DenoisePage() {
       <DenoiseBenefitsSection />
       <DenoiseShowcaseSection />
       <DenoiseFeaturesSection />
-      <DenoiseTestimonialsSection />
-
-      {/* Social Proof Section */}
-      <section className="px-4 py-16 bg-gray-50/50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-black mb-4">Trusted by night photographers worldwide</h2>
-            <p className="text-lg text-gray-600">Join thousands who've already cleaned up their grainy shots</p>
+       {/* Technology Behind Section */}
+      <section className="px-6 py-20 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">How our AI understands noise</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Advanced signal processing meets machine learning to separate noise from actual image content
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="flex text-black">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                "My low-light photos from the city at night were so grainy. BringBack cleaned them up perfectly while
-                keeping all the important details sharp."
-              </p>
-              <p className="text-sm font-medium text-black">David K.</p>
-            </div>
+          {/* Process Flow */}
+          <div className="relative">
+            {/* Connecting Line */}
+            <div className="absolute left-8 top-16 bottom-16 w-0.5 bg-gray-200 hidden md:block"></div>
 
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="flex text-black">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
+            <div className="space-y-12">
+              <div className="flex items-start space-x-6">
+                <div className="flex-shrink-0 w-16 h-16 bg-black rounded-full flex items-center justify-center relative z-10">
+                  <Search className="w-8 h-8 text-white" />
+                </div>
+                <div className="flex-1 pt-3">
+                  <h3 className="text-xl font-bold text-black mb-3">🔍 Noise Pattern Analysis</h3>
+                  <p className="text-gray-600 mb-4">
+                    Our AI first identifies the type of noise in your photo—whether it's high-ISO grain, color noise
+                    from low light, or digital artifacts from compression.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Luminance noise</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Color noise</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                      Compression artifacts
                     </span>
-                  ))}
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Banding</span>
+                  </div>
                 </div>
               </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                "Indoor party photos from my phone looked terrible with all the noise. This AI made them look like they
-                were taken with a professional camera!"
-              </p>
-              <p className="text-sm font-medium text-black">Lisa M.</p>
+
+              <div className="flex items-start space-x-6">
+                <div className="flex-shrink-0 w-16 h-16 bg-black rounded-full flex items-center justify-center relative z-10">
+                  <Brain className="w-8 h-8 text-white" />
+                </div>
+                <div className="flex-1 pt-3">
+                  <h3 className="text-xl font-bold text-black mb-3">🧠 Content Preservation</h3>
+                  <p className="text-gray-600 mb-4">
+                    While removing noise, the AI carefully preserves important details like hair texture, fabric
+                    patterns, and facial features that could be mistaken for noise.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Fine details</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Textures</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Sharp edges</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Important patterns</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-6">
+                <div className="flex-shrink-0 w-16 h-16 bg-black rounded-full flex items-center justify-center relative z-10">
+                  <Filter className="w-8 h-8 text-white" />
+                </div>
+                <div className="flex-1 pt-3">
+                  <h3 className="text-xl font-bold text-black mb-3">⚙️ Selective Processing</h3>
+                  <p className="text-gray-600 mb-4">
+                    Different areas of your photo get different treatment—smooth backgrounds get heavy denoising while
+                    detailed areas like faces get gentle, precise cleaning.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Adaptive strength</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Content-aware</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Region-specific</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-6">
+                <div className="flex-shrink-0 w-16 h-16 bg-black rounded-full flex items-center justify-center relative z-10">
+                  <Sparkle className="w-8 h-8 text-white" />
+                </div>
+                <div className="flex-1 pt-3">
+                  <h3 className="text-xl font-bold text-black mb-3">✨ Quality Verification</h3>
+                  <p className="text-gray-600 mb-4">
+                    Before delivering results, our AI checks that no important details were lost and that the noise
+                    reduction looks natural and professional.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Natural results</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Detail retention</span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Artifact-free</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
       </section>
+ 
 
       <DenoiseFAQSection />
       <DenoiseMemoriesSection />

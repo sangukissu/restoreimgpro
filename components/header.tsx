@@ -45,7 +45,7 @@ interface MobileNavMenuProps {
 }
 
 export const Navbar = ({ children, className }: NavbarProps) => {
-  return <motion.div className={cn("fixed inset-x-0 top-0 z-40 w-full pt-2", className)}>{children}</motion.div>
+  return <motion.div className={cn("fixed inset-x-0 top-0 z-60 w-full pt-2", className)}>{children}</motion.div>
 }
 
 export const NavBody = ({ children, className }: NavBodyProps) => {
@@ -174,7 +174,7 @@ export default function Header() {
         <div className="flex items-center">
           <Link href="/dashboard">
           <button className="bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors">
-            Try Now
+            Restore Now
           </button>
           </Link>
         </div>

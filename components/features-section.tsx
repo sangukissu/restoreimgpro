@@ -40,7 +40,7 @@ export default function FeaturesSection() {
   ]
 
   return (
-    <section className="px-4 py-20 bg-white">
+    <section id="features" className="px-4 py-20 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
