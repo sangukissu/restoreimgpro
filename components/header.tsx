@@ -162,6 +162,7 @@ export default function Header() {
               width={80} 
               height={36} 
               className="w-36 h-9"
+              style={{ width: 'auto' }}
             />
           </a>
         </div>
@@ -189,6 +190,7 @@ export default function Header() {
                 width={80} 
                 height={36} 
                 className="w-36 h-9"
+                style={{ width: 'auto' }}
               />
             
             </a>

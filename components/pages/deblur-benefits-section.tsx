@@ -73,6 +73,10 @@ export default function DeblurBenefitsSection() {
               <button className="w-full bg-black text-white py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200">
                 Fix 5 Photos for $2
               </button>
+              
+              <p className="text-xs text-gray-500 mt-2">
+                Only $0.40 per photo
+              </p>
 
               <p className="text-xs text-gray-500 mt-3">No subscription • No hidden fees</p>
             </div>

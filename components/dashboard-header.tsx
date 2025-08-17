@@ -64,6 +64,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
              width={80} 
               height={32} 
               className="w-36 h-8"
+              style={{ width: 'auto' }}
             />
           </a>
         </div>
@@ -126,6 +127,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
               width={28} 
               height={28} 
               className="w-7 h-7"
+              style={{ width: 'auto' }}
             />
           </a>
         </div>

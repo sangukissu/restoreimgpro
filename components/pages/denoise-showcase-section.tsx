@@ -2,6 +2,9 @@
 
 import { Compare } from "@/components/ui/compare"
 import { Cover } from "@/components/ui/cover"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { ChevronRight } from "lucide-react"
 
 export default function DenoiseShowcaseSection() {
   const showcaseItems = [
@@ -10,36 +13,48 @@ export default function DenoiseShowcaseSection() {
       description: "Removes grain from photos taken at high ISO settings",
       beforeImage: "/placeholder.svg?height=300&width=480&text=High+ISO+Noise+Before",
       afterImage: "/placeholder.svg?height=300&width=480&text=Clean+Photo+After",
+      beforeImageAlt: "Before: high ISO noise photo",
+      afterImageAlt: "After: high ISO noise photo denoised with bringback ai",
     },
     {
       title: "Low-Light Grain",
       description: "Cleans up noise from dark indoor or nighttime shots",
       beforeImage: "/placeholder.svg?height=300&width=480&text=Low+Light+Grain+Before",
       afterImage: "/placeholder.svg?height=300&width=480&text=Smooth+Photo+After",
+      beforeImageAlt: "Before: low light grain photo",
+      afterImageAlt: "After: low light grain photo denoised with bringback ai",
     },
     {
       title: "Color Noise",
       description: "Eliminates colored speckles and digital artifacts",
       beforeImage: "/placeholder.svg?height=300&width=480&text=Color+Noise+Before",
       afterImage: "/placeholder.svg?height=300&width=480&text=Clean+Colors+After",
+      beforeImageAlt: "Before: color noise photo",
+      afterImageAlt: "After: color noise photo denoised with bringback ai",
     },
     {
       title: "Old Digital Camera",
       description: "Removes noise from older digital camera sensors",
       beforeImage: "/placeholder.svg?height=300&width=480&text=Old+Camera+Noise+Before",
       afterImage: "/placeholder.svg?height=300&width=480&text=Modern+Quality+After",
+      beforeImageAlt: "Before: old digital camera noise photo",
+      afterImageAlt: "After: old digital camera noise photo denoised with bringback ai",
     },
     {
       title: "Phone Camera Grain",
       description: "Cleans up noise from smartphone low-light photos",
       beforeImage: "/placeholder.svg?height=300&width=480&text=Phone+Grain+Before",
       afterImage: "/placeholder.svg?height=300&width=480&text=Professional+After",
+      beforeImageAlt: "Before: phone camera grain photo",
+      afterImageAlt: "After: phone camera grain photo denoised with bringback ai",
     },
     {
       title: "Film Grain Removal",
       description: "Removes unwanted grain while preserving film character",
       beforeImage: "/placeholder.svg?height=300&width=480&text=Film+Grain+Before",
       afterImage: "/placeholder.svg?height=300&width=480&text=Clean+Film+After",
+      beforeImageAlt: "Before: film grain photo",
+      afterImageAlt: "After: film grain photo cleaned with bringback ai",
     },
   ]
 
@@ -84,6 +99,8 @@ export default function DenoiseShowcaseSection() {
                       className="h-[220px] w-[320px] rounded-lg"
                       slideMode="hover"
                       showHandlebar={true}
+                      firstImageAlt={item.beforeImageAlt}
+                      secondImageAlt={item.afterImageAlt}
                     />
                   </div>
                 </div>
@@ -98,9 +115,15 @@ export default function DenoiseShowcaseSection() {
             <p className="text-gray-600 mb-6">
               Our AI handles even the most challenging noise problems. Upload your photo and see the difference.
             </p>
-            <button className="bg-black text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200 shadow-sm hover:shadow-md">
-              Denoise Your Photo Now
-            </button>
+           
+             <Link href="/login">
+            <Button className="px-8 py-6 group relative overflow-hidden w-auto" size="lg">
+              <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Denoise Your Photo Now</span>
+              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
+              </i>
+            </Button>
+            </Link>
           </div>
         </div>
       </div>

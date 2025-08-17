@@ -113,6 +113,10 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
                 Get Started for $2
               </Button>
               </Link>
+              
+              <p className="text-xs text-gray-300 mt-2">
+                Only $0.40 per photo
+              </p>
             </div>
           </div>
       </main>

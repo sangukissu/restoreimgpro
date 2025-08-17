@@ -101,6 +101,10 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         >
           {isProcessing ? "Processing..." : "Get Started - $2"}
         </Button>
+        
+        <p className="text-xs text-gray-500 mt-2">
+          Only $0.40 per photo
+        </p>
 
         {/* Additional Info */}
         <p className="text-xs text-gray-500 mt-4">

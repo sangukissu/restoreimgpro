@@ -12,37 +12,48 @@ export default function ShowcaseSection() {
       description: "Seamlessly repair tears and missing pieces",
       beforeImage: "/ripped.webp",
       afterImage: "/ripped-restored.webp",
+      beforeImageAlt: "Before: torn and ripped photo",
+      afterImageAlt: "After: torn and ripped photo restored with bringback ai",
     },
     {
       title: "Faded & Yellowed",
       description: "Restore original colors and vibrancy",
       beforeImage: "/yellowandfaded.webp",
       afterImage: "/yellowandfaded-restored.webp",
+      beforeImageAlt: "Before: faded and yellowed photo",
+      afterImageAlt: "After: faded and yellowed photo restored with bringback ai",
     },
     {
       title: "Water Damaged",
       description: "Remove stains and water marks completely",
       beforeImage: "/water-damaged.webp",
       afterImage: "/water-damaged-restored.webp",
+      beforeImageAlt: "Before: water damaged photo",
+      afterImageAlt: "After: water damaged photo restored with bringback ai",
     },
     {
       title: "Scratched & Cracked",
       description: "Eliminate scratches and surface damage",
       beforeImage: "/scratched.webp",
       afterImage: "/scratched-restored.webp",
+      beforeImageAlt: "Before: scratched and cracked photo",
     },
     {
       title: "Blurred & Out of Focus",
       description: "Sharpen details and enhance clarity",
       beforeImage: "/blurred.webp",
       afterImage: "/blurred-restored.webp",
+      beforeImageAlt: "Before: blurred and out of focus photo",
+      afterImageAlt: "After: blurred and out of focus photo restored with bringback ai",
     },
     {
       title: "Dark & Underexposed",
       description: "Brighten shadows and recover hidden details",
       beforeImage: "/under-exposed.webp",
       afterImage: "/under-exposed-restored.webp",
-    },
+      beforeImageAlt: "Before: dark and underexposed photo",
+      afterImageAlt: "After: dark and underexposed photo restored with bringback ai",
+    }
   ]
 
   return (
@@ -85,6 +96,8 @@ export default function ShowcaseSection() {
                       className="sm:h-[220px] sm:w-[300px] h-[190px] w-[280px] rounded-lg"
                       slideMode="hover"
                       showHandlebar={true}
+                      firstImageAlt={`Before: ${item.title}`}
+                      secondImageAlt={`After: ${item.title} restored with bringback ai`}
                     />
                   </div>
                 </div>
@@ -103,9 +116,9 @@ export default function ShowcaseSection() {
               happen.
             </p>
               <Link href="/login">
-            <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
+            <Button className="px-8 py-6 group relative overflow-hidden w-auto" size="lg">
               <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Restore Your Photo</span>
-              <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
                 <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
               </i>
             </Button>

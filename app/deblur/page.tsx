@@ -261,25 +261,12 @@ export default function DeblurPage() {
       <Header />
       {/* Hero Section */}
       <section className="relative px-4 py-20 pt-32 overflow-hidden">
-        <GridPattern
-          squares={[
-            [4, 4],
-            [5, 1],
-            [8, 2],
-            [5, 3],
-            [5, 5],
-            [10, 10],
-            [12, 15],
-            [15, 10],
-            [10, 15],
-            [15, 10],
-            [10, 15],
-            [15, 10],
-          ]}
-          className={cn(
-            "[mask-image:radial-gradient(600px_circle_at_50%_20%,white,transparent)]",
-            "absolute inset-0 w-full h-full skew-y-12 fill-gray-200/70 stroke-gray-300/70",
-          )}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(135deg, transparent, transparent 2px, #f3f4f6 2px, #f3f4f6 4px)",
+          }}
         />
 
         <div className="max-w-6xl mx-auto text-center relative z-10">
@@ -319,10 +306,12 @@ export default function DeblurPage() {
               <Link href="/login">
 
               <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-                <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Unblur Your Photo</span>
-                <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                  <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-                </i>
+                <>
+                  <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Unblur Your Photo</span>
+                  <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+                    <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
+                  </i>
+                </>
               </Button>
             </Link>
             </div>
@@ -350,22 +339,31 @@ export default function DeblurPage() {
             </div>
 
             {/* Hero Comapre Section */}
-             <div className="pt-4">
-              <div className="flex justify-center">
-                <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
-                  <Compare
-                    firstImage="/placeholder-1bjxl.png"
-                    secondImage="/restored-family-photo.png"
-                    firstImageClassName="object-cover"
-                    secondImageClassname="object-cover"
-                    className="h-[200px] w-[320px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px]" // Responsive sizing
-                    slideMode="hover"
-                    firstImageAlt="Before: Blurred family photo"
-                    secondImageAlt="After: Deblurred and restored family photo"
-                  />
+              <div className="pt-8 w-full">
+                <div className="max-w-4xl mx-auto">
+                   
+                    <div className="flex justify-center px-4">
+                        <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
+                      <Compare
+                        firstImage="/placeholder.svg?height=400&width=600&text=Black+and+White+Photo"
+                        secondImage="/placeholder.svg?height=400&width=600&text=Colorized+Photo"
+                        firstImageClassName="object-cover"
+                        secondImageClassname="object-cover"
+                        className="h-[280px] w-[400px] md:h-[400px] md:w-[600px] rounded-lg"
+                        slideMode="hover"
+                        firstImageAlt="Before: Blurred family photo" 
+                        secondImageAlt="After: Deblurred and restored family photo with bringback ai"
+                        showHandlebar={true}
+                      />
+                      </div>
+                    </div>
+                </div>
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-gray-500 max-w-2xl mx-auto">
+                    Watch how BringBack transforms black and white photos into realistic, vibrant color images
+                  </p>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </section>
@@ -436,10 +434,12 @@ export default function DeblurPage() {
             </p>
 
             <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-              <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Start Deblurring Now</span>
-              <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-              </i>
+              <>
+                <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Start Deblurring Now</span>
+                <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+                  <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
+                </i>
+              </>
             </Button>
           </div>
         </div>

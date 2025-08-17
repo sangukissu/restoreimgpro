@@ -5,7 +5,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import Link from "next/link"
 import { PointerHighlight } from "@/components/pointer-highlight"
-import { GridPattern } from "@/components/grid-pattern"
 import DenoiseHowItWorksSection from "@/components/pages/denoise-how-it-works-section"
 import DenoiseBenefitsSection from "@/components/pages/denoise-benefits-section"
 import DenoiseShowcaseSection from "@/components/pages/denoise-showcase-section"
@@ -13,7 +12,6 @@ import DenoiseFeaturesSection from "@/components/pages/denoise-features-section"
 import DenoiseTestimonialsSection from "@/components/pages/denoise-testimonials-section"
 import DenoiseFAQSection from "@/components/pages/denoise-faq-section"
 import DenoiseMemoriesSection from "@/components/pages/denoise-memories-section"
-import { cn } from "@/lib/utils"
 import { Compare } from "@/components/ui/compare"
 export const metadata: Metadata = {
   title: "AI Photo Denoise - Remove Grain & Noise Instantly | BringBack",
@@ -243,27 +241,13 @@ export default function DenoisePage() {
       <Header />
       {/* Hero Section */}
       <section className="relative px-4 py-20 pt-32 overflow-hidden">
-        <GridPattern
-          squares={[
-            [4, 4],
-            [5, 1],
-            [8, 2],
-            [5, 3],
-            [5, 5],
-            [10, 10],
-            [12, 15],
-            [15, 10],
-            [10, 15],
-            [15, 10],
-            [10, 15],
-            [15, 10],
-          ]}
-          className={cn(
-            "[mask-image:radial-gradient(600px_circle_at_50%_20%,white,transparent)]",
-            "absolute inset-0 w-full h-full skew-y-12 fill-gray-200/70 stroke-gray-300/70",
-          )}
+       <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(135deg, transparent, transparent 2px, #f3f4f6 2px, #f3f4f6 4px)",
+          }}
         />
-
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <div className="space-y-6">
             <div className="space-y-6">
@@ -301,10 +285,12 @@ export default function DenoisePage() {
                 <Link href="/login">
 
               <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-                <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Denoise Your Photo</span>
-                <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                  <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-                </i>
+                <>
+                  <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Denoise Your Photo</span>
+                  <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+                    <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
+                  </i>
+                </>
               </Button>
             </Link>
             </div>
@@ -331,23 +317,32 @@ export default function DenoisePage() {
               <p className="text-gray-600 font-medium">Loved by Everyone Who Shoots at Night</p>
             </div>
 
-            {/* Hero compare Section */}
-              <div className="pt-4">
-              <div className="flex justify-center">
-                <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
-                  <Compare
-                    firstImage="/placeholder-1bjxl.png"
-                    secondImage="/restored-family-photo.png"
-                    firstImageClassName="object-cover"
-                    secondImageClassname="object-cover"
-                    className="h-[200px] w-[320px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px]" // Responsive sizing
-                    slideMode="hover"
-                    firstImageAlt="Before: Noisy family photo"
-                    secondImageAlt="After: Denoised and restored family photo"
-                  />
+                {/* Hero Compare Section */}
+              <div className="pt-8 w-full">
+                <div className="max-w-4xl mx-auto">
+                   
+                    <div className="flex justify-center px-4">
+                        <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
+                      <Compare
+                        firstImage="/placeholder.svg?height=400&width=600&text=Black+and+White+Photo"
+                        secondImage="/placeholder.svg?height=400&width=600&text=Colorized+Photo"
+                        firstImageClassName="object-cover"
+                        secondImageClassname="object-cover"
+                        className="h-[280px] w-[400px] md:h-[400px] md:w-[600px] rounded-lg"
+                        slideMode="hover"
+                        firstImageAlt="Before: grainy family photo" 
+                        secondImageAlt="After: Denoised family photo with bringback ai"
+                        showHandlebar={true}
+                      />
+                      </div>
+                    </div>
+                </div>
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-gray-500 max-w-2xl mx-auto">
+                    Watch how BringBack transforms black and white photos into realistic, vibrant color images
+                  </p>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </section>
@@ -407,25 +402,6 @@ export default function DenoisePage() {
       <DenoiseFAQSection />
       <DenoiseMemoriesSection />
 
-      {/* Final CTA Section */}
-      <section className="px-4 py-20 max-w-6xl mx-auto text-center">
-        <div className="text-center mt-16">
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
-            <h3 className="text-2xl font-bold text-black mb-4">Ready to clean up your grainy photos?</h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Don't let noise and grain ruin your precious moments. Every photo deserves to look smooth and
-              professional.
-            </p>
-
-            <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-              <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Start Denoising Now</span>
-              <i className="absolute right-1 top-1 bottom-1 rounded-sm z-10 grid w-1/4 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-              </i>
-            </Button>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>

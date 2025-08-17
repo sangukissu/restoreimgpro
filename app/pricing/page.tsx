@@ -76,6 +76,10 @@ export default function PricingPage() {
                 <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
               </i>
             </Button>
+            
+              <p className="text-xs text-gray-500 mt-2">
+                Only $0.40 per photo
+              </p>
 
               <p className="text-xs text-gray-500 mt-3">Secure payment • Instant access</p>
             </div>
@@ -197,6 +201,10 @@ export default function PricingPage() {
               <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
                 Get Started for $2
               </Button>
+              
+              <p className="text-xs text-gray-300 mt-2">
+                Only $0.40 per photo
+              </p>
             </div>
           </div>
         </div>

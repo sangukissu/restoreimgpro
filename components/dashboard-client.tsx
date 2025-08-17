@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast"
 
 type AppState = "feature-selection" | "upload" | "loading" | "comparison" | "error"
 
-type FeatureType = "restore" | "denoise" | "deblur"
+type FeatureType = "restore" | "denoise" | "deblur" | "colorize"
 
 interface RestorationData {
   originalFile: File
@@ -248,7 +248,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-12 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 relative">
               {/* Restore Feature */}
                 <div
                 onClick={() => handleFeatureSelect("restore")}
@@ -373,6 +373,51 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
                   </p>
                 </div>
               </div>
+
+              {/* Colorize Feature */}
+              <div
+                onClick={() => handleFeatureSelect("colorize")}
+                className="bg-white rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-6 border-gray-200 sm:border-4 sm:border-gray-200 backdrop-blur sm:transform sm:rotate-2 sm:hover:rotate-0 transition-all duration-300 cursor-pointer hover:border-gray-400 sm:hover:border-black group relative z-10 active:scale-95 sm:active:scale-100"
+              >
+                {/* Mobile Layout */}
+                <div className="sm:hidden">
+                  <div className="flex items-start gap-5">
+                    <div className="flex-shrink-0 mt-1">
+                      <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
+                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3H5a2 2 0 00-2 2v12a4 4 0 004 4h2V3z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 3h2a2 2 0 012 2v12a4 4 0 01-4 4h-2V3z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 21a4 4 0 004-4V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-2xl font-bold text-black mb-3 tracking-tight">Colorize</h3>
+                      <p className="text-gray-700 leading-relaxed text-base font-medium">
+                        Add vibrant colors to black and white photos.
+                      </p>
+                    
+                    </div>
+                  </div>
+                </div>
+
+                {/* Desktop Layout */}
+                <div className="hidden sm:block">
+                  <div className="mb-6">
+                    <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3H5a2 2 0 00-2 2v12a4 4 0 004 4h2V3z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 3h2a2 2 0 012 2v12a4 4 0 01-4 4h-2V3z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 21a4 4 0 004-4V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-black mb-4">Colorize</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Transform black and white photos into vibrant colored images using AI technology.
+                  </p>
+                </div>
+              </div>
             </div>
           </>
         )}
@@ -397,11 +442,13 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
               {selectedFeature === "restore" && "Restore Your Images"}
               {selectedFeature === "denoise" && "Denoise Your Images"}
               {selectedFeature === "deblur" && "Deblur Your Images"}
+              {selectedFeature === "colorize" && "Colorize Your Images"}
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               {selectedFeature === "restore" && "Upload your old, damaged, or low-quality photos and watch our AI transform them into stunning restored images."}
               {selectedFeature === "denoise" && "Upload your noisy or grainy photos and let our AI remove unwanted noise while preserving important details."}
               {selectedFeature === "deblur" && "Upload your blurry photos and watch our AI sharpen them to crystal clear quality."}
+              {selectedFeature === "colorize" && "Upload your black and white photos and watch our AI add vibrant, realistic colors to bring them to life."}
             </p>
           </div>
         )}
@@ -445,11 +492,13 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
                     {selectedFeature === "restore" && "Giving one more life to your past..."}
                     {selectedFeature === "denoise" && "Cleaning up your image..."}
                     {selectedFeature === "deblur" && "Sharpening your image..."}
+                    {selectedFeature === "colorize" && "Adding colors to your memories..."}
                   </h3>
                   <p className="text-gray-600">
                     {selectedFeature === "restore" && "Our AI is carefully restoring your image"}
                     {selectedFeature === "denoise" && "Our AI is removing noise and artifacts"}
                     {selectedFeature === "deblur" && "Our AI is enhancing clarity and sharpness"}
+                    {selectedFeature === "colorize" && "Our AI is adding realistic colors to your photo"}
                   </p>
                 </div>
               </div>
