@@ -427,7 +427,6 @@ export default function Page() {
       <FAQSection />
 
    
-    {/* Final CTA Section */}
     
        {/* Emotional Connection */}
              <section className="px-4 py-20 max-w-6xl mx-auto text-center">
