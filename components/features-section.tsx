@@ -3,38 +3,43 @@
 import type React from "react"
 
 import { cn } from "@/lib/utils"
-import { Shield, Wrench, Eye, Palette, Search, Lock } from "lucide-react"
+import { Wrench, Eye, Palette, Heart, Lock, Play } from "lucide-react"
 
 export default function FeaturesSection() {
   const features = [
     {
-      title: "Preserves Original Character",
-      description: "Doesn't make photos look fake or over-processed. Keeps the authentic feel of your memories.",
-      icon: <Eye className="h-6 w-6" />,
+      title: "Restore & Animate",
+      description:
+        "First restores your photos to perfect quality, then brings people to life with natural movement and expressions.",
+      icon: <Play className="h-6 w-6" />,
     },
     {
       title: "Handles Any Damage Type",
-      description: "Scratches, tears, water damage, fading - our AI tackles every type of photo damage.",
+      description:
+        "Scratches, tears, water damage, fading - our AI tackles every type of photo damage before animation.",
       icon: <Wrench className="h-6 w-6" />,
     },
     {
-      title: "Smart Face Recognition",
-      description: "Specifically enhances faces without losing likeness. Your loved ones stay recognizable.",
-      icon: <Search className="h-6 w-6" />,
+      title: "Natural Face Animation",
+      description: "Creates realistic facial movements while preserving the person's authentic likeness and character.",
+      icon: <Eye className="h-6 w-6" />,
     },
     {
-      title: "Color Restoration",
-      description: "Brings back original colors, not artificial ones. Natural tones that feel authentic.",
+      title: "Smart Color Revival",
+      description:
+        "Brings back original colors in photos, then adds lifelike animation that feels natural and authentic.",
       icon: <Palette className="h-6 w-6" />,
     },
     {
-      title: "Detail Recovery",
-      description: "Recovers lost details from shadows and highlights. Every texture comes back to life.",
-      icon: <Shield className="h-6 w-6" />,
+      title: "Emotion Recognition",
+      description:
+        "AI detects facial expressions and creates appropriate animations - gentle smiles, warm eyes, natural movements.",
+      icon: <Heart className="h-6 w-6" />,
     },
     {
-      title: "Privacy Protection",
-      description: "Photos processed securely and deleted in 30 minutes. Your memories stay private.",
+      title: "Complete Privacy",
+      description:
+        "Photos processed securely and deleted in 30 minutes. Your precious memories stay completely private.",
       icon: <Lock className="h-6 w-6" />,
     },
   ]
@@ -46,7 +51,7 @@ export default function FeaturesSection() {
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">Why BringBack works like magic</h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight mb-4">
-            Advanced AI technology meets human understanding to restore what matters most
+            Advanced AI technology that restores photos and animates your loved ones with natural, lifelike movement
           </p>
         </div>
 
