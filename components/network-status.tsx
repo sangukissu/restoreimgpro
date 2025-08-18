@@ -12,10 +12,10 @@ export default function NetworkStatus() {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-red-500 text-white px-4 py-2 text-center text-sm">
-      <div className="flex items-center justify-center gap-2">
-        <WifiOff className="h-4 w-4" />
-        <span>You are currently offline. Some features may not work properly.</span>
+    <div className="fixed bottom-4 right-4 z-50 bg-orange-500 text-white px-4 py-3 rounded-lg shadow-lg max-w-sm">
+      <div className="flex items-center gap-2">
+        <WifiOff className="h-4 w-4 flex-shrink-0" />
+        <span className="text-sm font-medium">You're offline - showing cached content</span>
       </div>
     </div>
   )
