@@ -34,7 +34,7 @@ const nextConfig = {
           "img-src 'self' data: https: blob:", // Allow images from various sources
           "font-src 'self' data:",
           "connect-src 'self' https://api.supabase.co https://*.supabase.co https://fal.ai https://*.fal.ai https://dodopayments.com https://*.dodopayments.com", // API endpoints
-          "media-src 'self' blob:",
+          "media-src 'self' blob: https://*.public.blob.vercel-storage.com",
           "frame-src 'self' https://www.youtube.com https://youtube.com", // Allow YouTube iframes
           "object-src 'none'",
           "base-uri 'self'",

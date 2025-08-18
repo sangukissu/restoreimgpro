@@ -11,8 +11,8 @@ export default function DeblurShowcaseSection() {
     {
       title: "Motion Blur",
       description: "Corrects blur from shaky hands or moving subjects",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Motion+Blur+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Sharp+Photo+After",
+      beforeImage: "/blurred-lady.webp",
+      afterImage: "/unblurred-lady.webp",
     },
     {
       title: "Out of Focus",

@@ -375,7 +375,7 @@ export default function Page() {
               <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
                 <HeroVideoDialog
                   animationStyle="from-center"
-                  videoSrc="https://youtu.be/u3tc96poZ6Q?si=v_NauGytkfuvjQf0"
+                  videoSrc="https://youtu.be/NT7UD2_sMTk"
                   thumbnailSrc="/blurred-restored.webp"
                   thumbnailAlt="Photo restoration demo video"
                   className="h-[250px] w-[400px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
