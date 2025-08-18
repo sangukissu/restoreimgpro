@@ -276,26 +276,12 @@ export default function Page() {
       <Header />
       {/* Hero Section */}
       <section className="relative pb-12 overflow-hidden">
-          {/* Grid Pattern Background - positioned at the very top */}
-          <GridPattern
-          squares={[
-            [4, 4],
-            [5, 1],
-            [8, 2],
-            [5, 3],
-            [5, 5],
-            [10, 10],
-            [12, 15],
-            [15, 10],
-            [10, 15],
-            [15, 10],
-            [10, 15],
-            [15, 10],
-          ]}
-          className={cn(
-            "[mask-image:radial-gradient(600px_circle_at_50%_20%,white,transparent)]",
-            "absolute inset-x-0 top-0 h-full skew-y-12 fill-gray-200/70 stroke-gray-300/70",
-          )}
+     <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(135deg, transparent, transparent 2px, #f3f4f6 2px, #f3f4f6 4px)",
+          }}
         />
       <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
       
@@ -382,6 +368,7 @@ export default function Page() {
       </section>
 
       <HowItWorksSection />
+      <MemoriesSection />
       <BenefitsSection />
       <ShowcaseSection />
       <FeaturesSection />
@@ -438,9 +425,32 @@ export default function Page() {
 
 
       <FAQSection />
-      <MemoriesSection />
 
    
+    {/* Final CTA Section */}
+    
+       {/* Emotional Connection */}
+             <section className="px-4 py-20 max-w-6xl mx-auto text-center">
+
+        <div className="text-center">
+          <div className="max-w-4xl mx-auto">
+            <div className="border-t border-gray-200 pt-12">
+              <blockquote className="text-2xl md:text-3xl font-light text-gray-800 italic leading-relaxed">
+                "Every photo tells a story. Every animation brings that story to life. Every memory deserves to be
+                preserved, restored, and shared with future generations."
+              </blockquote>
+              <div className="mt-8">
+                  <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
+              <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Start bringing memories to life</span>
+              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.7rem)] group-active:scale-95 text-black-500">
+                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
+              </i>
+            </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </section>
 
       {/* Footer */}
       <Footer />

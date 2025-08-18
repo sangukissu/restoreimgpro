@@ -1,6 +1,5 @@
 "use client"
 import { Cover } from "@/components/ui/cover"
-import Link from "next/link"
 
 export default function HowItWorksSection() {
   return (
@@ -32,7 +31,7 @@ Upload your old, damaged, or faded photos. Our AI instantly restores quality, fi
               <div className="mb-6">
                 <span className="text-6xl font-bold text-black">2</span>
               </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Restore</h3>
+              <h3 className="text-2xl font-bold text-black mb-4">Animate</h3>
               <p className="text-gray-600 leading-relaxed">
                 Watch as our AI brings your loved ones to life with natural movements, gentle smiles, and realistic animations.
               </p>
@@ -43,7 +42,7 @@ Upload your old, damaged, or faded photos. Our AI instantly restores quality, fi
               <div className="mb-6">
                 <span className="text-6xl font-bold text-black">3</span>
               </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Get Your Memories</h3>
+              <h3 className="text-2xl font-bold text-black mb-4">Re-live Your Memories</h3>
               <p className="text-gray-600 leading-relaxed">
                 Download your restored photos and animated videos. Share moving memories with family and relive precious moments.
               </p>
@@ -89,15 +88,7 @@ Upload your old, damaged, or faded photos. Our AI instantly restores quality, fi
           </div>
         </div>
 
-       {/* Bottom CTA */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 mb-6">Ready to see your memories come alive?</p>
-          <Link href="/login">
-          <button className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
-            Try It Now
-          </button>
-          </Link>
-        </div>
+     
       </div>
     </section>
   )
