@@ -237,7 +237,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
       />
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
         {/* Feature Selection State */}
         {appState === "feature-selection" && (
           <>

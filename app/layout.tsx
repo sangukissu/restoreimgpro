@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Toaster } from "@/components/ui/toast"
+import NetworkStatus from "@/components/network-status"
 import "./globals.css"
 
 const inter = Inter({
@@ -140,6 +141,7 @@ export default function RootLayout({
       </head>
       <body className={`font-sans antialiased`}>
         {children}
+        <NetworkStatus />
         <Toaster />
       </body>
     </html>

@@ -144,10 +144,10 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
-    { name: "Features", link: "#features" },
-    { name: "How it works", link: "#how-it-works" },
-    { name: "Pricing", link: "#pricing" },
-    { name: "Examples", link: "#showcase" },
+    { name: "Features", link: "/#features" },
+    { name: "How it works", link: "/#how-it-works" },
+    { name: "Pricing", link: "/#pricing" },
+    { name: "Examples", link: "/#examples" },
   ]
 
   return (

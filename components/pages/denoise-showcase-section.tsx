@@ -8,51 +8,36 @@ import { ChevronRight } from "lucide-react"
 
 export default function DenoiseShowcaseSection() {
   const showcaseItems = [
-    {
-      title: "High-ISO Noise",
-      description: "Removes grain from photos taken at high ISO settings",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=High+ISO+Noise+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Clean+Photo+After",
-      beforeImageAlt: "Before: high ISO noise photo",
-      afterImageAlt: "After: high ISO noise photo denoised with bringback ai",
-    },
+  
     {
       title: "Low-Light Grain",
       description: "Cleans up noise from dark indoor or nighttime shots",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Low+Light+Grain+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Smooth+Photo+After",
+      beforeImage: "/grainy-photo.webp",
+      afterImage: "/grainy-photo-restored.webp",
       beforeImageAlt: "Before: low light grain photo",
       afterImageAlt: "After: low light grain photo denoised with bringback ai",
     },
     {
       title: "Color Noise",
       description: "Eliminates colored speckles and digital artifacts",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Color+Noise+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Clean+Colors+After",
+      beforeImage: "/color-noise.webp",
+      afterImage: "/color-noise-removed.webp",
       beforeImageAlt: "Before: color noise photo",
       afterImageAlt: "After: color noise photo denoised with bringback ai",
     },
     {
       title: "Old Digital Camera",
       description: "Removes noise from older digital camera sensors",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Old+Camera+Noise+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Modern+Quality+After",
+      beforeImage: "/old-digi-camera.webp",
+      afterImage: "/restored-old-digi.webp",
       beforeImageAlt: "Before: old digital camera noise photo",
       afterImageAlt: "After: old digital camera noise photo denoised with bringback ai",
     },
     {
-      title: "Phone Camera Grain",
-      description: "Cleans up noise from smartphone low-light photos",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Phone+Grain+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Professional+After",
-      beforeImageAlt: "Before: phone camera grain photo",
-      afterImageAlt: "After: phone camera grain photo denoised with bringback ai",
-    },
-    {
       title: "Film Grain Removal",
       description: "Removes unwanted grain while preserving film character",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Film+Grain+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Clean+Film+After",
+      beforeImage: "/film-grain.webp",
+      afterImage: "/restored-film-grain.webp",
       beforeImageAlt: "Before: film grain photo",
       afterImageAlt: "After: film grain photo cleaned with bringback ai",
     },
@@ -78,7 +63,7 @@ export default function DenoiseShowcaseSection() {
         </div>
 
         {/* Showcase Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {showcaseItems.map((item, index) => (
             <div key={index} className="group">
               <div className="bg-white rounded-2xl p-6 border-6 border-gray-200 bg-transparent">
@@ -96,7 +81,7 @@ export default function DenoiseShowcaseSection() {
                       secondImage={item.afterImage}
                       firstImageClassName="object-cover"
                       secondImageClassname="object-cover"
-                      className="h-[220px] w-[320px] rounded-lg"
+                      className="h-[220px] w-[320px] md:h-[280px] md:w-[400px] rounded-lg"
                       slideMode="hover"
                       showHandlebar={true}
                       firstImageAlt={item.beforeImageAlt}

@@ -16,20 +16,20 @@ import Link from "next/link"
 
 
 export const metadata: Metadata = {
-  title: "AI Photo Deblur - Fix Blurry Photos Instantly | BringBack",
+  title: "AI Photo Unblur - Fix Blurry Photos Instantly | BringBack",
   description:
     "Turn blurry, out-of-focus photos into crystal-clear images with AI. Fix motion blur, camera shake, and missed focus in seconds.",
-  keywords: "deblur photo, unblur image, fix blurry photo, sharpen image, AI photo enhancement",
+  keywords: "unblur photo, unblur image, fix blurry photo, sharpen image, AI photo enhancement",
   robots: "index, follow",
 }
 
 const deblurPageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  '@id': 'https://bringback.pro/deblur#webapp',
-  name: 'AI Photo Deblur Tool',
+  '@id': 'https://bringback.pro/unblur#webapp',
+  name: 'AI Photo Unblur Tool',
   description: 'Self-serve web application that automatically fixes blurry, out-of-focus photos using advanced AI technology.',
-  url: 'https://bringback.pro/deblur',
+  url: 'https://bringback.pro/unblur',
   applicationCategory: 'PhotoEditingApplication',
 
   operatingSystem: 'Web Browser',
@@ -37,10 +37,10 @@ const deblurPageJsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'USD',
-    description: 'Free photo deblur service with premium options available'
+    description: 'Free photo unblur service with premium options available'
   },
   featureList: [
-    'AI-powered photo deblurring',
+    'AI-powered photo unblurring',
     'Motion blur correction',
     'Camera shake removal',
     'Focus enhancement',
@@ -59,7 +59,7 @@ const deblurFAQPageJsonLd = {
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'How can I deblur a photo online?',
+      name: 'How can I unblur a photo online?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'You can deblur a photo online instantly using BringBack. Simply upload your blurry photo, and our AI automatically restores it with improved sharpness and clarity.'
@@ -67,7 +67,7 @@ const deblurFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'Is BringBack free to use for photo deblurring?',
+      name: 'Is BringBack free to use for photo unblurring?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'BringBack offers a free trial to deblur photos. For higher resolution results and batch processing, you can choose from affordable paid plans.'
@@ -83,7 +83,7 @@ const deblurFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'Do I need to download any software to deblur photos?',
+      name: 'Do I need to download any software to unblur photos?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'No downloads are required. BringBack is a web app that works directly in your browser.'
@@ -99,7 +99,7 @@ const deblurFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'How fast does it take to deblur a photo?',
+      name: 'How fast does it take to unblur a photo?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Most photos are processed in under 30 seconds, depending on image size and resolution.'
@@ -118,15 +118,15 @@ const deblurFAQPageJsonLd = {
       name: 'Does BringBack work on mobile?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. You can upload and deblur photos directly from your phone using BringBack\'s mobile-friendly web app.'
+        text: 'Yes. You can upload and unblur photos directly from your phone using BringBack\'s mobile-friendly web app.'
       }
     },
     {
       '@type': 'Question',
-      name: 'Can I deblur multiple photos at once?',
+      name: 'Can I unblur multiple photos at once?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. With a paid plan, BringBack supports batch deblurring so you can restore multiple images in one go.'
+        text: 'Yes. With a paid plan, BringBack supports batch unblurring so you can restore multiple images in one go.'
       }
     },
     {
@@ -150,7 +150,7 @@ const deblurFAQPageJsonLd = {
       name: 'Can BringBack fix both blur and noise in photos?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. The AI engine reduces noise while deblurring, giving you a cleaner, sharper final image.'
+        text: 'Yes. The AI engine reduces noise while unblurring, giving you a cleaner, sharper final image.'
       }
     },
     {
@@ -171,10 +171,10 @@ const deblurFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'Can I use BringBack to deblur photos for commercial projects?',
+      name: 'Can I use BringBack to unblur photos for commercial projects?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. You are free to use deblurred and restored photos from BringBack for both personal and commercial purposes.'
+        text: 'Yes. You are free to use unblurred and restored photos from BringBack for both personal and commercial purposes.'
       }
     },
     {
@@ -195,7 +195,7 @@ const deblurFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'Will my photos look artificial after deblurring?',
+      name: 'Will my photos look artificial after unblurring?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'No! Our AI is specifically trained to enhance sharpness while preserving the natural texture and character of your photos. Unlike basic sharpening filters that can create harsh edges or artifacts, our system intelligently enhances details without making images look over-processed or fake.'
@@ -203,10 +203,10 @@ const deblurFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'How much does photo deblurring cost?',
+      name: 'How much does photo unblurring cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We offer 5 high-quality photo deblurring enhancements for just $2 - no subscription required. This one-time payment gives you professional-grade results in seconds, compared to traditional photo editing services that charge $50-200+ per photo.'
+        text: 'We offer 5 high-quality photo unblurring enhancements for just $2 - no subscription required. This one-time payment gives you professional-grade results in seconds, compared to traditional photo editing services that charge $50-200+ per photo.'
       }
     },
     {
@@ -219,10 +219,10 @@ const deblurFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'How long does the deblurring process take?',
+      name: 'How long does the unblurring process take?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Most photos are processed and deblurred in under 30 seconds. Simply upload your blurry photo and watch it transform into a sharp, clear image in real-time. No waiting hours or days like traditional photo editing services.'
+        text: 'Most photos are processed and unblurred in under 30 seconds. Simply upload your blurry photo and watch it transform into a sharp, clear image in real-time. No waiting hours or days like traditional photo editing services.'
       }
     },
     {
@@ -345,14 +345,14 @@ export default function DeblurPage() {
                     <div className="flex justify-center px-4">
                         <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
                       <Compare
-                        firstImage="/placeholder.svg?height=400&width=600&text=Black+and+White+Photo"
-                        secondImage="/placeholder.svg?height=400&width=600&text=Colorized+Photo"
+                        firstImage="/blury-photo.webp"
+                        secondImage="/unblurred-photo.webp"
                         firstImageClassName="object-cover"
                         secondImageClassname="object-cover"
                         className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"
                         slideMode="hover"
-                        firstImageAlt="Before: Blurred family photo" 
-                        secondImageAlt="After: Deblurred and restored family photo with bringback ai"
+                        firstImageAlt="Before: Blurred woman photo" 
+                        secondImageAlt="After: Unblurred and restored woman photo with bringback ai"
                         showHandlebar={true}
                       />
                       </div>

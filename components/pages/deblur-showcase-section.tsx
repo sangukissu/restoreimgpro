@@ -20,24 +20,14 @@ export default function DeblurShowcaseSection() {
       beforeImage: "/placeholder.svg?height=300&width=480&text=Out+of+Focus+Before",
       afterImage: "/placeholder.svg?height=300&width=480&text=Sharp+Focus+After",
     },
-    {
-      title: "Low-Light Softness",
-      description: "Removes the softness from photos taken in the dark",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Soft+Photo+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Sharp+Photo+After",
-    },
+
     {
       title: "Camera Shake",
       description: "Eliminates blur from unsteady camera movement",
       beforeImage: "/placeholder.svg?height=300&width=480&text=Shaky+Photo+Before",
       afterImage: "/placeholder.svg?height=300&width=480&text=Stable+Photo+After",
     },
-    {
-      title: "General Blurriness",
-      description: "Enhances overall image sharpness and detail",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=Blurry+Photo+Before",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Sharp+Photo+After",
-    },
+
     {
       title: "Subject Blur",
       description: "Sharpens moving subjects while preserving background",
@@ -66,7 +56,7 @@ export default function DeblurShowcaseSection() {
         </div>
 
         {/* Showcase Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {showcaseItems.map((item, index) => (
             <div key={index} className="group">
               <div className="bg-white rounded-2xl p-6 border-6 border-gray-200 bg-transparent">
@@ -84,7 +74,7 @@ export default function DeblurShowcaseSection() {
                       secondImage={item.afterImage}
                       firstImageClassName="object-cover"
                       secondImageClassname="object-cover"
-                      className="h-[220px] w-[320px] rounded-lg"
+                      className="h-[220px] w-[320px] md:h-[280px] md:w-[400px] rounded-lg"
                       slideMode="hover"
                       showHandlebar={true}
                     />

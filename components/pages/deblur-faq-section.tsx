@@ -9,14 +9,14 @@ export default function DeblurFAQSection() {
 
   const faqs = [
     {
-      question: "How can I deblur a photo online?",
+      question: "How can I Unblur a photo online?",
       answer:
-        "You can deblur a photo online instantly using BringBack. Simply upload your blurry photo, and our AI automatically restores it with improved sharpness and clarity.",
+        "You can Unblur a photo online instantly using BringBack. Simply upload your blurry photo, and our AI automatically restores it with improved sharpness and clarity.",
     },
     {
-      question: "Is BringBack free to use for photo deblurring?",
+      question: "Is BringBack free to use for photo Unblurring?",
       answer:
-        "BringBack offers a free trial to deblur photos. For higher resolution results and batch processing, you can choose from affordable paid plans.",
+        "BringBack offers a free trial to Unblur photos. For higher resolution results and batch processing, you can choose from affordable paid plans.", 
     },
     {
       question: "What types of blurry photos can BringBack fix?",
@@ -24,17 +24,17 @@ export default function DeblurFAQSection() {
         "BringBack can fix motion blur, out-of-focus images, low-light photos, and old scanned pictures that appear soft or unclear.",
     },
     {
-      question: "Do I need to download any software to deblur photos?",
+      question: "Do I need to download any software to Unblur photos?",
       answer:
         "No downloads are required. BringBack is a web app that works directly in your browser.",
     },
     {
-      question: "Can BringBack deblur old scanned family photos?",
+      question: "Can BringBack Unblur old scanned family photos?",
       answer:
-        "Yes. BringBack specializes in restoring and deblurring old scanned photos, making them look clearer and more detailed.",
+        "Yes. BringBack specializes in restoring and Unblurring old scanned photos, making them look clearer and more detailed.",
     },
     {
-      question: "How fast does it take to deblur a photo?",
+      question: "How fast does it take to Unblur a photo?",
       answer:
         "Most photos are processed in under 30 seconds, depending on image size and resolution.",
     },
@@ -49,17 +49,17 @@ export default function DeblurFAQSection() {
         "Yes. You can upload and deblur photos directly from your phone using BringBack's mobile-friendly web app.",
     },
     {
-      question: "Can I deblur multiple photos at once?",
+      question: "Can I Unblur multiple photos at once?",
       answer:
-        "Yes. With a paid plan, BringBack supports batch deblurring so you can restore multiple images in one go.",
+        "Yes. With a paid plan, BringBack supports batch Unblurring so you can restore multiple images in one go.",
     },
     {
       question: "What image formats does BringBack support?",
       answer:
-        "BringBack supports JPEG, PNG, and WebP image formats for photo deblurring and restoration.",
+        "BringBack supports JPEG, PNG, and WebP image formats for photo Unblurring and restoration.",
     },
     {
-      question: "Will deblurring reduce the quality of my photo?",
+      question: "Will Unblurring reduce the quality of my photo?",
       answer:
         "No. BringBack enhances sharpness and details while preserving the original photo quality.",
     },
@@ -79,12 +79,12 @@ export default function DeblurFAQSection() {
         "Yes. BringBack can deblur photos up to very high resolutions, making it ideal for prints and professional use.",
     },
     {
-      question: "Can I use BringBack to deblur photos for commercial projects?",
+      question: "Can I use BringBack to Unblur photos for commercial projects?",
       answer:
-        "Yes. You are free to use deblurred and restored photos from BringBack for both personal and commercial purposes.",
+        "Yes. You are free to use Unblurred and restored photos from BringBack for both personal and commercial purposes.",
     },
     {
-      question: "How does AI photo deblurring actually work?",
+      question: "How does AI photo Unblurring actually work?",
       answer:
         "Our AI analyzes the type and pattern of blur in your photo, then applies sophisticated algorithms to reverse the blurring process. It understands the physics of how motion blur, focus blur, and camera shake affect images, allowing it to reconstruct sharp details from blurry areas while preserving the natural look of your photo.",
     },
@@ -94,7 +94,7 @@ export default function DeblurFAQSection() {
         "We can fix virtually any type of blur: motion blur from moving subjects or camera shake, out-of-focus blur from missed autofocus, low-light softness, and general image blur. Our AI handles both uniform blur (like camera shake) and complex blur patterns (like moving subjects) with equal effectiveness.",
     },
     {
-      question: "Will my photos look artificial after deblurring?",
+      question: "Will my photos look artificial after Unblurring?",
       answer:
         "No! Our AI is specifically trained to enhance sharpness while preserving the natural texture and character of your photos. Unlike basic sharpening filters that can create harsh edges or artifacts, our system intelligently enhances details without making images look over-processed or fake.",
     },

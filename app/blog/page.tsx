@@ -3,7 +3,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import BlogCard from "@/components/blog-card"
 import Link from "next/link"
-
+import { OfflineBanner } from "@/components/network-status"
 
 import { Button } from "@/components/ui/button"
 import { getAllPosts, formatDate, calculateReadingTime, extractExcerpt, type WordPressPost } from "@/lib/wordpress"
@@ -68,6 +68,9 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
 
       <main className="pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4">
+          {/* Offline Banner */}
+          <OfflineBanner />
+          
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-3xl font-bold text-black mb-4">Blog</h1>
@@ -78,18 +81,25 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
 
           {/* Blog Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
-              <BlogCard
-                key={post.slug}
-                title={post.title}
-                excerpt={post.excerpt}
-                slug={post.slug}
-                publishedAt={post.publishedAt}
-                readTime={post.readTime}
-                category={post.category}
-                image={post.image}
-              />
-            ))}
+            {blogPosts.length > 0 ? (
+              blogPosts.map((post) => (
+                <BlogCard
+                  key={post.slug}
+                  title={post.title}
+                  excerpt={post.excerpt}
+                  slug={post.slug}
+                  publishedAt={post.publishedAt}
+                  readTime={post.readTime}
+                  category={post.category}
+                  image={post.image}
+                />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500 text-lg">No blog posts available at the moment.</p>
+                <p className="text-gray-400 text-sm mt-2">Please check your internet connection and try again.</p>
+              </div>
+            )}
           </div>
 
           {/* Load More Button - Only show if more than 8 posts */}
@@ -101,7 +111,7 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
             </div>
           )}
         </div>
-        <div className="text-center mt-16">
+        <div className="text-center mt-16 px-4">
             <div className="bg-black text-white rounded-2xl p-8 max-w-2xl mx-auto">
               <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
               <p className="text-gray-300 mb-6">

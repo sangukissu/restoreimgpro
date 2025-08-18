@@ -140,7 +140,10 @@ const GET_ALL_SLUGS_QUERY = `
 `
 
 // Helper function to make GraphQL requests
-async function fetchGraphQL(query: string, variables: Record<string, any> = {}) {
+async function fetchGraphQL(query: string, variables: Record<string, any> = {}, retries: number = 3) {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
   try {
     const response = await fetch(WORDPRESS_GRAPHQL_URL, {
       method: 'POST',
@@ -151,10 +154,13 @@ async function fetchGraphQL(query: string, variables: Record<string, any> = {}) 
         query,
         variables,
       }),
+      signal: controller.signal,
       next: {
         revalidate: 300, // Revalidate every 5 minutes
       },
     })
+
+    clearTimeout(timeoutId)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -168,6 +174,15 @@ async function fetchGraphQL(query: string, variables: Record<string, any> = {}) 
 
     return json
   } catch (error) {
+    clearTimeout(timeoutId)
+    
+    // Retry logic for network errors
+    if (retries > 0 && (error instanceof TypeError || (error as Error).name === 'AbortError')) {
+      console.warn(`Retrying GraphQL request. Attempts remaining: ${retries - 1}`)
+      await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second before retry
+      return fetchGraphQL(query, variables, retries - 1)
+    }
+    
     throw error
   }
 }
@@ -182,14 +197,31 @@ export async function getAllPosts(first: number = 10, after?: string): Promise<{
     endCursor: string
   }
 }> {
-  const response: WordPressResponse = await fetchGraphQL(GET_POSTS_QUERY, {
-    first,
-    after,
-  })
+  try {
+    const response: WordPressResponse = await fetchGraphQL(GET_POSTS_QUERY, {
+      first,
+      after,
+    })
 
-  return {
-    posts: response.data.posts.nodes,
-    pageInfo: response.data.posts.pageInfo,
+    return {
+      posts: response.data.posts.nodes,
+      pageInfo: response.data.posts.pageInfo,
+    }
+  } catch (error) {
+    console.warn('Failed to fetch posts from WordPress, using fallback data:', error)
+    
+    // Import fallback data dynamically to avoid circular dependencies
+    const { fallbackBlogPosts } = await import('./fallback-data')
+    
+    return {
+      posts: fallbackBlogPosts.slice(0, first),
+      pageInfo: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        startCursor: '',
+        endCursor: ''
+      }
+    }
   }
 }
 

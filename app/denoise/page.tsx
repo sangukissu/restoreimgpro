@@ -328,8 +328,8 @@ export default function DenoisePage() {
                     <div className="flex justify-center px-4">
                         <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
                       <Compare
-                        firstImage="/placeholder.svg?height=400&width=600&text=Black+and+White+Photo"
-                        secondImage="/placeholder.svg?height=400&width=600&text=Colorized+Photo"
+                        firstImage="/noise-removed.webp"
+                        secondImage="/after-noise-removal.webp"
                         firstImageClassName="object-cover"
                         secondImageClassname="object-cover"
                         className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"

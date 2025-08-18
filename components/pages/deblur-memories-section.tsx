@@ -39,7 +39,7 @@ export default function DeblurMemoriesSection() {
            <Link href="/login">
           <Button className="px-8 py-6 group relative overflow-hidden w-auto" size="lg" asChild>
             <div>
-              <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Deblur Photos Now</span>
+              <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Unblur Photos Now</span>
               <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
                 <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
               </i>
