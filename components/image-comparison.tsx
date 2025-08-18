@@ -117,6 +117,13 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
     }
   }
 
+  const handleGenerateVideo = () => {
+    // Store the restored image URL in sessionStorage to pass to animate dashboard
+    sessionStorage.setItem('preloadedImageUrl', restoredUrl)
+    // Navigate to animate dashboard
+    window.location.href = '/dashboard/animate'
+  }
+
   // Memoize the clip path to prevent unnecessary recalculations
   const clipPathStyle = useMemo(() => ({
     clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
@@ -217,6 +224,21 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
                 />
               </svg>
               Download
+            </Button>
+
+            <Button
+              onClick={handleGenerateVideo}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M9 10V9a2 2 0 012-2h2a2 2 0 012 2v1m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v1"
+                />
+              </svg>
+              Generate Video
             </Button>
 
             <Button

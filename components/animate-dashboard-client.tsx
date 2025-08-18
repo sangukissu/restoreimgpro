@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Upload, Play, Download, Loader2, RefreshCw, ArrowLeft, Sparkles } from "lucide-react"
+import { Upload, Play, Download, Loader2, ArrowLeft, Sparkles } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import DashboardHeader from "@/components/dashboard-header"
 import { Button } from "@/components/ui/button"
@@ -73,6 +73,27 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
   const fileInputRef = useRef<HTMLInputElement>(null)
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const { toast } = useToast()
+
+  // Check for preloaded image from sessionStorage on mount
+  useEffect(() => {
+    const preloadedImageUrl = sessionStorage.getItem('preloadedImageUrl')
+    if (preloadedImageUrl) {
+      // Convert URL to File object
+      fetch(preloadedImageUrl)
+        .then(response => response.blob())
+        .then(blob => {
+          const file = new File([blob], 'restored-image.png', { type: 'image/png' })
+          setSelectedFile(file)
+          setSelectedImageUrl(preloadedImageUrl)
+          setError(null)
+          // Clear the sessionStorage after using it
+          sessionStorage.removeItem('preloadedImageUrl')
+        })
+        .catch(error => {
+          console.error('Error loading preloaded image:', error)
+        })
+    }
+  }, [])
 
   // Cleanup polling interval on unmount
   useEffect(() => {
@@ -336,13 +357,13 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
       />
       
       {/* Main Content */}
-      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
+      <main className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
 
 
         {/* Upload Interface */}
         {appState === "upload" && (
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-8">
+          <div className="max-w-xl py-4 sm:py-12 mx-auto">
+            <div className="mb-8 text-center">
               <h1 className="font-inter font-bold text-3xl sm:text-4xl text-black mb-2">
                 Photo Animation
               </h1>
@@ -439,7 +460,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                     isProcessing ||
                     credits < 1
                   }
-                  className="w-full bg-black hover:bg-gray-800 text-white py-4 text-lg font-semibold rounded-xl"
+                  className="w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
                 >
                   {isProcessing ? (
                     <>
@@ -460,8 +481,8 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
 
         {/* Processing/Results Interface */}
         {(appState === "processing" || appState === "results") && currentGeneration && (
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-8">
+          <div className="max-w-3xl mx-auto">
+            <div className="mb-4">
               <Button
                 onClick={handleStartOver}
                 variant="outline"
@@ -471,44 +492,34 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Start Over
               </Button>
-              <h1 className="font-inter font-bold text-3xl sm:text-4xl text-black mb-2">
-                {currentGeneration.preset_name}
-              </h1>
-              <p className="text-lg text-gray-600">Your video is being processed</p>
             </div>
 
             <div className="bg-white rounded-3xl sm:rounded-2xl p-4 sm:p-6 border-6 border-gray-200">
               {/* Status Header */}
               <div className="mb-6">
-                <div className="flex items-center gap-4 mb-4">
-                  {(currentGeneration.status === "uploading" || currentGeneration.status === "generating") && (
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
-                    </div>
-                  )}
-                  {currentGeneration.status === "completed" && (
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <Download className="w-5 h-5 text-green-600" />
-                    </div>
-                  )}
-                  {currentGeneration.status === "failed" && (
-                    <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                      <ArrowLeft className="w-5 h-5 text-red-600" />
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="text-xl font-semibold text-black">
+                <div className="flex flex-col gap-3 mb-4">
+                  <div className="flex items-center gap-3">
+                    {currentGeneration.status === "completed" && (
+                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                        <Download className="w-5 h-5 text-green-600" />
+                      </div>
+                    )}
+                    {currentGeneration.status === "failed" && (
+                      <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                        <ArrowLeft className="w-5 h-5 text-red-600" />
+                      </div>
+                    )}
+                    <h3 className="text-lg sm:text-xl font-semibold text-black">
                       {currentGeneration.status === "uploading" && "Uploading Image..."}
                       {currentGeneration.status === "generating" && "Generating Video..."}
                       {currentGeneration.status === "completed" && "Video Ready!"}
                       {currentGeneration.status === "failed" && "Generation Failed"}
                     </h3>
-                    <p className="text-gray-600">
-                      {(currentGeneration.status === "uploading" || currentGeneration.status === "generating") && "This usually takes 1-3 minutes"}
-                      {currentGeneration.status === "completed" && "Your animated video is ready for download"}
-                      {currentGeneration.status === "failed" && "Something went wrong, please try again"}
-                    </p>
                   </div>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    {currentGeneration.status === "completed" && "Your animated video is ready for download"}
+                    {currentGeneration.status === "failed" && "Something went wrong, please try again"}
+                  </p>
                 </div>
                 
                 {currentGeneration.status === "failed" && (
@@ -527,38 +538,54 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                 )}
               </div>
 
-              {/* Image and Video Layout */}
+              {/* Video Generation Area */}
               {currentGeneration.originalImageUrl && (
                 <div className="space-y-6">
-                  {/* Desktop: Side by side, Mobile: Stacked */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                    {/* Original Image */}
-                    <div className="space-y-3">
-                      <h3 className="text-lg font-semibold text-black">Original Image</h3>
-                      <div className="aspect-square max-w-sm mx-auto lg:mx-0">
-                        <Image 
-                          src={currentGeneration.originalImageUrl} 
-                          alt="Original image" 
-                          width={400}
-                          height={400}
-                          className="w-full h-full rounded-2xl object-cover border-2 border-gray-200"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Generated Video */}
-                    {currentGeneration.status === "completed" && currentGeneration.videoUrl && (
-                      <div className="space-y-3">
-                        <h3 className="text-lg font-semibold text-black">Generated Video</h3>
-                        <div className="max-w-sm mx-auto lg:mx-0">
+                  {/* Centered Video Display */}
+                  <div className="flex justify-center">
+                    <div className="space-y-4 w-full max-w-md">
+                      <h3 className="text-lg font-semibold text-black text-center">
+                        {currentGeneration.status === "completed" ? "Your Generated Video" : "Generating Your Video"}
+                      </h3>
+                      <div className="w-full">
+                        {currentGeneration.status === "completed" && currentGeneration.videoUrl ? (
                           <CustomVideoPlayer
                             url={currentGeneration.videoUrl}
                             poster={currentGeneration.originalImageUrl}
-                            className="border-2 border-gray-200"
+                            className="border-2 border-gray-200 rounded-2xl"
                           />
-                        </div>
+                        ) : (
+                          <div className="aspect-square w-full rounded-2xl border-2 border-gray-200 bg-gray-50 flex flex-col items-center justify-center">
+                            {(currentGeneration.status === "uploading" || currentGeneration.status === "generating") ? (
+                              <>
+                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                                  <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                                </div>
+                                <p className="text-gray-700 text-center px-4 font-medium text-lg mb-2">
+                                  {currentGeneration.status === "uploading" ? "Uploading your image..." : "Creating your video..."}
+                                </p>
+                                <p className="text-sm text-gray-500 text-center px-4">
+                                  This usually takes 1-3 minutes
+                                </p>
+                              </>
+                            ) : currentGeneration.status === "failed" ? (
+                              <>
+                                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                                  <ArrowLeft className="w-8 h-8 text-red-600" />
+                                </div>
+                                <p className="text-red-600 text-center px-4 font-medium text-lg">
+                                  Generation failed
+                                </p>
+                              </>
+                            ) : (
+                              <p className="text-gray-500 text-center px-4">
+                                Your video will appear here
+                              </p>
+                            )}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
 
                   {/* Action Buttons */}

@@ -141,6 +141,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'ddbpucrrposyyfpwpigq.supabase.co',
+        port: '',
+        pathname: '/**',
+      },
     ],
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
