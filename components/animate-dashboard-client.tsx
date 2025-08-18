@@ -335,6 +335,27 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
     toast.info('Payment system integration needed')
   }
 
+  const handleDownloadVideo = (videoUrl: string) => {
+    try {
+      // Create a temporary anchor element and trigger download
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = videoUrl
+      a.download = `animated-video-${Date.now()}.mp4`
+
+      
+      // Append to body, click, and remove
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      
+      toast.success('Video downloaded successfully!')
+    } catch (error) {
+      console.error('Download error:', error)
+      toast.error('Failed to download video. Please try again.')
+    }
+  }
+
   return (
     <div className="min-h-screen relative">
       {/* Dotted Background Pattern */}
@@ -548,7 +569,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                 <div className="space-y-6">
                   {/* Centered Video Display */}
                   <div className="flex justify-center">
-                    <div className="space-y-4 w-full max-w-md">
+                    <div className="space-y-4 w-full max-w-2xl">
                       <h3 className="text-lg font-semibold text-black text-center">
                         {currentGeneration.status === "completed" ? "Your Generated Video" : "Generating Your Video"}
                       </h3>
@@ -560,7 +581,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                             className="border-2 border-gray-200 rounded-2xl"
                           />
                         ) : (
-                          <div className="aspect-square w-full rounded-2xl border-2 border-gray-200 bg-gray-50 flex flex-col items-center justify-center">
+                          <div className="w-full min-h-[300px] rounded-2xl border-2 border-gray-200 bg-gray-50 flex flex-col items-center justify-center">
                             {(currentGeneration.status === "uploading" || currentGeneration.status === "generating") ? (
                               <>
                                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
@@ -597,7 +618,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                   {currentGeneration.status === "completed" && currentGeneration.videoUrl && (
                     <div className="flex flex-col sm:flex-row gap-4 pt-4 text-center justify-center">
                       <Button
-                        onClick={() => window.open(currentGeneration.videoUrl, '_blank')}
+                        onClick={() => handleDownloadVideo(currentGeneration.videoUrl!)}
                         className="text-xs px-3 py-1.5 rounded font-medium transition-colors bg-black text-white hover:bg-gray-800"
                       >
                         <Download className="w-5 h-5 mr-2" />
@@ -663,7 +684,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                       />
                       <div className="flex gap-3">
                         <Button
-                          onClick={() => window.open(generation.videoUrl, '_blank')}
+                          onClick={() => handleDownloadVideo(generation.videoUrl!)}
                           size="sm"
                           className="bg-green-600 hover:bg-green-700 text-white"
                         >

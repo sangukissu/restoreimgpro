@@ -11,11 +11,11 @@ interface CustomVideoPlayerProps {
 export default function CustomVideoPlayer({ url, poster, className = '' }: CustomVideoPlayerProps) {
   return (
     <div className={`relative bg-black rounded-2xl overflow-hidden ${className}`}>
-      <div className="relative aspect-square">
+      <div className="relative">
         <video
           src={url}
           poster={poster}
-          className="w-full h-full object-cover"
+          className="w-full h-auto"
           controls
           playsInline
           preload="metadata"

@@ -23,8 +23,7 @@ const ANIMATION_PRESETS = [
     prompt:
       "Animate this photo so the person softly blinks and tilts their head slightly, keeping a natural expression.",
     icon: <Eye className="w-3 h-3" />,
-    videoUrl: "/videos/video-animation1.mp4",
-
+    videoUrl: "/videos/blink-tilt-animation.mp4",
   },
   {
     id: "smile-look",
@@ -33,7 +32,7 @@ const ANIMATION_PRESETS = [
     prompt:
       "Bring this image to life with the person smiling lightly and shifting gaze side to side as if noticing surroundings.",
     icon: <Heart className="w-3 h-3" />,
-    videoUrl: "/videos/smile-look-animation.mp4",
+    videoUrl: "/videos/smile-and-look.mp4",
   },
 ]
 
@@ -203,12 +202,13 @@ come to life</h3>
 
             {/* Animation Demo */}
             <div className="max-w-2xl mx-auto">
-              <div className="bg-white rounded-2xl p-8 border border-gray-200">
+              <div className="bg-white rounded-2xl pt-8 border border-gray-200">
               
 
                 <div className="flex justify-center mb-6">
                   <div className="relative border rounded-xl bg-gray-50 border-gray-200 p-3">
                     <video
+                      key={selectedPreset.id}
                       className="sm:h-[300px] sm:w-[400px] h-[250px] w-[350px] rounded-lg object-cover"
                       autoPlay
                       loop
@@ -231,17 +231,7 @@ come to life</h3>
                 </div>
 
                 {/* Animation Preset Selector */}
-                <div className="flex justify-center space-x-2">
-                  {ANIMATION_PRESETS.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedPreset(ANIMATION_PRESETS[index])}
-                      className={`w-3 h-3 rounded-full transition-all ${
-                        selectedPreset.id === ANIMATION_PRESETS[index].id ? "bg-black" : "bg-gray-300 hover:bg-gray-400"
-                      }`}
-                    />
-                  ))}
-                </div>
+                
               </div>
             </div>
           </div>
