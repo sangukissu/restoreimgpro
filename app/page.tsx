@@ -385,58 +385,57 @@ export default function Page() {
       <BenefitsSection />
       <ShowcaseSection />
       <FeaturesSection />
-            {/* Our Promise Section - Matching existing design patterns */}
+      {/* Our Promise Section - Updated for Animation Feature */}
       <section className="px-4 py-20 bg-white">
         <div className="max-w-6xl mx-auto">
-          {/* Header - matching other sections */}
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
               <Cover>Our Promise</Cover> to You
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Built on trust, transparency, and technical excellence
+              When you trust us with your precious memories, here's what we guarantee
             </p>
           </div>
 
-          {/* Content - matching the border-left style from benefits section */}
           <div className="space-y-12 max-w-4xl mx-auto">
             <div className="border-l-2 border-gray-200 pl-8">
-              <h3 className="text-2xl font-bold text-black mb-3">100% Privacy Guaranteed</h3>
+              <h3 className="text-2xl font-bold text-black mb-3">Your Memories Stay Private</h3>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Your photos are processed securely and automatically deleted from our servers within 30 minutes. We
-                never store, share, or use your personal photos for any purpose other than restoration.
+                Whether you're restoring a family photo or bringing grandma back to life with animation, your images are
+                processed securely and automatically deleted within 30 minutes. We never store, share, or use your
+                personal photos.
               </p>
-              <div className="text-sm text-gray-500">🔒 Your memories remain completely private</div>
+              <div className="text-sm text-gray-500">🔒 Complete privacy for your most precious moments</div>
             </div>
 
             <div className="border-l-2 border-gray-200 pl-8">
-              <h3 className="text-2xl font-bold text-black mb-3">Lightning Fast Results</h3>
+              <h3 className="text-2xl font-bold text-black mb-3">Respectful Animation Technology</h3>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Most photos are restored in under 30 seconds. No waiting days or weeks like traditional restoration
-                services - you get professional results instantly.
+                Our AI creates gentle, natural movements that honor your loved ones. No exaggerated or inappropriate
+                animations—just subtle, lifelike motion that brings back the warmth you remember.
               </p>
-              <div className="text-sm text-gray-500">⚡ Results in under 30 seconds</div>
+              <div className="text-sm text-gray-500">✨ Dignified animation that preserves their essence</div>
             </div>
 
             <div className="border-l-2 border-gray-200 pl-8">
-              <h3 className="text-2xl font-bold text-black mb-3">Quality Guarantee</h3>
+              <h3 className="text-2xl font-bold text-black mb-3">Results You'll Treasure</h3>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Not satisfied with the results? Get a full refund within 30 days. We're confident in our AI's ability to
-                restore your memories perfectly.
+                Not satisfied with your restored photo or animation? Get a full refund within 30 days. We're confident
+                our AI will help you reconnect with your memories in the most beautiful way.
               </p>
-              <div className="text-sm text-gray-500">💰 30-day money-back guarantee</div>
+              <div className="text-sm text-gray-500">💰 30-day guarantee on every memory we revive</div>
             </div>
           </div>
 
-          {/* Bottom message - matching memories section style */}
           <div className="text-center mt-16 pt-8 border-t border-gray-100">
             <p className="text-lg text-gray-600 italic">
-              "We built BringBack because we believe every memory deserves to be preserved perfectly."
+              "We built BringBack because every family deserves to see their loved ones smile again."
             </p>
             <p className="text-gray-500 mt-2">— The BringBack Team</p>
           </div>
         </div>
       </section>
+
 
       <FAQSection />
       <MemoriesSection />
