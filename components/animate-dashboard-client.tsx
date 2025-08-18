@@ -382,7 +382,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                       className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 transition-colors group"
                     >
                       {selectedImageUrl ? (
-                        <div className="space-y-4">
+                        <div className="space-y-4 ">
                           <Image 
                             src={selectedImageUrl} 
                             alt="Selected image" 
@@ -393,10 +393,15 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                           <p className="text-sm text-gray-600">Click to change image</p>
                         </div>
                       ) : (
-                        <div className="space-y-4">
-                          <Upload className="w-12 h-12 text-gray-400 mx-auto group-hover:text-gray-600 transition-colors" />
+                        <div className="space-y-4 relative">
+                          <div className="relative mx-auto w-12 h-12 sm:w-24 sm:h-24 group">
+                            <div className="inset-0 absolute rounded-full bg-gray-100 opacity-50 transition-all duration-300 group-hover:opacity-75 group-hover:scale-105"></div>
+                            <div className="relative w-full h-full flex items-center justify-center">
+                              <Upload className="w-6 h-6 sm:w-12 sm:h-12 text-gray-700" />
+                            </div>
+                          </div>
                           <div>
-                            <p className="text-xl font-semibold text-black">Upload your photo</p>
+                            <p className="text-lg font-semibold text-gray-900">Upload your photo</p>
                             <p className="text-gray-600">JPG, PNG, WebP up to 20MB</p>
                           </div>
                         </div>

@@ -209,6 +209,13 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
             </div>
           </div>
 
+          {/* AI Restoration Description */}
+          <div className="text-center mt-6 mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed max-w-2xl mx-auto">
+              Your photo has been enhanced. Here’s what we fixed: removed noise, fixed blur, restored details, added natural color.
+            </p>
+          </div>
+
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center pt-2">
             <Button
