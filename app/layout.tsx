@@ -12,11 +12,10 @@ const inter = Inter({
   display: "swap",
   variable: "--font-inter",
 })
-
 export const metadata: Metadata = {
-  title: "BringBack - AI-Powered Photo Restoration | Restore Old & Damaged Photos",
-  description: "BringBack restores old, damaged photos, repairs faded colors, and revives torn memories in seconds. Preserve your history with stunning clarity.",
-  keywords: "photo restoration, AI photo repair, old photo restoration, damaged photo fix, vintage photo restoration, image enhancement, photo recovery, digital photo restoration",
+  title: "BringBack - AI Photo Restoration & Animation | Revive Old Photos",
+  description: "BringBack restores old, damaged photos and even animates them with AI. Repair faded colors, fix damage, and bring portraits to life in seconds.",
+  keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, bring photos to life, image enhancement, digital photo restoration",
   authors: [{ name: "BringBack Team" }],
   creator: "BringBack",
   publisher: "BringBack",
@@ -30,8 +29,8 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "BringBack - AI-Powered Photo Restoration",
-    description: "BringBack restores old, damaged photos, repairs faded colors, and revives torn memories in seconds. Preserve your history with stunning clarity.",
+    title: "BringBack - AI Photo Restoration & Animation",
+    description: "BringBack restores old, damaged photos and animates them with AI. Preserve your history and relive memories in motion.",
     url: 'https://bringback.pro',
     siteName: 'BringBack',
     images: [
@@ -39,7 +38,7 @@ export const metadata: Metadata = {
         url: '/screenshot.png',
         width: 1200,
         height: 630,
-        alt: 'BringBack Photo Restoration Before and After',
+        alt: 'BringBack Photo Restoration and Animation Demo',
       },
     ],
     locale: 'en_US',
@@ -47,10 +46,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "BringBack - AI-Powered Photo Restoration",
-    description: "Transform your old, damaged photos into stunning restored images with our advanced AI technology.",
-    images: ['/screenshot.png'],
-
+    title: "BringBack - AI Photo Restoration & Animation",
+    description: "Transform old photos with AI. Restore damage, enhance quality, and even animate your loved ones in seconds.",
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -64,7 +62,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: 'hu3ekEfdGWbrLcOkcNbIn4qSHWCQ06F',
   },
 }
 
@@ -76,7 +74,7 @@ const jsonLd = {
       '@id': 'https://bringback.pro/#website',
       url: 'https://bringback.pro/',
       name: 'BringBack',
-      description: 'AI-Powered Photo Restoration Service',
+      description: 'AI-powered photo restoration and animation service.',
       publisher: {
         '@id': 'https://bringback.pro/#organization'
       },
@@ -92,7 +90,7 @@ const jsonLd = {
         width: 512,
         height: 512
       },
-      description: 'Leading AI-powered photo restoration service helping people preserve their precious memories.',
+      description: 'AI-powered photo restoration and animation service helping people preserve and relive memories.',
       foundingDate: '2024',
       serviceArea: {
         '@type': 'Place',
@@ -100,22 +98,30 @@ const jsonLd = {
       },
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
-        name: 'Photo Restoration Services',
+        name: 'AI Photo Services',
         itemListElement: [
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Service',
               name: 'AI Photo Restoration',
-              description: 'Restore old, damaged, or faded photos using advanced AI technology'
+              description: 'Restore old, damaged, or faded photos using advanced AI technology.'
+            }
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'AI Photo Animation',
+              description: 'Revive still photos by animating faces — subtle smiles, waves, and lifelike gestures with AI.'
             }
           }
         ]
       }
-    },
-
+    }
   ]
 }
+
 
 export default function RootLayout({
   children,

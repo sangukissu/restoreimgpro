@@ -13,47 +13,28 @@ import FeaturesSection from "@/components/features-section"
 import ShowcaseSection from "@/components/showcase-section"
 import FAQSection from "@/components/faq-section"
 import MemoriesSection from "@/components/memories-section"
-import TestimonialsSection from "@/components/testimonials-section"
 import type { Metadata } from "next"
 
-import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = {
-  title: "BringBack - AI Photo Restoration | Restore Old & Damaged Photos Online",
-  description: "Transform your old, faded, torn or damaged photos into vibrant memories with our advanced AI technology. Quick restoration, simple process, and lifetime preserved moments. Start restoring your precious photos today!",
-  keywords: "photo restoration, AI photo repair, old photo restoration, damaged photo fix, vintage photo restoration, image enhancement, photo recovery, digital photo restoration, restore photos online, fix old photos",
-  openGraph: {
-    title: "BringBack - AI Photo Restoration | Restore Old & Damaged Photos Online",
-    description: "Transform your old, faded, torn or damaged photos into vibrant memories with our advanced AI technology. Quick restoration, simple process, and lifetime preserved moments.",
-    images: [
-      {
-        url: '/blurred-restored.webp',
-        width: 1200,
-        height: 630,
-        alt: 'Before and after photo restoration example showing damaged photo transformed into vibrant memory',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "BringBack - AI Photo Restoration | Restore Old & Damaged Photos Online",
-    description: "Transform your old, faded, torn or damaged photos into vibrant memories with our advanced AI technology.",
-    images: ['/blurred-restored.webp'],
-  },
+  title: "BringBack - AI Photo Restoration & Animation | Restore & Revive Old Photos",
+  description: "BringBack not only restores old, faded, or damaged photos but also brings them to life with AI animation. Repair colors, fix damage, and create subtle moving memories in seconds.",
+  keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration",
+  
 }
 
 const homePageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/#webapp',
-  name: 'BringBack – AI Old Photo Restoration Web App',
-  description: 'BringBack is an AI-powered web app where users upload old, faded, or damaged photos and instantly receive restored, vibrant images automatically. Users can also use the app to denoise, deblur, and remove grain from photos.',
+  name: 'BringBack – AI Photo Restoration & Animation',
+  description: 'BringBack is an AI-powered web app where users upload old, faded, or damaged photos and instantly receive restored, vibrant images. Users can also bring photos to life with subtle AI animations like smiling and waving.',
   url: 'https://bringback.pro/',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
   offers: {
     '@type': 'Offer',
-    name: 'BringBack Restoration Plans',
+    name: 'BringBack Restoration & Animation Plans',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
     price: '2',
@@ -64,20 +45,18 @@ const homePageJsonLd = {
   },
   featureList: [
     'AI-powered photo restoration',
-    'Repair damaged photos',
+    'Repair damaged or torn photos',
     'Enhance old and faded images',
-    'Remove scratches and tears',
-    'Color restoration',
-    'High-quality output',
-    'Denoise photo online',
-    'Remove grain from photos',
-    'Remove noise from photos',
-    'Deblur photos online',
-    'Restore old photos',
-    'Restore faded photos',
+    'Automatic color restoration',
+    'Side-by-side before/after preview',
+    'Bring photos to life with AI animations',
+    'Animate photos with smiling and waving gestures',
+    'Fast processing – results under 30 seconds',
+    'High-quality output for download and sharing'
   ],
   screenshot: 'https://bringback.pro/screenshot.png'
 }
+
 
 const homeFAQPageJsonLd = {
   '@context': 'https://schema.org',
@@ -357,7 +336,7 @@ export default function Page() {
               <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
                 <HeroVideoDialog
                   animationStyle="from-center"
-                  videoSrc="https://youtu.be/NT7UD2_sMTk"
+                  videoSrc="https://youtu.be/K_CYXkv2Yso"
                   thumbnailSrc="/blurred-restored.webp"
                   thumbnailAlt="Photo restoration demo video"
                   className="h-[250px] w-[400px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
