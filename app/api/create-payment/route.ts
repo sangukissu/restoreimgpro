@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       },
     }
 
-    const dodoResponse = await fetch("https://test.dodopayments.com/payments", {
+    const dodoResponse = await fetch("https://live.dodopayments.com/payments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,7 +62,6 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify(dodoPaymentData),
     })
-
     if (!dodoResponse.ok) {
       return NextResponse.json({ error: "Failed to create payment" }, { status: 500 })
     }
