@@ -57,7 +57,7 @@ export default function BlogError({
             </h1>
             <p className="text-gray-600">
               {!isOnline 
-                ? 'Please check your internet connection and try again.'
+                ? 'Please check back later.'
                 : 'We\'re having trouble loading the blog content. This might be a temporary issue.'
               }
             </p>
