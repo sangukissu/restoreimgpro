@@ -303,7 +303,7 @@ export default function Page() {
           <div className="space-y-6">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-4">
               <Sparkles className="w-3 h-3 mr-1" />
-              AI Powered
+              BringBack AI
             </div>
             <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-800 leading-tight">
               Bring back{" "}
@@ -327,22 +327,18 @@ export default function Page() {
               to life
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
-              Restore your old, faded, torn or damaged photos into vibrant memories again. Quick restoration simple
-              process and a lifetime of preserved moments.
+              Restore and animate your precious memories. Our AI revives faded, torn, damaged or black-and-white photos and even makes your loved ones smile and wave again.
             </p>
           </div>
           <div className="flex flex-col gap-4 justify-center items-center w-full">
             <Link href="/dashboard">
             <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-              <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Restore Your Photo</span>
+              <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Bring Back the Memories</span>
               <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
                 <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
               </i>
             </Button>
             </Link>
-            <p className="text-xs text-gray-500">
-                Only $0.40 per photo
-              </p>
           
           </div>
           <div className="flex flex-col items-center space-y-2 pt-2">

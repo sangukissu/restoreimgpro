@@ -1,5 +1,6 @@
 "use client"
 import { Cover } from "@/components/ui/cover"
+import Link from "next/link"
 
 export default function HowItWorksSection() {
   return (
@@ -20,9 +21,9 @@ export default function HowItWorksSection() {
               <div className="mb-6">
                 <span className="text-6xl font-bold text-black">1</span>
               </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Upload</h3>
+              <h3 className="text-2xl font-bold text-black mb-4">Upload & Restore</h3>
               <p className="text-gray-600 leading-relaxed">
-                Drop in your old photos — torn edges, faded colors, scratches and all. We handle any condition.
+Upload your old, damaged, or faded photos. Our AI instantly restores quality, fixes damage, and enhances every detail.
               </p>
             </div>
 
@@ -33,8 +34,7 @@ export default function HowItWorksSection() {
               </div>
               <h3 className="text-2xl font-bold text-black mb-4">Restore</h3>
               <p className="text-gray-600 leading-relaxed">
-                In seconds, our AI restores damaged photos, repairs faded colors, and smooths out years of wear without
-                losing the original look.
+                Watch as our AI brings your loved ones to life with natural movements, gentle smiles, and realistic animations.
               </p>
             </div>
 
@@ -45,7 +45,7 @@ export default function HowItWorksSection() {
               </div>
               <h3 className="text-2xl font-bold text-black mb-4">Get Your Memories</h3>
               <p className="text-gray-600 leading-relaxed">
-                You get back a version that feels like it was taken yesterday, ready to print, frame, or share.
+                Download your restored photos and animated videos. Share moving memories with family and relive precious moments.
               </p>
             </div>
           </div>
@@ -89,12 +89,14 @@ export default function HowItWorksSection() {
           </div>
         </div>
 
-        {/* Bottom Text */}
-        <div className="text-center mt-16">
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
-            No complicated settings, no waiting around. Just upload your old photos and watch decades of damage
-            disappear in seconds.
-          </p>
+       {/* Bottom CTA */}
+        <div className="text-center mt-12">
+          <p className="text-gray-600 mb-6">Ready to see your memories come alive?</p>
+          <Link href="/login">
+          <button className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+            Try It Now
+          </button>
+          </Link>
         </div>
       </div>
     </section>
