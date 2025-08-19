@@ -177,11 +177,15 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
       // Track first download for feedback system
       await trackFirstDownload()
       
-      // Show feedback modal after 1-2 seconds if conditions are met
-      if (shouldShowFeedback) {
-        setTimeout(() => {
-          showFeedbackModal()
-        }, 1500) // 1.5 seconds delay
+      // Check feedback status after tracking and show modal if needed
+      const response2 = await fetch('/api/feedback')
+      if (response2.ok) {
+        const data = await response2.json()
+        if (data.shouldShow) {
+          setTimeout(() => {
+            showFeedbackModal()
+          }, 1500) // 1.5 seconds delay
+        }
       }
     } catch (error) {
       console.error("Error downloading image:", error)

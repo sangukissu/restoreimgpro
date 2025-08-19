@@ -35,8 +35,11 @@ export function useFeedback(): UseFeedbackReturn {
       
       if (response.ok) {
         const data = await response.json()
+        console.log('Feedback status check:', data)
         setShouldShowFeedback(data.shouldShow)
         setTracking(data.tracking)
+      } else {
+        console.error('Failed to fetch feedback status:', response.status, response.statusText)
       }
     } catch (error) {
       console.error('Error checking feedback status:', error)
@@ -64,11 +67,18 @@ export function useFeedback(): UseFeedbackReturn {
   // Track first download
   const trackFirstDownload = useCallback(async () => {
     try {
-      await fetch('/api/feedback/track', {
+      console.log('Tracking first download...')
+      const response = await fetch('/api/feedback/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ event: 'first_download' })
       })
+      
+      if (response.ok) {
+        console.log('First download tracked successfully')
+      } else {
+        console.error('Failed to track first download:', response.status, response.statusText)
+      }
       
       // Refresh feedback status after tracking
       await checkFeedbackStatus()
