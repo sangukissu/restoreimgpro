@@ -6,7 +6,6 @@ import Footer from "@/components/footer"
 import { Cover } from "@/components/ui/cover" 
 import { PointerHighlight } from "@/components/pointer-highlight"
 import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
-import { GridPattern } from "@/components/grid-pattern"
 import HowItWorksSection from "@/components/how-it-works-section"
 import BenefitsSection from "@/components/benefits-section"
 import FeaturesSection from "@/components/features-section"
@@ -17,7 +16,7 @@ import type { Metadata } from "next"
 
 
 export const metadata: Metadata = {
-  title: "BringBack - AI Photo Restoration & Animation | Restore & Revive Old Photos",
+  title: "BringBack - AI Photo Restoration & Animation | Revive Old Memories",
   description: "BringBack not only restores old, faded, or damaged photos but also brings them to life with AI animation. Repair colors, fix damage, and create subtle moving memories in seconds.",
   keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration",
   
@@ -72,6 +71,14 @@ const homeFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
+      name: 'How does AI photo animation work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our AI animation technology analyzes facial features and expressions in your photos to create natural, lifelike movements. It can generate subtle animations like smiling, waving, blinking, and head tilts while maintaining the original character and authenticity of the person in the photo.'
+      }
+    },
+    {
+      '@type': 'Question',
       name: 'What types of photo damage can BringBack fix?',
       acceptedAnswer: {
         '@type': 'Answer',
@@ -80,10 +87,26 @@ const homeFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'How much does photo restoration cost?',
+      name: 'What animation styles are available?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We offer 5 high-quality photo restorations for just $2 - no subscription required. This one-time payment gives you professional-grade results in seconds. Compare that to traditional photo restoration services that charge $50-200 per photo and take weeks to complete.'
+        text: 'We offer three animation presets: Smile + Wave (natural smile with gentle wave gesture), Subtle Blink + Head Tilt (soft blinking with slight head movement), and Smile + Look Around (light smile with curious gaze movement). Each animation is designed to bring your photos to life naturally.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How much do photo restoration and animation cost?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Photo restoration: We offer 5 high-quality photo restorations for just $2 - no subscription required. Photo animation: Each animation costs 4 credits (available through our pricing plans). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How much does photo animation cost?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Each photo animation costs 4 credits. You can purchase credits through our pricing plans or buy them individually as needed. The animation process typically takes 30-60 seconds to complete.'
       }
     },
     {
@@ -91,15 +114,15 @@ const homeFAQPageJsonLd = {
       name: 'Is my personal data and photos safe?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely. Your photos are processed securely and automatically deleted from our servers within 30 minutes. We never store, share, or use your personal photos for any purpose other than restoration. Your memories remain completely private and belong only to you.'
+        text: 'Absolutely. Your photos are processed securely and automatically deleted from our servers within 30 minutes. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you.'
       }
     },
     {
       '@type': 'Question',
-      name: 'How long does the restoration process take?',
+      name: 'How long does the restoration and animation process take?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Most photos are restored in under 30 seconds. Upload your photo, and watch the transformation happen in real-time. No waiting days or weeks like traditional restoration services - you get professional results instantly.'
+        text: 'Photo restoration takes under 30 seconds, while photo animation typically takes 30-60 seconds depending on complexity. Both processes happen in real-time with no waiting days or weeks like traditional services.'
       }
     },
     {
@@ -107,15 +130,15 @@ const homeFAQPageJsonLd = {
       name: 'What if I\'m not satisfied with the results?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We\'re confident you\'ll love the results, but if you\'re not completely satisfied, we offer a full refund within 30 days. Our AI produces consistently high-quality results, but we stand behind every restoration with our satisfaction guarantee.'
+        text: 'We\'re confident you\'ll love the results, but if you\'re not completely satisfied, we offer a full refund within 30 days. Our AI produces consistently high-quality results for both restoration and animation, but we stand behind every service with our satisfaction guarantee.'
       }
     },
     {
       '@type': 'Question',
-      name: 'Can I use restored photos commercially?',
+      name: 'Can I use restored and animated photos commercially?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes! Once restored, the photos are yours to use however you\'d like - personal use, commercial projects, printing, sharing, or selling. We don\'t retain any rights to your restored images. They\'re your memories, enhanced and returned to you.'
+        text: 'Yes! Once processed, the photos and videos are yours to use however you\'d like - personal use, commercial projects, printing, sharing, or selling. We don\'t retain any rights to your enhanced content. They\'re your memories, enhanced and returned to you.'
       }
     },
     {
@@ -123,7 +146,15 @@ const homeFAQPageJsonLd = {
       name: 'What file formats do you support?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We support all common image formats including JPG, PNG, TIFF, and BMP. You can upload photos up to 50MB in size. The restored photo will be delivered in high-resolution PNG format, perfect for printing or digital use.'
+        text: 'We support all common image formats including JPG, PNG, TIFF, and BMP for both restoration and animation. You can upload photos up to 50MB in size. Restored photos are delivered in high-resolution PNG format, while animations are provided as MP4 videos.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can you animate very old or damaged photos?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For best animation results, we recommend restoring damaged photos first, then animating them. Our AI works best with clear facial features and good image quality. However, we can often animate moderately damaged photos with visible faces.'
       }
     },
     {
@@ -131,7 +162,7 @@ const homeFAQPageJsonLd = {
       name: 'How does this compare to manual photo restoration?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Traditional restoration can take weeks and cost $50-200 per photo. Our AI delivers comparable or better results in seconds for a fraction of the cost. While manual restoration has its place for extremely rare or historically significant photos, our AI is perfect for family photos and personal memories.'
+        text: 'Traditional restoration can take weeks and cost $50-200 per photo. Our AI delivers comparable or better results in seconds for a fraction of the cost. Animation would be nearly impossible manually, but our AI creates natural movements that bring your memories to life instantly.'
       }
     },
     {
@@ -147,55 +178,7 @@ const homeFAQPageJsonLd = {
       name: 'What is old photo restoration?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Old photo restoration uses AI to automatically repair faded, torn, scratched, or discolored photographs—returning them to vibrant, clear versions.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'How much does it cost to restore an old photo using BringBack?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'BringBack offers a free trial to restore your first photo. Paid plans for higher resolution or batch processing are available through our pricing page.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'Can BringBack repair water-damaged or sun-faded photos?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes, our AI module is trained to handle common damage like water stains, fading, scratches, and sun-exposure effects.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'Is the restoration fully automatic?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Absolutely. Upload your image, and our AI automatically restores color, sharpness, and detail—no manual intervention needed.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'How long does it take to restore a photo?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Most photos are fully restored in under 60 seconds, depending on image size and server load.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'Can BringBack restore scratched or torn old photos?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. Our AI handles structured defects like scratches and tears and recovers details while maintaining realism.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'Is the restoration quality better than manual editing?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'AI restoration is faster and highly effective for most photos. It automates complex tasks—yet keeps sentimental accuracy—often in seconds rather than hours.'
+        text: 'Old photo restoration uses AI to automatically repair faded, torn, scratched, or discolored photographs—returning them to vibrant, clear versions that can then be animated to bring your ancestors to life.'
       }
     },
     {
@@ -203,15 +186,7 @@ const homeFAQPageJsonLd = {
       name: 'Are my uploaded photos kept private?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Photos are processed securely, and you may choose to delete them from our servers after download for privacy.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'What image formats does BringBack support?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'We support common formats like JPEG, PNG, and TIFF to ensure compatibility with scanned or digital old photographs.'
+        text: 'Yes. Photos are processed securely, and automatically deleted from our servers within 30 minutes for privacy. We never use your personal photos for training or any other purpose.'
       }
     },
     {
@@ -219,7 +194,7 @@ const homeFAQPageJsonLd = {
       name: 'Can I restore multiple old photos at once?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes, with a paid plan, batch restoration is available so you can process multiple images together.'
+        text: 'Yes, with a paid plan, batch restoration is available so you can process multiple images together. Animation is currently processed one photo at a time for optimal quality.'
       }
     },
     {
@@ -227,15 +202,7 @@ const homeFAQPageJsonLd = {
       name: 'Can I print or enlarge restored photos?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Definitely. Restored images maintain high resolution and quality, ideal for printing or enlargements.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'Are restored photos usable for commercial purposes?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. You retain full rights to restored images and may use them for personal, editorial, or commercial purposes.'
+        text: 'Definitely. Restored images maintain high resolution and quality, ideal for printing or enlargements. Animated videos can be shared digitally or converted to GIFs for various uses.'
       }
     }
   ]
@@ -327,6 +294,22 @@ export default function Page() {
               </div>
             </div>
             <p className="text-gray-600 font-medium">Loved by Everyone</p>
+          </div>
+          
+          {/* Peerlist Badge */}
+          <div className="flex justify-center pt-4">
+            <a 
+              href="https://peerlist.io/harvansh/project/bringback-ai" 
+              target="_blank" 
+              rel="noreferrer"
+              className="transition-transform hover:scale-105"
+            > 
+              <img 
+                src="https://peerlist.io/api/v1/projects/embed/PRJHDNDGKO6Q7LN8AINDNK96OBDLLL?showUpvote=true&theme=light" 
+                alt="BringBack AI on Peerlist" 
+                className="h-12 sm:h-16 md:h-18 w-auto" 
+              /> 
+            </a>
           </div>
         
         </div>

@@ -39,7 +39,7 @@ const colorizePageJsonLd = {
     "name": "BringBack",
     "url": "https://bringback.pro/",
     "description": "AI-powered web application for photo colorization and enhancement.",
-    "foundingDate": "2024",
+    "foundingDate": "2025",
     "logo": {
       "@type": "ImageObject",
       "url": "https://bringback.pro/bringback-logo.png",
@@ -52,7 +52,7 @@ const colorizePageJsonLd = {
     "name": "BringBack Colorization Plans",
     "url": "https://bringback.pro/pricing",
     "priceCurrency": "USD",
-    "price": "0",
+    "price": "2",
     "eligibleRegion": {
       "@type": "Place",
       "name": "Worldwide"

@@ -152,6 +152,11 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
       throw new Error(errorMessage)
     }
 
+    // Update credits from server response
+    if (typeof data.creditsRemaining === 'number') {
+      setCredits(data.creditsRemaining)
+    }
+
     return data.id
   }
 
@@ -184,8 +189,8 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
       return
     }
 
-    if (credits < 1) {
-      toast.error('Insufficient credits. Please purchase more credits.')
+    if (credits < 4) {
+      toast.error('Insufficient credits. Video generation requires 4 credits.')
       return
     }
 
@@ -223,8 +228,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
       setCurrentGeneration(newGeneration)
       setGenerations(prev => [newGeneration, ...prev])
       
-      // Deduct credits immediately after successful submission
-      setCredits(prev => prev - 1)
+      // Credits will be deducted server-side and updated via polling
       
       // Start polling for status updates after a short delay to ensure DB record is created
       setTimeout(() => {
@@ -484,7 +488,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                   disabled={
                     !selectedFile ||
                     isProcessing ||
-                    credits < 1
+                    credits < 4
                   }
                   className="w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
                 >

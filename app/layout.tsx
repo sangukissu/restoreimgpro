@@ -13,9 +13,9 @@ const inter = Inter({
   variable: "--font-inter",
 })
 export const metadata: Metadata = {
-  title: "BringBack - AI Photo Restoration & Animation | Revive Old Photos",
-  description: "BringBack restores old, damaged photos and even animates them with AI. Repair faded colors, fix damage, and bring portraits to life in seconds.",
-  keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, bring photos to life, image enhancement, digital photo restoration",
+  title: "BringBack - AI Photo Restoration & Animation | Revive Old Memories",
+  description: "BringBack AI restores old, damaged photos and even animates them with AI. Repair faded colors, fix damage, and bring portraits to life in seconds.",
+  keywords: "photo restoration, AI photo repair, photo to video, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, bring photos to life, image enhancement, digital photo restoration",
   authors: [{ name: "BringBack Team" }],
   creator: "BringBack",
   publisher: "BringBack",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "BringBack - AI Photo Restoration & Animation",
-    description: "BringBack restores old, damaged photos and animates them with AI. Preserve your history and relive memories in motion.",
+    description: "BringBack AI restores old, damaged photos and animates them with AI. Preserve your history and relive memories in motion.",
     url: 'https://bringback.pro',
     siteName: 'BringBack',
     images: [
@@ -89,7 +89,7 @@ const jsonLd = {
         height: 512
       },
       description: 'AI-powered photo restoration and animation service helping people preserve and relive memories.',
-      foundingDate: '2024',
+      foundingDate: '2025',
       serviceArea: {
         '@type': 'Place',
         name: 'Worldwide'
