@@ -91,6 +91,7 @@ export default function ShowcaseSection() {
   const [activeStep, setActiveStep] = useState<"restore" | "animate">("restore")
   const [selectedPreset, setSelectedPreset] = useState(ANIMATION_PRESETS[0])
   const [activeItem, setActiveItem] = useState(0)
+  const [videoLoaded, setVideoLoaded] = useState(false)
 
   return (
     <section id="examples" className="px-4 py-20 bg-gradient-to-br from-gray-50 to-gray-100">
@@ -186,7 +187,10 @@ come to life</h3>
                 {ANIMATION_PRESETS.map((preset) => (
                   <button
                     key={preset.id}
-                    onClick={() => setSelectedPreset(preset)}
+                    onClick={() => {
+                      setVideoLoaded(false)
+                      setSelectedPreset(preset)
+                    }}
                     className={`p-4 rounded-lg border text-left transition-all ${
                       selectedPreset.id === preset.id
                         ? "border-black bg-gray-50"
@@ -207,13 +211,28 @@ come to life</h3>
 
                 <div className="flex justify-center mb-6">
                   <div className="relative border rounded-xl bg-gray-50 border-gray-200 p-3">
+                    {/* Placeholder/Loading State */}
+                    {!videoLoaded && (
+                      <div className="sm:h-[300px] sm:w-[400px] h-[250px] w-[350px] rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-12 h-12 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-3"></div>
+                          <p className="text-gray-600 text-sm font-medium">Loading animation...</p>
+                          <p className="text-gray-500 text-xs mt-1">{selectedPreset.name}</p>
+                        </div>
+                      </div>
+                    )}
+                    
                     <video
                       key={selectedPreset.id}
-                      className="sm:h-[300px] sm:w-[400px] h-[250px] w-[350px] rounded-lg object-cover"
+                      className={`sm:h-[300px] sm:w-[400px] h-[250px] w-[350px] rounded-lg object-cover transition-opacity duration-300 ${
+                        videoLoaded ? 'opacity-100' : 'opacity-0 absolute inset-3'
+                      }`}
                       autoPlay
                       loop
                       muted
                       playsInline
+                      onLoadedData={() => setVideoLoaded(true)}
+                      onLoadStart={() => setVideoLoaded(false)}
                     >
                       <source src={selectedPreset.videoUrl} type="video/mp4" />
                       <img
@@ -222,11 +241,10 @@ come to life</h3>
                         className="w-full h-full object-cover rounded-lg"
                       />
                     </video>
-                       <div className="absolute -top-2 -right-2 bg-black flex items-center text-white px-2 py-1 rounded text-xs font-medium">
-
-                  {selectedPreset.icon}   <span className="ml-1">{selectedPreset.name}</span>
-
-                </div>
+                    
+                    <div className="absolute -top-2 -right-2 bg-black flex items-center text-white px-2 py-1 rounded text-xs font-medium">
+                      {selectedPreset.icon} <span className="ml-1">{selectedPreset.name}</span>
+                    </div>
                   </div>
                 </div>
 

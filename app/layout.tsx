@@ -38,7 +38,7 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'BringBack Photo Restoration and Animation Demo',
+        alt: 'BringBack Photo Restoration and Animation demo',
       },
     ],
     locale: 'en_US',

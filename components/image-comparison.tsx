@@ -143,7 +143,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
           <div className="flex justify-center">
             <div
               ref={containerRef}
-              className="relative max-w-full max-h-[600px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
+              className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
               onMouseDown={handleMouseDown}
               onTouchStart={handleTouchStart}
               style={{ touchAction: "none" }} // Prevent default touch behaviors
@@ -152,7 +152,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
               <img
                 src={restoredUrl || "/placeholder.svg"}
                 alt="Restored image"
-                className="block max-w-full max-h-[600px] w-auto h-auto object-contain"
+                className="w-full h-full object-contain"
                 draggable={false}
                 loading="lazy"
               />
