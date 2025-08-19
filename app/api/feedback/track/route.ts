@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const { event } = await request.json()
 
     if (event === 'restoration_completed') {
+      
       // Increment restoration count
       const { error: incrementError } = await supabase
         .rpc('increment_restoration_count', { p_user_id: user.id })
