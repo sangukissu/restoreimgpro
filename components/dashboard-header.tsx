@@ -192,6 +192,27 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
                     <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
                   </div>
                 </div>
+                  <Link href="/dashboard">
+
+                <button
+                 
+                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                >
+                  <ImageIcon className="w-4 h-4" />
+                  <span className="text-sm font-medium text-gray-900 truncate">
+                    Dashboard
+                  </span>
+                </button>
+              </Link>
+              <Link href="/dashboard/animate">
+                <button
+                 
+                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                >
+                  <Video className="w-4 h-4" />
+                  Animate
+                </button>
+              </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"

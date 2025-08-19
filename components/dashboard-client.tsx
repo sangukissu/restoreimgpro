@@ -6,8 +6,10 @@ import ImageComparison from "@/components/image-comparison"
 import PaymentModal from "@/components/payment-modal"
 import PaymentSuccessModal from "@/components/payment-success-modal"
 import DashboardHeader from "@/components/dashboard-header"
+import FeedbackModal from "@/components/feedback-modal"
 import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
+import { useFeedback } from "@/hooks/use-feedback"
 
 type AppState = "upload" | "loading" | "comparison" | "error"
 
@@ -44,6 +46,18 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   
   // Add ref to track current restoration request
   const isRestoringRef = useRef(false)
+  
+  // Feedback system integration
+  const {
+    shouldShowFeedback,
+    isModalOpen: isFeedbackModalOpen,
+    showFeedbackModal,
+    hideFeedbackModal,
+    submitFeedback,
+    skipFeedback,
+    trackRestoration,
+    trackFirstDownload
+  } = useFeedback()
 
   // Removed automatic payment modal trigger - users should manually buy credits
 
@@ -110,6 +124,9 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         })
         setAppState("comparison")
         
+        // Track restoration completion for feedback system
+        await trackRestoration()
+        
         // Show success toast
         toast.success(`Image Restored Successfully! 1 credit deducted. ${newCredits} credits remaining.`)
       } else {
@@ -141,6 +158,56 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     setSelectedImageUrl(null)
     setRestorationData(null)
     setError(null)
+  }
+  
+  // Handle download with feedback tracking
+  const handleDownload = async (restoredUrl: string) => {
+    try {
+      const response = await fetch(restoredUrl)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `restored-image-${Date.now()}.png`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+      
+      // Track first download for feedback system
+      await trackFirstDownload()
+      
+      // Show feedback modal after 1-2 seconds if conditions are met
+      if (shouldShowFeedback) {
+        setTimeout(() => {
+          showFeedbackModal()
+        }, 1500) // 1.5 seconds delay
+      }
+    } catch (error) {
+      console.error("Error downloading image:", error)
+      toast.error("Failed to download image")
+    }
+  }
+  
+  // Handle feedback submission
+  const handleFeedbackSubmit = async (rating: number, feedback: string) => {
+    try {
+      await submitFeedback(rating, feedback)
+      hideFeedbackModal()
+      toast.success("Thank you for your feedback!")
+    } catch (error) {
+      toast.error("Failed to submit feedback. Please try again.")
+    }
+  }
+  
+  // Handle feedback skip
+  const handleFeedbackSkip = async () => {
+    try {
+      await skipFeedback()
+      hideFeedbackModal()
+    } catch (error) {
+      toast.error("Failed to skip feedback. Please try again.")
+    }
   }
 
   const handleRetry = () => {
@@ -296,6 +363,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
             originalUrl={restorationData.originalUrl}
             restoredUrl={restorationData.restoredUrl}
             onStartOver={handleStartOver}
+            onDownload={handleDownload}
           />
         )}
 
@@ -349,6 +417,14 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         onError={handlePaymentError}
         isProcessing={isProcessingPayment}
         setIsProcessing={setIsProcessingPayment}
+      />
+      
+      {/* Feedback Modal */}
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={hideFeedbackModal}
+        onSubmit={handleFeedbackSubmit}
+        onSkip={handleFeedbackSkip}
       />
     </div>
   )

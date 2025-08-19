@@ -10,9 +10,10 @@ interface ImageComparisonProps {
   originalUrl: string
   restoredUrl: string
   onStartOver: () => void
+  onDownload?: (restoredUrl: string) => void
 }
 
-export default function ImageComparison({ originalUrl, restoredUrl, onStartOver }: ImageComparisonProps) {
+export default function ImageComparison({ originalUrl, restoredUrl, onStartOver, onDownload }: ImageComparisonProps) {
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -100,20 +101,26 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver 
   }, [])
 
   const handleDownload = async () => {
-    try {
-      const response = await fetch(restoredUrl)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `restored-image-${Date.now()}.png`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error("Error downloading image:", error)
-      alert("Failed to download image")
+    if (onDownload) {
+      // Use the parent's download handler (with feedback tracking)
+      onDownload(restoredUrl)
+    } else {
+      // Fallback to default download behavior
+      try {
+        const response = await fetch(restoredUrl)
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `restored-image-${Date.now()}.png`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        window.URL.revokeObjectURL(url)
+      } catch (error) {
+        console.error("Error downloading image:", error)
+        alert("Failed to download image")
+      }
     }
   }
 
