@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     siteName: 'BringBack',
     images: [
       {
-        url: '/screenshot.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'BringBack Photo Restoration and Animation Demo',
