@@ -54,13 +54,18 @@ export async function POST(request: NextRequest) {
       }
 
       // Mark feedback as given
-      const { error: markError } = await supabase
-        .rpc('mark_feedback_given', { p_user_id: user.id })
+      const { error: trackingError } = await supabase
+        .from('user_feedback_tracking')
+        .upsert({
+          user_id: user.id,
+          feedback_given: true,
+          updated_at: new Date().toISOString()
+        })
 
-      if (markError) {
-        console.error('Error marking feedback as given:', markError)
+      if (trackingError) {
+        console.error('Error updating tracking:', trackingError)
         return NextResponse.json(
-          { error: 'Failed to mark feedback as given' },
+          { error: 'Failed to update tracking' },
           { status: 500 }
         )
       }
@@ -69,9 +74,24 @@ export async function POST(request: NextRequest) {
     } 
     
     else if (action === 'skip') {
+      // Get current skip count and increment it
+      const { data: currentTracking } = await supabase
+        .from('user_feedback_tracking')
+        .select('feedback_skipped_count')
+        .eq('user_id', user.id)
+        .single()
+
+      const currentSkipCount = currentTracking?.feedback_skipped_count || 0
+
       // Increment skip count
       const { error: skipError } = await supabase
-        .rpc('increment_skip_count', { p_user_id: user.id })
+        .from('user_feedback_tracking')
+        .upsert({
+          user_id: user.id,
+          feedback_skipped_count: currentSkipCount + 1,
+          last_feedback_prompt_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
 
       if (skipError) {
         console.error('Error updating skip count:', skipError)
