@@ -21,7 +21,7 @@ export default function MemoriesSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {/* Family Portraits */}
           <div className="group">
-            <div className="border-l-4 border-black pl-6 hover:border-gray-400 transition-colors duration-300">
+            <div className="border-l-4 border-gray-400 pl-6 hover:border-black transition-colors duration-300">
               <div className="text-2xl mb-3">👨‍👩‍👧‍👦</div>
               <h3 className="text-xl font-semibold text-black mb-2">Family Portraits</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -33,7 +33,7 @@ export default function MemoriesSection() {
 
           {/* Wedding Photos */}
           <div className="group">
-            <div className="border-l-4 border-black pl-6 hover:border-gray-400 transition-colors duration-300">
+            <div className="border-l-4 border-gray-400 pl-6 hover:border-black transition-colors duration-300">
               <div className="text-2xl mb-3">💒</div>
               <h3 className="text-xl font-semibold text-black mb-2">Wedding Memories</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -45,7 +45,7 @@ export default function MemoriesSection() {
 
           {/* Historical Photos */}
           <div className="group">
-            <div className="border-l-4 border-black pl-6 hover:border-gray-400 transition-colors duration-300">
+            <div className="border-l-4 border-gray-400 pl-6 hover:border-black transition-colors duration-300">
               <div className="text-2xl mb-3">🏛️</div>
               <h3 className="text-xl font-semibold text-black mb-2">Historical Moments</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -57,7 +57,7 @@ export default function MemoriesSection() {
 
           {/* Childhood Photos */}
           <div className="group">
-            <div className="border-l-4 border-black pl-6 hover:border-gray-400 transition-colors duration-300">
+            <div className="border-l-4 border-gray-400 pl-6 hover:border-black transition-colors duration-300">
               <div className="text-2xl mb-3">🧸</div>
               <h3 className="text-xl font-semibold text-black mb-2">Childhood Memories</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -69,7 +69,7 @@ export default function MemoriesSection() {
 
           {/* Pet Photos */}
           <div className="group">
-            <div className="border-l-4 border-black pl-6 hover:border-gray-400 transition-colors duration-300">
+            <div className="border-l-4 border-gray-400 pl-6 hover:border-black transition-colors duration-300">
               <div className="text-2xl mb-3">🐕</div>
               <h3 className="text-xl font-semibold text-black mb-2">Beloved Pets</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -81,7 +81,7 @@ export default function MemoriesSection() {
 
           {/* Military Photos */}
           <div className="group">
-            <div className="border-l-4 border-black pl-6 hover:border-gray-400 transition-colors duration-300">
+            <div className="border-l-4 border-gray-400 pl-6 hover:border-black transition-colors duration-300">
               <div className="text-2xl mb-3">🎖️</div>
               <h3 className="text-xl font-semibold text-black mb-2">Military Heritage</h3>
               <p className="text-gray-600 leading-relaxed">

@@ -103,14 +103,6 @@ const homeFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'How much does photo animation cost?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Each photo animation costs 4 credits. You can purchase credits through our pricing plans or buy them individually as needed. The animation process typically takes 30-60 seconds to complete.'
-      }
-    },
-    {
-      '@type': 'Question',
       name: 'Is my personal data and photos safe?',
       acceptedAnswer: {
         '@type': 'Answer',
@@ -187,14 +179,6 @@ const homeFAQPageJsonLd = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Yes. Photos are processed securely, and automatically deleted from our servers within 30 minutes for privacy. We never use your personal photos for training or any other purpose.'
-      }
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I restore multiple old photos at once?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes, with a paid plan, batch restoration is available so you can process multiple images together. Animation is currently processed one photo at a time for optimal quality.'
       }
     },
     {
@@ -331,59 +315,10 @@ export default function Page() {
 
       <HowItWorksSection />
       <MemoriesSection />
+            <ShowcaseSection />
       <BenefitsSection />
-      <ShowcaseSection />
+
       <FeaturesSection />
-      {/* Our Promise Section - Updated for Animation Feature */}
-      <section className="px-4 py-20 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
-              <Cover>Our Promise</Cover> to You
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              We understand these aren't just photos, they're irreplaceable moments with the people you love most
-            </p>
-          </div>
-
-          <div className="space-y-12 max-w-4xl mx-auto">
-            <div className="border-l-2 border-gray-200 pl-8">
-              <h3 className="text-2xl font-bold text-black mb-3">Your Memories Stay Private</h3>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Whether you're restoring a family photo or bringing grandma back to life with animation, your images are
-                processed securely and automatically deleted within 30 minutes. We never store, share, or use your
-                personal photos.
-              </p>
-              <div className="text-sm text-gray-500">🔒 Complete privacy for your most precious moments</div>
-            </div>
-
-            <div className="border-l-2 border-gray-200 pl-8">
-              <h3 className="text-2xl font-bold text-black mb-3">Respectful Animation Technology</h3>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Our AI creates gentle, natural movements that honor your loved ones. No exaggerated or inappropriate
-                animations—just subtle, lifelike motion that brings back the warmth you remember.
-              </p>
-              <div className="text-sm text-gray-500">✨ Dignified animation that preserves their essence</div>
-            </div>
-
-            <div className="border-l-2 border-gray-200 pl-8">
-              <h3 className="text-2xl font-bold text-black mb-3">Results You'll Treasure</h3>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Not satisfied with your restored photo or animation? Get a full refund within 30 days. We're confident
-                our AI will help you reconnect with your memories in the most beautiful way.
-              </p>
-              <div className="text-sm text-gray-500">💰 30-day guarantee on every memory we revive</div>
-            </div>
-          </div>
-
-          <div className="text-center mt-16 pt-8 border-t border-gray-100">
-            <p className="text-lg text-gray-600 italic">
-              "There's something magical about seeing a photo come to life. It's not just restoration - it's giving families the chance to see their loved ones smile again."
-            </p>
-            <p className="text-gray-500 mt-2">— The BringBack Team</p>
-          </div>
-        </div>
-      </section>
 
 
       <FAQSection />
@@ -400,13 +335,16 @@ export default function Page() {
                 "Every photo tells a story. Every animation brings that story to life. Every memory deserves to be
                 preserved, restored, and shared with future generations."
               </blockquote>
-              <div className="mt-8">
-                  <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
+              <div className="mt-8 mx-auto">
+                <Link href="/dashboard">
+
+                  <Button className="px-8 py-6 group relative overflow-hidden" size="lg">
               <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Start bringing memories to life</span>
               <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.7rem)] group-active:scale-95 text-black-500">
                 <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
               </i>
             </Button>
+            </Link>
               </div>
             </div>
           </div>

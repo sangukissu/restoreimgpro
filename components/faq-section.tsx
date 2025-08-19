@@ -33,11 +33,7 @@ export default function FAQSection() {
       answer:
         "Photo restoration: We offer 5 high-quality photo restorations for just $2 - no subscription required. Photo animation: Each animation costs 4 credits (available through our pricing plans). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.",
     },
-    {
-      question: "How much does photo animation cost?",
-      answer:
-        "Each photo animation costs 4 credits. You can purchase credits through our pricing plans or buy them individually as needed. The animation process typically takes 30-60 seconds to complete.",
-    },
+
     {
       question: "Is my personal data and photos safe?",
       answer:
@@ -88,11 +84,7 @@ export default function FAQSection() {
       answer:
         "Yes. Photos are processed securely, and automatically deleted from our servers within 30 minutes for privacy. We never use your personal photos for training or any other purpose.",
     },
-    {
-      question: "Can I restore multiple old photos at once?",
-      answer:
-        "Yes, with a paid plan, batch restoration is available so you can process multiple images together. Animation is currently processed one photo at a time for optimal quality.",
-    },
+    
     {
       question: "Can I print or enlarge restored photos?",
       answer:
@@ -101,7 +93,7 @@ export default function FAQSection() {
   ]
 
   return (
-    <section className="px-4 py-20 bg-white">
+    <section className="px-4 pt-24 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
@@ -119,7 +111,7 @@ export default function FAQSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* First Column */}
           <div className="space-y-4">
-            {faqs.slice(0, Math.ceil(faqs.length / 2)).map((faq, index) => (
+            {faqs.slice(0, 7).map((faq, index) => (
               <div
                 key={index}
                 className="bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden transition-all duration-200"
@@ -154,8 +146,8 @@ export default function FAQSection() {
           
           {/* Second Column */}
           <div className="space-y-4">
-            {faqs.slice(Math.ceil(faqs.length / 2)).map((faq, index) => {
-              const actualIndex = index + Math.ceil(faqs.length / 2);
+            {faqs.slice(7).map((faq, index) => {
+              const actualIndex = index + 7;
               return (
                 <div
                   key={actualIndex}
