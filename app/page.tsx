@@ -342,7 +342,7 @@ export default function Page() {
               <Cover>Our Promise</Cover> to You
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              When you trust us with your precious memories, here's what we guarantee
+              We understand these aren't just photos, they're irreplaceable moments with the people you love most
             </p>
           </div>
 
@@ -378,7 +378,7 @@ export default function Page() {
 
           <div className="text-center mt-16 pt-8 border-t border-gray-100">
             <p className="text-lg text-gray-600 italic">
-              "We built BringBack because every family deserves to see their loved ones smile again."
+              "There's something magical about seeing a photo come to life. It's not just restoration - it's giving families the chance to see their loved ones smile again."
             </p>
             <p className="text-gray-500 mt-2">— The BringBack Team</p>
           </div>
