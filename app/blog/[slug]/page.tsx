@@ -102,7 +102,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
     '@type': 'BlogPosting',
     '@id': `https://bringback.pro/blog/${post.slug}`,
     headline: post.title,
-    description: post.excerpt || post.title,
+    description: post.excerpt ? post.excerpt.replace(/<[^>]*>/g, '') : post.title,
     image: post.featuredImage?.node?.sourceUrl || 'https://bringback.pro/placeholder.svg',
     datePublished: post.date,
     dateModified: post.modified,
