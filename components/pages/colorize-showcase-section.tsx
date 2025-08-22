@@ -104,8 +104,8 @@ export default function ColorizeShowcaseSection() {
                       className="h-[220px] w-[320px] rounded-lg"
                       slideMode="hover"
                       showHandlebar={true}
-                      ImageAltbefore={item.beforeImageAlt}
-                      ImageAltafter={item.afterImageAlt}
+                      firstImageAlt={item.beforeImageAlt}
+                      secondImageAlt={item.afterImageAlt}
                     />
                   </div>
                 </div>
