@@ -215,7 +215,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                 alt={post.featuredImage.node.altText || post.title}
                 width={1200}
                 height={800}
-                className="w-full h-64 md:h-120 object-cover"
+                className="w-full h-auto aspect-[3/2] object-cover"
                 priority
               />
             </div>
@@ -223,7 +223,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
         )}
 
         {/* Article Content */}
-        <div className="max-w-4xl mx-auto px-4 mt-16">
+        <div className="max-w-4xl mx-auto px-4 mt-8">
           <div className="bg-white">
             <BlogContentRenderer content={post.content} />
           </div>
