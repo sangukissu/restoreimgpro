@@ -11,17 +11,17 @@ export default function ColorizeShowcaseSection() {
     {
       title: "Vintage Family Portraits",
       description: "Brings warmth and life to old family photographs",
-      beforeImage: "/vintage-family-portrait.webp",
-      afterImage: "/vintage-family-portrait-colorized.webp",
+      beforeImage: "/vintage-family-portraits.webp",
+      afterImage: "/vintage-family-portraits-colorized.webp",
       beforeImageAlt: "Before: black and white damaged vintage family portrait",
       afterImageAlt: "After: vintage family portrait colorized with bringback ai",
 
     },
     {
       title: "Historical Wedding Photos",
-      description: "Restores the romance and joy of vintage weddings",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Wedding+Photo",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Wedding+Photo",
+      description: "Restores the joy of vintage weddings",
+      beforeImage: "/historical-wedding-photo.webp",
+      afterImage: "/historical-wedding-photo-colorized.webp",
       beforeImageAlt: "Before: black and white damaged historical wedding photo",
       afterImageAlt: "After: historical wedding photo colorized with bringback ai",
 
@@ -29,15 +29,15 @@ export default function ColorizeShowcaseSection() {
     {
       title: "Old Childhood Memories",
       description: "Makes childhood photos feel fresh and alive",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Childhood+Photo",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Childhood+Photo",
+      beforeImage: "/childhood-memories-black-and-white.webp",
+      afterImage: "/childhood-memories-colorized.webp",
       beforeImageAlt: "Before: black and white old childhood photo",
       afterImageAlt: "After: old childhood photo colorized with bringback ai",
 
     },
     {
       title: "Military & Service Photos",
-      description: "Honors service members with realistic uniform colors",
+      description: "Honors service members with uniform colors",
       beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Military+Photo",
       afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Military+Photo",
       beforeImageAlt: "Before: black and white damaged military photo",
@@ -55,7 +55,7 @@ export default function ColorizeShowcaseSection() {
     },
     {
       title: "Old School & Group Photos",
-      description: "Makes class photos and group shots vibrant again",
+      description: "Makes class photos and group shots vibrant",
       beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Group+Photo",
       afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Group+Photo",
       beforeImageAlt: "Before: black and white old school group photo",
@@ -89,7 +89,7 @@ export default function ColorizeShowcaseSection() {
               <div className="bg-white rounded-2xl p-6 border-6 border-gray-200 bg-transparent">
                 {/* Header */}
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-black mb-2">{item.title}</h3>
+                  <h3 className="text-xl font-bold text-black mb-1">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.description}</p>
                 </div>
 
@@ -101,7 +101,7 @@ export default function ColorizeShowcaseSection() {
                       secondImage={item.afterImage}
                       firstImageClassName="object-cover"
                       secondImageClassname="object-cover"
-                      className="h-[220px] w-[320px] rounded-lg"
+                      className="sm:h-[220px] sm:w-[300px] h-[190px] w-[280px] rounded-lg"
                       slideMode="hover"
                       showHandlebar={true}
                       firstImageAlt={item.beforeImageAlt}

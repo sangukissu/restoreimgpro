@@ -250,7 +250,7 @@ export default function Page() {
             <Link href="/dashboard">
             
              <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
-            Bring Back the Memories
+            Bring Back Memories
           </FramerButton>
             </Link>
           
