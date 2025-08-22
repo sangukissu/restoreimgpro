@@ -47,8 +47,8 @@ export default function ColorizeShowcaseSection() {
     {
       title: "Vintage Street Scenes",
       description: "Brings historical moments and places to life",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Street+Scene",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Street+Scene",
+      beforeImage: "/vintage-street.webp",
+      afterImage: "/colorized-vintage-street-photo.webp",
       beforeImageAlt: "Before: black and white damaged vintage street scene",
       afterImageAlt: "After: vintage street scene colorized with bringback ai",
 
@@ -56,8 +56,8 @@ export default function ColorizeShowcaseSection() {
     {
       title: "Old School & Group Photos",
       description: "Makes class photos and group shots vibrant",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Group+Photo",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Group+Photo",
+      beforeImage: "/old-school-photo.webp",
+      afterImage: "/colorized-school-photo.webp",
       beforeImageAlt: "Before: black and white old school group photo",
       afterImageAlt: "After: old school group photo colorized with bringback ai",
     },
