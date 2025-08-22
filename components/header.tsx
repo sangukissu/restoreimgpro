@@ -7,6 +7,9 @@ import { IconMenu2, IconX } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
 import type React from "react"
 import { useState } from "react"
+import { Plus, Menu, Icon } from "lucide-react"
+import { FramerButton } from "@/components/ui/framer-button"
+
 
 interface NavbarProps {
   children: React.ReactNode
@@ -115,7 +118,8 @@ export const MobileNavMenu = ({ children, className, isOpen, onClose }: MobileNa
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-2 rounded-lg bg-white border border-gray-200 px-4 py-6",
+            "absolute inset-x-0 top-16 z-50 flex w-full text-black font-semibold flex-col  justify-start gap-2 rounded-lg bg-white border border-gray-200 px-4 py-6",
+
             className,
           )}
         >
@@ -134,9 +138,10 @@ export const MobileNavToggle = ({
   onClick: () => void
 }) => {
   return (
-    <button onClick={onClick} className="p-1">
-      {isOpen ? <IconX className="h-5 w-5 text-black" /> : <IconMenu2 className="h-5 w-5 text-black" />}
-    </button>
+    <FramerButton onClick={onClick} className="text-sm py-1 group overflow-hidden pr-2 bg-white pl-2" iconClassName="w-6 h-6">
+
+      {isOpen ? <IconX className="h-6 w-6 text-black" /> : <IconMenu2 className="h-6 w-6 text-black" />}
+    </FramerButton>
   )
 }
 
@@ -172,11 +177,14 @@ export default function Header() {
 
         {/* CTA Button */}
         <div className="flex items-center">
+         
           <Link href="/dashboard">
-          <button className="bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors">
+            
+             <FramerButton variant="primary" icon={<Plus />} className="text-sm py-1 group relative overflow-hidden pr-10 pl-4" iconClassName="w-6 h-6">
+
             Restore Now
-          </button>
-          </Link>
+          </FramerButton>
+            </Link>
         </div>
       </NavBody>
 
@@ -209,10 +217,13 @@ export default function Header() {
               {item.name}
             </a>
           ))}
-          <Link href="/login">
-          <button className="w-full bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors mt-2">
-            Sign In
-          </button>
+         
+             <Link href="/login">
+            
+             <FramerButton variant="primary" icon={<Plus />} className="text-sm py-1 group overflow-hidden pr-10 pl-4" iconClassName="w-6 h-6">
+
+            Restore Now
+          </FramerButton>
             </Link>
         </MobileNavMenu>
       </MobileNav>

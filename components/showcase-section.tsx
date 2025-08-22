@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { FramerButton } from "@/components/ui/framer-button"
 import { ChevronRight, Play, Smile, Eye, Heart } from "lucide-react"
 import Link from "next/link"
 import { Compare } from "@/components/ui/compare"
@@ -261,14 +261,15 @@ come to life</h3>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight mb-4">
               Ready to restore your photos and bring your loved ones back to life?
             </p>
-            <Link href="/login">
-              <Button className="px-8 py-6 group relative overflow-hidden w-auto" size="lg">
-                <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Upload & Animate Now</span>
-                <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.7rem)] group-active:scale-95 text-black-500">
-                  <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-                </i>
-              </Button>
+           
+            
+              <Link href="/login">
+            
+             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
+            Upload & Animate Now
+          </FramerButton>
             </Link>
+        
           </div>
         </div>
       </div>
