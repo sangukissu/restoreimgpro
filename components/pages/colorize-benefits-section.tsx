@@ -1,5 +1,8 @@
 "use client"
 import { Cover } from "@/components/ui/cover"
+import { FramerButton } from "@/components/ui/framer-button"
+import { ChevronRight } from "lucide-react"
+import Link from "next/link"
 
 export default function ColorizeBenefitsSection() {
   return (
@@ -71,9 +74,13 @@ export default function ColorizeBenefitsSection() {
                 </div>
               </div>
 
-              <button className="w-full bg-black text-white py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200">
-                Colorize 5 Photos for $2
-              </button>
+              
+              <Link href="/login">
+            
+             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full ">
+            Colorize 5 Photos for $2
+          </FramerButton>
+            </Link>
               
               <p className="text-xs text-gray-500 mt-2">
                 Only $0.40 per photo

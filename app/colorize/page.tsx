@@ -1,10 +1,8 @@
 import type { Metadata } from "next"
-import { Button } from "@/components/ui/button"
 import { Sparkles, ChevronRight } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { PointerHighlight } from "@/components/pointer-highlight"
-import { Compare } from "@/components/ui/compare"
 import ColorizeHowItWorksSection from "@/components/pages/colorize-how-it-works-section"
 import ColorizeBenefitsSection from "@/components/pages/colorize-benefits-section"
 import ColorizeShowcaseSection from "@/components/pages/colorize-showcase-section"
@@ -12,6 +10,10 @@ import ColorizeFeaturesSection from "@/components/pages/colorize-features-sectio
 import ColorizeFAQSection from "@/components/pages/colorize-faq-section"
 import ColorizeMemoriesSection from "@/components/pages/colorize-memories-section"
 import Link from "next/link"
+import { FramerButton } from "@/components/ui/framer-button"
+import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
+
+
 
 
 export const metadata: Metadata = {
@@ -244,7 +246,7 @@ export default function ColorizePage() {
                   <Sparkles className="w-3 h-3 mr-1" />
                   AI Powered
                 </div>
-                <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
+                <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-800 leading-tight">
                   Bring{" "}
                   <PointerHighlight
                     rectangleClassName="bg-purple-100 border-purple-300 leading-tight px-2"
@@ -274,15 +276,13 @@ export default function ColorizePage() {
               <div className="flex flex-col gap-4 justify-center items-center w-full">
                 
               
-              <Link href="/login">
-              <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-                <>
-                  <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Colorize Your Photo</span>
-                  <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                    <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-                  </i>
-                </>
-              </Button>
+         
+         
+             <Link href="/login">
+            
+             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
+           Colorize Your Photo
+          </FramerButton>
             </Link>
             <p className="text-xs text-gray-500">
                 Only $0.40 per photo 
@@ -311,35 +311,24 @@ export default function ColorizePage() {
               </div>
 
               {/* Hero Compare Section */}
-              <div className="pt-8 w-full">
-                <div className="max-w-4xl mx-auto">
-                   
-                    <div className="flex justify-center px-4">
-                        <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
-                      <Compare
-                        firstImage="/placeholder.svg?height=400&width=600&text=Black+and+White+Photo"
-                        secondImage="/placeholder.svg?height=400&width=600&text=Colorized+Photo"
-                        firstImageClassName="object-cover"
-                        secondImageClassname="object-cover"
-                        className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"
-                        slideMode="hover"
-                        firstImageAlt="Before: black and white family photo" 
-                        secondImageAlt="After: Colorized family photo with bringback ai"
-                        showHandlebar={true}
-                      />
-                      </div>
-                    </div>
-                </div>
-                <div className="mt-6 text-center">
-                  <p className="text-sm text-gray-500 max-w-2xl mx-auto">
-                    Watch how BringBack transforms black and white photos into realistic, vibrant color images
-                  </p>
-                </div>
+               </div>
+          <div>
+            <div className="flex justify-center">
+              <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
+                <HeroVideoDialog
+                  animationStyle="from-center"
+                  videoSrc="https://youtu.be/YcexFcxi2xY"
+                  thumbnailSrc="/bw-to-colorize.webp"
+                  thumbnailAlt="Photo restoration demo video"
+                  className="h-[250px] w-[400px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
+                />
               </div>
             </div>
           </div>
+            </div>
+          </div>
         </div>
-        </div>
+   
       </section>
 
       <ColorizeHowItWorksSection />

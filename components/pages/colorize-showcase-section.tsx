@@ -2,7 +2,7 @@
 
 import { Compare } from "@/components/ui/compare"
 import { Cover } from "@/components/ui/cover"
-import { Button } from "../ui/button"
+import { FramerButton } from "@/components/ui/framer-button"
 import Link from "next/link"
 import { ChevronRight } from "lucide-react" 
 
@@ -11,38 +11,55 @@ export default function ColorizeShowcaseSection() {
     {
       title: "Vintage Family Portraits",
       description: "Brings warmth and life to old family photographs",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Family+Portrait",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Family+Portrait",
+      beforeImage: "/vintage-family-portrait.webp",
+      afterImage: "/vintage-family-portrait-colorized.webp",
+      beforeImageAlt: "Before: black and white damaged vintage family portrait",
+      afterImageAlt: "After: vintage family portrait colorized with bringback ai",
+
     },
     {
       title: "Historical Wedding Photos",
       description: "Restores the romance and joy of vintage weddings",
       beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Wedding+Photo",
       afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Wedding+Photo",
+      beforeImageAlt: "Before: black and white damaged historical wedding photo",
+      afterImageAlt: "After: historical wedding photo colorized with bringback ai",
+
     },
     {
       title: "Old Childhood Memories",
       description: "Makes childhood photos feel fresh and alive",
       beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Childhood+Photo",
       afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Childhood+Photo",
+      beforeImageAlt: "Before: black and white old childhood photo",
+      afterImageAlt: "After: old childhood photo colorized with bringback ai",
+
     },
     {
       title: "Military & Service Photos",
       description: "Honors service members with realistic uniform colors",
       beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Military+Photo",
       afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Military+Photo",
+      beforeImageAlt: "Before: black and white damaged military photo",
+      afterImageAlt: "After: military photo colorized with bringback ai",
+
     },
     {
       title: "Vintage Street Scenes",
       description: "Brings historical moments and places to life",
       beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Street+Scene",
       afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Street+Scene",
+      beforeImageAlt: "Before: black and white damaged vintage street scene",
+      afterImageAlt: "After: vintage street scene colorized with bringback ai",
+
     },
     {
       title: "Old School & Group Photos",
       description: "Makes class photos and group shots vibrant again",
       beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Group+Photo",
       afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Group+Photo",
+      beforeImageAlt: "Before: black and white old school group photo",
+      afterImageAlt: "After: old school group photo colorized with bringback ai",
     },
   ]
 
@@ -87,6 +104,8 @@ export default function ColorizeShowcaseSection() {
                       className="h-[220px] w-[320px] rounded-lg"
                       slideMode="hover"
                       showHandlebar={true}
+                      ImageAltbefore={item.beforeImageAlt}
+                      ImageAltafter={item.afterImageAlt}
                     />
                   </div>
                 </div>
@@ -102,13 +121,14 @@ export default function ColorizeShowcaseSection() {
               Our AI handles even the most challenging vintage photos. Upload your black and white image and see the
               magic happen.
             </p>
-             <Link href="/login">
-            <Button className="px-8 py-6 group relative overflow-hidden w-auto" size="lg">
-              <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Colorize Your Photo Now</span>
-              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-              </i>
-            </Button>
+          
+
+            
+              <Link href="/login">
+            
+             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden">
+            Colorize Your Photo Now
+          </FramerButton>
             </Link>
           </div>
         </div>

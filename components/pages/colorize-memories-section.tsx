@@ -2,7 +2,7 @@
 
 import { Cover } from "@/components/ui/cover"
 import { ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { FramerButton } from "@/components/ui/framer-button"
 import Link from "next/link"
 
 export default function ColorizeMemoriesSection() {
@@ -39,15 +39,11 @@ export default function ColorizeMemoriesSection() {
             </p>
          
           </div>
-              <Link href="/login">
-          <Button className="px-8 py-6 group relative overflow-hidden w-auto" size="lg" asChild>
-            <div>
-              <span className="mr-10 transition-opacity duration-500 group-hover:opacity-0">Colorize Your Photos</span>
-              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-              </i>
-            </div>
-          </Button>
+             <Link href="/login">
+            
+             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden">
+            Colorize Your Photos
+          </FramerButton>
             </Link>
         </div>
       </div>
