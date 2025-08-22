@@ -38,8 +38,8 @@ export default function ColorizeShowcaseSection() {
     {
       title: "Military & Service Photos",
       description: "Honors service members with uniform colors",
-      beforeImage: "/placeholder.svg?height=300&width=480&text=B%26W+Military+Photo",
-      afterImage: "/placeholder.svg?height=300&width=480&text=Colorized+Military+Photo",
+      beforeImage: "/old-military-photo.webp",
+      afterImage: "/colorized-military-photo.webp",
       beforeImageAlt: "Before: black and white damaged military photo",
       afterImageAlt: "After: military photo colorized with bringback ai",
 
