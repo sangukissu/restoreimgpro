@@ -5,6 +5,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
+import Script from "next/script"
 import "./globals.css"
 
 const inter = Inter({
@@ -147,6 +148,18 @@ export default function RootLayout({
         {children}
         <NetworkStatus />
         <Toaster />
+        {/* Simple Analytics Script */}
+        <Script
+          src="https://scripts.simpleanalyticscdn.com/latest.js"
+          strategy="afterInteractive"
+        />
+        <noscript>
+          <img
+            src="https://queue.simpleanalyticscdn.com/noscript.gif"
+            alt=""
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </noscript>
       </body>
     </html>
   )
