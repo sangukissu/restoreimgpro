@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
       },
     }
 
-    const dodoResponse = await fetch("https://live.dodopayments.com/payments", {
+    const dodoResponse = await fetch("https://test.dodopayments.com/payments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
