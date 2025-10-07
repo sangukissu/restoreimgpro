@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import AnimateDashboardClient from "@/components/animate-dashboard-client"
 
-export default async function AnimateDashboard() {
+export default async function AnimatePage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
   const supabase = await createClient()
 
   const {
@@ -21,11 +21,13 @@ export default async function AnimateDashboard() {
     .single()
 
   const credits = profile?.credits || 0
+  const isPaymentSuccess = searchParams?.payment === "success"
 
   return (
-    <AnimateDashboardClient 
-      user={{ email: user.email || "", id: user.id }} 
+    <AnimateDashboardClient
+      user={{ email: user.email || "", id: user.id }}
       initialCredits={credits}
+      isPaymentSuccess={isPaymentSuccess}
     />
   )
 }
