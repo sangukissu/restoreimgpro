@@ -66,8 +66,8 @@ AI-powered photo restoration and animation that transforms old, damaged photos i
             {/* Restore & Animate Plan (Best Value) */}
             <div className="bg-black text-white rounded-3xl p-8 border-2 border-gray-800 relative h-full flex flex-col">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="bg-gray-300 text-black px-3 py-1 rounded-full text-sm font-semibold flex items-center border border-gray-300">
-                  <Star className="w-4 h-4 mr-2 text-yellow-200" />
+                <div className="bg-gray-200 text-black px-3 py-1 rounded-full text-sm font-semibold flex items-center border border-gray-300">
+                  <Star className="w-4 h-4 mr-2 text-white" />
                   Best Value
                 </div>
               </div>

@@ -75,8 +75,8 @@ export default function PricingPage() {
             {/* Restore & Animate Plan (Best Value) */}
             <div className="bg-black text-white rounded-3xl p-8 border-2 border-gray-800 relative h-full flex flex-col">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="bg-gray-50 text-black px-4 py-2 rounded-full text-sm font-semibold flex items-center border border-gray-300">
-                  <Star className="w-4 h-4 mr-2 text-yellow-500" />
+                <div className="bg-gray-200 text-black px-3 py-1 rounded-full text-sm font-semibold flex items-center border border-gray-300">
+                  <Star className="w-4 h-4 mr-2 text-white" />
                   Best Value
                 </div>
               </div>
@@ -124,20 +124,6 @@ export default function PricingPage() {
             </div>
           </div>
           
-          {/* NEW SECTION: Animation Value Proposition */}
-          <div className="mb-24 bg-gray-50 rounded-2xl p-8 lg:p-12 flex flex-col lg:flex-row items-center">
-             <div className="lg:w-1/2 lg:pr-12 text-center lg:text-left">
-                <h2 className="text-3xl font-bold text-black mb-4">Bring Your Story to Life</h2>
-                <p className="text-lg text-gray-600 mb-6">Go beyond a static image. Our AI adds gentle, lifelike motion to your restored photos. See a subtle smile, a gentle glance, and feel the moment again. It’s a magical way to reconnect with your most precious memories.</p>
-                <p className="text-gray-500">Included in the Restore & Animate plan.</p>
-             </div>
-             <div className="lg:w-1/2 mt-8 lg:mt-0">
-                {/* You can replace this div with a GIF or a video component */}
-                <div className="bg-gray-200 w-full h-80 rounded-xl flex items-center justify-center">
-                   <p className="text-gray-500">[Animation Example Video or GIF]</p>
-                </div>
-             </div>
-          </div>
 
 
           {/* Value Proposition */}
