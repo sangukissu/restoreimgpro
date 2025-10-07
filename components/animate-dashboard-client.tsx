@@ -632,7 +632,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                                   <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                                 </div>
                                 <p className="text-gray-700 text-center px-4 font-medium text-lg mb-2">
-                                  {currentGeneration.status === "uploading" ? "Uploading your image..." : "Creating your video..."}
+                                  {currentGeneration.status === "uploading" ? "Uploading your image..." : "Creating your video... Please do not leave or refresh the page."}
                                 </p>
                                 <p className="text-sm text-gray-500 text-center px-4">
                                   This usually takes 1-3 minutes
