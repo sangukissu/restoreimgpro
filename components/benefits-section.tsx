@@ -37,10 +37,7 @@ AI-powered photo restoration and animation that transforms old, damaged photos i
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-700"><span className="font-semibold text-black">5</span> Photo Restorations</span>
                 </div>
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-700"><span className="font-semibold text-black">Free</span> Photo Enhance/Upscale</span>
-                </div>
+                
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-700">High-Resolution Output</span>
@@ -85,10 +82,7 @@ AI-powered photo restoration and animation that transforms old, damaged photos i
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-300"><span className="font-semibold text-white">5</span> Photo Restorations</span>
                 </div>
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300"><span className="font-semibold text-white">Free</span> Photo Enhance/Upscale</span>
-                </div>
+                
                 <div className="flex items-center font-bold">
                   <Film className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span><span className="text-white">1</span> High-Quality Video Animation</span>
