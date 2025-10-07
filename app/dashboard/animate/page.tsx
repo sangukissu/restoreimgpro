@@ -1,8 +1,12 @@
-import { redirect } from "next/navigation"
-import { createClient } from "@/utils/supabase/server"
 import AnimateDashboardClient from "@/components/animate-dashboard-client"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
 
-export default async function AnimatePage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+export default async function AnimatePage({ 
+  searchParams, 
+}: { 
+  searchParams: Promise<{ payment?: string }> 
+}) {
   const supabase = await createClient()
 
   const {
@@ -21,7 +25,8 @@ export default async function AnimatePage({ searchParams }: { searchParams: { [k
     .single()
 
   const credits = profile?.credits || 0
-  const isPaymentSuccess = searchParams?.payment === "success"
+  const resolvedSearchParams = await searchParams
+  const isPaymentSuccess = resolvedSearchParams.payment === "success"
 
   return (
     <AnimateDashboardClient
