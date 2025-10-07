@@ -57,15 +57,14 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
   return (
     <motion.div className="fixed inset-x-0 top-0 z-40 w-full pt-2">
       <motion.div className="relative z-[60] mx-auto w-[70%] max-w-6xl flex items-center justify-between rounded-lg bg-white/95 border border-gray-200 px-6 py-3 hidden backdrop-blur-lg lg:flex">
-        {/* Logo */}
-        <div className="flex items-center">
+       <div className="flex items-center">
           <a href="/" className="flex items-center gap-2">
             <Image 
               src="/header-logo.webp" 
               alt="BringBack Logo" 
-             width={80} 
-              height={32} 
-              className="w-36 h-8"
+              width={80} 
+              height={36} 
+              className="w-36 h-9"
               style={{ width: 'auto' }}
             />
           </a>
@@ -148,9 +147,9 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
             <Image 
               src="/header-logo.webp" 
               alt="BringBack Logo" 
-              width={28} 
-              height={28} 
-              className="w-7 h-7"
+              width={80} 
+              height={36} 
+              className="w-36 h-9"
               style={{ width: 'auto' }}
             />
           </a>

@@ -26,7 +26,7 @@ export default function ColorizeFAQSection() {
     {
       question: "How much does photo colorization cost?",
       answer:
-        "We offer 5 high-quality photo colorizations for just $2 - no subscription required. This one-time payment gives you professional-grade colorization in seconds, compared to traditional hand-colorization services that charge $100-500+ per photo.",
+        "We offer 5 high-quality photo colorizations for just $2.49 - no subscription required. This one-time payment gives you professional-grade colorization in seconds, compared to traditional hand-colorization services that charge $100-500+ per photo.",
     },
     {
       question: "Can I control or adjust the colors?",

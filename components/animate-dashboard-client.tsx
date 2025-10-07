@@ -4,6 +4,8 @@ import { useState, useRef, useCallback, useEffect } from "react"
 import { Upload, Play, Download, Loader2, ArrowLeft, Sparkles } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import DashboardHeader from "@/components/dashboard-header"
+import PaymentModal from "@/components/payment-modal"
+import PaymentSuccessModal from "@/components/payment-success-modal"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import CustomVideoPlayer from './custom-video-player'
@@ -16,6 +18,7 @@ interface AnimateDashboardClientProps {
     id: string
   }
   initialCredits: number
+  isPaymentSuccess: boolean
 }
 
 interface VideoGeneration {
@@ -59,7 +62,7 @@ const ANIMATION_PRESETS: AnimationPreset[] = [
 
 
 
-export default function AnimateDashboardClient({ user, initialCredits }: AnimateDashboardClientProps) {
+export default function AnimateDashboardClient({ user, initialCredits, isPaymentSuccess }: AnimateDashboardClientProps) {
   const [appState, setAppState] = useState<AppState>("upload")
   const [credits, setCredits] = useState(initialCredits)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -70,9 +73,22 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
   const [currentGeneration, setCurrentGeneration] = useState<VideoGeneration | null>(null)
   const [generations, setGenerations] = useState<VideoGeneration[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [showPaymentModal, setShowPaymentModal] = useState(false)
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(isPaymentSuccess)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const { toast } = useToast()
+
+  // Show success message if payment was successful
+  useEffect(() => {
+    if (isPaymentSuccess && credits > 0) {
+      setShowPaymentSuccess(true)
+      // Auto-hide success message after 5 seconds
+      const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [isPaymentSuccess, credits])
 
   // Check for preloaded image from sessionStorage on mount
   useEffect(() => {
@@ -189,8 +205,8 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
       return
     }
 
-    if (credits < 4) {
-      toast.error('Insufficient credits. Video generation requires 4 credits.')
+    if (credits < 10) {
+      toast.error('Insufficient credits. Video generation requires 10 credits.')
       return
     }
 
@@ -334,9 +350,26 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
     handleGenerate()
   }
 
+  // Handle payment modal actions
+  const handlePaymentSkip = () => {
+    setShowPaymentModal(false)
+  }
+
+  const handlePaymentSuccess = (newCredits: number) => {
+    setCredits(newCredits)
+    setShowPaymentModal(false)
+    setIsProcessingPayment(false)
+    
+    toast.success(`Credits Added Successfully! You now have ${newCredits} credits to restore images.`)
+  }
+
+  const handlePaymentError = (error: string) => {
+    setIsProcessingPayment(false)
+    toast.error(`Payment Failed: ${error}`)
+  }
+
   const handleBuyCredits = () => {
-    // This would open the payment modal - implement based on existing payment system
-    toast.info('Payment system integration needed')
+    setShowPaymentModal(true)
   }
 
   const handleDownloadVideo = (videoUrl: string) => {
@@ -381,6 +414,13 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
         onBuyCredits={handleBuyCredits} 
       />
       
+      {/* Payment Success Modal */}
+      <PaymentSuccessModal 
+        isOpen={showPaymentSuccess}
+        onClose={() => setShowPaymentSuccess(false)}
+        userCredits={credits}
+      />
+
       {/* Main Content */}
       <main className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
 
@@ -488,7 +528,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                   disabled={
                     !selectedFile ||
                     isProcessing ||
-                    credits < 4
+                    credits < 10
                   }
                   className="w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
                 >
@@ -500,7 +540,7 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
                   ) : (
                     <>
                       <Play className="w-5 h-5 mr-2" />
-                      Generate Video (4 credits)
+                      Generate Video (10 credits)
                     </>
                   )}
                 </Button>
@@ -730,6 +770,17 @@ export default function AnimateDashboardClient({ user, initialCredits }: Animate
           </div>
         )}
       </main>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onSkip={handlePaymentSkip}
+        onSuccess={handlePaymentSuccess}
+        onError={handlePaymentError}
+        isProcessing={isProcessingPayment}
+        setIsProcessing={setIsProcessingPayment}
+      />
     </div>
   )
 }

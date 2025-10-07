@@ -14,15 +14,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Get the plan from the database (only one plan now)
+    // Require explicit planId (supports premium-plan and plus-plan)
+    const body = await request.json().catch(() => ({} as any))
+    const selectedPlanId = typeof body?.planId === "string" ? body.planId.trim() : ""
+    if (!selectedPlanId) {
+      return NextResponse.json({ error: "planId is required" }, { status: 400 })
+    }
+
+    // Get the plan from the database
     const { data: plan, error: planError } = await supabase
       .from("payment_plans")
       .select("*")
-      .eq("id", "premium-plan")
+      .eq("id", selectedPlanId)
       .single()
 
     if (planError || !plan) {
-      return NextResponse.json({ error: "Premium plan not found" }, { status: 404 })
+      return NextResponse.json({ error: "Selected plan not found" }, { status: 404 })
+    }
+
+    // Validate product configuration to avoid placeholder IDs
+    if (!plan.dodo_product_id || [
+      "your_dodo_product_id_here",
+      "REPLACE_ME",
+      "REPLACE_WITH_PLUS_DODO_PRODUCT_ID",
+      "REPLACE_WITH_STARTER_DODO_PRODUCT_ID",
+      ""
+    ].includes(plan.dodo_product_id)) {
+      return NextResponse.json({ error: "Invalid product configuration for selected plan" }, { status: 400 })
     }
 
     // Create DodoPayments payment

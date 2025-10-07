@@ -49,7 +49,7 @@ export default function FeaturesSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">Why BringBack works like magic</h2>
+          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">Why BringBack AI works like magic</h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight mb-4">
             Advanced AI technology that restores photos and animates your loved ones with natural, lifelike movement
           </p>

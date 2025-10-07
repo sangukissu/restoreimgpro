@@ -21,7 +21,7 @@ export default function AnimateFAQSection() {
     },
     {
       question: "How many credits does it cost to animate a photo?",
-      answer: "Each photo animation costs 4 credits. You can purchase credits through our pricing plans or buy them individually as needed."
+      answer: "Each photo animation costs 10 credits. You can purchase credits through our pricing plans (Starter $2.49, Plus $4.99) or buy them individually as needed."
     },
     {
       question: "Can I use the Old Photo Revival template for modern photos?",

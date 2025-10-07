@@ -120,7 +120,7 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
               <Link href="/login">
 
               <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
-                Get Started for $2
+                Get Started for $2.49
               </Button>
               </Link>
               

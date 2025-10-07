@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Sparkles, ChevronRight } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
@@ -13,6 +12,8 @@ import ShowcaseSection from "@/components/showcase-section"
 import FAQSection from "@/components/faq-section"
 import MemoriesSection from "@/components/memories-section"
 import type { Metadata } from "next"
+import { Highlighter } from "@/components/ui/HIghlighter"
+import { SparklesText } from "@/components/ui/Magicsparks"
 
 
 export const metadata: Metadata = {
@@ -98,7 +99,7 @@ const homeFAQPageJsonLd = {
       name: 'How much do photo restoration and animation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Photo restoration: We offer 5 high-quality photo restorations for just $2 - no subscription required. Photo animation: Each animation costs 4 credits (available through our pricing plans). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.'
+        text: 'Photo restoration: We offer 5 high-quality photo restorations for just $2.49 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.'
       }
     },
     {
@@ -230,9 +231,8 @@ export default function Page() {
               >
                 <span className="relative z-10">old photos</span>
               </PointerHighlight>
-              <br />
               and
-              <br />
+
               <PointerHighlight
                 rectangleClassName="bg-blue-100 border-blue-300 leading-tight px-2"
                 pointerClassName="text-blue-500 h-3 w-3"
@@ -242,6 +242,7 @@ export default function Page() {
               </PointerHighlight>{" "}
               to life
             </h1>
+
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
               Restore and animate your precious memories. Our AI revives faded, torn, damaged or black-and-white photos and even makes your loved ones smile and wave again.
             </p>

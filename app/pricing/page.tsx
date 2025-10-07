@@ -4,11 +4,12 @@ import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Check, Star, Zap, Shield, Clock, ChevronRight } from "lucide-react"
+import { Check, Star, Zap, Shield, Clock, ChevronRight, Film, Sparkles } from "lucide-react"
+import { FramerButton } from "@/components/ui/framer-button"
 
 export const metadata: Metadata = {
-  title: "Pricing - BringBack | AI Photo Restoration",
-  description: "Simple, transparent pricing for AI photo restoration. $2 for 5 restorations, no subscriptions.",
+  title: "Pricing - BringBack.pro | AI Photo Restoration & Animation",
+  description: "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
   robots: "index, follow",
 }
 
@@ -23,69 +24,121 @@ export default function PricingPage() {
           <div className="text-center mb-16">
             <h1 className="text-4xl lg:text-5xl font-bold text-black mb-6">Simple, Fair Pricing</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              No subscriptions, no hidden fees. Just professional photo restoration at an honest price.
+              No subscriptions, no hidden fees. Just professional photo restoration at an honest price. Choose the plan that's right for you.
             </p>
           </div>
 
-          {/* Pricing Card */}
-          <div className="max-w-md mx-auto mb-16">
-            <div className="bg-gray-50 rounded-3xl p-8 border-2 border-gray-200 text-center relative">
-              {/* Popular Badge */}
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="bg-black text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-                  <Star className="w-4 h-4 mr-1" />
-                  Most Popular
-                </div>
-              </div>
+          {/* Pricing Cards */}
+          <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto mb-24">
 
-              <div className="mt-4 mb-8">
-                <div className="text-6xl font-bold text-black mb-2">$2</div>
+            {/* Starter Plan */}
+            <div className="bg-gray-50 rounded-3xl p-8 border-2 border-gray-200 h-full flex flex-col">
+              <h3 className="text-2xl font-bold text-black">Starter</h3>
+              <p className="text-gray-600 mt-1 mb-6">Perfect for high-quality photo restoration.</p>
+              
+              <div className="mb-8">
+                <span className="text-5xl font-bold text-black">$2.49</span>
                 <div className="text-gray-600 text-lg">One-time payment</div>
-                <div className="text-sm text-gray-500 mt-1">No monthly fees ever</div>
               </div>
 
-              <div className="space-y-4 mb-8 text-left">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Photo restorations</span>
-                  <span className="font-semibold text-black">5 images</span>
+              <div className="flex-grow space-y-4 mb-8 text-left">
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-700"><span className="font-semibold text-black">5</span> Photo Restorations</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Processing time</span>
-                  <span className="font-semibold text-black">30 seconds</span>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-700"><span className="font-semibold text-black">Free</span> Photo Enhance/Upscale</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">High resolution output</span>
-                  <Check className="w-5 h-5 text-green-500" />
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-700">High-Resolution Output</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Commercial usage rights</span>
-                  <Check className="w-5 h-5 text-green-500" />
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-700">Credits Never Expire</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">30-day money back</span>
-                  <Check className="w-5 h-5 text-green-500" />
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Credits never expire</span>
-                  <Check className="w-5 h-5 text-green-500" />
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-700">30-Day Money-Back Guarantee</span>
                 </div>
               </div>
-              <Link href="/login">
-              <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-              <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Restore Your Photos for $2</span>
-              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-              </i>
-            </Button>
-            </Link>
+              
+               <Link href="/login">
             
-              <p className="text-xs text-gray-500 mt-2">
-                Only $0.40 per photo
-              </p>
+             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full">
+            Get Started
+          </FramerButton>
+            </Link>
+            </div>
 
-              <p className="text-xs text-gray-500 mt-3">Secure payment • Instant access</p>
+            {/* Restore & Animate Plan (Best Value) */}
+            <div className="bg-black text-white rounded-3xl p-8 border-2 border-gray-800 relative h-full flex flex-col">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-gray-50 text-black px-4 py-2 rounded-full text-sm font-semibold flex items-center border border-gray-300">
+                  <Star className="w-4 h-4 mr-2 text-yellow-500" />
+                  Best Value
+                </div>
+              </div>
+
+              <h3 className="text-2xl font-bold text-white">Restore & Animate</h3>
+              <p className="text-gray-400 mt-1 mb-6">Everything in Starter, plus bring photos to life.</p>
+              
+              <div className="mb-8">
+                <span className="text-5xl font-bold text-white">$4.99</span>
+                <div className="text-gray-400 text-lg">One-time payment</div>
+              </div>
+
+              <div className="flex-grow space-y-4 mb-8 text-left">
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300"><span className="font-semibold text-white">5</span> Photo Restorations</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300"><span className="font-semibold text-white">Free</span> Photo Enhance/Upscale</span>
+                </div>
+                <div className="flex items-center font-bold">
+                  <Film className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span><span className="text-white">1</span> High-Quality Video Animation</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">High-Resolution Output</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">Credits Never Expire</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <span className="text-gray-300">30-Day Money-Back Guarantee</span>
+                </div>
+              </div>
+              
+              <Link href="/login" className="mt-auto">
+                <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full bg-white text-black hover:bg-gray-200">
+                  Bring Memories to Life
+                </FramerButton>
+              </Link>
             </div>
           </div>
+          
+          {/* NEW SECTION: Animation Value Proposition */}
+          <div className="mb-24 bg-gray-50 rounded-2xl p-8 lg:p-12 flex flex-col lg:flex-row items-center">
+             <div className="lg:w-1/2 lg:pr-12 text-center lg:text-left">
+                <h2 className="text-3xl font-bold text-black mb-4">Bring Your Story to Life</h2>
+                <p className="text-lg text-gray-600 mb-6">Go beyond a static image. Our AI adds gentle, lifelike motion to your restored photos. See a subtle smile, a gentle glance, and feel the moment again. It’s a magical way to reconnect with your most precious memories.</p>
+                <p className="text-gray-500">Included in the Restore & Animate plan.</p>
+             </div>
+             <div className="lg:w-1/2 mt-8 lg:mt-0">
+                {/* You can replace this div with a GIF or a video component */}
+                <div className="bg-gray-200 w-full h-80 rounded-xl flex items-center justify-center">
+                   <p className="text-gray-500">[Animation Example Video or GIF]</p>
+                </div>
+             </div>
+          </div>
+
 
           {/* Value Proposition */}
           <div className="grid md:grid-cols-3 gap-8 mb-16">
@@ -120,14 +173,14 @@ export default function PricingPage() {
                 <thead>
                   <tr className="border-b border-gray-200">
                     <th className="text-left py-4 px-4 font-semibold text-black">Feature</th>
-                    <th className="text-center py-4 px-4 font-semibold text-black">BringBack AI</th>
+                    <th className="text-center py-4 px-4 font-semibold text-black">BringBack.pro</th>
                     <th className="text-center py-4 px-4 font-semibold text-gray-600">Traditional Service</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
                   <tr className="border-b border-gray-100">
                     <td className="py-4 px-4 text-gray-700">Price per photo</td>
-                    <td className="py-4 px-4 text-center font-semibold text-green-600">$0.40</td>
+                    <td className="py-4 px-4 text-center font-semibold text-green-600">~$0.50</td>
                     <td className="py-4 px-4 text-center text-gray-600">$50-200</td>
                   </tr>
                   <tr className="border-b border-gray-100">
@@ -164,23 +217,21 @@ export default function PricingPage() {
             <h2 className="text-3xl font-bold text-black text-center mb-8">Pricing Questions</h2>
             <div className="space-y-6">
               <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-black mb-2">Why is BringBack so affordable?</h3>
+                <h3 className="text-lg font-semibold text-black mb-2">Is this a one-time payment?</h3>
                 <p className="text-gray-600">
-                  Our AI technology processes thousands of photos simultaneously, eliminating the need for expensive
-                  manual labor. We pass these savings directly to you.
+                  Yes! We believe in simple, honest pricing. Both our plans are a single, one-time purchase with no subscriptions or hidden fees.
+                </p>
+              </div>
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-black mb-2">What is the difference between the plans?</h3>
+                <p className="text-gray-600">
+                  The Starter plan provides 5 photo restorations. The Restore & Animate plan gives you the same 5 restorations, plus one credit to create a high-quality, gentle video animation from any one of your restored photos. Both plans include our free AI photo enhancement feature.
                 </p>
               </div>
               <div className="border-b border-gray-200 pb-6">
                 <h3 className="text-lg font-semibold text-black mb-2">Do credits expire?</h3>
                 <p className="text-gray-600">
-                  Never. Your restoration credits are yours forever. Use them next week or next year - they'll always be
-                  available.
-                </p>
-              </div>
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-black mb-2">Can I buy more credits?</h3>
-                <p className="text-gray-600">
-                  You can purchase additional restoration credits anytime. Each pack of 5 restorations costs $2.
+                  Never. Your restoration and animation credits are yours forever. Use them next week or next year - they'll always be available.
                 </p>
               </div>
               <div>
@@ -200,12 +251,13 @@ export default function PricingPage() {
               <p className="text-gray-300 mb-6">
                 Join thousands of families who've already brought their precious photos back to life.
               </p>
-              <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
-                Get Started for $2
-              </Button>
-              
-              <p className="text-xs text-gray-300 mt-2">
-                Only $0.40 per photo
+              <Link href="/login">
+                <Button className="bg-white text-black hover:bg-gray-200 px-8 py-3 h-auto font-medium text-base">
+                  Get Started Now
+                </Button>
+              </Link>
+              <p className="text-xs text-gray-500 mt-3">
+                Simple one-time pricing. Secure payment.
               </p>
             </div>
           </div>

@@ -74,14 +74,14 @@ export async function GET(request: NextRequest) {
 
     try {
       // Check status with FAL
-      const falStatus: FalStatus = await fal.queue.status("fal-ai/minimax/hailuo-02-fast/image-to-video", {
+      const falStatus: FalStatus = await fal.queue.status("fal-ai/minimax/hailuo-02/standard/image-to-video", {
         requestId: generation.fal_video_id,
         logs: true
       })
 
       if (falStatus.status === "COMPLETED") {
         // Get the result
-        const falResult: FalResult = await fal.queue.result("fal-ai/minimax/hailuo-02-fast/image-to-video", {
+        const falResult: FalResult = await fal.queue.result("fal-ai/minimax/hailuo-02/standard/image-to-video", {
           requestId: generation.fal_video_id
         })
 

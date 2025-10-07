@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 
@@ -13,6 +13,27 @@ interface PaymentPlanProps {
 
 export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsProcessing }: PaymentPlanProps) {
   const { toast, loading } = useToast()
+  const [plans, setPlans] = useState<Array<{ id: string; name: string; price_cents: number; credits: number }>>([])
+  const [selectedPlanId, setSelectedPlanId] = useState<string>("")
+
+  // Fetch available plans
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const res = await fetch(`/api/payment-plans?t=${Date.now()}`, { cache: "no-store" })
+        const data = await res.json()
+        setPlans(data || [])
+        if (data && data.length > 0) {
+          // Prefer selecting the 5-credit Starter plan by default if present
+          const starter = data.find((p: any) => p.credits === 5)
+          setSelectedPlanId((starter?.id as string) || data[0].id)
+        }
+      } catch (e) {
+        onError("Failed to load plans. Please try again later.")
+      }
+    }
+    fetchPlans()
+  }, [onError])
 
   const handlePurchase = async () => {
     setIsProcessing(true)
@@ -24,6 +45,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ planId: selectedPlanId })
       })
 
       if (!response.ok) {
@@ -31,11 +53,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
       }
 
       const { payment_link } = await response.json()
-      
-      // Dismiss loading toast before redirect
       toast.dismiss(loadingToastId)
-      
-      // Redirect to payment page
       window.location.href = payment_link
     } catch (error) {
       toast.dismiss(loadingToastId)
@@ -47,69 +65,44 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-xs hover:shadow-sm transition-shadow duration-200">
       <div className="text-center">
-        {/* Plan Header */}
-        <div className="mb-6">
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Plan</h3>
-          <p className="text-gray-600">Perfect for getting started</p>
-        </div>
+       
 
-        {/* Price */}
+        {/* Plan Selector */}
         <div className="mb-6">
-          <div className="flex items-baseline justify-center">
-            <span className="text-4xl font-bold text-gray-900">$2</span>
-            <span className="text-gray-500 ml-1">one-time</span>
+          <div className="grid grid-cols-1 gap-3">
+            {plans.map((plan) => (
+              <button
+                key={plan.id}
+                onClick={() => setSelectedPlanId(plan.id)}
+                className={`w-full text-left border rounded-xl p-4 transition-colors ${
+                  selectedPlanId === plan.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-semibold text-black">{plan.name}</div>
+                    <div className="text-sm text-gray-600">{plan.credits} credits</div>
+                  </div>
+                  <div className="text-xl font-bold text-black">${(plan.price_cents / 100).toFixed(2)}</div>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Features */}
-        <div className="mb-8">
-          <ul className="space-y-3 text-left">
-            <li className="flex items-center">
-              <svg className="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-gray-700">5 image restorations</span>
-            </li>
-            <li className="flex items-center">
-              <svg className="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-gray-700">High-quality AI restoration</span>
-            </li>
-            <li className="flex items-center">
-              <svg className="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-gray-700">Instant download</span>
-            </li>
-            <li className="flex items-center">
-              <svg className="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-gray-700">No monthly fees</span>
-            </li>
-          </ul>
+        {/* Purchase Button */}
+        <div className="mb-2">
+          <Button
+            onClick={handlePurchase}
+            disabled={isProcessing || !selectedPlanId}
+            className="w-full bg-black hover:bg-gray-800 text-white"
+          >
+            {isProcessing ? "Processing..." : "Continue to Checkout"}
+          </Button>
         </div>
-
-        {/* CTA Button */}
-        <Button
-          onClick={handlePurchase}
-          disabled={isProcessing}
-          className="w-full bg-black hover:bg-gray-800 text-white py-3 px-6 text-lg font-medium rounded-lg transition-colors duration-200"
-        >
-          {isProcessing ? "Processing..." : "Get Started - $2"}
-        </Button>
-        
-        <p className="text-xs text-gray-500 mt-2">
-          Only $0.40 per photo
-        </p>
-
-        {/* Additional Info */}
-        <p className="text-xs text-gray-500 mt-4">
-          Secure payment powered by DodoPayments
-        </p>
+        <p className="text-xs text-gray-500">Credits never expire</p>
       </div>
     </div>
   )

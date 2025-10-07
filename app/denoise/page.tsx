@@ -94,7 +94,7 @@ const denoiseFAQPageJsonLd = {
       "name": "How much does photo denoising cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "We offer 5 high-quality photo denoising cleanups for just $2 - no subscription required. This one-time payment gives you professional-grade noise removal in seconds, compared to traditional photo editing services that charge $30-100+ per photo."
+        "text": "We offer 5 high-quality photo denoising cleanups for just $2.49 - no subscription required. This one-time payment gives you professional-grade noise removal in seconds, compared to traditional photo editing services that charge $30-100+ per photo."
       }
     },
     {

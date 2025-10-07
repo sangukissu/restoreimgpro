@@ -92,8 +92,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to check credits" }, { status: 500 })
     }
 
-    if (!userProfile || userProfile.credits < 4) {
-      const error = createError.insufficientCredits(4, userProfile?.credits || 0)
+    if (!userProfile || userProfile.credits < 10) {
+      const error = createError.insufficientCredits(10, userProfile?.credits || 0)
       return NextResponse.json(error.toApiResponse(), { status: error.statusCode })
     }
 
@@ -158,14 +158,17 @@ export async function POST(request: NextRequest) {
     // Prepare input for Fal AI image-to-video model (following official documentation)
     const input = {
       image_url: uploadedFile,
-      prompt: preset.prompt
+      prompt: preset.prompt,
+      duration: "6" as const,
+      prompt_optimizer: false,
+      resolution: "768P" as const
     }
-
+    
     let requestId: string
     
     try {
       // Submit video generation request to FAL queue
-      const queueResult = await fal.queue.submit("fal-ai/minimax/hailuo-02-fast/image-to-video", {
+      const queueResult = await fal.queue.submit("fal-ai/minimax/hailuo-02/standard/image-to-video", {
         input: input
       })
       
@@ -183,7 +186,7 @@ export async function POST(request: NextRequest) {
       // Deduct credits immediately after successful submission
       await supabase
         .from("user_profiles")
-        .update({ credits: userProfile.credits - 4 })
+        .update({ credits: userProfile.credits - 10 })
         .eq("user_id", user.id)
 
       // Return the generation ID for polling
@@ -193,7 +196,7 @@ export async function POST(request: NextRequest) {
         requestId: requestId,
         status: "generating",
         preset: preset.name,
-        creditsRemaining: userProfile.credits - 4,
+        creditsRemaining: userProfile.credits - 10,
         message: "Video generation started. Use the polling endpoint to check status."
       })
         

@@ -309,7 +309,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
               Revive Your Photo
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Upload your old, damaged, or low-quality photos and watch our AI transform them into stunning restored images.
+              Upload your old, damaged, or low-quality photos and let our AI bring back your memories to life.
             </p>
           </div>
         )}

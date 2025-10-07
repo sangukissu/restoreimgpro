@@ -80,7 +80,7 @@ export default function TermsPage() {
                 <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
                   <h3 className="font-semibold text-green-900 mb-2">💳 Simple Pricing</h3>
                   <p className="text-green-800">
-                    $2 for 5 photo restorations. One-time payment, no subscriptions, no hidden fees.
+                    $2.49 for 5 photo restorations (Starter pack). Plus plan available at $4.99 for additional credits. One-time payments, no subscriptions, no hidden fees.
                   </p>
                 </div>
                 <div className="text-gray-700 space-y-4">
