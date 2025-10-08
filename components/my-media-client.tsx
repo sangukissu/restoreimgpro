@@ -104,15 +104,10 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
                   </video>
                 ) : (
                   <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <p className="text-gray-500">Video processing...</p>
+                    <p className="text-gray-500">Video is generating, please check back after 2-3 minutes...</p>
                   </div>
                 )}
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold">{video.preset_name}</h3>
-                  <p className="text-gray-400 text-xs mt-4">
-                    {new Date(video.created_at).toLocaleString()}
-                  </p>
-                </div>
+               
               </div>
             ))}
           </div>
