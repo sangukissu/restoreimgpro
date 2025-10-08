@@ -121,7 +121,7 @@ const colorizeFAQPageJsonLd = {
       "name": "Is my data safe during colorization?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely. Your photos are processed securely and automatically deleted from our servers within 30 minutes. We never store, share, or use your personal photos for any purpose other than colorization. Your family memories remain completely private."
+        "text": "Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is auotmatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you."
       }
     },
     {

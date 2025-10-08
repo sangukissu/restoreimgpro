@@ -39,7 +39,7 @@ export default function FeaturesSection() {
     {
       title: "Complete Privacy",
       description:
-        "Photos processed securely and deleted in 30 minutes. Your precious memories stay completely private.",
+        "Uploaded Photos processed securely and deleted in 30 minutes. Your precious memories stay completely private.",
       icon: <Lock className="h-6 w-6" />,
     },
   ]

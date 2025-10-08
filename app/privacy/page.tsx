@@ -76,7 +76,7 @@ export default function PrivacyPage() {
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
                   <h3 className="font-semibold text-blue-900 mb-2">🔒 Your Photos Are Safe</h3>
                   <p className="text-blue-800">
-                    All uploaded photos are automatically deleted from our servers within 30 minutes of processing. We
+                    All uploaded photos are automatically deleted from our servers within 30 minutes of processing. Generated media is automatically deleted after 7 days. We
                     never store, share, or use your personal photos for any purpose other than restoration.
                   </p>
                 </div>
@@ -85,7 +85,8 @@ export default function PrivacyPage() {
                     <li>Photos are encrypted during upload and processing</li>
                     <li>Access is restricted to authorized restoration systems only</li>
                     <li>No human employees view your personal photos</li>
-                    <li>Automatic deletion within 30 minutes guaranteed</li>
+                    <li>Automatic deletion of uploaded media within 30 minutes of processing guaranteed</li>
+                    <li>Automatic deletion of generated media after 7 days guaranteed</li>
                   </ul>
                 </div>
               </section>

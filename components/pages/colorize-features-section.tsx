@@ -33,7 +33,7 @@ export default function ColorizeFeaturesSection() {
     },
     {
       title: "Privacy Protection",
-      description: "Photos processed securely and deleted in 30 minutes. Your family memories stay private.",
+      description: "Uploaded Photos processed securely and deleted in 30 minutes. Your family memories stay private.",
       icon: <Lock className="h-6 w-6" />,
     },
   ]

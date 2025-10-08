@@ -133,7 +133,7 @@ export default function PricingPage() {
               <Shield className="w-12 h-12 text-green-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-black mb-3">100% Secure</h3>
               <p className="text-gray-600">
-                Your photos are encrypted and automatically deleted within 30 minutes. Complete privacy guaranteed.
+                Your photos are encrypted and uploaded media automatically deleted from our servers within 30 minutes. Complete privacy guaranteed.
               </p>
             </div>
             <div className="text-center p-6">

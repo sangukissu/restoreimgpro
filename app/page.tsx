@@ -107,7 +107,7 @@ const homeFAQPageJsonLd = {
       name: 'Is my personal data and photos safe?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely. Your photos are processed securely and automatically deleted from our servers within 30 minutes. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you.'
+        text: 'Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is auotmatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you.'
       }
     },
     {
@@ -179,7 +179,7 @@ const homeFAQPageJsonLd = {
       name: 'Are my uploaded photos kept private?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Photos are processed securely, and automatically deleted from our servers within 30 minutes for privacy. We never use your personal photos for training or any other purpose.'
+        text: 'Yes. Photos are processed securely, and uploaded photos are automatically deleted from our servers within 30 minutes and generated media is deleted after 7 days for privacy. We never use your personal photos for training or any other purpose.'
       }
     },
     {
