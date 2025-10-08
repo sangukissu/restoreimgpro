@@ -89,9 +89,9 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
       <main className="relative z-10 container mx-auto px-4 py-12 pt-24">
         <h1 className="text-3xl font-bold mb-8">My Media</h1>
         {videos && videos.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
             {videos.map((video) => (
-              <div key={video.id} className="border rounded-lg overflow-hidden">
+              <div key={video.id} className="break-inside-avoid mb-6 border rounded-lg overflow-hidden">
                 {video.video_url ? (
                   <video
                     src={video.video_url}
@@ -104,10 +104,10 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
                   </video>
                 ) : (
                   <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <p className="text-gray-500">Video is generating, please check back after 2-3 minutes...</p>
+                    <p className="text-gray-500">Video processing...</p>
                   </div>
                 )}
-               
+                
               </div>
             ))}
           </div>
