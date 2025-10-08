@@ -17,7 +17,7 @@ interface ImageUploadProps {
 // Security constants
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-const MAX_DIMENSIONS = 4096 // Max width/height in pixels
+const MAX_DIMENSIONS = 7680 // Max width/height in pixels
 const MIN_DIMENSIONS = 100 // Min width/height in pixels
 
 export default function ImageUpload({ onImageSelect, onRestore, selectedFile, selectedImageUrl, userCredits, onBuyCredits }: ImageUploadProps) {
