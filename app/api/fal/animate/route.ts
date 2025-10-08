@@ -159,17 +159,18 @@ export async function POST(request: NextRequest) {
     const input = {
       image_url: uploadedFile,
       prompt: preset.prompt,
-      duration: "6" as const,
-      prompt_optimizer: false,
-      resolution: "768P" as const
+      duration: "5" as const,
+      negative_prompt: "blur, distort, and low quality",
+      cfg_scale: 0.5
     }
     
     let requestId: string
     
     try {
       // Submit video generation request to FAL queue
-      const queueResult = await fal.queue.submit("fal-ai/minimax/hailuo-02/standard/image-to-video", {
-        input: input
+      const queueResult = await fal.queue.submit("fal-ai/kling-video/v2.5-turbo/pro/image-to-video", {
+        input: input,
+        webhookUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/fal/webhook?generationId=${videoGeneration.id}`
       })
       
       requestId = queueResult.request_id

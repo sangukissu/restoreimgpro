@@ -34,7 +34,9 @@ const baseConfig: SecurityConfig = {
       'https://fal.ai',
       'https://*.fal.ai',
       'https://dodopayments.com',
-      'https://*.dodopayments.com'
+      'https://*.dodopayments.com',
+      'https://1262a1778d74.ngrok-free.app',
+      'https://*.ngrok-free.app'
     ],
     'media-src': ["'self'", 'blob:'],
     'object-src': ["'none'"],

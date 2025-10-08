@@ -77,7 +77,6 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
   const [isProcessingPayment, setIsProcessingPayment] = useState(false)
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(isPaymentSuccess)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const pollIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const { toast } = useToast()
 
   // Show success message if payment was successful
@@ -111,14 +110,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
     }
   }, [])
 
-  // Cleanup polling interval on unmount
-  useEffect(() => {
-    return () => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current)
-      }
-    }
-  }, [])
+
 
   const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -176,28 +168,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
     return data.id
   }
 
-  const pollVideoStatus = async (generationId: string): Promise<VideoGeneration> => {
-    const response = await fetch(`/api/fal/animate/status?id=${generationId}`)
-    
-    if (!response.ok) {
-      const errorData = await response.json()
-      // Handle new error response format
-      const errorMessage = errorData.error?.message || errorData.error || 'Failed to check video status'
-      throw new Error(errorMessage)
-    }
 
-    const data = await response.json()
-    return {
-      id: data.id,
-      video_id: data.id,
-      status: data.status,
-      originalImageUrl: selectedImageUrl || '',
-      videoUrl: data.videoUrl,
-      preset_id: selectedPreset.id,
-      preset_name: data.preset || selectedPreset.name,
-      created_at: data.createdAt || new Date().toISOString()
-    }
-  }
 
   const handleGenerate = async () => {
     if (!selectedFile) {
@@ -244,86 +215,16 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
       setCurrentGeneration(newGeneration)
       setGenerations(prev => [newGeneration, ...prev])
       
-      // Credits will be deducted server-side and updated via polling
-      
-      // Start polling for status updates after a short delay to ensure DB record is created
+      // Redirect to my-media page after a short delay
       setTimeout(() => {
-        let pollAttempts = 0
-        const maxPollAttempts = 200 // 10 minutes at 3-second intervals
-        
-        pollIntervalRef.current = setInterval(async () => {
-          try {
-            pollAttempts++
-            const updatedGeneration = await pollVideoStatus(generationId)
-            
-            setCurrentGeneration(updatedGeneration)
-            setGenerations(prev => prev.map(gen => 
-              gen.id === generationId ? updatedGeneration : gen
-            ))
-            
-            // Stop polling if completed or failed
-            if (updatedGeneration.status === 'completed' || updatedGeneration.status === 'failed') {
-              if (pollIntervalRef.current) {
-                clearInterval(pollIntervalRef.current)
-                pollIntervalRef.current = null
-              }
-              setIsProcessing(false)
-              
-              if (updatedGeneration.status === 'completed') {
-                toast.success('Video generated successfully!')
-                setAppState('results')
-              } else {
-                toast.error('Video generation failed')
-                setError('Video generation failed. Please try again.')
-              }
-            }
-            
-            // Stop polling after max attempts
-            if (pollAttempts >= maxPollAttempts) {
-              if (pollIntervalRef.current) {
-                clearInterval(pollIntervalRef.current)
-                pollIntervalRef.current = null
-              }
-              setIsProcessing(false)
-              setError('Video generation timed out. Please try again.')
-              toast.error('Generation timed out')
-            }
-          } catch (pollError) {
-            console.error('Polling error:', pollError)
-            // For the first few attempts, ignore "Generation not found" errors
-            // as the database record might still be creating
-            if (pollAttempts <= 3) {
-              console.log('Ignoring early polling error, DB record may still be creating...')
-              return
-            }
-            
-            // After initial attempts, stop polling on persistent errors
-            if (pollError instanceof Error && pollError.message.includes('Generation not found')) {
-              if (pollIntervalRef.current) {
-                clearInterval(pollIntervalRef.current)
-                pollIntervalRef.current = null
-              }
-              setIsProcessing(false)
-              setError('Generation not found. Please try again.')
-              toast.error('Generation not found')
-            }
-          }
-        }, 3000) // Poll every 3 seconds
-      }, 2000) // Wait 2 seconds before starting polling
-      
-    } catch (error) {
+        window.location.href = '/dashboard/my-media'
+      }, 1000)
+    } catch (error: any) {
+      setError(error.message)
+      toast.error(error.message)
+      setAppState("upload")
+    } finally {
       setIsProcessing(false)
-      
-      // Extract error message from new error format
-      let errorMessage = 'Generation failed'
-      if (error instanceof Error) {
-        errorMessage = error.message
-      } else if (typeof error === 'object' && error !== null && 'message' in error) {
-        errorMessage = String(error.message)
-      }
-      
-      setError(errorMessage)
-      toast.error(errorMessage)
     }
   }
 
@@ -685,90 +586,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
           </div>
         )}
 
-        {/* Previous Generations */}
-        {generations.length > 1 && (
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Previous Generations</h2>
-            <div className="grid gap-6">
-              {generations.slice(1).map((generation) => (
-                <div key={generation.id} className="bg-white rounded-2xl shadow-sm border-2 border-gray-200 p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center space-x-4">
-                      <Image 
-                        src={generation.originalImageUrl} 
-                        alt="Original image" 
-                        width={80}
-                        height={80}
-                        className="rounded-xl object-cover"
-                      />
-                      <div>
-                        <h3 className="font-semibold text-gray-900">Old Photo Revival</h3>
-                        <p className="text-sm text-gray-500">
-                          {new Date(generation.created_at).toLocaleDateString()}
-                        </p>
-                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 ${
-                          generation.status === 'completed' ? 'bg-green-100 text-green-800' :
-                          generation.status === 'failed' ? 'bg-red-100 text-red-800' :
-                          'bg-yellow-100 text-yellow-800'
-                        }`}>
-                          {generation.status}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Video Display */}
-                  {generation.status === 'completed' && generation.videoUrl && (
-                    <div className="space-y-4">
-                      <video 
-                        src={generation.videoUrl} 
-                        controls 
-                        className="w-full max-w-md rounded-xl border-2 border-gray-200"
-                        poster={generation.originalImageUrl}
-                      />
-                      <div className="flex gap-3">
-                        <Button
-                          onClick={() => handleDownloadVideo(generation.videoUrl!)}
-                          size="sm"
-                          className="bg-green-600 hover:bg-green-700 text-white"
-                        >
-                          <Download className="w-4 h-4 mr-2" />
-                          Download
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setCurrentGeneration(generation)
-                            setAppState('results')
-                          }}
-                          size="sm"
-                          variant="outline"
-                        >
-                          <Play className="w-4 h-4 mr-2" />
-                          View Details
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Processing State */}
-                  {(generation.status === 'generating' || generation.status === 'uploading') && (
-                    <div className="flex items-center space-x-3 text-gray-600">
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Processing...</span>
-                    </div>
-                  )}
-                  
-                  {/* Failed State */}
-                  {generation.status === 'failed' && (
-                    <div className="text-red-600 text-sm">
-                      Generation failed. Please try again.
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+
       </main>
 
       {/* Payment Modal */}
