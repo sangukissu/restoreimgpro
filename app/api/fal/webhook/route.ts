@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server";
+import { supabaseAdmin } from "@/utils/supabase/admin";
 import { uploadVideoToBlob, downloadVideoFromUrl } from "@/lib/vercel-blob";
 import { logError } from "@/lib/error-handling";
 
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const supabase = await createClient();
+    const supabase = supabaseAdmin;
     const bodyText = await request.text();
     const body = JSON.parse(bodyText);
     const { status, error, payload } = body;
