@@ -12,8 +12,7 @@ import ShowcaseSection from "@/components/showcase-section"
 import FAQSection from "@/components/faq-section"
 import MemoriesSection from "@/components/memories-section"
 import type { Metadata } from "next"
-import { Highlighter } from "@/components/ui/HIghlighter"
-import { SparklesText } from "@/components/ui/Magicsparks"
+import Image from "next/image"
 
 
 export const metadata: Metadata = {
@@ -115,7 +114,7 @@ const homeFAQPageJsonLd = {
       name: 'How long does the restoration and animation process take?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Photo restoration takes under 30 seconds, while photo animation typically takes 30-60 seconds depending on complexity. Both processes happen in real-time with no waiting days or weeks like traditional services.'
+        text: 'Photo restoration takes under 30-60 seconds, while photo animation typically takes 2-3 minutes. Both processes happen in real-time with no waiting days or weeks like traditional services.'
       }
     },
     {
@@ -276,24 +275,15 @@ export default function Page() {
                 ))}
               </div>
             </div>
-            <p className="text-gray-600 font-medium">Loved by Everyone</p>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">Loved by Everyone</p>
           </div>
           
           {/* Peerlist Badge */}
-          <div className="flex justify-center pt-4">
-            <a 
-              href="https://peerlist.io/harvansh/project/bringback-ai" 
-              target="_blank" 
-              rel="noreferrer"
-              className="transition-transform hover:scale-105"
-            > 
-              <img 
-                src="https://peerlist.io/api/v1/projects/embed/PRJHDNDGKO6Q7LN8AINDNK96OBDLLL?showUpvote=true&theme=light" 
-                alt="BringBack AI on Peerlist" 
-                className="h-12 sm:h-16 md:h-18 w-auto" 
-              /> 
+          <div className="flex justify-center pt-4 space-x-4">
+            <a href="https://peerlist.io/harvansh/project/bringback-ai" target="_blank" rel="noopener noreferrer">
+              <Image src="/peerlist.svg" alt="Peerlist Badge" className="h-12 sm:h-16 md:h-18 w-auto" width={171} height={54} />
             </a>
-          </div>
+              </div>
         
         </div>
         </div>
@@ -339,7 +329,7 @@ export default function Page() {
 
             <Link href="/dashboard">
             
-             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
+             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden  sm:w-auto">
             Start bringing memories to life
           </FramerButton>
             </Link>

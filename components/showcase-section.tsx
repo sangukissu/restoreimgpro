@@ -265,7 +265,7 @@ come to life</h3>
             
               <Link href="/login">
             
-             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
+             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden sm:w-auto">
             Upload & Animate Now
           </FramerButton>
             </Link>

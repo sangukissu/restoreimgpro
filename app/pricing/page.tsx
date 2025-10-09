@@ -98,7 +98,7 @@ export default function PricingPage() {
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">High-Resolution Output</span>
+                  <span className="text-gray-300">1080P High-Resolution Output</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
@@ -147,7 +147,7 @@ export default function PricingPage() {
 
           {/* Comparison */}
           <div className="bg-gray-50 rounded-2xl p-8 mb-16">
-            <h2 className="text-3xl font-bold text-black text-center mb-8">How We Compare</h2>
+            <h2 className="text-3xl font-bold text-black text-center mb-8">How We Compare photo restoration</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -175,13 +175,7 @@ export default function PricingPage() {
                     </td>
                     <td className="py-4 px-4 text-center text-gray-600">Varies</td>
                   </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 text-gray-700">Revisions included</td>
-                    <td className="py-4 px-4 text-center">
-                      <Check className="w-5 h-5 text-green-500 mx-auto" />
-                    </td>
-                    <td className="py-4 px-4 text-center text-gray-600">Extra cost</td>
-                  </tr>
+                  
                   <tr>
                     <td className="py-4 px-4 text-gray-700">Money-back guarantee</td>
                     <td className="py-4 px-4 text-center font-semibold text-green-600">30 days</td>
@@ -205,7 +199,7 @@ export default function PricingPage() {
               <div className="border-b border-gray-200 pb-6">
                 <h3 className="text-lg font-semibold text-black mb-2">What is the difference between the plans?</h3>
                 <p className="text-gray-600">
-                  The Starter plan provides 5 photo restorations. The Restore & Animate plan gives you the same 5 restorations, plus one credit to create a high-quality, gentle video animation from any one of your restored photos. Both plans include our free AI photo enhancement feature.
+                  The Starter plan provides 5 photo restorations. The Restore & Animate plan gives you the same 5 restorations, plus 10 credits to create a high-quality, gentle video animation from any one of your restored photos. Both plans include our free AI photo enhancement feature.
                 </p>
               </div>
               <div className="border-b border-gray-200 pb-6">

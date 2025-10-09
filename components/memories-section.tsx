@@ -25,8 +25,8 @@ export default function MemoriesSection() {
               <div className="text-2xl mb-3">👨‍👩‍👧‍👦</div>
               <h3 className="text-xl font-semibold text-black mb-2">Family Portraits</h3>
               <p className="text-gray-600 leading-relaxed">
-                Watch grandparents smile, see children laugh, and bring family gatherings back to life with gentle,
-                natural animation.
+                That familiar twinkle in your grandmother’s eye, the infectious giggle of your children, the warmth of a
+                family hug—see it all again, not just as a static image, but as a living moment.
               </p>
             </div>
           </div>
@@ -37,8 +37,8 @@ export default function MemoriesSection() {
               <div className="text-2xl mb-3">💒</div>
               <h3 className="text-xl font-semibold text-black mb-2">Wedding Memories</h3>
               <p className="text-gray-600 leading-relaxed">
-                Restore the magic of your special day. See the bride's smile, the groom's joy, and relive those precious
-                vows.
+                The day you said 'I do' was filled with a million tiny, perfect moments. We bring back the nervous
+                smile, the joyful tear, and the loving glance that made your wedding day uniquely yours.
               </p>
             </div>
           </div>
@@ -49,8 +49,8 @@ export default function MemoriesSection() {
               <div className="text-2xl mb-3">🏛️</div>
               <h3 className="text-xl font-semibold text-black mb-2">Historical Moments</h3>
               <p className="text-gray-600 leading-relaxed">
-                Bring history to life. From vintage portraits to historical events, watch the past move again with
-                respectful animation.
+                History isn't just dates and facts; it's the stories of those who came before us. Watch ancestors and
+                historical figures come to life, connecting you to your past in a way you never thought possible.
               </p>
             </div>
           </div>
@@ -61,8 +61,8 @@ export default function MemoriesSection() {
               <div className="text-2xl mb-3">🧸</div>
               <h3 className="text-xl font-semibold text-black mb-2">Childhood Memories</h3>
               <p className="text-gray-600 leading-relaxed">
-                See your younger self come alive. Watch childhood innocence, playful moments, and growing up memories
-                move again.
+                That mischievous grin, the scraped knees from a summer of adventure, the pure joy of being a kid.
+                Reconnect with your inner child and see your own story unfold.
               </p>
             </div>
           </div>
@@ -73,8 +73,8 @@ export default function MemoriesSection() {
               <div className="text-2xl mb-3">🐕</div>
               <h3 className="text-xl font-semibold text-black mb-2">Beloved Pets</h3>
               <p className="text-gray-600 leading-relaxed">
-                Honor your furry friends. Watch their tails wag, see their playful expressions, and remember the joy
-                they brought.
+                They're not just pets; they're family. We bring back the happy tail wags, the gentle purrs, and the
+                unconditional love that made them so special. See your best friend again.
               </p>
             </div>
           </div>
@@ -85,8 +85,8 @@ export default function MemoriesSection() {
               <div className="text-2xl mb-3">🎖️</div>
               <h3 className="text-xl font-semibold text-black mb-2">Military Heritage</h3>
               <p className="text-gray-600 leading-relaxed">
-                Honor service members. Restore uniforms, medals, and bring dignity to those who served with respectful
-                animation.
+                A uniform tells a story of courage, sacrifice, and honor. We restore these powerful portraits with the
+                dignity and respect they deserve, creating a moving tribute to the heroes in your family.
               </p>
             </div>
           </div>

@@ -67,6 +67,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
   const [credits, setCredits] = useState(initialCredits)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
+  const [isPreloadingImage, setIsPreloadingImage] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState<AnimationPreset>(ANIMATION_PRESETS[0])
 
   const [isProcessing, setIsProcessing] = useState(false)
@@ -93,6 +94,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
   useEffect(() => {
     const preloadedImageUrl = sessionStorage.getItem('preloadedImageUrl')
     if (preloadedImageUrl) {
+      setIsPreloadingImage(true)
       // Convert URL to File object
       fetch(preloadedImageUrl)
         .then(response => response.blob())
@@ -107,8 +109,11 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
         .catch(error => {
           console.error('Error loading preloaded image:', error)
         })
-    }
-  }, [])
+        .finally(() => {
+          setIsPreloadingImage(false)
+        })
+  }
+}, [])
 
 
 
@@ -344,10 +349,18 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                       Upload Image
                     </label>
                     <div 
-                      onClick={() => fileInputRef.current?.click()}
+                      onClick={() => !isPreloadingImage && fileInputRef.current?.click()}
                       className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 transition-colors group"
                     >
-                      {selectedImageUrl ? (
+                      {isPreloadingImage ? (
+                        <div className="space-y-4 py-6 flex flex-col items-center">
+                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                          </div>
+                          <p className="text-gray-700 font-medium">Loading your image from previous step...</p>
+                          <p className="text-sm text-gray-500">Please wait while we prepare it for animation</p>
+                        </div>
+                      ) : selectedImageUrl ? (
                         <div className="space-y-4 ">
                           <Image 
                             src={selectedImageUrl} 
@@ -429,7 +442,8 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                   disabled={
                     !selectedFile ||
                     isProcessing ||
-                    credits < 10
+                    credits < 10 ||
+                    isPreloadingImage
                   }
                   className="w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
                 >

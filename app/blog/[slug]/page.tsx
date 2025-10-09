@@ -230,8 +230,8 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16">
-            <div className="bg-black text-white rounded-2xl p-8 max-w-2xl mx-auto">
+        <div className="text-center mt-16 px-4">
+            <div className="bg-black text-white rounded-xl p-8 max-w-2xl mx-auto">
               <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
               <p className="text-gray-300 mb-6">
                 Join thousands of families who've already brought their precious photos back to life.

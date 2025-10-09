@@ -131,6 +131,18 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
     window.location.href = '/dashboard/animate'
   }
 
+  // Add navigation to Enhance page with restored image
+  const handleNavigateEnhance = () => {
+    try {
+      const url = new URL('/enhance', window.location.origin)
+      url.searchParams.set('image', restoredUrl)
+      window.location.href = url.toString()
+    } catch (e) {
+      // Fallback if URL construction fails
+      window.location.href = `/enhance?image=${encodeURIComponent(restoredUrl)}`
+    }
+  }
+
   // Memoize the clip path to prevent unnecessary recalculations
   const clipPathStyle = useMemo(() => ({
     clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
@@ -238,6 +250,22 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
                 />
               </svg>
               Download
+            </Button>
+
+            {/* Free Enhance Button */}
+            <Button
+              onClick={handleNavigateEnhance}
+              className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v4m0 0V4m0 4h4m-4 0H8m8 8H8m8 0a4 4 0 01-8 0"
+                />
+              </svg>
+              Free Enhance
             </Button>
 
             <Button

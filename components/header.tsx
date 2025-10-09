@@ -152,8 +152,7 @@ export default function Header() {
     { name: "Features", link: "/#features" },
     { name: "How it works", link: "/#how-it-works" },
     { name: "Pricing", link: "/#pricing" },
-    { name: "Examples", link: "/#examples" },
-    
+
   ]
 
   return (

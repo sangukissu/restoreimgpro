@@ -1,14 +1,16 @@
-# MiniMax Hailuo 02 [Standard] (Image to Video)
+# CodeFormer
 
-> MiniMax Hailuo-02 Image To Video API (Standard, 768p, 512p): Advanced image-to-video generation model with 768p and 512p resolutions
+> Fix distorted or blurred photos of people with CodeFormer.
 
 
 ## Overview
 
-- **Endpoint**: `https://fal.run/fal-ai/minimax/hailuo-02/standard/image-to-video`
-- **Model ID**: `fal-ai/minimax/hailuo-02/standard/image-to-video`
-- **Category**: image-to-video
+- **Endpoint**: `https://fal.run/fal-ai/codeformer`
+- **Model ID**: `fal-ai/codeformer`
+- **Category**: image-to-image
 - **Kind**: inference
+**Tags**: image-restoration, faces, utility
+
 
 
 ## API Information
@@ -22,28 +24,32 @@ See the input and output schema below, as well as the usage examples.
 The API accepts the following input parameters:
 
 
-- **`prompt`** (`string`, _required_)
-  - Examples: "Man walked into winter cave with polar bear"
+- **`image_url`** (`string`, _required_):
+  URL of image to be used for relighting
+  - Examples: "https://storage.googleapis.com/falserverless/model_tests/codeformer/codeformer_poor_1.jpeg"
 
-- **`image_url`** (`string`, _required_)
-  - Examples: "https://storage.googleapis.com/falserverless/model_tests/minimax/1749891352437225630-389852416840474630_1749891352.png"
+- **`fidelity`** (`float`, _optional_):
+  Weight of the fidelity factor. Default value: `0.5`
+  - Default: `0.5`
 
-- **`duration`** (`DurationEnum`, _optional_):
-  The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution. Default value: `"6"`
-  - Default: `"6"`
-  - Options: `"6"`, `"10"`
+- **`upscaling`** (`float`, _optional_):
+  Upscaling factor Default value: `2`
+  - Default: `2`
 
-- **`prompt_optimizer`** (`boolean`, _optional_):
-  Whether to use the model's prompt optimizer Default value: `true`
+- **`aligned`** (`boolean`, _optional_):
+  Should faces etc should be aligned.
+  - Default: `false`
+
+- **`only_center_face`** (`boolean`, _optional_):
+  Should only center face be restored
+  - Default: `false`
+
+- **`face_upscale`** (`boolean`, _optional_):
+  Should faces be upscaled Default value: `true`
   - Default: `true`
 
-- **`resolution`** (`ResolutionEnum`, _optional_):
-  The resolution of the generated video. Default value: `"768P"`
-  - Default: `"768P"`
-  - Options: `"512P"`, `"768P"`
-
-- **`end_image_url`** (`string`, _optional_):
-  Optional URL of the image to use as the last frame of the video
+- **`seed`** (`integer`, _optional_):
+  Random seed for reproducible generation.
 
 
 
@@ -51,8 +57,7 @@ The API accepts the following input parameters:
 
 ```json
 {
-  "prompt": "Man walked into winter cave with polar bear",
-  "image_url": "https://storage.googleapis.com/falserverless/model_tests/minimax/1749891352437225630-389852416840474630_1749891352.png"
+  "image_url": "https://storage.googleapis.com/falserverless/model_tests/codeformer/codeformer_poor_1.jpeg"
 }
 ```
 
@@ -60,11 +65,10 @@ The API accepts the following input parameters:
 
 ```json
 {
-  "prompt": "Man walked into winter cave with polar bear",
-  "image_url": "https://storage.googleapis.com/falserverless/model_tests/minimax/1749891352437225630-389852416840474630_1749891352.png",
-  "duration": "6",
-  "prompt_optimizer": true,
-  "resolution": "768P"
+  "image_url": "https://storage.googleapis.com/falserverless/model_tests/codeformer/codeformer_poor_1.jpeg",
+  "fidelity": 0.5,
+  "upscaling": 2,
+  "face_upscale": true
 }
 ```
 
@@ -73,9 +77,13 @@ The API accepts the following input parameters:
 
 The API returns the following output format:
 
-- **`video`** (`File`, _required_):
-  The generated video
-  - Examples: {"url":"https://v3.fal.media/files/monkey/xF9OsLwGjjNURyAxD8RM1_output.mp4"}
+- **`image`** (`Image`, _required_):
+  The generated image file info.
+  - Examples: {"file_size":423052,"height":512,"file_name":"36d3ca4791a647678b2ff01a35c87f5a.png","content_type":"image/png","url":"https://storage.googleapis.com/falserverless/model_tests/codeformer/codeformer_restored_1.jpeg","width":512}
+
+- **`seed`** (`integer`, _required_):
+  Seed of the generated Image. It will be the same value of the one passed in the
+  input or the randomly generated that was used in case none was passed.
 
 
 
@@ -83,8 +91,13 @@ The API returns the following output format:
 
 ```json
 {
-  "video": {
-    "url": "https://v3.fal.media/files/monkey/xF9OsLwGjjNURyAxD8RM1_output.mp4"
+  "image": {
+    "file_size": 423052,
+    "height": 512,
+    "file_name": "36d3ca4791a647678b2ff01a35c87f5a.png",
+    "content_type": "image/png",
+    "url": "https://storage.googleapis.com/falserverless/model_tests/codeformer/codeformer_restored_1.jpeg",
+    "width": 512
   }
 }
 ```
@@ -96,12 +109,11 @@ The API returns the following output format:
 
 ```bash
 curl --request POST \
-  --url https://fal.run/fal-ai/minimax/hailuo-02/standard/image-to-video \
+  --url https://fal.run/fal-ai/codeformer \
   --header "Authorization: Key $FAL_KEY" \
   --header "Content-Type: application/json" \
   --data '{
-     "prompt": "Man walked into winter cave with polar bear",
-     "image_url": "https://storage.googleapis.com/falserverless/model_tests/minimax/1749891352437225630-389852416840474630_1749891352.png"
+     "image_url": "https://storage.googleapis.com/falserverless/model_tests/codeformer/codeformer_poor_1.jpeg"
    }'
 ```
 
@@ -124,10 +136,9 @@ def on_queue_update(update):
            print(log["message"])
 
 result = fal_client.subscribe(
-    "fal-ai/minimax/hailuo-02/standard/image-to-video",
+    "fal-ai/codeformer",
     arguments={
-        "prompt": "Man walked into winter cave with polar bear",
-        "image_url": "https://storage.googleapis.com/falserverless/model_tests/minimax/1749891352437225630-389852416840474630_1749891352.png"
+        "image_url": "https://storage.googleapis.com/falserverless/model_tests/codeformer/codeformer_poor_1.jpeg"
     },
     with_logs=True,
     on_queue_update=on_queue_update,
@@ -148,10 +159,9 @@ Then use the API client to make requests:
 ```javascript
 import { fal } from "@fal-ai/client";
 
-const result = await fal.subscribe("fal-ai/minimax/hailuo-02/standard/image-to-video", {
+const result = await fal.subscribe("fal-ai/codeformer", {
   input: {
-    prompt: "Man walked into winter cave with polar bear",
-    image_url: "https://storage.googleapis.com/falserverless/model_tests/minimax/1749891352437225630-389852416840474630_1749891352.png"
+    image_url: "https://storage.googleapis.com/falserverless/model_tests/codeformer/codeformer_poor_1.jpeg"
   },
   logs: true,
   onQueueUpdate: (update) => {
@@ -169,9 +179,9 @@ console.log(result.requestId);
 
 ### Documentation
 
-- [Model Playground](https://fal.ai/models/fal-ai/minimax/hailuo-02/standard/image-to-video)
-- [API Documentation](https://fal.ai/models/fal-ai/minimax/hailuo-02/standard/image-to-video/api)
-- [OpenAPI Schema](https://fal.ai/api/openapi/queue/openapi.json?endpoint_id=fal-ai/minimax/hailuo-02/standard/image-to-video)
+- [Model Playground](https://fal.ai/models/fal-ai/codeformer)
+- [API Documentation](https://fal.ai/models/fal-ai/codeformer/api)
+- [OpenAPI Schema](https://fal.ai/api/openapi/queue/openapi.json?endpoint_id=fal-ai/codeformer)
 
 ### fal.ai Platform
 

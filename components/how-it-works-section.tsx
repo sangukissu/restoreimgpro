@@ -8,8 +8,7 @@ export default function HowItWorksSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <p className="text-gray-500 italic text-lg mb-4">Our Process, Explained</p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-black">Here's how BringBack             <Cover>works</Cover>
-</h2>
+          <h2 className="text-4xl lg:text-5xl font-bold text-black">Your Memories, Reborn in 3 Simple Steps</h2>
         </div>
 
         {/* Process Cards */}
@@ -20,9 +19,9 @@ export default function HowItWorksSection() {
               <div className="mb-6">
                 <span className="text-6xl font-bold text-black">1</span>
               </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Upload & Restore</h3>
+              <h3 className="text-2xl font-bold text-black mb-4">Upload & See the Magic</h3>
               <p className="text-gray-600 leading-relaxed">
-Upload your old, damaged, or faded photos. Our AI instantly restores quality, fixes damage, and enhances every detail.
+                Simply upload any photo—no matter how old, torn, or faded. In seconds, our AI gets to work, meticulously restoring color, clarity, and detail with breathtaking accuracy.
               </p>
             </div>
 
@@ -31,9 +30,9 @@ Upload your old, damaged, or faded photos. Our AI instantly restores quality, fi
               <div className="mb-6">
                 <span className="text-6xl font-bold text-black">2</span>
               </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Animate</h3>
+              <h3 className="text-2xl font-bold text-black mb-4">Bring Them to Life</h3>
               <p className="text-gray-600 leading-relaxed">
-                Watch as our AI brings your loved ones to life with natural movements, gentle smiles, and realistic animations.
+                This is where the real magic happens. With a single click, animate your restored photo. Watch in awe as your loved ones offer a gentle smile, a subtle blink, or a warm wave—movements so natural, it feels like they're right there with you.
               </p>
             </div>
 
@@ -42,9 +41,9 @@ Upload your old, damaged, or faded photos. Our AI instantly restores quality, fi
               <div className="mb-6">
                 <span className="text-6xl font-bold text-black">3</span>
               </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Re-live Your Memories</h3>
+              <h3 className="text-2xl font-bold text-black mb-4">Download & Share the Joy</h3>
               <p className="text-gray-600 leading-relaxed">
-                Download your restored photos and animated videos. Share moving memories with family and relive precious moments.
+                Your reborn memories are ready to be cherished. Download your high-resolution photo and animated video. Share them with family, post them on social media, and spark conversations that bring generations together.
               </p>
             </div>
           </div>
