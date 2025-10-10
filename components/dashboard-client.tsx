@@ -10,6 +10,7 @@ import FeedbackModal from "@/components/feedback-modal"
 import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
 import { useFeedback } from "@/hooks/use-feedback"
+import LetterGlitch from "@/components/ui/letter-glitch"
 
 type AppState = "upload" | "loading" | "comparison" | "error"
 
@@ -330,32 +331,17 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         {/* Loading State */}
         {appState === "loading" && (
           <div className="w-full max-w-2xl mx-auto">
-            <div className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-2xl p-16 text-center">
-              <div className="space-y-6">
-                {/* Animated restoration icon */}
-                <div className="w-20 h-20 mx-auto relative">
-                  <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
-                  <div className="absolute inset-0 border-4 border-black rounded-full border-t-transparent animate-spin"></div>
-                  <div className="absolute inset-4 flex items-center justify-center">
-                    <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-inter font-semibold text-xl text-black mb-2">
-                    Giving one more life to your past...
-                  </h3>
-                  <p className="text-gray-600">
-                    Our AI is carefully restoring your image
-                  </p>
-                </div>
+            <div className="bg-black border border-gray-800 rounded-2xl p-16 text-center relative overflow-hidden aspect-video flex items-center justify-center">
+              <div className="absolute inset-0 w-full h-full">
+                <LetterGlitch glitchSpeed={1} />
+              </div>
+              <div className="relative z-10 space-y-4">
+                <h3 className="font-inter font-semibold text-2xl text-white mb-2">
+                  Giving one more life to your past...
+                </h3>
+                <p className="text-gray-400">
+                  Our AI is carefully restoring your image. This can take up to a minute.
+                </p>
               </div>
             </div>
           </div>
