@@ -120,7 +120,7 @@ export default function EnhancedImageComparison({ restoredUrl, enhancedUrl, onSt
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+      <div className="bg-white/60 backdrop-blur-sm border rounded-xl p-6">
         <div className="space-y-8">
           <div className="text-center">
             <h3 className="font-medium text-xl text-gray-900 mb-1">Enhancement Complete</h3>
@@ -130,7 +130,7 @@ export default function EnhancedImageComparison({ restoredUrl, enhancedUrl, onSt
           <div className="flex justify-center">
             <div
               ref={containerRef}
-              className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
+              className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
               onMouseDown={handleMouseDown}
               onTouchStart={handleTouchStart}
               style={{ touchAction: "none" }}

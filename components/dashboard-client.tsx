@@ -11,6 +11,7 @@ import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
 import { useFeedback } from "@/hooks/use-feedback"
 import LetterGlitch from "@/components/ui/letter-glitch"
+import { analyzeRestoredImage, rerestoreImage, type AnalyzeImageResponse } from "@/lib/api-client"
 
 type AppState = "upload" | "loading" | "comparison" | "error"
 
@@ -20,6 +21,7 @@ interface RestorationData {
   originalFile: File
   originalUrl: string
   restoredUrl: string
+  initialRestoredUrl: string
   featureType: FeatureType
 }
 
@@ -48,6 +50,12 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   // Add ref to track current restoration request
   const isRestoringRef = useRef(false)
   
+  // New analysis and re-restoration states
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [analysis, setAnalysis] = useState<AnalyzeImageResponse | null>(null)
+  const [isRerestoring, setIsRerestoring] = useState(false)
+  const [hasUsedSecondPass, setHasUsedSecondPass] = useState(false)
+
   // Feedback system integration
   const {
     shouldShowFeedback,
@@ -117,13 +125,27 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         finalCredits = newCredits
         setUserCredits(newCredits)
         
-        setRestorationData({
+        const newData: RestorationData = {
           originalFile: selectedFile,
           originalUrl: selectedImageUrl!,
           restoredUrl: response.restoredImageUrl,
+          initialRestoredUrl: response.restoredImageUrl,
           featureType: selectedFeature!,
-        })
+        }
+        setRestorationData(newData)
+        setHasUsedSecondPass(false)
         setAppState("comparison")
+        
+        // Trigger post-restore analysis (non-blocking)
+        setIsAnalyzing(true)
+        analyzeRestoredImage(newData.originalUrl, newData.restoredUrl, newData.initialRestoredUrl)
+          .then((res) => {
+            setAnalysis(res)
+          })
+          .catch((e) => {
+            console.error("Analyze failed", e)
+          })
+          .finally(() => setIsAnalyzing(false))
         
         // Track restoration completion for feedback system
         await trackRestoration()
@@ -158,6 +180,8 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     setSelectedFile(null)
     setSelectedImageUrl(null)
     setRestorationData(null)
+    setAnalysis(null)
+    setHasUsedSecondPass(false)
     setError(null)
   }
   
@@ -305,11 +329,11 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
 
         {/* Upload State Header */}
         {(appState === "upload" || appState === "loading" || appState === "comparison" || appState === "error") && (
-          <div className="text-center mb-12">
-            <h1 className="font-inter font-bold text-3xl text-black mb-4">
+          <div className="text-center max-w-2xl mx-auto mb-4">
+            <h1 className="font-inter font-bold text-3xl text-black">
               Revive Your Photo
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 leading-tight">
               Upload your old, damaged, or low-quality photos and let our AI bring back your memories to life.
             </p>
           </div>
@@ -337,24 +361,113 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
               </div>
               <div className="relative z-10 space-y-4">
                 <h3 className="font-inter font-semibold text-2xl text-white mb-2">
-                  Giving one more life to your past...
+                  {isRerestoring ? "Making one more improvement..." : "Giving one more life to your past..."}
                 </h3>
-                <p className="text-gray-400">
-                  Our AI is carefully restoring your image. This can take up to a minute.
+                <p className="text-gray-100">
+                  {isRerestoring
+                    ? "We’re refining your photo to preserve identity and reduce artifacts. This can take up to a minute."
+                    : "Our AI is carefully restoring your image. This can take up to a minute."}
                 </p>
               </div>
+              
             </div>
           </div>
         )}
 
         {/* Comparison State */}
         {appState === "comparison" && restorationData && (
-          <ImageComparison
-            originalUrl={restorationData.originalUrl}
-            restoredUrl={restorationData.restoredUrl}
-            onStartOver={handleStartOver}
-            onDownload={handleDownload}
-          />
+          <>
+            {/* Analysis status strip (reserved space) above comparison */}
+            <div className="mb-4 w-full max-w-4xl mx-auto min-h-16">
+              {isAnalyzing && (
+                <div
+                  className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 transition-colors"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Analyzing restored image for remaining issues...
+                </div>
+              )}
+              {!isAnalyzing && analysis && analysis.shouldRerestore && !hasUsedSecondPass && (
+                <div className="relative overflow-hidden rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50 p-5 shadow-sm">
+                  {/* banner content unchanged */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+                          <path d="M12 3l1.5 3.9 3.9 1.5-3.9 1.5-1.5 3.9-1.5-3.9-3.9-1.5 3.9-1.5L12 3z" />
+                          <path d="M6 14l.8 2.1 2.1.8-2.1.8L6 20l-.8-2.1-2.1-.8 2.1-.8L6 14z" />
+                          <path d="M18 14l.8 2.1 2.1.8-2.1.8L18 20l-.8-2.1-2.1-.8 2.1-.8L18 14z" />
+                        </svg>
+                      </span>
+                      <div>
+                        <h4 className="text-amber-900 font-semibold">We found a few issues in the AI restoration</h4>
+                        <p className="text-amber-900/80 text-sm">We can refine your photo and reduce artifacts with one more pass. It’s quick and completely free.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded text-sm disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-auto"
+                        disabled={isRerestoring}
+                        onClick={async () => {
+                          if (!restorationData?.restoredUrl || !analysis?.analysis?.recommended_second_pass_prompt) return
+                          try {
+                            setIsRerestoring(true)
+                            setAnalysis(null)
+                            setIsAnalyzing(false)
+                            setAppState("loading")
+                            const res = await rerestoreImage(restorationData.restoredUrl, analysis.analysis.recommended_second_pass_prompt, restorationData.initialRestoredUrl)
+                            if (res.success && res.imageUrl) {
+                              const updatedData = { ...restorationData, restoredUrl: res.imageUrl }
+                              setRestorationData(updatedData)
+                              setHasUsedSecondPass(true)
+                              toast.success("We improved your photo — enjoy the enhanced result!")
+                              // re-analyze the new result
+                              setIsAnalyzing(true)
+                              analyzeRestoredImage(updatedData.originalUrl, updatedData.restoredUrl, updatedData.initialRestoredUrl)
+                                .then((res) => {
+                                  setAnalysis(res)
+                                })
+                                .catch((e) => {
+                                  console.error("Analyze failed", e)
+                                })
+                                .finally(() => setIsAnalyzing(false))
+                              setAppState("comparison")
+                            } else {
+                              toast.error(res.error || "Failed to apply the free improvement.")
+                              setAppState("comparison")
+                            }
+                          } catch (e) {
+                            toast.error("Failed to apply the free improvement.")
+                            setAppState("comparison")
+                          } finally {
+                            setIsRerestoring(false)
+                          }
+                        }}
+                      >
+                        {isRerestoring ? "Improving..." : "Fix my photo (free)"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!isAnalyzing && analysis && !analysis.shouldRerestore && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800">
+                  Looks good — no second pass needed.
+                </div>
+              )}
+              {!isAnalyzing && !analysis && (
+                <div className="h-0" aria-hidden />
+              )}
+            </div>
+
+            <ImageComparison
+              originalUrl={restorationData.originalUrl}
+              restoredUrl={restorationData.restoredUrl}
+              onStartOver={handleStartOver}
+              onDownload={handleDownload}
+            />
+          </>
         )}
 
         {/* Error State */}

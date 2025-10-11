@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { SparklesCore } from "@/components/ui/sparkles"
 import { AnimatePresence, motion } from "framer-motion"
 import { IconDotsVertical } from "@tabler/icons-react"
+import { DownloadIcon, ImageOffIcon, ImageUpIcon, Videotape,  } from "lucide-react"
 
 interface ImageComparisonProps {
   originalUrl: string
@@ -150,11 +151,10 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+      <div className="bg-white/60 backdrop-blur-sm border rounded-xl p-6">
         <div className="space-y-8">
           {/* Header */}
           <div className="text-center">
-            <h3 className="font-medium text-xl text-gray-900 mb-1">Restoration Complete</h3>
             <p className="text-gray-500 text-sm">Drag the slider to compare before and after</p>
           </div>
 
@@ -162,7 +162,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
           <div className="flex justify-center">
             <div
               ref={containerRef}
-              className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
+              className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
               onMouseDown={handleMouseDown}
               onTouchStart={handleTouchStart}
               style={{ touchAction: "none" }} // Prevent default touch behaviors
@@ -228,12 +228,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
             </div>
           </div>
 
-          {/* AI Restoration Description */}
-          <div className="text-center mt-6 mb-4">
-            <p className="text-gray-600 text-sm leading-relaxed max-w-2xl mx-auto">
-              Your photo has been enhanced. Here’s what we fixed: removed noise, fixed blur, restored details, added natural color.
-            </p>
-          </div>
+       
 
           {/* Buttons */}
           <div className="flex flex-wrap gap-3 justify-center items-center pt-2">
@@ -241,14 +236,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
               onClick={handleDownload}
               className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+              <DownloadIcon className="w-4 h-4" />
               Download
             </Button>
 
@@ -257,14 +245,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
               onClick={handleNavigateEnhance}
               className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v4m0 0V4m0 4h4m-4 0H8m8 8H8m8 0a4 4 0 01-8 0"
-                />
-              </svg>
+              <ImageUpIcon className="w-4 h-4" />
               Free Enhance
             </Button>
 
@@ -272,14 +253,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
               onClick={handleGenerateVideo}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M9 10V9a2 2 0 012-2h2a2 2 0 012 2v1m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v1"
-                />
-              </svg>
+              <Videotape className="w-4 h-4" />
               Generate Video
             </Button>
 
