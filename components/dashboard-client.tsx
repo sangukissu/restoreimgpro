@@ -11,6 +11,8 @@ import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
 import { useFeedback } from "@/hooks/use-feedback"
 import LetterGlitch from "@/components/ui/letter-glitch"
+import { OrbitSepiaDust } from "@/components/ui/orbit-sepia-dust"
+
 import { analyzeRestoredImage, rerestoreImage, type AnalyzeImageResponse } from "@/lib/api-client"
 
 type AppState = "upload" | "loading" | "comparison" | "error"
@@ -357,7 +359,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
           <div className="w-full max-w-2xl mx-auto">
             <div className="bg-black border border-gray-800 rounded-2xl p-16 text-center relative overflow-hidden aspect-video flex items-center justify-center">
               <div className="absolute inset-0 w-full h-full">
-                <LetterGlitch glitchSpeed={1} />
+                <OrbitSepiaDust />
               </div>
               <div className="relative z-10 space-y-4">
                 <h3 className="font-inter font-semibold text-2xl text-white mb-2">

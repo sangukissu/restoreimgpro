@@ -117,7 +117,11 @@ export default function PricingPage() {
               </Link>
             </div>
           </div>
-          
+           <div className="text-center mt-4 max-w-3xl mx-auto"> 
+           <p className="text-md text-gray-500 mt-2">
+                Even after restoration, if we detect any damage (tears, stains, scratches) is still present which costed you one credit, <span className="font-bold text-red-500">we automatically offer one free re‑restoration.</span>
+              </p>
+</div>
 
 
           {/* Value Proposition */}

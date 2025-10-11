@@ -21,7 +21,7 @@ export default function HowItWorksSection() {
               </div>
               <h3 className="text-2xl font-bold text-black mb-4">Upload & See the Magic</h3>
               <p className="text-gray-600 leading-relaxed">
-                Simply upload any photo—no matter how old, torn, or faded. In seconds, our AI gets to work, meticulously restoring color, clarity, and detail with breathtaking accuracy.
+                Simply upload any photo, no matter how old, torn, or faded. In seconds, our AI gets to work, meticulously restoring color, clarity, and detail with breathtaking accuracy.
               </p>
             </div>
 
@@ -32,7 +32,7 @@ export default function HowItWorksSection() {
               </div>
               <h3 className="text-2xl font-bold text-black mb-4">Bring Them to Life</h3>
               <p className="text-gray-600 leading-relaxed">
-                This is where the real magic happens. With a single click, animate your restored photo. Watch in awe as your loved ones offer a gentle smile, a subtle blink, or a warm wave—movements so natural, it feels like they're right there with you.
+                This is where the real magic happens. With a single click, animate your restored photo. Watch in awe as your loved ones offer a gentle smile, a subtle blink, or a warm wavemovements so natural, it feels like they're right there with you.
               </p>
             </div>
 
@@ -41,13 +41,13 @@ export default function HowItWorksSection() {
               <div className="mb-6">
                 <span className="text-6xl font-bold text-black">3</span>
               </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Download & Share the Joy</h3>
+              <h3 className="text-2xl font-bold text-black mb-4">Animate & Share</h3>
               <p className="text-gray-600 leading-relaxed">
-                Your reborn memories are ready to be cherished. Download your high-resolution photo and animated video. Share them with family, post them on social media, and spark conversations that bring generations together.
-              </p>
+                Your reborn memories are ready to be cherished. Download your high-resolution photo and animated video. Share them with family, post them on social media, and spark conversations that bring generations together.              </p>
+             
             </div>
           </div>
-
+         
           {/* Connection Line 1 to 2 - Made shorter */}
           <div className="absolute top-0 sm:-rotate-45 left-1/4 w-1/6 h-32 hidden lg:block z-20">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 247 69">

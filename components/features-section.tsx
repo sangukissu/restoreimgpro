@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { cn } from "@/lib/utils"
-import { Wrench, Eye, Palette, Heart, Lock, Play } from "lucide-react"
+import { Wrench, Eye, Palette, Heart, Lock, Play, ShieldCheck } from "lucide-react"
 
 export default function FeaturesSection() {
   const features = [
@@ -41,6 +41,12 @@ export default function FeaturesSection() {
       description:
         "Uploaded Photos processed securely and deleted in 30 minutes. Your precious memories stay completely private.",
       icon: <Lock className="h-6 w-6" />,
+    },
+    {
+      title: "Smart Damage Check + Free Re‑Restoration",
+      description:
+        "If we detect heavy damage (tears, stains, scratches), we automatically offer a free second pass. Minor noise/blur doesn’t qualify.",
+      icon: <ShieldCheck className="h-6 w-6" />,
     },
   ]
 
