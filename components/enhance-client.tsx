@@ -6,6 +6,7 @@ import PaymentModal from "@/components/payment-modal"
 import PaymentSuccessModal from "@/components/payment-success-modal"
 import EnhancedImageComparison from "@/components/enhanced-image-comparison"
 import { useToast } from "@/hooks/use-toast"
+import LetterGlitch from "@/components/ui/letter-glitch"
 
 interface EnhanceClientProps {
   user: {
@@ -151,7 +152,13 @@ export default function EnhanceClient({ user, initialCredits, restoredImageUrl }
         {!enhancedImageUrl && (
           <div className="w-full max-w-4xl mx-auto bg-white/60 backdrop-blur-sm border border-gray-200 rounded-2xl p-6">
             <div className="flex flex-col items-center gap-6">
-              <img src={restoredImageUrl} alt="Restored" className="max-h-[500px] w-auto object-contain rounded-lg border-4 border-gray-200" />
+              {isEnhancing ? (
+                <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] rounded-lg overflow-hidden border-4 border-gray-200 shadow-sm">
+                  <LetterGlitch glitchSpeed={20} smooth outerVignette />
+                </div>
+              ) : (
+                <img src={restoredImageUrl} alt="Restored" className="max-h-[500px] w-auto object-contain rounded-lg border-4 border-gray-200" />
+              )}
               <div className="flex gap-3">
                 <button
                   onClick={handleEnhance}

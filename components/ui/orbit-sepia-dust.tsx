@@ -22,7 +22,7 @@ function OrbitSepiaDustBase({
   speed = 1,
   vignette = true,
   grain = false,
-  microcopy = ["Rewinding memories…", "Mending the grain…", "Breathing time back in…"],
+  microcopy = [],
 }: SepiaOrbitProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const rafRef = useRef<number | null>(null)
@@ -249,24 +249,6 @@ function OrbitSepiaDustBase({
   return (
     <div className="absolute inset-0">
       <canvas ref={canvasRef} className="block h-full w-full" />
-      {microcopy?.length ? (
-        <div
-          aria-live="polite"
-          className="pointer-events-none absolute inset-x-0 bottom-4 flex items-center justify-center"
-        >
-          <div
-            className="rounded px-3 py-1.5 text-sm"
-            style={{
-              background: "rgba(239, 228, 216, 0.08)",
-              color: PALETTE.cream,
-              border: "1px solid rgba(200, 169, 107, 0.25)",
-              textShadow: "0 1px 0 rgba(0,0,0,0.45)",
-            }}
-          >
-            {microcopy[msgIndex]}
-          </div>
-        </div>
-      ) : null}
     </div>
   )
 }
