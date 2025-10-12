@@ -84,8 +84,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
               // GA4: track click on Buy More from header
               try {
                 if (typeof window !== 'undefined' && (window as any).gtag) {
-                  (window as any).gtag('event', 'select_promotion', {
-                    promotion_name: 'Header Buy Credits',
+                  (window as any).gtag('event', 'buy_credits_click', {
                     location: 'dashboard_header',
                   })
                 }
@@ -191,8 +190,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
               // GA4: track click on Buy in mobile header
               try {
                 if (typeof window !== 'undefined' && (window as any).gtag) {
-                  (window as any).gtag('event', 'select_promotion', {
-                    promotion_name: 'Header Buy Credits (Mobile)',
+                  (window as any).gtag('event', 'buy_credits_click', {
                     location: 'dashboard_header_mobile',
                   })
                 }
