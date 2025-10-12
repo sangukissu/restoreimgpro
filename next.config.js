@@ -29,13 +29,15 @@ const nextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // unsafe-inline needed for Next.js
-          "style-src 'self' 'unsafe-inline'", // unsafe-inline needed for Tailwind CSS
-          "img-src 'self' data: https: blob:", // Allow images from various sources
+          // Allow GA scripts (gtag) to load
+          "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+          "style-src 'self' 'unsafe-inline'",
+          "img-src 'self' data: https: blob:",
           "font-src 'self' data:",
-          "connect-src 'self' https://api.supabase.co https://*.supabase.co https://fal.ai https://*.fal.ai https://dodopayments.com https://*.dodopayments.com", // API endpoints
+          // Allow GA to send events
+          "connect-src 'self' https://api.supabase.co https://*.supabase.co https://fal.ai https://*.fal.ai https://dodopayments.com https://*.dodopayments.com https://www.google-analytics.com https://www.googletagmanager.com",
           "media-src 'self' blob: https://*.public.blob.vercel-storage.com",
-          "frame-src 'self' https://www.youtube.com https://youtube.com", // Allow YouTube iframes
+          "frame-src 'self' https://www.youtube.com https://youtube.com",
           "object-src 'none'",
           "base-uri 'self'",
           "form-action 'self'",

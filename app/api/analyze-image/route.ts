@@ -12,14 +12,12 @@ async function urlToGenerativePart(url: string): Promise<Part> {
   try {
     const response = await fetch(url, { signal: controller.signal });
     if (!response.ok) {
-      console.warn('[analyze-image] Fetch image failed:', url, response.status, response.statusText)
       throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
     }
     const buffer = await response.arrayBuffer();
     const contentType = response.headers.get('content-type') || mime.getType(url);
 
     if (!contentType) {
-      console.warn('[analyze-image] Missing content type for:', url)
       throw new Error('Could not determine content type of the image.');
     }
 
@@ -38,12 +36,10 @@ export async function POST(req: NextRequest) {
   const reqStart = Date.now()
   try {
     const body = await req.json();
-    console.debug('[analyze-image] Request body:', body)
     const restoredUrl: string | undefined = body?.restoredUrl || body?.imageUrl; // support old clients
     const originalUrl: string | undefined = body?.originalUrl;
 
     if (!restoredUrl || typeof restoredUrl !== 'string') {
-      console.warn('[analyze-image] 400 invalid restoredUrl:', restoredUrl)
       return NextResponse.json({ error: 'restoredUrl is required' }, { status: 400 });
     }
 
@@ -67,25 +63,21 @@ Guidance:\n
       model: 'gemini-flash-lite-latest',
     });
     const genMs = Date.now() - genStart
-    console.debug('[analyze-image] Model generateContent duration:', genMs, 'ms')
 
     const responseText =
       (result as any).text ??
       result.candidates?.[0]?.content?.parts?.find((p: any) => p?.text)?.text;
 
     if (!responseText || typeof responseText !== 'string') {
-      console.warn('[analyze-image] 502 no text output from model')
       return NextResponse.json({ error: 'Model did not return text output' }, { status: 502 });
     }
 
     const cleaned = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-    console.debug('[analyze-image] Raw model text (first 300 chars):', cleaned.slice(0, 300))
 
     let parsed: any;
     try {
       parsed = JSON.parse(cleaned);
     } catch (e) {
-      console.warn('[analyze-image] 502 parse error. Preview:', cleaned.slice(0, 300))
       return NextResponse.json({ error: 'Failed to parse analysis JSON', details: cleaned.slice(0, 300) }, { status: 502 });
     }
 
@@ -133,7 +125,7 @@ Guidance:\n
     }
 
     const totalMs = Date.now() - reqStart
-    console.debug('[analyze-image] Response payload:', resPayload, `(${totalMs}ms total)`) 
+    // Removed noisy debug log for production readiness
     return NextResponse.json(resPayload);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';

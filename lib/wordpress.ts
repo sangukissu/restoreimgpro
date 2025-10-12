@@ -178,7 +178,6 @@ async function fetchGraphQL(query: string, variables: Record<string, any> = {}, 
     
     // Retry logic for network errors
     if (retries > 0 && (error instanceof TypeError || (error as Error).name === 'AbortError')) {
-      console.warn(`Retrying GraphQL request. Attempts remaining: ${retries - 1}`)
       await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second before retry
       return fetchGraphQL(query, variables, retries - 1)
     }
@@ -213,7 +212,7 @@ export async function getAllPosts(first: number = 10, after?: string): Promise<{
     // Import fallback data dynamically to avoid circular dependencies
     const { fallbackBlogPosts } = await import('./fallback-data')
     
-    return {
+    return {  
       posts: fallbackBlogPosts.slice(0, first),
       pageInfo: {
         hasNextPage: false,

@@ -60,15 +60,11 @@ export async function analyzeRestoredImage(originalUrl: string | null, restoredU
   if (originalUrl) payload.originalUrl = originalUrl
   if (initialRestoredUrl) payload.initialRestoredUrl = initialRestoredUrl
   try {
-    console.debug('[analyzeRestoredImage] Request payload:', payload)
-
     const response = await fetch('/api/analyze-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     })
-
-    console.debug('[analyzeRestoredImage] HTTP status:', response.status)
 
     let data: any
     try {
@@ -79,7 +75,6 @@ export async function analyzeRestoredImage(originalUrl: string | null, restoredU
     }
 
     const endTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now()
-    console.debug('[analyzeRestoredImage] Response JSON:', data, `(${Math.round(endTime - startTime)}ms)`) 
 
     if (!response.ok) {
       return { error: data.error || 'Failed to analyze image' }
