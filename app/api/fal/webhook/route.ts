@@ -5,7 +5,6 @@ import { logError } from "@/lib/error-handling";
 
 export async function POST(request: NextRequest) {
   const generationId = request.nextUrl.searchParams.get("generationId");
-  console.log("FAL webhook called for generationId:", generationId);
 
   if (!generationId) {
     console.error("Missing generationId in webhook call");
@@ -17,11 +16,9 @@ export async function POST(request: NextRequest) {
     const bodyText = await request.text();
     const body = JSON.parse(bodyText);
     const { status, error, payload } = body;
-    console.log(`Webhook status: ${status} for generationId: ${generationId}`);
 
     if (status === "OK") {
       const videoUrl = payload.video.url;
-      console.log(`Downloading video from: ${videoUrl}`);
 
       const { data: generation, error: fetchError } = await supabase
         .from("video_generations")
@@ -40,14 +37,12 @@ export async function POST(request: NextRequest) {
       }
 
       const videoBuffer = await downloadVideoFromUrl(videoUrl);
-      console.log(`Downloaded video buffer, size: ${videoBuffer.length}`);
 
       const blobUrl = await uploadVideoToBlob(
         videoBuffer,
         `video-${generation.id}.mp4`,
         generation.user_id
       );
-      console.log(`Uploaded video to Vercel Blob: ${blobUrl}`);
 
       await supabase
         .from("video_generations")
@@ -57,9 +52,7 @@ export async function POST(request: NextRequest) {
           updated_at: new Date().toISOString(),
         })
         .eq("id", generation.id);
-      console.log(`Updated database for generationId: ${generationId}`);
     } else if (status === "ERROR") {
-      console.error(`Webhook reported error for generationId: ${generationId}`, error);
       await supabase
         .from("video_generations")
         .update({

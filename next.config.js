@@ -29,20 +29,19 @@ const nextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          // Allow GA scripts (gtag) to load
           "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+          "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
           "style-src 'self' 'unsafe-inline'",
-          "img-src 'self' data: https: blob:",
+          "img-src 'self' data: https: blob: https://www.google-analytics.com",
           "font-src 'self' data:",
-          // Allow GA to send events
-          "connect-src 'self' https://api.supabase.co https://*.supabase.co https://fal.ai https://*.fal.ai https://dodopayments.com https://*.dodopayments.com https://www.google-analytics.com https://www.googletagmanager.com",
+          "connect-src 'self' https://api.supabase.co https://*.supabase.co https://fal.ai https://*.fal.ai https://dodopayments.com https://*.dodopayments.com https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com",
           "media-src 'self' blob: https://*.public.blob.vercel-storage.com",
           "frame-src 'self' https://www.youtube.com https://youtube.com",
           "object-src 'none'",
           "base-uri 'self'",
           "form-action 'self'",
           "frame-ancestors 'none'",
-          isProduction ? "upgrade-insecure-requests" : ""
+          process.env.NODE_ENV === 'production' ? "upgrade-insecure-requests" : ""
         ].filter(Boolean).join('; ')
       },
       // Cross-Origin policies
