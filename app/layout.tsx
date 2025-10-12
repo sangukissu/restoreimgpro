@@ -148,18 +148,20 @@ export default function RootLayout({
         {children}
         <NetworkStatus />
         <Toaster />
-        {/* Simple Analytics Script */}
+        
+        {/* Google Analytics */}
         <Script
-          src="https://scripts.simpleanalyticscdn.com/latest.js"
+          src="https://www.googletagmanager.com/gtag/js?id=G-184H988WCE"
           strategy="afterInteractive"
         />
-        <noscript>
-          <img
-            src="https://queue.simpleanalyticscdn.com/noscript.gif"
-            alt=""
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </noscript>
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);} 
+            gtag('js', new Date());
+            gtag('config', 'G-184H988WCE');
+          `}
+        </Script>
       </body>
     </html>
   )

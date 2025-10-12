@@ -139,9 +139,17 @@ export function useFeedback(): UseFeedbackReturn {
   }, [])
 
   // Show feedback modal
-  const showFeedbackModal = useCallback(() => {
+  const showFeedbackModal = () => {
     setIsModalOpen(true)
-  }, [])
+    // GA4: track feedback promotion when modal opens
+    try {
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'view_promotion', {
+          promotion_name: 'Feedback Modal',
+        })
+      }
+    } catch {}
+  }
 
   // Hide feedback modal
   const hideFeedbackModal = useCallback(() => {

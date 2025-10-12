@@ -39,6 +39,39 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     setIsProcessing(true)
     const loadingToastId = loading("Creating payment...")
 
+    // GA4: Track begin_checkout when user clicks Continue to Checkout
+    try {
+      const selectedPlan = plans.find((p) => p.id === selectedPlanId)
+      if (selectedPlan && typeof window !== "undefined") {
+        // Persist a local marker to detect checkout return without success
+        try {
+          localStorage.setItem('buyCheckout', JSON.stringify({
+            planId: selectedPlan.id,
+            planName: selectedPlan.name,
+            credits: selectedPlan.credits,
+            amount: Number((selectedPlan.price_cents / 100).toFixed(2)),
+            startedAt: new Date().toISOString(),
+          }))
+        } catch { /* ignore storage errors */ }
+
+        if ((window as any).gtag) {
+          (window as any).gtag('event', 'begin_checkout', {
+            value: Number((selectedPlan.price_cents / 100).toFixed(2)),
+            currency: 'USD',
+            items: [
+              {
+                item_id: selectedPlan.id,
+                item_name: selectedPlan.name,
+                price: Number((selectedPlan.price_cents / 100).toFixed(2)),
+                quantity: 1,
+                credits: selectedPlan.credits,
+              }
+            ]
+          })
+        }
+      }
+    } catch { /* ignore analytics errors */ }
+
     try {
       const response = await fetch("/api/create-payment", {
         method: "POST",
@@ -52,7 +85,18 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         throw new Error("Failed to create payment")
       }
 
-      const { payment_link } = await response.json()
+      const { payment_link, payment_id } = await response.json()
+
+      // Update localStorage marker with payment_id for GA purchase transaction_id
+      try {
+        const markerStr = localStorage.getItem('buyCheckout')
+        if (markerStr) {
+          const marker = JSON.parse(markerStr)
+          marker.paymentId = payment_id
+          localStorage.setItem('buyCheckout', JSON.stringify(marker))
+        }
+      } catch { /* ignore storage errors */ }
+
       toast.dismiss(loadingToastId)
       window.location.href = payment_link
     } catch (error) {

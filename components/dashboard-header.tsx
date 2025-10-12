@@ -79,7 +79,18 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
             </span>
           </div>
           <button
-            onClick={onBuyCredits}
+            onClick={() => {
+              onBuyCredits()
+              // GA4: track click on Buy More from header
+              try {
+                if (typeof window !== 'undefined' && (window as any).gtag) {
+                  (window as any).gtag('event', 'select_promotion', {
+                    promotion_name: 'Header Buy Credits',
+                    location: 'dashboard_header',
+                  })
+                }
+              } catch { /* ignore analytics errors */ }
+            }}
             className="text-xs px-3 py-1.5 rounded font-medium transition-colors bg-black text-white hover:bg-gray-800"
           >
             Buy More
@@ -175,7 +186,18 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
           
           {/* Mobile Buy Credits Button */}
           <button
-            onClick={onBuyCredits}
+            onClick={() => {
+              onBuyCredits()
+              // GA4: track click on Buy in mobile header
+              try {
+                if (typeof window !== 'undefined' && (window as any).gtag) {
+                  (window as any).gtag('event', 'select_promotion', {
+                    promotion_name: 'Header Buy Credits (Mobile)',
+                    location: 'dashboard_header_mobile',
+                  })
+                }
+              } catch { /* ignore analytics errors */ }
+            }}
             className="text-xs px-3 py-1.5 rounded font-medium transition-colors bg-black text-white hover:bg-gray-800"
           >
             Buy

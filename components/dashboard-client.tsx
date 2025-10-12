@@ -75,12 +75,67 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   // Show success message if payment was successful
   useEffect(() => {
     if (isPaymentSuccess && userCredits > 0) {
+      // GA4: purchase event
+      try {
+        if (typeof window !== 'undefined') {
+          const markerStr = localStorage.getItem('buyCheckout')
+          if (markerStr && (window as any).gtag) {
+            const marker = JSON.parse(markerStr)
+            ;(window as any).gtag('event', 'purchase', {
+              transaction_id: marker.paymentId || `${user.id}-${Date.now()}`,
+              value: marker.amount || 0,
+              currency: 'USD',
+              items: [
+                {
+                  item_id: marker.planId,
+                  item_name: marker.planName,
+                  price: marker.amount || 0,
+                  quantity: 1,
+                  credits: marker.credits,
+                }
+              ]
+            })
+            // Clear marker after recording purchase
+            try { localStorage.removeItem('buyCheckout') } catch {}
+          }
+        }
+      } catch { /* ignore analytics errors */ }
+
       setShowPaymentSuccess(true)
       // Auto-hide success message after 5 seconds
       const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
       return () => clearTimeout(timer)
     }
   }, [isPaymentSuccess, userCredits])
+
+  // Detect checkout abandonment (user returned without success)
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const isSuccessParam = new URLSearchParams(window.location.search).get('payment') === 'success'
+        const markerStr = localStorage.getItem('buyCheckout')
+        if (!isSuccessParam && markerStr && (window as any).gtag) {
+          const marker = JSON.parse(markerStr)
+          ;(window as any).gtag('event', 'checkout_abandon', {
+            value: marker.amount || 0,
+            currency: 'USD',
+            items: [
+              {
+                item_id: marker.planId,
+                item_name: marker.planName,
+                price: marker.amount || 0,
+                quantity: 1,
+                credits: marker.credits,
+              }
+            ],
+            started_at: marker.startedAt,
+          })
+          // Clear marker after recording abandon
+          try { localStorage.removeItem('buyCheckout') } catch {}
+        }
+      }
+    } catch { /* ignore analytics errors */ }
+  }, [])
 
   // Cleanup on unmount
   useEffect(() => {
