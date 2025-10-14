@@ -1,6 +1,19 @@
 import type React from "react"
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
+import { EB_Garamond } from "next/font/google"
+import { Special_Elite } from "next/font/google"
+import { Cinzel } from "next/font/google"
+import { Suspense } from "react"
+
+const ebGaramond = EB_Garamond({ subsets: ["latin"], display: "swap", variable: "--font-eb-garamond" })
+const specialElite = Special_Elite({
+  subsets: ["latin"],
+  display: "swap",
+  weight: "400",
+  variable: "--font-special-elite",
+})
+const cinzel = Cinzel({ subsets: ["latin"], display: "swap", variable: "--font-cinzel" })
 
 export default async function DashboardLayout({
   children,
@@ -16,5 +29,13 @@ export default async function DashboardLayout({
     redirect("/login")
   }
 
-  return <div className="min-h-screen">{children}</div>
+  return (
+    <div 
+      className={`min-h-screen ${ebGaramond.variable} ${specialElite.variable} ${cinzel.variable}`}
+    >
+      <Suspense fallback={<div>Loading...</div>}>
+        {children}
+      </Suspense>
+    </div>
+  )
 }
