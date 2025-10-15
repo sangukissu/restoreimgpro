@@ -7,7 +7,6 @@ import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import { renderFramedComposite, type FrameStyleKey, FRAME_STYLE_OPTIONS } from "@/lib/frame-styles"
-import { IconUpload } from "@tabler/icons-react"
 import { IconRefresh } from "@tabler/icons-react"
 
 type MatOption = "none" | "light" | "charcoal" | "ivory" | "ash" | "brightWhite" | "warmCream" | "museum"
@@ -255,14 +254,7 @@ export default function FrameDesigner() {
           <Button onClick={onExport} disabled={!imageBitmap || isRendering} size="sm" className="md:size-default">
             {isRendering ? "Exporting..." : "Export PNG"}
           </Button>
-          <Button
-                  size="sm"
-                  variant="default"
-                  className="pointer-events-auto bg-primary text-primary-foreground"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <IconUpload className="h-4 w-4" />                
-                  </Button>
+         
                 <Button size="sm" variant="outline" className="pointer-events-auto" onClick={clearSelection}>
                   <IconRefresh className="h-4 w-4" />
                   

@@ -55,6 +55,14 @@ export default function PricingPage() {
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-700">Credits Never Expire</span>
                 </div>
+                 <div className="flex items-center">
+                  <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
+                  <span className="text-red-400">Free Photo Enhance/Upscale</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
+                  <span className="text-red-400">Ready to print Free Digital Framing</span>
+                </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-700">30-Day Money-Back Guarantee</span>
@@ -73,7 +81,7 @@ export default function PricingPage() {
             <div className="bg-black text-white rounded-3xl p-8 border-2 border-gray-800 relative h-full flex flex-col">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <div className="bg-gray-200 text-black px-3 py-1 rounded-full text-sm font-semibold flex items-center border border-gray-300">
-                  <Star className="w-4 h-4 mr-2 text-white" />
+                  <Star className="w-4 h-4 mr-2 text-black" />
                   Best Value
                 </div>
               </div>
@@ -103,6 +111,14 @@ export default function PricingPage() {
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-300">Credits Never Expire</span>
+                </div>
+                 <div className="flex items-center">
+                  <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
+                  <span className="text-red-400">Free Photo Enhance/Upscale</span> 
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
+                  <span className="text-red-400">Ready to print Free Digital Framing</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />

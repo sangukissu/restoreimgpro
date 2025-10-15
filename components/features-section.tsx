@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { cn } from "@/lib/utils"
-import { Wrench, Eye, Palette, Heart, Lock, Play, ShieldCheck } from "lucide-react"
+import { Wrench, Eye, Palette, Heart, Lock, Play, ShieldCheck, Frame } from "lucide-react"
 
 export default function FeaturesSection() {
   const features = [
@@ -12,6 +12,12 @@ export default function FeaturesSection() {
       description:
         "First restores your photos to perfect quality, then brings people to life with natural movement and expressions.",
       icon: <Play className="h-6 w-6" />,
+    },
+    {
+      title: "Digital Photo Frames",
+      description:
+        "Create stunning digital frames with customizable styles, colors, and captions to showcase your restored memories.",
+      icon: <Frame className="h-6 w-6" />,
     },
     {
       title: "Handles Any Damage Type",
@@ -45,7 +51,7 @@ export default function FeaturesSection() {
     {
       title: "Smart Damage Check + Free Re‑Restoration",
       description:
-        "If we detect heavy damage (tears, stains, scratches), we automatically offer a free second pass. Minor noise/blur doesn’t qualify.",
+        "If we detect heavy damage (tears, stains, scratches), we automatically offer a free second pass. Minor noise/blur doesn't qualify.",
       icon: <ShieldCheck className="h-6 w-6" />,
     },
   ]

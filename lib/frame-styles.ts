@@ -74,7 +74,7 @@ export async function renderFramedComposite(opts: RenderOptions): Promise<string
 
   const hasCaption = !!(caption && caption.enabled && caption.text?.trim())
   const baseCaptionSize = caption?.size ?? 18
-  const extraBottom = hasCaption ? Math.max(60, Math.round(baseCaptionSize * 2.5)) : 0
+  const extraBottom = hasCaption ? Math.max(24, Math.round(baseCaptionSize * 1.8)) : 0
 
   const frameT = showFrame ? frameThicknessBase : 0
 
@@ -116,9 +116,9 @@ export async function renderFramedComposite(opts: RenderOptions): Promise<string
   // Caption
   if (hasCaption && caption) {
     const areaX = frameT
-    const areaY = frameT + matThickness + imgH
+    const areaY = frameT + matThickness + imgH + 8 // Add 8px gap between image and caption
     const areaW = imgW + 2 * matThickness
-    const areaH = extraBottom
+    const areaH = extraBottom - 8 // Reduce caption height by the gap amount
     drawCaption(ctx, caption, areaX, areaY, areaW, areaH, mat)
   }
 

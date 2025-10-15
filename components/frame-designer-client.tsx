@@ -140,7 +140,7 @@ export default function FrameDesignerClient({ user, initialCredits, isPaymentSuc
 
       {/* Main Content */}
       <main className="relative z-10 min-h-dvh pt-24">
-        <section className="mx-auto max-w-5xl px-6 py-10">
+        <section className="mx-auto max-w-5xl px-2 py-10">
           <FrameDesigner />
         </section>
       </main>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { Coins, ChevronDown, LogOut, Image as ImageIcon, Video, UserIcon, ImagePlayIcon } from "lucide-react"
+import { Coins, ChevronDown, LogOut, Image as ImageIcon, Video, UserIcon, ImagePlayIcon, FrameIcon } from "lucide-react"
 
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
@@ -144,6 +144,15 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
                 >
                   <ImagePlayIcon className="w-4 h-4" />
                   My Media
+                </button>
+              </Link>
+              <Link href="/dashboard/editor">
+                <button
+                 
+                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                >
+                  <FrameIcon className="w-4 h-4" />
+                  Digital Framing
                 </button>
               </Link>
          

@@ -16,9 +16,9 @@ import Image from "next/image"
 
 
 export const metadata: Metadata = {
-  title: "BringBack - AI Photo Restoration & Animation | Revive Old Memories",
-  description: "BringBack not only restores old, faded, or damaged photos but also brings them to life with AI animation. Repair colors, fix damage, and create subtle moving memories in seconds.",
-  keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration",
+  title: "BringBack - AI Photo Restoration, Animation & Digital Frames | Revive Old Memories",
+  description: "BringBack restores old, faded, or damaged photos, brings them to life with AI animation, and creates beautiful digital frames. Repair colors, fix damage, and showcase memories in stunning frames in seconds.",
+  keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration, digital photo frames, photo framing, custom photo frames",
   
 }
 
@@ -26,14 +26,14 @@ const homePageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/#webapp',
-  name: 'BringBack – AI Photo Restoration & Animation',
-  description: 'BringBack is an AI-powered web app where users upload old, faded, or damaged photos and instantly receive restored, vibrant images. Users can also bring photos to life with subtle AI animations like smiling and waving.',
+  name: 'BringBack – AI Photo Restoration, Animation & Digital Frames',
+  description: 'BringBack is an AI-powered web app where users upload old, faded, or damaged photos and instantly receive restored, vibrant images. Users can also bring photos to life with subtle AI animations and create beautiful digital frames for display.',
   url: 'https://bringback.pro/',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
   offers: {
     '@type': 'Offer',
-    name: 'BringBack Restoration & Animation Plans',
+    name: 'BringBack Restoration, Animation & Framing Plans',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
     price: '2',
@@ -50,6 +50,9 @@ const homePageJsonLd = {
     'Side-by-side before/after preview',
     'Bring photos to life with AI animations',
     'Animate photos with smiling and waving gestures',
+    'Create beautiful digital photo frames',
+    'Customizable frame styles and colors',
+    'Add personalized captions to framed photos',
     'Fast processing – results under 30 seconds',
     'High-quality output for download and sharing'
   ],
@@ -183,10 +186,26 @@ const homeFAQPageJsonLd = {
     },
     {
       '@type': 'Question',
+      name: 'What digital frame styles are available?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We offer a variety of digital frame styles including classic wooden frames, modern metallic frames, vintage ornate frames, and minimalist borders. You can customize colors, add matting, and include personalized captions to create the perfect display for your restored memories.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How much do digital frames cost?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Digital frame creation is included with our restoration and animation services for free. Once you\'ve restored or animated your photo, you can add beautiful frames at no additional cost. The frames are delivered as high-resolution images perfect for printing or digital display.'
+      }
+    },
+    {
+      '@type': 'Question',
       name: 'Can I print or enlarge restored photos?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Definitely. Restored images maintain high resolution and quality, ideal for printing or enlargements. Animated videos can be shared digitally or converted to GIFs for various uses.'
+        text: 'Definitely. Restored images and framed photos maintain high resolution and quality, ideal for printing or enlargements. Animated videos can be shared digitally or converted to GIFs for various uses.'
       }
     }
   ]
@@ -243,7 +262,7 @@ export default function Page() {
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
-              Restore and animate your precious memories. Our AI revives faded, torn, damaged or black-and-white photos and even makes your loved ones smile and wave again.
+              Restore, animate, and frame your precious memories. Our AI revives faded, torn, damaged or black-and-white photos, makes your loved ones smile and wave again, and creates beautiful digital frames perfect for display.
             </p>
           </div>
           <div className="flex flex-col gap-4 justify-center items-center w-full">
@@ -289,13 +308,13 @@ export default function Page() {
         </div>
           <div>
             <div className="flex justify-center">
-              <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
+              <div className="py-4 border rounded-3xl bg-white border-neutral-200 px-4">
                 <HeroVideoDialog
                   animationStyle="from-center"
                   videoSrc="https://youtu.be/K_CYXkv2Yso"
                   thumbnailSrc="/video-thumbnail.webp"
                   thumbnailAlt="Photo restoration demo video"
-                  className="h-[250px] w-[300px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
+                  className="h-[250px] w-[380px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
                 />
               </div>
             </div>
