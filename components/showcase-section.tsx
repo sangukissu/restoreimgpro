@@ -1,10 +1,11 @@
 "use client"
 import { useState } from "react"
 import { FramerButton } from "@/components/ui/framer-button"
-import { ChevronRight, Play, Smile, Eye, Heart, Frame } from "lucide-react"
+import { ChevronRight, Smile, Eye, Heart, Frame } from "lucide-react"
 import Link from "next/link"
 import { Compare } from "@/components/ui/compare"
 import { Cover } from "@/components/ui/cover"
+import Image from "next/image"
 
 const ANIMATION_PRESETS = [
   {
@@ -229,25 +230,16 @@ export default function ShowcaseSection() {
 
             {/* Frame Editor Screenshot */}
             <div className="max-w-5xl mx-auto">
-              <div className="relative bg-white rounded-2xl p-8 border border-gray-200">
-                <div className="relative">
-                  <img
-                    src="/digital-frame.png"
+              <div className="relative bg-white rounded-2xl p-4 sm:p-8 border border-gray-200">
+                <div className="relative ">
+                  <Image
+                    src="/digital-frame.webp"
                     alt="Frame designer interface showing restored photo being framed with various customization options"
-                    className="w-full rounded-lg border border-gray-200"
+                    className="w-full border-6 border-gray-200 bg-transparent backdrop-blur-lg rounded-xl" width={500} height={300}
                   />
                   
-                  {/* Overlay badges */}
-                  <div className="absolute top-4 right-4 bg-black/80 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    <Frame className="w-3 h-3 inline mr-1" />
-                    Live Preview
-                  </div>
                   
-                  
-                  
-                  <div className="absolute bottom-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Real-time Editing
-                  </div>
+             
                 </div>
                 
                 

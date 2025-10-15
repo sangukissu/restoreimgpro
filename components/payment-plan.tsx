@@ -109,30 +109,63 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-xs hover:shadow-sm transition-shadow duration-200">
+    <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-8 shadow-xs hover:shadow-sm transition-shadow duration-200">
       <div className="text-center">
        
 
         {/* Plan Selector */}
-        <div className="mb-6">
-          <div className="grid grid-cols-1 gap-3">
-            {plans.map((plan) => (
-              <button
-                key={plan.id}
-                onClick={() => setSelectedPlanId(plan.id)}
-                className={`w-full text-left border rounded-xl p-4 transition-colors ${
-                  selectedPlanId === plan.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-semibold text-black">{plan.name}</div>
-                    <div className="text-sm text-gray-600">{plan.credits} credits</div>
+        <div className="mb-2">
+          <div className="grid grid-cols-1 gap-4">
+            {plans.map((plan) => {
+              // Determine badge and perks based on plan
+              const isStarter = plan.credits === 5
+              const isPlus = plan.credits === 15
+              const badge = isPlus ? "BEST VALUE" : isStarter ? "POPULAR" : ""
+              const badgeColor = isPlus ? "bg-green-500" : "bg-blue-500"
+              
+              const perks = isStarter 
+                ? ["Perfect for trying out", "5 photo restorations", "High-quality AI enhancement"]
+                : isPlus 
+                ? ["Best value for families", "5 photo restorations", "01 HD Video Animation", "Priority processing"]
+                : [`${plan.credits} photo restorations`]
+
+              return (
+                <button
+                  key={plan.id}
+                  onClick={() => setSelectedPlanId(plan.id)}
+                  className={`relative w-full text-left border rounded-xl p-4 transition-colors ${
+                    selectedPlanId === plan.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {/* Conversion Badge */}
+                  {badge && (
+                    <div className={`absolute -top-2 left-4 px-2 py-1 ${badgeColor} text-white text-xs font-bold rounded-full`}>
+                      {badge}
+                    </div>
+                  )}
+                  
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="font-semibold text-black mb-1">{plan.name}</div>
+                      <div className="text-sm text-gray-600 mb-2">{plan.credits} credits</div>
+                      
+                      {/* Plan Perks */}
+                      <div className="space-y-1">
+                        {perks.map((perk, index) => (
+                          <div key={index} className="flex items-center text-xs text-gray-500">
+                            <svg className="w-3 h-3 text-green-500 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                            {perk}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="text-xl font-bold text-black ml-4">${(plan.price_cents / 100).toFixed(2)}</div>
                   </div>
-                  <div className="text-xl font-bold text-black">${(plan.price_cents / 100).toFixed(2)}</div>
-                </div>
-              </button>
-            ))}
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -146,7 +179,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
             {isProcessing ? "Processing..." : "Continue to Checkout"}
           </Button>
         </div>
-        <p className="text-xs text-gray-500">Credits never expire</p>
+        <p className="text-xs text-gray-500">Secure payments by dodopayments</p>
       </div>
     </div>
   )

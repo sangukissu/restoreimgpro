@@ -259,6 +259,15 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
                   My Media
                 </button>
               </Link>
+              <Link href="/dashboard/editor">
+                <button
+                 
+                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                >
+                  <FrameIcon className="w-4 h-4" />
+                  Digital Framing
+                </button>
+              </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
