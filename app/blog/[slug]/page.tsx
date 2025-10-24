@@ -244,7 +244,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
               </Link>
               
               <p className="text-xs text-gray-300 mt-2">
-                Only $0.40 per photo
+                Only $0.50 per photo
               </p>
             </div>
           </div>

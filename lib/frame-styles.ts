@@ -46,10 +46,12 @@ export interface RenderOptions {
   exportScale: number // 1..3
   caption?: CaptionOptions
   showFrame?: boolean
+  compressionLevel?: number // 0-1, default 0.8 for optimal file size
+  format?: "png" | "jpeg" | "webp" // default "png"
 }
 
 export async function renderFramedComposite(opts: RenderOptions): Promise<string> {
-  const { image, thicknessFactor, mat, exportScale, caption, styleKey, showFrame = true } = opts
+  const { image, thicknessFactor, mat, exportScale, caption, styleKey, showFrame = true, compressionLevel = 0.8, format = "png" } = opts
 
   // Ensure fonts are ready where supported for more accurate text metrics
   if (typeof document !== "undefined" && (document as any).fonts?.ready) {
@@ -122,7 +124,31 @@ export async function renderFramedComposite(opts: RenderOptions): Promise<string
     drawCaption(ctx, caption, areaX, areaY, areaW, areaH, mat)
   }
 
-  return canvas.toDataURL("image/png", 1.0)
+  // Optimize file size based on format and compression level
+  if (format === "jpeg") {
+    // JPEG offers better compression for photos with minimal quality loss
+    return canvas.toDataURL("image/jpeg", Math.max(0.7, compressionLevel))
+  } else if (format === "webp") {
+    // WebP provides excellent compression with quality preservation
+    return canvas.toDataURL("image/webp", Math.max(0.75, compressionLevel))
+  } else {
+    // PNG with optimized compression
+    // For PNG, we use a lower compression level to reduce file size
+    // The quality parameter doesn't affect PNG compression, so we adjust canvas size instead
+    if (compressionLevel < 1.0 && exportScale > 1) {
+      // Create a temporary canvas with optimized dimensions
+      const tempCanvas = document.createElement("canvas")
+      const optimizedScale = exportScale * Math.max(0.7, compressionLevel)
+      tempCanvas.width = canvasW * optimizedScale / exportScale
+      tempCanvas.height = canvasH * optimizedScale / exportScale
+      const tempCtx = tempCanvas.getContext("2d")
+      if (tempCtx) {
+        tempCtx.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height)
+        return tempCanvas.toDataURL("image/png")
+      }
+    }
+    return canvas.toDataURL("image/png")
+  }
 }
 
 function drawFrame(

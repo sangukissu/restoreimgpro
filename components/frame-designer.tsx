@@ -18,8 +18,11 @@ export default function FrameDesigner() {
   const [mat, setMat] = React.useState<MatOption>("light")
   const [thicknessFactor, setThicknessFactor] = React.useState<number>(0.04)
   const [exportScale, setExportScale] = React.useState<number>(2)
+  const [exportFormat, setExportFormat] = React.useState<"png" | "jpeg" | "webp">("jpeg")
+  const [compressionLevel, setCompressionLevel] = React.useState<number>(0.85)
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null)
   const [isRendering, setIsRendering] = React.useState<boolean>(false)
+  const [isExporting, setIsExporting] = React.useState<boolean>(false)
   const [showFrame, setShowFrame] = React.useState<boolean>(true)
 
   // Caption state
@@ -103,6 +106,8 @@ export default function FrameDesigner() {
         mat,
         exportScale: 1, // fast preview
         showFrame,
+        format: exportFormat,
+        compressionLevel: 0.8, // Use good compression for preview
         caption: {
           enabled: captionEnabled,
           text: captionText,
@@ -122,6 +127,7 @@ export default function FrameDesigner() {
     thicknessFactor,
     mat,
     showFrame,
+    exportFormat,
     captionEnabled,
     captionText,
     captionFont,
@@ -145,6 +151,7 @@ export default function FrameDesigner() {
     thicknessFactor,
     mat,
     showFrame,
+    exportFormat,
     captionEnabled,
     captionText,
     captionFont,
@@ -157,7 +164,7 @@ export default function FrameDesigner() {
 
   const onExport = async () => {
     if (!imageBitmap) return
-    setIsRendering(true)
+    setIsExporting(true)
     try {
       const dataUrl = await renderFramedComposite({
         image: imageBitmap,
@@ -166,6 +173,8 @@ export default function FrameDesigner() {
         mat,
         exportScale,
         showFrame,
+        format: exportFormat,
+        compressionLevel,
         caption: {
           enabled: captionEnabled,
           text: captionText,
@@ -178,12 +187,13 @@ export default function FrameDesigner() {
 
       const a = document.createElement("a")
       a.href = dataUrl
-      a.download = `bringback-framed-${Date.now()}.png`
+      const extension = exportFormat === "jpeg" ? "jpg" : exportFormat
+      a.download = `bringback-framed-${Date.now()}.${extension}`
       document.body.appendChild(a)
       a.click()
       a.remove()
     } finally {
-      setIsRendering(false)
+      setIsExporting(false)
     }
   }
 
@@ -251,8 +261,16 @@ export default function FrameDesigner() {
           <Button onClick={doPreview} disabled={!imageBitmap || isRendering} variant="secondary" size="sm" className="md:size-default">
             {isRendering ? "Rendering..." : "Refresh Preview"}
           </Button>
-          <Button onClick={onExport} disabled={!imageBitmap || isRendering} size="sm" className="md:size-default">
-            {isRendering ? "Exporting..." : "Export PNG"}
+          <Button onClick={onExport} disabled={!imageBitmap || isExporting} size="sm" className="md:size-default">
+            {isExporting ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Exporting...
+              </>
+            ) : "Export PNG"}
           </Button>
          
                 <Button size="sm" variant="outline" className="pointer-events-auto" onClick={clearSelection}>
@@ -431,6 +449,37 @@ export default function FrameDesigner() {
                   <SelectItem value="3">3x</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className=" gap-2">
+              <Label htmlFor="export-format">Export format</Label>
+              <Select value={exportFormat} onValueChange={(v) => setExportFormat(v as "png" | "jpeg" | "webp")}>
+                <SelectTrigger id="export-format" className="w-full mt-2">
+                  <SelectValue placeholder="Export format" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="jpeg">JPEG (Smaller size)</SelectItem>
+                  <SelectItem value="webp">WebP (Best compression)</SelectItem>
+                  <SelectItem value="png">PNG (Lossless)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className=" gap-2">
+              <Label htmlFor="compression">Quality/Compression</Label>
+              <div className="flex items-center gap-3 mt-2">
+                <Slider
+                  id="compression"
+                  min={0.6}
+                  max={1.0}
+                  step={0.05}
+                  value={[compressionLevel]}
+                  onValueChange={(v) => setCompressionLevel(v[0] ?? 0.85)}
+                  className="flex-1"
+                />
+                <span className="text-muted-foreground text-sm tabular-nums">
+                  {Math.round(compressionLevel * 100)}%
+                </span>
+              </div>
+             
             </div>
             </div>
 

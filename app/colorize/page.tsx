@@ -285,7 +285,7 @@ export default function ColorizePage() {
           </FramerButton>
             </Link>
             <p className="text-xs text-gray-500">
-                Only $0.40 per photo 
+                Only $0.50 per photo 
                 </p>
                 <div className="flex flex-col items-center space-y-2 pt-2">
              <div className="flex items-center space-x-2">

@@ -295,7 +295,7 @@ export default function DenoisePage() {
               </Button>
             </Link>
             <p className="text-xs text-gray-500">
-                Only $0.40 per photo
+                Only $0.50 per photo
               </p>
             </div>
             <div className="flex flex-col items-center space-y-2 pt-2">
