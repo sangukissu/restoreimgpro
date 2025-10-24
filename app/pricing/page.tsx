@@ -61,7 +61,7 @@ export default function PricingPage() {
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
-                  <span className="text-red-400">Ready to print Free Digital Framing</span>
+                  <span className="text-red-400">Free Digital Frames</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
@@ -72,7 +72,7 @@ export default function PricingPage() {
                <Link href="/login">
             
              <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full">
-            Get Started
+            Start Restoring
           </FramerButton>
             </Link>
             </div>
@@ -106,7 +106,7 @@ export default function PricingPage() {
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">1080P High-Resolution Output</span>
+                  <span className="text-gray-300">High-Resolution Output</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
@@ -118,7 +118,7 @@ export default function PricingPage() {
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
-                  <span className="text-red-400">Ready to print Free Digital Framing</span>
+                  <span className="text-red-400">Free Digital Frames</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
@@ -247,7 +247,7 @@ export default function PricingPage() {
               </p>
               <Link href="/login">
                 <Button className="bg-white text-black hover:bg-gray-200 px-8 py-3 h-auto font-medium text-base">
-                  Get Started Now
+                    Start Restoring Now
                 </Button>
               </Link>
               <p className="text-xs text-gray-500 mt-3">

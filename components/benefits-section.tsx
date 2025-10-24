@@ -40,7 +40,7 @@ AI-powered photo restoration and animation that transforms old, damaged photos i
                 
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-700">1080P High-Resolution Output</span>
+                  <span className="text-gray-700">High-Resolution Output</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
@@ -52,7 +52,7 @@ AI-powered photo restoration and animation that transforms old, damaged photos i
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-700">Ready to print Free DIgital Framing</span>
+                  <span className="text-gray-700">Free Digital Frames</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
@@ -63,7 +63,7 @@ AI-powered photo restoration and animation that transforms old, damaged photos i
                <Link href="/login">
             
              <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full">
-            Get Started
+            Start Restoring
           </FramerButton>
             </Link>
             </div>
@@ -109,7 +109,7 @@ AI-powered photo restoration and animation that transforms old, damaged photos i
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-300">Ready to print Free Digital Framing</span>
+                  <span className="text-gray-300">Free Digital Frames</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />

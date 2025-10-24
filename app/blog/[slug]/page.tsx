@@ -239,7 +239,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
               <Link href="/login">
 
               <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
-                Get Started for $2.49
+                Start Restoring for $2.49
               </Button>
               </Link>
               
