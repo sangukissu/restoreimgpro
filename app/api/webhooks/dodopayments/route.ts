@@ -215,6 +215,9 @@ async function handlePaymentSucceeded(webhookData: any) {
       }
     }
 
+    // Process referral rewards if this is the user's first purchase
+    await processReferralReward(payment.user_id, payment.amount_cents)
+
     // Log the webhook event for tracking using the proper webhook_events table
     await logWebhookEvent(webhookData.type, payment.id, webhookData.business_id)
 
@@ -292,6 +295,27 @@ async function handlePaymentCancelled(webhookData: any) {
 
   } catch (error) {
     // Payment cancelled handling error
+  }
+}
+
+// Helper function to process referral rewards
+async function processReferralReward(userId: string, amountCents: number) {
+  try {
+    // Call the database function to process referral reward
+    const { data, error } = await supabase.rpc('process_referral_reward', {
+      p_user_id: userId,
+      p_purchase_amount_cents: amountCents
+    })
+
+    if (error) {
+      console.error('Error processing referral reward:', error)
+      return false
+    }
+
+    return data || false
+  } catch (error) {
+    console.error('Error in processReferralReward:', error)
+    return false
   }
 }
 
