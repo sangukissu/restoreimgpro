@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Copy, Share2, Users, Gift, TrendingUp, Clock } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast'
+import { Copy, Users, Gift, TrendingUp } from 'lucide-react'
+import { toast } from 'sonner'
+import { DashboardHeader } from '@/components/dashboard-header'
 
 interface ReferralData {
   code: string
