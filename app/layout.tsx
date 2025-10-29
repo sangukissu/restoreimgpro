@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
+import { Suspense } from "react"
 import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
 import ReferralHandler from "@/components/referral-handler"
@@ -147,7 +148,9 @@ export default function RootLayout({
       </head>
       <body className={`font-sans antialiased`}>
         {children}
-        <ReferralHandler />
+        <Suspense fallback={null}>
+          <ReferralHandler />
+        </Suspense>
         <NetworkStatus />
         <Toaster />
         
