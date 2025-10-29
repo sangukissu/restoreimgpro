@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Copy, Users, Gift, TrendingUp, Share2, Clock } from 'lucide-react'
 import { toast } from 'sonner'
-import { DashboardHeader } from '@/components/dashboard-header'
+import DashboardHeader from '@/components/dashboard-header'
 
 interface ReferralData {
   code: string
@@ -25,7 +25,16 @@ interface ReferralSettings {
   is_active: boolean
 }
 
-export default function ReferralDashboard() {
+interface ReferralDashboardProps {
+  user: {
+    email: string
+    id: string
+  }
+  initialCredits: number
+  onBuyCredits: () => void
+}
+
+export default function ReferralDashboard({ user, initialCredits, onBuyCredits }: ReferralDashboardProps) {
   const [referralData, setReferralData] = useState<ReferralData | null>(null)
   const [settings, setSettings] = useState<ReferralSettings | null>(null)
   const [loading, setLoading] = useState(true)
@@ -121,7 +130,7 @@ export default function ReferralDashboard() {
         </div>
         
         <div className="relative z-10 p-6">
-          <DashboardHeader />
+          <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
           <div className="max-w-6xl mx-auto mt-8">
             <div className="animate-pulse space-y-6">
               <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
@@ -149,7 +158,7 @@ export default function ReferralDashboard() {
         </div>
         
         <div className="relative z-10 p-6">
-          <DashboardHeader />
+          <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
           <div className="max-w-6xl mx-auto mt-8">
             <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
               <Gift className="mx-auto h-12 w-12 text-gray-400 mb-4" />
@@ -177,7 +186,7 @@ export default function ReferralDashboard() {
       </div>
       
       <div className="relative z-10 p-6">
-        <DashboardHeader />
+        <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
         
         <div className="max-w-6xl mx-auto mt-8 space-y-8">
           {/* Header Section */}
