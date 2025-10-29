@@ -36,7 +36,6 @@ export default function ReferralDashboard() {
   const [settings, setSettings] = useState<ReferralSettings | null>(null)
   const [loading, setLoading] = useState(true)
   const [copying, setCopying] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const { toast } = useToast()
 
   useEffect(() => {
@@ -46,28 +45,10 @@ export default function ReferralDashboard() {
 
   const fetchReferralData = async () => {
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-      
-      if (sessionError) {
-        console.error('Session error:', sessionError)
-        toast.error("Authentication error. Please log in again.")
-        setIsAuthenticated(false)
-        setLoading(false)
-        return
-      }
-
-      if (!session || !session.access_token) {
-        console.log('No active session found')
-        setIsAuthenticated(false)
-        setLoading(false)
-        return
-      }
-
-      setIsAuthenticated(true)
-
       const response = await fetch('/api/referrals/my-code', {
+        method: 'GET',
+        credentials: 'include',
         headers: {
-          'Authorization': `Bearer ${session.access_token}`,
           'Content-Type': 'application/json'
         }
       })
@@ -77,7 +58,6 @@ export default function ReferralDashboard() {
         setReferralData(data)
       } else if (response.status === 401) {
         console.error('Unauthorized access to referral data')
-        setIsAuthenticated(false)
         toast.error("Please log in to view your referral code")
       } else {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
@@ -151,30 +131,6 @@ export default function ReferralDashboard() {
     )
   }
 
-  if (isAuthenticated === false) {
-    return (
-      <Card>
-        <CardContent className="pt-6">
-          <div className="text-center">
-            <Users className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Please Log In
-            </h3>
-            <p className="text-gray-500 mb-4">
-              You need to be logged in to view your referral dashboard.
-            </p>
-            <Button 
-              onClick={() => window.location.href = '/login'}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              Go to Login
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
   if (!settings?.is_active) {
     return (
       <Card>
@@ -187,31 +143,6 @@ export default function ReferralDashboard() {
             <p className="text-gray-500">
               We're working on an exciting referral program. Stay tuned!
             </p>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  // If user is authenticated but we couldn't load referral data, show error state
-  if (isAuthenticated === true && !referralData && !loading) {
-    return (
-      <Card>
-        <CardContent className="pt-6">
-          <div className="text-center">
-            <TrendingUp className="mx-auto h-12 w-12 text-red-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Unable to Load Referral Data
-            </h3>
-            <p className="text-gray-500 mb-4">
-              We couldn't load your referral information. Please try refreshing the page.
-            </p>
-            <Button 
-              onClick={() => window.location.reload()}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              Refresh Page
-            </Button>
           </div>
         </CardContent>
       </Card>
