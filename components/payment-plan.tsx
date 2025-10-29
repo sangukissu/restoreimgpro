@@ -159,9 +159,9 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
               const badgeColor = isPlus ? "bg-green-500" : "bg-blue-500"
               
               const perks = isStarter 
-                ? ["Perfect for trying out", "5 photo restorations", "High-quality AI enhancement"]
+                ? ["5 photo restorations"]
                 : isPlus 
-                ? ["Best value for families", "5 photo restorations", "01 HD Video Animation", "Priority processing"]
+                ? ["5 photo restorations", "01 HD Video Animation"]
                 : [`${plan.credits} photo restorations`]
 
               return (
