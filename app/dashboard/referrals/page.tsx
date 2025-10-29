@@ -4,8 +4,8 @@ import { createClient } from "@/utils/supabase/server"
 import ReferralClient from '@/components/referral-client'
 
 export const metadata: Metadata = {
-  title: 'Referrals - RestoreImg Pro',
-  description: 'Refer friends and earn credits with RestoreImg Pro referral program',
+  title: 'Referrals - BringBack AI',
+  description: 'Refer friends and earn credits with BringBack AI referral program',
 }
 
 export default async function ReferralsPage({

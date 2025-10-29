@@ -103,7 +103,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
 
     const shareData = {
       title: 'Restore Your Photos with AI',
-      text: `Join me on RestoreImg Pro and get ${settings?.referred_credits_reward || 1} free credits! Use my referral code: ${referralData.code}`,
+      text: `Join me on BringBack AI and get ${settings?.referred_credits_reward || 1} free credits! Use my referral code: ${referralData.code}`,
       url: referralData.shareUrl
     }
 
@@ -193,7 +193,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Refer Friends & Earn Credits</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Share RestoreImg Pro with friends and earn {settings?.referrer_credits_reward || 2} credits 
+              Share BringBack AI with friends and earn {settings?.referrer_credits_reward || 2} credits 
               for each friend who makes their first purchase. They get {settings?.referred_credits_reward || 1} credits too!
             </p>
           </div>

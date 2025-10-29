@@ -1,6 +1,6 @@
 # Security Implementation Guide
 
-This document outlines the security measures implemented in the RestoreImgPro application.
+This document outlines the security measures implemented in the Birngback application.
 
 ## 🛡️ Security Features Implemented
 

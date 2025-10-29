@@ -114,7 +114,7 @@ export function useReferrals() {
 
     const shareData = {
       title: 'Restore Your Photos with AI',
-      text: `Join me on RestoreImg Pro and get ${settings?.referred_credits_reward || 1} free credits! Use my referral code: ${referralData.code}`,
+      text: `Join me on BringBack AI and get ${settings?.referred_credits_reward || 1} free credits! Use my referral code: ${referralData.code}`,
       url: referralData.shareUrl
     }
 
