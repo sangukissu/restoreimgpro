@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
     
     try {
       // Submit video generation request to FAL queue
-      const queueResult = await fal.queue.submit("fal-ai/kling-video/v2.5-turbo/standard/image-to-video", {
+      const queueResult = await fal.queue.submit("fal-ai/kling-video/v2.5-turbo/pro/image-to-video", {
         input: input,
         webhookUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/fal/webhook?generationId=${videoGeneration.id}`
       })
