@@ -1,13 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import { useToast } from '@/hooks/use-toast'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 interface ReferralData {
   code: string
@@ -41,15 +35,11 @@ export function useReferrals() {
       setLoading(true)
       setError(null)
 
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        setError('Not authenticated')
-        return
-      }
-
       const response = await fetch('/api/referrals/my-code', {
+        method: 'GET',
+        credentials: 'include',
         headers: {
-          'Authorization': `Bearer ${session.access_token}`
+          'Content-Type': 'application/json'
         }
       })
 
@@ -84,17 +74,11 @@ export function useReferrals() {
 
   const applyReferralCode = async (code: string): Promise<boolean> => {
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        toast.error("Please log in to apply a referral code")
-        return false
-      }
-
       const response = await fetch('/api/referrals/apply', {
         method: 'POST',
+        credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ referralCode: code.trim() })
       })

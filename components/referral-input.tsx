@@ -1,17 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Gift } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 interface ReferralInputProps {
   onSuccess?: () => void
@@ -32,17 +26,11 @@ export default function ReferralInput({ onSuccess, defaultCode = '' }: ReferralI
 
     setLoading(true)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        toast.error("Please log in to apply a referral code")
-        return
-      }
-
       const response = await fetch('/api/referrals/apply', {
         method: 'POST',
+        credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ referralCode: referralCode.trim() })
       })

@@ -15,6 +15,9 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   const { toast, loading } = useToast()
   const [plans, setPlans] = useState<Array<{ id: string; name: string; price_cents: number; credits: number }>>([])
   const [selectedPlanId, setSelectedPlanId] = useState<string>("")
+  const [referralCode, setReferralCode] = useState<string>("")
+  const [isApplyingReferral, setIsApplyingReferral] = useState(false)
+  const [referralApplied, setReferralApplied] = useState(false)
 
   // Fetch available plans
   useEffect(() => {
@@ -34,6 +37,38 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     }
     fetchPlans()
   }, [onError])
+
+  const handleApplyReferral = async () => {
+    if (!referralCode.trim()) {
+      toast.error("Please enter a referral code")
+      return
+    }
+
+    setIsApplyingReferral(true)
+    try {
+      const response = await fetch("/api/referrals/apply", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: JSON.stringify({ referralCode: referralCode.trim() })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setReferralApplied(true)
+        toast.success(data.message || "Referral code applied successfully!")
+      } else {
+        toast.error(data.error || "Failed to apply referral code")
+      }
+    } catch (error) {
+      toast.error("Failed to apply referral code. Please try again.")
+    } finally {
+      setIsApplyingReferral(false)
+    }
+  }
 
   const handlePurchase = async () => {
     setIsProcessing(true)
@@ -167,6 +202,39 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
               )
             })}
           </div>
+        </div>
+
+        {/* Referral Code Section */}
+        <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="text-sm font-medium text-gray-700 mb-2">Have a referral code?</div>
+          {!referralApplied ? (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={referralCode}
+                onChange={(e) => setReferralCode(e.target.value)}
+                placeholder="Enter referral code"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                disabled={isApplyingReferral}
+              />
+              <Button
+                onClick={handleApplyReferral}
+                disabled={isApplyingReferral || !referralCode.trim()}
+                variant="outline"
+                size="sm"
+                className="px-4 py-2 text-sm"
+              >
+                {isApplyingReferral ? "Applying..." : "Apply"}
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-green-600">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-medium">Referral code applied successfully!</span>
+            </div>
+          )}
         </div>
 
         {/* Purchase Button */}
