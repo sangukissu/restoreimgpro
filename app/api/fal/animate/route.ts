@@ -15,9 +15,17 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
 // Animation presets
 const ANIMATION_PRESETS = {
+  "gentle-smile": {
+    name: "Gentle Smile",
+    prompt: "The people in the image develop a warm, natural smile that appears gradually and holds for a moment"
+  },
   "smile-wave": {
     name: "Smile + Wave",
     prompt: "The person in the image smiles warmly and waves their hand in a friendly greeting gesture"
+  },
+  "soft-nod": {
+    name: "Soft Nod",
+    prompt: "The people in the image give a single, slow, gentle nod of acknowledgment with a peaceful expression"
   },
   "blink-tilt": {
     name: "Subtle Blink + Head Tilt",
@@ -26,6 +34,22 @@ const ANIMATION_PRESETS = {
   "smile-look": {
     name: "Smile + Look Around",
     prompt: "The person in the image smiles and looks around curiously, moving their eyes and head naturally"
+  },
+  "warm-gaze": {
+    name: "Warm Gaze",
+    prompt: "The people in the image maintain steady, warm eye contact with a loving, subtle smile and peaceful expression"
+  },
+  "peaceful-presence": {
+    name: "Peaceful Presence",
+    prompt: "The people in the image show very subtle, natural micro-movements that suggest life and presence without dramatic changes"
+  },
+  "loving-recognition": {
+    name: "Loving Recognition",
+    prompt: "The people in the image show a moment of gentle recognition, with eyes softening and a hint of a smile"
+  },
+  "serene-moment": {
+    name: "Serene Moment",
+    prompt: "The people in the image maintain a calm, serene expression with minimal natural movement, as if caught in a peaceful moment"
   }
 }
 

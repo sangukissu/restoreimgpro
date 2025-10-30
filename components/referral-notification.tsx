@@ -37,7 +37,7 @@ export function ReferralNotification({ referralCode, onClose }: ReferralNotifica
     } max-w-[280px] sm:max-w-sm`}>
       
       {/* Mobile Version - Minimal */}
-      <div className="block sm:hidden bg-white border border-gray-200 rounded-lg shadow-sm p-3">
+      <div className="block sm:hidden rounded-lg shadow-sm border-6 border-gray-200 bg-white backdrop-blur p-2 max-w-sm">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-900">Referral Code</span>
           <button
@@ -61,32 +61,32 @@ export function ReferralNotification({ referralCode, onClose }: ReferralNotifica
         </div>
         
         <p className="text-xs text-gray-600">
-          Share for free restorations
+          Share & get 2 free restorations
         </p>
       </div>
 
       {/* Desktop Version - Detailed */}
-      <div className="hidden sm:block bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-lg p-4 max-w-sm">
-        <div className="flex items-start justify-between mb-3">
+      <div className="hidden sm:block z-10  text-black rounded-lg shadow-sm border-6 border-gray-200 bg-white backdrop-blur  p-4 max-w-sm">
+        <div className="flex items-start justify-between mb-2">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5" />
             <h3 className="font-semibold text-lg">Share & Earn!</h3>
           </div>
           <button
             onClick={handleClose}
-            className="text-white/80 hover:text-white transition-colors"
+            className="text-black/80 hover:text-black transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
         
-        <p className="text-sm text-white/90 mb-4">
-          Share your referral code with friends and both get free restorations!
+        <p className="text-sm text-black/90 mb-2">
+          Share your referral code with friends and both get free restorations when your friend purchase any plan!
         </p>
         
-        <div className="bg-white/20 rounded-md p-3 mb-4">
+        <div className="bg-white/20 rounded-md p-2 mb-2 shadow-xs border border-gray-300">
           <div className="flex items-center justify-between">
-            <code className="text-white font-mono text-lg font-bold">
+            <code className="text-black font-mono text-lg font-bold">
               {referralCode}
             </code>
             <button
@@ -98,7 +98,7 @@ export function ReferralNotification({ referralCode, onClose }: ReferralNotifica
           </div>
         </div>
         
-        <div className="text-xs text-white/80 space-y-1">
+        <div className="text-xs text-black/80 space-y-1">
           <div>• You get: 2 free restorations</div>
           <div>• Friend gets: 1 free restoration</div>
         </div>

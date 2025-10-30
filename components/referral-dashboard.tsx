@@ -139,10 +139,10 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
       <div className="relative z-10 p-6">
         <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
         
-        <div className="max-w-6xl mx-auto mt-24 space-y-8">
+        <div className="max-w-5xl mx-auto mt-24 space-y-8">
           {/* Header Section */}
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Refer Friends & Earn Credits</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Refer Friends & Earn Free Restorations</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Share BringBack AI with friends and earn {settings?.referrer_credits_reward || 2} credits 
               for each friend who makes their first purchase. They get {settings?.referred_credits_reward || 1} credits too!
@@ -151,7 +151,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
 
           {/* Statistics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex items-center">
                 <div className="p-3 bg-blue-100 rounded-lg">
                   <Users className="h-6 w-6 text-blue-600" />
@@ -165,7 +165,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
               </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+            <div className="bg-white border border-gray-200 rounded-lg p-6 ">
               <div className="flex items-center">
                 <div className="p-3 bg-green-100 rounded-lg">
                   <TrendingUp className="h-6 w-6 text-green-600" />
@@ -179,7 +179,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
               </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+            <div className="bg-white border border-gray-200 rounded-lg p-6 ">
               <div className="flex items-center">
                 <div className="p-3 bg-yellow-100 rounded-lg">
                   <Clock className="h-6 w-6 text-yellow-600" />
@@ -193,7 +193,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
               </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+            <div className="bg-white border border-gray-200 rounded-lg p-6 ">
               <div className="flex items-center">
                 <div className="p-3 bg-purple-100 rounded-lg">
                   <TrendingUp className="h-6 w-6 text-purple-600" />
@@ -236,11 +236,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                <p className="text-sm text-blue-700">
-                  Share this code with friends! They can enter it during signup to get bonus credits.
-                </p>
-              </div>
+
             </div>
           </div>
 

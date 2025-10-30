@@ -41,22 +41,58 @@ interface AnimationPreset {
 
 const ANIMATION_PRESETS: AnimationPreset[] = [
   {
+    id: 'gentle-smile',
+    name: 'Gentle Smile',
+    description: 'A warm, natural smile that develops gradually',
+    prompt: 'The people in the image develop a warm, natural smile that appears gradually and holds for a moment'
+  },
+  {
     id: 'smile-wave',
     name: 'Smile + Wave',
-    description: 'Natural smile with gentle wave gesture',
-    prompt: 'Revive this image to life. Make the person smile and gently wave if hands are visible. Keep gestures natural and smooth.'
+    description: 'Friendly smile with a gentle wave gesture',
+    prompt: 'The person in the image smiles warmly and waves their hand in a friendly greeting gesture'
+  },
+  {
+    id: 'soft-nod',
+    name: 'Soft Nod',
+    description: 'A single, gentle nod of acknowledgment',
+    prompt: 'The people in the image give a single, slow, gentle nod of acknowledgment with a peaceful expression'
   },
   {
     id: 'blink-tilt',
     name: 'Subtle Blink + Head Tilt',
-    description: 'Soft blinking with slight head movement',
-    prompt: 'Animate this photo so the person softly blinks and tilts their head slightly, keeping a natural expression.'
+    description: 'Natural blinking with slight head movement',
+    prompt: 'The person in the image blinks naturally and tilts their head slightly with a gentle expression'
   },
   {
     id: 'smile-look',
     name: 'Smile + Look Around',
     description: 'Light smile with curious gaze movement',
-    prompt: 'Bring this image to life with the person smiling lightly and shifting gaze side to side as if noticing surroundings.'
+    prompt: 'The person in the image smiles and looks around curiously, moving their eyes and head naturally'
+  },
+  {
+    id: 'warm-gaze',
+    name: 'Warm Gaze',
+    description: 'Steady, loving eye contact with warmth',
+    prompt: 'The people in the image maintain steady, warm eye contact with a loving, subtle smile and peaceful expression'
+  },
+  {
+    id: 'peaceful-presence',
+    name: 'Peaceful Presence',
+    description: 'Minimal natural micro-movements',
+    prompt: 'The people in the image show very subtle, natural micro-movements that suggest life and presence without dramatic changes'
+  },
+  {
+    id: 'loving-recognition',
+    name: 'Loving Recognition',
+    description: 'A moment of gentle recognition and warmth',
+    prompt: 'The people in the image show a moment of gentle recognition, with eyes softening and a hint of a smile'
+  },
+  {
+    id: 'serene-moment',
+    name: 'Serene Moment',
+    description: 'Calm expression with minimal movement',
+    prompt: 'The people in the image maintain a calm, serene expression with minimal natural movement, as if caught in a peaceful moment'
   }
 ]
 

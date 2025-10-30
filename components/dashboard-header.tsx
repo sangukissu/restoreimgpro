@@ -92,7 +92,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
             }}
             className="text-xs px-3 py-1.5 rounded font-medium transition-colors bg-black text-white hover:bg-gray-800"
           >
-            Buy More
+            Buy Credits
           </button>
         </div>
 
