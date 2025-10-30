@@ -72,7 +72,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       code: referralCode?.code,
-      shareUrl: `${process.env.NEXT_PUBLIC_APP_URL}?ref=${referralCode?.code}`,
       statistics: {
         totalReferrals,
         completedReferrals,

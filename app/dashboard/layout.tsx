@@ -5,6 +5,8 @@ import { EB_Garamond } from "next/font/google"
 import { Special_Elite } from "next/font/google"
 import { Cinzel } from "next/font/google"
 import { Suspense } from "react"
+import { DashboardSkeleton } from "@/components/ui/skeleton"
+import { ReferralNotificationManager } from "@/components/referral-notification-manager"
 
 const ebGaramond = EB_Garamond({ subsets: ["latin"], display: "swap", variable: "--font-eb-garamond" })
 const specialElite = Special_Elite({
@@ -33,9 +35,10 @@ export default async function DashboardLayout({
     <div 
       className={`min-h-screen ${ebGaramond.variable} ${specialElite.variable} ${cinzel.variable}`}
     >
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<DashboardSkeleton />}>
         {children}
       </Suspense>
+      <ReferralNotificationManager />
     </div>
   )
 }

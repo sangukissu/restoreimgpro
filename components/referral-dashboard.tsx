@@ -1,16 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Copy, Users, Gift, TrendingUp, Share2, Clock } from 'lucide-react'
+import { Copy, Users, TrendingUp, Clock } from 'lucide-react'
 import { toast } from 'sonner'
 import DashboardHeader from '@/components/dashboard-header'
 
 interface ReferralData {
   code: string
-  shareUrl: string
   statistics: {
     totalReferrals: number
     completedReferrals: number
@@ -90,31 +88,11 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
     setCopying(true)
     try {
       await navigator.clipboard.writeText(text)
-      toast.success("Referral link copied to clipboard")
+      toast.success("Referral code copied to clipboard")
     } catch (error) {
       toast.error("Failed to copy to clipboard")
     } finally {
       setCopying(false)
-    }
-  }
-
-  const shareReferral = async () => {
-    if (!referralData) return
-
-    const shareData = {
-      title: 'Restore Your Photos with AI',
-      text: `Join me on BringBack AI and get ${settings?.referred_credits_reward || 1} free credits! Use my referral code: ${referralData.code}`,
-      url: referralData.shareUrl
-    }
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData)
-      } else {
-        await copyToClipboard(referralData.shareUrl)
-      }
-    } catch (error) {
-      console.error('Error sharing:', error)
     }
   }
 
@@ -131,7 +109,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
         
         <div className="relative z-10 p-6">
           <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
-          <div className="max-w-6xl mx-auto mt-8">
+          <div className="max-w-6xl mx-auto mt-24">
             <div className="animate-pulse space-y-6">
               <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -146,34 +124,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
     )
   }
 
-  if (!settings?.is_active) {
-    return (
-      <div className="min-h-screen bg-white relative overflow-hidden">
-        {/* Dotted Background */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
-            backgroundSize: '20px 20px'
-          }} />
-        </div>
-        
-        <div className="relative z-10 p-6">
-          <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
-          <div className="max-w-6xl mx-auto mt-8">
-            <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-              <Gift className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Referral Program Coming Soon
-              </h3>
-              <p className="text-gray-500">
-                We're working on an exciting referral program. Stay tuned!
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
@@ -188,7 +139,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
       <div className="relative z-10 p-6">
         <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
         
-        <div className="max-w-6xl mx-auto mt-8 space-y-8">
+        <div className="max-w-6xl mx-auto mt-24 space-y-8">
           {/* Header Section */}
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Refer Friends & Earn Credits</h1>
@@ -245,7 +196,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
             <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
               <div className="flex items-center">
                 <div className="p-3 bg-purple-100 rounded-lg">
-                  <Gift className="h-6 w-6 text-purple-600" />
+                  <TrendingUp className="h-6 w-6 text-purple-600" />
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Credits Earned</p>
@@ -262,7 +213,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Your Referral Code</h2>
               <p className="text-gray-600">
-                Share this code or link with friends to start earning credits
+                Share this code with friends to start earning credits
               </p>
             </div>
             
@@ -285,28 +236,10 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
-
-              <div className="flex items-center space-x-3">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Referral Link</label>
-                  <Input
-                    value={referralData?.shareUrl || ''}
-                    readOnly
-                    className="text-sm bg-gray-50"
-                  />
-                </div>
-                <Button
-                  onClick={() => copyToClipboard(referralData?.shareUrl || '')}
-                  disabled={copying}
-                  variant="outline"
-                  className="mt-7"
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
-                <Button onClick={shareReferral} className="mt-7 bg-black hover:bg-gray-800">
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Share
-                </Button>
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                <p className="text-sm text-blue-700">
+                  Share this code with friends! They can enter it during signup to get bonus credits.
+                </p>
               </div>
             </div>
           </div>
@@ -321,11 +254,11 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Share2 className="h-8 w-8 text-blue-600" />
+                  <Copy className="h-8 w-8 text-blue-600" />
                 </div>
                 <h3 className="text-lg font-semibold mb-3 text-gray-900">1. Share Your Code</h3>
                 <p className="text-gray-600">
-                  Share your unique referral code or link with friends and family
+                  Share your unique referral code with friends and family
                 </p>
               </div>
 
@@ -341,7 +274,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
 
               <div className="text-center">
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Gift className="h-8 w-8 text-purple-600" />
+                  <Users className="h-8 w-8 text-purple-600" />
                 </div>
                 <h3 className="text-lg font-semibold mb-3 text-gray-900">3. Both Earn Credits</h3>
                 <p className="text-gray-600">

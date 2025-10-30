@@ -35,7 +35,7 @@ export default async function ReferralsPage({
   const isPaymentSuccess = resolvedSearchParams.payment === "success"
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
       <ReferralClient 
         user={{ email: user.email || "", id: user.id }} 
         initialCredits={credits}
