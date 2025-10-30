@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input"
 import { Loader2, Mail } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import ReferralInput from "@/components/referral-input"
 import { signInWithMagicLink, signInWithGoogle, type AuthState } from "./actions"
 import { createClient } from "@/utils/supabase/client"
 
