@@ -153,7 +153,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex items-center">
-                <div className="p-3 bg-blue-100 rounded-lg">
+                <div className="p-3 border border-blue-600 rounded-lg">
                   <Users className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="ml-4">
@@ -167,7 +167,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
 
             <div className="bg-white border border-gray-200 rounded-lg p-6 ">
               <div className="flex items-center">
-                <div className="p-3 bg-green-100 rounded-lg">
+                <div className="p-3 border border-green-600 rounded-lg">
                   <TrendingUp className="h-6 w-6 text-green-600" />
                 </div>
                 <div className="ml-4">
@@ -181,7 +181,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
 
             <div className="bg-white border border-gray-200 rounded-lg p-6 ">
               <div className="flex items-center">
-                <div className="p-3 bg-yellow-100 rounded-lg">
+                <div className="p-3 border border-yellow-600 rounded-lg">
                   <Clock className="h-6 w-6 text-yellow-600" />
                 </div>
                 <div className="ml-4">
@@ -195,7 +195,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
 
             <div className="bg-white border border-gray-200 rounded-lg p-6 ">
               <div className="flex items-center">
-                <div className="p-3 bg-purple-100 rounded-lg">
+                <div className="p-3 border border-purple-600 rounded-lg">
                   <TrendingUp className="h-6 w-6 text-purple-600" />
                 </div>
                 <div className="ml-4">
