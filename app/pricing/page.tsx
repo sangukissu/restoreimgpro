@@ -22,7 +22,7 @@ export default function PricingPage() {
         <div className="max-w-6xl mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl lg:text-5xl font-bold text-black mb-6">Simple, Fair Pricing</h1>
+            <h1 className="font-serif text-4xl lg:text-5xl font-bold text-black mb-6">Simple, Fair Pricing</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               No subscriptions, no hidden fees. Just professional photo restoration at an honest price. Choose the plan that's right for you.
             </p>

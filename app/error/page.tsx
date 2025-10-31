@@ -12,7 +12,7 @@ export default function ErrorPage() {
           <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
             <RefreshCw className="w-8 h-8 text-red-600" />
           </div>
-          <h1 className="text-3xl font-semibold tracking-tight text-gray-900">Something went wrong</h1>
+          <h1 className="font-serif text-3xl font-semibold tracking-tight text-gray-900">Something went wrong</h1>
           <p className="text-lg text-gray-600">
             We encountered an unexpected error. This might be due to an expired or invalid authentication link.
           </p>

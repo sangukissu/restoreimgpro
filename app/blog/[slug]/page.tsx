@@ -166,7 +166,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                 </div>
               </div>
               
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">{post.title}</h1>
+              <h1 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 leading-tight">{post.title}</h1>
               
               {post.excerpt && (
                 <div className="text-xl text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: post.excerpt }} suppressHydrationWarning />

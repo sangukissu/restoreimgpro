@@ -142,7 +142,7 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
         <div className="max-w-5xl mx-auto mt-24 space-y-8">
           {/* Header Section */}
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Refer Friends & Earn Free Restorations</h1>
+            <h1 className="font-serif text-3xl font-bold text-gray-900 mb-4">Refer Friends & Earn Free Restorations</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Share BringBack AI with friends and earn {settings?.referrer_credits_reward || 2} credits 
               for each friend who makes their first purchase. They get {settings?.referred_credits_reward || 1} credits too!

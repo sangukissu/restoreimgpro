@@ -371,7 +371,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
         {appState === "upload" && (
           <div className="max-w-xl py-4 sm:py-12 mx-auto">
             <div className="mb-8 text-center">
-              <h1 className="font-inter font-bold text-3xl sm:text-4xl text-black mb-2">
+              <h1 className="font-serif font-inter font-bold text-3xl sm:text-4xl text-black mb-2">
                 Photo Animation
               </h1>
               <p className="text-lg text-gray-600">Bring your photos to life with AI-powered animations</p>

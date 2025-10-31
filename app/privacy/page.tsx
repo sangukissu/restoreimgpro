@@ -17,7 +17,7 @@ export default function PrivacyPage() {
         <div className="max-w-4xl mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl lg:text-5xl font-bold text-black mb-6">Privacy Policy</h1>
+            <h1 className="font-serif text-4xl lg:text-5xl font-bold text-black mb-6">Privacy Policy</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Your privacy is important to us. This policy explains how we collect, use, and protect your information.
             </p>

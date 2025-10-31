@@ -256,7 +256,7 @@ export default function DenoisePage() {
                 <Sparkles className="w-3 h-3 mr-1" />
                 AI Powered
               </div>
-              <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
+              <h1 className="font-serif text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
                 Clean up{" "}
                 <PointerHighlight
                   rectangleClassName="bg-purple-100 border-purple-300 leading-tight px-2"

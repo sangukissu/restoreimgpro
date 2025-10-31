@@ -87,7 +87,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
 
       {/* Main Content */}
       <main className="relative z-10 container mx-auto px-4 py-12 pt-24">
-        <h1 className="text-3xl font-bold mb-8">My Media</h1>
+        <h1 className="font-serif text-3xl font-bold mb-8">My Media</h1>
         {videos && videos.length > 0 ? (
           <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
             {videos.map((video) => (

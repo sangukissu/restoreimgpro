@@ -73,7 +73,7 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
           
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-3xl font-bold text-black mb-4">Blog</h1>
+            <h1 className="font-serif text-3xl font-bold text-black mb-4">Blog</h1>
             <p className="text-gray-600 max-w-xl mx-auto">
               Photo restoration tips and insights.
             </p>
@@ -144,7 +144,7 @@ export default function BlogPage() {
         <main className="pt-24 pb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h1 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                 Photo Restoration Blog
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">

@@ -26,7 +26,7 @@ export default function BlogPostError({
         <div className="max-w-md mx-auto text-center px-4">
           <div className="mb-8">
             <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Failed to Load Article</h1>
+            <h1 className="font-serif text-3xl font-bold text-gray-900 mb-2">Failed to Load Article</h1>
             <p className="text-gray-600">
               We're having trouble loading this blog post. This might be a temporary issue.
             </p>

@@ -65,7 +65,7 @@ export default function ReferralPublicPage() {
               <Sparkles className="w-3 h-3 mr-1" />
               BringBack AI Refferal Program
             </div>
-            <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-800 leading-tight">
+            <h1 className="font-serif text-3xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-800 leading-tight">
                             Share & Get Free Restorations
             </h1>
 

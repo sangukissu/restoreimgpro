@@ -226,18 +226,13 @@ export default function Page() {
       <Header />
       {/* Hero Section */}
       <section className="relative pb-12 overflow-hidden">
-     <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(135deg, transparent, transparent 2px, #f3f4f6 2px, #f3f4f6 4px)",
-          }}
-        />
+        <div className="absolute inset-0 bg-[url('/hero-bg.png')] bg-cover bg-center  pointer-events-none" />
+     
       <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
       
         <div className="relative z-10 space-y-6">
           <div className="space-y-6">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-4">
+            <div className="shadow-xl shadow-zinc-500/10 text-black inline-flex items-center px-3 py-1 rounded-full bg-white/50 text-xs font-medium mb-4 backdrop-blur-lg">
               <Sparkles className="w-3 h-3 mr-1" />
               BringBack AI
             </div>
@@ -250,7 +245,7 @@ export default function Page() {
               afterText="to life"
             />
 
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
+            <p className="text-lg sm:text-xl text-gray-800 max-w-3xl mx-auto leading-tight -mt-4">
               Restore, animate, and frame your precious memories. Our AI revives faded, torn, damaged or black-and-white photos, makes your loved ones smile and wave again, and creates beautiful digital frames perfect for display.
             </p>
           </div>
@@ -271,11 +266,11 @@ export default function Page() {
                 <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
                 <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
                 <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
-                <div className="w-8 h-8 rounded-full bg-gray-900 border-2 border-white flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">17+</span>
+                <div className="w-8 h-8 rounded-full bg-stone-800 border-2 border-white flex items-center justify-center">
+                  <span className="text-stone-200 text-xs font-bold">17+</span>
                 </div>
               </div>
-              <div className="flex text-yellow-400">
+              <div className="flex text-zinc-500">
                 {[...Array(5)].map((_, i) => (
                   <span key={i} className="text-lg">
                     ★
@@ -283,7 +278,7 @@ export default function Page() {
                 ))}
               </div>
             </div>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">Loved by Everyone</p>
+            <p className="text-lg sm:text-xl text-stone-700 max-w-3xl mx-auto leading-tight">Loved by Everyone</p>
           </div>
           
           {/* Peerlist Badge */}

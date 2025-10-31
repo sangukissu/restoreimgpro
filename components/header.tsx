@@ -1,13 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
-import { IconMenu2, IconX } from "@tabler/icons-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import type React from "react"
-import { useState } from "react"
-import { Plus, Menu, Icon } from "lucide-react"
+import { Plus } from "lucide-react"
 import { FramerButton } from "@/components/ui/framer-button"
 
 
@@ -35,27 +34,16 @@ interface MobileNavProps {
   className?: string
 }
 
-interface MobileNavHeaderProps {
-  children: React.ReactNode
-  className?: string
-}
-
-interface MobileNavMenuProps {
-  children: React.ReactNode
-  className?: string
-  isOpen: boolean
-  onClose: () => void
-}
-
 export const Navbar = ({ children, className }: NavbarProps) => {
-  return <motion.div className={cn("fixed inset-x-0 top-0 z-60 w-full pt-2", className)}>{children}</motion.div>
+  return <motion.div className={cn("fixed inset-x-0 top-0 z-60 w-full pt-4", className)}>{children}</motion.div>
 }
 
 export const NavBody = ({ children, className }: NavBodyProps) => {
   return (
     <motion.div
       className={cn(
-        "relative z-[60] mx-auto w-[70%] max-w-6xl flex-row items-center justify-between self-start rounded-lg bg-white/95 border border-gray-200 px-6 py-3 hidden backdrop-blur-lg lg:flex",
+        // **FIXED: Clean White Translucency and Subtle Border**
+        "shadow-xl shadow-zinc-500/10 relative z-[60] mx-auto max-w-4xl flex-row items-center justify-between self-start rounded-full bg-white/50 px-4 py-3 hidden backdrop-blur-lg lg:flex shadow-md",
         className,
       )}
     >
@@ -70,7 +58,8 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "flex flex-1 flex-row items-center justify-center space-x-1 text-sm font-medium text-gray-600 transition duration-200",
+        // **FIXED: Rich, Warm Charcoal Text Color (text-gray-900 is darker and more professional)**
+        "flex flex-1 flex-row items-center justify-center space-x-1 text-gray-900 transition duration-200",
         className,
       )}
     >
@@ -78,12 +67,14 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-3 py-2 text-gray-600 hover:text-black transition-colors"
+          // **FIXED: Link Color and Hover effect**
+          className="relative px-3 py-2 text-gray-900 text-md font-semibold hover:text-black transition-colors"
           key={`link-${idx}`}
           href={item.link}
         >
           {hovered === idx && (
-            <motion.div layoutId="hovered" className="absolute inset-0 h-full w-full rounded-md bg-gray-100" />
+            // **FIXED: Clean, Light Hover Background**
+            <motion.div layoutId="hovered" className="absolute inset-0 h-full w-full rounded-md bg-gray-100/70" />
           )}
           <span className="relative z-20">{item.name}</span>
         </a>
@@ -96,7 +87,8 @@ export const MobileNav = ({ children, className }: MobileNavProps) => {
   return (
     <motion.div
       className={cn(
-        "relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] flex-col items-center justify-between bg-white/95 border border-gray-200 rounded-lg backdrop-blur-lg py-3 px-4 lg:hidden",
+        // **FIXED: Mobile Clean White Translucency**
+        "shadow-xl shadow-zinc-500/10 bg-white/50 relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] flex-col items-center justify-between  rounded-lg backdrop-blur-lg py-3 px-4 lg:hidden shadow-md",
         className,
       )}
     >
@@ -105,54 +97,11 @@ export const MobileNav = ({ children, className }: MobileNavProps) => {
   )
 }
 
-export const MobileNavHeader = ({ children, className }: MobileNavHeaderProps) => {
-  return <div className={cn("flex w-full flex-row items-center justify-between", className)}>{children}</div>
-}
-
-export const MobileNavMenu = ({ children, className, isOpen, onClose }: MobileNavMenuProps) => {
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full text-black font-semibold flex-col  justify-start gap-2 rounded-lg bg-white border border-gray-200 px-4 py-6",
-
-            className,
-          )}
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
-}
-
-export const MobileNavToggle = ({
-  isOpen,
-  onClick,
-}: {
-  isOpen: boolean
-  onClick: () => void
-}) => {
-  return (
-    <FramerButton onClick={onClick} className="text-sm py-1 group overflow-hidden pr-2 bg-white pl-2" iconClassName="w-6 h-6">
-
-      {isOpen ? <IconX className="h-6 w-6 text-black" /> : <IconMenu2 className="h-6 w-6 text-black" />}
-    </FramerButton>
-  )
-}
-
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
-
   const navItems = [
     { name: "Features", link: "/#features" },
     { name: "How it works", link: "/#how-it-works" },
-    { name: "Pricing", link: "/#pricing" },
-
+    { name: "Pricing", link: "/pricing" },
   ]
 
   return (
@@ -161,6 +110,7 @@ export default function Header() {
         {/* Logo */}
         <div className="flex items-center">
           <a href="/" className="flex items-center gap-2">
+            {/* Logo is assumed to work well against a white background */}
             <Image 
               src="/header-logo.webp" 
               alt="BringBack Logo" 
@@ -177,11 +127,9 @@ export default function Header() {
 
         {/* CTA Button */}
         <div className="flex items-center">
-         
           <Link href="/dashboard">
-            
+             {/* CTA: Keeping the color dark for high contrast. If your primary brand color is a rich, warm tone, use it here instead of black. */}
              <FramerButton variant="primary" icon={<Plus />} className="text-sm py-1 group relative overflow-hidden pr-10 pl-4" iconClassName="w-6 h-6">
-
             Restore Now
           </FramerButton>
             </Link>
@@ -189,7 +137,8 @@ export default function Header() {
       </NavBody>
 
       <MobileNav>
-        <MobileNavHeader>
+        <div className="flex w-full items-center justify-between">
+          {/* Logo */}
           <div className="flex items-center">
             <a href="/" className="flex items-center gap-2">
               <Image 
@@ -200,32 +149,18 @@ export default function Header() {
                 className="w-36 h-9"
                 style={{ width: 'auto' }}
               />
-            
             </a>
           </div>
-          <MobileNavToggle isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-        </MobileNavHeader>
-
-        <MobileNavMenu isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          {navItems.map((item, idx) => (
-            <a
-              key={idx}
-              href={item.link}
-              className="w-full px-2 py-2 text-gray-600 hover:text-black transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              {item.name}
-            </a>
-          ))}
-         
-             <Link href="/login">
-            
-             <FramerButton variant="primary" icon={<Plus />} className="text-sm py-1 group overflow-hidden pr-10 pl-4" iconClassName="w-6 h-6">
-
-            Restore Now
-          </FramerButton>
+          
+          {/* CTA Button */}
+          <div className="flex items-center">
+            <Link href="/dashboard">
+              <FramerButton variant="primary" icon={<Plus />} className="text-sm py-1 group overflow-hidden pr-10 pl-4" iconClassName="w-6 h-6">
+                Restore Now
+              </FramerButton>
             </Link>
-        </MobileNavMenu>
+          </div>
+        </div>
       </MobileNav>
     </Navbar>
   )

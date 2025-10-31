@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     if (existingReferral) {
       return NextResponse.json({ 
-        error: 'You have already been referred by someone else' 
+        error: 'You have already been referred' 
       }, { status: 400 })
     }
 

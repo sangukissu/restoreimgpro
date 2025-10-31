@@ -23,7 +23,7 @@ export default function RefundsPage() {
               <CheckCircle className="w-4 h-4 mr-2" />
               30-Day Money-Back Guarantee
             </div>
-            <h1 className="text-4xl lg:text-5xl font-bold text-black mb-6">Refund Policy</h1>
+            <h1 className="font-serif text-4xl lg:text-5xl font-bold text-black mb-6">Refund Policy</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               We stand behind our photo restoration service. If you're not completely satisfied, we'll make it right.
             </p>
