@@ -226,6 +226,25 @@ export default function Page() {
       <Header />
       {/* Hero Section */}
       <section className="relative pb-12 overflow-hidden">
+           <div className="absolute hidden md:block left-12 top-50 w-86 h-96 z-1 opacity-60 rounded-lg">
+        <div className="relative w-full h-full -rotate-8 transform origin-center rounded-lg">
+          <img src="/hero-grandpa.webp" alt="" className="w-full h-full  object-top" />
+          {/* Cloud overlay for natural dissolving effect */}
+          <div className="absolute -bottom-4 -left-8 -right-8 h-32 rounded-lg">
+            <img src="/cloud.png" alt="" className="w-full h-full object-cover opacity-95" />
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute hidden md:block right-12 top-50 w-86 h-96 z-1 opacity-60 rounded-lg">
+        <div className="relative w-full h-full rotate-12 transform origin-center rounded-lg">
+          <img src="/hero-grandma.webp" alt="" className="w-full h-full  object-top" />
+          {/* Cloud overlay for natural dissolving effect */}
+          <div className="absolute -bottom-4 -left-8 -right-8 h-32 rounded-lg">
+            <img src="/cloud.png" alt="" className="w-full h-full object-cover opacity-95" />
+          </div>
+        </div>
+      </div>
         <div className="absolute inset-0 bg-[url('/hero-bg.png')] bg-cover bg-center  pointer-events-none" />
      
       <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
