@@ -11,6 +11,7 @@ import FeaturesSection from "@/components/features-section"
 import ShowcaseSection from "@/components/showcase-section"
 import FAQSection from "@/components/faq-section"
 import MemoriesSection from "@/components/memories-section"
+import InlinePhotosHeadline from "@/components/inline-photos-headline"
 import type { Metadata } from "next"
 import Image from "next/image"
 
@@ -240,26 +241,14 @@ export default function Page() {
               <Sparkles className="w-3 h-3 mr-1" />
               BringBack AI
             </div>
-            <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-800 leading-tight">
-              Bring back{" "}
-              <PointerHighlight
-                rectangleClassName="bg-purple-100 border-purple-300 leading-tight px-2"
-                pointerClassName="text-purple-500 h-3 w-3"
-                containerClassName="inline-block mx-1"
-              >
-                <span className="relative z-10">old photos</span>
-              </PointerHighlight>
-              and
-
-              <PointerHighlight
-                rectangleClassName="bg-blue-100 border-blue-300 leading-tight px-2"
-                pointerClassName="text-blue-500 h-3 w-3"
-                containerClassName="inline-block mx-1"
-              >
-                <span className="relative z-10">faded memories</span>
-              </PointerHighlight>{" "}
-              to life
-            </h1>
+            <InlinePhotosHeadline
+              beforeText="Bring back"
+              imageUrl1="/childhood-memories-black-and-white.webp"
+              betweenText="old photos &"
+              accentWord="faded memories"
+              imageUrl2="/childhood-memories-colorized.webp"
+              afterText="to life"
+            />
 
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
               Restore, animate, and frame your precious memories. Our AI revives faded, torn, damaged or black-and-white photos, makes your loved ones smile and wave again, and creates beautiful digital frames perfect for display.

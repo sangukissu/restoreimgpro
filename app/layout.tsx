@@ -6,7 +6,6 @@ import { GeistMono } from "geist/font/mono"
 import { Suspense } from "react"
 import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
-import ReferralHandler from "@/components/referral-handler"
 import Script from "next/script"
 import "./globals.css"
 
@@ -148,9 +147,7 @@ export default function RootLayout({
       </head>
       <body className={`font-sans antialiased`}>
         {children}
-        <Suspense fallback={null}>
-          <ReferralHandler />
-        </Suspense>
+        
         <NetworkStatus />
         <Toaster />
         
