@@ -8,7 +8,7 @@ export default function MemoriesSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
+          <h2 className="font-serif text-4xl md:text-5xl text-black mb-6">
             Every <Cover>memory</Cover> deserves to live forever
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">

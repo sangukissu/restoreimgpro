@@ -16,7 +16,7 @@ export default function ColorizeMemoriesSection() {
             <span className="text-sm font-medium text-gray-400 italic">In Living Color</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black leading-tight">
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-black leading-tight">
             Because history
             <br />
             <Cover>deserves to be seen in color</Cover>

@@ -359,7 +359,7 @@ export default function DenoisePage() {
       <section className="px-6 py-20 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">How our AI understands noise</h2>
+            <h2 className="font-serif text-4xl lg:text-5xl font-bold text-black mb-4">How our AI understands noise</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Advanced signal processing meets machine learning to separate noise from actual image content
             </p>

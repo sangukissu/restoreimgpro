@@ -117,7 +117,7 @@ export default function ReferralPublicPage() {
           {/* Header */}
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <p className="text-gray-500 italic text-lg mb-4">Our Process, Explained</p>
-            <h2 className="text-4xl lg:text-5xl font-bold text-black">Share & Earn Free Restorations in 3 Simple Steps</h2>
+            <h2 className="font-serif text-4xl lg:text-5xl text-black">Share & Earn Free Restorations in 3 Simple Steps</h2>
           </div>
 
           {/* Process Cards */}
@@ -171,7 +171,7 @@ export default function ReferralPublicPage() {
       <section className="px-4 py-20 bg-white min-h-screen">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black mb-6">
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-black mb-6">
               Why Share Our Service?
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
@@ -236,7 +236,7 @@ export default function ReferralPublicPage() {
       {/* CTA Section */}
       <section className="px-4 py-20 bg-gray-100">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
+          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6">
             Ready to Start Sharing?
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">

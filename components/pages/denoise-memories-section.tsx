@@ -18,7 +18,7 @@ export default function DenoiseMemoriesSection() {
             <span className="text-sm font-medium text-gray-400 italic">Noise Free</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black leading-tight">
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-black leading-tight">
             Because clean photos
             <br />
             <Cover>tell better stories</Cover>

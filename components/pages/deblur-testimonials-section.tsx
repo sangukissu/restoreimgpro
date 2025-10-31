@@ -35,7 +35,7 @@ export default function DeblurTestimonialsSection() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">
+          <h2 className="font-serif text-4xl lg:text-5xl font-bold text-black mb-4">
             Moments worth <Cover>sharpening</Cover>
           </h2>
           <p className="text-lg text-gray-600">Real people, real photos brought into focus</p>

@@ -13,7 +13,7 @@ export default function AnimateHowItWorksSection() {
             <Sparkles className="w-4 h-4 mr-2" />
             How It Works
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
+          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6">
             Bring photos to life in 3 simple steps
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">

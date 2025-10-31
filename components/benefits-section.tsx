@@ -12,7 +12,7 @@ export default function BenefitsSection() {
         {/* Header */}
         <div className="text-center mb-20">
           <p className="text-gray-500 italic text-lg mb-4">Why Choose Us</p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">Why trust <Cover>BringBack AI</Cover>
+          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6">Why trust <Cover>BringBack AI</Cover>
 </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
 AI-powered photo restoration and animation that transforms old, damaged photos into living memories.

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "BringBack - AI Photo Restoration, Animation & Digital Frames | Revive Old Memories",
   description: "BringBack restores old, faded, or damaged photos, brings them to life with AI animation, and creates beautiful digital frames. Repair colors, fix damage, and showcase memories in stunning frames in seconds.",
   keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration, digital photo frames, photo framing, custom photo frames",
-  
+
 }
 
 const homePageJsonLd = {
@@ -226,107 +226,91 @@ export default function Page() {
       <Header />
       {/* Hero Section */}
       <section className="relative pb-12 overflow-hidden">
-           <div className="absolute hidden md:block left-12 top-50 w-86 h-96 z-1 opacity-60 rounded-lg">
-        <div className="relative w-full h-full -rotate-8 transform origin-center rounded-lg">
-          <img src="/hero-grandpa.webp" alt="" className="w-full h-full  object-top" />
-          {/* Cloud overlay for natural dissolving effect */}
-          <div className="absolute -bottom-4 -left-8 -right-8 h-32 rounded-lg">
-            <img src="/cloud.png" alt="" className="w-full h-full object-cover opacity-95" />
-          </div>
-        </div>
-      </div>
+        
 
-      <div className="absolute hidden md:block right-12 top-50 w-86 h-96 z-1 opacity-60 rounded-lg">
-        <div className="relative w-full h-full rotate-12 transform origin-center rounded-lg">
-          <img src="/hero-grandma.webp" alt="" className="w-full h-full  object-top" />
-          {/* Cloud overlay for natural dissolving effect */}
-          <div className="absolute -bottom-4 -left-8 -right-8 h-32 rounded-lg">
-            <img src="/cloud.png" alt="" className="w-full h-full object-cover opacity-95" />
-          </div>
-        </div>
-      </div>
+       
         <div className="absolute inset-0 bg-[url('/hero-bg.png')] bg-cover bg-center  pointer-events-none" />
-     
-      <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
-      
-        <div className="relative z-10 space-y-6">
-          <div className="space-y-6">
-            <div className="shadow-xl shadow-zinc-500/10 text-black inline-flex items-center px-3 py-1 rounded-full bg-white/50 text-xs font-medium mb-4 backdrop-blur-lg">
-              <Sparkles className="w-3 h-3 mr-1" />
-              BringBack AI
-            </div>
-            <InlinePhotosHeadline
-              beforeText="Bring back"
-              imageUrl1="/childhood-memories-black-and-white.webp"
-              betweenText="old photos &"
-              accentWord="faded memories"
-              imageUrl2="/childhood-memories-colorized.webp"
-              afterText="to life"
-            />
 
-            <p className="text-lg sm:text-xl text-gray-800 max-w-3xl mx-auto leading-tight -mt-4">
-              Restore, animate, and frame your precious memories. Our AI revives faded, torn, damaged or black-and-white photos, makes your loved ones smile and wave again, and creates beautiful digital frames perfect for display.
-            </p>
-          </div>
-          <div className="flex flex-col gap-4 justify-center items-center w-full">
-            <Link href="/dashboard">
-            
-             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
-            Bring Back Memories
-          </FramerButton>
-            </Link>
-          
-          </div>
-          <div className="flex flex-col items-center space-y-2 pt-2">
-            <div className="flex items-center space-x-2">
-              <div className="flex -space-x-2">
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />  
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
-                <div className="w-8 h-8 rounded-full bg-stone-800 border-2 border-white flex items-center justify-center">
-                  <span className="text-stone-200 text-xs font-bold">17+</span>
+        <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
+
+          <div className="relative z-10 space-y-6">
+            <div className="space-y-6">
+              <div className="shadow-xl shadow-zinc-500/10 text-black inline-flex items-center px-3 py-1 rounded-full bg-white/50 text-xs font-medium mb-4 backdrop-blur-lg">
+                <Sparkles className="w-3 h-3 mr-1" />
+                BringBack AI
+              </div>
+              <InlinePhotosHeadline
+                beforeText="Bring back"
+                imageUrl1="/childhood-memories-black-and-white.webp"
+                betweenText="old photos &"
+                accentWord="faded memories"
+                imageUrl2="/childhood-memories-colorized.webp"
+                afterText="to life"
+              />
+
+              <p className="text-lg sm:text-xl text-gray-800 max-w-3xl mx-auto leading-tight -mt-4">
+                Restore, animate, and frame your precious memories. Our AI revives faded, torn, damaged or black-and-white photos, makes your loved ones smile and wave again, and creates beautiful digital frames perfect for display.
+              </p>
+            </div>
+            <div className="flex flex-col gap-4 justify-center items-center w-full">
+              <Link href="/dashboard">
+
+                <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
+                  Bring Back Memories
+                </FramerButton>
+              </Link>
+
+            </div>
+            <div className="flex flex-col items-center space-y-2 pt-2">
+              <div className="flex items-center space-x-2">
+                <div className="flex -space-x-2">
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
+                  <div className="w-8 h-8 rounded-full bg-stone-800 border-2 border-white flex items-center justify-center">
+                    <span className="text-stone-200 text-xs font-bold">17+</span>
+                  </div>
+                </div>
+                <div className="flex text-zinc-500">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-lg">
+                      ★
+                    </span>
+                  ))}
                 </div>
               </div>
-              <div className="flex text-zinc-500">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-lg">
-                    ★
-                  </span>
-                ))}
-              </div>
+              <p className="text-lg sm:text-xl text-stone-700 max-w-3xl mx-auto leading-tight">Loved by Everyone</p>
             </div>
-            <p className="text-lg sm:text-xl text-stone-700 max-w-3xl mx-auto leading-tight">Loved by Everyone</p>
+
+            {/* Peerlist Badge */}
+            <div className="flex justify-center pt-4 space-x-4">
+              <a href="https://peerlist.io/harvansh/project/bringback-ai" target="_blank" rel="noopener noreferrer">
+                <Image src="/peerlist.svg" alt="Peerlist Badge" className="h-12 sm:h-16 md:h-18 w-auto" width={171} height={54} />
+              </a>
+            </div>
+
           </div>
-          
-          {/* Peerlist Badge */}
-          <div className="flex justify-center pt-4 space-x-4">
-            <a href="https://peerlist.io/harvansh/project/bringback-ai" target="_blank" rel="noopener noreferrer">
-              <Image src="/peerlist.svg" alt="Peerlist Badge" className="h-12 sm:h-16 md:h-18 w-auto" width={171} height={54} />
-            </a>
-              </div>
-        
         </div>
-        </div>
-          <div>
-            <div className="flex justify-center">
-              <div className="py-4 border rounded-3xl bg-white border-neutral-200 px-4">
-                <HeroVideoDialog
-                  animationStyle="from-center"
-                  videoSrc="https://youtu.be/K_CYXkv2Yso"
-                  thumbnailSrc="/video-thumbnail.webp"
-                  thumbnailAlt="Photo restoration demo video"
-                  className="h-[250px] w-[380px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
-                />
-              </div>
+        <div>
+          <div className="flex justify-center">
+            <div className="py-4 border rounded-3xl bg-white border-neutral-200 px-4">
+              <HeroVideoDialog
+                animationStyle="from-center"
+                videoSrc="https://youtu.be/K_CYXkv2Yso"
+                thumbnailSrc="/video-thumbnail.webp"
+                thumbnailAlt="Photo restoration demo video"
+                className="h-[250px] w-[380px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
+              />
             </div>
           </div>
+        </div>
       </section>
 
       <HowItWorksSection />
       <MemoriesSection />
-            <ShowcaseSection />
+      <ShowcaseSection />
       <BenefitsSection />
 
       <FeaturesSection />
@@ -334,10 +318,10 @@ export default function Page() {
 
       <FAQSection />
 
-   
-    
-       {/* Emotional Connection */}
-             <section className="px-4 py-20 max-w-6xl mx-auto text-center">
+
+
+      {/* Emotional Connection */}
+      <section className="px-4 py-20 max-w-6xl mx-auto text-center">
 
         <div className="text-center">
           <div className="max-w-4xl mx-auto">
@@ -347,19 +331,19 @@ export default function Page() {
                 preserved, restored, and shared with future generations."
               </blockquote>
               <div className="mt-8 mx-auto">
-              
 
-            <Link href="/dashboard">
-            
-             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden  sm:w-auto">
-            Start bringing memories to life
-          </FramerButton>
-            </Link>
+
+                <Link href="/dashboard">
+
+                  <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden  sm:w-auto">
+                    Start bringing memories to life
+                  </FramerButton>
+                </Link>
               </div>
             </div>
           </div>
         </div>
-        </section>
+      </section>
 
       {/* Footer */}
       <Footer />

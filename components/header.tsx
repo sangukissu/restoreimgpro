@@ -88,7 +88,7 @@ export const MobileNav = ({ children, className }: MobileNavProps) => {
     <motion.div
       className={cn(
         // **FIXED: Mobile Clean White Translucency**
-        "shadow-xl shadow-zinc-500/10 bg-white/50 relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] flex-col items-center justify-between  rounded-lg backdrop-blur-lg py-3 px-4 lg:hidden shadow-md",
+        "shadow-xl shadow-zinc-500/10 bg-white/50 relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] flex-col items-center justify-between rounded-full backdrop-blur-lg py-3 px-4 lg:hidden shadow-md",
         className,
       )}
     >

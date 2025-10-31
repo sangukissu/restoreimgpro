@@ -17,7 +17,7 @@ export default function PrivacyPage() {
         <div className="max-w-4xl mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="font-serif text-4xl lg:text-5xl font-bold text-black mb-6">Privacy Policy</h1>
+            <h1 className="font-serif text-4xl lg:text-5xl text-black mb-6">Privacy Policy</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Your privacy is important to us. This policy explains how we collect, use, and protect your information.
             </p>
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
           <div className="prose prose-lg max-w-none">
             <div className="space-y-12">
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Information We Collect</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Information We Collect</h2>
                 <div className="text-gray-700 space-y-4">
                   <p>
                     When you use BringBack, we collect minimal information necessary to provide our photo restoration
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">How We Use Your Information</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">How We Use Your Information</h2>
                 <div className="text-gray-700 space-y-4">
                   <p>We use your information solely to:</p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Photo Privacy & Security</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Photo Privacy & Security</h2>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
                   <h3 className="font-semibold text-blue-900 mb-2">🔒 Your Photos Are Safe</h3>
                   <p className="text-blue-800">
@@ -92,7 +92,7 @@ export default function PrivacyPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Data Sharing</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Data Sharing</h2>
                 <div className="text-gray-700 space-y-4">
                   <p>We do not sell, rent, or share your personal information with third parties, except:</p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -104,7 +104,7 @@ export default function PrivacyPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Your Rights</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Your Rights</h2>
                 <div className="text-gray-700 space-y-4">
                   <p>You have the right to:</p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -118,7 +118,7 @@ export default function PrivacyPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Contact Us</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Contact Us</h2>
                 <div className="text-gray-700">
                   <p>If you have questions about this Privacy Policy or how we handle your data, contact us at:</p>
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">

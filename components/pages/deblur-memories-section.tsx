@@ -17,7 +17,7 @@ export default function DeblurMemoriesSection() {
             <span className="text-sm font-medium text-gray-400 italic">Crystal Clear</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black leading-tight">
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-black leading-tight">
             Because sharp moments
             <br />
             <Cover>deserve sharp photos</Cover>

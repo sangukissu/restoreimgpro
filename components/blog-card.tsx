@@ -49,7 +49,7 @@ export default function BlogCard({
               <span>{readTime}</span>
             </div>
 
-            <h2 className="font-bold text-black mb-3 group-hover:text-gray-700 transition-colors text-lg leading-tight">
+            <h2 className="font-serif font-semibold text-black mb-3 group-hover:text-gray-700 transition-colors text-lg leading-tight">
               {title}
             </h2>
 

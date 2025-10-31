@@ -23,7 +23,7 @@ export default function RefundsPage() {
               <CheckCircle className="w-4 h-4 mr-2" />
               30-Day Money-Back Guarantee
             </div>
-            <h1 className="font-serif text-4xl lg:text-5xl font-bold text-black mb-6">Refund Policy</h1>
+            <h1 className="font-serif text-4xl lg:text-5xl text-black mb-6">Refund Policy</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               We stand behind our photo restoration service. If you're not completely satisfied, we'll make it right.
             </p>
@@ -52,7 +52,7 @@ export default function RefundsPage() {
           <div className="prose prose-lg max-w-none">
             <div className="space-y-12">
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Our Guarantee</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Our Guarantee</h2>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
                   <p className="text-blue-800 font-medium">
                     We're confident you'll love your restored photos. If you're not completely satisfied with the
@@ -68,7 +68,7 @@ export default function RefundsPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Refund Eligibility</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Refund Eligibility</h2>
                 <div className="text-gray-700 space-y-4">
                   <p>You're eligible for a full refund if:</p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -85,7 +85,7 @@ export default function RefundsPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">How to Request a Refund</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">How to Request a Refund</h2>
                 <div className="text-gray-700 space-y-4">
                   <p>Getting a refund is simple:</p>
                   <div className="bg-gray-50 rounded-lg p-6 space-y-4">
@@ -121,7 +121,7 @@ export default function RefundsPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Refund Timeline</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Refund Timeline</h2>
                 <div className="text-gray-700 space-y-4">
                   <ul className="list-disc pl-6 space-y-2">
                     <li>
@@ -145,7 +145,7 @@ export default function RefundsPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Partial Refunds</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Partial Refunds</h2>
                 <div className="text-gray-700 space-y-4">
                   <p>If you've used some of your photo restoration credits, we can offer:</p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -158,7 +158,7 @@ export default function RefundsPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-black mb-4">Contact for Refunds</h2>
+                <h2 className="font-serif text-2xl font-bold text-black mb-4">Contact for Refunds</h2>
                 <div className="text-gray-700">
                   <p>Ready to request a refund or have questions about our policy?</p>
                   <div className="mt-6 p-6 bg-gray-50 rounded-lg">

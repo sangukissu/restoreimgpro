@@ -22,7 +22,7 @@ export default function PricingPage() {
         <div className="max-w-6xl mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="font-serif text-4xl lg:text-5xl font-bold text-black mb-6">Simple, Fair Pricing</h1>
+            <h1 className="font-serif text-4xl lg:text-5xl text-black mb-6">Simple, Fair Pricing</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               No subscriptions, no hidden fees. Just professional photo restoration at an honest price. Choose the plan that's right for you.
             </p>
@@ -167,7 +167,7 @@ export default function PricingPage() {
 
           {/* Comparison */}
           <div className="bg-gray-50 rounded-2xl p-8 mb-16">
-            <h2 className="text-3xl font-bold text-black text-center mb-8">How We Compare photo restoration</h2>
+            <h2 className="font-serif text-3xl font-bold text-black text-center mb-8">How We Compare photo restoration</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -208,7 +208,7 @@ export default function PricingPage() {
 
           {/* FAQ */}
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-black text-center mb-8">Pricing Questions</h2>
+            <h2 className="font-serif text-3xl font-bold text-black text-center mb-8">Pricing Questions</h2>
             <div className="space-y-6">
               <div className="border-b border-gray-200 pb-6">
                 <h3 className="text-lg font-semibold text-black mb-2">Is this a one-time payment?</h3>
