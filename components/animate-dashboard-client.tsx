@@ -105,6 +105,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [isPreloadingImage, setIsPreloadingImage] = useState(false)
   const [selectedPreset, setSelectedPreset] = useState<AnimationPreset>(ANIMATION_PRESETS[0])
+  const [showAllPresets, setShowAllPresets] = useState(false)
 
   const [isProcessing, setIsProcessing] = useState(false)
   const [currentGeneration, setCurrentGeneration] = useState<VideoGeneration | null>(null)
@@ -364,12 +365,12 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
       />
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
 
 
         {/* Upload Interface */}
         {appState === "upload" && (
-          <div className="max-w-xl py-4 sm:py-12 mx-auto">
+          <div className="max-w-6xl py-4 sm:py-12 mx-auto">
             <div className="mb-8 text-center">
               <h1 className="font-serif font-inter font-bold text-3xl sm:text-4xl text-black mb-2">
                 Photo Animation
@@ -378,124 +379,163 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
             </div>
 
             <div className="bg-white rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-4 border-gray-200">
-              <div className="space-y-6">
-                {/* Image Upload */}
-                <div>
-                    <label className="block text-lg font-semibold text-black mb-4">
-                      Upload Image
-                    </label>
-                    <div 
-                      onClick={() => !isPreloadingImage && fileInputRef.current?.click()}
-                      className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 transition-colors group"
-                    >
-                      {isPreloadingImage ? (
-                        <div className="space-y-4 py-6 flex flex-col items-center">
-                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+              {/* Responsive Layout: Stack on mobile, side-by-side on desktop */}
+              <div className={`${selectedFile ? 'lg:grid lg:grid-cols-2 lg:gap-8' : ''} space-y-6 lg:space-y-0`}>
+                {/* Image Upload Section */}
+                <div className="space-y-6">
+                  <div>
+                      <label className="block text-lg font-semibold text-black mb-4">
+                        Upload Image
+                      </label>
+                      <div 
+                        onClick={() => !isPreloadingImage && fileInputRef.current?.click()}
+                        className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 transition-colors group"
+                      >
+                        {isPreloadingImage ? (
+                          <div className="space-y-4 py-6 flex flex-col items-center">
+                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                              <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                            </div>
+                            <p className="text-gray-700 font-medium">Loading your image from previous step...</p>
+                            <p className="text-sm text-gray-500">Please wait while we prepare it for animation</p>
                           </div>
-                          <p className="text-gray-700 font-medium">Loading your image from previous step...</p>
-                          <p className="text-sm text-gray-500">Please wait while we prepare it for animation</p>
-                        </div>
-                      ) : selectedImageUrl ? (
-                        <div className="space-y-4 ">
-                          <Image 
-                            src={selectedImageUrl} 
-                            alt="Selected image" 
-                            width={200}
-                            height={200}
-                            className="mx-auto rounded-xl object-cover"
-                          />
-                          <p className="text-sm text-gray-600">Click to change image</p>
-                        </div>
-                      ) : (
-                        <div className="space-y-4 relative">
-                          <div className="relative mx-auto w-12 h-12 sm:w-24 sm:h-24 group">
-                            <div className="inset-0 absolute rounded-full bg-gray-100 opacity-50 transition-all duration-300 group-hover:opacity-75 group-hover:scale-105"></div>
-                            <div className="relative w-full h-full flex items-center justify-center">
-                              <Upload className="w-6 h-6 sm:w-12 sm:h-12 text-gray-700" />
+                        ) : selectedImageUrl ? (
+                          <div className="space-y-4 ">
+                            <Image 
+                              src={selectedImageUrl} 
+                              alt="Selected image" 
+                              width={200}
+                              height={200}
+                              className="mx-auto rounded-xl object-cover"
+                            />
+                            <p className="text-sm text-gray-600">Click to change image</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-4 relative">
+                            <div className="relative mx-auto w-12 h-12 sm:w-24 sm:h-24 group">
+                              <div className="inset-0 absolute rounded-full bg-gray-100 opacity-50 transition-all duration-300 group-hover:opacity-75 group-hover:scale-105"></div>
+                              <div className="relative w-full h-full flex items-center justify-center">
+                                <Upload className="w-6 h-6 sm:w-12 sm:h-12 text-gray-700" />
+                              </div>
+                            </div>
+                            <div>
+                              <p className="text-lg font-semibold text-gray-900">Upload your photo</p>
+                              <p className="text-gray-600">JPG, PNG, WebP up to 20MB</p>
                             </div>
                           </div>
-                          <div>
-                            <p className="text-lg font-semibold text-gray-900">Upload your photo</p>
-                            <p className="text-gray-600">JPG, PNG, WebP up to 20MB</p>
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileSelect}
+                        className="hidden"
+                      />
                     </div>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
-                </div>
+                  </div>
 
-                {/* Animation Preset Selection */}
+                {/* Animation Selection - Second Column on Large Screens */}
                 {selectedFile && (
-                  <div>
+                  <div className="space-y-6">
                     <label className="block text-lg font-semibold text-black mb-4">
                       Choose Animation Style
                     </label>
-                    <div className="grid gap-4">
-                      {ANIMATION_PRESETS.map((preset) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
+                      {ANIMATION_PRESETS.slice(0, showAllPresets ? ANIMATION_PRESETS.length : 6).map((preset) => (
                         <div
                           key={preset.id}
                           onClick={() => setSelectedPreset(preset)}
-                          className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                          className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
                             selectedPreset.id === preset.id
                               ? 'border-black bg-gray-50'
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
                         >
-                          <div className="flex items-start gap-3">
-                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                               selectedPreset.id === preset.id
                                 ? 'border-black bg-black'
                                 : 'border-gray-300'
                             }`}>
                               {selectedPreset.id === preset.id && (
-                                <div className="w-2 h-2 bg-white rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-white rounded-full" />
                               )}
                             </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <Sparkles className="w-4 h-4 text-gray-600" />
-                                <h3 className="font-semibold text-black">{preset.name}</h3>
-                              </div>
-                              <p className="text-sm text-gray-600">{preset.description}</p>
-                            </div>
+                            <Sparkles className="w-3 h-3 text-gray-600" />
+                            <h3 className="font-semibold text-sm text-black">{preset.name}</h3>
                           </div>
+                          <p className="text-xs text-gray-600 leading-relaxed">{preset.description}</p>
                         </div>
                       ))}
                     </div>
+                    
+                    {/* Show More/Less Button */}
+                    {ANIMATION_PRESETS.length > 6 && (
+                      <div className="mt-4 text-center">
+                        <button
+                          onClick={() => setShowAllPresets(!showAllPresets)}
+                          className="text-sm text-gray-600 hover:text-black transition-colors underline"
+                        >
+                          {showAllPresets ? 'Show Less' : `Show ${ANIMATION_PRESETS.length - 6} More Options`}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Generate Button for Desktop */}
+                    <Button
+                      onClick={handleGenerate}
+                      disabled={
+                        !selectedFile ||
+                        isProcessing ||
+                        credits < 10 ||
+                        isPreloadingImage
+                      }
+                      className="hidden lg:flex w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Play className="w-5 h-5 mr-2" />
+                          Generate Video (10 credits)
+                        </>
+                      )}
+                    </Button>
                   </div>
                 )}
-
-                {/* Generate Button */}
-                <Button
-                  onClick={handleGenerate}
-                  disabled={
-                    !selectedFile ||
-                    isProcessing ||
-                    credits < 10 ||
-                    isPreloadingImage
-                  }
-                  className="w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
-                >
-                  {isProcessing ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-5 h-5 mr-2" />
-                      Generate Video (10 credits)
-                    </>
-                  )}
-                </Button>
               </div>
+
+              {/* Generate Button for mobile when no side-by-side layout */}
+              {selectedFile && (
+                <div className="lg:hidden mt-6">
+                  <Button
+                    onClick={handleGenerate}
+                    disabled={
+                      !selectedFile ||
+                      isProcessing ||
+                      credits < 10 ||
+                      isPreloadingImage
+                    }
+                    className="w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-5 h-5 mr-2" />
+                        Generate Video (10 credits)
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
          )}
