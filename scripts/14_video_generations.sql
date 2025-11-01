@@ -27,6 +27,9 @@ CREATE POLICY "Users can insert their own video generations" ON public.video_gen
 CREATE POLICY "Users can update their own video generations" ON public.video_generations
     FOR UPDATE USING (auth.uid() = user_id);
 
+CREATE POLICY "Users can delete their own video generations" ON public.video_generations
+    FOR DELETE USING (auth.uid() = user_id);
+
 -- Create indexes for performance
 CREATE INDEX IF NOT EXISTS idx_video_generations_user_id ON public.video_generations(user_id);
 CREATE INDEX IF NOT EXISTS idx_video_generations_status ON public.video_generations(status);

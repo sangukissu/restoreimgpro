@@ -44,6 +44,9 @@ CREATE POLICY "Users can insert their own restorations" ON public.image_restorat
 CREATE POLICY "Users can update their own restorations" ON public.image_restorations
     FOR UPDATE USING (auth.uid() = user_id);
 
+CREATE POLICY "Users can delete their own restorations" ON public.image_restorations
+    FOR DELETE USING (auth.uid() = user_id);
+
 -- Create function to automatically create credits record for new users
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
