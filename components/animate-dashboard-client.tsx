@@ -378,7 +378,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
               <p className="text-lg text-gray-600">Bring your photos to life with AI-powered animations</p>
             </div>
 
-            <div className="bg-white rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-4 border-gray-200">
+            <div className="max-w-5xl mx-auto bg-white rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-4 border-gray-200">
               {/* Responsive Layout: Stack on mobile, side-by-side on desktop */}
               <div className={`${selectedFile ? 'lg:grid lg:grid-cols-2 lg:gap-8' : ''} space-y-6 lg:space-y-0`}>
                 {/* Image Upload Section */}
