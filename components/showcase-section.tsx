@@ -4,7 +4,6 @@ import { FramerButton } from "@/components/ui/framer-button"
 import { ChevronRight, Smile, Eye, Heart, Frame } from "lucide-react"
 import Link from "next/link"
 import { Compare } from "@/components/ui/compare"
-import { Cover } from "@/components/ui/cover"
 import Image from "next/image"
 
 const ANIMATION_PRESETS = [
@@ -134,15 +133,18 @@ export default function ShowcaseSection() {
   const [videoLoaded, setVideoLoaded] = useState(false)
 
   return (
-    <section id="examples" className="px-4 py-20 bg-gradient-to-br from-gray-50 to-gray-100">
+    <section id="examples" className="px-4 py-20 bg-[#fff6f070]">
       <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
           <p className="text-gray-500 italic text-lg mb-4">Real Transformations</p>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6">
+          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6 leading-tight">
             Every type of damage,
             <br />
             <span className="text-gray-600">
-              <Cover>restored, animated & framed</Cover>
+              <span className="relative inline-block">
+                <span className="relative z-10">restored, animated & framed</span>
+                <span className="absolute bottom-0 left-0 w-full h-3 bg-yellow-200 rounded-full transform -rotate-1"></span>
+              </span>
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">

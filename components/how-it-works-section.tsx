@@ -3,12 +3,27 @@ import { Cover } from "@/components/ui/cover"
 
 export default function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="px-4 py-20 bg-gray-100">
+    <section id="how-it-works" className="px-4 py-20 bg-[#fff6f070]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
           <p className="text-gray-500 italic text-lg mb-4">Our Process, Explained</p>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black">Your Memories, Reborn in 3 Simple Steps</h2>
+          <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight">
+            Your{" "}
+            <span className="relative inline-block">
+              <span className="relative z-10">Memories</span>
+              <span className="absolute inset-0 bg-orange-100 rounded-lg transform -rotate-1 scale-110"></span>
+            </span>
+            , Reborn in{" "}
+            <span className="relative">
+              <span className="relative z-10 px-3 py-1 bg-black text-white rounded-full text-3xl lg:text-4xl font-bold">3</span>
+            </span>{" "}
+            Simple{" "}
+            <span className="relative inline-block">
+              <span className="relative z-10">Steps</span>
+              <span className="absolute bottom-0 left-0 w-full h-3 bg-yellow-200 rounded-full transform -rotate-1"></span>
+            </span>
+          </h2>
         </div>
 
         {/* Process Cards */}

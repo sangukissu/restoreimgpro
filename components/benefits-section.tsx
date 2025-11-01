@@ -1,5 +1,4 @@
 "use client"
-import { Cover } from "@/components/ui/cover"
 import Link from "next/link"
 import { FramerButton } from "@/components/ui/framer-button"
 import { Check, ChevronRight, Star, Film } from "lucide-react"
@@ -12,8 +11,13 @@ export default function BenefitsSection() {
         {/* Header */}
         <div className="text-center mb-20">
           <p className="text-gray-500 italic text-lg mb-4">Why Choose Us</p>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6">Why trust <Cover>BringBack AI</Cover>
-</h2>
+          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6 leading-tight">
+            Why trust{" "}
+            <span className="relative inline-block">
+              <span className="relative z-10">BringBack AI</span>
+              <span className="absolute inset-0 bg-orange-100 rounded-lg transform -rotate-1 scale-110"></span>
+            </span>
+          </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
 AI-powered photo restoration and animation that transforms old, damaged photos into living memories.
           </p>
