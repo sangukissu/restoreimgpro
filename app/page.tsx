@@ -3,12 +3,13 @@ import { Sparkles, ChevronRight } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { FramerButton } from "@/components/ui/framer-button"
-import { PointerHighlight } from "@/components/pointer-highlight"
+import ComparisonSection from "@/components/ComparisonSection"
 import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
 import HowItWorksSection from "@/components/how-it-works-section"
 import BenefitsSection from "@/components/benefits-section"
 import FeaturesSection from "@/components/features-section"
 import ShowcaseSection from "@/components/showcase-section"
+import AIPhotoRestorationSection from "@/components/ai-photo-restoration-section"
 import FAQSection from "@/components/faq-section"
 import MemoriesSection from "@/components/memories-section"
 import InlinePhotosHeadline from "@/components/inline-photos-headline"
@@ -240,7 +241,7 @@ export default function Page() {
                 BringBack AI
               </div>
               <InlinePhotosHeadline
-                beforeText="Bring back"
+                beforeText="Restore"
                 imageUrl1="/childhood-memories-black-and-white.webp"
                 betweenText="old photos &"
                 accentWord="faded memories"
@@ -249,8 +250,7 @@ export default function Page() {
               />
 
               <p className="text-lg sm:text-xl text-gray-800 max-w-3xl mx-auto leading-tight -mt-4">
-                Restore, animate, and frame your precious memories. Our AI revives faded, torn, damaged or black-and-white photos, makes your loved ones smile and wave again, and creates beautiful digital frames perfect for display.
-              </p>
+Give your old photos a new life. Our powerful AI photo restoration tool automatically repairs scratches, tears, water damage, and fading in seconds. Simply upload a picture to restore old photos to their former glory, enhance colors, and sharpen details with breathtaking clarity.              </p>
             </div>
             <div className="flex flex-col gap-4 justify-center items-center w-full">
               <Link href="/dashboard">
@@ -311,6 +311,9 @@ export default function Page() {
       <HowItWorksSection />
       <MemoriesSection />
       <ShowcaseSection />
+      <AIPhotoRestorationSection />
+      <ComparisonSection />
+
       <BenefitsSection />
 
       <FeaturesSection />

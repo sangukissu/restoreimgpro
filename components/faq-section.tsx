@@ -105,7 +105,7 @@ export default function FAQSection() {
             Frequently asked{" "}
             <span className="relative inline-block">
               <span className="relative z-10">questions</span>
-              <span className="absolute bottom-0 left-0 w-full h-3 bg-yellow-200 rounded-full transform -rotate-1"></span>
+              <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">

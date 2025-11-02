@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 import { FramerButton } from "@/components/ui/framer-button"
-import { ChevronRight, Smile, Eye, Heart, Frame } from "lucide-react"
+import { ChevronRight, Smile, Eye, Heart, Frame, Wand2 } from "lucide-react"
 import Link from "next/link"
 import { Compare } from "@/components/ui/compare"
 import Image from "next/image"
@@ -136,14 +136,18 @@ export default function ShowcaseSection() {
     <section id="examples" className="px-4 py-20 bg-[#fff6f070]">
       <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-          <p className="text-gray-500 italic text-lg mb-4">Real Transformations</p>
+          <p className="text-gray-500 italic text-lg mb-4"></p>
+ <div className="inline-flex items-center px-2 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-6">
+            <Wand2 className="w-4 h-4 mr-2" />
+            Real Transformations
+          </div>
           <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6 leading-tight">
-            Every type of damage,
+            A Complete Solution for Any Type of 
             <br />
             <span className="text-gray-600">
               <span className="relative inline-block">
-                <span className="relative z-10">restored, animated & framed</span>
-                <span className="absolute bottom-0 left-0 w-full h-3 bg-yellow-200 rounded-full transform -rotate-1"></span>
+                <span className="relative z-10">Photo Damage</span>
+                <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
               </span>
             </span>
           </h2>

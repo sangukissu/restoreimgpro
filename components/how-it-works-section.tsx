@@ -1,5 +1,6 @@
 "use client"
-import { Cover } from "@/components/ui/cover"
+
+import { Sparkles } from "lucide-react"
 
 export default function HowItWorksSection() {
   return (
@@ -7,22 +8,17 @@ export default function HowItWorksSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-gray-500 italic text-lg mb-4">Our Process, Explained</p>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight">
-            Your{" "}
+          <div className="inline-flex items-center px-2 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-6">
+            <Sparkles className="w-4 h-4 mr-2" />
+            Our Process, Explained
+          </div>
+          <h2 className="max-w-3xl mx-auto font-serif text-4xl lg:text-5xl text-black leading-tight">
+            How to Restore{" "}
             <span className="relative inline-block">
-              <span className="relative z-10">Memories</span>
-              <span className="absolute inset-0 bg-orange-100 rounded-lg transform -rotate-1 scale-110"></span>
-            </span>
-            , Reborn in{" "}
-            <span className="relative">
-              <span className="relative z-10 px-3 py-1 bg-black text-white rounded-full text-3xl lg:text-4xl font-bold">3</span>
+              <span className="relative z-10">Your Old Photos</span>
+              <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
             </span>{" "}
-            Simple{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">Steps</span>
-              <span className="absolute bottom-0 left-0 w-full h-3 bg-yellow-200 rounded-full transform -rotate-1"></span>
-            </span>
+              in 3 Simple Steps
           </h2>
         </div>
 

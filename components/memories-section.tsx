@@ -6,17 +6,14 @@ export default function MemoriesSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6 leading-tight">
-            Every{" "}
+          <h2 className="max-w-3xl mx-auto font-serif text-4xl lg:text-5xl text-black mb-6 leading-tight">
+            
+           
             <span className="relative inline-block">
-              <span className="relative z-10">memory</span>
-              <span className="absolute inset-0 bg-orange-100 rounded-lg transform -rotate-1 scale-110"></span>
-            </span>{" "}
-            deserves to{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">live forever</span>
-              <span className="absolute bottom-0 left-0 w-full h-3 bg-yellow-200 rounded-full transform -rotate-1"></span>
-            </span>
+              <span className="relative z-10">Old Photo Restoration </span>
+              <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
+            </span> {" "}
+            for the Memories You Cherish Most
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             From faded family portraits to damaged historical photos, our AI brings every precious moment back to life

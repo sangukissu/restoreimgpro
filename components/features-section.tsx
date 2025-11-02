@@ -61,15 +61,13 @@ export default function FeaturesSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-4 mx-auto max-w-3xl leading-tight">
-            Why choose{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">BringBack AI</span>
-              <span className="absolute inset-0 bg-orange-100 rounded-lg transform -rotate-1 scale-110"></span>
-            </span>for{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">old photo restoration</span>
-              <span className="absolute bottom-0 left-0 w-full h-3 bg-yellow-200 rounded-full transform -rotate-1"></span>
+          <h2 className="max-w-3xl mx-auto font-serif text-4xl lg:text-5xl text-black mb-6 leading-tight">
+            Why Choose Our AI for{" "}
+           <span className="text-gray-600">
+              <span className="relative inline-block">
+                <span className="relative z-10"> Old Photo Restoration</span>
+                <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
+              </span>
             </span>
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight mb-4">
