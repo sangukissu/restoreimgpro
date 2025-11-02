@@ -17,7 +17,7 @@ export function generateJsonLd(page: PseoPageData) {
       about: {
         '@id': 'https://bringback.pro/#organization'
       },
-      datePublished: '2025-01-01',
+      datePublished: '2025-11-02',
       dateModified: new Date().toISOString().split('T')[0],
       breadcrumb: {
         '@id': pageUrl + '#breadcrumb'
@@ -110,7 +110,37 @@ export function generateJsonLd(page: PseoPageData) {
   }
 }
 
+export function generateOpenGraph(page: PseoPageData) {
+  const pageUrl = `https://bringback.pro/restore/${page.slug}`
+  
+  return {
+    title: page.metaTitle,
+    description: page.metaDescription,
+    url: pageUrl,
+    siteName: 'BringBack',
+    images: [
+      {
+        url: 'https://bringback.pro/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: `BringBack - ${page.h1}`,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  }
+}
+
+export function generateTwitterCard(page: PseoPageData) {
+  return {
+    card: 'summary_large_image',
+    title: page.metaTitle,
+    description: page.metaDescription,
+    images: ['https://bringback.pro/og-image.png'],
+  }
+}
+
 export function generateSchemaScript(page: PseoPageData): string {
   const jsonLd = generateJsonLd(page)
-  return JSON.stringify(jsonLd, null, 2)
+  return `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`
 }

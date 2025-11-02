@@ -2,12 +2,11 @@
 
 import { notFound } from 'next/navigation';
 import { allPseoPages, getPageDataBySlug } from '@/lib/generate-pages';
-import { generateJsonLd } from '@/lib/schema-generator';
+import { generateJsonLd, generateOpenGraph, generateTwitterCard } from '@/lib/schema-generator';
 import type { Metadata } from 'next';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { ChevronRight, Sparkles, Star, Clock, Shield } from 'lucide-react';
 import { FramerButton } from '@/components/ui/framer-button';
 
@@ -24,9 +23,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const page = await getPageDataBySlug(slug);
   if (!page) return {};
 
+  const openGraph = generateOpenGraph(page);
+  const twitter = generateTwitterCard(page);
+
   return {
     title: page.metaTitle,
     description: page.metaDescription,
+    openGraph,
+    twitter,
+    alternates: {
+      canonical: `/restore/${page.slug}`,
+    },
   };
 }
 
