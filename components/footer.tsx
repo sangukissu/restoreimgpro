@@ -42,6 +42,9 @@ export default function Footer() {
               <a href="/refunds" className="text-gray-600 hover:text-black transition-colors">
                 Refunds
               </a>
+              <a href="/examples" className="text-gray-600 hover:text-black transition-colors">
+                Examples
+              </a>
               <a href="/blog" className="text-gray-600 hover:text-black transition-colors">
                 Blog
               </a>
