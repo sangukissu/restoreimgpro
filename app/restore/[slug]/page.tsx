@@ -44,7 +44,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       
       <div className="min-h-screen bg-white">
