@@ -59,7 +59,7 @@ export default function ColorizeFAQSection() {
             <Palette className="w-4 h-4 mr-2" />
             Got Questions?
           </div>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6">Frequently asked questions</h2>
+          <h2 className=" text-4xl lg:text-5xl text-black mb-6">Frequently asked questions</h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Everything you need to know about AI photo colorization and how BringBack works.
           </p>

@@ -213,6 +213,48 @@ const homeFAQPageJsonLd = {
   ]
 }
 
+const tornRestorationVideoJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'Torn Photo Restoration Demo — BringBack AI',
+  description:
+    'Watch BringBack AI rebuild a photo torn into multiple pieces, preserving faces and reconstructing missing areas with high fidelity.',
+  thumbnailUrl: 'https://bringback.pro/torn-tear.webp',
+  uploadDate: '2025-11-05T00:00:00Z',
+  contentUrl: 'https://bringback.pro/videos/tear-torn-restoration.mp4',
+  embedUrl: 'https://bringback.pro/#what-is-ai',
+  publisher: {
+    '@type': 'Organization',
+    name: 'BringBack',
+    url: 'https://bringback.pro/'
+  },
+  potentialAction: {
+    '@type': 'WatchAction',
+    target: 'https://bringback.pro/#what-is-ai'
+  }
+}
+
+const heroVideoJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'BringBack — Photo Restoration Demo (Hero)',
+  description:
+    'Quick demo of BringBack restoring old, faded photos using AI with before/after results.',
+  thumbnailUrl: 'https://bringback.pro/video-thumbnail.webp',
+  uploadDate: '2025-11-05T00:00:00Z',
+  contentUrl: 'https://www.youtube.com/watch?v=K_CYXkv2Yso',
+  embedUrl: 'https://www.youtube.com/embed/K_CYXkv2Yso',
+  publisher: {
+    '@type': 'Organization',
+    name: 'BringBack',
+    url: 'https://bringback.pro/'
+  },
+  potentialAction: {
+    '@type': 'WatchAction',
+    target: 'https://bringback.pro/'
+  }
+}
+
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
@@ -223,6 +265,14 @@ export default function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFAQPageJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(tornRestorationVideoJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(heroVideoJsonLd) }}
       />
       <Header />
       {/* Hero Section */}

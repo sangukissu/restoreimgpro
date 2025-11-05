@@ -69,7 +69,7 @@ export default function ColorizeShowcaseSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <p className="text-gray-500 italic text-lg mb-4">Real Transformations</p>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6">
+          <h2 className=" text-4xl lg:text-5xl text-black mb-6">
             Every vintage photo,
             <br />
             <span className="text-gray-600">

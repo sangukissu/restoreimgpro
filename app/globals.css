@@ -6,6 +6,8 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Using Manrope via next/font; no local @font-face needed */
+
 /* Line clamp utilities */
 .line-clamp-2 {
   overflow: hidden;
@@ -139,7 +141,16 @@ html {
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-manrope), sans-serif !important;
   }
+}
+
+/* Apply Manrope Bold to headings and common heading utility */
+h1, h2, h3, h4, h5, h6,
+.font-serif,
+.heading {
+  font-family: var(--font-manrope), sans-serif !important;
+  font-weight: 700 !important;
 }
 
 @layer utilities {

@@ -62,7 +62,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           
           {/* Hero Section */}
           <div className="text-center mb-16">
-            <h1 className="font-serif text-4xl lg:text-6xl text-black mb-6 leading-tight">
+            <h1 className="  text-4xl lg:text-6xl text-black mb-6 leading-tight">
               {page.h1}
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
@@ -122,7 +122,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-2 h-12 bg-gray-800 rounded-full"></div>
-                  <h2 className="font-serif text-3xl lg:text-4xl text-black">The Challenge</h2>
+                  <h2 className=" text-3xl lg:text-4xl text-black">The Challenge</h2>
                 </div>
                 <p className="text-gray-600 text-lg leading-relaxed pl-6">
                   {page.content.problem}
@@ -133,7 +133,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-2 h-12 bg-black rounded-full"></div>
-                  <h2 className="font-serif text-3xl lg:text-4xl text-black">Our Solution</h2>
+                  <h2 className=" text-3xl lg:text-4xl text-black">Our Solution</h2>
                 </div>
                 <p className="text-gray-600 text-lg leading-relaxed pl-6">
                   {page.content.solution}
@@ -154,11 +154,11 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </section>
 
           {/* Why Choose BringBack.pro */}
-          <section className="px-4 py-20 bg-[#fff6f070]">
+          <section className="px-4 py-20 bg-[#fff6f0de]">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Why Choose Us</p>
-                <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight">
+                <h2 className=" text-4xl lg:text-5xl text-black leading-tight">
                   Why trust{" "}
                   <span className="relative inline-block">
                     <span className="relative z-10">BringBack.pro</span>
@@ -200,7 +200,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Our Process, Explained</p>
-                <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight">
+                <h2 className=" text-4xl lg:text-5xl text-black leading-tight">
                   {page.howItWorks.title.replace('How Our AI Photo Restoration Works', 'Your Memories, Reborn in')} {" "}
                   <span className="relative">
                     <span className="relative z-10 px-3 py-1 bg-black text-white rounded-full text-3xl lg:text-4xl font-bold">3</span>
@@ -244,7 +244,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Compare & Decide</p>
-                <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight mb-6">
+                <h2 className=" text-4xl lg:text-5xl text-black leading-tight mb-6">
                   {page.comparisonTable.title}
                 </h2>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -331,7 +331,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Real-World Applications</p>
-                <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight mb-6">
+                <h2 className=" text-4xl lg:text-5xl text-black leading-tight mb-6">
                   {page.useCases.title}
                 </h2>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -361,7 +361,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Investment & Value</p>
-                <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight mb-6">
+                <h2 className=" text-4xl lg:text-5xl text-black leading-tight mb-6">
                   {page.costAnalysis.title}
                 </h2>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -413,7 +413,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Common Questions</p>
-                <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight">
+                <h2 className=" text-4xl lg:text-5xl text-black leading-tight">
                   Frequently Asked Questions
                 </h2>
               </div>
@@ -438,7 +438,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           {/* Final CTA Section */}
           <section className="px-4 py-20 bg-black">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="font-serif text-4xl lg:text-5xl text-white leading-tight mb-6">
+              <h2 className=" text-4xl lg:text-5xl text-white leading-tight mb-6">
                 Ready to Bring Your Memories Back?
               </h2>
               <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">

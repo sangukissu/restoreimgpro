@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Script from "next/script"
 import Link from "next/link"      
 
 import Header from "@/components/header"
@@ -9,8 +10,31 @@ import { FramerButton } from "@/components/ui/framer-button"
 
 export const metadata: Metadata = {
   title: "Pricing - BringBack.pro | AI Photo Restoration & Animation",
-  description: "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
-  robots: "index, follow",
+  description:
+    "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "Pricing - BringBack.pro | AI Photo Restoration & Animation",
+    description:
+      "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
+    type: "website",
+    siteName: "BringBack",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "BringBack AI Photo Restoration",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pricing - BringBack.pro | AI Photo Restoration & Animation",
+    description:
+      "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
+    images: ["/og-image.png"],
+  },
 }
 
 export default function PricingPage() {
@@ -20,9 +44,38 @@ export default function PricingPage() {
 
       <main className="pt-32 pb-20">
         <div className="max-w-6xl mx-auto px-4">
+          <Script
+            id="pricing-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "OfferCatalog",
+                name: "BringBack Pricing",
+                provider: { "@type": "Organization", name: "BringBack" },
+                itemListElement: [
+                  {
+                    "@type": "Offer",
+                    price: "2.49",
+                    priceCurrency: "USD",
+                    itemOffered: { "@type": "Service", name: "AI Photo Restoration" },
+                  },
+                  {
+                    "@type": "Offer",
+                    price: "4.99",
+                    priceCurrency: "USD",
+                    itemOffered: {
+                      "@type": "Service",
+                      name: "AI Photo Restoration + Animation",
+                    },
+                  },
+                ],
+              }),
+            }}
+          />
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="font-serif text-4xl lg:text-5xl text-black mb-6">Simple, Fair Pricing</h1>
+            <h1 className="  text-4xl lg:text-5xl text-black mb-6">Simple, Fair Pricing</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               No subscriptions, no hidden fees. Just professional photo restoration at an honest price. Choose the plan that's right for you.
             </p>
@@ -86,7 +139,7 @@ export default function PricingPage() {
                 </div>
               </div>
 
-              <h3 className="text-2xl font-bold text-white">Restore & Animate</h3>
+              <h3 className="text-2xl font-bold text-white">Pro</h3>
               <p className="text-gray-400 mt-1 mb-6">Everything in Starter, plus bring photos to life.</p>
               
               <div className="mb-8">
@@ -167,7 +220,7 @@ export default function PricingPage() {
 
           {/* Comparison */}
           <div className="bg-gray-50 rounded-2xl p-8 mb-16">
-            <h2 className="font-serif text-3xl font-bold text-black text-center mb-8">How We Compare photo restoration</h2>
+            <h2 className=" text-3xl font-bold text-black text-center mb-8">How We Compare photo restoration</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -208,7 +261,7 @@ export default function PricingPage() {
 
           {/* FAQ */}
           <div className="max-w-3xl mx-auto">
-            <h2 className="font-serif text-3xl font-bold text-black text-center mb-8">Pricing Questions</h2>
+            <h2 className=" text-3xl font-bold text-black text-center mb-8">Pricing Questions</h2>
             <div className="space-y-6">
               <div className="border-b border-gray-200 pb-6">
                 <h3 className="text-lg font-semibold text-black mb-2">Is this a one-time payment?</h3>

@@ -1,19 +1,18 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
-import { Suspense } from "react"
+import { Manrope } from "next/font/google"
 import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
 import Script from "next/script"
 import "./globals.css"
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-manrope",
+  weight: ["400", "700"],
 })
+
 export const metadata: Metadata = {
   title: "BringBack - AI Photo Restoration & Animation | Revive Old Memories",
   description: "BringBack AI restores old, damaged photos and even animates them with AI. Repair faded colors, fix damage, and bring portraits to life in seconds.",
@@ -129,7 +128,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en" className={manrope.variable}>
       <head>
         <script
           type="application/ld+json"
@@ -145,7 +144,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className={`font-sans antialiased`}>
+      <body className={`antialiased`}>
         {children}
         
         <NetworkStatus />

@@ -1,7 +1,6 @@
 "use client"
-import { useState } from "react"
 import { FramerButton } from "@/components/ui/framer-button"
-import { ChevronRight, Smile, Eye, Heart, Frame, Wand2 } from "lucide-react"
+import { ChevronRight, Smile, Eye, Heart, Wand2 } from "lucide-react"
 import Link from "next/link"
 import { Compare } from "@/components/ui/compare"
 import Image from "next/image"
@@ -127,13 +126,8 @@ const FRAME_SHOWCASE_ITEMS = [
 ]
 
 export default function ShowcaseSection() {
-  const [activeStep, setActiveStep] = useState<"restore" | "animate" | "frame">("restore")
-  const [selectedPreset, setSelectedPreset] = useState(ANIMATION_PRESETS[0])
-  const [activeItem, setActiveItem] = useState(0)
-  const [videoLoaded, setVideoLoaded] = useState(false)
-
   return (
-    <section id="examples" className="px-4 py-20 bg-[#fff6f070]">
+    <section id="examples" className="px-4 py-20 bg-[#fff6f0de]">
       <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
           <p className="text-gray-500 italic text-lg mb-4"></p>
@@ -141,201 +135,112 @@ export default function ShowcaseSection() {
             <Wand2 className="w-4 h-4 mr-2" />
             Real Transformations
           </div>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6 leading-tight">
-            A Complete Solution for Any Type of 
-            <br />
-            <span className="text-gray-600">
-              <span className="relative inline-block">
-                <span className="relative z-10">Photo Damage</span>
-                <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
-              </span>
-            </span>
+          <h2 className="max-w-3xl mx-auto text-4xl lg:text-5xl text-black mb-6 leading-tight">
+            A Complete Solution for Any Type of Photo Damage
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             From torn family portraits to faded wedding photos, see how BringBack handles every type of photo damage
-            with precision and care - then brings your loved ones back to life and frames them beautifully.
+            with precision and care — then brings your loved ones back to life and frames them beautifully.
           </p>
         </div>
 
-        {/* Step Toggle */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex border border-gray-200 rounded-lg p-1 bg-white">
-            <button
-              onClick={() => setActiveStep("restore")}
-              className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                activeStep === "restore" ? "bg-black text-white" : "text-gray-600 hover:text-black"
-              }`}
-            >
-              1. Restore
-            </button>
-            <button
-              onClick={() => setActiveStep("animate")}
-              className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                activeStep === "animate" ? "bg-black text-white" : "text-gray-600 hover:text-black"
-              }`}
-            >
-              2. Animate
-            </button>
-            <button
-              onClick={() => setActiveStep("frame")}
-              className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                activeStep === "frame" ? "bg-black text-white" : "text-gray-600 hover:text-black"
-              }`}
-            >
-              3. Frame
-            </button>
+        {/* Restoration Section (visible, crawlable) */}
+        <div className="space-y-8">
+         
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {showcaseItems.map((item, index) => (
+              <div key={index} className="group">
+                <div className="bg-white rounded-2xl p-6 border-6 border-gray-200">
+                  <div className="text-center mb-6">
+                    <h4 className="text-xl font-bold text-black mb-2">{item.title}</h4>
+                    <p className="text-gray-600 text-sm">{item.description}</p>
+                  </div>
+
+                  <div className="flex justify-center">
+                    <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
+                      <Compare
+                        firstImage={item.beforeImage}
+                        secondImage={item.afterImage}
+                        firstImageClassName="object-cover"
+                        secondImageClassname="object-cover"
+                        className="sm:h-[220px] sm:w-[300px] h-[190px] w-[280px] rounded-lg"
+                        slideMode="hover"
+                        showHandlebar={true}
+                        firstImageAlt={item.beforeImageAlt}
+                        secondImageAlt={item.afterImageAlt}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Restoration Step */}
-        {activeStep === "restore" && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-black mb-2">Photo Restoration</h3>
-              <p className="text-gray-600">AI repairs damage and enhances quality</p>
-            </div>
+        {/* Animation Section (visible, crawlable) */}
+        <div className="space-y-6 mt-16">
+          <h2 className="max-w-3xl mx-auto text-4xl lg:text-5xl text-black mb-4 leading-tight text-center">
+            Bring Your Memories to Life with Photo Animation
+          </h2>
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed text-center">
+            Once your photo is restored to perfect clarity, take the magic a step further. Our AI photo animation technology
+            analyzes faces and creates subtle, lifelike movements — a gentle smile, a warm blink, or a slight turn of the head.
+            It’s a deeply moving way to reconnect with cherished memories and see your ancestors in a whole new light.
+          </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {showcaseItems.map((item, index) => (
-                <div key={index} className="group">
-                  <div className="bg-white rounded-2xl p-6 border border-gray-200">
-                    <div className="text-center mb-6">
-                      <h4 className="text-xl font-bold text-black mb-2">{item.title}</h4>
-                      <p className="text-gray-600 text-sm">{item.description}</p>
-                    </div>
-
-                    <div className="flex justify-center">
-                      <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
-                        <Compare
-                          firstImage={item.beforeImage}
-                          secondImage={item.afterImage}
-                          firstImageClassName="object-cover"
-                          secondImageClassname="object-cover"
-                          className="sm:h-[220px] sm:w-[300px] h-[190px] w-[280px] rounded-lg"
-                          slideMode="hover"
-                          showHandlebar={true}
-                          firstImageAlt={item.beforeImageAlt}
-                          secondImageAlt={item.afterImageAlt}
-                        />
-                      </div>
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {ANIMATION_PRESETS.map((preset) => (
+                <div key={preset.id} className="bg-white rounded-2xl border-6 border-gray-200 p-4">
+                  <h3 className="text-lg font-bold text-black mb-1">{preset.name}</h3>
+                  <p className="text-sm text-gray-600 mb-3">{preset.description}</p>
+                  <div className="relative border rounded-xl bg-gray-50 border-gray-200 p-3">
+                    <video
+                      className="h-[240px] w-full rounded-lg object-cover"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                    >
+                      <source src={preset.videoUrl} type="video/mp4" />
+                    </video>
+                    <div className="absolute -top-2 -right-2 bg-black flex items-center text-white px-2 py-1 rounded text-xs font-medium">
+                      {preset.icon} <span className="ml-1">{preset.name}</span>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Frame Step */}
-        {activeStep === "frame" && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-black mb-2">Interactive Frame Designer</h3>
-              <p className="text-gray-600">Design beautiful frames with our easy-to-use editor</p>
-            </div>
+        {/* Framing Section (visible, crawlable) */}
+        <div className="space-y-6 mt-16">
+          <h2 className="max-w-3xl mx-auto text-4xl lg:text-5xl text-black mb-4 leading-tight text-center">
+            Frame Your Restored Memory Beautifully
+          </h2>
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed text-center">
+            The perfect memory deserves the perfect presentation. Choose from our library of beautiful digital photo frames to
+            complement your restored and animated pictures. Customize styles, colors, and add captions to create a truly personal
+            keepsake — ideal for sharing on social media, displaying on digital devices, or sending as a heartfelt gift.
+          </p>
 
-            {/* Frame Editor Screenshot */}
-            <div className="max-w-5xl mx-auto">
-              <div className="relative bg-white rounded-2xl p-4 sm:p-8 border border-gray-200">
-                <div className="relative ">
-                  <Image
-                    src="/digital-frame.webp"
-                    alt="Frame designer interface showing restored photo being framed with various customization options"
-                    className="w-full border-6 border-gray-200 bg-transparent backdrop-blur-lg rounded-xl" width={500} height={300}
-                  />
-                  
-                  
-             
-                </div>
-                
-                
+          <div className="max-w-5xl mx-auto">
+            <div className="relative bg-white rounded-2xl p-4 sm:p-8 border border-gray-200">
+              <div className="relative">
+                <Image
+                  src="/digital-frame.webp"
+                  alt="Digital photo frame showcasing a restored and animated memory"
+                  className="w-full border-6 border-gray-200 bg-transparent backdrop-blur-lg rounded-xl"
+                  width={1200}
+                  height={675}
+                />
               </div>
             </div>
           </div>
-        )}
-
-        {/* Animation Step */}
-        {activeStep === "animate" && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-black mb-2">Then watch them 
-come to life</h3>
-              <p className="text-gray-600">After restoration, choose how your loved ones move again with respectful, gentle animations.</p>
-            </div>
-
-            {/* Animation Presets */}
-            <div className="max-w-4xl mx-auto mb-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {ANIMATION_PRESETS.map((preset) => (
-                  <button
-                    key={preset.id}
-                    onClick={() => {
-                      setVideoLoaded(false)
-                      setSelectedPreset(preset)
-                    }}
-                    className={`p-4 rounded-lg border text-left transition-all ${
-                      selectedPreset.id === preset.id
-                        ? "border-black bg-gray-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <h4 className="font-medium text-black mb-1">{preset.name}</h4>
-                    <p className="text-sm text-gray-600">{preset.description}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Animation Demo */}
-            <div className="max-w-2xl mx-auto">
-              <div className="bg-white rounded-2xl pt-8 border border-gray-200">
-              
-
-                <div className="flex justify-center mb-6">
-                  <div className="relative border rounded-xl bg-gray-50 border-gray-200 p-3">
-                    {/* Placeholder/Loading State */}
-                    {!videoLoaded && (
-                      <div className="sm:h-[300px] sm:w-[400px] h-[250px] w-[350px] rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-12 h-12 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-3"></div>
-                          <p className="text-gray-600 text-sm font-medium">Loading animation...</p>
-                          <p className="text-gray-500 text-xs mt-1">{selectedPreset.name}</p>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <video
-                      key={selectedPreset.id}
-                      className={`sm:h-[300px] sm:w-[400px] h-[250px] w-[350px] rounded-lg object-cover transition-opacity duration-300 ${
-                        videoLoaded ? 'opacity-100' : 'opacity-0 absolute inset-3'
-                      }`}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      onLoadedData={() => setVideoLoaded(true)}
-                      onLoadStart={() => setVideoLoaded(false)}
-                    >
-                      <source src={selectedPreset.videoUrl} type="video/mp4" />
-                      <img
-                        src={showcaseItems[activeItem].afterImage || "/placeholder.svg"}
-                        alt={showcaseItems[activeItem].afterImageAlt}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    </video>
-                    
-                    <div className="absolute -top-2 -right-2 bg-black flex items-center text-white px-2 py-1 rounded text-xs font-medium">
-                      {selectedPreset.icon} <span className="ml-1">{selectedPreset.name}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Animation Preset Selector */}
-                
-              </div>
-            </div>
-          </div>
-        )}
+        </div>
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">

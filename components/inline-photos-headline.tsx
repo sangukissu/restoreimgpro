@@ -39,7 +39,7 @@ export default function InlinePhotosHeadline({
 
   return (
     <div className="w-full text-center">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif text-gray-800 leading-tight md:leading-tight lg:leading-tight">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-gray-800 leading-tight md:leading-tight lg:leading-tight">
         <span className="inline-flex items-center justify-center flex-wrap gap-1 md:gap-2">
           <span>{beforeText}</span>
 

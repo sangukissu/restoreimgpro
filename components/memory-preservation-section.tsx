@@ -17,7 +17,7 @@ export default function MemoryPreservationSection() {
           {/* Left Content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h2 className="font-serif text-4xl lg:text-5xl text-gray-900 leading-tight">
+              <h2 className=" text-4xl lg:text-5xl text-gray-900 leading-tight">
                 Because some memories
                 <br />
                 only live in photos

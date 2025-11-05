@@ -149,7 +149,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
       {/* Main Content */}
       <main className="relative z-10 container mx-auto px-4 py-12 pt-24">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="font-serif text-3xl font-bold">My Media</h1>
+          <h1 className="  text-3xl font-bold">My Media</h1>
           {videos && videos.length > 0 && (
             <button
               onClick={() => setShowDeleteConfirmation(true)}

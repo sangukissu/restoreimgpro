@@ -35,13 +35,33 @@ export default function AIPhotoRestorationSection() {
             <span className="mr-2">💡</span>
             The Technology Explained
           </div>
-          <h2 className="max-w-4xl mx-auto font-serif text-4xl lg:text-5xl text-black leading-tight">
-            What is AI Photo{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">Restoration & Animation?</span>
-              <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
-            </span>
+          <h2 className="max-w-4xl mx-auto text-4xl lg:text-5xl text-black leading-tight">
+            What is AI Photo Restoration & Animation?
           </h2>
+          {/* Torn & Ripped Restoration Demo */}
+          <div className="max-w-4xl mx-auto mt-6">
+            <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-black">
+              <video
+                className="w-full h-auto"
+                src="/videos/tear-torn-restoration.mp4"
+                controls
+                preload="metadata"
+                playsInline
+                poster="/torn-tear.webp"
+                onPlay={() => {
+                  if (typeof window !== "undefined" && (window as any).gtag) {
+                    (window as any).gtag("event", "video_play", {
+                      feature: "torn_restoration",
+                      location: "technology_section",
+                    })
+                  }
+                }}
+              />
+            </div>
+            <p className="text-sm text-gray-600 mt-3">
+              Watch BringBack rebuild a photo torn into multiple pieces, preserving faces and reconstructing missing areas.
+            </p>
+          </div>
         </div>
 
         {/* Two-Column Layout */}

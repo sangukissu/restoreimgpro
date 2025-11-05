@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react"
 
 export default function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="px-4 py-20 bg-[#fff6f070]">
+    <section id="how-it-works" className="px-4 py-20 bg-[#fff6f0de]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
@@ -12,14 +12,12 @@ export default function HowItWorksSection() {
             <Sparkles className="w-4 h-4 mr-2" />
             Our Process, Explained
           </div>
-          <h2 className="max-w-3xl mx-auto font-serif text-4xl lg:text-5xl text-black leading-tight">
-            How to Restore{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">Your Old Photos</span>
-              <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
-            </span>{" "}
-              in 3 Simple Steps
+          <h2 className="max-w-3xl mx-auto text-4xl lg:text-5xl text-black leading-tight mb-6">
+            How to Restore Your Old Photos in 3 Simple Steps
           </h2>
+          <p className="max-w-3xl mx-auto text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            BringBack makes photo restoration effortless for everyone. Upload a damaged or faded picture, let our AI repair details and color, then animate the result for a lifelike touch. In minutes, you’ll have a high‑quality restored photo and a shareable video ready for family, social media, or printing.
+          </p>
         </div>
 
         {/* Process Cards */}

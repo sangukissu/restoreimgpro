@@ -101,12 +101,8 @@ export default function FAQSection() {
             <HelpCircle className="w-4 h-4 mr-2" />
             Got Questions?
           </div>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6 leading-tight">
-            Frequently asked{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">questions</span>
-              <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
-            </span>
+          <h2 className=" text-4xl lg:text-5xl text-black mb-6 leading-tight">
+            Frequently asked questions
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Everything you need to know about AI photo restoration and how BringBack works.

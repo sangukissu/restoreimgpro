@@ -8,7 +8,7 @@ export default function DeblurHowItWorksSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <p className="text-gray-500 italic text-lg mb-4">Our Process, Explained</p>
-          <h2 className="font-serif text-4xl lg:text-5xl font-bold text-black">
+          <h2 className=" text-4xl lg:text-5xl font-bold text-black">
             Here's how our Unblur AI <Cover> works</Cover>
           </h2>
         </div>

@@ -387,7 +387,7 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         {/* Upload State Header */}
         {(appState === "upload" || appState === "loading" || appState === "comparison" || appState === "error") && (
           <div className="text-center max-w-2xl mx-auto mb-4">
-            <h1 className="font-serif font-inter font-bold text-3xl text-black">
+            <h1 className="  font-inter font-bold text-3xl text-black">
               Revive Your Photo
             </h1>
             <p className="text-lg text-gray-600 leading-tight">

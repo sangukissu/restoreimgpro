@@ -8,7 +8,7 @@ export default function DenoiseBenefitsSection() {
         {/* Header */}
         <div className="text-center mb-20">
           <p className="text-gray-500 italic text-lg mb-4">Why Choose Us</p>
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-6">
+          <h2 className=" text-4xl lg:text-5xl text-black mb-6">
             Why trust this <Cover>AI Denoise Tool</Cover>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">

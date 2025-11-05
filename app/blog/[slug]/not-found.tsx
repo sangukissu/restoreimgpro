@@ -12,7 +12,7 @@ export default function BlogPostNotFound() {
         <div className="max-w-md mx-auto text-center px-4">
           <div className="mb-8">
             <FileX className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h1 className="font-serif text-3xl font-bold text-gray-900 mb-2">Article Not Found</h1>
+            <h1 className="  text-3xl font-bold text-gray-900 mb-2">Article Not Found</h1>
             <p className="text-gray-600">
               The blog post you're looking for doesn't exist or may have been moved.
             </p>

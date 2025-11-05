@@ -36,7 +36,7 @@ export default function TestimonialsSection() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="font-serif text-4xl lg:text-5xl text-black mb-4">
+          <h2 className=" text-4xl lg:text-5xl text-black mb-4">
             Stories worth <Cover>preserving</Cover>
           </h2>
           <p className="text-lg text-gray-600">Real people, real memories restored</p>

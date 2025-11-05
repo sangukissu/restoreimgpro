@@ -65,13 +65,13 @@ export default function ComparisonSection() {
     <section id="comparison" className="px-4 py-20 bg-[#F9F7F5]">
       <div className="max-w-6xl mx-auto">
         {/* Main Card Container */}
-        <div className="bg-white rounded-2xl border-6 border-gray-200 shadow-sm p-6 sm:p-10">
+        <div className="bg-white rounded-3xl border-6 border-gray-200 shadow-sm p-6 sm:p-10">
           {/* Header */}
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-orange-600 uppercase tracking-widest mb-2">
               FEATURE COMPARISON
             </p>
-            <h2 className="font-serif text-4xl lg:text-5xl text-black leading-tight">
+            <h2 className=" text-4xl lg:text-5xl text-black leading-tight">
               BringBack AI vs The Alternatives
             </h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">

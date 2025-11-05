@@ -101,7 +101,7 @@ function LoginFormWithSearchParams() {
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24">
         <div className="w-full max-w-md space-y-8">
           <div className="space-y-2 text-center">
-            <h1 className="font-serif text-4xl font-semibold tracking-tight text-black">Welcome to BringBack</h1>
+            <h1 className="  text-4xl font-semibold tracking-tight text-black">Welcome to BringBack</h1>
             <p className="text-lg text-gray-600">Sign in to start restoring your photos</p>
           </div>
 
