@@ -48,8 +48,8 @@ const ANIMATION_PRESETS = {
     prompt: "The people in the image show a moment of gentle recognition, with eyes softening and a hint of a smile"
   },
   "serene-moment": {
-    name: "Serene Moment",
-    prompt: "The people in the image maintain a calm, serene expression with minimal natural movement, as if caught in a peaceful moment"
+    name: "Gentle Talking",
+    prompt: "The people in the image filmed speaking to each other with lifelike, minimal movements, and micro-expressions. Keep it realistic and respectful."
   }
 }
 

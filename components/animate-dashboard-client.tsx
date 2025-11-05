@@ -90,9 +90,9 @@ const ANIMATION_PRESETS: AnimationPreset[] = [
   },
   {
     id: 'serene-moment',
-    name: 'Serene Moment',
-    description: 'Calm expression with minimal movement',
-    prompt: 'The people in the image maintain a calm, serene expression with minimal natural movement, as if caught in a peaceful moment'
+    name: 'Gentle Talking',
+    description: 'Calm expression with minimal movement while talking',
+    prompt: 'The people in the image talks softly with lifelike, minimal movements, and micro-expressions. Keep it realistic and respectful.'
   }
 ]
 

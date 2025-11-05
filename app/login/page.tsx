@@ -1,5 +1,4 @@
 "use client"
-
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 import { Suspense } from "react"
@@ -12,6 +11,10 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { signInWithMagicLink, signInWithGoogle, type AuthState } from "./actions"
 import { createClient } from "@/utils/supabase/client"
+
+// Route-level metadata is defined in app/login/head.tsx to avoid exporting
+// metadata from a client component. This page remains a client component
+// for interactive login behaviors.
 
 function MagicLinkSubmit() {
   const { pending } = useFormStatus()
