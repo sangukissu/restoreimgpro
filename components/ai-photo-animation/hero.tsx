@@ -3,6 +3,62 @@
 import Link from "next/link"
 import { ChevronRight, Sparkles } from "lucide-react"
 import { FramerButton } from "@/components/ui/framer-button"
+import { useEffect, useRef, useState } from "react"
+
+function HeroVideo({
+  src,
+  poster,
+  className,
+}: {
+  src: string
+  poster: string
+  className?: string
+}) {
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [activeSrc, setActiveSrc] = useState<string | null>(null)
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        setInView(entry.isIntersecting)
+      },
+      { rootMargin: "300px 0px", threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    if (inView) {
+      if (!activeSrc) setActiveSrc(src)
+      v.play().catch(() => {})
+    } else {
+      v.pause()
+    }
+  }, [inView, src, activeSrc])
+
+  return (
+    <div ref={containerRef} className={className}>
+      <video
+        ref={videoRef}
+        src={activeSrc ?? undefined}
+        poster={poster}
+        loop
+        muted
+        playsInline
+        preload="none"
+        className="h-full w-full object-cover"
+      />
+    </div>
+  )
+}
 
 export default function AIAnimationHero() {
   return (
@@ -33,16 +89,11 @@ export default function AIAnimationHero() {
 
       <div className="relative z-10 px-4">
         <div className="mx-auto w-full max-w-6xl rounded-2xl border-6 border-gray-200 overflow-hidden ">
-          <div className="aspect-[16/9] w-full">
-            <video
-              className="h-full w-full object-cover"
-              src="/videos/blink-tilt-animation.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-          </div>
+          <HeroVideo
+            src="/videos/blink-tilt-animation.mp4"
+            poster="/video-thumbnail.webp"
+            className="aspect-[16/9] w-full"
+          />
         </div>
       </div>
     </section>

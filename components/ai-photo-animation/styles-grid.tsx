@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Sparkles } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 
 type StyleItem = {
   name: string
@@ -77,6 +78,62 @@ const styles: StyleItem[] = [
   },
 ]
 
+function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: string }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [activeSrc, setActiveSrc] = useState<string | null>(null)
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        setInView(entry.isIntersecting)
+      },
+      { rootMargin: "200px 0px", threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    if (inView) {
+      if (!activeSrc) setActiveSrc(src)
+      v.play().catch(() => {})
+    } else {
+      v.pause()
+    }
+  }, [inView, src, activeSrc])
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative h-[280px] sm:h-[240px] w-full overflow-hidden rounded-xl bg-gray-50 border border-gray-200 p-3"
+    >
+      <img
+        src={poster}
+        alt={`${alt} sample photo`}
+        loading="lazy"
+        className="absolute top-4 left-4 z-10 w-16 h-12 rounded-md border border-white object-cover"
+      />
+      <video
+        ref={videoRef}
+        src={activeSrc ?? undefined}
+        poster={poster}
+        loop
+        muted
+        playsInline
+        preload="none"
+        className="w-full h-full object-cover rounded-xl"
+      />
+    </div>
+  )
+}
+
 export default function AnimationStylesGrid() {
   return (
     <section className="px-4 py-20 bg-white">
@@ -100,14 +157,7 @@ export default function AnimationStylesGrid() {
                 <CardDescription className="text-gray-700">{style.description}</CardDescription>
               </CardHeader>
               <CardContent className="p-3">
-                <div className="relative h-[240px] w-full overflow-hidden rounded-xl bg-gray-50 border border-gray-200 p-3">
-                  <img
-                    src={style.photoSrc}
-                    alt={`${style.name} sample photo`}
-                    className="absolute top-3 left-3 z-10 w-12 h-12 rounded-lg border border-white shadow-md object-cover"
-                  />
-                  <video src={style.src} autoPlay loop muted playsInline className="w-full h-full object-cover rounded-xl" />
-                </div>
+                <AutoVideo src={style.src} poster={style.photoSrc} alt={style.name} />
               </CardContent>
             </Card>
           ))}
