@@ -64,24 +64,16 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
     
         {/* Hero */}
         <section className="mb-8">
-          <div className="rounded-xl border border-gray-200 bg-white px-6 py-8">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">Dashboard</h1>
                 <p className="text-gray-600">Choose a feature to get started</p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span className="font-medium">Credits:</span>
-                <span className={`px-2 py-1 rounded-md border ${credits === 0 ? 'border-red-300 text-red-700 bg-red-50' : 'border-gray-300 text-gray-800 bg-gray-50'}`}>{credits}</span>
-                <Button size="sm" className="ml-2" onClick={() => setShowPaymentModal(true)}>Buy Credits</Button>
-              </div>
-            </div>
-          </div>
+          
         </section>
 
         {/* Feature Cards */}
         <section>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-4">
             {/* Restore Photo */}
             <Card>
               <CardHeader>
