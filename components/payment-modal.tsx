@@ -27,15 +27,11 @@ export default function PaymentModal({
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-auto">
-        <div className="p-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h2 className="font-inter font-bold text-2xl text-black mb-2">Get Credits to Start</h2>
-            <p className="text-gray-600">Purchase credits to restore your images with AI</p>
-          </div>
+        <div className="p-4">
+          
 
           {/* Payment Plan */}
-          <div className="mb-8">
+          <div className="mb-2">
             <PaymentPlan 
               onSuccess={onSuccess}
               onError={onError}
@@ -45,7 +41,7 @@ export default function PaymentModal({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3">
+          <div className="flex justify-center">
             
             <button
               onClick={onClose}

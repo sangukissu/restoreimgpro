@@ -163,6 +163,18 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
       return
     }
 
+    // Idempotency: prevent re-restoring the exact same file unless explicitly retried
+    try {
+      const signature = `${selectedFile.name}:${selectedFile.size}:${selectedFile.lastModified}`
+      const existing = typeof window !== 'undefined' ? sessionStorage.getItem(`restore_signature:${signature}`) : null
+      // If we've already completed a restore for this signature in this session, skip
+      if (existing && appState !== 'error') {
+        // Avoid accidental duplicate calls on tab revisit
+        toast.info('Already restored this image. Skipping duplicate request.')
+        return
+      }
+    } catch { /* ignore storage access errors */ }
+
     // Set restoring flag
     isRestoringRef.current = true
 
@@ -192,6 +204,14 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         setRestorationData(newData)
         setHasUsedSecondPass(false)
         setAppState("comparison")
+
+        // Mark this file signature as restored in this session to prevent duplicates
+        try {
+          const signature = `${selectedFile.name}:${selectedFile.size}:${selectedFile.lastModified}`
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem(`restore_signature:${signature}`, 'completed')
+          }
+        } catch { /* ignore storage access errors */ }
         
         // Trigger post-restore analysis (non-blocking)
         setIsAnalyzing(true)

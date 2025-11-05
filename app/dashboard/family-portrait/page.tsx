@@ -1,13 +1,20 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
-import MainDashboardClient from "@/components/main-dashboard-client"
+import FamilyPortraitDashboardClient from "@/components/family-portrait-dashboard-client"
 
-export default async function DashboardPage({
+export const metadata = {
+  title: "Family Portrait – Combine Individual Photos | BringBack",
+  description:
+    "Combine up to 4 individual portraits into one cohesive family photo using BringBack's AI compositor. Choose aspect ratio and get a high‑quality image in seconds.",
+}
+
+export default async function FamilyPortraitPage({
   searchParams,
 }: {
   searchParams: Promise<{ payment?: string }>
 }) {
   const supabase = await createClient()
+
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -16,7 +23,6 @@ export default async function DashboardPage({
     redirect("/login")
   }
 
-  // Fetch user credits from database
   const { data: profile } = await supabase
     .from("user_profiles")
     .select("credits")
@@ -28,7 +34,7 @@ export default async function DashboardPage({
   const isPaymentSuccess = resolvedSearchParams.payment === "success"
 
   return (
-    <MainDashboardClient
+    <FamilyPortraitDashboardClient
       user={{ email: user.email || "", id: user.id }}
       initialCredits={credits}
       isPaymentSuccess={isPaymentSuccess}

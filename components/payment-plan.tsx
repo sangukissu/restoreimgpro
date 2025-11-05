@@ -208,13 +208,13 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
           <div className="text-sm font-medium text-gray-700 mb-2">Have a referral code?</div>
           {!referralApplied ? (
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={referralCode}
                 onChange={(e) => setReferralCode(e.target.value)}
                 placeholder="Enter referral code"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                className="w-full sm:flex-1 sm:max-w-[70%] px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                 disabled={isApplyingReferral}
               />
               <Button
@@ -222,7 +222,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                 disabled={isApplyingReferral || !referralCode.trim()}
                 variant="outline"
                 size="sm"
-                className="px-4 py-2 text-sm"
+                className="w-full sm:w-auto px-4 py-2 text-sm"
               >
                 {isApplyingReferral ? "Applying..." : "Apply"}
               </Button>
@@ -242,7 +242,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
           <Button
             onClick={handlePurchase}
             disabled={isProcessing || !selectedPlanId}
-            className="w-full bg-black hover:bg-gray-800 text-white"
+            className="w-full bg-black hover:bg-gray-800 text-white text-md"
           >
             {isProcessing ? "Processing..." : "Continue to Checkout"}
           </Button>

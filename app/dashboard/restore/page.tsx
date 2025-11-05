@@ -1,13 +1,14 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
-import MainDashboardClient from "@/components/main-dashboard-client"
+import DashboardClient from "@/components/dashboard-client"
 
-export default async function DashboardPage({
+export default async function Dashboard({
   searchParams,
 }: {
   searchParams: Promise<{ payment?: string }>
 }) {
   const supabase = await createClient()
+
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -17,7 +18,7 @@ export default async function DashboardPage({
   }
 
   // Fetch user credits from database
-  const { data: profile } = await supabase
+  const { data: profile, error } = await supabase
     .from("user_profiles")
     .select("credits")
     .eq("user_id", user.id)
@@ -28,8 +29,8 @@ export default async function DashboardPage({
   const isPaymentSuccess = resolvedSearchParams.payment === "success"
 
   return (
-    <MainDashboardClient
-      user={{ email: user.email || "", id: user.id }}
+    <DashboardClient 
+      user={{ email: user.email || "", id: user.id }} 
       initialCredits={credits}
       isPaymentSuccess={isPaymentSuccess}
     />
