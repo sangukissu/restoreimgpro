@@ -68,10 +68,49 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Insufficient credits' }, { status: 402 })
     }
 
-    const body = await req.json()
-    const images: string[] = Array.isArray(body?.images) ? body.images.slice(0, 4) : []
-    const aspectRatio: string = body?.aspectRatio || '4:3'
-    const backgroundStyle: string = body?.backgroundStyle || 'black'
+    // Parse request body robustly: support JSON and x-www-form-urlencoded
+    const contentType = req.headers.get('content-type') || ''
+    let images: string[] = []
+    let aspectRatio: string = '4:3'
+    let backgroundStyle: string = 'black'
+
+    if (contentType.includes('application/json')) {
+      const body = await req.json()
+      images = Array.isArray(body?.images) ? body.images.slice(0, 4) : []
+      aspectRatio = body?.aspectRatio || aspectRatio
+      backgroundStyle = body?.backgroundStyle || backgroundStyle
+    } else if (contentType.includes('application/x-www-form-urlencoded')) {
+      const raw = await req.text()
+      // Example body: images=...&images=...&aspectRatio=4:3&backgroundStyle=black
+      const params = new URLSearchParams(raw)
+      const imgParams = params.getAll('images')
+      images = imgParams.slice(0, 4)
+      aspectRatio = params.get('aspectRatio') || aspectRatio
+      backgroundStyle = params.get('backgroundStyle') || backgroundStyle
+    } else if (contentType.includes('multipart/form-data')) {
+      // Minimal support: expect string fields for images (URLs/base64). Files are not supported here.
+      const form = await req.formData()
+      const imgEntries = form.getAll('images')
+      images = imgEntries
+        .map((v) => (typeof v === 'string' ? v : ''))
+        .filter(Boolean)
+        .slice(0, 4)
+      aspectRatio = (form.get('aspectRatio') as string) || aspectRatio
+      backgroundStyle = (form.get('backgroundStyle') as string) || backgroundStyle
+    } else {
+      // Fallback: try to parse as JSON text, else return helpful error
+      try {
+        const raw = await req.text()
+        const body = JSON.parse(raw)
+        images = Array.isArray(body?.images) ? body.images.slice(0, 4) : []
+        aspectRatio = body?.aspectRatio || aspectRatio
+        backgroundStyle = body?.backgroundStyle || backgroundStyle
+      } catch {
+        return NextResponse.json({
+          error: 'Unsupported payload format. Send JSON (Content-Type: application/json) or x-www-form-urlencoded with fields: images[], aspectRatio, backgroundStyle.',
+        }, { status: 415 })
+      }
+    }
 
     const bgText = backgroundStyleMap[backgroundStyle] || backgroundStyleMap['black']
 
