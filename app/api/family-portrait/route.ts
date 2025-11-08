@@ -29,14 +29,14 @@ function buildPrompt(subjectCount: number, aspectRatio: string, backgroundStyleT
     ? 'Place subjects side-by-side, shoulder-level, gently angled toward center.'
     : 'Generate new, appropriate, three-quarter (half-body) or full-body studio poses for all subjects. Subjects should be posed naturally as a group, oriented toward the camera.'
 
-  return `You are an expert photo compositor, to bring back the lost memories of loved ones.
+  return `You are an experienced, expert photographer and compositor.
 Generate a single, high-resolution, photorealistic family portrait in a professional studio setting.
 Identity & Subjects: Identify every unique individual from the provided input images. Use the exact facial identity of each person.
 Scene & Composition: Place all identified individuals together in a classic, cohesive group portrait arrangement. 
 Set in a professional photo studio with ${backgroundStyleText}
 ${arrangement}
 Synthesis Requirements (Critical):  Apply unified, professional studio lighting (e.g., softbox) consistently across all subjects. Style must be studio-quality, high-detail, and photorealistic.
-Constraints & Negative Prompts: CRITICAL: IGNORE all original poses, backgrounds, props, and lighting from the input images. DO NOT create a collage, "cut-and-paste," or "photoshop" composite. AVOID mismatched lighting, shadows, scale, or perspective. The final output must be a single, newly synthesized photograph. Ensure facial identities are preserved accurately.`
+Constraints & Negative Prompts: CRITICAL: IGNORE all original poses, backgrounds, props, and lighting from the input images. DO NOT create a collage, "cut-and-paste," or "photoshop" composite. AVOID mismatched lighting, shadows, scale, or perspective. The final output must be a single, newly synthesized photograph. Ensure facial identities and clothing are preserved accurately.`
 }
 
 export async function POST(req: NextRequest) {
