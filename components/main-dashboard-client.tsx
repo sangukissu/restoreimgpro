@@ -63,7 +63,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
       <main className="mx-auto max-w-6xl pt-24 pb-16 relative">
     
         {/* Hero */}
-        <section className="mb-8">
+        <section className="mb-8 p-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">Dashboard</h1>
                 <p className="text-gray-600">Choose a feature to get started</p>
@@ -85,8 +85,8 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
               </CardHeader>
               <CardContent>
                 <div className="rounded-lg overflow-hidden border">
-                  <img src="/dashboard-compare.png" alt="Restore preview" className="w-full object-cover" />
-                </div>
+                  <img src="/dashboard-compare.png" alt="Restore preview" className="w-full h-56 sm:h-40 object-cover" />
+              </div>
               </CardContent>
               <CardFooter className="justify-between">
                 <div className="text-sm text-gray-600">1 credit per restoration</div>
@@ -112,7 +112,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
                 <div className="rounded-lg overflow-hidden border">
                   <video
                     src="/videos/blink-tilt-animation.mp4"
-                    className="w-full object-cover"
+                    className="w-full h-56 sm:h-40 object-cover"
                     autoPlay
                     loop
                     muted
@@ -144,7 +144,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
               </CardHeader>
               <CardContent>
                 <div className="rounded-lg overflow-hidden border">
-                  <img src="/family-portrait.png" alt="Family portrait preview" className="w-full object-cover" />
+                  <img src="/family-portrait.png" alt="Family portrait preview" className="w-full h-56 sm:h-40 object-cover" />
                 </div>
               </CardContent>
               <CardFooter className="justify-between">
@@ -169,7 +169,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
               </CardHeader>
               <CardContent>
                 <div className="rounded-lg overflow-hidden border">
-                  <img src="/digital-frame.webp" alt="Digital frame preview" className="w-full object-cover" />
+                  <img src="/digital-frame.webp" alt="Digital frame preview" className="w-full h-56 sm:h-40 object-cover" />
                 </div>
               </CardContent>
               <CardFooter className="justify-between">
