@@ -11,38 +11,32 @@ fal.config({
 // Map of allowed background styles to prescriptive prompt text
 const backgroundStyleMap: Record<string, string> = {
   black:
-    "Use a matte charcoal seamless studio backdrop with soft falloff to near‑black; no visible texture; no patterns.",
+    "a matte charcoal seamless studio backdrop with soft falloff to near‑black.",
   gray:
-    "Use a neutral mid‑gray seamless studio paper; evenly lit; slight vignette; no patterns; no visible texture.",
+    "a neutral mid‑gray seamless studio paper; evenly lit; slight vignette.",
   beige:
-    "Use a light warm beige studio background; high‑key look; soft shadows only; no patterns; no texture.",
+    "a light warm beige studio background; high‑key look; soft shadows only.",
   gradient:
-    "Use a very faint center‑weighted studio gradient from dark to light; avoid banding; no visible texture or patterns.",
+    "a very faint center‑weighted studio gradient from dark to light; avoid banding.",
   brown:
-    "Use a classic dark brown portrait studio background with a gentle vignette; no obvious texture; no patterns.",
+    "a classic dark brown portrait studio background with a gentle vignette.",
   bokeh:
-    "Use an abstract shallow depth‑of‑field bokeh background with soft circular highlights; no identifiable scene elements, objects, or text.",
+    "an abstract shallow depth‑of‑field bokeh background with soft circular highlights.",
 }
 
 function buildPrompt(subjectCount: number, aspectRatio: string, backgroundStyleText: string) {
   const arrangement = subjectCount <= 2
     ? 'Place subjects side-by-side, shoulder-level, gently angled toward center.'
-    : 'Arrange subjects in a natural, cohesive group; prioritize center alignment and spacing suitable for a wider frame.'
+    : 'Generate new, appropriate, three-quarter (half-body) or full-body studio poses for all subjects. Subjects should be posed naturally as a group, oriented toward the camera.'
 
   return `You are an expert photo compositor, to bring back the lost memories of loved ones.
-Combine the provided individual portrait photos into a single cohesive family portrait.
-
-Identity preservation is mandatory:
-- Replicate each subject’s face exactly as in the references: facial geometry, proportions, distinctive features, age markers (wrinkles, scars, moles), hairline and facial hair.
-- Do NOT beautify, modernize, de-age, reinterpret, or replace any subject. If any subject appears elderly or from an archival photo (e.g., a grandfather), preserve that identity strictly and keep age marks intact.
-Maintain skin texture, color grading consistency across all persons, and natural proportions across all subjects.
+Generate a single, high-resolution, photorealistic family portrait in a professional studio setting.
+Identity & Subjects: Identify every unique individual from the provided input images. Use the exact facial identity of each person.
+Scene & Composition: Place all identified individuals together in a classic, cohesive group portrait arrangement. 
+Set in a professional photo studio with ${backgroundStyleText}
 ${arrangement}
-${backgroundStyleText}
-Keep lighting direction unified across all subjects; harmonize shadows naturally.
-Output must look like a single photograph, not a collage.
-Remove distortions, warping, objects, halos, cutout edges, banding, posterization, or added props.
-Final image aspect ratio: ${aspectRatio}.
-Render at high quality.`
+Synthesis Requirements (Critical):  Apply unified, professional studio lighting (e.g., softbox) consistently across all subjects. Style must be studio-quality, high-detail, and photorealistic.
+Constraints & Negative Prompts: CRITICAL: IGNORE all original poses, backgrounds, props, and lighting from the input images. DO NOT create a collage, "cut-and-paste," or "photoshop" composite. AVOID mismatched lighting, shadows, scale, or perspective. The final output must be a single, newly synthesized photograph. Ensure facial identities are preserved accurately.`
 }
 
 export async function POST(req: NextRequest) {
