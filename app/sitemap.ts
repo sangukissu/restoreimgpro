@@ -50,13 +50,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     {
-      url: `${baseUrl}/denoise`,
+      url: `${baseUrl}/denoise-photos`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.3,
     },
     {
-      url: `${baseUrl}/colorize`,
+      url: `${baseUrl}/colorize-photos`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.3,
@@ -69,6 +69,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/ai-photo-animation`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/ai-family-portrait`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.8,

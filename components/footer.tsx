@@ -45,6 +45,18 @@ export default function Footer() {
               <a href="/examples" className="text-gray-600 hover:text-black transition-colors">
                 Examples
               </a>
+              <a href="/denoise-photos" className="text-gray-600 hover:text-black transition-colors">
+                Denoise Photos
+              </a>
+              <a href="/colorize-photos" className="text-gray-600 hover:text-black transition-colors">
+                Colorize Photos
+              </a>
+              <a href="/ai-photo-animation" className="text-gray-600 hover:text-black transition-colors">
+                AI Photo Animation
+              </a>
+              <a href="/ai-family-portrait" className="text-gray-600 hover:text-black transition-colors">
+                AI Family Portrait
+              </a>
               <a href="/blog" className="text-gray-600 hover:text-black transition-colors">
                 Blog
               </a>

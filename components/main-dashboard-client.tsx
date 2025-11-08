@@ -63,7 +63,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
       <main className="mx-auto max-w-6xl pt-24 pb-16 relative">
     
         {/* Hero */}
-        <section className="mb-8 p-4">
+        <section className="mb-4 px-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">Dashboard</h1>
                 <p className="text-gray-600">Choose a feature to get started</p>
