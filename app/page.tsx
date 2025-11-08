@@ -334,10 +334,22 @@ Give your old photos a new life. Our powerful AI photo restoration tool automati
               <p className="text-lg sm:text-xl text-stone-700 max-w-3xl mx-auto leading-tight">Loved by Everyone</p>
             </div>
 
-            {/* Peerlist Badge */}
-            <div className="flex justify-center pt-4 space-x-4">
+            {/* Peer badges: Peerlist + PeerPush */}
+            <div className="flex justify-center items-center flex-nowrap pt-2 space-x-2">
               <a href="https://peerlist.io/harvansh/project/bringback-ai" target="_blank" rel="noopener noreferrer">
-                <Image src="/peerlist.svg" alt="Peerlist Badge" className="h-12 sm:h-16 md:h-18 w-auto" width={171} height={54} />
+                <Image src="/peerlist.svg" alt="Peerlist Badge" className="h-14 sm:h-16 md:h-18 w-auto" width={171} height={54} />
+              </a>
+              <a
+                href="https://peerpush.net/p/bringback-ai-photo-restoration"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="BringBack - AI Photo Restoration badge on PeerPush"
+              >
+                <Image
+                  src="https://peerpush.net/p/bringback-ai-photo-restoration/badge"
+                  alt="BringBack - AI Photo Restoration badge"
+                  className="h-12 sm:h-16 md:h-18 w-auto" width={171} height={48}
+                />
               </a>
             </div>
 

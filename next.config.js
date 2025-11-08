@@ -94,7 +94,7 @@ const nextConfig = {
             value: 'http'
           }
         ],
-        destination: 'https://yourdomain.com/:path*',
+        destination: 'https://bringback.pro/:path*',
         permanent: true
       } : null
     ].filter(Boolean)
@@ -121,6 +121,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'img.youtube.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'peerpush.net',
         port: '',
         pathname: '/**',
       },
