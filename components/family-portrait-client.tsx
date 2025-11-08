@@ -96,12 +96,29 @@ export default function FamilyPortraitClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ images: dataUrls, aspectRatio, backgroundStyle }),
       })
-
-      const json = await res.json()
-      if (!res.ok) {
-        throw new Error(json?.error || "Failed to generate family portrait")
+      const contentType = res.headers.get("content-type") || ""
+      let payload: any = null
+      if (contentType.includes("application/json")) {
+        try {
+          payload = await res.json()
+        } catch (e) {
+          // Fallback to text if JSON parsing fails
+          const text = await res.text()
+          payload = { error: text }
+        }
+      } else {
+        const text = await res.text()
+        payload = { error: text }
       }
-      setResultUrl(json.imageUrl)
+
+      if (!res.ok) {
+        if (res.status === 402) {
+          throw new Error(payload?.error || "Insufficient credits")
+        }
+        throw new Error(payload?.error || "Failed to generate family portrait")
+      }
+
+      setResultUrl(payload.imageUrl)
     } catch (err: any) {
       setError(err?.message || "Unexpected error")
     } finally {

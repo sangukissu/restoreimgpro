@@ -65,7 +65,11 @@ export async function POST(req: NextRequest) {
     }
 
     if (!userProfile || (userProfile.credits ?? 0) <= 0) {
-      return NextResponse.json({ error: 'Insufficient credits' }, { status: 402 })
+      return NextResponse.json({
+        error: 'Insufficient credits',
+        code: 'INSUFFICIENT_CREDITS',
+        requiresPayment: true,
+      }, { status: 402 })
     }
 
     // Parse request body robustly: support JSON and x-www-form-urlencoded
@@ -81,7 +85,6 @@ export async function POST(req: NextRequest) {
       backgroundStyle = body?.backgroundStyle || backgroundStyle
     } else if (contentType.includes('application/x-www-form-urlencoded')) {
       const raw = await req.text()
-      // Example body: images=...&images=...&aspectRatio=4:3&backgroundStyle=black
       const params = new URLSearchParams(raw)
       const imgParams = params.getAll('images')
       images = imgParams.slice(0, 4)
