@@ -120,15 +120,7 @@ export async function POST(req: NextRequest) {
     // Build prompt for composition
     const prompt = buildPrompt(images.length, aspectRatio, bgText)
 
-    // Debug: log final prompt and key params (non-production only)
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[FamilyPortrait] Final prompt:', prompt)
-      console.log('[FamilyPortrait] Params:', {
-        aspectRatio,
-        backgroundStyle,
-        subjectCount: images.length,
-      })
-    }
+    // Debug logging removed for security and privacy
 
     // Upload all input images to Fal storage to obtain stable URLs
     const uploadedUrls: string[] = []
@@ -272,7 +264,7 @@ export async function POST(req: NextRequest) {
       .eq('user_id', user.id)
 
     // Return response even if credits update failed (avoid blocking user on non-critical error)
-    return NextResponse.json({ imageUrl: finalImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 1 })
+    return NextResponse.json({ imageUrl: finalImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 2 })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })
