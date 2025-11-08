@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Sparkles } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
@@ -114,7 +115,7 @@ function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: str
       ref={containerRef}
       className="relative h-[280px] sm:h-[240px] w-full overflow-hidden rounded-xl bg-gray-50 border border-gray-200 p-3"
     >
-      <img
+      <Image
         src={poster}
         alt={`${alt} sample photo`}
         loading="lazy"

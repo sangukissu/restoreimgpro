@@ -68,7 +68,7 @@ export default function AIAnimationHero() {
         <div className="relative z-10 space-y-6">
           <div className="shadow-xl shadow-zinc-500/10 text-black inline-flex items-center px-3 py-1 rounded-full bg-white/50 text-xs font-medium mb-4 backdrop-blur-lg">
             <Sparkles className="w-3 h-3 mr-1" />
-            BringBack AI
+            AI Photo Animation
           </div>
           <h1 className="max-w-4xl mx-auto text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-black">
             Turn Your family photos into Respectful Animations

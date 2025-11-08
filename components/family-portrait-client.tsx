@@ -6,6 +6,7 @@ import Image from "next/image"
 import { Upload, X, Loader2 } from "lucide-react"
 
 type AspectRatio = "1:1" | "4:3" | "3:4" | "16:9"
+type BackgroundStyle = "black" | "gray" | "beige" | "gradient" | "brown" | "bokeh"
 
 function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -19,6 +20,7 @@ function fileToDataUrl(file: File): Promise<string> {
 export default function FamilyPortraitClient() {
   const [files, setFiles] = useState<File[]>([])
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("4:3")
+  const [backgroundStyle, setBackgroundStyle] = useState<BackgroundStyle>("black")
   const [isLoading, setIsLoading] = useState(false)
   const [resultUrl, setResultUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -92,7 +94,7 @@ export default function FamilyPortraitClient() {
       const res = await fetch("/api/family-portrait", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ images: dataUrls, aspectRatio }),
+        body: JSON.stringify({ images: dataUrls, aspectRatio, backgroundStyle }),
       })
 
       const json = await res.json()
@@ -228,6 +230,33 @@ export default function FamilyPortraitClient() {
             ? "With 1–2 people, square and portrait ratios are enabled."
             : "With 3–4 people, use wider ratios (4:3 or 16:9) for better composition."}
         </p>
+      </div>
+
+      {/* Background Style */}
+      <div className="space-y-2">
+        <label className="block text-lg font-semibold text-black">Background style</label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {([
+            { key: "black", label: "Matte Black" },
+            { key: "gray", label: "Neutral Gray" },
+            { key: "beige", label: "Warm Beige" },
+            { key: "gradient", label: "Subtle Gradient" },
+            { key: "brown", label: "Dark Brown Vignette" },
+            { key: "bokeh", label: "Gentle Bokeh" },
+          ] as { key: BackgroundStyle; label: string }[]).map(({ key, label }) => {
+            const selected = backgroundStyle === key
+            return (
+              <button
+                key={key}
+                onClick={() => setBackgroundStyle(key)}
+                className={`p-3 rounded-lg border-2 text-sm font-semibold transition-colors ${selected ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"}`}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
+        <p className="text-xs text-gray-500">Studio presets keep lighting consistent and reduce artifacts.</p>
       </div>
 
       <div className="flex items-center gap-3">

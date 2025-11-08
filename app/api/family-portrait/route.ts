@@ -8,18 +8,39 @@ fal.config({
   credentials: process.env.FAL_KEY,
 })
 
-function buildPrompt(subjectCount: number, aspectRatio: string) {
+// Map of allowed background styles to prescriptive prompt text
+const backgroundStyleMap: Record<string, string> = {
+  black:
+    "Use a matte charcoal seamless studio backdrop with soft falloff to near‑black; no visible texture; no patterns.",
+  gray:
+    "Use a neutral mid‑gray seamless studio paper; evenly lit; slight vignette; no patterns; no visible texture.",
+  beige:
+    "Use a light warm beige studio background; high‑key look; soft shadows only; no patterns; no texture.",
+  gradient:
+    "Use a very faint center‑weighted studio gradient from dark to light; avoid banding; no visible texture or patterns.",
+  brown:
+    "Use a classic dark brown portrait studio background with a gentle vignette; no obvious texture; no patterns.",
+  bokeh:
+    "Use an abstract shallow depth‑of‑field bokeh background with soft circular highlights; no identifiable scene elements, objects, or text.",
+}
+
+function buildPrompt(subjectCount: number, aspectRatio: string, backgroundStyleText: string) {
   const arrangement = subjectCount <= 2
     ? 'Place subjects side-by-side, shoulder-level, gently angled toward center.'
     : 'Arrange subjects in a natural, cohesive group; prioritize center alignment and spacing suitable for a wider frame.'
 
-  return `You are an expert photo compositor.
+  return `You are an expert photo compositor, to bring back the lost memories of loved ones.
 Combine the provided individual portrait photos into a single cohesive family portrait.
-Keep each person’s identity, facial features, and likeness intact.Arrange them in a natural group pose as if together for a real family photograph.
-Maintain skin texture, color grading consistency and natural proportions. 
+
+Identity preservation is mandatory:
+- Replicate each subject’s face exactly as in the references: facial geometry, proportions, distinctive features, age markers (wrinkles, scars, moles), hairline and facial hair.
+- Do NOT beautify, modernize, de-age, reinterpret, or replace any subject. If any subject appears elderly or from an archival photo (e.g., a grandfather), preserve that identity strictly and keep age marks intact.
+Maintain skin texture, color grading consistency across all persons, and natural proportions across all subjects.
 ${arrangement}
-Use a neutral studio-style background with dark, soft, flattering light. Remove mismatched shadows or old photo artifacts. Output should look like a single modern photograph, not a collage. 
-Avoid distortions, warping, or truncating faces.
+${backgroundStyleText}
+Keep lighting direction unified across all subjects; harmonize shadows naturally.
+Output must look like a single photograph, not a collage.
+Remove distortions, warping, objects, halos, cutout edges, banding, posterization, or added props.
 Final image aspect ratio: ${aspectRatio}.
 Render at high quality.`
 }
@@ -50,6 +71,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const images: string[] = Array.isArray(body?.images) ? body.images.slice(0, 4) : []
     const aspectRatio: string = body?.aspectRatio || '4:3'
+    const backgroundStyle: string = body?.backgroundStyle || 'black'
+
+    const bgText = backgroundStyleMap[backgroundStyle] || backgroundStyleMap['black']
 
     if (images.length === 0) {
       return NextResponse.json({ error: 'Provide 1–4 images (base64 data URLs or URLs).' }, { status: 400 })
@@ -61,7 +85,17 @@ export async function POST(req: NextRequest) {
     }
 
     // Build prompt for composition
-    const prompt = buildPrompt(images.length, aspectRatio)
+    const prompt = buildPrompt(images.length, aspectRatio, bgText)
+
+    // Debug: log final prompt and key params (non-production only)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[FamilyPortrait] Final prompt:', prompt)
+      console.log('[FamilyPortrait] Params:', {
+        aspectRatio,
+        backgroundStyle,
+        subjectCount: images.length,
+      })
+    }
 
     // Upload all input images to Fal storage to obtain stable URLs
     const uploadedUrls: string[] = []
