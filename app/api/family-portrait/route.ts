@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 
     // Parse request body robustly: support JSON and x-www-form-urlencoded
     const contentType = req.headers.get('content-type') || ''
-    let images: string[] = []
+    let images: Array<string | File> = []
     let aspectRatio: string = '4:3'
     let backgroundStyle: string = 'black'
 
@@ -85,13 +85,10 @@ export async function POST(req: NextRequest) {
       aspectRatio = params.get('aspectRatio') || aspectRatio
       backgroundStyle = params.get('backgroundStyle') || backgroundStyle
     } else if (contentType.includes('multipart/form-data')) {
-      // Minimal support: expect string fields for images (URLs/base64). Files are not supported here.
+      // Support both string URLs/data URLs and File objects
       const form = await req.formData()
       const imgEntries = form.getAll('images')
-      images = imgEntries
-        .map((v) => (typeof v === 'string' ? v : ''))
-        .filter(Boolean)
-        .slice(0, 4)
+      images = imgEntries.slice(0, 4) as Array<string | File>
       aspectRatio = (form.get('aspectRatio') as string) || aspectRatio
       backgroundStyle = (form.get('backgroundStyle') as string) || backgroundStyle
     } else {
@@ -137,21 +134,31 @@ export async function POST(req: NextRequest) {
     const uploadedUrls: string[] = []
     for (const img of images) {
       try {
-        if (img.startsWith('data:')) {
-          const [meta, b64] = img.split(',')
-          const mimeType = meta.substring(5, meta.indexOf(';')) || 'image/png'
-          const buffer = Buffer.from(b64, 'base64')
-          const blob = new Blob([buffer], { type: mimeType })
-          const url = await fal.storage.upload(blob)
-          uploadedUrls.push(url)
-        } else {
-          // Fetch remote URL and re-upload to Fal storage for reliability
-          const resp = await fetch(img)
-          if (!resp.ok) {
-            throw new Error(`Failed to fetch image: ${resp.status}`)
+        if (typeof img === 'string') {
+          if (img.startsWith('data:')) {
+            const [meta, b64] = img.split(',')
+            const mimeType = meta.substring(5, meta.indexOf(';')) || 'image/png'
+            const buffer = Buffer.from(b64, 'base64')
+            const blob = new Blob([buffer], { type: mimeType })
+            const url = await fal.storage.upload(blob)
+            uploadedUrls.push(url)
+          } else {
+            // Fetch remote URL and re-upload to Fal storage for reliability
+            const resp = await fetch(img)
+            if (!resp.ok) {
+              throw new Error(`Failed to fetch image: ${resp.status}`)
+            }
+            const arrayBuf = await resp.arrayBuffer()
+            const contentType = resp.headers.get('content-type') || mime.getType(img) || 'image/png'
+            const blob = new Blob([arrayBuf], { type: contentType })
+            const url = await fal.storage.upload(blob)
+            uploadedUrls.push(url)
           }
-          const arrayBuf = await resp.arrayBuffer()
-          const contentType = resp.headers.get('content-type') || mime.getType(img) || 'image/png'
+        } else {
+          // File object from multipart form-data
+          const fileLike: any = img
+          const arrayBuf = await fileLike.arrayBuffer()
+          const contentType = fileLike.type || 'image/png'
           const blob = new Blob([arrayBuf], { type: contentType })
           const url = await fal.storage.upload(blob)
           uploadedUrls.push(url)
@@ -265,7 +272,7 @@ export async function POST(req: NextRequest) {
       .eq('user_id', user.id)
 
     // Return response even if credits update failed (avoid blocking user on non-critical error)
-    return NextResponse.json({ imageUrl: finalImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 2 })
+    return NextResponse.json({ imageUrl: finalImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 1 })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })

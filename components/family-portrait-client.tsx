@@ -2,20 +2,14 @@
 
 import { useCallback, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
+import NextImage from "next/image"
 import { Upload, X, Loader2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 type AspectRatio = "1:1" | "4:3" | "3:4" | "16:9"
 type BackgroundStyle = "black" | "gray" | "beige" | "gradient" | "brown" | "bokeh"
 
-function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-}
+// Note: Do NOT compress user-uploaded images. Preserve full quality for model fidelity.
 
 export default function FamilyPortraitClient() {
   const [files, setFiles] = useState<File[]>([])
@@ -26,6 +20,7 @@ export default function FamilyPortraitClient() {
   const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { toast } = useToast()
 
   const canUseNarrow = files.length <= 2 // For 3–4 people, use wider ratios
 
@@ -89,12 +84,17 @@ export default function FamilyPortraitClient() {
         return
       }
 
-      const dataUrls = await Promise.all(files.map(fileToDataUrl))
+      // Send originals via multipart/form-data to preserve quality
+      const form = new FormData()
+      form.append("aspectRatio", aspectRatio)
+      form.append("backgroundStyle", backgroundStyle)
+      for (const f of files) {
+        form.append("images", f, f.name)
+      }
 
       const res = await fetch("/api/family-portrait", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ images: dataUrls, aspectRatio, backgroundStyle }),
+        body: form,
       })
       const contentType = res.headers.get("content-type") || ""
       let payload: any = null
@@ -113,14 +113,26 @@ export default function FamilyPortraitClient() {
 
       if (!res.ok) {
         if (res.status === 402) {
-          throw new Error(payload?.error || "Insufficient credits")
+          const message = payload?.error || "You don't have enough credits."
+          toast.error(message)
+          throw new Error(message)
         }
-        throw new Error(payload?.error || "Failed to generate family portrait")
+        if (res.status === 413 || /entity too large|FUNCTION_PAYLOAD_TOO_LARGE/i.test(payload?.error || "")) {
+          const message = "Images are too large to send. Try smaller files."
+          toast.error(message)
+          throw new Error(message)
+        }
+        const message = payload?.error || "Failed to generate family portrait"
+        toast.error(message)
+        throw new Error(message)
       }
 
       setResultUrl(payload.imageUrl)
+      toast.success("Family portrait generated!")
     } catch (err: any) {
-      setError(err?.message || "Unexpected error")
+      const msg = err?.message || "Unexpected error"
+      setError(msg)
+      if (msg) toast.error(msg)
     } finally {
       setIsLoading(false)
     }
@@ -202,13 +214,13 @@ export default function FamilyPortraitClient() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {files.map((f, idx) => (
                 <div key={idx} className="relative group rounded-xl overflow-hidden border">
-                  <Image
-                    src={URL.createObjectURL(f)}
-                    alt={`Upload ${idx + 1}`}
-                    width={200}
-                    height={200}
-                    className="w-full h-32 sm:h-36 object-cover"
-                  />
+              <NextImage
+                src={URL.createObjectURL(f)}
+                alt={`Upload ${idx + 1}`}
+                width={200}
+                height={200}
+                className="w-full h-32 sm:h-36 object-cover"
+              />
                   <button
                     aria-label="Remove"
                     onClick={(e) => { e.stopPropagation(); removeFile(idx) }}
