@@ -257,15 +257,15 @@ export async function POST(req: NextRequest) {
       // Non-fatal: still return image to user
     }
 
-    // Deduct 1 credit after successful generation and save
-    const remaining = (userProfile.credits ?? 0) - 1
+    // Deduct 2 credits after successful generation and save
+    const remaining = (userProfile.credits ?? 0) - 2
     const { error: updateError } = await supabase
       .from('user_profiles')
       .update({ credits: remaining })
       .eq('user_id', user.id)
 
     // Return response even if credits update failed (avoid blocking user on non-critical error)
-    return NextResponse.json({ imageUrl: finalImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 1 })
+    return NextResponse.json({ imageUrl: finalImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 2 })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })
