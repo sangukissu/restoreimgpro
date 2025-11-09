@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Calendar, Clock, ArrowRight } from "lucide-react"
+import Image from "next/image"
 
 interface BlogCardProps {
   title: string
@@ -29,10 +30,13 @@ export default function BlogCard({
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden ">
           {/* Image */}
           <div className="relative overflow-hidden h-48">
-            <img
+            <Image
               src={image || "/placeholder.svg"}
               alt={title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              fill
+              priority={featured}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
             <div className="absolute top-4 left-4">
               <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-medium">{category}</span>

@@ -23,6 +23,16 @@ export const metadata: Metadata = {
   keywords:
     "colorize photo, black and white to color, AI photo colorization, vintage photo coloring, historical photo restoration",
   robots: "index, follow",
+  alternates: {
+    canonical: "/colorize-photos",
+  },
+  openGraph: {
+    title: "AI Photo Colorization - Colorize Black & White Photos | BringBack",
+    description:
+      "Transform black and white photos into vibrant color images with AI. Colorize old family photos, vintage portraits, and historical images in seconds.",
+    type: "website",
+    url: "https://bringback.pro/colorize-photos",
+  },
 }
 
 const colorizePageJsonLd = {
@@ -320,6 +330,7 @@ export default function ColorizePage() {
                   videoSrc="https://youtu.be/YcexFcxi2xY"
                   thumbnailSrc="/bw-to-colorize.webp"
                   thumbnailAlt="Photo restoration demo video"
+                  priority
                   className="h-[250px] w-[300px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
                 />
               </div>

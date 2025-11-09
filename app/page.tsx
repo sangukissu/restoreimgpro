@@ -363,6 +363,7 @@ Give your old photos a new life. Our powerful AI photo restoration tool automati
                 videoSrc="https://youtu.be/K_CYXkv2Yso"
                 thumbnailSrc="/video-thumbnail.webp"
                 thumbnailAlt="Photo restoration demo video"
+                priority
                 className="h-[250px] w-[380px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
               />
             </div>

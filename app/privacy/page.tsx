@@ -6,6 +6,15 @@ export const metadata: Metadata = {
   title: "Privacy Policy - BringBack | AI Photo Restoration",
   description: "Learn how BringBack protects your privacy and handles your personal data during photo restoration.",
   robots: "index, follow",
+  alternates: {
+    canonical: "/privacy",
+  },
+  openGraph: {
+    title: "Privacy Policy - BringBack | AI Old Photo Restoration",
+    description: "Learn how BringBack protects your privacy and handles your personal data during photo restoration.",
+    type: "website",
+    url: "https://bringback.pro/privacy",
+  },
 }
 
 export default function PrivacyPage() {

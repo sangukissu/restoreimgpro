@@ -6,6 +6,15 @@ export const metadata: Metadata = {
   title: "Terms of Service - BringBack | AI Photo Restoration",
   description: "Read BringBack's terms of service for our AI photo restoration platform.",
   robots: "index, follow",
+  alternates: {
+    canonical: "/terms",
+  },
+  openGraph: {
+    title: "Terms of Service - BringBack | AI Old Photo Restoration",
+    description: "Read BringBack's terms of service for our AI photo restoration platform.",
+    type: "website",
+    url: "https://bringback.pro/terms",
+  },
 }
 
 export default function TermsPage() {

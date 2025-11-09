@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Play, X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 interface HeroVideoDialogProps {
   className?: string
@@ -11,6 +12,8 @@ interface HeroVideoDialogProps {
   videoSrc: string
   thumbnailSrc: string
   thumbnailAlt?: string
+  /** Preload the thumbnail image for LCP-critical heroes */
+  priority?: boolean
 }
 
 // Function to convert YouTube URL to embed format
@@ -18,18 +21,18 @@ function getYouTubeEmbedUrl(url: string): string {
   // Handle youtu.be format
   if (url.includes('youtu.be/')) {
     const videoId = url.split('youtu.be/')[1].split('?')[0]
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`
   }
   
   // Handle youtube.com/watch format
   if (url.includes('youtube.com/watch')) {
     const videoId = url.split('v=')[1]?.split('&')[0]
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`
   }
   
   // If already embed format, return as is
   if (url.includes('youtube.com/embed/')) {
-    return url.includes('autoplay=1') ? url : `${url}?autoplay=1&rel=0`
+    return url.includes('autoplay=1') ? url : `${url}?autoplay=1&rel=0&modestbranding=1`
   }
   
   return url
@@ -40,7 +43,8 @@ export function HeroVideoDialog({
   animationStyle = "from-center",
   videoSrc,
   thumbnailSrc,
-  thumbnailAlt = "Video thumbnail"
+  thumbnailAlt = "Video thumbnail",
+  priority = false
 }: HeroVideoDialogProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isClient, setIsClient] = useState(false)
@@ -88,9 +92,13 @@ export function HeroVideoDialog({
     return (
       <div className={cn("relative cursor-pointer group", className)}>
         <div className="relative overflow-hidden rounded-2xl">
-          <img
+          <Image
             src={thumbnailSrc}
             alt={thumbnailAlt}
+            width={1920}
+            height={1080}
+            priority={priority}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1080px"
             className="w-full h-auto"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors cursor-pointer">
@@ -113,11 +121,20 @@ export function HeroVideoDialog({
 
   return (
     <>
-      <div className={cn("relative cursor-pointer group", className)} onClick={handleOpen}>
+      <div
+        className={cn("relative cursor-pointer group", className)}
+        onClick={handleOpen}
+        role="button"
+        aria-label="Play video"
+      >
         <div className="relative overflow-hidden rounded-2xl">
-          <img
+          <Image
             src={thumbnailSrc}
             alt={thumbnailAlt}
+            width={1920}
+            height={1080}
+            priority={priority}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1080px"
             className="w-full h-auto"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors cursor-pointer">
@@ -159,6 +176,7 @@ export function HeroVideoDialog({
               <button
                 onClick={handleClose}
                 className="absolute top-4 right-4 z-10 flex items-center justify-center w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full transition-colors"
+                aria-label="Close video"
               >
                 <X className="w-5 h-5 text-white" />
               </button>
@@ -169,7 +187,9 @@ export function HeroVideoDialog({
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                title="Video player"
+                title="BringBack video demo"
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
               />
             </motion.div>
           </motion.div>

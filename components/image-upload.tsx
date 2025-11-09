@@ -243,6 +243,10 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
                 src={selectedImageUrl || "/placeholder.svg"}
                 alt="Selected image"
                 className="w-full h-full object-cover"
+                width={512}
+                height={512}
+                loading="lazy"
+                decoding="async"
               />
             </div>
 

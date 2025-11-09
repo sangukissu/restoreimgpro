@@ -12,6 +12,16 @@ export const metadata: Metadata = {
   title: "AI Photo Animation: Bring Your Old Photos to Life | BringBack AI",
   description:
     "Watch your loved ones smile and wave again. Our advanced AI Photo Animation tool turns still portraits into beautiful, living memories in seconds. Try it now.",
+  alternates: {
+    canonical: "/ai-photo-animation",
+  },
+  openGraph: {
+    title: "AI Photo Animation: Bring Your Old Photos to Life | BringBack AI",
+    description:
+      "Watch your loved ones smile and wave again. Our advanced AI Photo Animation tool turns still portraits into beautiful, living memories in seconds. Try it now.",
+    type: "website",
+    url: "https://bringback.pro/ai-photo-animation",
+  },
 }
 
 // WebApplication schema for the animation page (mirrors homepage pattern)

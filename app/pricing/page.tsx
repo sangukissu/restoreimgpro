@@ -13,11 +13,15 @@ export const metadata: Metadata = {
   description:
     "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
   robots: { index: true, follow: true },
+  alternates: {
+    canonical: "/pricing",
+  },
   openGraph: {
     title: "Pricing - BringBack.pro | AI Photo Restoration & Animation",
     description:
       "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
     type: "website",
+    url: "https://bringback.pro/pricing",
     siteName: "BringBack",
     images: [
       {

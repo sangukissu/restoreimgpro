@@ -63,6 +63,10 @@ export default function UploadDropzone({
               alt="Selected image preview"
               className="h-40 w-full rounded-md object-contain"
               crossOrigin="anonymous"
+              width={300}
+              height={160}
+              loading="lazy"
+              decoding="async"
             />
           ) : (
             <div className="text-muted-foreground text-sm">Image selected</div>

@@ -16,6 +16,16 @@ export const metadata: Metadata = {
   title: "AI Family Portrait: Combine Photos to Create a Family Portrait with AI | BringBack AI",
   description:
     "Create a unified family portrait from up to 4 individual photos—across time, distance, and even black-and-white. Private, high‑resolution family portrait in seconds.",
+  alternates: {
+    canonical: "/ai-family-portrait",
+  },
+  openGraph: {
+    title: "AI Family Portrait: Combine Photos to Create a Family Portrait with AI | BringBack AI",
+    description:
+      "Create a unified family portrait from up to 4 individual photos—across time, distance, and even black-and-white. Private, high‑resolution family portrait in seconds.",
+    type: "website",
+    url: "https://bringback.pro/ai-family-portrait",
+  },
 }
 
 // WebApplication schema for the family portrait feature

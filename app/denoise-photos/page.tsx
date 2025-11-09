@@ -20,6 +20,16 @@ export const metadata: Metadata = {
     "Clean up grainy, noisy photos with AI. Remove digital noise, grain, and artifacts from low-light shots in seconds.",
   keywords: "denoise photo, remove grain, fix grainy photos, AI noise reduction, clean up photos",
   robots: "index, follow",
+  alternates: {
+    canonical: "/denoise-photos",
+  },
+  openGraph: {
+    title: "AI Photo Denoise - Remove Grain & Noise Instantly | BringBack",
+    description:
+      "Clean up grainy, noisy photos with AI. Remove digital noise, grain, and artifacts from low-light shots in seconds.",
+    type: "website",
+    url: "https://bringback.pro/denoise-photos",
+  },
 }
 
 const denoisePageJsonLd = {

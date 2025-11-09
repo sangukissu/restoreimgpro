@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   description:
     "Learn about photo restoration, preservation tips, and read inspiring stories of memories brought back to life.",
   robots: "index, follow",
+  alternates: {
+    canonical: "/blog",
+  },
   openGraph: {
     title: "Blog - BringBack | Photo Restoration Tips & Stories",
     description: "Learn about photo restoration, preservation tips, and read inspiring stories of memories brought back to life.",
