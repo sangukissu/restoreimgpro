@@ -5,16 +5,12 @@ import { Layers, Palette, Users, Camera } from "lucide-react"
 
 export default function AITechnologySection() {
   return (
-    <section id="technology" className="px-4 py-20 bg-[#F7F8FA]"> {/* Use a subtle contrasting background */}
+    <section id="technology" className="px-4 py-20 bg-white"> {/* Use a subtle contrasting background */}
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="max-w-3xl mx-auto font-serif text-4xl lg:text-5xl text-black leading-tight">
-            The Art and Science of{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">Your AI Portrait</span>
-              <span className="absolute bottom-0 left-0 w-full h-3 bg-orange-200 rounded-full transform -rotate-1"></span>
-            </span>
+            The Art and Science of Your AI Portrait
           </h2>
           <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
             This is more than a simple photo merge. Discover the intelligent technology that makes each composite family portrait a work of art.

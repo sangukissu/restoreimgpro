@@ -1,8 +1,10 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
+import { FramerButton } from "@/components/ui/framer-button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Sparkles } from "lucide-react"
+import { Sparkles, ChevronRight} from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 type StyleItem = {
@@ -119,6 +121,8 @@ function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: str
         src={poster}
         alt={`${alt} sample photo`}
         loading="lazy"
+        width={160}
+        height={90}
         className="absolute top-4 left-4 z-10 w-16 h-12 rounded-md border border-white object-cover"
       />
       <video
@@ -164,6 +168,13 @@ export default function AnimationStylesGrid() {
           ))}
         </div>
       </div>
+      <div className="flex justify-center mt-12">
+            <Link href="/">
+              <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
+                Start Photo Animation
+              </FramerButton>
+            </Link>
+          </div>
     </section>
   )
 }

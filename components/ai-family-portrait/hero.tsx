@@ -34,7 +34,7 @@ export default function AIAnimationHero() {
 
       <div className="relative z-10 px-4">
         <div className="mx-auto w-full max-w-6xl rounded-2xl border-6 border-gray-200 overflow-hidden ">
-          <div className="aspect-[16/9] w-full relative">
+          <div className="aspect-[4/3] w-full relative">
             <Image
               src="/family-portrait.png"
               alt="Unified modern family portrait"

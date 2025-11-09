@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { SunMedium, Palette, LayoutList, Wand2 } from "lucide-react"
+import { SunMedium, Palette, LayoutList, Wand2, Camera } from "lucide-react"
 
 function InputMosaic() {
   return (
@@ -36,6 +36,8 @@ function ProcessStrip() {
     { icon: <SunMedium className="w-4 h-4" />, title: "Match Lighting", desc: "Balance exposure and tone across photos" },
     { icon: <Palette className="w-4 h-4" />, title: "Unify Style", desc: "Align color and art style tastefully" },
     { icon: <LayoutList className="w-4 h-4" />, title: "Compose Naturally", desc: "Respectful arrangement that feels real" },
+    { icon: <Camera className="w-4 h-4" />, title: "Ready to Print", desc: "Print‑ready, respectful composite — created in minutes." },
+
   ]
   return (
     <div className="bg-white rounded-2xl border p-6">
@@ -69,7 +71,6 @@ function ResultPanel() {
       </div>
       <div className="mt-4 flex items-center justify-between">
         <p className="text-sm text-gray-600">Print‑ready, respectful composite — created in minutes.</p>
-        <Link href="/dashboard/family-portrait" className="text-sm font-medium text-black underline underline-offset-4">Create yours</Link>
       </div>
     </div>
   )

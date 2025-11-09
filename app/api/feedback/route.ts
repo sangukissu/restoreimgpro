@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         .from('user_feedback_tracking')
         .select('total_restorations')
         .eq('user_id', user.id)
-        .single()
+        .maybeSingle()
 
       const restorationCount = trackingData?.total_restorations || 1
 
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
         .from('user_feedback_tracking')
         .select('feedback_skipped_count')
         .eq('user_id', user.id)
-        .single()
+        .maybeSingle()
 
       const currentSkipCount = currentTracking?.feedback_skipped_count || 0
 
@@ -149,7 +149,7 @@ export async function GET(request: NextRequest) {
       .from('user_feedback_tracking')
       .select('*')
       .eq('user_id', user.id)
-      .single()
+      .maybeSingle()
 
     return NextResponse.json({
       shouldShow: shouldShow || false,
