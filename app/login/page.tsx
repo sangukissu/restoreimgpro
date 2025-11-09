@@ -11,6 +11,7 @@ import { Loader2, Mail } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import Image from "next/image"
+import Link from "next/link"
 import { signInWithMagicLink, signInWithGoogle, type AuthState } from "./actions"
 import { createClient } from "@/utils/supabase/client"
 
@@ -132,7 +133,7 @@ function LoginFormWithSearchParams() {
             <p className="text-lg text-gray-600">Sign in to start restoring your photos</p>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+          <div className="bg-white border-6 border-gray-200 rounded-xl p-8">
             {displayError && (
               <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-red-50 border border-red-200 text-red-700">
                 {displayError}
@@ -174,7 +175,7 @@ function LoginFormWithSearchParams() {
               <div className="relative">
                 <MagicLinkSubmit />
                 {lastUsed === 'magic' && (
-                  <span className="absolute -top-3 right-3 bg-purple-600 text-white text-xs px-3 py-1 rounded-full shadow-sm">Last used</span>
+                  <span className="absolute -top-2 right-3 bg-white text-black text-xs px-2  rounded-full border border-purple-600 text-sm">Last used</span>
                 )}
               </div>
             </form>
@@ -188,13 +189,13 @@ function LoginFormWithSearchParams() {
               <div className="relative">
                 <GoogleSignInButton />
                 {lastUsed === 'google' && (
-                  <span className="absolute -top-3 right-3 bg-purple-600 text-white text-xs px-3 py-1 rounded-full shadow-sm">Last used</span>
+                  <span className="absolute -top-2 right-3 bg-white text-black text-xs px-2 rounded-full border border-purple-600 text-sm">Last used</span>
                 )}
               </div>
             </div>
 
             <div className="mt-6 text-center text-gray-600">
-              <p className="text-sm">By continuing, you agree to our terms of service and privacy policy.</p>
+              <p className="text-sm">By continuing, you agree to our <Link href="/terms" className="text-blue-600 hover:text-blue-700">terms of service</Link> and <Link href="/privacy" className="text-blue-600 hover:text-blue-700">privacy policy</Link>.</p>
             </div>
           </div>
         </div>
