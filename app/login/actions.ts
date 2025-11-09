@@ -14,6 +14,7 @@ export async function signInWithMagicLink(
 ): Promise<AuthState> {
   const supabase = await createClient()
   const email = formData.get('email') as string
+  const captchaToken = (formData.get('captchaToken') as string) || undefined
 
   // Process magic link request
 
@@ -23,6 +24,7 @@ export async function signInWithMagicLink(
       options: {
         shouldCreateUser: true,
         emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/dashboard`,
+        captchaToken,
       },
     })
 

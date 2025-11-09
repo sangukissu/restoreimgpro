@@ -148,7 +148,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
                 </div>
               </CardContent>
               <CardFooter className="justify-between">
-                <div className="text-sm text-gray-600">1 credit per composite</div>
+                <div className="text-sm text-gray-600">2 credit per composite</div>
                 <Link href="/dashboard/family-portrait" className="inline-flex items-center">
                   <Button size="sm" className="inline-flex items-center gap-1">
                     Open
