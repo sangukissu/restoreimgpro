@@ -98,7 +98,12 @@ export function useFeedback(): UseFeedbackReturn {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to submit feedback')
+        let serverMessage = 'Failed to submit feedback'
+        try {
+          const body = await response.json()
+          if (body?.error) serverMessage = body.error
+        } catch {}
+        throw new Error(serverMessage)
       }
 
       // Update local state

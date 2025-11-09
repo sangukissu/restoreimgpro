@@ -53,21 +53,34 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Mark feedback as given
-      const { error: trackingError } = await supabase
+      // Mark feedback as given (update first, insert fallback)
+      const now = new Date().toISOString()
+      const { data: updateRes, error: updateErr } = await supabase
         .from('user_feedback_tracking')
-        .upsert({
-          user_id: user.id,
-          feedback_given: true,
-          updated_at: new Date().toISOString()
-        })
+        .update({ feedback_given: true, updated_at: now })
+        .eq('user_id', user.id)
+        .select('user_id')
 
-      if (trackingError) {
-        console.error('Error updating tracking:', trackingError)
+      if (updateErr) {
+        console.error('Error updating tracking:', updateErr)
         return NextResponse.json(
           { error: 'Failed to update tracking' },
           { status: 500 }
         )
+      }
+
+      if (!updateRes || updateRes.length === 0) {
+        const { error: insertErr } = await supabase
+          .from('user_feedback_tracking')
+          .insert({ user_id: user.id, feedback_given: true, updated_at: now })
+
+        if (insertErr) {
+          console.error('Error inserting tracking:', insertErr)
+          return NextResponse.json(
+            { error: 'Failed to update tracking' },
+            { status: 500 }
+          )
+        }
       }
 
       return NextResponse.json({ success: true })
@@ -83,22 +96,43 @@ export async function POST(request: NextRequest) {
 
       const currentSkipCount = currentTracking?.feedback_skipped_count || 0
 
-      // Increment skip count
-      const { error: skipError } = await supabase
+      // Increment skip count (update first, insert fallback)
+      const nowSkip = new Date().toISOString()
+      const { data: skipUpdateRes, error: skipUpdateErr } = await supabase
         .from('user_feedback_tracking')
-        .upsert({
-          user_id: user.id,
+        .update({
           feedback_skipped_count: currentSkipCount + 1,
-          last_feedback_prompt_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          last_feedback_prompt_at: nowSkip,
+          updated_at: nowSkip
         })
+        .eq('user_id', user.id)
+        .select('user_id')
 
-      if (skipError) {
-        console.error('Error updating skip count:', skipError)
+      if (skipUpdateErr) {
+        console.error('Error updating skip count:', skipUpdateErr)
         return NextResponse.json(
           { error: 'Failed to update skip count' },
           { status: 500 }
         )
+      }
+
+      if (!skipUpdateRes || skipUpdateRes.length === 0) {
+        const { error: skipInsertErr } = await supabase
+          .from('user_feedback_tracking')
+          .insert({
+            user_id: user.id,
+            feedback_skipped_count: currentSkipCount + 1,
+            last_feedback_prompt_at: nowSkip,
+            updated_at: nowSkip
+          })
+
+        if (skipInsertErr) {
+          console.error('Error inserting skip tracking:', skipInsertErr)
+          return NextResponse.json(
+            { error: 'Failed to update skip count' },
+            { status: 500 }
+          )
+        }
       }
 
       return NextResponse.json({ success: true })
