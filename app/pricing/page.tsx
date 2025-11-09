@@ -234,7 +234,7 @@ export default function PricingPage() {
                   <tr className="border-b border-gray-100">
                     <td className="py-4 px-4 text-gray-700">Price per photo</td>
                     <td className="py-4 px-4 text-center font-semibold text-green-600">~$0.50</td>
-                    <td className="py-4 px-4 text-center text-gray-600">$50-200</td>
+                    <td className="py-4 px-4 text-center text-gray-600">$20-100</td>
                   </tr>
                   <tr className="border-b border-gray-100">
                     <td className="py-4 px-4 text-gray-700">Processing time</td>
@@ -248,7 +248,28 @@ export default function PricingPage() {
                     </td>
                     <td className="py-4 px-4 text-center text-gray-600">Varies</td>
                   </tr>
-                  
+
+                  {/* New rows */}
+                  <tr className="border-b border-gray-100">
+                    <td className="py-4 px-4 text-gray-700">Photo animation</td>
+                    <td className="py-4 px-4 text-center font-semibold text-green-600">
+                      $2 Only
+                    </td>
+                    <td className="py-4 px-4 text-center text-gray-600">Not available</td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-4 px-4 text-gray-700">AI family portrait</td>
+                    <td className="py-4 px-4 text-center font-semibold text-green-600">
+                      $1 Only
+                    </td>
+                    <td className="py-4 px-4 text-center text-gray-600">$100-200</td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-4 px-4 text-gray-700">Free digital photo frame</td>
+                    <td className="py-4 px-4 text-center font-semibold text-green-600">Included</td>
+                    <td className="py-4 px-4 text-center text-gray-600">Not included</td>
+                  </tr>
+
                   <tr>
                     <td className="py-4 px-4 text-gray-700">Money-back guarantee</td>
                     <td className="py-4 px-4 text-center font-semibold text-green-600">30 days</td>

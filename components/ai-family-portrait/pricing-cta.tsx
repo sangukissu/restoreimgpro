@@ -19,7 +19,7 @@ export default function AIAnimationPricingCTA() {
             </FramerButton>
           </Link>
         </div>
-        <p className="text-sm text-gray-600 mt-3">Includes our 30-Day Money-Back Guarantee. Credits never expire.</p>
+        <p className="text-sm text-gray-600 mt-3">Includes our 30-Day Money-Back Guarantee.</p>
       </div>
     </section>
   )

@@ -9,6 +9,7 @@ import FamilyPortraitUseCases from "@/components/ai-family-portrait/features"
 import AIAnimationPricingCTA from "@/components/ai-family-portrait/pricing-cta"
 import FamilyPortraitFAQ from "@/components/ai-family-portrait/faq"
 import AITechnologySection from "@/components/ai-family-portrait/AITechnologySection"
+import BenefitsSection from "@/components/benefits-section"
 
 
 export const metadata: Metadata = {
@@ -182,6 +183,7 @@ export default function Page() {
       <AIAnimationHero />
       <FamilyPortraitShowcase />
       <AIAnimationHowItWorks />
+      <BenefitsSection />
       <FamilyPortraitUseCases />
       <AITechnologySection />
       <FamilyPortraitFAQ />
