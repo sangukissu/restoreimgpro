@@ -17,16 +17,16 @@ import { createClient } from "@/utils/supabase/client"
 // metadata from a client component. This page remains a client component
 // for interactive login behaviors.
 
-function MagicLinkSubmit({ disabled }: { disabled: boolean }) {
+function MagicLinkSubmit() {
   const { pending } = useFormStatus()
   return (
-    <Button type="submit" disabled={pending || disabled} className="w-full bg-black hover:bg-gray-800 text-white py-3 text-base font-medium rounded-lg h-12">
+    <Button type="submit" disabled={pending} className="w-full bg-black hover:bg-gray-800 text-white py-3 text-base font-medium rounded-lg h-12">
       {pending ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Sending link...</>) : (<><Mail className="mr-2 h-4 w-4" />Send Magic Link</>)}
     </Button>
   )
 }
 
-function GoogleSignInButton({ disabled }: { disabled: boolean }) {
+function GoogleSignInButton() {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleGoogleSignIn = async () => {
@@ -43,7 +43,7 @@ function GoogleSignInButton({ disabled }: { disabled: boolean }) {
     <Button 
       type="button" 
       variant="outline" 
-      disabled={isLoading || disabled}
+      disabled={isLoading}
       onClick={handleGoogleSignIn}
       className="w-full border-gray-300 hover:bg-gray-50 text-black py-3 text-base font-medium rounded-lg h-12 bg-transparent"
     >
@@ -132,7 +132,7 @@ function LoginFormWithSearchParams() {
                 <Input id="email" name="email" type="email" placeholder="you@example.com" required className="bg-white border-gray-300 text-black placeholder:text-gray-500 rounded-lg h-12" />
               </div>
               {/* Cloudflare Turnstile CAPTCHA */}
-              {siteKey ? (
+              {siteKey && (
                 <div className="flex justify-center">
                   <Turnstile
                     siteKey={siteKey}
@@ -141,13 +141,9 @@ function LoginFormWithSearchParams() {
                     onError={() => setCaptchaToken(undefined)}
                   />
                 </div>
-              ) : (
-                <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-yellow-50 border border-yellow-200 text-yellow-800">
-                  CAPTCHA not configured. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY.
-                </div>
               )}
               <input type="hidden" name="captchaToken" value={captchaToken ?? ""} />
-              <MagicLinkSubmit disabled={!captchaToken} />
+              <MagicLinkSubmit />
             </form>
 
             <div className="mt-6 space-y-4">
@@ -156,7 +152,7 @@ function LoginFormWithSearchParams() {
                 <div className="relative flex justify-center text-sm"><span className="bg-white px-2 text-gray-500">Or</span></div>
               </div>
 
-              <GoogleSignInButton disabled={!captchaToken} />
+              <GoogleSignInButton />
             </div>
 
             <div className="mt-6 text-center text-gray-600">
