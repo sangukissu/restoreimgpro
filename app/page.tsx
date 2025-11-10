@@ -320,10 +320,10 @@ Give your old photos a new life. Our powerful AI photo restoration tool automati
                   <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
                   <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
                   <div className="w-8 h-8 rounded-full bg-stone-800 border-2 border-white flex items-center justify-center">
-                    <span className="text-stone-200 text-xs font-bold">17+</span>
+                    <span className="text-stone-200 text-xs font-bold">122+</span>
                   </div>
                 </div>
-                <div className="flex text-zinc-500">
+                <div className="flex text-yellow-500">
                   {[...Array(5)].map((_, i) => (
                     <span key={i} className="text-lg">
                       ★
@@ -331,7 +331,7 @@ Give your old photos a new life. Our powerful AI photo restoration tool automati
                   ))}
                 </div>
               </div>
-              <p className="text-lg sm:text-xl text-stone-700 max-w-3xl mx-auto leading-tight">Loved by Everyone</p>
+              <p className="text-lg sm:text-xl text-stone-700 max-w-3xl mx-auto leading-tight">4.9/5 Star Rating from 122+ Users</p>
             </div>
 
             {/* Peer badges: Peerlist + PeerPush */}
