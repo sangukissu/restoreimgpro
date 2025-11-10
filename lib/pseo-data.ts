@@ -38,12 +38,7 @@ export const problems = [
     h1_fragment: 'Yellowed',
     description: 'Yellowing happens over time due to acid in the paper or exposure to sunlight. It can make a photo look dull and aged.'
   },
-  {
-    name: 'Moldy',
-    slug: 'moldy',
-    h1_fragment: 'Moldy',
-    description: 'Mold damage can appear as black, green, or white spots on a photo, often caused by high humidity. It can eat away at the image over time.'
-  },
+
   {
     name: 'Creased',
     slug: 'creased',
@@ -120,7 +115,6 @@ export const photoTypes = [
     slug: 'holiday-snap',
     description: 'Holiday snaps are full of happy memories. Restoring them brings back the joy of those special times with family and friends.'
   }
-  // ... (add 'ancestor', 'baby-photo', 'graduation-photo', 'holiday-snap')
 ];
 
 // CATEGORY 3: The Action (This is a different set of pages)
@@ -152,7 +146,6 @@ export const actions = [
     problemText: 'Your photos may look dull, grainy, or lack detail. This can be due to a variety of factors, including the quality of the camera or the age of the photo.',
     solutionText: 'Our AI can enhance the quality of your photos by increasing the resolution, reducing noise, and improving the colors. The result is a sharper, more vibrant image.',
   }
-  // ... (add 'unblur-faces', 'enhance-photo-quality')
 ];
 
 // --- General FAQs ---
@@ -182,61 +175,37 @@ export const restorationKeywords = [
   { keyword: 'Restore old damaged photos', slug: 'restore-old-damaged-photos' },
   { keyword: 'ChatGPT photo restoration', slug: 'chatgpt-photo-restoration' },
   { keyword: 'Enhance old photo', slug: 'enhance-old-photo' },
-  { keyword: 'Old photo restoration ai tools free', slug: 'old-photo-restoration-ai-tools-free' },
-  { keyword: 'Old photo restoration online free', slug: 'old-photo-restoration-online-free' },
-  { keyword: 'AI photo restoration online free', slug: 'ai-photo-restoration-online-free' },
-  { keyword: 'Old photo color restoration online free', slug: 'old-photo-color-restoration-online-free' },
-  { keyword: 'Best old photo restoration ai tools', slug: 'best-old-photo-restoration-ai-tools' },
+  { keyword: 'Old photo restoration online', slug: 'old-photo-restoration-online' },
+  { keyword: 'AI photo restoration online', slug: 'ai-photo-restoration-online' },
+  { keyword: 'Old photo color restoration online', slug: 'old-photo-color-restoration-online' },
   { keyword: 'Nero AI Photo Restoration', slug: 'nero-ai-photo-restoration' },
-  { keyword: 'Best AI photo restoration', slug: 'best-ai-photo-restoration' },
-  { keyword: 'Old photo restoration prompt', slug: 'old-photo-restoration-prompt' },
 ];
 
 export const howToKeywords = [
   { keyword: 'how to clean old pictures', slug: 'how-to-clean-old-pictures' },
-  { keyword: 'how to clean pictures', slug: 'how-to-clean-pictures' },
-  { keyword: 'how to clean old photos', slug: 'how-to-clean-old-photos' },
-  { keyword: 'cleaning photographs', slug: 'cleaning-photographs' },
+  { keyword: 'how to clean old photos with ai', slug: 'how-to-clean-old-photos-with-ai' },
   { keyword: 'how do you clean a photograph', slug: 'how-do-you-clean-a-photograph' },
-  { keyword: 'what cleans a professional photograph', slug: 'what-cleans-a-professional-photograph' },
   { keyword: 'how to remove scratches from old photos', slug: 'how-to-remove-scratches-from-old-photos' },
   { keyword: 'remove scratches from pictures', slug: 'remove-scratches-from-pictures' },
-  { keyword: 'remove scratches from photo', slug: 'remove-scratches-from-photo' },
-  { keyword: 'graininess in photos', slug: 'graininess-in-photos' },
   { keyword: 'how to fix grainy images', slug: 'how-to-fix-grainy-images' },
-  { keyword: 'how to fix grainy pictures', slug: 'how-to-fix-grainy-pictures' },
   { keyword: 'how to fix grainy photos', slug: 'how-to-fix-grainy-photos' },
 ];
 
 export const digitizationKeywords = [
-  { keyword: 'where can i scan photos', slug: 'where-can-i-scan-photos' },
   { keyword: 'digitising photographs', slug: 'digitising-photographs' },
-  { keyword: 'how to scan photographs', slug: 'how-to-scan-photographs' },
   { keyword: 'how to digitize photos', slug: 'how-to-digitize-photos' },
   { keyword: 'how to scan old photos for the best resolution', slug: 'how-to-scan-old-photos-for-the-best-resolution' },
   { keyword: 'scan photos to digital', slug: 'scan-photos-to-digital' },
-  { keyword: 'scanning old photographs', slug: 'scanning-old-photographs' },
   { keyword: 'where to scan photos', slug: 'where-to-scan-photos' },
-  { keyword: 'scanner for scanning photos', slug: 'scanner-for-scanning-photos' },
   { keyword: 'best way to digitize photos', slug: 'best-way-to-digitize-photos' },
-  { keyword: 'how to digitise photos', slug: 'how-to-digitise-photos' },
   { keyword: 'how to scan old pictures', slug: 'how-to-scan-old-pictures' },
-  { keyword: 'how to digitize pictures', slug: 'how-to-digitize-pictures' },
   { keyword: 'where can i get a photo digitized', slug: 'where-can-i-get-a-photo-digitized' },
-  { keyword: 'convert photos to digital at home', slug: 'convert-photos-to-digital-at-home' },
   { keyword: 'how can i digitize old photos', slug: 'how-can-i-digitize-old-photos' },
-  { keyword: 'where to get photos scanned', slug: 'where-to-get-photos-scanned' },
   { keyword: 'where can i get photos scanned', slug: 'where-can-i-get-photos-scanned' },
   { keyword: 'convert photographs to digital', slug: 'convert-photographs-to-digital' },
-  { keyword: 'best photo scanner for old photos', slug: 'best-photo-scanner-for-old-photos' },
   { keyword: 'how to scan pictures', slug: 'how-to-scan-pictures' },
-  { keyword: 'best photo scanner for old pictures', slug: 'best-photo-scanner-for-old-pictures' },
   { keyword: 'photographs to digital', slug: 'photographs-to-digital' },
   { keyword: 'convert pictures to digital', slug: 'convert-pictures-to-digital' },
-  { keyword: 'how do i digitise old photos', slug: 'how-do-i-digitise-old-photos' },
   { keyword: 'best way to scan photos', slug: 'best-way-to-scan-photos' },
-  { keyword: 'best scanner old photos', slug: 'best-scanner-old-photos' },
-  { keyword: 'how to digitize old photographs', slug: 'how-to-digitize-old-photographs' },
   { keyword: 'how do i digitize old photos', slug: 'how-do-i-digitize-old-photos' },
-  { keyword: 'copy old photos', slug: 'copy-old-photos' },
 ];
