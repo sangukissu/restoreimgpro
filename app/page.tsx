@@ -331,7 +331,7 @@ Give your old photos a new life. Our powerful AI photo restoration tool automati
                   ))}
                 </div>
               </div>
-              <p className="text-lg sm:text-xl text-stone-700 max-w-3xl mx-auto leading-tight">4.9/5 Star Rating from 122+ Users</p>
+              <p className="text-md sm:text-lg text-stone-700 max-w-3xl mx-auto leading-tight">4.9/5 Star Rating from 122+ Users</p>
             </div>
 
             {/* Peer badges: Peerlist + PeerPush */}
