@@ -58,7 +58,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
         <Header />
       
       <main className="pt-32 pb-20">
-        <div className="max-w-6xl mx-auto px-4">
+        <div>
           
           {/* Hero Section */}
           <div className="text-center mb-16">
@@ -115,7 +115,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </div>
 
           {/* Content Sections */}
-          <section className="px-4 py-20 max-w-6xl mx-auto">
+          <section className="px-4 py-20 mx-auto">
             <div className="grid lg:grid-cols-2 gap-16 mb-20">
               
               {/* The Problem */}
@@ -154,8 +154,8 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </section>
 
           {/* Why Choose BringBack.pro */}
-          <section className="px-4 py-20 bg-[#fff6f0de]">
-            <div className="max-w-6xl mx-auto">
+          <section className="bg-[#fff6f0de]">
+            <div className="max-w-6xl mx-auto px-4 py-20">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Why Choose Us</p>
                 <h2 className=" text-4xl lg:text-5xl text-black leading-tight">
@@ -196,8 +196,8 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </section>
 
           {/* How It Works Section */}
-          <section className="px-4 py-20 bg-white">
-            <div className="max-w-6xl mx-auto">
+          <section className="bg-white">
+            <div className="max-w-6xl mx-auto px-4 py-20 ">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Our Process, Explained</p>
                 <h2 className=" text-4xl lg:text-5xl text-black leading-tight">
@@ -240,8 +240,8 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </section>
 
           {/* Comparison Table Section */}
-          <section className="px-4 py-20 bg-gray-50">
-            <div className="max-w-6xl mx-auto">
+          <section className="bg-gray-50">
+            <div className="max-w-6xl mx-auto px-4 py-20">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Compare & Decide</p>
                 <h2 className=" text-4xl lg:text-5xl text-black leading-tight mb-6">
@@ -327,8 +327,8 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </section>
 
           {/* Use Cases & Examples Section */}
-          <section className="px-4 py-20 bg-white">
-            <div className="max-w-6xl mx-auto">
+          <section className="bg-white">
+            <div className="max-w-6xl mx-auto px-4 py-20">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Real-World Applications</p>
                 <h2 className=" text-4xl lg:text-5xl text-black leading-tight mb-6">
@@ -357,8 +357,8 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </section>
 
           {/* Cost Analysis Section */}
-          <section className="px-4 py-20 bg-gray-50">
-            <div className="max-w-6xl mx-auto">
+          <section className="bg-gray-50">
+            <div className="max-w-6xl mx-auto px-4 py-20">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Investment & Value</p>
                 <h2 className=" text-4xl lg:text-5xl text-black leading-tight mb-6">
@@ -409,8 +409,8 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </section>
 
           {/* FAQ Section */}
-          <section className="px-4 py-20 bg-white">
-            <div className="max-w-4xl mx-auto">
+          <section className="bg-white">
+            <div className="px-4 py-20 max-w-4xl mx-auto">
               <div className="text-center mb-16">
                 <p className="text-gray-500 italic text-lg mb-4">Common Questions</p>
                 <h2 className=" text-4xl lg:text-5xl text-black leading-tight">
@@ -436,8 +436,8 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
           </section>
 
           {/* Final CTA Section */}
-          <section className="px-4 py-20 bg-black">
-            <div className="max-w-4xl mx-auto text-center">
+          <section className="bg-black">
+            <div className="px-4 py-20 max-w-4xl mx-auto text-center">
               <h2 className=" text-4xl lg:text-5xl text-white leading-tight mb-6">
                 Ready to Bring Your Memories Back?
               </h2>
