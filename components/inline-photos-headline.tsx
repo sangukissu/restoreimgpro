@@ -1,7 +1,6 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useEffect } from "react"
 
 interface InlinePhotosHeadlineProps {
   beforeText: string
@@ -20,22 +19,8 @@ export default function InlinePhotosHeadline({
   imageUrl2,
   afterText,
 }: InlinePhotosHeadlineProps) {
-  const [isMobile, setIsMobile] = useState(false)
-  const [isTablet, setIsTablet] = useState(false)
-
-  useEffect(() => {
-    const checkSize = () => {
-      setIsMobile(window.innerWidth < 768)
-      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024)
-    }
-
-    checkSize()
-    window.addEventListener("resize", checkSize)
-    return () => window.removeEventListener("resize", checkSize)
-  }, [])
-
-  // Responsive image sizes
-  const imageSize = isMobile ? 40 : isTablet ? 50 : 80
+  // Use CSS responsive classes to keep SSR/CSR markup identical and prevent CLS
+  const imageSize = 80
 
   return (
     <div className="w-full text-center">
@@ -51,7 +36,7 @@ export default function InlinePhotosHeadline({
                 alt="Photo 1"
                 width={imageSize}
                 height={imageSize}
-                className="rounded-lg shadow-lg object-cover"
+                className="rounded-lg shadow-lg object-cover w-10 sm:w-12 md:w-20 h-auto"
                 style={{
                   transform: "rotate(-3deg)",
                   transition: "transform 0.3s ease-out",
@@ -85,7 +70,7 @@ export default function InlinePhotosHeadline({
                 alt="Photo 2"
                 width={imageSize}
                 height={imageSize}
-                className="rounded-lg shadow-lg object-cover"
+                className="rounded-lg shadow-lg object-cover w-10 sm:w-12 md:w-20 h-auto"
                 style={{
                   transform: "rotate(2deg)",
                   transition: "transform 0.3s ease-out",
