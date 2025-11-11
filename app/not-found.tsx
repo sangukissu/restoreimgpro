@@ -11,7 +11,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-white">
       {/* Subtle background */}
-        <div className="absolute inset-0 bg-[url('/hero-bg.png')] bg-cover bg-center opacity-40 pointer-events-none" />
+        <div className="absolute inset-0 bg-[url('/hero-bg.webp')] bg-cover bg-center opacity-40 pointer-events-none" />
       
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4">
         <div className="text-center max-w-2xl mx-auto">

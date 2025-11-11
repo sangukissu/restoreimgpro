@@ -63,7 +63,7 @@ function HeroVideo({
 export default function AIAnimationHero() {
   return (
     <section className="relative pb-12 overflow-hidden bg-white">
-      <div className="absolute inset-0 bg-[url('/hero-bg.png')] bg-cover bg-center opacity-60 pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-[url('/hero-bg.webp')] bg-cover bg-center opacity-60 pointer-events-none z-0" />
       <div className="px-4 pt-28 pb-12 max-w-6xl mx-auto text-center">
         <div className="relative z-10 space-y-6">
           <div className="shadow-xl shadow-zinc-500/10 text-black inline-flex items-center px-3 py-1 rounded-full bg-white/50 text-xs font-medium mb-4 backdrop-blur-lg">

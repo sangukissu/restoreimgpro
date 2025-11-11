@@ -280,7 +280,7 @@ export default function Page() {
         
 
        
-        <div className="absolute inset-0 bg-[url('/hero-bg.png')] bg-cover bg-center opacity-60 pointer-events-none" />
+        <div className="absolute inset-0 bg-[url('/hero-bg.webp')] bg-cover bg-center opacity-60 pointer-events-none" />
 
         <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
 
