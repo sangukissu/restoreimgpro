@@ -43,7 +43,7 @@ export const NavBody = ({ children, className }: NavBodyProps) => {
     <motion.div
       className={cn(
         // **FIXED: Clean White Translucency and Subtle Border**
-        "shadow-xl shadow-zinc-500/10 relative z-[60] mx-auto max-w-4xl flex-row items-center justify-between self-start rounded-full bg-white/50 px-4 py-3 hidden backdrop-blur-lg lg:flex shadow-md",
+        "shadow-sm shadow-zinc-500/10 relative z-[60] mx-auto max-w-4xl flex-row items-center justify-between self-start rounded-full bg-white/50 px-4 py-3 hidden backdrop-blur-lg lg:flex ",
         className,
       )}
     >
@@ -88,7 +88,7 @@ export const MobileNav = ({ children, className }: MobileNavProps) => {
     <motion.div
       className={cn(
         // **FIXED: Mobile Clean White Translucency**
-        "shadow-xl shadow-zinc-500/10 bg-white/50 relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] flex-col items-center justify-between rounded-full backdrop-blur-lg py-3 px-4 lg:hidden shadow-md",
+        "shadow-zinc-500/10 bg-white/50 relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] flex-col items-center justify-between rounded-full backdrop-blur-lg py-3 px-4 lg:hidden shadow-sm",
         className,
       )}
     >
