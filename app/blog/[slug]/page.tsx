@@ -119,10 +119,8 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
         url: 'https://bringback.pro/bringback-logo.png'
       }
     },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://bringback.pro/blog/${post.slug}`
-    },
+    // Use URL string for mainEntityOfPage to avoid emitting a WebPage entity
+    mainEntityOfPage: `https://bringback.pro/blog/${post.slug}`,
     articleSection: category,
     wordCount: post.content.split(' ').length,
     timeRequired: `PT${readTime}M`,
