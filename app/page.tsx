@@ -10,11 +10,9 @@ import FeaturesSection from "@/components/features-section"
 import ShowcaseSection from "@/components/showcase-section"
 import AIPhotoRestorationSection from "@/components/ai-photo-restoration-section"
 import FAQSection from "@/components/faq-section"
-import MemoriesSection from "@/components/memories-section"
 import InlinePhotosHeadline from "@/components/inline-photos-headline"
 import type { Metadata } from "next"
 import Image from "next/image"
-import { Check } from "lucide-react"
 import { Compare } from "@/components/ui/compare"
 
 
@@ -356,7 +354,6 @@ Our powerful photo restoration tool automatically repairs scratches, tears, wate
       </section>
 
       <HowItWorksSection />
-      <MemoriesSection />
       <ShowcaseSection />
       <AIPhotoRestorationSection />
       <ComparisonSection />
