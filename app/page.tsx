@@ -4,7 +4,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { FramerButton } from "@/components/ui/framer-button"
 import ComparisonSection from "@/components/ComparisonSection"
-import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
 import HowItWorksSection from "@/components/how-it-works-section"
 import BenefitsSection from "@/components/benefits-section"
 import FeaturesSection from "@/components/features-section"
@@ -15,6 +14,8 @@ import MemoriesSection from "@/components/memories-section"
 import InlinePhotosHeadline from "@/components/inline-photos-headline"
 import type { Metadata } from "next"
 import Image from "next/image"
+import { Check } from "lucide-react"
+import { Compare } from "@/components/ui/compare"
 
 
 export const metadata: Metadata = {
@@ -278,8 +279,6 @@ export default function Page() {
       {/* Hero Section */}
       <section className="relative pb-12 overflow-hidden">
         
-
-       
         <div className="absolute inset-0 bg-[url('/hero-bg.webp')] bg-cover bg-center opacity-60 pointer-events-none" />
 
         <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
@@ -300,7 +299,7 @@ export default function Page() {
               />
 
               <p className="text-lg sm:text-xl text-gray-800 max-w-3xl mx-auto leading-tight -mt-4">
-Give your old photos a new life. Our powerful photo restoration tool automatically repairs scratches, tears, water damage, and fading with precision. Simply upload a picture to restore damaged photos to their former glory, enhance colors, and sharpen details with breathtaking clarity.              </p>
+Our powerful photo restoration tool automatically repairs scratches, tears, water damage, and fading with precision. Simply upload a picture to restore damaged photos to their former glory, enhance colors, and sharpen details with breathtaking clarity.              </p>
             </div>
             <div className="flex flex-col gap-4 justify-center items-center w-full">
               <Link href="/dashboard">
@@ -314,11 +313,11 @@ Give your old photos a new life. Our powerful photo restoration tool automatical
             <div className="flex flex-col items-center space-y-2 pt-2">
               <div className="flex items-center space-x-2">
                 <div className="flex -space-x-2">
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
+                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar1.webp" alt="User" />
+                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar2.webp" alt="User" />
+                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar3.webp" alt="User" />
+                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar6.webp" alt="User" />
+                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar5.webp" alt="User" />
                   <div className="w-8 h-8 rounded-full bg-stone-800 border-2 border-white flex items-center justify-center">
                     <span className="text-stone-200 text-xs font-bold">122+</span>
                   </div>
@@ -333,24 +332,27 @@ Give your old photos a new life. Our powerful photo restoration tool automatical
               </div>
               <p className="text-md sm:text-lg text-stone-700 max-w-3xl mx-auto leading-tight">4.9/5 Star Rating from 122+ Users</p>
             </div>
-
-
-          </div>
-        </div>
-        <div>
+<div className="pb-12">
           <div className="flex justify-center">
-            <div className="py-4 border rounded-3xl bg-white border-neutral-200 px-4">
-              <HeroVideoDialog
-                animationStyle="from-center"
-                videoSrc="https://youtu.be/K_CYXkv2Yso"
-                thumbnailSrc="/video-thumbnail.webp"
-                thumbnailAlt="Photo restoration demo video"
-                priority
+            <div className="py-4 border rounded-3xl bg-white border-neutral-200 px-4 shadow-2xl shadow-zinc-500/20">
+              <Compare
+                firstImage="/ripped.webp"
+                secondImage="/ripped-restored.webp"
+                firstImageClassName="object-cover"
+                secondImageClassname="object-cover"
                 className="h-[250px] w-[380px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
+                slideMode="hover"
+                showHandlebar={true}
+                firstImageAlt="Torn photo of a woman"
+                secondImageAlt="Restored photo of a woman"
               />
             </div>
           </div>
         </div>
+
+          </div>
+        </div>
+      
       </section>
 
       <HowItWorksSection />

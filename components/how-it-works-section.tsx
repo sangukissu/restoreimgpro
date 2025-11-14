@@ -1,6 +1,8 @@
 "use client"
 
 import { Sparkles } from "lucide-react"
+import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
+
 
 export default function HowItWorksSection() {
   return (
@@ -21,7 +23,7 @@ export default function HowItWorksSection() {
         </div>
 
         {/* Process Cards */}
-        <div className="relative">
+        <div className="relative mb-16">
           <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 relative">
             {/* Step 1 */}
             <div className="bg-white lg:mt-8 rounded-2xl p-8 shadow-sm border-6 border-gray-200 bg-transparent backdrop-blur transform -rotate-2 sm:-rotate-5 relative z-10">
@@ -96,7 +98,20 @@ export default function HowItWorksSection() {
           </div>
         </div>
 
-     
+       <div className="mt-16">
+               <div className="flex justify-center">
+                 <div className="py-4 border rounded-3xl bg-white border-neutral-200 px-4">
+                   <HeroVideoDialog
+                     animationStyle="from-center"
+                     videoSrc="https://youtu.be/K_CYXkv2Yso"
+                     thumbnailSrc="/video-thumbnail.webp"
+                     thumbnailAlt="Photo restoration demo video"
+                     priority
+                     className="h-[250px] w-[380px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
+                   />
+                 </div>
+               </div>
+             </div>
       </div>
     </section>
   )
