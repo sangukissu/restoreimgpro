@@ -18,8 +18,8 @@ import Image from "next/image"
 
 
 export const metadata: Metadata = {
-  title: "BringBack - AI Photo Restoration, Animation & Digital Frames | Revive Old Memories",
-  description: "BringBack restores old, faded, or damaged photos, brings them to life with AI animation, and creates beautiful digital frames. Repair colors, fix damage, and showcase memories in stunning frames in seconds.",
+  title: "Restore, Colorize & Animate Old damaged Photos Online",
+  description: "BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.",
   keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration, digital photo frames, photo framing, custom photo frames",
 
 }
@@ -28,8 +28,8 @@ const homePageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/#webapp',
-  name: 'BringBack – AI Photo Restoration, Animation & Digital Frames',
-  description: 'BringBack is an AI-powered web app where users upload old, faded, or damaged photos and instantly receive restored, vibrant images. Users can also bring photos to life with subtle AI animations and create beautiful digital frames for display.',
+  name: 'Restore, Colorize & Animate Old damaged Photos Online',
+  description: 'BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.',
   url: 'https://bringback.pro/',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
@@ -300,13 +300,13 @@ export default function Page() {
               />
 
               <p className="text-lg sm:text-xl text-gray-800 max-w-3xl mx-auto leading-tight -mt-4">
-Give your old photos a new life. Our powerful AI photo restoration tool automatically repairs scratches, tears, water damage, and fading in seconds. Simply upload a picture to restore old photos to their former glory, enhance colors, and sharpen details with breathtaking clarity.              </p>
+Give your old photos a new life. Our powerful photo restoration tool automatically repairs scratches, tears, water damage, and fading with precision. Simply upload a picture to restore damaged photos to their former glory, enhance colors, and sharpen details with breathtaking clarity.              </p>
             </div>
             <div className="flex flex-col gap-4 justify-center items-center w-full">
               <Link href="/dashboard">
 
                 <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
-                  Bring Back Memories
+                  Restore Photos Now
                 </FramerButton>
               </Link>
 
@@ -334,24 +334,6 @@ Give your old photos a new life. Our powerful AI photo restoration tool automati
               <p className="text-md sm:text-lg text-stone-700 max-w-3xl mx-auto leading-tight">4.9/5 Star Rating from 122+ Users</p>
             </div>
 
-            {/* Peer badges: Peerlist + PeerPush */}
-            <div className="flex justify-center items-center flex-nowrap pt-2 space-x-2">
-              <a href="https://peerlist.io/harvansh/project/bringback-ai" target="_blank" rel="noopener noreferrer">
-                <Image src="/peerlist.svg" alt="Peerlist Badge" className="h-14 sm:h-16 md:h-18 w-auto" width={171} height={54} />
-              </a>
-              <a
-                href="https://peerpush.net/p/bringback-ai-photo-restoration"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="BringBack - AI Photo Restoration badge on PeerPush"
-              >
-                <Image
-                  src="https://peerpush.net/p/bringback-ai-photo-restoration/badge"
-                  alt="BringBack - AI Photo Restoration badge"
-                  className="h-12 sm:h-16 md:h-18 w-auto" width={171} height={48}
-                />
-              </a>
-            </div>
 
           </div>
         </div>
