@@ -35,7 +35,6 @@ const VisualRestore = () => {
               }}
             ></div>
 
-            {/* Active Scanning Highlight */}
             <div
               className="absolute inset-0 bg-brand-orange/20 animate-[scan-flash_4s_infinite]"
               style={{ animationDelay: `${i * 0.4}s` }}
