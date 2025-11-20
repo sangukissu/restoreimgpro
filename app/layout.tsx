@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Manrope } from "next/font/google"
+import { Manrope, Inter, Patrick_Hand } from "next/font/google"
 import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
 import Script from "next/script"
@@ -11,6 +11,19 @@ const manrope = Manrope({
   display: "swap",
   variable: "--font-manrope",
   weight: ["400", "700"],
+})
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+})
+
+const patrickHand = Patrick_Hand({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-patrick-hand",
+  weight: ["400"],
 })
 
 export const metadata: Metadata = {
@@ -62,7 +75,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-
 }
 
 const jsonLd = {
@@ -121,14 +133,13 @@ const jsonLd = {
   ]
 }
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={manrope.variable}>
+    <html lang="en" className={`${manrope.variable} ${inter.variable} ${patrickHand.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -146,10 +157,10 @@ export default function RootLayout({
       </head>
       <body className={`antialiased`}>
         {children}
-        
+
         <NetworkStatus />
         <Toaster />
-        
+
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-184H988WCE"

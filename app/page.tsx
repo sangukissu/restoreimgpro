@@ -1,19 +1,19 @@
 import Link from "next/link"
-import { Sparkles, ChevronRight } from "lucide-react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
-import { FramerButton } from "@/components/ui/framer-button"
-import ComparisonSection from "@/components/ComparisonSection"
-import HowItWorksSection from "@/components/how-it-works-section"
-import BenefitsSection from "@/components/benefits-section"
-import FeaturesSection from "@/components/features-section"
-import ShowcaseSection from "@/components/showcase-section"
-import AIPhotoRestorationSection from "@/components/ai-photo-restoration-section"
-import FAQSection from "@/components/faq-section"
-import InlinePhotosHeadline from "@/components/inline-photos-headline"
+
 import type { Metadata } from "next"
-import Image from "next/image"
-import { Compare } from "@/components/ui/compare"
+import React from 'react';
+import { Navbar } from '@/components/landing/Navbar';
+import { Hero } from '@/components/landing/Hero';
+import { HowItWorks } from '@/components/landing/HowItWorks';
+import { Showcase } from '@/components/landing/Showcase';
+import { PhotoAnimation } from '@/components/landing/PhotoAnimation';
+import { WhyUs } from '@/components/landing/WhyUs';
+import { Benefits } from '@/components/landing/Benefits';
+import { Pricing } from '@/components/landing/Pricing';
+import { Clients } from '@/components/landing/Clients';
+import { FAQ } from '@/components/landing/FAQ';
+import { Footer } from '@/components/landing/Footer';
+
 
 
 export const metadata: Metadata = {
@@ -256,7 +256,7 @@ const heroVideoJsonLd = {
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-brand-bg text-brand-black font-sans selection:bg-brand-orange selection:text-white relative overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
@@ -273,127 +273,31 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(heroVideoJsonLd) }}
       />
-      <Header />
-      {/* Hero Section */}
-      <section className="relative pb-12 overflow-hidden">
-        
-        <div className="absolute inset-0 bg-[url('/hero-bg.webp')] bg-cover bg-center opacity-60 pointer-events-none" />
+      {/* Navbar - Fixed to stay at top during scroll */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
+        <Navbar />
+      </header>
 
-        <div className="px-4 py-12 pt-32 max-w-[85rem] 2xl:max-w-[100rem] mx-auto text-center" >
+      {/* Main Content */}
+      <main>
+        <Hero />
+        <HowItWorks />
+        <Showcase />
+        <PhotoAnimation />
+        <WhyUs />
+        <Benefits />
+        <Pricing />
+        <Clients />
+        <FAQ />
+      </main>
 
-          <div className="relative z-10 space-y-6">
-            <div className="space-y-6">
-              <div className="shadow-xl shadow-zinc-500/10 text-black inline-flex items-center px-3 py-1 rounded-full bg-white/50 text-xs font-medium mb-4 backdrop-blur-lg">
-                <Sparkles className="w-3 h-3 mr-1" />
-                BringBack AI
-              </div>
-              <InlinePhotosHeadline
-                beforeText="Restore"
-                imageUrl1="/childhood-memories-black-and-white.webp"
-                betweenText="old photos &"
-                accentWord="faded memories"
-                imageUrl2="/childhood-memories-colorized.webp"
-                afterText="to life"
-              />
-
-              <p className="text-lg sm:text-xl text-gray-800 max-w-3xl mx-auto leading-tight -mt-4">
-Our powerful photo restoration tool automatically repairs scratches, tears, water damage, and fading with precision. Simply upload a picture to restore damaged photos to their former glory, enhance colors, and sharpen details with breathtaking clarity.              </p>
-            </div>
-            <div className="flex flex-col gap-4 justify-center items-center w-full">
-              <Link href="/dashboard">
-
-                <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
-                  Restore Photos Now
-                </FramerButton>
-              </Link>
-
-            </div>
-            <div className="flex flex-col items-center space-y-2 pt-2">
-              <div className="flex items-center space-x-2">
-                <div className="flex -space-x-2">
-                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar1.webp" alt="User" />
-                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar2.webp" alt="User" />
-                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar3.webp" alt="User" />
-                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar6.webp" alt="User" />
-                  <Image className="w-8 h-8 rounded-full border-2 border-white" width={80} height={80} src="/avatar5.webp" alt="User" />
-                  <div className="w-8 h-8 rounded-full bg-stone-800 border-2 border-white flex items-center justify-center">
-                    <span className="text-stone-200 text-xs font-bold">122+</span>
-                  </div>
-                </div>
-                <div className="flex text-yellow-500">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <p className="text-md sm:text-lg text-stone-700 max-w-3xl mx-auto leading-tight">4.9/5 Star Rating from 122+ Users</p>
-            </div>
-<div className="pb-12">
-          <div className="flex justify-center">
-            <div className="py-4 border rounded-3xl bg-white border-neutral-200 px-4 shadow-2xl shadow-zinc-500/20">
-              <Compare
-                firstImage="/ripped.webp"
-                secondImage="/ripped-restored.webp"
-                firstImageClassName="object-cover"
-                secondImageClassname="object-cover"
-                className="h-[250px] w-[380px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
-                slideMode="hover"
-                showHandlebar={true}
-                firstImageAlt="Torn photo of a woman"
-                secondImageAlt="Restored photo of a woman"
-              />
-            </div>
-          </div>
-        </div>
-
-          </div>
-        </div>
-      
-      </section>
-
-      <HowItWorksSection />
-      <ShowcaseSection />
-      <AIPhotoRestorationSection />
-      <ComparisonSection />
-
-      <BenefitsSection />
-
-      <FeaturesSection />
-
-
-      <FAQSection />
-
-
-
-      {/* Emotional Connection */}
-      <section className="px-4 py-20 max-w-6xl mx-auto text-center">
-
-        <div className="text-center">
-          <div className="max-w-4xl mx-auto">
-            <div className="border-t border-gray-200 pt-12">
-              <blockquote className="text-2xl md:text-3xl font-light text-gray-800 italic leading-relaxed">
-                "Every photo tells a story. Every animation brings that story to life. Every memory deserves to be
-                preserved, restored, and shared with future generations."
-              </blockquote>
-              <div className="mt-8 mx-auto">
-
-
-                <Link href="/dashboard">
-
-                  <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden  sm:w-auto">
-                    Start bringing memories to life
-                  </FramerButton>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
       <Footer />
+
+      {/* Decorative Gradients (Subtle background noise/glows to match high-end feel) */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1] overflow-hidden">
+        <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-white rounded-full blur-[120px] opacity-60"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-gray-200 rounded-full blur-[100px] opacity-40"></div>
+      </div>
     </div>
   )
 }

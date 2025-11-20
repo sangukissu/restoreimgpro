@@ -133,12 +133,35 @@ html {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* User requested theme extensions */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-hand: var(--font-patrick-hand), cursive;
+
+  --color-brand-bg: #F2F2F0;
+  --color-brand-surface: #E6E6E6;
+  --color-brand-orange: #FF4D00;
+  --color-brand-black: #111111;
+  --color-brand-dark: #1A1A1A;
+  --color-brand-gray: #EBEBE9;
+
+  --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  --animate-scroll-up: scroll-up 30s linear infinite;
+  --animate-scroll-down: scroll-down 45s linear infinite;
+  --animate-scan: scan 4s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-cursor-drop: cursor-drop 3s ease-in-out infinite;
+  --animate-scan-vertical: scan-vertical 2s linear infinite;
+  --animate-pulse-mesh: pulse-mesh 3s ease-in-out infinite;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-manrope), sans-serif !important;
@@ -146,7 +169,12 @@ html {
 }
 
 /* Apply Manrope Bold to headings and common heading utility */
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 .font-serif,
 .heading {
   font-family: var(--font-manrope), sans-serif !important;
@@ -154,6 +182,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 @layer utilities {
+
   /* Essential cursor styles for good UX - High priority */
   button,
   [role="button"],
@@ -167,7 +196,7 @@ h1, h2, h3, h4, h5, h6,
   .button {
     cursor: pointer !important;
   }
-  
+
   /* Disable cursor for disabled elements */
   button:disabled,
   [role="button"][aria-disabled="true"],
@@ -176,7 +205,7 @@ h1, h2, h3, h4, h5, h6,
   .disabled {
     cursor: not-allowed !important;
   }
-  
+
   /* Text selection cursor */
   input[type="text"],
   input[type="email"],
@@ -190,29 +219,29 @@ h1, h2, h3, h4, h5, h6,
   .text-input {
     cursor: text !important;
   }
-  
+
   /* Resize cursors for interactive elements */
   .cursor-resize,
   .resize {
     cursor: resize !important;
   }
-  
+
   .cursor-grab,
   .grab {
     cursor: grab !important;
   }
-  
+
   .cursor-grabbing,
   .grabbing {
     cursor: grabbing !important;
   }
-  
+
   /* Default cursor for non-interactive elements */
   .cursor-default,
   .default {
     cursor: default !important;
   }
-  
+
   /* Hover effects for better UX */
   button:hover,
   [role="button"]:hover,
@@ -220,27 +249,27 @@ h1, h2, h3, h4, h5, h6,
   .cursor-pointer:hover {
     cursor: pointer !important;
   }
-  
+
   /* Ensure links always show pointer */
   a[href],
   a[href]:hover,
   a[href]:focus {
     cursor: pointer !important;
   }
-  
+
   /* Form elements */
   select,
   select:hover,
   select:focus {
     cursor: pointer !important;
   }
-  
+
   /* Checkboxes and radio buttons */
   input[type="checkbox"],
   input[type="radio"] {
     cursor: pointer !important;
   }
-  
+
   /* Labels for form controls */
   label[for] {
     cursor: pointer !important;
@@ -311,4 +340,136 @@ a,
 .button-secondary {
   @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-all duration-200;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+/* User requested global styles */
+body {
+  background-color: #F2F2F0;
+  color: #111111;
+}
+
+/* Custom scrollbar to match the aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F2F2F0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* User requested keyframes */
+@keyframes scroll-up {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes scroll-down {
+  0% {
+    transform: translateY(-50%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes scan {
+
+  0%,
+  100% {
+    left: 5%;
+  }
+
+  50% {
+    left: 95%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes cursor-drop {
+  0% {
+    transform: translate(40px, 40px);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  50% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  60% {
+    transform: scale(0.95);
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes scan-vertical {
+  0% {
+    top: -10%;
+  }
+
+  100% {
+    top: 110%;
+  }
+}
+
+@keyframes pulse-mesh {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
 }
