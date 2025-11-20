@@ -83,7 +83,7 @@ const ComparisonSlider: React.FC<{ before: string; after: string; active: boolea
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full min-h-[400px] lg:min-h-[600px] overflow-hidden rounded-[2.5rem] cursor-ew-resize select-none group"
+      className="relative w-full h-full min-h-[400px] lg:min-h-[600px] overflow-hidden rounded-[1.3rem] cursor-ew-resize select-none group"
       onMouseMove={handleMove}
       onTouchMove={handleMove}
     >
@@ -139,12 +139,12 @@ export const Showcase: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> Showcase <span className="text-brand-orange">//</span>
             </div>
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Restoration <br />
-              <span className="text-gray-400/80">Capabilities</span>
+              <span className="text-gray-400">Capabilities</span>
             </h2>
           </div>
           <div className="max-w-sm">
@@ -155,7 +155,7 @@ export const Showcase: React.FC = () => {
         </div>
 
         {/* Main Layout: Gray Surface Container */}
-        <div className="bg-brand-surface p-3 rounded-[3rem]">
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto lg:h-[600px]">
 
             {/* Left Column: Selection Menu (4 cols on desktop) */}
@@ -166,7 +166,7 @@ export const Showcase: React.FC = () => {
                   <button
                     key={item.id}
                     onClick={() => setActiveId(item.id)}
-                    className={`flex-1 text-left p-6 rounded-[2.5rem] transition-all duration-300 group relative overflow-hidden flex flex-col justify-center
+                    className={`flex-1 text-left p-6 rounded-[1.5rem] transition-all duration-300 group relative overflow-hidden flex flex-col justify-center
                     ${isActive
                         ? 'bg-brand-black text-white shadow-xl'
                         : 'bg-white text-brand-black hover:bg-gray-50'
@@ -194,7 +194,7 @@ export const Showcase: React.FC = () => {
             </div>
 
             {/* Right Column: Interactive Viewport (8 cols on desktop) */}
-            <div className="lg:col-span-8 h-[500px] lg:h-auto bg-white rounded-[2.5rem] p-2 overflow-hidden relative">
+            <div className="lg:col-span-8 h-[500px] lg:h-auto bg-white rounded-[1.5rem] p-2 overflow-hidden relative">
               <ComparisonSlider
                 before={activeCase.beforeImage}
                 after={activeCase.afterImage}

@@ -13,10 +13,10 @@ export const Footer: React.FC = () => {
     return (
         <footer className="w-full px-4 sm:px-8 pb-8 pt-0 bg-brand-bg">
             {/* Main Dark Card Container */}
-            <div className="bg-[#111111] rounded-[3rem] px-6 sm:px-12 py-16 sm:py-24 text-white overflow-hidden relative">
+            <div className="bg-[#111111] rounded-[1.8rem] px-6 sm:px-12 py-16 text-white overflow-hidden relative">
 
                 {/* Top Section: CTA and Links */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
 
                     {/* Left: Brand & CTA */}
                     <div className="lg:col-span-5 flex flex-col justify-between h-full">
@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
 
                             <h2 className="text-5xl sm:text-6xl lg:text-6xl font-extrabold tracking-tight leading-[0.95] mb-8">
                                 Ready to restore <br />
-                                <span className="text-gray-500">your memories?</span>
+                                <span className="text-gray-400">your memories?</span>
                             </h2>
 
                             <p className="text-gray-400 font-medium text-lg max-w-md mb-8">
@@ -45,7 +45,7 @@ export const Footer: React.FC = () => {
                     </div>
 
                     {/* Right: Navigation Links */}
-                    <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 lg:pl-12">
+                    <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 lg:pl-12 mb-8">
                         <div className="flex flex-col gap-6">
                             <h4 className="text-gray-500 font-bold text-sm uppercase tracking-wider">Features</h4>
                             <a href="/denoise-photos" className="font-medium hover:text-brand-orange transition-colors">Denoise Photos</a>

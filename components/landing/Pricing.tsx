@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Sparkles, Film, UploadCloud, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star } from 'lucide-react';
+import Link from 'next/link';
 
 // Process Card Component - Compacted
 const ProcessCard: React.FC<{
@@ -9,7 +10,7 @@ const ProcessCard: React.FC<{
   subtitle: string;
   dots: boolean[]
 }> = ({ icon, title, subtitle, dots }) => (
-  <div className="bg-brand-surface rounded-[2.5rem] p-6 flex flex-col gap-6 hover:shadow-lg transition-shadow duration-300">
+  <div className="bg-brand-surface rounded-[1.8rem] p-6 flex flex-col gap-6 ">
     <div className="flex justify-between items-start">
       <div className="w-12 h-12 rounded-full border-2 border-brand-black flex items-center justify-center text-brand-black">
         {icon}
@@ -44,26 +45,19 @@ const PricingCard: React.FC<{
   badge: string;
   features: PricingFeature[];
   icon: React.ReactNode;
-  isPopular?: boolean;
   buttonText: string;
+  buttonLink: string;
   buttonIcon: React.ReactNode;
-}> = ({ theme, title, price, description, badge, features, icon, isPopular, buttonText, buttonIcon }) => {
+}> = ({ theme, title, price, description, badge, features, icon, buttonText, buttonLink, buttonIcon }) => {
   const isDark = theme === 'dark';
 
   return (
-    <div className={`h-full rounded-[2.5rem] p-3 flex flex-col group hover:-translate-y-1 transition-transform duration-300 relative ${isDark ? 'bg-[#111111] text-white shadow-2xl' : 'bg-white text-brand-black shadow-sm'}`}>
+    <div className={`h-full rounded-[1.5rem] p-3 flex flex-col group hover:-translate-y-1 transition-transform duration-300 relative ${isDark ? 'bg-[#111111] text-white shadow-2xl' : 'bg-white text-brand-black shadow-sm'}`}>
 
-      {isPopular && (
-        <div className="absolute -top-3 right-8 z-30">
-          <div className="bg-brand-orange text-white px-4 py-1.5 rounded-full shadow-lg shadow-brand-orange/40 text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 animate-in fade-in slide-in-from-top-4 duration-700">
-            <Star size={12} fill="currentColor" />
-            Most Popular
-          </div>
-        </div>
-      )}
+
 
       {/* Nested Header Card - Reduced Padding */}
-      <div className={`rounded-[2rem] p-6 mb-4 flex flex-col relative overflow-hidden shrink-0 ${isDark ? 'bg-white/10' : 'bg-[#F5F5F7]'}`}>
+      <div className={`rounded-[1.5rem] p-6 mb-4 flex flex-col relative overflow-hidden shrink-0 ${isDark ? 'bg-white/10' : 'bg-[#F5F5F7]'}`}>
         <div className="flex justify-between items-start mb-4">
           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${isDark ? 'bg-white text-brand-black' : 'bg-brand-black text-white'}`}>
             {icon}
@@ -101,12 +95,14 @@ const PricingCard: React.FC<{
 
       {/* Hero Style Button - Compact */}
       <div className="px-2 pb-2 mt-auto">
-        <button className={`group w-full flex items-center justify-between pl-6 pr-2 py-2 rounded-full transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg ${isDark ? 'bg-white text-brand-black' : 'bg-brand-black text-white'}`}>
-          <span className="font-bold text-base tracking-tight">{buttonText}</span>
-          <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${isDark ? 'bg-brand-black text-white group-hover:bg-brand-orange' : 'bg-white text-brand-black group-hover:bg-brand-orange group-hover:text-white'}`}>
-            {buttonIcon}
-          </div>
-        </button>
+        <Link href={buttonLink}>
+          <button className={`group w-full flex items-center justify-between pl-6 pr-2 py-2 rounded-full transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg ${isDark ? 'bg-white text-brand-black' : 'bg-brand-black text-white'}`}>
+            <span className="font-bold text-base tracking-tight">{buttonText}</span>
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${isDark ? 'bg-brand-black text-white group-hover:bg-brand-orange' : 'bg-white text-brand-black group-hover:bg-brand-orange group-hover:text-white'}`}>
+              {buttonIcon}
+            </div>
+          </button>
+        </Link>
       </div>
     </div>
   );
@@ -139,13 +135,13 @@ export const Pricing: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> Pricing <span className="text-brand-orange">//</span>
             </div>
 
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Simple pricing. <br />
-              <span className="text-gray-400/80 whitespace-nowrap">Professional results.</span>
+              <span className="text-gray-400 whitespace-nowrap">Professional results.</span>
             </h2>
           </div>
 
@@ -191,6 +187,7 @@ export const Pricing: React.FC = () => {
             features={starterFeatures}
             icon={<Sparkles size={24} />}
             buttonText="Get Started"
+            buttonLink="/login"
             buttonIcon={<ArrowRight size={20} />}
           />
 
@@ -203,8 +200,8 @@ export const Pricing: React.FC = () => {
             badge="One-time payment"
             features={proFeatures}
             icon={<Film size={24} />}
-            isPopular={true}
             buttonText="Get Pro Access"
+            buttonLink="/dashboard"
             buttonIcon={<Play size={20} fill="currentColor" />}
           />
 

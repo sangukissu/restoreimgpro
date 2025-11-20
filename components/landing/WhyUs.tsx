@@ -42,14 +42,14 @@ export const WhyUs: React.FC = () => {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> Why BringBack? <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Keep your family <br />
-              <span className="text-gray-400/80">history alive.</span>
+              <span className="text-gray-400">history alive.</span>
             </h2>
           </div>
 
@@ -65,7 +65,7 @@ export const WhyUs: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
           {/* Left Column: The "Emotional" Visual */}
-          <div className="lg:col-span-5 relative h-[500px] lg:h-auto rounded-[2.5rem] overflow-hidden shadow-2xl group bg-gray-900">
+          <div className="lg:col-span-5 relative h-[500px] lg:h-auto rounded-[1.5rem] overflow-hidden shadow-2xl group bg-gray-900">
             {/* Image Layer */}
             <img
               src="/family-history.png"
@@ -93,12 +93,12 @@ export const WhyUs: React.FC = () => {
           </div>
 
           {/* Right Column: Stats Grid */}
-          <div className="lg:col-span-7 bg-brand-surface p-3 rounded-[3rem]">
+          <div className="lg:col-span-7 bg-brand-surface p-3 rounded-[1.8rem]">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 h-full">
               {STATS.map((stat, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-[2.5rem] p-8 flex flex-col justify-between min-h-[240px] group hover:shadow-md transition-all duration-300 relative overflow-hidden"
+                  className="bg-white rounded-[1.5rem] p-8 flex flex-col justify-between min-h-[240px] group"
                 >
                   {/* Top Row */}
                   <div className="flex justify-between items-start relative z-10">

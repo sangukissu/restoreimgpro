@@ -102,14 +102,14 @@ export const Services: React.FC = () => {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> Services <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
               How We Grow <br />
-              <span className="text-gray-400/80">Your Business</span>
+              <span className="text-gray-400">Your Business</span>
             </h2>
           </div>
 

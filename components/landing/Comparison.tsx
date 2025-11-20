@@ -67,12 +67,12 @@ export const Comparison: React.FC = () => {
 
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+          <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
             <span className="text-brand-orange">//</span> Benchmark <span className="text-brand-orange">//</span>
           </div>
           <h2 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-brand-black leading-[0.95] mb-6">
             Why BringBack is the <br />
-            <span className="text-gray-400/80">smartest choice.</span>
+            <span className="text-gray-400">smartest choice.</span>
           </h2>
           <p className="text-lg text-gray-600 font-medium">
             We compared the top restoration methods so you don't have to.

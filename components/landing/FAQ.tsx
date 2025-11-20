@@ -48,15 +48,15 @@ const AccordionItem: React.FC<{
   return (
     <div
       onClick={toggle}
-      className={`bg-white rounded-[2rem] overflow-hidden transition-all duration-300 cursor-pointer group ${isOpen ? 'shadow-sm' : 'hover:bg-gray-50'}`}
+      className={`bg-white rounded-[1.5rem] overflow-hidden transition-all duration-300 cursor-pointer group ${isOpen ? 'shadow-sm' : 'hover:bg-gray-50'}`}
     >
-      <div className="p-6 sm:p-8 flex justify-between items-center gap-4">
+      <div className="p-4 sm:p-6 flex justify-between items-center gap-4">
         <h3 className="text-lg sm:text-xl font-bold text-brand-black leading-tight select-none">
           {item.question}
         </h3>
 
         {/* Toggle Button */}
-        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 ${isOpen ? 'bg-brand-orange text-white' : 'bg-gray-100 text-brand-black group-hover:bg-gray-200'
+        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 cursor-pointer ${isOpen ? 'bg-brand-orange text-white' : 'bg-gray-100 text-brand-black group-hover:bg-gray-200'
           }`}>
           {isOpen ? <Minus size={20} strokeWidth={2.5} /> : <Plus size={20} strokeWidth={2.5} />}
         </div>
@@ -68,7 +68,7 @@ const AccordionItem: React.FC<{
           }`}
       >
         <div className="overflow-hidden">
-          <p className="px-6 sm:px-8 pb-8 text-gray-600 font-medium leading-relaxed text-base sm:text-lg max-w-3xl">
+          <p className="px-4 sm:px-6 pb-8 text-gray-600 font-medium leading-relaxed text-base sm:text-lg max-w-3xl">
             {item.answer}
           </p>
         </div>
@@ -93,14 +93,14 @@ export const FAQ: React.FC = () => {
           {/* Header Column */}
           <div className="lg:col-span-5 sticky top-32">
             {/* Badge */}
-            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> FAQs <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
               Questions <br />
-              <span className="text-gray-400/80">& answers.</span>
+              <span className="text-gray-400">& answers.</span>
             </h2>
 
             {/* Subtitle */}
@@ -111,7 +111,7 @@ export const FAQ: React.FC = () => {
 
           {/* Questions Column - The Frame */}
           <div className="lg:col-span-7">
-            <div className="bg-brand-surface p-3 rounded-[3rem]">
+            <div className="bg-brand-surface p-3 rounded-[1.8rem]">
               <div className="flex flex-col gap-3">
                 {FAQS.map((faq, index) => (
                   <AccordionItem

@@ -17,19 +17,22 @@ export const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 w-full py-3 px-4 sm:px-8 flex items-center justify-between z-50 max-w-[1320px] mx-auto backdrop-blur-md transition-all duration-300">
+    <nav className="sticky top-0 w-full py-3 px-4 sm:px-8 flex items-center justify-between z-50 max-w-[1320px] mx-auto transition-all duration-300">
 
       {/* Logo */}
-      <div className="flex items-center gap-2 cursor-pointer select-none">
-        <div className="relative">
-          {/* Abstract logo shape */}
-          <div className="flex items-center justify-center bg-brand-black w-8 h-8 rounded-lg text-white">
-            <Sparkles size={16} fill="currentColor" />
-          </div>
-        </div>
-        <span className="text-2xl font-extrabold tracking-tight">BringBack</span>
-      </div>
+      <Link href="/">
+        <div className="flex items-center gap-2 cursor-pointer select-none">
 
+          <div className="relative">
+            {/* Abstract logo shape */}
+            <div className="flex items-center justify-center bg-brand-black w-8 h-8 rounded-lg text-white">
+              <Sparkles size={16} fill="currentColor" />
+            </div>
+          </div>
+          <span className="text-2xl font-extrabold tracking-tight">BringBack</span>
+
+        </div>
+      </Link>
       {/* Desktop Navigation - Pill Shape */}
       <div className="hidden lg:flex items-center bg-brand-gray/80 backdrop-blur-sm px-2 py-2 rounded-full border border-black/5 shadow-sm">
         {NAV_LINKS.map((link) => (
@@ -67,7 +70,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 mx-4 bg-white rounded-3xl shadow-2xl border border-gray-100 p-6 flex flex-col gap-4 lg:hidden origin-top animate-in fade-in slide-in-from-top-5 duration-200">
+        <div className="absolute top-full left-0 right-0 mt-2 mx-4 bg-brand-surface rounded-3xl shadow-2xl border border-gray-100 p-6 flex flex-col gap-4 lg:hidden origin-top animate-in fade-in slide-in-from-top-5 duration-200">
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}

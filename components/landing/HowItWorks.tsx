@@ -6,7 +6,7 @@ const STEPS = [
   {
     id: 1,
     title: "Upload Your Photo",
-    description: "Drag & drop your damaged, blurred, or old black-and-white photos securely into our platform.",
+    description: "Drag & drop your damaged, blurred, or old black-and-white photos securely into our platform. In seconds, our AI gets to work, meticulously restoring color, clarity, and detail with breathtaking accuracy.",
     icon: <ImagePlus size={24} className="text-brand-black" />,
     visual: (
       <div className="w-full h-full relative bg-gray-50 overflow-hidden group/visual">
@@ -48,7 +48,7 @@ const STEPS = [
   {
     id: 2,
     title: "AI Restoration",
-    description: "Our deep learning models automatically remove scratches, sharpen details, and colorize faces.",
+    description: "This is where the real magic happens. With a single click, animate your restored photo. Watch in awe as your loved ones offer a gentle smile, a subtle blink, or a warm wave movements so natural, it feels like they're right there with you.",
     icon: <Wand2 size={24} className="text-brand-black" />,
     visual: (
       <div className="w-full h-full relative bg-gray-100 overflow-hidden flex items-center justify-center">
@@ -92,7 +92,7 @@ const STEPS = [
   {
     id: 3,
     title: "Animate Memories",
-    description: "Bring portraits to life with our 'Live Portrait' technology that adds subtle, realistic motion.",
+    description: "Your reborn memories are ready to be cherished. Download your high-resolution photo and animated video with subtle, realistic motion. Share them with family, post them on social media, and spark conversations that bring generations together.",
     icon: <Film size={24} className="text-brand-black" />,
     visual: (
       <div className="w-full h-full relative bg-[#F5F5F5] overflow-hidden flex flex-col group/video">
@@ -147,14 +147,14 @@ export const HowItWorks: React.FC = () => {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> How It Works <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Restore memories <br />
-              <span className="text-gray-400/80">in 3 simple steps.</span>
+              <span className="text-gray-400">in 3 simple steps.</span>
             </h2>
           </div>
 
@@ -167,12 +167,12 @@ export const HowItWorks: React.FC = () => {
         </div>
 
         {/* Steps Grid Container - Gray Background */}
-        <div className="bg-brand-surface p-3 rounded-[3rem]">
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
             {STEPS.map((step) => (
               <div
                 key={step.id}
-                className="bg-white rounded-[2.5rem] p-8 min-h-[420px] flex flex-col group hover:shadow-lg transition-all duration-300"
+                className="bg-white rounded-[1.5rem] p-8 min-h-[420px] flex flex-col group"
               >
                 {/* Step Number & Icon */}
                 <div className="flex justify-between items-start mb-8">

@@ -64,12 +64,12 @@ const RestorationDemo: React.FC = () => {
       <div className="absolute inset-0 w-full h-full">
         <img
           src={AFTER_IMAGE_URL}
-          alt="Restored"
+          alt="Restored photo with bringback ai"
           className="w-full h-full object-cover"
         />
         {/* AI UI Overlay on Restored Side */}
-        <div className="absolute bottom-8 right-8 flex flex-col gap-2 items-end opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="bg-gray-200 text-black text-xs font-bold px-2 py-1 rounded-lg">
+        <div className="absolute bottom-8 right-8 flex flex-col gap-2 items-end">
+          <div className="bg-brand-gray text-black text-xs font-bold px-2 py-1 rounded-lg">
             RESTORED
           </div>
 
@@ -85,7 +85,7 @@ const RestorationDemo: React.FC = () => {
           {/* The Image - Needs to be same size/position as background to line up */}
           <img
             src={BEFORE_IMAGE_URL}
-            alt="Damaged"
+            alt="Damaged photo before restoration"
             className={`absolute top-0 left-0 h-full max-w-none object-cover transition-opacity duration-300 ${containerWidth ? 'opacity-100' : 'opacity-0'}`}
             style={{
               width: containerWidth ? `${containerWidth}px` : '100%'
@@ -139,9 +139,8 @@ export const Hero: React.FC = () => {
 
           {/* Heading */}
           <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-            Restore <br />
-            Old Photos & <br />
-            <span className="text-gray-300 relative">
+            Restore Old Photos & <br />
+            <span className="text-gray-400 relative">
               Faded Memories.
 
             </span>
@@ -158,7 +157,7 @@ export const Hero: React.FC = () => {
             {/* Primary: Orange Button with Black Circle Arrow */}
             <Link href="/dashboard">
 
-              <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-transform duration-200 hover:scale-105 active:scale-95 shadow-[0_20px_40px_-15px_rgba(255,77,0,0.4)] shrink-0">
+              <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_20px_40px_-12px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
                 <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Restore Photos</span>
                 <div className="w-8 h-8 sm:w-11 sm:h-11 bg-[#111111] rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
                   <ArrowRight className="text-[#FF4D00] w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
@@ -169,7 +168,7 @@ export const Hero: React.FC = () => {
             {/* Secondary: Black Button with Orange Circle Play */}
             <Link href="/ai-photo-animation">
 
-              <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black border border-gray-200 pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-transform duration-200 hover:scale-105 active:scale-95 shadow-sm shrink-0 hover:border-gray-300">
+              <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
                 <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Animate Photos</span>
                 <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
                   <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
@@ -209,7 +208,7 @@ export const Hero: React.FC = () => {
                   <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
                 ))}
               </div>
-              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 122+ users</span>
+              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 122+ Families</span>
             </div>
           </div>
         </div>

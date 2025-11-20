@@ -64,14 +64,14 @@ export const PhotoAnimation: React.FC = () => {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> Live Portrait <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Bring photos <br />
-              <span className="text-gray-400/80">to life with AI.</span>
+              <span className="text-gray-400">to life with AI.</span>
             </h2>
           </div>
 
@@ -84,11 +84,11 @@ export const PhotoAnimation: React.FC = () => {
         </div>
 
         {/* Main Layout: Gray Surface Container */}
-        <div className="bg-brand-surface p-3 rounded-[3rem]">
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto lg:h-[600px]">
 
             {/* Left Column: Video Player (8 cols) - Inverted from Showcase */}
-            <div className="lg:col-span-8 h-[400px] lg:h-auto bg-black rounded-[2.5rem] overflow-hidden relative group shadow-inner">
+            <div className="lg:col-span-8 h-[400px] lg:h-auto bg-black rounded-[1.5rem] overflow-hidden relative group shadow-inner">
 
               {/* Video Element */}
               <video
@@ -137,7 +137,7 @@ export const PhotoAnimation: React.FC = () => {
                   <button
                     key={item.id}
                     onClick={() => setActiveId(item.id)}
-                    className={`flex-1 text-left p-6 rounded-[2.5rem] transition-all duration-300 group relative overflow-hidden flex flex-col justify-center border-2
+                    className={`flex-1 text-left p-6 rounded-[1.5rem] transition-all duration-300 group relative overflow-hidden flex flex-col justify-center border-2
                     ${isActive
                         ? 'bg-brand-black text-white shadow-xl border-brand-black'
                         : 'bg-white text-brand-black hover:bg-gray-50 border-transparent'
