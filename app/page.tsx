@@ -14,8 +14,6 @@ import { Clients } from '@/components/landing/Clients';
 import { FAQ } from '@/components/landing/FAQ';
 import { Footer } from '@/components/landing/Footer';
 
-
-
 export const metadata: Metadata = {
   title: "Restore, Colorize & Animate Old damaged Photos Online",
   description: "BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.",
