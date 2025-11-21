@@ -164,14 +164,14 @@ export async function POST(req: NextRequest) {
     // Call Fal nano-banana edit model to compose images
     let falOutput: any
     try {
-      const result = await fal.subscribe('fal-ai/nano-banana/edit', {
+      const result = await fal.subscribe('fal-ai/nano-banana-pro/edit', {
         input: {
           prompt,
           image_urls: uploadedUrls,
           num_images: 1,
           output_format: 'png',
           aspect_ratio: aspectRatio,
-          limit_generations: false,
+          resolution: '1K'
         },
         logs: true,
         onQueueUpdate: () => {
