@@ -13,6 +13,8 @@ import { Pricing } from '@/components/landing/Pricing';
 import { Clients } from '@/components/landing/Clients';
 import { FAQ } from '@/components/landing/FAQ';
 import { Footer } from '@/components/landing/Footer';
+import { CTA } from '@/components/landing/CTA';
+
 
 export const metadata: Metadata = {
   title: "Restore, Colorize & Animate Old damaged Photos Online",
@@ -287,6 +289,7 @@ export default function Page() {
         <Pricing />
         <Clients />
         <FAQ />
+        <CTA />
       </main>
 
       <Footer />

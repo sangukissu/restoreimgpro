@@ -11,15 +11,15 @@ fal.config({
 // Map of allowed background styles to prescriptive prompt text
 const backgroundStyleMap: Record<string, string> = {
   black:
-    "a matte charcoal seamless studio backdrop with soft falloff to near‑black.",
+    "a matte charcoal seamless backdrop with soft falloff to near‑black background.",
   gray:
-    "a neutral mid‑gray seamless studio paper; evenly lit; slight vignette.",
+    "a neutral mid‑gray seamless paper; evenly lit; slight vignette background.",
   beige:
-    "a light warm beige studio background; high‑key look; soft shadows only.",
+    "a light warm beige background; high‑key look; soft shadows only.",
   gradient:
-    "a very faint center‑weighted studio gradient from dark to light; avoid banding.",
+    "a very faint center‑weighted gradient from dark to light; avoid banding background.",
   brown:
-    "a classic dark brown portrait studio background with a gentle vignette.",
+    "a classic dark brown background with a gentle vignette.",
   bokeh:
     "an abstract shallow depth‑of‑field bokeh background with soft circular highlights.",
 }
@@ -33,7 +33,7 @@ function buildPrompt(subjectCount: number, aspectRatio: string, backgroundStyleT
 Generate a single, high-resolution, photorealistic family portrait in a professional studio setting.
 Identity & Subjects: Identify every unique individual from the provided input images. Use the exact facial identity of each person.
 Scene & Composition: Place all identified individuals together in a classic, cohesive group portrait arrangement. 
-Set in a professional photo studio with ${backgroundStyleText}
+against ${backgroundStyleText}
 ${arrangement}
 Synthesis Requirements (Critical):  Apply unified, professional studio lighting (e.g., softbox) consistently across all subjects. Style must be studio-quality, high-detail, and photorealistic.
 Constraints & Negative Prompts: CRITICAL: IGNORE all original poses, backgrounds, props, and lighting from the input images. DO NOT create a collage, "cut-and-paste," or "photoshop" composite. AVOID mismatched lighting, shadows, scale, or perspective. The final output must be a single, newly synthesized photograph. Ensure facial identities and clothing are preserved accurately.`

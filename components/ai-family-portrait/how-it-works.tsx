@@ -1,104 +1,89 @@
-"use client"
+"use client";
 
-import { Sparkles } from "lucide-react"
+import { Sparkles, UploadCloud, LayoutTemplate, Download } from "lucide-react";
+
+const STEPS = [
+  {
+    id: 1,
+    title: "Upload Photos",
+    description: "Select 1 to 4 clear, front-facing photos of your family members. Our AI works with modern, old, and even black-and-white pictures.",
+    icon: <UploadCloud size={24} className="text-brand-black" />,
+  },
+  {
+    id: 2,
+    title: "Choose Canvas",
+    description: "Select the perfect aspect ratio. Choose a wider format for larger groups to ensure a balanced, natural composition.",
+    icon: <LayoutTemplate size={24} className="text-brand-black" />,
+  },
+  {
+    id: 3,
+    title: "Generate & Cherish",
+    description: "In seconds, our AI composes a single, harmonious group photo. Download your high-resolution image, ready for printing.",
+    icon: <Download size={24} className="text-brand-black" />,
+  }
+];
 
 export default function AIAnimationHowItWorks() {
   return (
-    <section id="how-it-works" className="px-4 py-20 bg-[#fff6f0de]">
-      <div className="max-w-6xl mx-auto">
+    <section id="how-it-works" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
+      <div className="max-w-[1320px] mx-auto">
+
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center px-2 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-6">
-            <Sparkles className="w-4 h-4 mr-2" />
-            Simple Workflow
-          </div>
-          <h2 className="max-w-3xl mx-auto text-4xl lg:text-5xl text-black leading-tight mb-6">
-            Your Dream Portrait in 3 Simple Steps
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Select 1 to 4 clear, front-facing photos. Choose your canvas. In seconds, our AI composes a single, harmonious group photo.
-          </p>
-        </div>
-
-        {/* Process Cards */}
-        <div className="relative">
-          <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 relative">
-            {/* Step 1 */}
-            <div className="bg-white lg:mt-8 rounded-2xl p-8 shadow-sm border-6 border-gray-200 bg-transparent backdrop-blur transform -rotate-2 sm:-rotate-5 relative z-10">
-              <div className="mb-6">
-                <span className="text-6xl font-bold text-black">1</span>
-              </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Upload Their Photos</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Select 1 to 4 clear, front-facing photos of your family members. Our AI can work with a mix of modern, old, and even black-and-white pictures.
-              </p>
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+          <div className="max-w-2xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-brand-orange">//</span> Simple Workflow <span className="text-brand-orange">//</span>
             </div>
 
-            {/* Step 2 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border-6 border-gray-200 bg-transparent backdrop-blur transform rotate-2 sm:rotate-5  relative z-10">
-              <div className="mb-6">
-                <span className="text-6xl font-bold text-black">2</span>
-              </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Choose Your Canvas</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Select the perfect aspect ratio for your final portrait. Choose a wider format for larger groups to ensure a balanced, natural composition.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border-6 border-gray-200 bg-transparent backdrop-blur transform -rotate-2 sm:-rotate-5 relative z-10">
-              <div className="mb-6">
-                <span className="text-6xl font-bold text-black">3</span>
-              </div>
-              <h3 className="text-2xl font-bold text-black mb-4">Generate & Cherish</h3>
-              <p className="text-gray-600 leading-relaxed">
-                In seconds, our AI will analyze each person and compose a single, harmonious group photo. Download your high-resolution image, ready for printing and sharing.
-              </p>
-             
-            </div>
-          </div>
-         
-          {/* Connection Line 1 to 2 - Made shorter */}
-          <div className="absolute top-0 sm:-rotate-45 left-1/4 w-1/6 h-32 hidden lg:block z-20">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 247 69">
-              <path
-                d="M 10.716 56.236 C 10.716 56.236 38.876 9.087 88.573 3.406 C 138.271 -2.276 172.885 11.384 233.016 57.669 M 10.586 50.115 C 14.483 50.115 17.643 53.285 17.643 57.197 C 17.643 61.108 14.483 64.279 10.586 64.279 C 6.688 64.279 3.529 61.108 3.529 57.197 C 3.529 53.285 6.688 50.115 10.586 50.115 Z M 232.886 50.115 C 236.783 50.115 239.943 53.285 239.943 57.197 C 239.943 61.108 236.783 64.279 232.886 64.279 C 228.988 64.279 225.829 61.108 225.829 57.197 C 225.829 53.285 228.988 50.115 232.886 50.115 Z"
-                stroke="rgb(255, 55, 0)"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                fill="transparent"
-                opacity="1"
-                pathLength="1"
-                strokeDashoffset="0px"
-                strokeDasharray="1px 1px"
-                will-change="auto"
-              ></path>
-            </svg>
+            {/* Title */}
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+              Your Dream Portrait <br />
+              <span className="text-gray-400">in 3 Simple Steps.</span>
+            </h2>
           </div>
 
-          {/* Connection Line 2 to 3 */}
-          <div className="absolute top-20 right-1/5 w-1/4 h-40 sm:-rotate-60 hidden lg:block z-20">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 106 179">
-              <path
-                d="M 95.993 11.704 C 43.708 8.765 57.558 98.411 77.749 93.631 C 97.94 88.852 48.295 23.589 19.858 39.508 C -8.579 55.425 10.736 95.485 15.297 103.641 C 19.859 111.796 46.874 150.721 92.134 170.369 M 92.468 163.464 C 96.205 163.464 99.234 166.488 99.234 170.219 C 99.234 173.949 96.205 176.974 92.468 176.974 C 88.731 176.974 85.702 173.949 85.702 170.219 C 85.702 166.488 88.731 163.464 92.468 163.464 Z M 95.851 4.728 C 99.588 4.728 102.617 7.752 102.617 11.483 C 102.617 15.214 99.588 18.238 95.851 18.238 C 92.114 18.238 89.085 15.214 89.085 11.483 C 89.085 7.752 92.114 4.728 95.851 4.728 Z"
-                stroke="rgb(255, 55, 0)"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                fill="transparent"
-                opacity="1"
-                pathLength="1"
-                strokeDashoffset="0px"
-                strokeDasharray="1px 1px"
-                will-change="auto"
-              ></path>
-            </svg>
+          {/* Subtitle */}
+          <div className="max-w-sm">
+            <p className="text-lg text-gray-600 font-medium leading-relaxed">
+              Select 1 to 4 clear, front-facing photos. Choose your canvas. In seconds, our AI composes a single, harmonious group photo.
+            </p>
           </div>
         </div>
 
-     
+        {/* Steps Grid Container - Gray Background */}
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+            {STEPS.map((step) => (
+              <div
+                key={step.id}
+                className="bg-white rounded-[1.5rem] p-8 min-h-[320px] flex flex-col group relative overflow-hidden"
+              >
+                {/* Step Number & Icon */}
+                <div className="flex justify-between items-start mb-8">
+                  <div className="w-14 h-14 rounded-2xl bg-[#F2F2F0] flex items-center justify-center transition-colors group-hover:bg-brand-orange/10 group-hover:text-brand-orange">
+                    {step.icon}
+                  </div>
+                  <span className="text-7xl font-[800] text-gray-100 leading-none select-none font-sans group-hover:text-gray-200 transition-colors absolute top-4 right-6">
+                    0{step.id}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div className="mt-auto relative z-10">
+                  <h3 className="text-2xl font-bold text-brand-black mb-3">{step.title}</h3>
+                  <p className="text-gray-600 font-medium leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
+
+                {/* Hover Effect Decoration */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
-  )
+  );
 }

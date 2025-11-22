@@ -1,66 +1,100 @@
-"use client"
+"use client";
 
-import { Heart, Users, Globe, Gift, Sparkles } from "lucide-react"
-import React from "react"
+import { Heart, Users, Globe, Gift, Sparkles } from "lucide-react";
+import React from "react";
 
-const useCases = [
+const USE_CASES = [
   {
-    icon: <Heart className="w-8 h-8 text-orange-600" />,
+    icon: <Heart size={24} />,
     title: "The Memorial Portrait",
-    description:
-      "Honor a loved one who has passed away. Create a beautiful portrait that places them together with family, creating a treasured keepsake of remembrance.",
+    description: "Honor a loved one who has passed away. Create a beautiful portrait that places them together with family.",
+    dots: [true, true, true, false]
   },
   {
-    icon: <Users className="w-8 h-8 text-orange-600" />,
+    icon: <Users size={24} />,
     title: "The Impossible Reunion",
-    description:
-      "Unite generations that never had the chance to meet. Place a grandparent in their youth next to their grandchild, creating a powerful image of your family's legacy.",
+    description: "Unite generations that never met. Place a grandparent in their youth next to their grandchild.",
+    dots: [true, true, false, false]
   },
   {
-    icon: <Globe className="w-8 h-8 text-orange-600" />,
-    title: "The Long-Distance Family",
-    description:
-      "Bridge the miles. Bring together family members from across the country or around the world into a single, perfect group photo, no travel required.",
+    icon: <Globe size={24} />,
+    title: "Long-Distance Family",
+    description: "Bring together family members from across the world into a single, perfect group photo.",
+    dots: [true, false, false, false]
   },
   {
-    icon: <Gift className="w-8 h-8 text-orange-600" />,
-    title: "The Perfect Sentimental Gift",
-    description:
-      "Create a one-of-a-kind gift for an anniversary, holiday, or birthday that is guaranteed to touch their hearts. A portrait of shared history and love.",
+    icon: <Gift size={24} />,
+    title: "Perfect Sentimental Gift",
+    description: "Create a one-of-a-kind gift for an anniversary or birthday that is guaranteed to touch their hearts.",
+    dots: [true, true, true, true]
   },
-]
+];
 
 export default function FamilyPortraitUseCases() {
   return (
-    <section id="use-cases" className="px-4 py-20 bg-[#fff6f0de]">
-      <div className="max-w-6xl mx-auto">
+    <section id="use-cases" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
+      <div className="max-w-[1320px] mx-auto">
+
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center px-2 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-6">
-            <Sparkles className="w-4 h-4 mr-2" />
-            Use Cases
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+          <div className="max-w-2xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-brand-orange">//</span> Use Cases <span className="text-brand-orange">//</span>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+              Create a Portrait <br />
+              <span className="text-gray-400">for Every Story.</span>
+            </h2>
           </div>
-          <h2 className="max-w-3xl mx-auto text-4xl lg:text-5xl text-black leading-tight">
-            Create a Portrait for Every Story
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Connect your family across time, distance, and memory with a unified portrait.
-          </p>
+
+          {/* Subtitle */}
+          <div className="max-w-sm">
+            <p className="text-lg text-gray-600 font-medium leading-relaxed">
+              Connect your family across time, distance, and memory with a unified portrait.
+            </p>
+          </div>
         </div>
 
         {/* Use Cases Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-          {useCases.map((item) => (
-            <div key={item.title}>
-              <div className="bg-gray-100 rounded-lg p-5 inline-block mb-6">
-                {item.icon}
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            {USE_CASES.map((item, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-[1.5rem] p-8 flex flex-col justify-between min-h-[320px] group hover:shadow-lg transition-all duration-300"
+              >
+                {/* Top Row */}
+                <div className="flex justify-between items-start relative z-10 mb-6">
+                  <div className="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange group-hover:bg-brand-orange group-hover:text-white transition-colors duration-300">
+                    {item.icon}
+                  </div>
+
+                  {/* Dots Indicator */}
+                  <div className="flex gap-1.5 pt-2">
+                    {item.dots.map((isActive, i) => (
+                      <div
+                        key={i}
+                        className={`w-2 h-2 rounded-full transition-colors duration-500 ${isActive ? 'bg-brand-orange' : 'bg-gray-200'}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="mt-auto relative z-10">
+                  <h3 className="text-xl font-bold text-brand-black mb-3 leading-tight">{item.title}</h3>
+                  <p className="text-gray-600 font-medium leading-relaxed text-sm">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-black mb-3">{item.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{item.description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

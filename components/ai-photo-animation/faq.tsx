@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ChevronDown, ChevronUp, HelpCircle } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { Plus, Minus, HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const faqs = [
   {
@@ -45,38 +45,54 @@ const faqs = [
     answer:
       "Our service is focused purely on creating a silent, moving portrait. There is no audio added, which we believe creates a more timeless and respectful final video.",
   },
-]
+];
 
 export default function AIAnimationFAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="px-4 py-20 bg-[#fff6f0de]">
-      <div className="max-w-6xl mx-auto">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gray-100 border border-gray-200 text-sm font-medium text-gray-700 mb-6">
-            <HelpCircle className="w-4 h-4 mr-2" />
-            Your Questions, Answered
+    <section className="px-4 sm:px-8 py-24 bg-brand-bg">
+      <div className="max-w-[1320px] mx-auto">
 
+        {/* Header */}
+        <div className="flex flex-col items-center text-center mb-20">
+          <div className="inline-flex items-center gap-2 bg-white border border-gray-200 text-brand-black px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-8">
+            <HelpCircle size={14} className="text-brand-orange fill-brand-orange" />
+            <span>FAQ</span>
           </div>
-          <h2 className="text-4xl lg:text-5xl text-black mb-4 leading-tight"> Questions About AI Photo Animation? We Have Answers.
-</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">Here are the real questions people ask about bringing their photos to life.</p>
+
+          <h2 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
+            Common Questions.
+          </h2>
+
+          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl font-medium leading-relaxed">
+            Here are the real questions people ask about bringing their photos to life.
+          </p>
         </div>
 
-        <div className="space-y-4 max-w-3xl mx-auto">
+        {/* FAQ Grid */}
+        <div className="max-w-4xl mx-auto space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden transition-all duration-200">
+            <div
+              key={index}
+              className={cn(
+                "bg-white rounded-[1.5rem] overflow-hidden transition-all duration-300 border border-transparent",
+                openIndex === index ? "border-gray-100" : "hover:bg-white/60"
+              )}
+            >
               <button
-                className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-gray-100 transition-colors duration-200"
+                className="w-full px-8 py-6 text-left flex items-center justify-between gap-4"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
-                <h3 className="text-lg font-semibold text-black pr-4">{faq.question}</h3>
-                <div className="flex-shrink-0">
+                <h3 className="text-lg sm:text-xl font-bold text-brand-black">{faq.question}</h3>
+                <div className={cn(
+                  "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300",
+                  openIndex === index ? "bg-brand-orange text-white" : "bg-gray-100 text-gray-500"
+                )}>
                   {openIndex === index ? (
-                    <ChevronUp className="h-5 w-5 text-gray-600" />
+                    <Minus size={16} strokeWidth={3} />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-600" />
+                    <Plus size={16} strokeWidth={3} />
                   )}
                 </div>
               </button>
@@ -84,17 +100,20 @@ export default function AIAnimationFAQ() {
               <div
                 className={cn(
                   "overflow-hidden transition-all duration-300 ease-in-out",
-                  openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+                  openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                 )}
               >
-                <div className="px-8 pb-6">
-                  <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                <div className="px-8 pb-8 pt-0">
+                  <p className="text-gray-600 font-medium leading-relaxed text-lg">
+                    {faq.answer}
+                  </p>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
       </div>
     </section>
-  )
+  );
 }
