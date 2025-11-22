@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Script from "next/script"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import { Button } from "@/components/ui/button"
 import { CheckCircle, Clock, CreditCard } from "lucide-react"
 
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 export default function RefundsPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Navbar />
 
       <main className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-4">

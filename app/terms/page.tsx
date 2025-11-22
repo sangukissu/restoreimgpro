@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 
 export const metadata: Metadata = {
   title: "Terms of Service - BringBack | AI Photo Restoration",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Navbar />
 
       <main className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-4">
@@ -30,8 +30,8 @@ export default function TermsPage() {
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Please read these terms carefully before using BringBack's photo restoration service.
             </p>
-             <div className="mt-4 text-sm text-gray-500">
-              Last updated: {new Date().toLocaleDateString('en-US', { 
+            <div className="mt-4 text-sm text-gray-500">
+              Last updated: {new Date().toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
@@ -158,7 +158,7 @@ export default function TermsPage() {
                     <p>
                       <strong>Email:</strong> support@bringback.pro
                     </p>
-                 
+
                   </div>
                 </div>
               </section>

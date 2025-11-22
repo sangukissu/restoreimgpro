@@ -2,8 +2,8 @@
 import { allPseoPages } from '@/lib/generate-pages';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import  Header from '@/components/header';
-import Footer from '@/components/footer';
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -92,8 +92,8 @@ export default function ExamplesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
-      <Header />
+
+      <Navbar />
       <main className="container mx-auto px-4 pt-30">
         <h1 className="text-4xl font-bold mb-8 text-center">Use Cases & Examples</h1>
         <p className="text-lg text-muted-foreground mb-12 text-center max-w-3xl mx-auto">

@@ -1,5 +1,5 @@
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import type { Metadata } from "next"
 import AIAnimationHero from "@/components/ai-photo-animation/hero"
 import AnimationStylesGrid from "@/components/ai-photo-animation/styles-grid"
@@ -177,13 +177,13 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationFAQPageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationHeroVideoJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationStylesVideoJsonLd) }} />
-      <Header />
+      <Navbar />
       <AIAnimationHero />
       <AnimationStylesGrid />
       <AIAnimationHowItWorks />
       <AIAnimationFeatures />
       <AIAnimationFAQ />
-            <AIAnimationPricingCTA />
+      <AIAnimationPricingCTA />
 
       <Footer />
     </div>

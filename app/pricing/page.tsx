@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import Script from "next/script"
-import Link from "next/link"      
+import Link from "next/link"
 
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import { Button } from "@/components/ui/button"
 import { Check, Star, Zap, Shield, Clock, ChevronRight, Film, Sparkles } from "lucide-react"
 import { FramerButton } from "@/components/ui/framer-button"
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Navbar />
 
       <main className="pt-32 pb-20">
         <div className="max-w-6xl mx-auto px-4">
@@ -92,7 +92,7 @@ export default function PricingPage() {
             <div className="bg-gray-50 rounded-3xl p-8 border-2 border-gray-200 h-full flex flex-col">
               <h3 className="text-2xl font-bold text-black">Starter</h3>
               <p className="text-gray-600 mt-1 mb-6">Perfect for high-quality photo restoration.</p>
-              
+
               <div className="mb-8">
                 <span className="text-5xl font-bold text-black">$2.49</span>
                 <div className="text-gray-600 text-lg">One-time payment</div>
@@ -103,7 +103,7 @@ export default function PricingPage() {
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-700"><span className="font-semibold text-black">5</span> Photo Restorations</span>
                 </div>
-              
+
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-700">High-Resolution Output</span>
@@ -112,7 +112,7 @@ export default function PricingPage() {
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-700">Credits Never Expire</span>
                 </div>
-                 <div className="flex items-center">
+                <div className="flex items-center">
                   <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
                   <span className="text-red-400">Free Photo Enhance/Upscale</span>
                 </div>
@@ -125,13 +125,13 @@ export default function PricingPage() {
                   <span className="text-gray-700">30-Day Money-Back Guarantee</span>
                 </div>
               </div>
-              
-               <Link href="/login">
-            
-             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full">
-            Start Restoring
-          </FramerButton>
-            </Link>
+
+              <Link href="/login">
+
+                <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full">
+                  Start Restoring
+                </FramerButton>
+              </Link>
             </div>
 
             {/* Restore & Animate Plan (Best Value) */}
@@ -145,7 +145,7 @@ export default function PricingPage() {
 
               <h3 className="text-2xl font-bold text-white">Pro</h3>
               <p className="text-gray-400 mt-1 mb-6">Everything in Starter, plus bring photos to life.</p>
-              
+
               <div className="mb-8">
                 <span className="text-5xl font-bold text-white">$4.99</span>
                 <div className="text-gray-400 text-lg">One-time payment</div>
@@ -156,7 +156,7 @@ export default function PricingPage() {
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-300"><span className="font-semibold text-white">5</span> Photo Restorations</span>
                 </div>
-                
+
                 <div className="flex items-center font-bold">
                   <Film className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span><span className="text-white">1</span> High-Quality Video Animation</span>
@@ -169,9 +169,9 @@ export default function PricingPage() {
                   <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                   <span className="text-gray-300">Credits Never Expire</span>
                 </div>
-                 <div className="flex items-center">
+                <div className="flex items-center">
                   <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
-                  <span className="text-red-400">Free Photo Enhance/Upscale</span> 
+                  <span className="text-red-400">Free Photo Enhance/Upscale</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" />
@@ -182,7 +182,7 @@ export default function PricingPage() {
                   <span className="text-gray-300">30-Day Money-Back Guarantee</span>
                 </div>
               </div>
-              
+
               <Link href="/login" className="mt-auto">
                 <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full bg-white text-black hover:bg-gray-200">
                   Bring Memories to Life
@@ -190,11 +190,11 @@ export default function PricingPage() {
               </Link>
             </div>
           </div>
-           <div className="text-center mt-4 max-w-3xl mx-auto"> 
-           <p className="text-md text-gray-500 mt-2">
-                Even after restoration, if we detect any damage (tears, stains, scratches) is still present which costed you one credit, <span className="font-bold text-red-500">we automatically offer one free re‑restoration.</span>
-              </p>
-</div>
+          <div className="text-center mt-4 max-w-3xl mx-auto">
+            <p className="text-md text-gray-500 mt-2">
+              Even after restoration, if we detect any damage (tears, stains, scratches) is still present which costed you one credit, <span className="font-bold text-red-500">we automatically offer one free re‑restoration.</span>
+            </p>
+          </div>
 
 
           {/* Value Proposition */}
@@ -325,7 +325,7 @@ export default function PricingPage() {
               </p>
               <Link href="/login">
                 <Button className="bg-white text-black hover:bg-gray-200 px-8 py-3 h-auto font-medium text-base">
-                    Start Restoring Now
+                  Start Restoring Now
                 </Button>
               </Link>
               <p className="text-xs text-gray-500 mt-3">

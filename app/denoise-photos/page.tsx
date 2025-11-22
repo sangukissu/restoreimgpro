@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Sparkles, ChevronRight, Search, Brain, Filter, Sparkle } from "lucide-react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import Link from "next/link"
 import { PointerHighlight } from "@/components/pointer-highlight"
 import DenoiseHowItWorksSection from "@/components/pages/denoise-how-it-works-section"
@@ -249,10 +249,10 @@ export default function DenoisePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(denoiseFAQPageJsonLd) }}
       />
-      <Header />
+      <Navbar />
       {/* Hero Section */}
       <section className="relative px-4 py-20 pt-32 overflow-hidden">
-       <div
+        <div
           className="absolute inset-0 z-0"
           style={{
             backgroundImage:
@@ -293,70 +293,70 @@ export default function DenoisePage() {
               </p>
             </div>
             <div className="flex flex-col gap-4 justify-center items-center w-full">
-                <Link href="/login">
+              <Link href="/login">
 
-              <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-                <>
-                  <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Denoise Your Photo</span>
-                  <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                    <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-                  </i>
-                </>
-              </Button>
-            </Link>
-            <p className="text-xs text-gray-500">
+                <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
+                  <>
+                    <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Denoise Your Photo</span>
+                    <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
+                      <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
+                    </i>
+                  </>
+                </Button>
+              </Link>
+              <p className="text-xs text-gray-500">
                 Only $0.50 per photo
               </p>
             </div>
             <div className="flex flex-col items-center space-y-2 pt-2">
               <div className="flex items-center space-x-2">
-              <div className="flex -space-x-2">
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />  
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
-                <div className="w-8 h-8 rounded-full bg-gray-900 border-2 border-white flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">17+</span>
+                <div className="flex -space-x-2">
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
+                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
+                  <div className="w-8 h-8 rounded-full bg-gray-900 border-2 border-white flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">17+</span>
+                  </div>
+                </div>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-lg">
+                      ★
+                    </span>
+                  ))}
                 </div>
               </div>
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-lg">
-                    ★
-                  </span>
-                ))}
-              </div>
-            </div>
               <p className="text-gray-600 font-medium">Loved by Everyone Who Shoots at Night</p>
             </div>
 
-                {/* Hero Compare Section */}
-              <div className="pt-8 w-full">
-                <div className="max-w-4xl mx-auto">
-                   
-                    <div className="flex justify-center px-4">
-                        <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
-                      <Compare
-                        firstImage="/noise-removed.webp"
-                        secondImage="/after-noise-removal.webp"
-                        firstImageClassName="object-cover"
-                        secondImageClassname="object-cover"
-                        className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"
-                        slideMode="hover"
-                        firstImageAlt="Before: grainy family photo" 
-                        secondImageAlt="After: Denoised family photo with bringback ai"
-                        showHandlebar={true}
-                      />
-                      </div>
-                    </div>
-                </div>
-                <div className="mt-6 text-center">
-                  <p className="text-sm text-gray-500 max-w-2xl mx-auto">
-                    Watch how BringBack transforms black and white photos into realistic, vibrant color images
-                  </p>
+            {/* Hero Compare Section */}
+            <div className="pt-8 w-full">
+              <div className="max-w-4xl mx-auto">
+
+                <div className="flex justify-center px-4">
+                  <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
+                    <Compare
+                      firstImage="/noise-removed.webp"
+                      secondImage="/after-noise-removal.webp"
+                      firstImageClassName="object-cover"
+                      secondImageClassname="object-cover"
+                      className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"
+                      slideMode="hover"
+                      firstImageAlt="Before: grainy family photo"
+                      secondImageAlt="After: Denoised family photo with bringback ai"
+                      showHandlebar={true}
+                    />
+                  </div>
                 </div>
               </div>
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-500 max-w-2xl mx-auto">
+                  Watch how BringBack transforms black and white photos into realistic, vibrant color images
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -365,7 +365,7 @@ export default function DenoisePage() {
       <DenoiseBenefitsSection />
       <DenoiseShowcaseSection />
       <DenoiseFeaturesSection />
-       {/* Technology Behind Section */}
+      {/* Technology Behind Section */}
       <section className="px-6 py-20 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -461,7 +461,7 @@ export default function DenoisePage() {
 
         </div>
       </section>
- 
+
 
       <DenoiseFAQSection />
       <DenoiseMemoriesSection />

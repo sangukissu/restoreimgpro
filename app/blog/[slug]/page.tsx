@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import BlogContentRenderer from "@/components/blog-content-renderer"
 import ShareButton from "@/components/share-button"
 import { Calendar, Clock, ArrowLeft, User } from "lucide-react"
@@ -133,12 +133,12 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostJsonLd) }}
       />
-      <Header />
+      <Navbar />
       <main className="pb-20">
         {/* Hero Section */}
         <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 pt-24 pb-12">
@@ -150,7 +150,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                 Back to Blog
               </Link>
             </div>
-            
+
             <div className="space-y-6">
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                 <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">{category}</span>
@@ -163,13 +163,13 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                   <span>{readTime}</span>
                 </div>
               </div>
-              
+
               <h1 className="  text-4xl md:text-5xl font-bold text-gray-900 leading-tight">{post.title}</h1>
-              
+
               {post.excerpt && (
                 <div className="text-xl text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: post.excerpt }} suppressHydrationWarning />
               )}
-              
+
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-3">
                   {post.author.node.avatar?.url ? (
@@ -190,9 +190,9 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                     <p className="text-sm text-gray-600">Author</p>
                   </div>
                 </div>
-                
+
                 <div className="ml-auto">
-                  <ShareButton 
+                  <ShareButton
                     title={post.title}
                     url={`https://bringback.pro/blog/${post.slug}`}
                     text={post.excerpt || `Check out this article: ${post.title}`}
@@ -222,30 +222,28 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
 
         {/* Article Content */}
         <div className="max-w-4xl mx-auto px-4 mt-8">
-          <div className="bg-white">
-            <BlogContentRenderer content={post.content} />
-          </div>
+          <BlogContentRenderer content={post.content} />
         </div>
 
         {/* Call to Action */}
         <div className="text-center mt-16 px-4">
-            <div className="bg-black text-white rounded-xl p-8 max-w-2xl mx-auto">
-              <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
-              <p className="text-gray-300 mb-6">
-                Join thousands of families who've already brought their precious photos back to life.
-              </p>
-              <Link href="/login">
+          <div className="bg-black text-white rounded-xl p-8 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
+            <p className="text-gray-300 mb-6">
+              Join thousands of families who've already brought their precious photos back to life.
+            </p>
+            <Link href="/login">
 
               <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
                 Start Restoring for $2.49
               </Button>
-              </Link>
-              
-              <p className="text-xs text-gray-300 mt-2">
-                Only $0.50 per photo
-              </p>
-            </div>
+            </Link>
+
+            <p className="text-xs text-gray-300 mt-2">
+              Only $0.50 per photo
+            </p>
           </div>
+        </div>
       </main>
       <Footer />
     </div>

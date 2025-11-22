@@ -1,5 +1,5 @@
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import type { Metadata } from "next"
 
 import AIAnimationHero from "@/components/ai-family-portrait/hero"
@@ -189,7 +189,7 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitWebAppJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitImageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitFAQJsonLd) }} />
-      <Header />
+      <Navbar />
       <AIAnimationHero />
       <FamilyPortraitShowcase />
       <AIAnimationHowItWorks />

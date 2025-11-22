@@ -50,7 +50,7 @@ const AccordionItem: React.FC<{
       onClick={toggle}
       className={`bg-white rounded-[1.5rem] overflow-hidden transition-all duration-300 cursor-pointer group ${isOpen ? 'shadow-sm' : 'hover:bg-gray-50'}`}
     >
-      <div className="p-4 sm:p-6 flex justify-between items-center gap-4">
+      <div className="p-6 flex justify-between items-center gap-4">
         <h3 className="text-lg sm:text-xl font-bold text-brand-black leading-tight select-none">
           {item.question}
         </h3>
@@ -68,7 +68,7 @@ const AccordionItem: React.FC<{
           }`}
       >
         <div className="overflow-hidden">
-          <p className="px-4 sm:px-6 pb-8 text-gray-600 font-medium leading-relaxed text-base sm:text-lg max-w-3xl">
+          <p className="px-6 pb-8 text-gray-600 font-medium leading-relaxed text-base sm:text-lg max-w-3xl">
             {item.answer}
           </p>
         </div>

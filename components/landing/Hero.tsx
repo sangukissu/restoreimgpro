@@ -130,9 +130,9 @@ export const Hero: React.FC = () => {
         <div className="lg:col-span-6 flex flex-col items-start z-10 justify-center h-full relative">
 
           {/* Available Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-5 py-2.5 rounded-full mb-8 shadow-lg shadow-black/5">
+          <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-4 py-2 rounded-full mb-8 shadow-lg shadow-black/5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#FF4D00] animate-pulse"></div>
-            <span className="text-sm font-bold tracking-wide">AI Model v2.0 Live</span>
+            <span className="text-sm font-semibold tracking-wide">Premium Photo Restoration</span>
           </div>
 
 

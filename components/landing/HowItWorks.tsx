@@ -52,26 +52,25 @@ const STEPS = [
     icon: <Wand2 size={24} className="text-brand-black" />,
     visual: (
       <div className="w-full h-full relative bg-gray-100 overflow-hidden flex items-center justify-center">
-        <div className="relative w-48 h-48 rounded-lg overflow-hidden shadow-lg bg-white ring-4 ring-white">
+        <div className="relative w-full h-full">
           {/* Base Image (Damaged) */}
           <img
             src="/childhood-memories-black-and-white.webp"
             alt="Original"
             className="absolute inset-0 w-full h-full object-cover grayscale contrast-125 brightness-90 blur-[0.5px]"
           />
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dust.png')] opacity-40 mix-blend-overlay"></div>
 
-          {/* Restored Image (Revealed by width animation) */}
-          <div className="absolute inset-0 w-full h-full animate-[width-scan_4s_ease-in-out_infinite] overflow-hidden border-r-2 border-brand-orange bg-white/0 z-10">
+          {/* Restored Image (Revealed by clip-path animation) */}
+          <div className="absolute inset-0 w-full h-full animate-[clip-scan_4s_ease-in-out_infinite] overflow-hidden z-10">
             <img
               src="/childhood-memories-colorized.webp"
               alt="Restored"
-              className="absolute inset-0 w-full h-full object-cover max-w-none"
-              style={{ width: '192px' }} // 48 * 4 = 192px (w-48)
+              className="absolute inset-0 w-full h-full object-cover"
             />
-            {/* Scanner Glow */}
-            <div className="absolute top-0 right-0 w-1 h-full bg-brand-orange/50 shadow-[0_0_15px_#FF4D00]"></div>
           </div>
+
+          {/* Scanner Line & Glow */}
+          <div className="absolute top-0 bottom-0 w-0.5 bg-brand-orange animate-[scan-line_4s_ease-in-out_infinite] z-20 shadow-[0_0_15px_#FF4D00]"></div>
         </div>
 
         {/* Clean Status Badge */}
@@ -81,9 +80,13 @@ const STEPS = [
         </div>
 
         <style>{`
-            @keyframes width-scan {
-                0%, 100% { width: 0%; }
-                50% { width: 100%; }
+            @keyframes clip-scan {
+                0%, 100% { clip-path: inset(0 100% 0 0); }
+                50% { clip-path: inset(0 0 0 0); }
+            }
+            @keyframes scan-line {
+                0%, 100% { left: 0%; }
+                50% { left: 100%; }
             }
          `}</style>
       </div>
@@ -175,7 +178,7 @@ export const HowItWorks: React.FC = () => {
                 className="bg-white rounded-[1.5rem] p-8 min-h-[420px] flex flex-col group"
               >
                 {/* Step Number & Icon */}
-                <div className="flex justify-between items-start mb-8">
+                <div className="flex justify-between items-start mb-4">
                   <div className="w-12 h-12 rounded-2xl bg-[#F2F2F0] flex items-center justify-center transition-colors group-hover:bg-brand-orange/10 group-hover:text-brand-orange">
                     {step.icon}
                   </div>
@@ -185,7 +188,7 @@ export const HowItWorks: React.FC = () => {
                 </div>
 
                 {/* Content */}
-                <div className="mb-10 relative z-10">
+                <div className="mb-4 relative z-10">
                   <h3 className="text-2xl font-bold text-brand-black mb-3">{step.title}</h3>
                   <p className="text-gray-600 font-medium leading-relaxed">
                     {step.description}

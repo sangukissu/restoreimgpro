@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import BlogCard from "@/components/blog-card"
 import Link from "next/link"
 import { OfflineBanner } from "@/components/network-status"
@@ -51,7 +51,7 @@ async function BlogContent() {
   try {
     const { posts } = await getAllPosts(20) // Fetch 20 posts
     const blogPosts = posts.map(transformWordPressPost)
-    
+
     return (
       <BlogPageContent blogPosts={blogPosts} />
     )
@@ -67,13 +67,13 @@ async function BlogContent() {
 function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Navbar />
 
       <main className="pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4">
           {/* Offline Banner */}
           <OfflineBanner />
-          
+
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="  text-3xl font-bold text-black mb-4">Blog</h1>
@@ -115,23 +115,23 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
           )}
         </div>
         <div className="text-center mt-16 px-4">
-            <div className="bg-black text-white rounded-2xl p-8 max-w-2xl mx-auto">
-              <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
-              <p className="text-gray-300 mb-6">
-                Join thousands of families who've already brought their precious photos back to life.
-              </p>
-              <Link href="/login">
+          <div className="bg-black text-white rounded-2xl p-8 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
+            <p className="text-gray-300 mb-6">
+              Join thousands of families who've already brought their precious photos back to life.
+            </p>
+            <Link href="/login">
 
               <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
                 Start restoring for $2.49
               </Button>
-              </Link>
-              
-              <p className="text-xs text-gray-300 mt-2">
-                Only $0.50 per photo
-              </p>
-            </div>
+            </Link>
+
+            <p className="text-xs text-gray-300 mt-2">
+              Only $0.50 per photo
+            </p>
           </div>
+        </div>
       </main>
 
       <Footer />
@@ -143,7 +143,7 @@ export default function BlogPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-white">
-        <Header />
+        <Navbar />
         <main className="pt-24 pb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">

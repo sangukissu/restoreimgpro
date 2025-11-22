@@ -8,8 +8,8 @@ import { Turnstile } from "@marsidev/react-turnstile"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Loader2, Mail } from "lucide-react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import Image from "next/image"
 import Link from "next/link"
 import { signInWithMagicLink, signInWithGoogle, type AuthState } from "./actions"
@@ -44,9 +44,9 @@ function GoogleSignInButton() {
   }
 
   return (
-    <Button 
-      type="button" 
-      variant="outline" 
+    <Button
+      type="button"
+      variant="outline"
       disabled={isLoading}
       onClick={handleGoogleSignIn}
       className="w-full border-gray-300 hover:bg-gray-50 text-black py-3 text-base font-medium rounded-lg h-12 bg-transparent"
@@ -58,7 +58,7 @@ function GoogleSignInButton() {
         </>
       ) : (
         <>
-          <Image 
+          <Image
             src="/google.svg"
             alt="Google logo"
             className="mr-2 h-4 w-4"
@@ -87,12 +87,12 @@ function LoginFormWithSearchParams() {
     const checkAuth = async () => {
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession()
-      
+
       if (session) {
         router.replace('/dashboard')
       }
     }
-    
+
     checkAuth()
   }, [router])
 
@@ -124,8 +124,7 @@ function LoginFormWithSearchParams() {
 
   return (
     <div className="flex flex-col bg-gray-50">
-      <Header />
-      
+      <Navbar />
       <main className="min-h-screen flex-1 flex items-center justify-center pb-24 px-4 sm:px-6 lg:px-8 pt-32">
         <div className="w-full max-w-md space-y-8">
           <div className="space-y-2 text-center">
@@ -148,8 +147,8 @@ function LoginFormWithSearchParams() {
               <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-green-50 border border-green-200 text-green-700">{state.success}</div>
             )}
 
-            <form 
-              action={formAction} 
+            <form
+              action={formAction}
               onSubmit={() => {
                 // Persist last used method for UX badge
                 document.cookie = 'last_auth=magic; path=/; max-age=31536000; SameSite=Lax'
@@ -200,7 +199,7 @@ function LoginFormWithSearchParams() {
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   )
@@ -211,7 +210,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex flex-col bg-gray-50 py-24">
-        <Header />
+        <Navbar />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-600" />

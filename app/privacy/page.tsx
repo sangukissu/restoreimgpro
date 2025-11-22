@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 
 export const metadata: Metadata = {
   title: "Privacy Policy - BringBack | AI Photo Restoration",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Navbar />
 
       <main className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-4">
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
               Your privacy is important to us. This policy explains how we collect, use, and protect your information.
             </p>
             <div className="mt-4 text-sm text-gray-500">
-              Last updated: {new Date().toLocaleDateString('en-US', { 
+              Last updated: {new Date().toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
@@ -134,7 +134,7 @@ export default function PrivacyPage() {
                     <p>
                       <strong>Email:</strong> support@bringback.pro
                     </p>
-            
+
                   </div>
                 </div>
               </section>

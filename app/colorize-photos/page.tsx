@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Sparkles, ChevronRight } from "lucide-react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Navbar } from '@/components/landing/Navbar';
+import { Footer } from '@/components/landing/Footer';
 import { PointerHighlight } from "@/components/pointer-highlight"
 import ColorizeHowItWorksSection from "@/components/pages/colorize-how-it-works-section"
 import ColorizeBenefitsSection from "@/components/pages/colorize-benefits-section"
@@ -236,7 +236,7 @@ export default function ColorizePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(colorizeFAQPageJsonLd) }}
       />
-      <Header />
+      <Navbar />
       {/* Hero Section */}
       <section className="min-h-screen w-full bg-white relative">
         {/* Diagonal Stripes Background */}
@@ -284,69 +284,69 @@ export default function ColorizePage() {
               </div>
 
               <div className="flex flex-col gap-4 justify-center items-center w-full">
-                
-              
-         
-         
-             <Link href="/login">
-            
-             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
-           Colorize Your Photo
-          </FramerButton>
-            </Link>
-            <p className="text-xs text-gray-500">
-                Only $0.50 per photo 
+
+
+
+
+                <Link href="/login">
+
+                  <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
+                    Colorize Your Photo
+                  </FramerButton>
+                </Link>
+                <p className="text-xs text-gray-500">
+                  Only $0.50 per photo
                 </p>
                 <div className="flex flex-col items-center space-y-2 pt-2">
-             <div className="flex items-center space-x-2">
-              <div className="flex -space-x-2">
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />  
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
-                <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
-                <div className="w-8 h-8 rounded-full bg-gray-900 border-2 border-white flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">17+</span>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex -space-x-2">
+                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
+                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />
+                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
+                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
+                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
+                      <div className="w-8 h-8 rounded-full bg-gray-900 border-2 border-white flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">17+</span>
+                      </div>
+                    </div>
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <span key={i} className="text-lg">
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-gray-600 font-medium">Loved by History Enthusiasts & Families</p>
+                </div>
+
+                {/* Hero Compare Section */}
+              </div>
+              <div>
+                <div className="flex justify-center">
+                  <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
+                    <HeroVideoDialog
+                      animationStyle="from-center"
+                      videoSrc="https://youtu.be/YcexFcxi2xY"
+                      thumbnailSrc="/bw-to-colorize.webp"
+                      thumbnailAlt="Photo restoration demo video"
+                      priority
+                      className="h-[250px] w-[300px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-lg">
-                    ★
-                  </span>
-                ))}
-              </div>
-            </div>
-                <p className="text-gray-600 font-medium">Loved by History Enthusiasts & Families</p>
-              </div>
-
-              {/* Hero Compare Section */}
-               </div>
-          <div>
-            <div className="flex justify-center">
-              <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
-                <HeroVideoDialog
-                  animationStyle="from-center"
-                  videoSrc="https://youtu.be/YcexFcxi2xY"
-                  thumbnailSrc="/bw-to-colorize.webp"
-                  thumbnailAlt="Photo restoration demo video"
-                  priority
-                  className="h-[250px] w-[300px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
-                />
-              </div>
-            </div>
-          </div>
             </div>
           </div>
         </div>
-   
+
       </section>
 
       <ColorizeHowItWorksSection />
       <ColorizeBenefitsSection />
       <ColorizeShowcaseSection />
       <ColorizeFeaturesSection />
-          {/* Colorization Quality Section */}
+      {/* Colorization Quality Section */}
       <section className="px-6 py-20 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
