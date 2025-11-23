@@ -1,35 +1,8 @@
 
 import React from 'react';
-import { Sparkles, Film, UploadCloud, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star } from 'lucide-react';
+import { Sparkles, Film, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star } from 'lucide-react';
 import Link from 'next/link';
 
-// Process Card Component - Compacted
-const ProcessCard: React.FC<{
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  dots: boolean[]
-}> = ({ icon, title, subtitle, dots }) => (
-  <div className="bg-brand-surface rounded-[1.8rem] p-6 flex flex-col gap-6 ">
-    <div className="flex justify-between items-start">
-      <div className="w-12 h-12 rounded-full border-2 border-brand-black flex items-center justify-center text-brand-black">
-        {icon}
-      </div>
-      <div className="flex gap-1.5 pt-2">
-        {dots.map((isActive, i) => (
-          <div
-            key={i}
-            className={`w-2.5 h-2.5 rounded-full transition-colors ${isActive ? 'bg-brand-orange' : 'bg-gray-300'}`}
-          />
-        ))}
-      </div>
-    </div>
-    <div>
-      <h4 className="text-xl font-extrabold text-brand-black mb-2">{title}</h4>
-      <p className="text-gray-500 font-medium text-sm leading-relaxed">{subtitle}</p>
-    </div>
-  </div>
-);
 
 interface PricingFeature {
   icon: React.ReactNode;
@@ -110,20 +83,34 @@ const PricingCard: React.FC<{
 
 export const Pricing: React.FC = () => {
   const starterFeatures = [
-    { icon: <ImageIcon size={16} />, text: "5 Photo Restorations" },
+    { icon: <Zap size={16} />, text: "5 Credits Included" },
+    { icon: <ImageIcon size={16} />, text: "Restore 5 Photos" },
     { icon: <Maximize2 size={16} />, text: "High-Resolution Output" },
     { icon: <Infinity size={16} />, text: "Credits Never Expire" },
-    { icon: <ArrowUpCircle size={16} />, text: "Free Photo Enhance/Upscale" },
+    { icon: <ArrowUpCircle size={16} />, text: "5 Free Photo Upscale" },
     { icon: <Frame size={16} />, text: "Free Digital Frames" },
     { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
   ];
 
   const proFeatures = [
-    { icon: <ImageIcon size={16} />, text: "5 Photo Restorations" },
-    { icon: <Film size={16} />, text: "1 High-Quality Video Animation" },
-    { icon: <Maximize2 size={16} />, text: "High-Resolution Output" },
+    { icon: <Zap size={16} />, text: "15 Flexible Credits" },
+    { icon: <ImageIcon size={16} />, text: "Restore up to 15 Photos" },
+    { icon: <Film size={16} />, text: "OR Create 1 Video (+ 5 Photos)" },
+    { icon: <Maximize2 size={16} />, text: "High-Resolution 1080P Output" },
     { icon: <Infinity size={16} />, text: "Credits Never Expire" },
-    { icon: <ArrowUpCircle size={16} />, text: "Free Photo Enhance/Upscale" },
+    { icon: <ArrowUpCircle size={16} />, text: "15 Free Photo Upscale" },
+    { icon: <Frame size={16} />, text: "Free Digital Frames" },
+    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
+  ];
+
+  const familyFeatures = [
+    { icon: <Zap size={16} />, text: "60 Flexible Credits" },
+    { icon: <ImageIcon size={16} />, text: "Restore up to 60 Photos" },
+    { icon: <Film size={16} />, text: "OR Create 6 Video Animations" },
+    { icon: <Sparkles size={16} />, text: "Mix & Match Usage" },
+    { icon: <Maximize2 size={16} />, text: "High-Resolution 1080P Output" },
+    { icon: <Infinity size={16} />, text: "Credits Never Expire" },
+    { icon: <ArrowUpCircle size={16} />, text: "20 Free Photo Upscale" },
     { icon: <Frame size={16} />, text: "Free Digital Frames" },
     { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
   ];
@@ -155,38 +142,18 @@ export const Pricing: React.FC = () => {
         {/* Pricing Grid: 3 Equal Columns - Removing items-start allows stretch by default */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* Column 1: Process & Value Pills */}
-          <div className="flex flex-col gap-4">
-            <ProcessCard
-              icon={<UploadCloud size={24} strokeWidth={2.5} />}
-              title="Instant Upload"
-              subtitle="Drag & drop your photos. We process them securely in seconds."
-              dots={[true, false, false]}
-            />
-            <ProcessCard
-              icon={<Zap size={24} strokeWidth={2.5} />}
-              title="AI Magic"
-              subtitle="30-second automatic restoration vs weeks with traditional services."
-              dots={[true, true, false]}
-            />
-            <ProcessCard
-              icon={<ShieldCheck size={24} strokeWidth={2.5} />}
-              title="Satisfaction Guarantee"
-              subtitle="Free automatic re-restoration if we detect complex damage like tears or stains."
-              dots={[true, true, true]}
-            />
-          </div>
+
 
           {/* Column 2: Starter Plan (White) */}
           <PricingCard
             theme="light"
             title="Starter"
-            price="$2.49"
+            price="$4.99"
             description="Perfect for high-quality photo restoration."
             badge="One-time payment"
             features={starterFeatures}
             icon={<Sparkles size={24} />}
-            buttonText="Get Started"
+            buttonText="Start Restoring Photos"
             buttonLink="/login"
             buttonIcon={<ArrowRight size={20} />}
           />
@@ -195,7 +162,7 @@ export const Pricing: React.FC = () => {
           <PricingCard
             theme="dark"
             title="Pro"
-            price="$4.99"
+            price="$9.99"
             description="Everything in Starter, plus bring photos to life."
             badge="One-time payment"
             features={proFeatures}
@@ -203,6 +170,19 @@ export const Pricing: React.FC = () => {
             buttonText="Get Pro Access"
             buttonLink="/dashboard"
             buttonIcon={<Play size={20} fill="currentColor" />}
+          />
+          {/* Column 2: Starter Plan (White) */}
+          <PricingCard
+            theme="light"
+            title="Family"
+            price="$24.99"
+            description="Perfect for photo animation for your family."
+            badge="One-time payment"
+            features={familyFeatures}
+            icon={<Sparkles size={24} />}
+            buttonText="Bring Memories to life"
+            buttonLink="/login"
+            buttonIcon={<ArrowRight size={20} />}
           />
 
         </div>

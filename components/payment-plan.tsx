@@ -146,7 +146,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-8 shadow-xs hover:shadow-sm transition-shadow duration-200">
       <div className="text-center">
-       
+
 
         {/* Plan Selector */}
         <div className="mb-2">
@@ -155,22 +155,40 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
               // Determine badge and perks based on plan
               const isStarter = plan.credits === 5
               const isPlus = plan.credits === 15
-              const badge = isPlus ? "BEST VALUE" : isStarter ? "POPULAR" : ""
-              const badgeColor = isPlus ? "bg-green-500" : "bg-blue-500"
-              
-              const perks = isStarter 
-                ? ["5 photo restorations"]
-                : isPlus 
-                ? ["5 photo restorations", "01 HD Video Animation"]
-                : [`${plan.credits} photo restorations`]
+              const isFamily = plan.credits === 60
+
+              let badge = ""
+              let badgeColor = ""
+
+              if (isPlus) {
+                badge = "BEST VALUE"
+                badgeColor = "bg-green-500"
+              } else if (isStarter) {
+                badge = "POPULAR"
+                badgeColor = "bg-blue-500"
+              } else if (isFamily) {
+                badge = "High-volume discount"
+                badgeColor = "bg-purple-600"
+              }
+
+              let perks: string[] = []
+
+              if (isStarter) {
+                perks = ["5 Credits (Restore 5 Photos)"]
+              } else if (isPlus) {
+                perks = ["15 Credits (15 Photos or 1 Video+)"]
+              } else if (isFamily) {
+                perks = ["60 Credits (60 Photos or 6 Videos)"]
+              } else {
+                perks = [`${plan.credits} credits`]
+              }
 
               return (
                 <button
                   key={plan.id}
                   onClick={() => setSelectedPlanId(plan.id)}
-                  className={`relative w-full text-left border rounded-xl p-4 transition-colors ${
-                    selectedPlanId === plan.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"
-                  }`}
+                  className={`relative w-full text-left border rounded-xl p-4 transition-colors ${selectedPlanId === plan.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"
+                    }`}
                 >
                   {/* Conversion Badge */}
                   {badge && (
@@ -178,12 +196,12 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                       {badge}
                     </div>
                   )}
-                  
+
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="font-semibold text-black mb-1">{plan.name}</div>
                       <div className="text-sm text-gray-600 mb-2">{plan.credits} credits</div>
-                      
+
                       {/* Plan Perks */}
                       <div className="space-y-1">
                         {perks.map((perk, index) => (

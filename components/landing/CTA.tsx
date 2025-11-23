@@ -96,22 +96,7 @@ export const CTA: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Floating Status Badge */}
-                                    <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-xl p-4 rounded-2xl border border-white/40 shadow-lg flex items-center justify-between z-20">
-                                        <div className="flex items-center gap-3">
-                                            <div className="relative">
-                                                <div className="w-2.5 h-2.5 bg-brand-orange rounded-full animate-pulse" />
-                                                <div className="absolute inset-0 bg-brand-orange rounded-full animate-ping opacity-20" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Status</span>
-                                                <span className="text-sm font-bold text-brand-black">Restoring Details...</span>
-                                            </div>
-                                        </div>
-                                        <div className="w-10 h-10 bg-brand-bg rounded-full flex items-center justify-center text-brand-black">
-                                            <ScanLine size={18} />
-                                        </div>
-                                    </div>
+
 
                                     {/* Top Badge */}
                                     <div className="absolute top-6 right-6 bg-black/30 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full border border-white/10 uppercase tracking-widest z-20">
