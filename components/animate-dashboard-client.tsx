@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Upload, Play, Download, Loader2, ArrowLeft, Sparkles } from "lucide-react"
+import { Upload, Play, Download, Loader2, ArrowLeft, Sparkles, AlertCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import DashboardHeader from "@/components/dashboard-header"
 import PaymentModal from "@/components/payment-modal"
@@ -387,6 +387,8 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                     <label className="block text-lg font-semibold text-black mb-4">
                       Upload Image
                     </label>
+
+
                     <div
                       onClick={() => !isPreloadingImage && fileInputRef.current?.click()}
                       className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 transition-colors group"
@@ -433,6 +435,21 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                       className="hidden"
                     />
                   </div>
+
+                  {/* Warning Message */}
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex gap-3 items-start">
+                    <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+
+                      <p className="text-amber-700 text-sm leading-relaxed">
+                        For best results with old photos, We strongly recommend restoring old or damaged photos before animating them.
+                        Animating a damaged photo may not produce good results.
+                      </p>
+                      <a href="/dashboard/restore" className="text-amber-800 text-sm font-medium underline hover:text-amber-900 inline-block mt-1">
+                        Restore Image First →
+                      </a>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Animation Selection - Second Column on Large Screens */}
@@ -447,14 +464,14 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                           key={preset.id}
                           onClick={() => setSelectedPreset(preset)}
                           className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${selectedPreset.id === preset.id
-                              ? 'border-black bg-gray-50'
-                              : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-black bg-gray-50'
+                            : 'border-gray-200 hover:border-gray-300'
                             }`}
                         >
                           <div className="flex items-center gap-2 mb-2">
                             <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${selectedPreset.id === preset.id
-                                ? 'border-black bg-black'
-                                : 'border-gray-300'
+                              ? 'border-black bg-black'
+                              : 'border-gray-300'
                               }`}>
                               {selectedPreset.id === preset.id && (
                                 <div className="w-1.5 h-1.5 bg-white rounded-full" />
