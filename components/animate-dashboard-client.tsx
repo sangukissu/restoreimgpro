@@ -149,8 +149,8 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
         .finally(() => {
           setIsPreloadingImage(false)
         })
-  }
-}, [])
+    }
+  }, [])
 
 
 
@@ -225,7 +225,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
 
     setIsProcessing(true)
     setError(null)
-    
+
     // Create generation object immediately to prevent blank screen
     const tempGeneration: VideoGeneration = {
       id: 'temp-' + Date.now(),
@@ -239,11 +239,11 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
 
     setCurrentGeneration(tempGeneration)
     setAppState("processing")
-    
+
     try {
       // Start video generation
       const generationId = await generateVideo(selectedFile, selectedPreset)
-      
+
       const newGeneration: VideoGeneration = {
         id: generationId,
         video_id: generationId,
@@ -256,7 +256,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
 
       setCurrentGeneration(newGeneration)
       setGenerations(prev => [newGeneration, ...prev])
-      
+
       // Redirect to my-media page after a short delay
       setTimeout(() => {
         window.location.href = '/dashboard/my-media'
@@ -302,7 +302,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
     setCredits(newCredits)
     setShowPaymentModal(false)
     setIsProcessingPayment(false)
-    
+
     toast.success(`Credits Added Successfully! You now have ${newCredits} credits to restore images.`)
   }
 
@@ -323,12 +323,12 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
       a.href = videoUrl
       a.download = `animated-video-${Date.now()}.mp4`
 
-      
+
       // Append to body, click, and remove
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
-      
+
       toast.success('Video downloaded successfully!')
     } catch (error) {
       console.error('Download error:', error)
@@ -351,14 +351,14 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
       </div>
 
       {/* Dashboard Header */}
-      <DashboardHeader 
-        user={user} 
-        credits={credits} 
-        onBuyCredits={handleBuyCredits} 
+      <DashboardHeader
+        user={user}
+        credits={credits}
+        onBuyCredits={handleBuyCredits}
       />
-      
+
       {/* Payment Success Modal */}
-      <PaymentSuccessModal 
+      <PaymentSuccessModal
         isOpen={showPaymentSuccess}
         onClose={() => setShowPaymentSuccess(false)}
         userCredits={credits}
@@ -384,56 +384,56 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                 {/* Image Upload Section */}
                 <div className="space-y-6">
                   <div>
-                      <label className="block text-lg font-semibold text-black mb-4">
-                        Upload Image
-                      </label>
-                      <div 
-                        onClick={() => !isPreloadingImage && fileInputRef.current?.click()}
-                        className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 transition-colors group"
-                      >
-                        {isPreloadingImage ? (
-                          <div className="space-y-4 py-6 flex flex-col items-center">
-                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                              <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-                            </div>
-                            <p className="text-gray-700 font-medium">Loading your image from previous step...</p>
-                            <p className="text-sm text-gray-500">Please wait while we prepare it for animation</p>
+                    <label className="block text-lg font-semibold text-black mb-4">
+                      Upload Image
+                    </label>
+                    <div
+                      onClick={() => !isPreloadingImage && fileInputRef.current?.click()}
+                      className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 transition-colors group"
+                    >
+                      {isPreloadingImage ? (
+                        <div className="space-y-4 py-6 flex flex-col items-center">
+                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                           </div>
-                        ) : selectedImageUrl ? (
-                          <div className="space-y-4 ">
-                            <Image 
-                              src={selectedImageUrl} 
-                              alt="Selected image" 
-                              width={200}
-                              height={200}
-                              className="mx-auto rounded-xl object-cover"
-                            />
-                            <p className="text-sm text-gray-600">Click to change image</p>
-                          </div>
-                        ) : (
-                          <div className="space-y-4 relative">
-                            <div className="relative mx-auto w-12 h-12 sm:w-24 sm:h-24 group">
-                              <div className="inset-0 absolute rounded-full bg-gray-100 opacity-50 transition-all duration-300 group-hover:opacity-75 group-hover:scale-105"></div>
-                              <div className="relative w-full h-full flex items-center justify-center">
-                                <Upload className="w-6 h-6 sm:w-12 sm:h-12 text-gray-700" />
-                              </div>
-                            </div>
-                            <div>
-                              <p className="text-lg font-semibold text-gray-900">Upload your photo</p>
-                              <p className="text-gray-600">JPG, PNG, WebP up to 20MB</p>
+                          <p className="text-gray-700 font-medium">Loading your image from previous step...</p>
+                          <p className="text-sm text-gray-500">Please wait while we prepare it for animation</p>
+                        </div>
+                      ) : selectedImageUrl ? (
+                        <div className="space-y-4 ">
+                          <Image
+                            src={selectedImageUrl}
+                            alt="Selected image"
+                            width={200}
+                            height={200}
+                            className="mx-auto rounded-xl object-cover"
+                          />
+                          <p className="text-sm text-gray-600">Click to change image</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-4 relative">
+                          <div className="relative mx-auto w-12 h-12 sm:w-24 sm:h-24 group">
+                            <div className="inset-0 absolute rounded-full bg-gray-100 opacity-50 transition-all duration-300 group-hover:opacity-75 group-hover:scale-105"></div>
+                            <div className="relative w-full h-full flex items-center justify-center">
+                              <Upload className="w-6 h-6 sm:w-12 sm:h-12 text-gray-700" />
                             </div>
                           </div>
-                        )}
-                      </div>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileSelect}
-                        className="hidden"
-                      />
+                          <div>
+                            <p className="text-lg font-semibold text-gray-900">Upload your photo</p>
+                            <p className="text-gray-600">JPG, PNG, WebP 10MB</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
                   </div>
+                </div>
 
                 {/* Animation Selection - Second Column on Large Screens */}
                 {selectedFile && (
@@ -446,18 +446,16 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                         <div
                           key={preset.id}
                           onClick={() => setSelectedPreset(preset)}
-                          className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                            selectedPreset.id === preset.id
+                          className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${selectedPreset.id === preset.id
                               ? 'border-black bg-gray-50'
                               : 'border-gray-200 hover:border-gray-300'
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-2 mb-2">
-                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                              selectedPreset.id === preset.id
+                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${selectedPreset.id === preset.id
                                 ? 'border-black bg-black'
                                 : 'border-gray-300'
-                            }`}>
+                              }`}>
                               {selectedPreset.id === preset.id && (
                                 <div className="w-1.5 h-1.5 bg-white rounded-full" />
                               )}
@@ -469,7 +467,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                         </div>
                       ))}
                     </div>
-                    
+
                     {/* Show More/Less Button */}
                     {ANIMATION_PRESETS.length > 6 && (
                       <div className="mt-4 text-center">
@@ -538,7 +536,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
               )}
             </div>
           </div>
-         )}
+        )}
 
         {/* Processing/Results Interface */}
         {(appState === "processing" || appState === "results") && currentGeneration && (
@@ -582,7 +580,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                     {currentGeneration.status === "failed" && "Something went wrong, please try again"}
                   </p>
                 </div>
-                
+
                 {currentGeneration.status === "failed" && (
                   <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6">
                     <p className="text-red-800 mb-4 font-medium">
@@ -671,7 +669,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                 </div>
               )}
 
- 
+
             </div>
           </div>
         )}

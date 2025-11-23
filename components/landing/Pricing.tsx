@@ -87,18 +87,18 @@ export const Pricing: React.FC = () => {
     { icon: <ImageIcon size={16} />, text: "Restore 5 Photos" },
     { icon: <Maximize2 size={16} />, text: "High-Resolution Output" },
     { icon: <Infinity size={16} />, text: "Credits Never Expire" },
-    { icon: <ArrowUpCircle size={16} />, text: "5 Free Photo Upscale" },
+    { icon: <ArrowUpCircle size={16} />, text: "UPto 5 Free Photo Upscale" },
     { icon: <Frame size={16} />, text: "Free Digital Frames" },
     { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
   ];
 
   const proFeatures = [
-    { icon: <Zap size={16} />, text: "15 Flexible Credits" },
-    { icon: <ImageIcon size={16} />, text: "Restore up to 15 Photos" },
-    { icon: <Film size={16} />, text: "OR Create 1 Video (+ 5 Photos)" },
+    { icon: <Zap size={16} />, text: "20 Flexible Credits" },
+    { icon: <ImageIcon size={16} />, text: "Restore up to 20 Photos" },
+    { icon: <Film size={16} />, text: "OR Create 2 Video Animations" },
     { icon: <Maximize2 size={16} />, text: "High-Resolution 1080P Output" },
     { icon: <Infinity size={16} />, text: "Credits Never Expire" },
-    { icon: <ArrowUpCircle size={16} />, text: "15 Free Photo Upscale" },
+    { icon: <ArrowUpCircle size={16} />, text: "Upto 20 Free Photo Upscale" },
     { icon: <Frame size={16} />, text: "Free Digital Frames" },
     { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
   ];
@@ -110,7 +110,7 @@ export const Pricing: React.FC = () => {
     { icon: <Sparkles size={16} />, text: "Mix & Match Usage" },
     { icon: <Maximize2 size={16} />, text: "High-Resolution 1080P Output" },
     { icon: <Infinity size={16} />, text: "Credits Never Expire" },
-    { icon: <ArrowUpCircle size={16} />, text: "20 Free Photo Upscale" },
+    { icon: <ArrowUpCircle size={16} />, text: "Upto 60 Free Photo Upscale" },
     { icon: <Frame size={16} />, text: "Free Digital Frames" },
     { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
   ];

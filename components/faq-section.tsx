@@ -31,7 +31,7 @@ export default function FAQSection() {
     {
       question: "How much do photo restoration and animation cost?",
       answer:
-        "Photo restoration: We offer 5 high-quality photo restorations for just $2.49 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans: Plus $4.99). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.",
+        "Photo restoration: We offer 5 high-quality photo restorations for just $4.99 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans: Plus $9.99). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.",
     },
 
     {
@@ -84,7 +84,7 @@ export default function FAQSection() {
       answer:
         "Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is auotmatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you.",
     },
-    
+
     {
       question: "Can I print or enlarge restored photos?",
       answer:
@@ -145,7 +145,7 @@ export default function FAQSection() {
               </div>
             ))}
           </div>
-          
+
           {/* Second Column */}
           <div className="space-y-4">
             {faqs.slice(7).map((faq, index) => {
@@ -185,7 +185,7 @@ export default function FAQSection() {
           </div>
         </div>
 
-        
+
       </div>
     </section>
   )

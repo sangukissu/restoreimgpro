@@ -28,7 +28,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "How much do photo restoration and animation cost?",
-    answer: "Photo restoration: We offer 5 high-quality photo restorations for just $2.49 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans: Plus $4.99). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete."
+    answer: "Photo restoration: We offer 5 high-quality photo restorations for just $4.99 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans: Plus $9.99). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete."
   },
   {
     question: "Is my personal data and photos safe?",

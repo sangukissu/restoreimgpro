@@ -17,7 +17,7 @@ function getImagePairForProblem(problemSlug: string): { before: string; after: s
     'dusty': { before: '/grainy-photo.webp', after: '/grainy-photo-restored.webp' },
     'low-resolution': { before: '/under-exposed.webp', after: '/under-exposed-restored.webp' }
   };
-  
+
   return imageMap[problemSlug] || { before: '/torn.webp', after: '/torn-restored.webp' }; // fallback
 }
 
@@ -27,7 +27,7 @@ function getImagePairForAction(actionSlug: string): { before: string; after: str
     'animate-old-photos': { before: '/vintage-family-portraits.webp', after: '/vintage-family-portraits-colorized.webp' },
     'enhance-photo-quality': { before: '/under-exposed.webp', after: '/under-exposed-restored.webp' }
   };
-  
+
   return actionImageMap[actionSlug] || { before: '/torn.webp', after: '/torn-restored.webp' }; // fallback
 }
 
@@ -44,7 +44,7 @@ export interface PseoPageData {
   faqs: { question: string; answer: string; }[];
   beforeImageUrl: string;
   afterImageUrl: string;
-  
+
   // New SEO Content Sections
   howItWorks: {
     title: string;
@@ -107,7 +107,7 @@ export function generatePseoPages(): PseoPageData[] {
           description: "Simply drag and drop your photo onto our secure platform. Our AI instantly analyzes the image and creates a restoration plan."
         },
         {
-          number: "02", 
+          number: "02",
           title: "AI Magic Happens",
           description: "Our trained neural networks work to repair damage, enhance colors, and restore missing details while preserving the original character of your photo."
         },
@@ -118,7 +118,7 @@ export function generatePseoPages(): PseoPageData[] {
         }
       ]
     },
-    
+
     comparisonTable: {
       title: "BringBack.pro vs Traditional Restoration",
       description: "See why thousands choose our AI-powered restoration over expensive manual services and unreliable competitors.",
@@ -155,7 +155,7 @@ export function generatePseoPages(): PseoPageData[] {
         }
       ]
     },
-    
+
     useCases: {
       title: "Real-World Applications for Photo Restoration",
       description: "Discover how people are using our AI to restore their precious photos and preserve family history.",
@@ -180,40 +180,52 @@ export function generatePseoPages(): PseoPageData[] {
         }
       ]
     },
-    
+
     costAnalysis: {
       title: "Cost Breakdown: Why BringBack.pro Saves You Money",
       description: "Compare the true cost of photo restoration options and see why our AI solution delivers the best value for your precious memories.",
       plans: [
         {
-          name: "Starter Plan",
-          price: "$2.49",
-          description: "Perfect for trying our service",
+          name: "Starter",
+          price: "$4.99",
+          description: "Perfect for high-quality photo restoration",
           features: [
-            "5 photo restorations",
-            "High-resolution output",
-            "30-second processing",
-            "Money-back guarantee",
-            "Secure & private"
+            "5 Credits Included",
+            "Restore 5 Photos",
+            "High-Resolution Output",
+            "Credits Never Expire",
+            "30-Day Money-Back Guarantee"
           ]
         },
         {
-          name: "Restore & Animate",
-          price: "$4.99",
-          description: "Restore and bring photos to life",
+          name: "Pro",
+          price: "$9.99",
+          description: "Everything in Starter, plus bring photos to life",
           features: [
-            "5 photo restorations",
-            "1 high-quality video animation",
-            "High-resolution output",
-            "Priority processing",
-            "Advanced AI features"
+            "15 Flexible Credits",
+            "Restore up to 15 Photos",
+            "OR Create 1 Video (+ 5 Photos)",
+            "High-Resolution 1080P Output",
+            "Credits Never Expire"
+          ]
+        },
+        {
+          name: "Family",
+          price: "$24.99",
+          description: "Perfect for photo animation for your family",
+          features: [
+            "60 Flexible Credits",
+            "Restore up to 60 Photos",
+            "OR Create 6 Video Animations",
+            "Mix & Match Usage",
+            "High-Resolution 1080P Output"
           ]
         }
       ],
       comparison: [
         {
           service: "BringBack.pro",
-          cost: "$2.49",
+          cost: "$4.99",
           timeframe: "30 seconds"
         },
         {
@@ -241,7 +253,7 @@ export function generatePseoPages(): PseoPageData[] {
       const slug = `fix-${problem.slug}-${photoType.slug}`;
       const h1 = `Instantly Fix Your ${problem.h1_fragment} ${photoType.h1_fragment}`;
       const metaTitle = `AI ${problem.name} ${photoType.name} Restoration | BringBack.pro`;
-      
+
       // **THIS IS THE HIGH-QUALITY CONTENT**
       // It combines unique snippets into a new, useful paragraph.
       const metaDescription = `Restore your ${problem.slug} ${photoType.slug} instantly with AI. Professional-quality results in 30 seconds for just $2.49. ${problem.description.split('.')[0]}. Free preview available - upload now!`;
@@ -251,7 +263,7 @@ export function generatePseoPages(): PseoPageData[] {
         question: `How effective is AI at restoring ${problem.slug} ${photoType.slug}s?`,
         answer: `Our AI is highly effective at restoring ${problem.slug} ${photoType.slug}s, with a 95% success rate for this specific type of damage. The system has been trained on over 2 million examples of ${problem.name.toLowerCase()} restoration, making it particularly skilled at handling ${photoType.name.toLowerCase()}s. Most customers see dramatic improvements in clarity, color, and overall image quality. The AI can handle multiple types of damage simultaneously and often recovers details that seem completely lost.`
       };
-      
+
       const specificFaq2 = {
         question: `What makes ${photoType.slug}s challenging to restore, and how does your AI handle it?`,
         answer: `${photoType.name}s present unique restoration challenges because ${photoType.description.toLowerCase()} Our AI has been specifically trained to understand the context and importance of ${photoType.slug}s, using advanced algorithms to preserve facial features, important details, and the emotional essence of the photo. The system applies specialized techniques for ${problem.name.toLowerCase()} damage while maintaining the authentic character that makes these photos so precious.`
@@ -269,7 +281,7 @@ export function generatePseoPages(): PseoPageData[] {
         faqs: [specificFaq, specificFaq2, ...generalFaqs],
         beforeImageUrl: getImagePairForProblem(problem.slug).before,
         afterImageUrl: getImagePairForProblem(problem.slug).after,
-        
+
         // New SEO Content Sections
         howItWorks: {
           title: `How Our AI Restores ${problem.name} ${photoType.name}s`,
@@ -281,7 +293,7 @@ export function generatePseoPages(): PseoPageData[] {
               description: `Simply drag and drop your ${problem.slug} ${photoType.slug} onto our secure platform. Our AI instantly analyzes the damage and creates a restoration plan.`
             },
             {
-              number: "02", 
+              number: "02",
               title: "AI Magic Happens",
               description: `Our trained neural networks work to repair ${problem.name.toLowerCase()} damage, enhance colors, and restore missing details while preserving the original character of your ${photoType.name.toLowerCase()}.`
             },
@@ -292,7 +304,7 @@ export function generatePseoPages(): PseoPageData[] {
             }
           ]
         },
-        
+
         comparisonTable: {
           title: "BringBack.pro vs Traditional Restoration",
           description: `See why thousands choose our AI-powered restoration over expensive manual services and unreliable competitors.`,
@@ -329,7 +341,7 @@ export function generatePseoPages(): PseoPageData[] {
             }
           ]
         },
-        
+
         useCases: {
           title: `Real-World Applications for ${photoType.name} Restoration`,
           description: `Discover how people are using our AI to restore their precious ${photoType.name.toLowerCase()}s and preserve family history.`,
@@ -354,7 +366,7 @@ export function generatePseoPages(): PseoPageData[] {
             }
           ]
         },
-        
+
         costAnalysis: {
           title: "Cost Breakdown: Why BringBack.pro Saves You Money",
           description: `Compare the true cost of photo restoration options and see why our AI solution delivers the best value for your precious memories.`,
@@ -365,7 +377,7 @@ export function generatePseoPages(): PseoPageData[] {
               description: "Perfect for high-quality photo restoration",
               features: [
                 "5 Photo Restorations",
-                "High-Resolution Output", 
+                "High-Resolution Output",
                 "Credits Never Expire",
                 "Free Photo Enhance/Upscale",
                 "Free Digital Frames",
@@ -380,7 +392,7 @@ export function generatePseoPages(): PseoPageData[] {
                 "5 Photo Restorations",
                 "1 High-Quality Video Animation",
                 "High-Resolution Output",
-                "Credits Never Expire", 
+                "Credits Never Expire",
                 "Free Photo Enhance/Upscale",
                 "Free Digital Frames",
                 "30-Day Money-Back Guarantee"
@@ -411,7 +423,7 @@ export function generatePseoPages(): PseoPageData[] {
           ]
         }
       };
-      
+
       pages.push(pageData);
     }
   }
@@ -420,14 +432,14 @@ export function generatePseoPages(): PseoPageData[] {
   // Generates pages like:
   // - /restore/colorize-black-and-white
   // - /restore/animate-old-photos
-  
+
   for (const action of actions) {
     // Create a specific FAQ for this action page
     const actionSpecificFaq = {
       question: `How accurate is AI for ${action.name.toLowerCase()} photos?`,
       answer: `Our AI achieves 98% accuracy for ${action.name.toLowerCase()} tasks, having been trained on over 5 million photo examples. ${action.solutionText.split('.')[0]}. The system understands context, lighting, and artistic intent to deliver results that often exceed professional manual work. Most users are amazed by the natural, realistic results achieved in just seconds.`
     };
-    
+
     const actionSpecificFaq2 = {
       question: `What types of photos work best for ${action.name.toLowerCase()}?`,
       answer: `Our ${action.name.toLowerCase()} AI works exceptionally well on all photo types, but performs best on photos with clear subjects and good contrast. The system can handle vintage photos, family portraits, historical images, and even damaged photos. For optimal results, we recommend photos with at least 300x300 pixel resolution, though our AI can enhance smaller images too.`
@@ -446,7 +458,7 @@ export function generatePseoPages(): PseoPageData[] {
       faqs: [actionSpecificFaq, actionSpecificFaq2, ...generalFaqs],
       beforeImageUrl: getImagePairForAction(action.slug).before,
       afterImageUrl: getImagePairForAction(action.slug).after,
-      
+
       // New SEO Content Sections
       howItWorks: {
         title: `How Our AI ${action.name}s Photos`,
@@ -458,7 +470,7 @@ export function generatePseoPages(): PseoPageData[] {
             description: `Upload any photo that needs ${action.name.toLowerCase()}. Our AI instantly analyzes the image and prepares the enhancement process.`
           },
           {
-            number: "02", 
+            number: "02",
             title: "AI Processing",
             description: `Our specialized ${action.name.toLowerCase()} algorithms work their magic, applying advanced techniques to transform your photo while maintaining natural quality.`
           },
@@ -469,7 +481,7 @@ export function generatePseoPages(): PseoPageData[] {
           }
         ]
       },
-      
+
       comparisonTable: {
         title: `${action.name} Service Comparison`,
         description: `See why our AI-powered ${action.name.toLowerCase()} service outperforms traditional methods.`,
@@ -500,7 +512,7 @@ export function generatePseoPages(): PseoPageData[] {
           }
         ]
       },
-      
+
       useCases: {
         title: `When to Use ${action.name} Services`,
         description: `Discover the best applications for our ${action.name.toLowerCase()} technology.`,
@@ -525,43 +537,52 @@ export function generatePseoPages(): PseoPageData[] {
           }
         ]
       },
-      
+
       costAnalysis: {
         title: `${action.name} Cost Analysis`,
         description: `Compare the true cost of ${action.name.toLowerCase()} services and see the value of our AI solution.`,
         plans: [
           {
             name: "Starter",
-            price: "$2.49",
+            price: "$4.99",
             description: `Perfect for high-quality ${action.name.toLowerCase()}`,
             features: [
-              "5 Photo Restorations",
-              "High-Resolution Output", 
+              "5 Credits Included",
+              "Restore 5 Photos",
+              "High-Resolution Output",
               "Credits Never Expire",
-              "Free Photo Enhance/Upscale",
-              "Free Digital Frames",
               "30-Day Money-Back Guarantee"
             ]
           },
           {
-            name: "Restore & Animate", 
-            price: "$4.99",
+            name: "Pro",
+            price: "$9.99",
             description: "Everything in Starter, plus bring photos to life",
             features: [
-              "5 Photo Restorations",
-              "1 High-Quality Video Animation",
-              "High-Resolution Output",
-              "Credits Never Expire", 
-              "Free Photo Enhance/Upscale",
-              "Free Digital Frames",
-              "30-Day Money-Back Guarantee"
+              "15 Flexible Credits",
+              "Restore up to 15 Photos",
+              "OR Create 1 Video (+ 5 Photos)",
+              "High-Resolution 1080P Output",
+              "Credits Never Expire"
+            ]
+          },
+          {
+            name: "Family",
+            price: "$24.99",
+            description: "Perfect for photo animation for your family",
+            features: [
+              "60 Flexible Credits",
+              "Restore up to 60 Photos",
+              "OR Create 6 Video Animations",
+              "Mix & Match Usage",
+              "High-Resolution 1080P Output"
             ]
           }
         ],
         comparison: [
           {
             service: `${action.name} (5 photos)`,
-            cost: "$2.49 vs $250-750",
+            cost: "$4.99 vs $250-750",
             timeframe: "30 seconds vs 2-4 weeks"
           },
           {
@@ -583,7 +604,7 @@ export function generatePseoPages(): PseoPageData[] {
   // --- BUILDLER 3: Restoration Keyword Pages ---
   restorationKeywords.forEach(keyword => {
     const standardSeoContent = generateStandardSeoContent(keyword.keyword, `Use our AI-powered tool to ${keyword.keyword.toLowerCase()}. Get high-quality results in seconds.`);
-    
+
     const pageData: PseoPageData = {
       slug: keyword.slug,
       h1: keyword.keyword,
@@ -605,7 +626,7 @@ export function generatePseoPages(): PseoPageData[] {
   // --- BUILDLER 4: How-To Keyword Pages ---
   howToKeywords.forEach(keyword => {
     const standardSeoContent = generateStandardSeoContent(keyword.keyword, `Learn ${keyword.keyword.toLowerCase()} with our easy-to-follow guide. Then, use our AI-powered tool to get perfect results.`);
-    
+
     const pageData: PseoPageData = {
       slug: keyword.slug,
       h1: keyword.keyword,
@@ -627,7 +648,7 @@ export function generatePseoPages(): PseoPageData[] {
   // --- BUILDLER 5: Digitization Keyword Pages ---
   digitizationKeywords.forEach(keyword => {
     const standardSeoContent = generateStandardSeoContent(keyword.keyword, `Thinking about ${keyword.keyword.toLowerCase()}? We can help. Learn the best ways to digitize your photos and how our tool can improve the quality.`);
-    
+
     const pageData: PseoPageData = {
       slug: keyword.slug,
       h1: keyword.keyword,
@@ -641,7 +662,7 @@ export function generatePseoPages(): PseoPageData[] {
       faqs: generalFaqs,
       beforeImageUrl: `/vintage-family-portraits.webp`,
       afterImageUrl: `/vintage-family-portraits-colorized.webp`,
-      
+
       ...standardSeoContent
     };
     pages.push(pageData);

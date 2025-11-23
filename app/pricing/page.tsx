@@ -11,7 +11,7 @@ import { FramerButton } from "@/components/ui/framer-button"
 export const metadata: Metadata = {
   title: "Pricing - BringBack.pro | AI Photo Restoration & Animation",
   description:
-    "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
+    "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $24.99 plans, no subscriptions.",
   robots: { index: true, follow: true },
   alternates: {
     canonical: "/pricing",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pricing - BringBack.pro | AI Photo Restoration & Animation",
     description:
-      "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
+      "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $24.99 plans, no subscriptions.",
     type: "website",
     url: "https://bringback.pro/pricing",
     siteName: "BringBack",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pricing - BringBack.pro | AI Photo Restoration & Animation",
     description:
-      "Simple, transparent pricing for AI photo restoration. Starter $2.49 and Plus $4.99 plans, no subscriptions.",
+      "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $24.99 plans, no subscriptions.",
     images: ["/og-image.png"],
   },
 }
@@ -60,7 +60,7 @@ export default function PricingPage() {
                 itemListElement: [
                   {
                     "@type": "Offer",
-                    price: "2.49",
+                    price: "4.99",
                     priceCurrency: "USD",
                     itemOffered: { "@type": "Service", name: "AI Photo Restoration" },
                   },

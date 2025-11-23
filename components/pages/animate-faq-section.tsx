@@ -21,7 +21,7 @@ export default function AnimateFAQSection() {
     },
     {
       question: "How many credits does it cost to animate a photo?",
-      answer: "Each photo animation costs 10 credits. You can purchase credits through our pricing plans (Starter $2.49, Plus $4.99) or buy them individually as needed."
+      answer: "Each photo animation costs 10 credits. You can purchase credits through our pricing plans (Starter $4.99, Plus $9.99 and Family $24.99) or buy them individually as needed."
     },
     {
       question: "Can I use the Old Photo Revival template for modern photos?",
@@ -29,7 +29,7 @@ export default function AnimateFAQSection() {
     },
     {
       question: "What is the maximum file size for uploaded photos?",
-      answer: "You can upload images up to 20MB in size. Supported formats include JPG, PNG, and WebP. For best results, we recommend images with at least 1024×1024 pixel resolution."
+      answer: "You can upload images up to 10MB in size. Supported formats include JPG, PNG, and WebP. For best results, we recommend images with at least 1024×1024 pixel resolution."
     },
     {
       question: "Are my photos stored on your servers?",

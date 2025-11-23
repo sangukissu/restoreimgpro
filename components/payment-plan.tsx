@@ -176,7 +176,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
               if (isStarter) {
                 perks = ["5 Credits (Restore 5 Photos)"]
               } else if (isPlus) {
-                perks = ["15 Credits (15 Photos or 1 Video+)"]
+                perks = ["20 Credits (20 Photos or 2 Videos)"]
               } else if (isFamily) {
                 perks = ["60 Credits (60 Photos or 6 Videos)"]
               } else {

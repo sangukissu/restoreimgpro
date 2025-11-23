@@ -206,7 +206,7 @@ export default function FamilyPortraitClient() {
               </div>
               <div>
                 <p className="text-base font-semibold text-gray-900">Drag & drop or click to upload</p>
-                <p className="text-sm text-gray-600">JPG, PNG, WebP up to 20MB each</p>
+                <p className="text-sm text-gray-600">JPG, PNG, WebP up to 10MB each</p>
                 <p className="text-xs text-gray-500 mt-2">Tip: use clear front-facing portraits for best results.</p>
               </div>
             </div>
@@ -214,13 +214,13 @@ export default function FamilyPortraitClient() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {files.map((f, idx) => (
                 <div key={idx} className="relative group rounded-xl overflow-hidden border">
-              <NextImage
-                src={URL.createObjectURL(f)}
-                alt={`Upload ${idx + 1}`}
-                width={200}
-                height={200}
-                className="w-full h-32 sm:h-36 object-cover"
-              />
+                  <NextImage
+                    src={URL.createObjectURL(f)}
+                    alt={`Upload ${idx + 1}`}
+                    width={200}
+                    height={200}
+                    className="w-full h-32 sm:h-36 object-cover"
+                  />
                   <button
                     aria-label="Remove"
                     onClick={(e) => { e.stopPropagation(); removeFile(idx) }}
@@ -239,7 +239,7 @@ export default function FamilyPortraitClient() {
       <div className="space-y-2">
         <label className="block text-lg font-semibold text-black">Aspect ratio</label>
         <div className="grid grid-cols-4 gap-2">
-          {(["1:1","3:4","4:3","16:9"] as AspectRatio[]).map((ratio) => {
+          {(["1:1", "3:4", "4:3", "16:9"] as AspectRatio[]).map((ratio) => {
             const disabled = (ratio === "1:1" || ratio === "3:4") && !canUseNarrow
             const selected = aspectRatio === ratio
             return (
