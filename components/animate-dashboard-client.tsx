@@ -437,15 +437,15 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                   </div>
 
                   {/* Warning Message */}
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex gap-3 items-start">
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-2 mb-6 flex gap-2 items-start">
                     <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                     <div className="space-y-1">
 
-                      <p className="text-amber-700 text-sm leading-relaxed">
+                      <p className="text-amber-700 text-xs leading-relaxed">
                         For best results with old photos, We strongly recommend restoring old or damaged photos before animating them.
                         Animating a damaged photo may not produce good results.
                       </p>
-                      <a href="/dashboard/restore" className="text-amber-800 text-sm font-medium underline hover:text-amber-900 inline-block mt-1">
+                      <a href="/dashboard/restore" className="text-amber-800 text-xs font-medium underline hover:text-amber-900 inline-block">
                         Restore Image First →
                       </a>
                     </div>
