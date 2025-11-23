@@ -238,6 +238,7 @@ const denoiseFAQPageJsonLd = {
   ]
 }
 
+
 export default function DenoisePage() {
   return (
     <div className="min-h-screen bg-white">
