@@ -37,7 +37,7 @@ const ANIMATION_PRESETS = {
   },
   "warm-gaze": {
     name: "Warm Gaze",
-    prompt: "The persons in the image maintain steady, warm eye contact with a loving, subtle smile and peaceful expression"
+    prompt: "The persons in the image looks at each other with steady, warm eye contact with a loving, subtle smile and peaceful expression"
   },
   "peaceful-presence": {
     name: "Peaceful Presence",
