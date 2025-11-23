@@ -17,35 +17,35 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ANIMATION_PRESETS = {
   "gentle-smile": {
     name: "Gentle Smile",
-    prompt: "The people in the image develop a warm, natural smile that appears gradually and holds for a moment"
+    prompt: "The persons in the image develop a warm, natural smile that appears gradually and holds for a moment"
   },
   "smile-wave": {
     name: "Smile + Wave",
-    prompt: "The person in the image smiles warmly and waves their hand in a friendly greeting gesture"
+    prompt: "The persons in the image smiles warmly and waves their hand in a friendly greeting gesture"
   },
   "soft-nod": {
     name: "Soft Nod",
-    prompt: "The people in the image give a single, slow, gentle nod of acknowledgment with a peaceful expression"
+    prompt: "The persons in the image give a single, slow, gentle nod of acknowledgment with a peaceful expression"
   },
   "blink-tilt": {
     name: "Subtle Blink + Head Tilt",
-    prompt: "The person in the image blinks naturally and tilts their head slightly with a gentle expression"
+    prompt: "The persons in the image blinks naturally and tilts their head slightly with a gentle expression"
   },
   "smile-look": {
     name: "Smile + Look Around",
-    prompt: "The person in the image smiles and looks around curiously, moving their eyes and head naturally"
+    prompt: "The persons in the image smiles and looks around curiously, moving their eyes and head naturally with a gentle expression"
   },
   "warm-gaze": {
     name: "Warm Gaze",
-    prompt: "The people in the image maintain steady, warm eye contact with a loving, subtle smile and peaceful expression"
+    prompt: "The persons in the image maintain steady, warm eye contact with a loving, subtle smile and peaceful expression"
   },
   "peaceful-presence": {
     name: "Peaceful Presence",
-    prompt: "The people in the image show very subtle, natural micro-movements that suggest life and presence without dramatic changes"
+    prompt: "The persons in the image show very subtle, natural micro-movements that suggest life and presence without much dramatic changes"
   },
   "loving-recognition": {
     name: "Loving Recognition",
-    prompt: "The people in the image show a moment of gentle recognition, with eyes softening and a hint of a smile"
+    prompt: "The persons in the image show a moment of gentle recognition, with eyes softening and a hint of a smile"
   },
   "serene-moment": {
     name: "Gentle Talking",
@@ -151,16 +151,16 @@ export async function POST(request: NextRequest) {
     }
 
     const preset = ANIMATION_PRESETS[presetId as keyof typeof ANIMATION_PRESETS]
-    
+
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    
+
     // Convert buffer to Blob for Fal AI storage
     const blob = new Blob([buffer], { type: file.type })
-    
+
     // Upload file to Fal AI storage
     const uploadedFile = await fal.storage.upload(blob)
-    
+
     // Create initial database record
     const { data: videoGeneration, error: insertError } = await supabase
       .from("video_generations")
@@ -187,22 +187,22 @@ export async function POST(request: NextRequest) {
       negative_prompt: "blur, distort, and low quality",
       cfg_scale: 0.5
     }
-    
+
     let requestId: string
-    
+
     try {
       // Submit video generation request to FAL queue
       const queueResult = await fal.queue.submit("fal-ai/kling-video/v2.5-turbo/pro/image-to-video", {
         input: input,
         webhookUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/fal/webhook?generationId=${videoGeneration.id}`
       })
-      
+
       requestId = queueResult.request_id
-      
+
       // Update database with generating status and FAL request ID
       await supabase
         .from("video_generations")
-        .update({ 
+        .update({
           fal_video_id: requestId,
           status: "generating"
         })
@@ -224,19 +224,19 @@ export async function POST(request: NextRequest) {
         creditsRemaining: userProfile.credits - 10,
         message: "Video generation started. Use the polling endpoint to check status."
       })
-        
+
     } catch (falError) {
       // Update database with error status
       await supabase
         .from("video_generations")
-        .update({ 
+        .update({
           status: "failed",
           error_message: falError instanceof Error ? falError.message : "Unknown error"
         })
         .eq("id", videoGeneration.id)
-        
+
       logError(falError instanceof Error ? falError : new Error(String(falError)), { userId: user.id, presetId })
-      
+
       if (falError instanceof Error) {
         if (falError.message.includes('authentication') || falError.message.includes('401')) {
           const error = new VideoGenerationError('FAL_AUTH_ERROR', 'Authentication failed with video service. Please check your API key.', 401)
@@ -250,7 +250,7 @@ export async function POST(request: NextRequest) {
       const error = createError.falApiError(falError instanceof Error ? falError.message : 'Unknown error', falError)
       return NextResponse.json(error.toApiResponse(), { status: error.statusCode })
     }
-    
+
   } catch (error) {
     logError(error instanceof Error ? error : new Error(String(error)), { endpoint: 'video-generation' })
     const serverError = new VideoGenerationError('INTERNAL_SERVER_ERROR', 'Failed to start video generation. Please try again.', 500)
@@ -262,7 +262,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   const hasKey = !!process.env.FAL_KEY
   const keyPreview = hasKey ? `${process.env.FAL_KEY?.substring(0, 8)}...` : 'Not set'
-  
+
   return NextResponse.json({
     status: "healthy",
     service: "Video Animation API",
