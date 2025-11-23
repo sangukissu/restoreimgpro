@@ -32,7 +32,7 @@ const comparisonData = [
   },
   {
     feature: "Cost Per Photo",
-    bringback: "Affordable (~$0.50)",
+    bringback: "Affordable (~$1)",
     manual: "$50 - $200+",
     freeTools: "Free (with compromises)",
     icon: YesIcon,
@@ -100,9 +100,8 @@ export default function ComparisonSection() {
                   {comparisonData.map((row, index) => (
                     <tr
                       key={row.feature}
-                      className={`${
-                        index % 2 === 0 ? 'bg-gray-50' : ''
-                      }`}
+                      className={`${index % 2 === 0 ? 'bg-gray-50' : ''
+                        }`}
                     >
                       <td className="text-left text-gray-700 py-5 px-2">{row.feature}</td>
                       <td className="text-left text-gray-800 py-5 px-2">
@@ -132,7 +131,7 @@ export default function ComparisonSection() {
                       </td>
                     </tr>
                   ))}
-                  
+
                   {/* Verdict Row - Proper table row */}
                   <tr className="mt-4">
                     <td className="text-left font-bold text-gray-800 py-6 px-2">Verdict</td>
@@ -150,7 +149,7 @@ export default function ComparisonSection() {
               </table>
             </div>
           </div>
-          
+
           {/* Concluding Paragraph */}
           <div className="text-center mt-16 max-w-3xl mx-auto">
             <p className="text-lg text-gray-600">

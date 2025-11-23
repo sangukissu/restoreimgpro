@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
-import { Sparkles, ChevronRight, Search, Brain, Filter, Sparkle } from "lucide-react"
+import { Sparkles, ArrowRight, Play, Star, Search, Brain, Filter, Sparkle } from "lucide-react"
 import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
 import Link from "next/link"
@@ -252,113 +252,111 @@ export default function DenoisePage() {
       />
       <Navbar />
       {/* Hero Section */}
-      <section className="relative px-4 py-20 pt-32 overflow-hidden">
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(135deg, transparent, transparent 2px, #f3f4f6 2px, #f3f4f6 4px)",
-          }}
-        />
-        <div className="max-w-6xl mx-auto text-center relative z-10">
-          <div className="space-y-6">
-            <div className="space-y-6">
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-4">
-                <Sparkles className="w-3 h-3 mr-1" />
-                AI Powered
-              </div>
-              <h1 className="  text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
-                Clean up{" "}
-                <PointerHighlight
-                  rectangleClassName="bg-purple-100 border-purple-300 leading-tight px-2"
-                  pointerClassName="text-purple-500 h-3 w-3"
-                  containerClassName="inline-block mx-1"
-                >
-                  <span className="relative z-10">grainy photos</span>
-                </PointerHighlight>
-                <br />
-                and rescue
-                <br />
-                <PointerHighlight
-                  rectangleClassName="bg-blue-100 border-blue-300 leading-tight px-2"
-                  pointerClassName="text-blue-500 h-3 w-3"
-                  containerClassName="inline-block mx-1"
-                >
-                  <span className="relative z-10">low-light shots</span>
-                </PointerHighlight>{" "}
-                to perfection
-              </h1>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
-                Remove distracting grain and digital noise from your photos to reveal the smooth, clean image
-                underneath. Quick processing, simple to use, and a lifetime of clean shots.
-              </p>
+      <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 overflow-visible h-auto lg:min-h-screen pt-32 pb-24 lg:pb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center h-full">
+
+          {/* Left Column: Content */}
+          <div className="lg:col-span-6 flex flex-col items-start z-10 justify-center h-full relative">
+
+            {/* Available Badge */}
+            <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-4 py-2 rounded-full mb-8 shadow-lg shadow-black/5">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#FF4D00] animate-pulse"></div>
+              <span className="text-sm font-semibold tracking-wide">AI Powered Denoising</span>
             </div>
-            <div className="flex flex-col gap-4 justify-center items-center w-full">
+
+            {/* Heading */}
+            <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
+              Clean up <br />
+              <span className="text-gray-400 relative">
+                Grainy Photos.
+              </span>
+            </h1>
+
+            {/* Subheading */}
+            <p className="text-lg sm:text-xl text-gray-600 max-w-xl mb-10 font-medium leading-relaxed">
+              Remove distracting grain and digital noise from your photos to reveal the smooth, clean image underneath. Rescue low-light shots in seconds.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-12 w-full max-w-full overflow-visible">
+              {/* Primary: Orange Button */}
               <Link href="/login">
-
-                <Button className="px-8 py-6 group relative overflow-hidden w-full sm:w-auto" size="lg">
-                  <>
-                    <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Denoise Your Photo</span>
-                    <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                      <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-                    </i>
-                  </>
-                </Button>
-              </Link>
-              <p className="text-xs text-gray-500">
-                Only $0.50 per photo
-              </p>
-            </div>
-            <div className="flex flex-col items-center space-y-2 pt-2">
-              <div className="flex items-center space-x-2">
-                <div className="flex -space-x-2">
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
-                  <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
-                  <div className="w-8 h-8 rounded-full bg-gray-900 border-2 border-white flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">17+</span>
+                <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_20px_40px_-12px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
+                  <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Denoise Photo</span>
+                  <div className="w-8 h-8 sm:w-11 sm:h-11 bg-[#111111] rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
+                    <ArrowRight className="text-[#FF4D00] w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                   </div>
-                </div>
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-lg">
-                      ★
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <p className="text-gray-600 font-medium">Loved by Everyone Who Shoots at Night</p>
+                </button>
+              </Link>
+
+              {/* Secondary: White Button */}
+              <Link href="#how-it-works">
+                <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
+                  <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">See Examples</span>
+                  <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                </button>
+              </Link>
             </div>
 
-            {/* Hero Compare Section */}
-            <div className="pt-8 w-full">
-              <div className="max-w-4xl mx-auto">
-
-                <div className="flex justify-center px-4">
-                  <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
-                    <Compare
-                      firstImage="/noise-removed.webp"
-                      secondImage="/after-noise-removal.webp"
-                      firstImageClassName="object-cover"
-                      secondImageClassname="object-cover"
-                      className="h-[280px] w-[400px] md:h-[600px] md:w-[900px] rounded-lg"
-                      slideMode="hover"
-                      firstImageAlt="Before: grainy family photo"
-                      secondImageAlt="After: Denoised family photo with bringback ai"
-                      showHandlebar={true}
+            {/* Social Proof */}
+            <div className="flex items-center gap-6 pl-2">
+              <div className="flex items-center relative h-12 w-[140px]">
+                {[1, 2, 3].map((i, index) => (
+                  <div
+                    key={i}
+                    className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
+                      ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
+                      ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
+                      ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
+                    `}
+                  >
+                    <img
+                      src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
+                      alt="User"
+                      className="w-full h-full object-cover"
                     />
                   </div>
+                ))}
+                <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
+                  130+
                 </div>
               </div>
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-500 max-w-2xl mx-auto">
-                  Watch how BringBack transforms black and white photos into realistic, vibrant color images
-                </p>
+
+              <div className="flex flex-col justify-center">
+                <div className="flex gap-0.5 mb-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
+                  ))}
+                </div>
+                <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 130+ Families</span>
               </div>
             </div>
           </div>
+
+          {/* Right Column: Interactive Demo */}
+          <div className="lg:col-span-6 flex items-center justify-center w-full lg:h-full pt-12 lg:pt-0">
+            <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-[2rem] overflow-hidden shadow-2xl select-none group border-[6px] border-white">
+              <Compare
+                firstImage="/noise-removed.webp"
+                secondImage="/after-noise-removal.webp"
+                firstImageClassName="object-cover w-full h-full"
+                secondImageClassname="object-cover w-full h-full"
+                className="w-full h-full"
+                slideMode="hover"
+                firstImageAlt="Before: grainy photo"
+                secondImageAlt="After: Denoised photo"
+                showHandlebar={true}
+              />
+              {/* Overlay Badge */}
+              <div className="absolute top-6 left-6 z-30 bg-black/40 backdrop-blur-md border border-white/10 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 pointer-events-none">
+                <Sparkles size={16} className="text-brand-orange animate-pulse" />
+                AI Denoise
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 

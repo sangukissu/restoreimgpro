@@ -28,7 +28,7 @@ const FEATURES = [
   {
     label: "Cost Per Photo",
     icon: <Coins size={18} />,
-    bringback: "~$0.50 (Affordable)",
+    bringback: "~$1 (Affordable)",
     manual: "$50 - $200+",
     free: "Free (Low Quality)"
   },

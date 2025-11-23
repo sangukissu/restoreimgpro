@@ -74,16 +74,16 @@ export default function ColorizeBenefitsSection() {
                 </div>
               </div>
 
-              
+
               <Link href="/login">
-            
-             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full ">
-            Colorize 5 Photos for $2.49
-          </FramerButton>
-            </Link>
-              
+
+                <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full ">
+                  Colorize 5 Photos for $2.49
+                </FramerButton>
+              </Link>
+
               <p className="text-xs text-gray-500 mt-2">
-                Only $0.50 per photo
+                Only $1 per photo
               </p>
 
               <p className="text-xs text-gray-500 mt-3">No subscription • No hidden fees</p>

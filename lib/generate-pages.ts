@@ -131,7 +131,7 @@ export function generatePseoPages(): PseoPageData[] {
         },
         {
           feature: "Cost per Photo",
-          bringback: "$0.50",
+          bringback: "$1",
           competitors: "$15-50",
           manual: "$50-300"
         },
@@ -317,7 +317,7 @@ export function generatePseoPages(): PseoPageData[] {
             },
             {
               feature: "Cost per Photo",
-              bringback: "$0.50",
+              bringback: "$1",
               competitors: "$15-50",
               manual: "$50-300"
             },
@@ -494,7 +494,7 @@ export function generatePseoPages(): PseoPageData[] {
           },
           {
             feature: "Cost per Photo",
-            bringback: "$0.50",
+            bringback: "$1",
             competitors: "$5-15",
             manual: "$50-300"
           },

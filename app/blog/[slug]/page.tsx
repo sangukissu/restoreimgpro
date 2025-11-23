@@ -235,12 +235,12 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
             <Link href="/login">
 
               <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
-                Start Restoring for $2.49
+                Start Restoring old photos
               </Button>
             </Link>
 
             <p className="text-xs text-gray-300 mt-2">
-              Only $0.50 per photo
+              Only $1 per photo
             </p>
           </div>
         </div>

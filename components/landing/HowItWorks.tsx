@@ -32,7 +32,7 @@ const STEPS = [
             <div className="w-14 h-16 bg-white rounded-lg shadow-xl border border-gray-100 flex items-center justify-center transform -rotate-6 origin-bottom-right">
               <div className="w-full h-full p-1.5 flex flex-col gap-1">
                 <div className="w-full h-2/3 bg-gray-100 rounded-md overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop" className="w-full h-full object-cover grayscale opacity-60" alt="file" />
+                  <img src="/childhood-memories-black-and-white.webp" className="w-full h-full object-cover grayscale opacity-60" alt="file" />
                 </div>
                 <div className="space-y-1">
                   <div className="w-2/3 h-1.5 bg-gray-200 rounded-full"></div>

@@ -237,7 +237,7 @@ export default function PricingPage() {
                 <tbody className="text-sm">
                   <tr className="border-b border-gray-100">
                     <td className="py-4 px-4 text-gray-700">Price per photo</td>
-                    <td className="py-4 px-4 text-center font-semibold text-green-600">~$0.50</td>
+                    <td className="py-4 px-4 text-center font-semibold text-green-600">~$1</td>
                     <td className="py-4 px-4 text-center text-gray-600">$20-100</td>
                   </tr>
                   <tr className="border-b border-gray-100">
