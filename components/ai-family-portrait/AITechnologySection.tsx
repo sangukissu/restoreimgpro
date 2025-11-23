@@ -34,8 +34,8 @@ export default function AITechnologySection() {
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 
           {/* Left Column: The "How" - Visual & Engaging */}
-          <div className="bg-brand-surface p-8 rounded-[1.8rem] h-full">
-            <div className="bg-white rounded-[1.5rem] p-8 shadow-sm mb-8">
+          <div className="bg-brand-surface p-4 rounded-[1.8rem] h-full">
+            <div className="bg-white rounded-[1.5rem] p-8 shadow-sm">
               <h3 className="text-2xl font-bold text-brand-black mb-4">From Individuals to a Unified Whole</h3>
               <p className="text-gray-600 font-medium leading-relaxed mb-8">
                 Our AI acts like a master portrait artist, analyzing each person's unique features, pose, and lighting. It then intelligently composes them in a virtual space to create a natural, balanced group photo that feels authentic.

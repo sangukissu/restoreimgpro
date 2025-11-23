@@ -3,10 +3,10 @@ import { Footer } from '@/components/landing/Footer';
 import type { Metadata } from "next"
 
 import AIAnimationHero from "@/components/ai-family-portrait/hero"
-import FamilyPortraitShowcase from "@/components/ai-family-portrait/styles-grid"
+import { FamilyPortrait } from "@/components/ai-family-portrait/styles-grid"
 import AIAnimationHowItWorks from "@/components/ai-family-portrait/how-it-works"
 import FamilyPortraitUseCases from "@/components/ai-family-portrait/features"
-import AIAnimationPricingCTA from "@/components/ai-family-portrait/pricing-cta"
+import { CTA } from '@/components/landing/CTA';
 import FamilyPortraitFAQ from "@/components/ai-family-portrait/faq"
 import AITechnologySection from "@/components/ai-family-portrait/AITechnologySection"
 import { Pricing } from "@/components/landing/Pricing"
@@ -185,19 +185,19 @@ const familyPortraitFAQJsonLd = {
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-brand-bg">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitWebAppJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitImageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitFAQJsonLd) }} />
       <Navbar />
       <AIAnimationHero />
-      <FamilyPortraitShowcase />
+      <FamilyPortrait />
       <AIAnimationHowItWorks />
       <Pricing />
       <FamilyPortraitUseCases />
       <AITechnologySection />
       <FamilyPortraitFAQ />
-      <AIAnimationPricingCTA />
+      <CTA />
       <Footer />
     </div>
   )

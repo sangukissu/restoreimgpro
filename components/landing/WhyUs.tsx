@@ -4,7 +4,7 @@ import { Heart, ShieldCheck, Sparkles, Users } from 'lucide-react';
 
 const STATS = [
   {
-    value: '122+',
+    value: '130+',
     label: 'Families have trusted us to restore their albums.',
     dots: [true, true, true, false], // Visual progress
     bullet: false,

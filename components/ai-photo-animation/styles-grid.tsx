@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -127,13 +126,13 @@ function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: str
 
 export default function AnimationStylesGrid() {
   return (
-    <section id="styles" className="px-4 sm:px-8 py-24 bg-brand-surface">
+    <section id="styles" className="px-4 sm:px-8 py-24 bg-brand-bg">
       <div className="max-w-[1320px] mx-auto">
 
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> Styles <span className="text-brand-orange">//</span>
             </div>
 
@@ -150,34 +149,32 @@ export default function AnimationStylesGrid() {
           </div>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {styles.map((style) => (
-            <div key={style.name} className="bg-white p-4 rounded-[1.8rem] transition-all duration-300 group border border-gray-100">
-              <AutoVideo src={style.src} poster={style.photoSrc} alt={style.name} />
+        {/* Grid Container - Gray Background */}
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {styles.map((style) => (
+              <div key={style.name} className="bg-white p-4 rounded-[1.5rem] transition-all duration-300 group hover:shadow-md">
+                <AutoVideo src={style.src} poster={style.photoSrc} alt={style.name} />
 
-              <div className="mt-6 mb-2 px-2">
-                <div className="flex items-center justify-between mb-2">
+                <div className="mt-6 mb-2 px-2">
                   <h3 className="text-xl font-bold text-brand-black tracking-tight">{style.name}</h3>
-                  <div className="w-8 h-8 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Sparkles size={14} />
-                  </div>
+
+                  <p className="text-gray-500 font-medium text-sm leading-relaxed">
+                    {style.description}
+                  </p>
                 </div>
-                <p className="text-gray-500 font-medium text-sm leading-relaxed">
-                  {style.description}
-                </p>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* CTA */}
         <div className="flex justify-center mt-16">
           <Link href="/dashboard/animate">
-            <button className="group relative flex items-center justify-between gap-6 bg-[#111111] text-white pl-8 pr-2 py-2.5 rounded-full transition-all duration-300 hover:scale-105">
+            <button className="group relative flex items-center justify-between gap-6 bg-[#111111] text-white pl-8 pr-2 py-2.5 rounded-full transition-all duration-300">
               <span className="font-bold text-lg tracking-tight">Start Animating</span>
-              <div className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-brand-orange transition-colors duration-300">
-                <ArrowRight className="text-white w-5 h-5" strokeWidth={2.5} />
+              <div className="w-11 h-11 bg-white rounded-full flex items-center justify-center group-hover:bg-brand-orange transition-colors duration-300">
+                <ArrowRight className="w-5 h-5 text-black" strokeWidth={2.5} />
               </div>
             </button>
           </Link>

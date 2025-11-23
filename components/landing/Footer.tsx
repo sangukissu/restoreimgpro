@@ -11,9 +11,9 @@ const XLogo = ({ className }: { className?: string }) => (
 
 export const Footer: React.FC = () => {
     return (
-        <footer className="w-full px-4 sm:px-8 pb-8 pt-0 bg-brand-bg">
+        <footer className="w-full px-4 py-4 bg-brand-bg">
             {/* Main Dark Card Container */}
-            <div className="bg-[#111111] rounded-[1.8rem] px-6 sm:px-12 py-16 text-white overflow-hidden relative">
+            <div className="bg-[#111111] rounded-[1.8rem] px-6 sm:px-12 py-12 text-white overflow-hidden relative">
 
                 {/* Top Section: CTA and Links */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
@@ -32,8 +32,8 @@ export const Footer: React.FC = () => {
                             </div>
 
                             <h2 className="text-5xl sm:text-6xl lg:text-6xl font-extrabold tracking-tight leading-[0.95] mb-8">
-                                Ready to restore <br />
-                                <span className="text-gray-400">your memories?</span>
+                                AI Old Photo Restoration <br />
+                                <span className="text-gray-400">& Animation </span>
                             </h2>
 
                             <p className="text-gray-400 font-medium text-lg max-w-md mb-8">

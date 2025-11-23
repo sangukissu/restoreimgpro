@@ -25,7 +25,7 @@ const STEPS = [
 
 export default function AIAnimationHowItWorks() {
   return (
-    <section id="how-it-works" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
+    <section id="how-it-works" className="w-full px-4 sm:px-8 py-24 ">
       <div className="max-w-[1320px] mx-auto">
 
         {/* Header */}
@@ -37,7 +37,7 @@ export default function AIAnimationHowItWorks() {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[1.1]">
               Your Dream Portrait <br />
               <span className="text-gray-400">in 3 Simple Steps.</span>
             </h2>

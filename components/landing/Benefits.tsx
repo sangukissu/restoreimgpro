@@ -390,7 +390,7 @@ export const Benefits: React.FC = () => {
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Advanced AI <br />
-              <span className="text-gray-400 whitespace-nowrap">Restoration Features.</span>
+              <span className="text-gray-400">Restoration Features.</span>
             </h2>
           </div>
 

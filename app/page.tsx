@@ -17,7 +17,7 @@ import { CTA } from '@/components/landing/CTA';
 
 
 export const metadata: Metadata = {
-  title: "Restore, Colorize & Animate Old damaged Photos Online",
+  title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
   description: "BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.",
   keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration, digital photo frames, photo framing, custom photo frames",
 
@@ -27,7 +27,7 @@ const homePageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/#webapp',
-  name: 'Restore, Colorize & Animate Old damaged Photos Online',
+  name: 'Restore, Colorize & Animate Old damaged Photos Online | BringBack AI',
   description: 'BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.',
   url: 'https://bringback.pro/',
   applicationCategory: 'PhotoEditingApplication',

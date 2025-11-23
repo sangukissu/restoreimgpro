@@ -27,7 +27,7 @@ const patrickHand = Patrick_Hand({
 })
 
 export const metadata: Metadata = {
-  title: "BringBack - AI Photo Restoration & Animation | Revive Old Memories",
+  title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
   description: "BringBack AI restores old, damaged photos and even animates them with AI. Repair faded colors, fix damage, and bring portraits to life in seconds.",
   keywords: "photo restoration, AI photo repair, photo to video, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, bring photos to life, image enhancement, digital photo restoration",
   authors: [{ name: "BringBack Team" }],
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "BringBack - AI Photo Restoration & Animation",
+    title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
     description: "BringBack AI restores old, damaged photos and animates them with AI. Preserve your history and relive memories in motion.",
     url: 'https://bringback.pro',
     siteName: 'BringBack',
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "BringBack - AI Photo Restoration & Animation",
+    title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
     description: "Transform old photos with AI. Restore damage, enhance quality, and even animate your loved ones in seconds.",
     images: ['/og-image.png'],
   },
@@ -85,7 +85,7 @@ const jsonLd = {
       '@id': 'https://bringback.pro/#website',
       url: 'https://bringback.pro/',
       name: 'BringBack',
-      description: 'AI-powered photo restoration and animation service.',
+      description: 'AI-powered premium photo restoration and animation service.',
       publisher: {
         '@id': 'https://bringback.pro/#organization'
       },
@@ -101,7 +101,7 @@ const jsonLd = {
         width: 512,
         height: 512
       },
-      description: 'AI-powered photo restoration and animation service helping people preserve and relive memories.',
+      description: 'AI-powered premium photo restoration and animation service helping people preserve and relive memories.',
       foundingDate: '2025',
       serviceArea: {
         '@type': 'Place',

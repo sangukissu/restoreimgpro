@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Plus, Minus, HelpCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React, { useState } from "react";
+import { Plus, Minus } from "lucide-react";
 
 const faqs = [
   {
@@ -47,72 +46,100 @@ const faqs = [
   },
 ];
 
+const AccordionItem: React.FC<{
+  item: { question: string; answer: string };
+  isOpen: boolean;
+  toggle: () => void;
+}> = ({ item, isOpen, toggle }) => {
+  return (
+    <div
+      onClick={toggle}
+      className={`bg-white rounded-[1.5rem] overflow-hidden transition-all duration-300 cursor-pointer group ${isOpen ? "shadow-sm" : "hover:bg-gray-50"
+        }`}
+    >
+      <div className="p-6 flex justify-between items-center gap-4">
+        <h3 className="text-lg sm:text-xl font-bold text-brand-black leading-tight select-none">
+          {item.question}
+        </h3>
+
+        {/* Toggle Button */}
+        <div
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 cursor-pointer ${isOpen
+            ? "bg-brand-orange text-white"
+            : "bg-gray-100 text-brand-black group-hover:bg-gray-200"
+            }`}
+        >
+          {isOpen ? (
+            <Minus size={20} strokeWidth={2.5} />
+          ) : (
+            <Plus size={20} strokeWidth={2.5} />
+          )}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div
+        className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          }`}
+      >
+        <div className="overflow-hidden">
+          <p className="px-6 pb-8 text-gray-600 font-medium leading-relaxed text-base sm:text-lg max-w-3xl">
+            {item.answer}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function AIAnimationFAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  return (
-    <section className="px-4 sm:px-8 py-24 bg-brand-bg">
-      <div className="max-w-[1320px] mx-auto">
+  const handleToggle = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
-        {/* Header */}
-        <div className="flex flex-col items-center text-center mb-20">
-          <div className="inline-flex items-center gap-2 bg-white border border-gray-200 text-brand-black px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-8">
-            <HelpCircle size={14} className="text-brand-orange fill-brand-orange" />
-            <span>FAQ</span>
+  return (
+    <section className="px-4 sm:px-8 py-24">
+      <div className="max-w-[1320px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+
+          {/* Header Column */}
+          <div className="lg:col-span-5 lg:sticky lg:top-32">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-brand-orange">//</span> FAQs{" "}
+              <span className="text-brand-orange">//</span>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
+              Common <br />
+              <span className="text-gray-400">Questions.</span>
+            </h2>
+
+            {/* Subtitle */}
+            <p className="text-lg text-gray-600 font-medium leading-relaxed max-w-md">
+              Here are the real questions people ask about bringing their photos to life.
+            </p>
           </div>
 
-          <h2 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
-            Common Questions.
-          </h2>
-
-          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl font-medium leading-relaxed">
-            Here are the real questions people ask about bringing their photos to life.
-          </p>
-        </div>
-
-        {/* FAQ Grid */}
-        <div className="max-w-4xl mx-auto space-y-4">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className={cn(
-                "bg-white rounded-[1.5rem] overflow-hidden transition-all duration-300 border border-transparent",
-                openIndex === index ? "border-gray-100" : "hover:bg-white/60"
-              )}
-            >
-              <button
-                className="w-full px-8 py-6 text-left flex items-center justify-between gap-4"
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              >
-                <h3 className="text-lg sm:text-xl font-bold text-brand-black">{faq.question}</h3>
-                <div className={cn(
-                  "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300",
-                  openIndex === index ? "bg-brand-orange text-white" : "bg-gray-100 text-gray-500"
-                )}>
-                  {openIndex === index ? (
-                    <Minus size={16} strokeWidth={3} />
-                  ) : (
-                    <Plus size={16} strokeWidth={3} />
-                  )}
-                </div>
-              </button>
-
-              <div
-                className={cn(
-                  "overflow-hidden transition-all duration-300 ease-in-out",
-                  openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                )}
-              >
-                <div className="px-8 pb-8 pt-0">
-                  <p className="text-gray-600 font-medium leading-relaxed text-lg">
-                    {faq.answer}
-                  </p>
-                </div>
+          {/* Questions Column - The Frame */}
+          <div className="lg:col-span-7">
+            <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+              <div className="flex flex-col gap-3">
+                {faqs.map((faq, index) => (
+                  <AccordionItem
+                    key={index}
+                    item={faq}
+                    isOpen={openIndex === index}
+                    toggle={() => handleToggle(index)}
+                  />
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
-
       </div>
     </section>
   );

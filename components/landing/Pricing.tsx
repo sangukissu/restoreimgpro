@@ -139,9 +139,9 @@ export const Pricing: React.FC = () => {
               <span className="text-brand-orange">//</span> Pricing <span className="text-brand-orange">//</span>
             </div>
 
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[1.1]">
               Simple pricing. <br />
-              <span className="text-gray-400 whitespace-nowrap">Professional results.</span>
+              <span className="text-gray-400">Professional results.</span>
             </h2>
           </div>
 

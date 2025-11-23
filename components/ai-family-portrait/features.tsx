@@ -32,7 +32,7 @@ const USE_CASES = [
 
 export default function FamilyPortraitUseCases() {
   return (
-    <section id="use-cases" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
+    <section id="use-cases" className="w-full px-4 sm:px-8 py-24 ">
       <div className="max-w-[1320px] mx-auto">
 
         {/* Header */}

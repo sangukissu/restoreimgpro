@@ -5,8 +5,10 @@ import AIAnimationHero from "@/components/ai-photo-animation/hero"
 import AnimationStylesGrid from "@/components/ai-photo-animation/styles-grid"
 import AIAnimationHowItWorks from "@/components/ai-photo-animation/how-it-works"
 import AIAnimationFeatures from "@/components/ai-photo-animation/features"
-import AIAnimationPricingCTA from "@/components/ai-photo-animation/pricing-cta"
+import { CTA } from '@/components/landing/CTA';
 import AIAnimationFAQ from "@/components/ai-photo-animation/faq"
+import { Pricing } from "@/components/landing/Pricing"
+
 
 export const metadata: Metadata = {
   title: "AI Photo Animation: Bring Your Old Photos to Life | BringBack AI",
@@ -172,7 +174,7 @@ const animationFAQPageJsonLd = {
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-brand-bg">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationWebAppJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationFAQPageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationHeroVideoJsonLd) }} />
@@ -181,9 +183,10 @@ export default function Page() {
       <AIAnimationHero />
       <AnimationStylesGrid />
       <AIAnimationHowItWorks />
+      <Pricing />
       <AIAnimationFeatures />
       <AIAnimationFAQ />
-      <AIAnimationPricingCTA />
+      <CTA />
 
       <Footer />
     </div>

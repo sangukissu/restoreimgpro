@@ -121,13 +121,13 @@ export default function FamilyPortraitFAQ() {
   };
 
   return (
-    <section id="faqs" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
+    <section id="faqs" className="w-full px-4 sm:px-8 py-24 ">
       <div className="max-w-[1320px] mx-auto">
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
 
           {/* Header Column */}
-          <div className="lg:col-span-5 sticky top-32">
+          <div className="lg:col-span-5 lg:sticky lg:top-32">
             {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> FAQs <span className="text-brand-orange">//</span>

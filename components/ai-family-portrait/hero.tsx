@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function AIAnimationHero() {
   return (
-    <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 pt-32 pb-24 lg:pb-32 overflow-visible">
+    <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 py-12 overflow-visible">
 
       <div className="flex flex-col items-center text-center z-10 relative">
 
@@ -17,7 +17,7 @@ export default function AIAnimationHero() {
         </div>
 
         {/* Heading - Exact Typography */}
-        <h1 className="max-w-5xl text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-8">
+        <h1 className="max-w-5xl text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[1.1] text-[#111111] mb-8">
           Bring Your Family <br />
           <span className="text-gray-400">
             Together.
@@ -55,7 +55,7 @@ export default function AIAnimationHero() {
 
         {/* Visual - Professional Container */}
         <div className="relative w-full max-w-5xl mx-auto">
-          <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white bg-gray-100 aspect-[4/3]">
+          <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white bg-gray-100 aspect-[3/2]">
             <Image
               src="/family-portrait.png"
               alt="Unified modern family portrait"
@@ -78,7 +78,7 @@ export default function AIAnimationHero() {
               <Star key={star} size={16} className="fill-[#FF4D00] text-[#FF4D00]" />
             ))}
           </div>
-          <span className="text-sm font-bold text-gray-600 uppercase tracking-wide">Trusted by 10,000+ Families</span>
+          <span className="text-sm font-bold text-gray-600 uppercase tracking-wide">Trusted by 130+ Families</span>
         </div>
 
       </div>
