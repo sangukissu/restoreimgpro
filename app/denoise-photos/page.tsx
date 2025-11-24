@@ -4,14 +4,16 @@ import { Sparkles, ArrowRight, Play, Star, Search, Brain, Filter, Sparkle } from
 import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
 import Link from "next/link"
-import { PointerHighlight } from "@/components/pointer-highlight"
 import DenoiseHowItWorksSection from "@/components/pages/denoise-how-it-works-section"
-import DenoiseBenefitsSection from "@/components/pages/denoise-benefits-section"
 import DenoiseShowcaseSection from "@/components/pages/denoise-showcase-section"
 import DenoiseFeaturesSection from "@/components/pages/denoise-features-section"
 import DenoiseFAQSection from "@/components/pages/denoise-faq-section"
-import DenoiseMemoriesSection from "@/components/pages/denoise-memories-section"
+import { CTA } from '@/components/landing/CTA';
+import { Clients } from '@/components/landing/Clients';
+import DenoiseTechnologySection from "@/components/pages/denoise-technology-section"
 import { Compare } from "@/components/ui/compare"
+import { Pricing } from '@/components/landing/Pricing';
+
 
 
 export const metadata: Metadata = {
@@ -241,7 +243,7 @@ const denoiseFAQPageJsonLd = {
 
 export default function DenoisePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-brand-bg">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(denoisePageJsonLd) }}
@@ -361,111 +363,13 @@ export default function DenoisePage() {
       </section>
 
       <DenoiseHowItWorksSection />
-      <DenoiseBenefitsSection />
+      <Pricing />
       <DenoiseShowcaseSection />
       <DenoiseFeaturesSection />
-      {/* Technology Behind Section */}
-      <section className="px-6 py-20 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className=" text-4xl lg:text-5xl font-bold text-black mb-4">How our AI understands noise</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Advanced signal processing meets machine learning to separate noise from actual image content
-            </p>
-          </div>
-
-          {/* Process Flow */}
-          <div className="relative">
-            {/* Connecting Line */}
-            <div className="absolute left-8 top-16 bottom-16 w-0.5 bg-gray-200 hidden md:block"></div>
-
-            <div className="space-y-12">
-              <div className="flex items-start space-x-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-black rounded-full flex items-center justify-center relative z-10">
-                  <Search className="w-8 h-8 text-white" />
-                </div>
-                <div className="flex-1 pt-3">
-                  <h3 className="text-xl font-bold text-black mb-3">🔍 Noise Pattern Analysis</h3>
-                  <p className="text-gray-600 mb-4">
-                    Our AI first identifies the type of noise in your photo—whether it's high-ISO grain, color noise
-                    from low light, or digital artifacts from compression.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Luminance noise</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Color noise</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                      Compression artifacts
-                    </span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Banding</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-black rounded-full flex items-center justify-center relative z-10">
-                  <Brain className="w-8 h-8 text-white" />
-                </div>
-                <div className="flex-1 pt-3">
-                  <h3 className="text-xl font-bold text-black mb-3">🧠 Content Preservation</h3>
-                  <p className="text-gray-600 mb-4">
-                    While removing noise, the AI carefully preserves important details like hair texture, fabric
-                    patterns, and facial features that could be mistaken for noise.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Fine details</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Textures</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Sharp edges</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Important patterns</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-black rounded-full flex items-center justify-center relative z-10">
-                  <Filter className="w-8 h-8 text-white" />
-                </div>
-                <div className="flex-1 pt-3">
-                  <h3 className="text-xl font-bold text-black mb-3">⚙️ Selective Processing</h3>
-                  <p className="text-gray-600 mb-4">
-                    Different areas of your photo get different treatment—smooth backgrounds get heavy denoising while
-                    detailed areas like faces get gentle, precise cleaning.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Adaptive strength</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Content-aware</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Region-specific</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-black rounded-full flex items-center justify-center relative z-10">
-                  <Sparkle className="w-8 h-8 text-white" />
-                </div>
-                <div className="flex-1 pt-3">
-                  <h3 className="text-xl font-bold text-black mb-3">✨ Quality Verification</h3>
-                  <p className="text-gray-600 mb-4">
-                    Before delivering results, our AI checks that no important details were lost and that the noise
-                    reduction looks natural and professional.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Natural results</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Detail retention</span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Artifact-free</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-
+      <Clients />
+      <DenoiseTechnologySection />
       <DenoiseFAQSection />
-      <DenoiseMemoriesSection />
-
-
+      <CTA />
       <Footer />
     </div>
   )

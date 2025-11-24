@@ -1,117 +1,218 @@
-"use client"
+"use client";
 
-import { Compare } from "@/components/ui/compare"
-import { Cover } from "@/components/ui/cover"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { ChevronRight } from "lucide-react"
+import React, { useState, useRef, useEffect } from 'react';
+import { ScanLine, Sparkles, Zap, Camera, Film, Palette, Image as ImageIcon } from 'lucide-react';
 
-export default function DenoiseShowcaseSection() {
-  const showcaseItems = [
-  
-    {
-      title: "Low-Light Grain",
-      description: "Cleans up noise from dark indoor or nighttime shots",
-      beforeImage: "/grainy-photo.webp",
-      afterImage: "/grainy-photo-restored.webp",
-      beforeImageAlt: "Before: low light grain photo",
-      afterImageAlt: "After: low light grain photo denoised with bringback ai",
-    },
-    {
-      title: "Color Noise",
-      description: "Eliminates colored speckles and digital artifacts",
-      beforeImage: "/color-noise.webp",
-      afterImage: "/color-noise-removed.webp",
-      beforeImageAlt: "Before: color noise photo",
-      afterImageAlt: "After: color noise photo denoised with bringback ai",
-    },
-    {
-      title: "Old Digital Camera",
-      description: "Removes noise from older digital camera sensors",
-      beforeImage: "/old-digi-camera.webp",
-      afterImage: "/restored-old-digi.webp",
-      beforeImageAlt: "Before: old digital camera noise photo",
-      afterImageAlt: "After: old digital camera noise photo denoised with bringback ai",
-    },
-    {
-      title: "Film Grain Removal",
-      description: "Removes unwanted grain while preserving film character",
-      beforeImage: "/film-grain.webp",
-      afterImage: "/restored-film-grain.webp",
-      beforeImageAlt: "Before: film grain photo",
-      afterImageAlt: "After: film grain photo cleaned with bringback ai",
-    },
-  ]
+// --- Types & Data ---
+
+interface CaseStudy {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  beforeImage: string;
+  afterImage: string;
+  tags: string[];
+}
+
+const CASE_STUDIES: CaseStudy[] = [
+  {
+    id: 'low-light',
+    title: 'Low-Light Grain',
+    description: 'Cleans up heavy noise from dark indoor or nighttime shots while revealing hidden details.',
+    icon: <Zap size={24} />,
+    beforeImage: '/grainy-photo.webp',
+    afterImage: '/grainy-photo-restored.webp',
+    tags: ['ISO Reduction', 'Detail Recovery']
+  },
+  {
+    id: 'color-noise',
+    title: 'Color Noise',
+    description: 'Eliminates distracting colored speckles and digital artifacts without desaturating the image.',
+    icon: <Palette size={24} />,
+    beforeImage: '/color-noise.webp',
+    afterImage: '/color-noise-removed.webp',
+    tags: ['Chroma Denoise', 'Color Fidelity']
+  },
+  {
+    id: 'old-digital',
+    title: 'Old Digital Camera',
+    description: 'Removes sensor noise and compression artifacts common in early digital camera photos.',
+    icon: <Camera size={24} />,
+    beforeImage: '/old-digi-camera.webp',
+    afterImage: '/restored-old-digi.webp',
+    tags: ['Artifact Removal', 'Smoothing']
+  },
+  {
+    id: 'film-grain',
+    title: 'Film Grain Removal',
+    description: 'Intelligently reduces film grain to create a cleaner look while preserving the original character.',
+    icon: <Film size={24} />,
+    beforeImage: '/film-grain.webp',
+    afterImage: '/restored-film-grain.webp',
+    tags: ['Grain Reduction', 'Texture Keeping']
+  }
+];
+
+// --- Interactive Slider Component (Reusable) ---
+
+const ComparisonSlider: React.FC<{ before: string; after: string; active: boolean }> = ({ before, after, active }) => {
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isScanning, setIsScanning] = useState(false);
+
+  // Reset slider and trigger scan effect when active case changes
+  useEffect(() => {
+    if (active) {
+      setSliderPosition(50);
+      setIsScanning(true);
+      const timer = setTimeout(() => setIsScanning(false), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [before, active]);
+
+  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!containerRef.current) return;
+    const { left, width } = containerRef.current.getBoundingClientRect();
+    let clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+    const relativeX = clientX - left;
+    setSliderPosition(Math.min(Math.max((relativeX / width) * 100, 0), 100));
+  };
 
   return (
-    <section className="px-4 py-20 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-6xl mx-auto">
+    <div
+      ref={containerRef}
+      className="relative w-full h-full min-h-[400px] lg:min-h-[600px] overflow-hidden rounded-[1.3rem] cursor-ew-resize select-none group"
+      onMouseMove={handleMove}
+      onTouchMove={handleMove}
+    >
+      {/* AFTER Image (Background) */}
+      <img src={after} alt="After" className="absolute inset-0 w-full h-full object-cover" />
+
+      {/* BEFORE Image (Foreground - Clipped) */}
+      <div
+        className="absolute inset-0 w-full h-full overflow-hidden border-r-[3px] border-white bg-gray-900"
+        style={{ width: `${sliderPosition}%` }}
+      >
+        <img
+          src={before}
+          alt="Before"
+          className="absolute inset-0 w-full h-full object-cover max-w-none grayscale sepia-[0.3] contrast-125 brightness-90 blur-[1px]"
+          style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }}
+        />
+        {/* Simulated Noise Overlay */}
+        <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] pointer-events-none"></div>
+
+        <div className="absolute bottom-6 left-6 bg-black/60 backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold tracking-widest uppercase">Before</div>
+      </div>
+
+      {/* Slider Handle */}
+      <div
+        className="absolute top-0 bottom-0 w-1 bg-transparent z-20"
+        style={{ left: `${sliderPosition}%` }}
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center text-brand-orange transform hover:scale-110 transition-transform">
+          <ScanLine size={18} strokeWidth={2.5} />
+        </div>
+      </div>
+
+      <div className="absolute bottom-6 right-6 bg-brand-orange/90 backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold tracking-widest uppercase z-10">After</div>
+
+      {/* Scanning Effect Animation (Triggers on switch) */}
+      {isScanning && (
+        <div className="absolute inset-0 pointer-events-none z-30 bg-white/10 animate-pulse mix-blend-overlay"></div>
+      )}
+    </div>
+  );
+};
+
+// --- Main Showcase Component ---
+
+export default function DenoiseShowcaseSection() {
+  const [activeId, setActiveId] = useState(CASE_STUDIES[0].id);
+  const activeCase = CASE_STUDIES.find(c => c.id === activeId) || CASE_STUDIES[0];
+
+  return (
+    <section id="showcase" className="w-full px-4 sm:px-8 py-24">
+      <div className="max-w-[1320px] mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-gray-500 italic text-lg mb-4">Real Transformations</p>
-          <h2 className=" text-4xl lg:text-5xl text-black mb-6">
-            Every type of noise,
-            <br />
-            <span className="text-gray-600">
-              <Cover>perfectly cleaned</Cover>
-            </span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            From grainy concert photos to noisy night shots, see how our AI removes every type of digital noise with
-            precision.
-          </p>
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-brand-orange">//</span> Showcase <span className="text-brand-orange">//</span>
+            </div>
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+              Every type of noise, <br />
+              <span className="text-gray-400">perfectly cleaned.</span>
+            </h2>
+          </div>
+          <div className="max-w-sm">
+            <p className="text-lg text-gray-600 font-medium leading-relaxed">
+              From grainy concert photos to noisy night shots, see how our AI removes every type of digital noise with precision.
+            </p>
+          </div>
         </div>
 
-        {/* Showcase Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-          {showcaseItems.map((item, index) => (
-            <div key={index} className="group">
-              <div className="bg-white rounded-2xl p-6 border-6 border-gray-200 bg-transparent">
-                {/* Header */}
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-black mb-2">{item.title}</h3>
-                  <p className="text-gray-600 text-sm">{item.description}</p>
-                </div>
+        {/* Main Layout: Gray Surface Container */}
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto lg:h-[600px]">
 
-                {/* Compare Slider */}
-                <div className="flex justify-center">
-                  <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
-                    <Compare
-                      firstImage={item.beforeImage}
-                      secondImage={item.afterImage}
-                      firstImageClassName="object-cover"
-                      secondImageClassname="object-cover"
-                      className="h-[220px] w-[320px] md:h-[280px] md:w-[400px] rounded-lg"
-                      slideMode="hover"
-                      showHandlebar={true}
-                      firstImageAlt={item.beforeImageAlt}
-                      secondImageAlt={item.afterImageAlt}
-                    />
+            {/* Left Column: Selection Menu (4 cols on desktop) */}
+            <div className="lg:col-span-4 flex flex-col gap-3 h-full">
+              {CASE_STUDIES.map((item) => {
+                const isActive = activeId === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveId(item.id)}
+                    className={`flex-1 text-left p-6 rounded-[1.5rem] transition-all duration-300 group relative overflow-hidden flex flex-col justify-center
+                    ${isActive
+                        ? 'bg-brand-black text-white shadow-xl'
+                        : 'bg-white text-brand-black hover:bg-gray-50'
+                      }`}
+                  >
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${isActive ? 'bg-brand-orange text-white' : 'bg-gray-100 text-gray-500'}`}>
+                        {item.icon}
+                      </div>
+                      <span className="text-xl font-bold tracking-tight">{item.title}</span>
+                    </div>
+                    <p className={`text-sm font-medium ml-14 max-w-[90%] ${isActive ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {item.description}
+                    </p>
+
+                    {/* Active Indicator Arrow */}
+                    {isActive && (
+                      <div className="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 lg:opacity-100 animate-in slide-in-from-left-2">
+                        <Sparkles size={20} className="text-brand-orange" />
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Right Column: Interactive Viewport (8 cols on desktop) */}
+            <div className="lg:col-span-8 h-[500px] lg:h-auto bg-white rounded-[1.5rem] p-2 overflow-hidden relative">
+              <ComparisonSlider
+                before={activeCase.beforeImage}
+                after={activeCase.afterImage}
+                active={true}
+              />
+
+              {/* Floating Tags */}
+              <div className="absolute top-6 right-6 flex gap-2 z-20">
+                {activeCase.tags.map(tag => (
+                  <div key={tag} className="bg-black/50 backdrop-blur border border-white/10 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+                    {tag}
                   </div>
-                </div>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <div className="max-w-2xl mx-auto">
-            <p className="text-gray-600 mb-6">
-              Our AI handles even the most challenging noise problems. Upload your photo and see the difference.
-            </p>
-           
-             <Link href="/login">
-            <Button className="px-8 py-6 group relative overflow-hidden w-auto" size="lg">
-              <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">Denoise Your Photo Now</span>
-              <i className="absolute right-1.5 top-1.5 bottom-1.5 rounded-sm z-10 grid w-1/5 place-items-center transition-all duration-500 bg-primary-foreground/15 group-hover:w-[calc(100%-0.5rem)] group-active:scale-95 text-black-500">
-                <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
-              </i>
-            </Button>
-            </Link>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

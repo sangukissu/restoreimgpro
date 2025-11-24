@@ -3,7 +3,7 @@ import { Cover } from "@/components/ui/cover"
 
 export default function DenoiseBenefitsSection() {
   return (
-    <section className="px-4 py-20 bg-white">
+    <section className="px-4 py-20">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20">

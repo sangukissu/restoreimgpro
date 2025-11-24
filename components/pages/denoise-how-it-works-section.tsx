@@ -141,7 +141,7 @@ const STEPS = [
 
 export default function DenoiseHowItWorksSection() {
   return (
-    <section id="how-it-works" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
+    <section id="how-it-works" className="w-full px-4 sm:px-8 py-24">
       <div className="max-w-[1320px] mx-auto">
 
         {/* Header */}
