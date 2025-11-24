@@ -1,10 +1,11 @@
 // /app/examples/page.tsx
 import { allPseoPages } from '@/lib/generate-pages';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
+import { CTA } from '@/components/landing/CTA';
 import type { Metadata } from 'next';
+import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'AI Photo Restoration Examples & Use Cases | BringBack',
@@ -86,7 +87,7 @@ export default function ExamplesPage() {
     }
   };
   return (
-    <>
+    <div className="min-h-screen bg-brand-bg">
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -94,27 +95,37 @@ export default function ExamplesPage() {
       />
 
       <Navbar />
-      <main className="container mx-auto px-4 pt-30">
-        <h1 className="text-4xl font-bold mb-8 text-center">Use Cases & Examples</h1>
-        <p className="text-lg text-muted-foreground mb-12 text-center max-w-3xl mx-auto">
-          Explore the many ways our AI can restore your photos. Each example below links to a dedicated page with more details.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {allPseoPages.map((page) => (
-            <Link key={page.slug} href={`/restore/${page.slug}`} passHref>
-              <Card className="h-full">
-                <CardHeader>
-                  <CardTitle className="text-lg">{page.h1}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">{page.metaDescription}</p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+      <main className="pt-32 pb-20">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-8">
+          <div className="text-center mb-16">
+            <h1 className="text-4xl lg:text-5xl font-[850] text-brand-black tracking-tight mb-6">Use Cases & Examples</h1>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Explore the many ways our AI can restore your photos. Each example below links to a dedicated page with more details.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+            {allPseoPages.map((page) => (
+              <Link key={page.slug} href={`/restore/${page.slug}`} className="group block h-full">
+                <div className="bg-white rounded-3xl p-8 h-full shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 flex flex-col">
+                  <h3 className="text-xl font-bold text-brand-black mb-3 group-hover:text-brand-orange transition-colors">
+                    {page.h1}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-grow">
+                    {page.metaDescription}
+                  </p>
+                  <div className="flex items-center text-brand-black font-semibold text-sm group-hover:translate-x-1 transition-transform duration-300">
+                    View Example <ArrowRight className="w-4 h-4 ml-2" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
+
+        <CTA />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

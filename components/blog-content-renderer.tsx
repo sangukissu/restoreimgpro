@@ -11,6 +11,53 @@ export default function BlogContentRenderer({ content, className = '' }: BlogCon
   const contentRef = useRef<HTMLDivElement>(null)
   const [isClient, setIsClient] = useState(false)
 
+  // Process content string before rendering to avoid hydration mismatches and DOM manipulation issues
+  const processContent = (html: string) => {
+    let processed = html
+
+    // 1. Enhance Video Tags
+    // Regex to find video tags and ensure they have controls and proper styling
+    processed = processed.replace(
+      /<video([^>]*)>/g,
+      (match, attributes) => {
+        // Check if attributes already exist
+        const hasControls = attributes.includes('controls')
+        const hasPlaysInline = attributes.includes('playsinline')
+        const hasClass = attributes.includes('class="')
+
+        let newAttributes = attributes
+
+        if (!hasControls) newAttributes += ' controls'
+        if (!hasPlaysInline) newAttributes += ' playsinline'
+
+        // Add or append classes
+        const videoClasses = 'w-full h-auto rounded-lg shadow-sm bg-black'
+        if (hasClass) {
+          newAttributes = newAttributes.replace(/class="([^"]*)"/, `class="$1 ${videoClasses}"`)
+        } else {
+          newAttributes += ` class="${videoClasses}"`
+        }
+
+        // Ensure preload is set to metadata or auto
+        if (!newAttributes.includes('preload')) {
+          newAttributes += ' preload="metadata"'
+        }
+
+        return `<video${newAttributes}>`
+      }
+    )
+
+    // 2. Enhance Figures (WordPress specific)
+    processed = processed.replace(
+      /<figure class="wp-block-video">/g,
+      '<figure class="wp-block-video mb-6">'
+    )
+
+    return processed
+  }
+
+  const processedContent = processContent(content)
+
   useEffect(() => {
     setIsClient(true)
   }, [])
@@ -22,8 +69,10 @@ export default function BlogContentRenderer({ content, className = '' }: BlogCon
     const processYouTubeEmbeds = () => {
       const iframes = contentRef.current?.querySelectorAll('iframe[src*="youtube.com"], iframe[src*="youtu.be"]')
       iframes?.forEach((iframe) => {
+        if (iframe.parentElement?.classList.contains('video-wrapper')) return
+
         const wrapper = document.createElement('div')
-        wrapper.className = 'relative w-full mb-6 rounded-lg overflow-hidden'
+        wrapper.className = 'video-wrapper relative w-full mb-6 rounded-lg overflow-hidden'
         wrapper.style.aspectRatio = '16/9'
 
         iframe.className = 'absolute inset-0 w-full h-full'
@@ -39,8 +88,10 @@ export default function BlogContentRenderer({ content, className = '' }: BlogCon
     const processVideoEmbeds = () => {
       const iframes = contentRef.current?.querySelectorAll('iframe[src*="vimeo.com"], iframe[src*="dailymotion.com"]')
       iframes?.forEach((iframe) => {
+        if (iframe.parentElement?.classList.contains('video-wrapper')) return
+
         const wrapper = document.createElement('div')
-        wrapper.className = 'relative w-full mb-6 rounded-lg overflow-hidden'
+        wrapper.className = 'video-wrapper relative w-full mb-6 rounded-lg overflow-hidden'
         wrapper.style.aspectRatio = '16/9'
 
         iframe.className = 'absolute inset-0 w-full h-full'
@@ -99,6 +150,8 @@ export default function BlogContentRenderer({ content, className = '' }: BlogCon
     const processTables = () => {
       const tables = contentRef.current?.querySelectorAll('table')
       tables?.forEach((table) => {
+        if (table.parentElement?.classList.contains('overflow-x-auto')) return
+
         const wrapper = document.createElement('div')
         wrapper.className = 'overflow-x-auto mb-6'
 
@@ -130,43 +183,9 @@ export default function BlogContentRenderer({ content, className = '' }: BlogCon
       })
     }
 
-    // Process native video elements
-    const processVideos = () => {
-      const videos = contentRef.current?.querySelectorAll('video')
-      videos?.forEach((video) => {
-        // Save the src to ensure we don't lose it
-        const src = video.getAttribute('src')
-        const currentSrc = video.currentSrc
-
-        video.className = 'w-full h-auto rounded-lg shadow-sm bg-black'
-        video.setAttribute('controls', 'true')
-        video.setAttribute('playsinline', 'true')
-        video.setAttribute('preload', 'auto')
-        video.setAttribute('crossorigin', 'anonymous')
-
-        // If there are source elements, ensure they are processed
-        const sources = video.querySelectorAll('source')
-        sources.forEach(source => {
-          if (!source.getAttribute('type') && source.getAttribute('src')?.endsWith('.mp4')) {
-            source.setAttribute('type', 'video/mp4')
-          }
-        })
-
-        // Force reload to apply changes
-        video.load()
-
-        // Ensure parent figure (if exists) has proper spacing
-        const parent = video.parentElement
-        if (parent?.tagName === 'FIGURE' && parent.classList.contains('wp-block-video')) {
-          parent.className = 'mb-6'
-        }
-      })
-    }
-
     // Process all content
     processYouTubeEmbeds()
     processVideoEmbeds()
-    processVideos()
     processGalleries()
     processColumns()
     processImages()
@@ -180,7 +199,7 @@ export default function BlogContentRenderer({ content, className = '' }: BlogCon
     <div
       ref={contentRef}
       className={`blog-content max-w-none ${className}`}
-      dangerouslySetInnerHTML={{ __html: content }}
+      dangerouslySetInnerHTML={{ __html: processedContent }}
     />
   )
 }
