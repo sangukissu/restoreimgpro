@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { getPostBySlug, getAllPostSlugs, formatDate, calculateReadingTime, type WordPressPost } from "@/lib/wordpress"
 import { notFound } from "next/navigation"
 import Image from "next/image"
+import { CTA } from '@/components/landing/CTA';
 
 // Generate static paths for all blog posts
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
@@ -133,117 +134,114 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-brand-bg">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostJsonLd) }}
       />
       <Navbar />
-      <main className="pb-20">
-        {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 pt-24 pb-12">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="mb-8">
-              <Link href="/blog" className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+      <main className="py-12">
 
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Blog
-              </Link>
-            </div>
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-8">
 
-            <div className="space-y-6">
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">{category}</span>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>{publishedDate}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  <span>{readTime}</span>
+          {/* Back Link */}
+          <div className="mb-8">
+            <Link href="/blog" className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-brand-black transition-colors uppercase tracking-wide">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Blog
+            </Link>
+          </div>
+
+          {/* Article Container */}
+          <div className="bg-brand-surface p-3 rounded-[2.5rem]">
+
+            {/* Inner White Paper */}
+            <div className="bg-white rounded-[2rem] overflow-hidden">
+
+              {/* Hero Section */}
+              <div className="relative pt-12 pb-12 px-6 sm:px-12 lg:px-20 border-b border-gray-100">
+                <div className="max-w-4xl mx-auto">
+
+                  {/* Meta Tags */}
+                  <div className="flex flex-wrap items-center gap-4 text-sm font-bold text-gray-500 mb-8 uppercase tracking-wide">
+                    <span className="bg-brand-orange/10 text-brand-orange px-3 py-1 rounded-full border border-brand-orange/20">{category}</span>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />
+                      <span>{publishedDate}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      <span>{readTime}</span>
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-[850] text-brand-black leading-[1.05] tracking-tight mb-8">
+                    {post.title}
+                  </h1>
+
+                  {/* Author & Share */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-8 border-t border-gray-100">
+                    <div className="flex items-center gap-4">
+                      {post.author.node.avatar?.url ? (
+                        <Image
+                          src={post.author.node.avatar.url}
+                          alt={post.author.node.name}
+                          width={48}
+                          height={48}
+                          className="rounded-full border-2 border-gray-100"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                          <User className="w-6 h-6 text-gray-400" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-bold text-brand-black text-lg leading-none">{post.author.node.name}</p>
+                        <p className="text-sm text-gray-500 font-medium mt-1">Author</p>
+                      </div>
+                    </div>
+
+                    <ShareButton
+                      title={post.title}
+                      url={`https://bringback.pro/blog/${post.slug}`}
+                      text={post.excerpt || `Check out this article: ${post.title}`}
+                    />
+                  </div>
+
                 </div>
               </div>
 
-              <h1 className="  text-4xl md:text-5xl font-bold text-gray-900 leading-tight">{post.title}</h1>
-
-              {post.excerpt && (
-                <div className="text-xl text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: post.excerpt }} suppressHydrationWarning />
-              )}
-
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3">
-                  {post.author.node.avatar?.url ? (
-                    <Image
-                      src={post.author.node.avatar.url}
-                      alt={post.author.node.name}
-                      width={40}
-                      height={40}
-                      className="rounded-full"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-gray-600" />
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-medium text-gray-900">{post.author.node.name}</p>
-                    <p className="text-sm text-gray-600">Author</p>
-                  </div>
-                </div>
-
-                <div className="ml-auto">
-                  <ShareButton
-                    title={post.title}
-                    url={`https://bringback.pro/blog/${post.slug}`}
-                    text={post.excerpt || `Check out this article: ${post.title}`}
+              {/* Featured Image */}
+              {post.featuredImage?.node?.sourceUrl && (
+                <div className="w-full h-[400px] lg:h-[600px] relative bg-gray-100">
+                  <Image
+                    src={post.featuredImage.node.sourceUrl}
+                    alt={post.featuredImage.node.altText || post.title}
+                    fill
+                    className="object-cover"
+                    priority
                   />
                 </div>
+              )}
+
+              {/* Article Content */}
+              <div className="px-6 sm:px-12 lg:px-20 py-16">
+                <div className="max-w-3xl mx-auto">
+                  {post.excerpt && (
+                    <div className="text-xl sm:text-2xl text-gray-600 font-medium leading-relaxed mb-12 italic border-l-4 border-brand-orange pl-6" dangerouslySetInnerHTML={{ __html: post.excerpt }} suppressHydrationWarning />
+                  )}
+
+                  <BlogContentRenderer content={post.content} className="prose-lg prose-headings:font-bold prose-headings:text-brand-black prose-p:text-gray-600 prose-a:text-brand-orange prose-img:rounded-2xl" />
+                </div>
               </div>
+
             </div>
           </div>
+
         </div>
 
-        {/* Featured Image */}
-        {post.featuredImage?.node?.sourceUrl && (
-          <div className="max-w-4xl mx-auto px-4 relative mt-10 z-10">
-            <div className="bg-white rounded-lg overflow-hidden">
-
-              <Image
-                src={post.featuredImage.node.sourceUrl}
-                alt={post.featuredImage.node.altText || post.title}
-                width={1200}
-                height={800}
-                className="w-full h-auto aspect-[3/2] object-cover"
-                priority
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Article Content */}
-        <div className="max-w-4xl mx-auto px-4 mt-8">
-          <BlogContentRenderer content={post.content} />
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center mt-16 px-4">
-          <div className="bg-black text-white rounded-xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
-            <p className="text-gray-300 mb-6">
-              Join thousands of families who've already brought their precious photos back to life.
-            </p>
-            <Link href="/login">
-
-              <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
-                Start Restoring old photos
-              </Button>
-            </Link>
-
-            <p className="text-xs text-gray-300 mt-2">
-              Only $1 per photo
-            </p>
-          </div>
-        </div>
+        <CTA />
       </main>
       <Footer />
     </div>

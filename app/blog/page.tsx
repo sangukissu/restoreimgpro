@@ -4,6 +4,7 @@ import { Footer } from '@/components/landing/Footer';
 import BlogCard from "@/components/blog-card"
 import Link from "next/link"
 import { OfflineBanner } from "@/components/network-status"
+import { CTA } from '@/components/landing/CTA';
 
 import { Button } from "@/components/ui/button"
 import { getAllPosts, formatDate, calculateReadingTime, extractExcerpt, type WordPressPost } from "@/lib/wordpress"
@@ -66,72 +67,68 @@ async function BlogContent() {
 
 function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-brand-bg">
       <Navbar />
 
       <main className="pt-32 pb-20">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-8">
           {/* Offline Banner */}
           <OfflineBanner />
 
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="  text-3xl font-bold text-black mb-4">Blog</h1>
-            <p className="text-gray-600 max-w-xl mx-auto">
-              Photo restoration tips and insights.
-            </p>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+                <span className="text-brand-orange">//</span> Latest <span className="text-brand-orange">//</span>
+              </div>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+                Stories & <br />
+                <span className="text-gray-400">Restoration Tips.</span>
+              </h1>
+            </div>
+            <div className="max-w-sm">
+              <p className="text-lg text-gray-600 font-medium leading-relaxed">
+                Learn about photo restoration, preservation tips, and read inspiring stories of memories brought back to life.
+              </p>
+            </div>
           </div>
 
-          {/* Blog Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.length > 0 ? (
-              blogPosts.map((post) => (
-                <BlogCard
-                  key={post.slug}
-                  title={post.title}
-                  excerpt={post.excerpt}
-                  slug={post.slug}
-                  publishedAt={post.publishedAt}
-                  readTime={post.readTime}
-                  category={post.category}
-                  image={post.image}
-                />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12">
-                <p className="text-gray-500 text-lg">No blog posts available at the moment.</p>
-                <p className="text-gray-400 text-sm mt-2">Please check your internet connection and try again.</p>
-              </div>
-            )}
+          {/* Blog Grid Container */}
+          <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {blogPosts.length > 0 ? (
+                blogPosts.map((post) => (
+                  <BlogCard
+                    key={post.slug}
+                    title={post.title}
+                    excerpt={post.excerpt}
+                    slug={post.slug}
+                    publishedAt={post.publishedAt}
+                    readTime={post.readTime}
+                    category={post.category}
+                    image={post.image}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-24 bg-white rounded-[1.5rem]">
+                  <p className="text-gray-500 text-lg font-medium">No blog posts available at the moment.</p>
+                  <p className="text-gray-400 text-sm mt-2">Please check your internet connection and try again.</p>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Load More Button - Only show if more than 8 posts */}
           {blogPosts.length > 8 && (
             <div className="text-center mt-12">
-              <button className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-all duration-200 font-medium hover:shadow-lg">
+              <button className="bg-brand-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-all duration-200 font-bold tracking-wide hover:shadow-lg hover:-translate-y-1">
                 Load More Posts
               </button>
             </div>
           )}
         </div>
-        <div className="text-center mt-16 px-4">
-          <div className="bg-black text-white rounded-2xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold mb-4">Ready to restore your memories?</h3>
-            <p className="text-gray-300 mb-6">
-              Join thousands of families who've already brought their precious photos back to life.
-            </p>
-            <Link href="/login">
 
-              <Button className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium">
-                Start restoring old photos
-              </Button>
-            </Link>
-
-            <p className="text-xs text-gray-300 mt-2">
-              Only $1 per photo
-            </p>
-          </div>
-        </div>
+        <CTA />
       </main>
 
       <Footer />
