@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check user credits from user_profiles table
-  
+
     const { data: userProfile, error: profileError } = await supabase
       .from("user_profiles")
       .select("credits")
@@ -100,19 +100,21 @@ export async function POST(request: NextRequest) {
     if (!fileValidation.valid) {
       return NextResponse.json({ error: fileValidation.error }, { status: 400 })
     }
-    
+
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    
+
     // Convert buffer to Blob for Fal AI storage
     const blob = new Blob([buffer], { type: file.type })
-    
+
     // Upload file to Fal AI storage
     const uploadedFile = await fal.storage.upload(blob)
-    
+
     // Prepare input for Fal AI photo restoration API with sanitization
     const input: any = {
       image_url: uploadedFile,
+      safety_tolerance: "6",
+      output_format: "png",
     }
 
     // Add optional parameters if provided
@@ -123,6 +125,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Override with form data if provided
     if (outputFormat) {
       const sanitizedFormat = sanitizeInput(outputFormat)
       if (["jpeg", "png"].includes(sanitizedFormat)) {
@@ -138,7 +141,7 @@ export async function POST(request: NextRequest) {
     }
 
 
-    
+
     let output: any
     try {
       // Use Fal AI photo restoration model
@@ -149,9 +152,9 @@ export async function POST(request: NextRequest) {
           // Processing updates handled silently in production
         },
       })
-      
+
       output = result.data
-      
+
     } catch (falError) {
       if (falError instanceof Error) {
         if (falError.message.includes('authentication') || falError.message.includes('401')) {
@@ -193,24 +196,24 @@ export async function POST(request: NextRequest) {
     // Download the restored image and save it to Supabase storage
     let finalImageUrl: string
 
-    
+
     try {
       // Download the image from Fal AI
       const imageResponse = await fetch(restoredImageUrl)
       if (!imageResponse.ok) {
         throw new Error(`Failed to download image: ${imageResponse.status}`)
       }
-      
+
       const imageBuffer = await imageResponse.arrayBuffer()
       const contentType = imageResponse.headers.get('content-type') || 'image/jpeg'
       const imageBlob = new Blob([imageBuffer], { type: contentType })
-      
+
       // Generate a unique filename with user folder structure
       const timestamp = Date.now()
       const randomId = Math.random().toString(36).substring(2, 15)
       const fileExtension = restoredImageUrl.split('.').pop() || 'png'
       const fileName = `${user.id}/${timestamp}_${randomId}.${fileExtension}`
-      
+
       // Upload directly to the restored_photos bucket (bucket already exists with policies)
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('restored_photos')
@@ -218,18 +221,18 @@ export async function POST(request: NextRequest) {
           contentType: contentType,
           cacheControl: '3600'
         })
-      
+
       if (uploadError) {
         throw new Error(`Storage upload failed: ${uploadError.message}`)
       }
-      
+
       // Get the public URL for the uploaded image
       const { data: urlData } = supabase.storage
         .from('restored_photos')
         .getPublicUrl(fileName)
-      
+
       finalImageUrl = urlData.publicUrl
-      
+
     } catch (storageError) {
       // Fallback: use the original Fal AI URL if storage fails
       finalImageUrl = restoredImageUrl
@@ -287,7 +290,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   const hasKey = !!process.env.FAL_KEY
   const keyPreview = hasKey ? `${process.env.FAL_KEY?.substring(0, 8)}...` : 'Not set'
-  
+
   return NextResponse.json({
     status: "healthy",
     service: "BringBack API",
