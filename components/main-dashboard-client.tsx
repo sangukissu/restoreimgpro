@@ -7,7 +7,7 @@ import PaymentModal from "@/components/payment-modal"
 import PaymentSuccessModal from "@/components/payment-success-modal"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Image as ImageIcon, Users, Video, ChevronRight, Frame } from "lucide-react"
+import { Image as ImageIcon, Users, Video, ChevronRight, Frame, Sparkles } from "lucide-react"
 
 interface MainDashboardClientProps {
   user: {
@@ -73,7 +73,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
 
         {/* Feature Cards */}
         <section>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 p-4">
             {/* Restore Photo */}
             <Card>
               <CardHeader>
@@ -175,6 +175,40 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
               <CardFooter className="justify-between">
                 <div className="text-sm text-gray-600">Free tool</div>
                 <Link href="/dashboard/editor" className="inline-flex items-center">
+                  <Button size="sm" className="inline-flex items-center gap-1">
+                    Open
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
+
+            {/* Nostalgic Hug */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-gray-700" />
+                  Nostalgic Hug
+                </CardTitle>
+                <CardDescription>Create a heartwarming video hug across time.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="rounded-lg overflow-hidden border">
+                  <video
+                    src="/hug/final-video.mp4"
+                    className="w-full h-56 sm:h-40 object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </CardContent>
+              <CardFooter className="justify-between">
+                <div className="text-sm text-gray-600">20 credits per video</div>
+                <Link href="/dashboard/nostalgic-hug" className="inline-flex items-center">
                   <Button size="sm" className="inline-flex items-center gap-1">
                     Open
                     <ChevronRight className="w-4 h-4" />

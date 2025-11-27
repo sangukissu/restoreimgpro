@@ -18,6 +18,8 @@ interface MyMediaClientProps {
     video_url: string | null
     preset_name: string
     created_at: string
+    status?: string
+    type?: string
   }[]
 }
 
@@ -29,6 +31,41 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [isDeletingAllMedia, setIsDeletingAllMedia] = useState(false)
   const { toast } = useToast()
+
+  // Poll for status updates
+  useEffect(() => {
+    const pendingVideos = videos.filter(v => v.status === 'generating' || v.status === 'uploading')
+
+    if (pendingVideos.length === 0) return
+
+    const intervalId = setInterval(async () => {
+      let hasUpdates = false
+
+      for (const video of pendingVideos) {
+        try {
+          // Determine which endpoint to call based on video type
+          const endpoint = (video as any).type === 'nostalgic-hug'
+            ? `/api/nostalgic-hug/status?id=${video.id}`
+            : `/api/fal/animate/status?id=${video.id}`
+
+          const response = await fetch(endpoint)
+          const data = await response.json()
+
+          if (data.status === 'completed' || data.status === 'failed') {
+            hasUpdates = true
+          }
+        } catch (error) {
+          console.error('Error checking status:', error)
+        }
+      }
+
+      if (hasUpdates) {
+        window.location.reload()
+      }
+    }, 5000) // Poll every 5 seconds
+
+    return () => clearInterval(intervalId)
+  }, [videos])
 
   // Show success message if payment was successful
   useEffect(() => {
@@ -61,7 +98,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
 
   const handleDeleteAllMedia = async () => {
     setIsDeletingAllMedia(true)
-    
+
     try {
       const response = await fetch('/api/delete-all-media', {
         method: 'DELETE',
@@ -77,10 +114,10 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
 
       const result = await response.json()
       toast.success('All media deleted successfully!')
-      
+
       // Refresh the page to show updated state
       window.location.reload()
-      
+
     } catch (error) {
       console.error('Error deleting all media:', error)
       toast.error(error instanceof Error ? error.message : 'Failed to delete media')
@@ -105,14 +142,14 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
       </div>
 
       {/* Dashboard Header */}
-      <DashboardHeader 
-        user={user} 
-        credits={credits} 
-        onBuyCredits={handleBuyCredits} 
+      <DashboardHeader
+        user={user}
+        credits={credits}
+        onBuyCredits={handleBuyCredits}
       />
 
       {/* Payment Success Modal */}
-      <PaymentSuccessModal 
+      <PaymentSuccessModal
         isOpen={showPaymentSuccess}
         onClose={() => setShowPaymentSuccess(false)}
         userCredits={credits}
@@ -160,7 +197,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
             </button>
           )}
         </div>
-        
+
         {videos && videos.length > 0 ? (
           <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
             {videos.map((video) => (
@@ -180,7 +217,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
                     <p className="text-gray-500">Video processing...</p>
                   </div>
                 )}
-                
+
               </div>
             ))}
           </div>

@@ -8,26 +8,29 @@ export async function middleware(request: NextRequest) {
   if (securityResponse.status !== 200) {
     return securityResponse
   }
-  
+
   // Check for suspicious activity on sensitive routes
   if (request.nextUrl.pathname.startsWith('/api/')) {
     if (detectSuspiciousActivity(request)) {
       return new Response('Forbidden', { status: 403 })
     }
-    
+
     // Validate origin for state-changing operations
     if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
-      if (!validateOrigin(request)) {
-        return new Response('Invalid origin', { status: 403 })
+      // Skip origin check for webhooks
+      if (!request.nextUrl.pathname.includes('/webhook')) {
+        if (!validateOrigin(request)) {
+          return new Response('Invalid origin', { status: 403 })
+        }
       }
     }
   }
-  
+
   // Apply Supabase session middleware for protected routes
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     return await updateSession(request)
   }
-  
+
   return securityResponse
 }
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { Coins, ChevronDown, LogOut, Image as ImageIcon, Video, UserIcon, ImagePlayIcon, FrameIcon, Users, LayoutList } from "lucide-react"
+import { Coins, Sparkles, ChevronDown, LogOut, Image as ImageIcon, Video, UserIcon, ImagePlayIcon, FrameIcon, Users, LayoutList } from "lucide-react"
 
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
@@ -57,13 +57,13 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
   return (
     <motion.div className="fixed inset-x-0 top-0 z-40 w-full pt-2">
       <motion.div className="relative z-[60] mx-auto w-[70%] max-w-6xl flex items-center justify-between rounded-lg bg-white/95 border border-gray-200 px-6 py-3 hidden backdrop-blur-lg lg:flex">
-       <div className="flex items-center">
+        <div className="flex items-center">
           <a href="/" className="flex items-center gap-2">
-            <Image 
-              src="/header-logo.webp" 
-              alt="BringBack Logo" 
-              width={80} 
-              height={36} 
+            <Image
+              src="/header-logo.webp"
+              alt="BringBack Logo"
+              width={80}
+              height={36}
               className="w-36 h-9"
               style={{ width: 'auto' }}
             />
@@ -98,7 +98,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
 
         {/* Profile Dropdown */}
         <div className="relative profile-dropdown-container">
-          <button 
+          <button
             onClick={() => setShowProfileDropdown(!showProfileDropdown)}
             className="flex items-center gap-2 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors"
           >
@@ -107,7 +107,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
             </span>
             <ChevronDown className="w-3 h-3 text-gray-500" />
           </button>
-          
+
           {showProfileDropdown && (
             <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg border border-gray-200 shadow-lg z-50">
               <div className="p-3 border-b border-gray-100">
@@ -116,10 +116,10 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
                   <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
                 </div>
               </div>
-                  <Link href="/dashboard">
+              <Link href="/dashboard">
 
                 <button
-                 
+
                   className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
                 >
                   <ImageIcon className="w-4 h-4" />
@@ -130,16 +130,34 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
               </Link>
               <Link href="/dashboard/animate">
                 <button
-                 
+
                   className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
                 >
                   <Video className="w-4 h-4" />
                   Animate
                 </button>
               </Link>
+               <Link href="/dashboard/family-portrait">
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <LayoutList className="w-4 h-4" />
+                    Family Portrait
+                  </button>
+                </Link>
+                <Link href="/dashboard/nostalgic-hug">
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Nostalgic Hug
+                  </button>
+                </Link>
               <Link href="/dashboard/my-media">
                 <button
-                 
+
                   className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
                 >
                   <ImagePlayIcon className="w-4 h-4" />
@@ -148,24 +166,24 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
               </Link>
               <Link href="/dashboard/editor">
                 <button
-                 
+
                   className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
                 >
                   <FrameIcon className="w-4 h-4" />
                   Digital Framing
                 </button>
               </Link>
-                <Link href="/dashboard/referrals">
+              <Link href="/dashboard/referrals">
                 <button
-                 
+
                   className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
                 >
                   <Users className="w-4 h-4" />
                   Referrals
                 </button>
               </Link>
-              
-         
+
+
               <button
                 onClick={handleSignOut}
                 className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
@@ -182,17 +200,17 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
       <motion.div className="relative z-50 mx-auto flex w-[95%] max-w-[calc(100vw-1rem)] items-center justify-between bg-white/95 border border-gray-200 rounded-lg backdrop-blur-lg py-3 px-4 lg:hidden">
         <div className="flex items-center">
           <a href="/" className="flex items-center gap-2">
-            <Image 
-              src="/header-logo.webp" 
-              alt="BringBack Logo" 
-              width={80} 
-              height={36} 
+            <Image
+              src="/header-logo.webp"
+              alt="BringBack Logo"
+              width={80}
+              height={36}
               className="w-36 h-9"
               style={{ width: 'auto' }}
             />
           </a>
         </div>
-        
+
         <div className="flex items-center gap-3">
           {/* Mobile Credits Display */}
           <div className="flex items-center gap-2 text-sm">
@@ -201,7 +219,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
               {credits}
             </span>
           </div>
-          
+
           {/* Mobile Buy Credits Button */}
           <button
             onClick={() => {
@@ -219,10 +237,10 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
           >
             Buy
           </button>
-          
+
           {/* Mobile Profile Button */}
           <div className="relative profile-dropdown-container">
-            <button 
+            <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
             >
@@ -230,7 +248,7 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
                 {user.email?.charAt(0).toUpperCase() || "U"}
               </span>
             </button>
-            
+
             {showProfileDropdown && (
               <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg border border-gray-200 shadow-lg z-50">
                 <div className="p-3 border-b border-gray-100">
@@ -239,63 +257,72 @@ export default function DashboardHeader({ user, credits, onBuyCredits }: Dashboa
                     <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
                   </div>
                 </div>
-                  <Link href="/dashboard">
+                <Link href="/dashboard">
 
-                <button
-                 
-                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                  <span className="text-sm font-medium text-gray-900 truncate">
-                    Dashboard
-                  </span>
-                </button>
-              </Link>
-              <Link href="/dashboard/animate">
-                <button
-                 
-                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
-                >
-                  <Video className="w-4 h-4" />
-                  Animate
-                </button>
-              </Link>
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <ImageIcon className="w-4 h-4" />
+                    <span className="text-sm font-medium text-gray-900 truncate">
+                      Dashboard
+                    </span>
+                  </button>
+                </Link>
+                <Link href="/dashboard/animate">
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <Video className="w-4 h-4" />
+                    Animate
+                  </button>
+                </Link>
                 <Link href="/dashboard/my-media">
-                <button
-                 
-                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
-                >
-                  <ImagePlayIcon className="w-4 h-4" />
-                  My Media
-                </button>
-              </Link>
-              <Link href="/dashboard/family-portrait">
-                <button
-                 
-                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
-                >
-                  <LayoutList className="w-4 h-4" />
-                  Family Portrait
-                </button>
-              </Link>
-              <Link href="/dashboard/editor">
-                <button
-                 
-                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
-                >
-                  <FrameIcon className="w-4 h-4" />
-                  Digital Framing
-                </button>
-              </Link>
-              <Link href="/dashboard/referrals">
-                <button
-                 
-                  className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
-                >
-                  <Users className="w-4 h-4" />
-                  Referrals
-                </button>
-              </Link>
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <ImagePlayIcon className="w-4 h-4" />
+                    My Media
+                  </button>
+                </Link>
+                <Link href="/dashboard/family-portrait">
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <LayoutList className="w-4 h-4" />
+                    Family Portrait
+                  </button>
+                </Link>
+                <Link href="/dashboard/nostalgic-hug">
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Nostalgic Hug
+                  </button>
+                </Link>
+                <Link href="/dashboard/editor">
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <FrameIcon className="w-4 h-4" />
+                    Digital Framing
+                  </button>
+                </Link>
+                <Link href="/dashboard/referrals">
+                  <button
+
+                    className="w-full text-left px-3 py-2 text-sm  transition-colors flex items-center gap-2"
+                  >
+                    <Users className="w-4 h-4" />
+                    Referrals
+                  </button>
+                </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
