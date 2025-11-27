@@ -208,7 +208,7 @@ export const Hero: React.FC = () => {
                   <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
                 ))}
               </div>
-              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 130+ Families</span>
+              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 190+ Families</span>
             </div>
           </div>
         </div>

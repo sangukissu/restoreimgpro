@@ -141,7 +141,7 @@ export const Hero: React.FC = () => {
           <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
             Restore Old, <br />
             Damaged & Faded <br />
-            <span className="text-gray-300 relative">
+            <span className="text-gray-400 relative">
               photos with precision.
             </span>
           </h1>
@@ -166,7 +166,7 @@ export const Hero: React.FC = () => {
             </Link>
 
             {/* Secondary: Black Button with Orange Circle Play */}
-            <Link href="/">
+            <Link href="#showcase">
 
               <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black border border-gray-200 pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-transform duration-200 hover:scale-105 active:scale-95 shadow-sm shrink-0 hover:border-gray-300">
                 <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">See Demo</span>
@@ -208,7 +208,7 @@ export const Hero: React.FC = () => {
                   <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
                 ))}
               </div>
-              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 130+ Families</span>
+              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 190+ Families</span>
             </div>
           </div>
         </div>

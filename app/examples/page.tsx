@@ -97,17 +97,36 @@ export default function ExamplesPage() {
       <Navbar />
       <main className="pt-32 pb-20">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-8">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl lg:text-5xl font-[850] text-brand-black tracking-tight mb-6">Use Cases & Examples</h1>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Explore the many ways our AI can restore your photos. Each example below links to a dedicated page with more details.
+          
+                   {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+          <div className="max-w-2xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-brand-orange">//</span> Use Cases <span className="text-brand-orange">//</span>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+               Use Cases & Examples <br />
+              <span className="text-gray-400">of Bringback AI</span>
+            </h2>
+          </div>
+
+          {/* Subtitle */}
+          <div className="max-w-sm">
+            <p className="text-lg text-gray-600 font-medium leading-relaxed">
+Explore the many ways our AI can restore your photos. Each example below links to a dedicated page with more details.
+
             </p>
           </div>
+        </div>
+
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
             {allPseoPages.map((page) => (
               <Link key={page.slug} href={`/restore/${page.slug}`} className="group block h-full">
-                <div className="bg-white rounded-3xl p-8 h-full shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 flex flex-col">
+                <div className="bg-white rounded-3xl p-8 h-full shadow-sm border border-gray-100 hover:shadow-xs transition-all duration-300 flex flex-col">
                   <h3 className="text-xl font-bold text-brand-black mb-3 group-hover:text-brand-orange transition-colors">
                     {page.h1}
                   </h3>

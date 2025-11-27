@@ -181,7 +181,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                   </h1>
 
                   {/* Author & Share */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-8 border-t border-gray-100">
+                  <div className="flex sm:items-center justify-between gap-6 pt-8 border-t border-gray-100">
                     <div className="flex items-center gap-4">
                       {post.author.node.avatar?.url ? (
                         <Image
@@ -214,14 +214,18 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
 
               {/* Featured Image */}
               {post.featuredImage?.node?.sourceUrl && (
-                <div className="w-full h-[400px] lg:h-[600px] relative bg-gray-100">
-                  <Image
-                    src={post.featuredImage.node.sourceUrl}
-                    alt={post.featuredImage.node.altText || post.title}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
+                <div className="w-full flex justify-center px-4 sm:px-8">
+                  <div className="relative w-full max-w-[1200px] bg-gray-100 rounded-[1.5rem] overflow-hidden">
+                    <Image
+                      src={post.featuredImage.node.sourceUrl}
+                      alt={post.featuredImage.node.altText || post.title}
+                      width={1200}
+                      height={800}
+                      className="w-full h-auto object-cover"
+                      sizes="(max-width: 1200px) 100vw, 1200px"
+                      priority
+                    />
+                  </div>
                 </div>
               )}
 

@@ -91,7 +91,7 @@ export const FAQ: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
 
           {/* Header Column */}
-          <div className="lg:col-span-5 sticky top-32">
+          <div className="lg:col-span-5 sm:sticky top-32">
             {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> FAQs <span className="text-brand-orange">//</span>

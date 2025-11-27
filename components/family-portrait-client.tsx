@@ -235,7 +235,9 @@ export default function FamilyPortraitClient() {
         </div>
         <input ref={fileInputRef} type="file" accept={acceptTypes} multiple onChange={onInputChange} className="hidden" />
       </div>
-
+      <div>
+        <p className="text-xs text-gray-500 mt-2">Alert: If your photo is old, damaged, or blurry,  we strongly recommend restoring it first before using it for this service.</p>
+      </div>
       <div className="space-y-2">
         <label className="block text-lg font-semibold text-black">Aspect ratio</label>
         <div className="grid grid-cols-4 gap-2">

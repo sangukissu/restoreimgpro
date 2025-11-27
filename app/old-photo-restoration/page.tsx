@@ -10,6 +10,7 @@ import { PhotoAnimation } from '@/components/old-photo-restoration/PhotoAnimatio
 import { Benefits } from '@/components/old-photo-restoration/Benefits';
 import { Pricing } from '@/components/landing/Pricing';
 import { Clients } from '@/components/landing/Clients';
+import { Comparison } from '@/components/landing/Comparison';
 import { FAQ } from '@/components/old-photo-restoration/FAQ';
 import { Footer } from '@/components/landing/Footer';
 import { CTA } from '@/components/old-photo-restoration/CTA';
@@ -66,182 +67,97 @@ const homeFAQPageJsonLd = {
     mainEntity: [
         {
             '@type': 'Question',
-            name: 'How does AI photo restoration actually work?',
+            name: 'Can AI restore photos with water damage or mold stains?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Our AI analyzes millions of photo patterns to understand how damage occurs and how to reverse it. It identifies faces, textures, and objects, then intelligently reconstructs missing or damaged areas while preserving the original character of your photo. The process happens in seconds, but the technology behind it represents years of machine learning development.'
+                text: 'Yes. BringBack’s AI is trained to distinguish between the original photo content and surface damage like water stains, ink spills, or mold spots. The tool digitally removes the stain and uses context-aware technology to reconstruct the missing parts of the image underneath.'
             }
         },
         {
             '@type': 'Question',
-            name: 'How does AI photo animation work?',
+            name: 'My old photos are very blurry. Can you sharpen faces?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Our AI animation technology analyzes facial features and expressions in your photos to create natural, lifelike movements. It can generate subtle animations like smiling, waving, blinking, and head tilts while maintaining the original character and authenticity of the person in the photo.'
+                text: 'Absolutely. We use specialized facial enhancement algorithms. The AI detects facial landmarks (eyes, nose, mouth) even in blurry or out-of-focus images and reconstructs high-definition details, making faces look sharp and clear as if they were taken with a modern camera.'
             }
         },
         {
             '@type': 'Question',
-            name: 'What types of photo damage can BringBack fix?',
+            name: 'How do I repair a torn photo or one with scratches and creases?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'We can restore virtually any type of damage: tears, scratches, water stains, fading, yellowing, blur, darkness, cracks, and missing pieces. Our AI handles both physical damage (like tears) and quality issues (like blur or low resolution). If you can see some of the original photo, we can likely restore it.'
+                text: 'You don\'t need manual tools. Once you scan and upload your torn photo, our \"Scratch & Tear Removal\" model automatically identifies cracks and white creases. It fills these gaps by analyzing the surrounding pixels, seamlessly stitching the photo back together digitally.'
             }
         },
         {
             '@type': 'Question',
-            name: 'What animation styles are available?',
+            name: 'Can I restore a photo and colorize it at the same time?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'We offer three animation presets: Smile + Wave (natural smile with gentle wave gesture), Subtle Blink + Head Tilt (soft blinking with slight head movement), and Smile + Look Around (light smile with curious gaze movement). Each animation is designed to bring your photos to life naturally.'
+                text: 'Yes. BringBack acts as an all-in-one restoration suite. You can repair the physical damage (scratches/tears) and then use our AI Colorizer to turn black-and-white photos into realistic color images in a single workflow.'
             }
         },
         {
             '@type': 'Question',
-            name: 'How much do photo restoration and animation cost?',
+            name: 'Is it safe to upload my private family photos?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Photo restoration: We offer 5 high-quality photo restorations for just $2.49 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.'
+                text: 'Your privacy is our priority. We use advanced encryption for all uploads. Furthermore, BringBack automatically deletes your images from our servers after a short period (usually 24 hours) to ensure your personal memories remain private and are not used for anything else.'
             }
         },
         {
             '@type': 'Question',
-            name: 'Is my personal data and photos safe?',
+            name: 'What is the best resolution to scan old photos for restoration?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is auotmatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you.'
+                text: 'For the best AI results, we recommend scanning your photos at 300 DPI to 600 DPI (dots per inch). This ensures the AI has enough pixel data to accurately sharpen details and remove grain. If you don\'t have a scanner, you can use a high-quality scanning app on your smartphone in a well-lit room.'
             }
         },
         {
             '@type': 'Question',
-            name: 'How long does the restoration and animation process take?',
+            name: 'Will the restored photo be good enough to print?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Photo restoration takes under 30-60 seconds, while photo animation typically takes 2-3 minutes. Both processes happen in real-time with no waiting days or weeks like traditional services.'
+                text: 'Yes. Our restoration process includes AI Upscaling. This increases the resolution of your small wallet-sized photos or old snapshots, allowing you to print them as 4x6, 5x7, or even 8x10 portraits without pixelation or blur.'
             }
         },
         {
             '@type': 'Question',
-            name: 'What if I\'m not satisfied with the results?',
+            name: 'Is there a free way to restore old photos online?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'We\'re confident you\'ll love the results, but if you\'re not completely satisfied, we offer a full refund within 30 days. Our AI produces consistently high-quality results for both restoration and animation, but we stand behind every service with our satisfaction guarantee.'
+                text: 'BringBack offers a free trial so you can test the power of our AI restoration before committing. You can upload a photo to see the \"Before vs. After\" results instantly. Premium plans are available for high-resolution downloads without watermarks.'
             }
         },
         {
             '@type': 'Question',
-            name: 'Can I use restored and animated photos commercially?',
+            name: 'How long does the AI restoration process take?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Yes! Once processed, the photos and videos are yours to use however you\'d like - personal use, commercial projects, printing, sharing, or selling. We don\'t retain any rights to your enhanced content. They\'re your memories, enhanced and returned to you.'
+                text: 'Unlike manual restoration services which can take days or weeks, BringBack restores photos in 5 to 10 seconds. It is an automated, instant process, allowing you to restore entire albums in minutes.'
             }
         },
         {
             '@type': 'Question',
-            name: 'What file formats do you support?',
+            name: 'Can I animate my photo after restoring it?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'We support all common image formats including JPG, PNG, TIFF, and BMP for both restoration and animation. You can upload photos up to 50MB in size. Restored photos are delivered in high-resolution PNG format, while animations are provided as MP4 videos.'
-            }
-        },
-        {
-            '@type': 'Question',
-            name: 'Can you animate very old or damaged photos?',
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'For best animation results, we recommend restoring damaged photos first, then animating them. Our AI works best with clear facial features and good image quality. However, we can often animate moderately damaged photos with visible faces.'
-            }
-        },
-        {
-            '@type': 'Question',
-            name: 'How does this compare to manual photo restoration?',
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Traditional restoration can take weeks and cost $50-200 per photo. Our AI delivers comparable or better results in seconds for a fraction of the cost. Animation would be nearly impossible manually, but our AI creates natural movements that bring your memories to life instantly.'
-            }
-        },
-        {
-            '@type': 'Question',
-            name: 'Can you restore very old or severely damaged photos?',
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Yes! Our AI excels at restoring even severely damaged photos from decades ago. The more of the original photo that\'s visible, the better the results. Even if large portions are missing or damaged, our AI can often reconstruct them based on surrounding context and learned patterns.'
-            }
-        },
-        {
-            '@type': 'Question',
-            name: 'What is old photo restoration?',
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Old photo restoration uses AI to automatically repair faded, torn, scratched, or discolored photographs—returning them to vibrant, clear versions that can then be animated to bring your ancestors to life.'
-            }
-        },
-        {
-            '@type': 'Question',
-            name: 'Are my uploaded photos kept private?',
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Yes. Photos are processed securely, and uploaded photos are automatically deleted from our servers within 30 minutes and generated media is deleted after 7 days for privacy. We never use your personal photos for training or any other purpose.'
-            }
-        },
-        {
-            '@type': 'Question',
-            name: 'What digital frame styles are available?',
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'We offer a variety of digital frame styles including classic wooden frames, modern metallic frames, vintage ornate frames, and minimalist borders. You can customize colors, add matting, and include personalized captions to create the perfect display for your restored memories.'
-            }
-        },
-        {
-            '@type': 'Question',
-            name: 'How much do digital frames cost?',
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Digital frame creation is included with our restoration and animation services for free. Once you\'ve restored or animated your photo, you can add beautiful frames at no additional cost. The frames are delivered as high-resolution images perfect for printing or digital display.'
-            }
-        },
-        {
-            '@type': 'Question',
-            name: 'Can I print or enlarge restored photos?',
-            acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Definitely. Restored images and framed photos maintain high resolution and quality, ideal for printing or enlargements. Animated videos can be shared digitally or converted to GIFs for various uses.'
+                text: 'Yes! We highly recommend restoring your photo first to remove scratches and sharpen the face. Once the photo is clean, you can use our Live Portrait feature to make your ancestors smile, blink, and move realistically.'
             }
         }
     ]
 }
 
-const tornRestorationVideoJsonLd = {
+// Video schema aligned with PhotoAnimation component usage
+const photoAnimationVideoJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'VideoObject',
-    name: 'Torn Photo Restoration Demo — BringBack AI',
+    name: 'Live Portrait — Photo Animation Demo',
     description:
-        'Watch BringBack AI rebuild a photo torn into multiple pieces, preserving faces and reconstructing missing areas with high fidelity.',
-    thumbnailUrl: 'https://bringback.pro/torn-tear.webp',
-    uploadDate: '2025-11-05T00:00:00Z',
-    contentUrl: 'https://bringback.pro/videos/tear-torn-restoration.mp4',
-    embedUrl: 'https://bringback.pro/#what-is-ai',
-    publisher: {
-        '@type': 'Organization',
-        name: 'BringBack',
-        url: 'https://bringback.pro/'
-    },
-    potentialAction: {
-        '@type': 'WatchAction',
-        target: 'https://bringback.pro/#what-is-ai'
-    }
-}
-
-const heroVideoJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'VideoObject',
-    name: 'BringBack — Photo Restoration Demo (Hero)',
-    description:
-        'Quick demo of BringBack restoring old, faded photos using AI with before/after results.',
+        'Short demo showing BringBack’s Live Portrait animating faces (smile, blink, look).',
     thumbnailUrl: 'https://bringback.pro/video-thumbnail.webp',
     uploadDate: '2025-11-05T00:00:00Z',
-    contentUrl: 'https://www.youtube.com/watch?v=K_CYXkv2Yso',
-    embedUrl: 'https://www.youtube.com/embed/K_CYXkv2Yso',
+    contentUrl: 'https://bringback.pro/videos/video-animation1.mp4',
     publisher: {
         '@type': 'Organization',
         name: 'BringBack',
@@ -249,7 +165,7 @@ const heroVideoJsonLd = {
     },
     potentialAction: {
         '@type': 'WatchAction',
-        target: 'https://bringback.pro/'
+        target: 'https://bringback.pro/ai-photo-animation'
     }
 }
 
@@ -266,11 +182,7 @@ export default function Page() {
             />
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(tornRestorationVideoJsonLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(heroVideoJsonLd) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(photoAnimationVideoJsonLd) }}
             />
             {/* Navbar - Fixed to stay at top during scroll */}
             <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
@@ -285,6 +197,7 @@ export default function Page() {
                 <PhotoAnimation />
                 <Benefits />
                 <Pricing />
+                <Comparison />
                 <Clients />
                 <FAQ />
                 <CTA />

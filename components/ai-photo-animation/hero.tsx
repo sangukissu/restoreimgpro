@@ -157,7 +157,7 @@ export default function AIAnimationHero() {
                 <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
               ))}
             </div>
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Trusted by 10,000+ Families</span>
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Trusted by 190+ Families</span>
           </div>
         </div>
 

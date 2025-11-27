@@ -62,21 +62,31 @@ const FOOTER_HEIGHT = "h-32";
 
 export const Comparison: React.FC = () => {
   return (
-    <section id="comparison" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
+    <section id="comparison" className="w-full px-4 sm:px-8 py-12 bg-brand-bg">
       <div className="max-w-[1320px] mx-auto">
 
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-            <span className="text-brand-orange">//</span> Benchmark <span className="text-brand-orange">//</span>
+        
+         {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+          <div className="max-w-2xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-brand-orange">//</span> Best Pricing <span className="text-brand-orange">//</span>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+                Why BringBack is <br />
+              <span className="text-gray-400">smartest choice.</span>
+            </h2>
           </div>
-          <h2 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-brand-black leading-[0.95] mb-6">
-            Why BringBack is the <br />
-            <span className="text-gray-400">smartest choice.</span>
-          </h2>
-          <p className="text-lg text-gray-600 font-medium">
+
+          {/* Subtitle */}
+          <div className="max-w-sm">
+            <p className="text-lg text-gray-600 font-medium leading-relaxed">
             We compared the top restoration methods so you don't have to.
-          </p>
+            </p>
+          </div>
         </div>
 
         {/* DESKTOP: Column-Based Layout (Guaranteed Alignment) */}
@@ -104,7 +114,7 @@ export const Comparison: React.FC = () => {
           </div>
 
           {/* --- COL 2: BringBack AI (The Spotlight Card) (30%) --- */}
-          <div className="w-[30%] bg-white rounded-[2.5rem] shadow-xl border border-gray-100 relative z-20 transform -translate-y-4 pb-4">
+          <div className="w-[30%] bg-white rounded-[2.5rem] shadow-xs border border-gray-100 relative z-20 transform ">
             {/* Highlight Line */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-1.5 bg-brand-orange rounded-b-full"></div>
 
@@ -182,11 +192,10 @@ export const Comparison: React.FC = () => {
         </div>
 
         {/* MOBILE: Card Layout (Unchanged as it works well for small screens) */}
-        <div className="lg:hidden flex flex-col gap-6">
+        <div className="lg:hidden flex flex-col gap-6 bg-brand-surface p-4 rounded-[1.8rem]">
 
           {/* BringBack Card (Featured) */}
-          <div className="bg-white rounded-[2rem] p-8 shadow-xl border-2 border-brand-black relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-2 bg-brand-orange"></div>
+          <div className="bg-white rounded-[1.5rem] p-6 border relative overflow-hidden">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-10 h-10 bg-brand-black rounded-xl flex items-center justify-center text-white">
                 <Sparkles size={20} fill="currentColor" />
@@ -206,14 +215,6 @@ export const Comparison: React.FC = () => {
             </div>
           </div>
 
-          {/* Others (Collapsed) */}
-          <div className="bg-brand-surface rounded-[2rem] p-8 opacity-80 grayscale">
-            <h3 className="font-bold text-xl text-gray-500 mb-6 text-center">Manual Services</h3>
-            <div className="space-y-3 text-center">
-              <div className="text-sm text-gray-400">Expensive ($50+)</div>
-              <div className="text-sm text-gray-400">Slow Turnaround</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

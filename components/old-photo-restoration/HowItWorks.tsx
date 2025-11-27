@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ImagePlus, Wand2, Download, MousePointer2, CheckCircle2, UploadCloud } from 'lucide-react';
+import { ImagePlus, Wand2, Download, MousePointer2, CheckCircle2, UploadCloud, HardDriveDownload, FileCheck } from 'lucide-react';
 
 const STEPS = [
   {
@@ -97,35 +97,50 @@ const STEPS = [
     title: "Download",
     description: "Get your studio-quality digital photo, ready to print or share.",
     icon: <Download size={24} className="text-brand-black" />,
-    visual: (
-      <div className="w-full h-full relative bg-[#FAFAFA] overflow-hidden flex items-center justify-center p-6 group/download">
+   visual: (
+      <div className="w-full h-full relative bg-[#F9F9F9] overflow-hidden flex items-center justify-center p-6">
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
+        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
 
-        {/* Wide Card */}
-        <div className="w-full max-w-[340px] bg-white rounded-2xl shadow-sm border border-gray-100 p-3 pr-5 flex items-center gap-4 transition-all duration-300 hover:shadow-md hover:border-gray-200">
+        {/* Professional Wide File Card - Cleaner, Less Shadow */}
+        <div className="w-full max-w-[320px] bg-white rounded-xl border border-gray-200/80 p-4 flex items-center gap-4 relative z-10 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+           
+           {/* File Icon / Thumb */}
+           <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0 relative overflow-hidden">
+               <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop" className="w-full h-full object-cover opacity-90" alt="Thumb" />
+               <div className="absolute inset-0 flex items-center justify-center bg-black/10">
+                  <FileCheck size={16} className="text-white drop-shadow-sm" />
+               </div>
+           </div>
 
-          {/* Thumbnail */}
-          <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 relative bg-gray-100 group-hover/download:ring-2 ring-brand-orange/10 transition-all">
-            <img src="/childhood-memories-colorized.webp" className="w-full h-full object-cover" alt="Thumbnail" />
-          </div>
-
-          {/* Info */}
-          <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-brand-black truncate">restored-final.jpg</span>
-              <div className="text-[10px] font-bold text-white bg-green-500 px-1.5 py-0.5 rounded-md flex items-center gap-0.5 animate-in zoom-in duration-300">
-                <CheckCircle2 size={8} /> Ready
-              </div>
-            </div>
-            <div className="text-xs text-gray-400 font-medium">5.2 MB • High-Res</div>
-          </div>
-
-          {/* Action */}
-          <div className="w-10 h-10 bg-[#111111] text-white rounded-full flex items-center justify-center group-hover/download:scale-105 group-hover/download:bg-brand-orange transition-all duration-300 shadow-lg shadow-black/10 cursor-pointer">
-            <Download size={18} />
-          </div>
+           {/* Metadata */}
+           <div className="flex-1 min-w-0 flex flex-col gap-1">
+               <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-gray-800 truncate">restored_final.jpg</span>
+                  <div className="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded border border-green-100 flex items-center gap-0.5">
+                      <CheckCircle2 size={8} /> Ready
+                  </div>
+               </div>
+               <div className="flex items-center gap-2 text-[10px] text-gray-400 font-medium uppercase tracking-wide">
+                  <span>5.2 MB</span>
+                  <span className="w-0.5 h-0.5 rounded-full bg-gray-300"></span>
+                  <span>300 DPI</span>
+               </div>
+               
+               {/* Progress Bar (Full) */}
+               <div className="w-full h-1 bg-gray-100 rounded-full mt-1 overflow-hidden">
+                  <div className="w-full h-full bg-green-500 rounded-full"></div>
+               </div>
+           </div>
         </div>
+        
+        {/* Floating Action Button (Download) */}
+        <div className="absolute bottom-6 right-6 z-20">
+           <div className="w-10 h-10 bg-brand-black text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform cursor-pointer">
+              <HardDriveDownload size={18} />
+           </div>
+        </div>
+
       </div>
     )
   }

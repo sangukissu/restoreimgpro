@@ -455,7 +455,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
                   </Link>
                   <div className="flex items-center gap-2 text-gray-400">
                     <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm">Trusted by 10,000+ customers</span>
+                    <span className="text-sm">Trusted by 190+ customers</span>
                   </div>
                 </div>
               </div>

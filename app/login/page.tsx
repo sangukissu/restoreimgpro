@@ -123,9 +123,9 @@ function LoginFormWithSearchParams() {
   const displayError = state?.error || urlError
 
   return (
-    <div className="flex flex-col bg-gray-50">
+    <div className="flex flex-col bg-brand-bg">
       <Navbar />
-      <main className="min-h-screen flex-1 flex items-center justify-center pb-24 px-4 sm:px-6 lg:px-8 pt-32">
+      <main className="min-h-screen flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div className="space-y-2 text-center">
             <h1 className="  text-4xl font-semibold tracking-tight text-black">Welcome to BringBack</h1>
@@ -209,7 +209,7 @@ function LoginFormWithSearchParams() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex flex-col bg-gray-50 py-24">
+      <div className="min-h-screen flex flex-col bg-brand-bg py-24">
         <Navbar />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">

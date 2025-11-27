@@ -5,6 +5,7 @@ import React from 'react';
 import { Navbar } from '@/components/landing/Navbar';
 import { Hero } from '@/components/landing/Hero';
 import { HowItWorks } from '@/components/landing/HowItWorks';
+import { NostalgicHug } from '@/components/landing/NostalgicHug';
 import { Showcase } from '@/components/landing/Showcase';
 import { PhotoAnimation } from '@/components/landing/PhotoAnimation';
 import { WhyUs } from '@/components/landing/WhyUs';
@@ -282,6 +283,7 @@ export default function Page() {
       <main>
         <Hero />
         <HowItWorks />
+        <NostalgicHug />
         <Showcase />
         <PhotoAnimation />
         <WhyUs />

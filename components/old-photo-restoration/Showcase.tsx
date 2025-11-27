@@ -154,8 +154,8 @@ export const Showcase: React.FC = () => {
       </div>
 
       {/* Main Layout: Gray Surface Container */}
-      <div className="bg-brand-surface p-3 rounded-[3rem]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto lg:h-[600px]">
+      <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto">
 
           {/* Left Column: Selection Menu (4 cols on desktop) */}
           <div className="lg:col-span-4 flex flex-col gap-3 h-full">

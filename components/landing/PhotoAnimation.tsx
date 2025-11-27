@@ -85,7 +85,7 @@ export const PhotoAnimation: React.FC = () => {
 
         {/* Main Layout: Gray Surface Container */}
         <div className="bg-brand-surface p-3 rounded-[1.8rem]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto lg:h-[600px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto">
 
             {/* Left Column: Video Player (8 cols) - Inverted from Showcase */}
             <div className="lg:col-span-8 h-[400px] lg:h-auto bg-black rounded-[1.5rem] overflow-hidden relative group shadow-inner">

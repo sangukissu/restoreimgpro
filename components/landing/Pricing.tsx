@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Sparkles, Film, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star } from 'lucide-react';
+import { Sparkles, Film, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star, MagnetIcon } from 'lucide-react';
 import Link from 'next/link';
 
 
@@ -96,6 +96,7 @@ export const Pricing: React.FC = () => {
     { icon: <Zap size={16} />, text: "20 Flexible Credits" },
     { icon: <ImageIcon size={16} />, text: "Restore up to 20 Photos" },
     { icon: <Film size={16} />, text: "OR Create 2 Video Animations" },
+    { icon: <MagnetIcon size={16} />, text: "Mix & Match Usage" },
     { icon: <Maximize2 size={16} />, text: "High-Resolution 1080P Output" },
     { icon: <Infinity size={16} />, text: "Credits Never Expire" },
     { icon: <ArrowUpCircle size={16} />, text: "Upto 20 Free Photo Upscale" },
