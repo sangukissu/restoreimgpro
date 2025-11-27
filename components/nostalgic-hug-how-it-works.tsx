@@ -51,7 +51,7 @@ export default function NostalgicHugHowItWorks() {
                     >
                         <div className="relative pb-[56.25%] h-0">
                             <iframe
-                                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                src="https://www.youtube.com/embed/Y0rdFdDdd10?si=pSwG5ljUhyA4iu_0"
                                 title="How Nostalgic Hug Works"
                                 className="absolute top-0 left-0 w-full h-full"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
