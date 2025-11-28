@@ -97,7 +97,7 @@ const jsonLd = {
       url: 'https://bringback.pro/',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bringback.pro/bringback-logo.png',
+        url: 'https://bringback.pro/bringback-logo.webp',
         width: 512,
         height: 512
       },

@@ -213,16 +213,16 @@ const homeFAQPageJsonLd = {
   ]
 }
 
-const tornRestorationVideoJsonLd = {
+const nostalgicHugVideoJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'VideoObject',
-  name: 'Torn Photo Restoration Demo — BringBack AI',
+  name: 'AI Nostalgic Hug — BringBack AI',
   description:
-    'Watch BringBack AI rebuild a photo torn into multiple pieces, preserving faces and reconstructing missing areas with high fidelity.',
-  thumbnailUrl: 'https://bringback.pro/torn-tear.webp',
-  uploadDate: '2025-11-05T00:00:00Z',
-  contentUrl: 'https://bringback.pro/videos/tear-torn-restoration.mp4',
-  embedUrl: 'https://bringback.pro/#what-is-ai',
+    'The world’s first AI that bridges the gap of time, creating heartwarming reunion videos from static photos.',
+  thumbnailUrl: 'https://img.youtube.com/vi/Y0rdFdDdd10/hqdefault.jpg',
+  uploadDate: '2025-11-28T00:00:00Z',
+  contentUrl: 'https://www.youtube.com/watch?v=Y0rdFdDdd10',
+  embedUrl: 'https://www.youtube.com/embed/Y0rdFdDdd10',
   publisher: {
     '@type': 'Organization',
     name: 'BringBack',
@@ -230,20 +230,20 @@ const tornRestorationVideoJsonLd = {
   },
   potentialAction: {
     '@type': 'WatchAction',
-    target: 'https://bringback.pro/#what-is-ai'
+    target: 'https://bringback.pro/#nostalgic-hug'
   }
 }
 
-const heroVideoJsonLd = {
+const photoAnimationTalkingJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'VideoObject',
-  name: 'BringBack — Photo Restoration Demo (Hero)',
+  name: 'AI Photo Animation Demo — Gentle Talking',
   description:
-    'Quick demo of BringBack restoring old, faded photos using AI with before/after results.',
-  thumbnailUrl: 'https://bringback.pro/video-thumbnail.webp',
+    'Transform static portraits into realistic videos with gentle talking motions using BringBack AI.',
+  thumbnailUrl: 'https://bringback.pro/dashboard-compare.png',
   uploadDate: '2025-11-05T00:00:00Z',
-  contentUrl: 'https://www.youtube.com/watch?v=K_CYXkv2Yso',
-  embedUrl: 'https://www.youtube.com/embed/K_CYXkv2Yso',
+  contentUrl: 'https://bringback.pro/videos/speaking.mp4',
+  embedUrl: 'https://bringback.pro/#photo-animation',
   publisher: {
     '@type': 'Organization',
     name: 'BringBack',
@@ -251,7 +251,91 @@ const heroVideoJsonLd = {
   },
   potentialAction: {
     '@type': 'WatchAction',
-    target: 'https://bringback.pro/'
+    target: 'https://bringback.pro/#photo-animation'
+  }
+}
+
+const photoAnimationWaveJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'AI Photo Animation Demo — Smile + Wave',
+  description:
+    'The person in the image smiles warmly and waves their hand in a friendly greeting gesture.',
+  thumbnailUrl: 'https://bringback.pro/dashboard-compare.png',
+  uploadDate: '2025-11-05T00:00:00Z',
+  contentUrl: 'https://bringback.pro/videos/video-animation1.mp4',
+  embedUrl: 'https://bringback.pro/#photo-animation',
+  publisher: {
+    '@type': 'Organization',
+    name: 'BringBack',
+    url: 'https://bringback.pro/'
+  },
+  potentialAction: {
+    '@type': 'WatchAction',
+    target: 'https://bringback.pro/#photo-animation'
+  }
+}
+
+const photoAnimationLookAroundJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'AI Photo Animation Demo — Smile + Look Around',
+  description:
+    'Curious movements, looking around naturally with eyes and head turning gently.',
+  thumbnailUrl: 'https://bringback.pro/dashboard-compare.png',
+  uploadDate: '2025-11-05T00:00:00Z',
+  contentUrl: 'https://bringback.pro/videos/smile-and-look.mp4',
+  embedUrl: 'https://bringback.pro/#photo-animation',
+  publisher: {
+    '@type': 'Organization',
+    name: 'BringBack',
+    url: 'https://bringback.pro/'
+  },
+  potentialAction: {
+    '@type': 'WatchAction',
+    target: 'https://bringback.pro/#photo-animation'
+  }
+}
+
+const photoAnimationWarmGazeJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'AI Photo Animation Demo — Warm Gaze',
+  description:
+    'Steady, warm eye contact with a loving, subtle smile and peaceful expression.',
+  thumbnailUrl: 'https://bringback.pro/dashboard-compare.png',
+  uploadDate: '2025-11-05T00:00:00Z',
+  contentUrl: 'https://bringback.pro/videos/warm-gaze.mp4',
+  embedUrl: 'https://bringback.pro/#photo-animation',
+  publisher: {
+    '@type': 'Organization',
+    name: 'BringBack',
+    url: 'https://bringback.pro/'
+  },
+  potentialAction: {
+    '@type': 'WatchAction',
+    target: 'https://bringback.pro/#photo-animation'
+  }
+}
+
+const howItWorksVideoJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'AI Photo Animation — Blink & Tilt',
+  description:
+    'Example of subtle, realistic motion added to a restored photo, showing blinking and head tilting.',
+  thumbnailUrl: 'https://bringback.pro/childhood-memories-colorized.webp',
+  uploadDate: '2025-11-05T00:00:00Z',
+  contentUrl: 'https://bringback.pro/videos/blink-tilt-animation.mp4',
+  embedUrl: 'https://bringback.pro/#how-it-works',
+  publisher: {
+    '@type': 'Organization',
+    name: 'BringBack',
+    url: 'https://bringback.pro/'
+  },
+  potentialAction: {
+    '@type': 'WatchAction',
+    target: 'https://bringback.pro/#how-it-works'
   }
 }
 
@@ -268,11 +352,27 @@ export default function Page() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(tornRestorationVideoJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(nostalgicHugVideoJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(heroVideoJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(photoAnimationTalkingJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(photoAnimationWaveJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(photoAnimationLookAroundJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(photoAnimationWarmGazeJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howItWorksVideoJsonLd) }}
       />
       {/* Navbar - Fixed to stay at top during scroll */}
       <header className="fixed top-0 left-0 w-full z-50 bg-transparent">

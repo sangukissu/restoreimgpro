@@ -412,7 +412,7 @@ export const Benefits: React.FC = () => {
               >
 
                 {/* Visual Micro App Area (Top) */}
-                <div className="h-40 w-full rounded-[1.5rem] overflow-hidden border border-gray-100 shadow-inner relative">
+                <div className="h-56 w-full rounded-[1.5rem] overflow-hidden border border-gray-100 shadow-inner relative">
                   {item.visual}
                 </div>
 

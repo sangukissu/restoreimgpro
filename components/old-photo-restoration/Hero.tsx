@@ -198,7 +198,7 @@ export const Hero: React.FC = () => {
                 </div>
               ))}
               <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-                130+
+                190+
               </div>
             </div>
 

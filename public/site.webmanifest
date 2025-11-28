@@ -10,7 +10,11 @@
   "scope": "/",
   "lang": "en",
   "dir": "ltr",
-  "categories": ["photo", "productivity", "utilities"],
+  "categories": [
+    "photo",
+    "productivity",
+    "utilities"
+  ],
   "screenshots": [
     {
       "src": "/screenshot.png",
@@ -37,7 +41,7 @@
       "type": "image/png"
     },
     {
-      "src": "/bringback-logo.png",
+      "src": "/bringback-logo.webp",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -51,7 +55,7 @@
       "url": "/login",
       "icons": [
         {
-          "src": "/bringback-logo.png",
+          "src": "/bringback-logo.webp",
           "sizes": "192x192"
         }
       ]
@@ -63,7 +67,7 @@
       "url": "/#examples",
       "icons": [
         {
-          "src": "/bringback-logo.png",
+          "src": "/bringback-logo.webp",
           "sizes": "192x192"
         }
       ]

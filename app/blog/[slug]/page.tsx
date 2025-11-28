@@ -117,7 +117,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
       name: 'BringBack',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bringback.pro/bringback-logo.png'
+        url: 'https://bringback.pro/bringback-logo.webp'
       }
     },
     // Use URL string for mainEntityOfPage to avoid emitting a WebPage entity

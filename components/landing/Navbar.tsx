@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Menu, X, Sparkles } from 'lucide-react';
 import { NavLink } from '@/types';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const NAV_LINKS: NavLink[] = [
   { label: 'Features', href: '#benefits' },
@@ -25,8 +26,8 @@ export const Navbar: React.FC = () => {
 
           <div className="relative">
             {/* Abstract logo shape */}
-            <div className="flex items-center justify-center bg-brand-black w-8 h-8 rounded-lg text-white">
-              <Sparkles size={16} fill="currentColor" />
+            <div className="flex items-center justify-center border-brand-black/10 border rounded-lg bg-brand-surface text-white">
+              <Image src="/bringback-logo.webp" alt="BringBack Logo" width={40} height={40} />
             </div>
           </div>
           <span className="text-2xl font-extrabold tracking-tight">BringBack</span>
@@ -34,7 +35,7 @@ export const Navbar: React.FC = () => {
         </div>
       </Link>
       {/* Desktop Navigation - Pill Shape */}
-      <div className="hidden lg:flex items-center bg-brand-gray/80 backdrop-blur-sm px-2 py-2 rounded-full border border-black/5 shadow-sm">
+      <div className="hidden lg:flex items-center bg-brand-gray/50 backdrop-blur-sm px-2 py-2 rounded-full border border-black/5 shadow-sm">
         {NAV_LINKS.map((link) => (
           <a
             key={link.label}
@@ -62,7 +63,7 @@ export const Navbar: React.FC = () => {
       <div className="lg:hidden">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="bg-brand-black text-white p-3 rounded-full hover:bg-gray-800 transition-colors"
+          className="bg-brand-black text-white p-3 rounded-full hover:bg-brand-gray transition-colors"
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>

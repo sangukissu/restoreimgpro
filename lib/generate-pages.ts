@@ -275,7 +275,7 @@ export function generatePseoPages(): PseoPageData[] {
         metaDescription: metaDescription,
         content: {
           problem: `Dealing with a ${problem.name.toLowerCase()} ${photoType.name.toLowerCase()} can be heartbreaking. ${problem.description} These precious memories deserve to be preserved and restored to their original beauty. Traditional photo restoration services are expensive (often $50-300 per photo) and can take weeks to complete, making them impractical for most people.`,
-          solution: `BringBack.pro's advanced AI technology offers the perfect solution for ${problem.slug} ${photoType.slug} restoration. Our cutting-edge machine learning algorithms have been trained on millions of photo restoration examples, allowing us to automatically detect and repair damage in seconds. The AI specifically excels at handling ${problem.name.toLowerCase()} issues in ${photoType.name.toLowerCase()}s, delivering professional-quality results at just $2.49 per photo - that's 95% less than traditional services.`,
+          solution: `BringBack.pro's advanced AI technology offers the perfect solution for ${problem.slug} ${photoType.slug} restoration. Our cutting-edge machine learning algorithms have been trained on millions of photo restoration examples, allowing us to automatically detect and repair damage in seconds. The AI specifically excels at handling ${problem.name.toLowerCase()} issues in ${photoType.name.toLowerCase()}s, delivering professional-quality results at just $1 per photo - that's 95% less than traditional services.`,
           subject: `Why restore your ${photoType.name.toLowerCase()}? ${photoType.description} Don't let time and damage rob you of these irreplaceable memories. With our AI restoration, you can bring your photos back to life and share them with future generations.`
         },
         faqs: [specificFaq, specificFaq2, ...generalFaqs],
@@ -373,7 +373,7 @@ export function generatePseoPages(): PseoPageData[] {
           plans: [
             {
               name: "Starter",
-              price: "$2.49",
+              price: "$4.99",
               description: "Perfect for high-quality photo restoration",
               features: [
                 "5 Photo Restorations",
@@ -386,11 +386,11 @@ export function generatePseoPages(): PseoPageData[] {
             },
             {
               name: "Restore & Animate",
-              price: "$4.99",
+              price: "$9.99",
               description: "Everything in Starter, plus bring photos to life",
               features: [
-                "5 Photo Restorations",
-                "1 High-Quality Video Animation",
+                "20 Photo Restorations",
+                "OR 2 High-Quality Video Animation",
                 "High-Resolution Output",
                 "Credits Never Expire",
                 "Free Photo Enhance/Upscale",
@@ -402,12 +402,12 @@ export function generatePseoPages(): PseoPageData[] {
           comparison: [
             {
               service: "Starter Plan (5 photos)",
-              cost: "$2.49 vs $250-1,500",
+              cost: "$4.99 vs $250-1,500",
               timeframe: "30 seconds vs 2-4 weeks"
             },
             {
               service: "Restore & Animate (5 photos + animation)",
-              cost: "$4.99 vs $300-2,000",
+              cost: "$9.99 vs $300-2,000",
               timeframe: "30 seconds vs 3-6 weeks"
             },
             {

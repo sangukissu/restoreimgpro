@@ -1,12 +1,15 @@
+"use client";
 
-import React from 'react';
-import { ArrowRight, Film, Lock, ScanFace, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, Film, Lock, ScanFace, Sparkles, Play } from 'lucide-react';
 import Link from 'next/link';
 import { ShineBorder } from "@/components/ui/shine-border"
 
 export default function NostalgicHug() {
+   const [isPlaying, setIsPlaying] = useState(false);
+
    return (
-      <section id="nostalgic-hug" className="w-full max-w-[1320px] mx-auto py-24 bg-brand-bg">
+      <section id="nostalgic-hug" className="w-full max-w-[1320px] mx-auto py-24 bg-brand-bg px-4">
 
 
          {/* Header */}
@@ -37,7 +40,7 @@ export default function NostalgicHug() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
 
                {/* 1. Steps Card (Top Left) */}
-               <div className="lg:col-span-1 bg-white rounded-[1.5rem] p-4 sm:p-6 flex flex-col justify-center relative overflow-hidden order-2 lg:order-1 h-full">
+               <div className="lg:col-span-1 bg-white rounded-[1.5rem] p-6 sm:p-6 flex flex-col justify-center relative overflow-hidden order-2 lg:order-1 h-full">
 
                   <div className="flex flex-col gap-2">
                      {/* Step 1 */}
@@ -94,14 +97,29 @@ export default function NostalgicHug() {
                </div>
 
                {/* 2. Video Card (Top Right - Spans 2 cols) */}
-               <div className="lg:col-span-2 bg-black rounded-[1.5rem] overflow-hidden relative min-h-[500px] order-1 lg:order-2 shadow-sm h-full">
-                  <iframe
-                     className="absolute inset-0 w-full h-full"
-                     src="https://www.youtube.com/embed/Y0rdFdDdd10?rel=0&loop=1&playlist=Y0rdFdDdd10&modestbranding=1&controls=0&showinfo=0"
-                     title="YouTube video player"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                     allowFullScreen
-                  ></iframe>
+               <div className="lg:col-span-2 bg-black rounded-[1.5rem] overflow-hidden relative aspect-video lg:aspect-auto lg:min-h-[500px] order-1 lg:order-2 shadow-sm h-full group cursor-pointer" onClick={() => !isPlaying && setIsPlaying(true)}>
+                  {!isPlaying ? (
+                     <>
+                        <img
+                           src="https://img.youtube.com/vi/Y0rdFdDdd10/hqdefault.jpg"
+                           alt="Video Thumbnail"
+                           className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                           <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 transition-all duration-300 group-hover:scale-110 shadow-2xl">
+                              <Play size={32} className="fill-white text-white ml-1" />
+                           </div>
+                        </div>
+                     </>
+                  ) : (
+                     <iframe
+                        className="absolute inset-0 w-full h-full"
+                        src="https://www.youtube.com/embed/Y0rdFdDdd10?rel=0&loop=1&playlist=Y0rdFdDdd10&modestbranding=1&controls=1&autoplay=1"
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                     ></iframe>
+                  )}
                </div>
 
                {/* 3. Feature Card 1 */}

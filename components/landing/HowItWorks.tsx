@@ -196,7 +196,7 @@ export const HowItWorks: React.FC = () => {
                 </div>
 
                 {/* Visual "Mini App" Area */}
-                <div className="mt-auto h-[200px] rounded-3xl overflow-hidden border border-gray-100 relative shadow-inner transform group-hover:translate-y-[-5px] transition-transform duration-300">
+                <div className="mt-auto h-[240px] rounded-3xl overflow-hidden border border-gray-100 relative shadow-inner transform group-hover:translate-y-[-5px] transition-transform duration-300">
                   {step.visual}
                 </div>
               </div>

@@ -47,7 +47,7 @@ const RestorationDemo: React.FC = () => {
 
   return (
     <div
-      className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-[2rem] overflow-hidden shadow-2xl select-none group cursor-ew-resize border-[6px] border-white"
+      className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-[1.8rem] overflow-hidden select-none group cursor-ew-resize"
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onTouchMove={handleMouseMove}
@@ -198,7 +198,7 @@ export const Hero: React.FC = () => {
                 </div>
               ))}
               <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-                130+
+                190+
               </div>
             </div>
 
@@ -215,7 +215,9 @@ export const Hero: React.FC = () => {
 
         {/* Right Column: Interactive Demo - Decreased to 6 cols */}
         <div className="lg:col-span-6 flex items-center justify-center w-full lg:h-full pt-12 lg:pt-0">
-          <RestorationDemo />
+          <div className="bg-brand-surface p-3 rounded-[2rem] w-full">
+            <RestorationDemo />
+          </div>
         </div>
 
       </div>
