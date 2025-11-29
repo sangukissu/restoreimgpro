@@ -63,14 +63,14 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
       </div>
 
       {/* Dashboard Header */}
-      <DashboardHeader 
+      <DashboardHeader
         user={user}
         credits={userCredits}
         onBuyCredits={handleBuyCredits}
       />
 
       {/* Payment Success Modal */}
-      <PaymentSuccessModal 
+      <PaymentSuccessModal
         isOpen={showPaymentSuccess}
         onClose={() => setShowPaymentSuccess(false)}
         userCredits={userCredits}
@@ -85,6 +85,22 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
             <p className="text-lg text-gray-600">
               Combine up to 4 individual portraits into a single family photo with consistent lighting and color.
             </p>
+
+            {/* Holiday Banner */}
+            <div className="mt-6 bg-gradient-to-r from-red-50 to-green-50 border border-red-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="bg-white p-2 rounded-full shadow-sm">
+                  <span className="text-xl">🎄</span>
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-gray-900">New: Holiday Magic Mode</p>
+                  <p className="text-sm text-gray-600">Create the perfect Christmas card from separate photos.</p>
+                </div>
+              </div>
+              <div className="hidden sm:block text-xs font-semibold text-red-600 bg-white px-3 py-1 rounded-full border border-red-100">
+                Try it below
+              </div>
+            </div>
           </div>
 
           {/* Main grid */}

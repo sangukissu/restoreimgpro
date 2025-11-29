@@ -8,6 +8,8 @@ import { useToast } from "@/hooks/use-toast"
 
 type AspectRatio = "1:1" | "4:3" | "3:4" | "16:9"
 type BackgroundStyle = "black" | "gray" | "beige" | "gradient" | "brown" | "bokeh"
+import { HolidayModeToggle } from "./holiday-mode-toggle"
+import { SceneSelector, HolidayStyle } from "./scene-selector"
 
 // Note: Do NOT compress user-uploaded images. Preserve full quality for model fidelity.
 
@@ -15,6 +17,8 @@ export default function FamilyPortraitClient() {
   const [files, setFiles] = useState<File[]>([])
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("4:3")
   const [backgroundStyle, setBackgroundStyle] = useState<BackgroundStyle>("black")
+  const [isHolidayMode, setIsHolidayMode] = useState(false)
+  const [holidayStyle, setHolidayStyle] = useState<HolidayStyle>("holiday_hearth")
   const [isLoading, setIsLoading] = useState(false)
   const [resultUrl, setResultUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -87,12 +91,18 @@ export default function FamilyPortraitClient() {
       // Send originals via multipart/form-data to preserve quality
       const form = new FormData()
       form.append("aspectRatio", aspectRatio)
-      form.append("backgroundStyle", backgroundStyle)
+      if (isHolidayMode) {
+        form.append("backgroundStyle", holidayStyle) // Send holiday style as the background style
+        form.append("isHolidayMode", "true")
+      } else {
+        form.append("backgroundStyle", backgroundStyle)
+      }
       for (const f of files) {
         form.append("images", f, f.name)
       }
 
-      const res = await fetch("/api/family-portrait", {
+      const endpoint = isHolidayMode ? "/api/christmas-portrait" : "/api/family-portrait"
+      const res = await fetch(endpoint, {
         method: "POST",
         body: form,
       })
@@ -161,6 +171,8 @@ export default function FamilyPortraitClient() {
 
   return (
     <div className="space-y-6">
+      <HolidayModeToggle isHolidayMode={isHolidayMode} onToggle={setIsHolidayMode} />
+
       {/* Dropzone */}
       <div className="space-y-2">
         <label className="block text-lg font-semibold text-black">Upload 1–4 photos</label>
@@ -264,31 +276,35 @@ export default function FamilyPortraitClient() {
       </div>
 
       {/* Background Style */}
-      <div className="space-y-2">
-        <label className="block text-lg font-semibold text-black">Background style</label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {([
-            { key: "black", label: "Matte Black" },
-            { key: "gray", label: "Neutral Gray" },
-            { key: "beige", label: "Warm Beige" },
-            { key: "gradient", label: "Subtle Gradient" },
-            { key: "brown", label: "Dark Brown Vignette" },
-            { key: "bokeh", label: "Gentle Bokeh" },
-          ] as { key: BackgroundStyle; label: string }[]).map(({ key, label }) => {
-            const selected = backgroundStyle === key
-            return (
-              <button
-                key={key}
-                onClick={() => setBackgroundStyle(key)}
-                className={`p-3 rounded-lg border-2 text-sm font-semibold transition-colors ${selected ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"}`}
-              >
-                {label}
-              </button>
-            )
-          })}
+      {isHolidayMode ? (
+        <SceneSelector selectedStyle={holidayStyle} onSelect={setHolidayStyle} />
+      ) : (
+        <div className="space-y-2">
+          <label className="block text-lg font-semibold text-black">Background style</label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {([
+              { key: "black", label: "Matte Black" },
+              { key: "gray", label: "Neutral Gray" },
+              { key: "beige", label: "Warm Beige" },
+              { key: "gradient", label: "Subtle Gradient" },
+              { key: "brown", label: "Dark Brown Vignette" },
+              { key: "bokeh", label: "Gentle Bokeh" },
+            ] as { key: BackgroundStyle; label: string }[]).map(({ key, label }) => {
+              const selected = backgroundStyle === key
+              return (
+                <button
+                  key={key}
+                  onClick={() => setBackgroundStyle(key)}
+                  className={`p-3 rounded-lg border-2 text-sm font-semibold transition-colors ${selected ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"}`}
+                >
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+          <p className="text-xs text-gray-500">Studio presets keep lighting consistent and reduce artifacts.</p>
         </div>
-        <p className="text-xs text-gray-500">Studio presets keep lighting consistent and reduce artifacts.</p>
-      </div>
+      )}
 
       <div className="flex items-center gap-3">
         <Button
