@@ -1,16 +1,12 @@
 import type { Metadata } from "next"
-import { Sparkles, ChevronRight } from "lucide-react"
 import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
-import { PointerHighlight } from "@/components/pointer-highlight"
-import ColorizeHowItWorksSection from "@/components/pages/colorize-how-it-works-section"
+import ColorizeHowItWorks from "@/components/pages/colorize-how-it-works"
 import ColorizeShowcaseSection from "@/components/pages/colorize-showcase-section"
 import ColorizeFeaturesSection from "@/components/pages/colorize-features-section"
 import ColorizeFAQSection from "@/components/pages/colorize-faq-section"
 import ColorizeMemoriesSection from "@/components/pages/colorize-memories-section"
-import Link from "next/link"
-import { FramerButton } from "@/components/ui/framer-button"
-import { HeroVideoDialog } from "@/components/ui/hero-video-dialog"
+import ColorizeHero from "@/components/pages/colorize-hero"
 
 
 
@@ -236,112 +232,9 @@ export default function ColorizePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(colorizeFAQPageJsonLd) }}
       />
       <Navbar />
-      {/* Hero Section */}
-      <section className="min-h-screen w-full bg-white relative">
-        {/* Diagonal Stripes Background */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(135deg, transparent, transparent 2px, #f3f4f6 2px, #f3f4f6 4px)",
-          }}
-        />
+      <ColorizeHero />
 
-        <div className="relative z-10 px-4 py-20 pt-32 overflow-hidden">
-          <div className="max-w-6xl mx-auto text-center">
-            <div className="space-y-6">
-              <div className="space-y-6">
-                <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700 mb-4">
-                  <Sparkles className="w-3 h-3 mr-1" />
-                  AI Powered
-                </div>
-                <h1 className="  text-3xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-800 leading-tight">
-                  Bring{" "}
-                  <PointerHighlight
-                    rectangleClassName="bg-purple-100 border-purple-300 leading-tight px-2"
-                    pointerClassName="text-purple-500 h-3 w-3"
-                    containerClassName="inline-block mx-1"
-                  >
-                    <span className="relative z-10">black & white</span>
-                  </PointerHighlight>
-                  <br />
-                  photos to
-                  <br />
-                  <PointerHighlight
-                    rectangleClassName="bg-blue-100 border-blue-300 leading-tight px-2"
-                    pointerClassName="text-blue-500 h-3 w-3"
-                    containerClassName="inline-block mx-1"
-                  >
-                    <span className="relative z-10">vibrant life</span>
-                  </PointerHighlight>{" "}
-                  with color
-                </h1>
-                <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-tight">
-                  Transform your vintage black and white photos into stunning color images. Intelligent colorization,
-                  simple process, and a lifetime of colorful memories.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-4 justify-center items-center w-full">
-
-
-
-
-                <Link href="/login">
-
-                  <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden w-full sm:w-auto">
-                    Colorize Your Photo
-                  </FramerButton>
-                </Link>
-                <p className="text-xs text-gray-500">
-                  Only $1 per photo
-                </p>
-                <div className="flex flex-col items-center space-y-2 pt-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex -space-x-2">
-                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar1.webp" alt="User" />
-                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar2.webp" alt="User" />
-                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar3.webp" alt="User" />
-                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar6.webp" alt="User" />
-                      <img className="w-8 h-8 rounded-full border-2 border-white" src="/avatar5.webp" alt="User" />
-                      <div className="w-8 h-8 rounded-full bg-gray-900 border-2 border-white flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">17+</span>
-                      </div>
-                    </div>
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} className="text-lg">
-                          ★
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-gray-600 font-medium">Loved by History Enthusiasts & Families</p>
-                </div>
-
-                {/* Hero Compare Section */}
-              </div>
-              <div>
-                <div className="flex justify-center">
-                  <div className="py-4 border rounded-3xl bg-neutral-50 border-neutral-200 px-4">
-                    <HeroVideoDialog
-                      animationStyle="from-center"
-                      videoSrc="https://youtu.be/YcexFcxi2xY"
-                      thumbnailSrc="/bw-to-colorize.webp"
-                      thumbnailAlt="Photo restoration demo video"
-                      priority
-                      className="h-[250px] w-[300px] sm:h-[300px] sm:w-[450px] md:h-[400px] md:w-[600px] lg:h-[500px] lg:w-[800px] xl:h-[720px] xl:w-[1080px] rounded-2xl overflow-hidden"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-      <ColorizeHowItWorksSection />
+      <ColorizeHowItWorks />
       <ColorizeShowcaseSection />
       <ColorizeFeaturesSection />
       {/* Colorization Quality Section */}

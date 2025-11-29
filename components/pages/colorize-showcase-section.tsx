@@ -1,10 +1,9 @@
 "use client"
 
 import { Compare } from "@/components/ui/compare"
-import { Cover } from "@/components/ui/cover"
 import { FramerButton } from "@/components/ui/framer-button"
 import Link from "next/link"
-import { ChevronRight } from "lucide-react" 
+import { ChevronRight, Users, Heart, Baby, Medal, MapPin, GraduationCap } from "lucide-react"
 
 export default function ColorizeShowcaseSection() {
   const showcaseItems = [
@@ -15,7 +14,7 @@ export default function ColorizeShowcaseSection() {
       afterImage: "/vintage-family-portraits-colorized.webp",
       beforeImageAlt: "Before: black and white damaged vintage family portrait",
       afterImageAlt: "After: vintage family portrait colorized with bringback ai",
-
+      icon: <Users size={24} />,
     },
     {
       title: "Historical Wedding Photos",
@@ -24,7 +23,7 @@ export default function ColorizeShowcaseSection() {
       afterImage: "/historical-wedding-photo-colorized.webp",
       beforeImageAlt: "Before: black and white damaged historical wedding photo",
       afterImageAlt: "After: historical wedding photo colorized with bringback ai",
-
+      icon: <Heart size={24} />,
     },
     {
       title: "Old Childhood Memories",
@@ -33,7 +32,7 @@ export default function ColorizeShowcaseSection() {
       afterImage: "/childhood-memories-colorized.webp",
       beforeImageAlt: "Before: black and white old childhood photo",
       afterImageAlt: "After: old childhood photo colorized with bringback ai",
-
+      icon: <Baby size={24} />,
     },
     {
       title: "Military & Service Photos",
@@ -42,7 +41,7 @@ export default function ColorizeShowcaseSection() {
       afterImage: "/colorized-military-photo.webp",
       beforeImageAlt: "Before: black and white damaged military photo",
       afterImageAlt: "After: military photo colorized with bringback ai",
-
+      icon: <Medal size={24} />,
     },
     {
       title: "Vintage Street Scenes",
@@ -51,7 +50,7 @@ export default function ColorizeShowcaseSection() {
       afterImage: "/colorized-vintage-street-photo.webp",
       beforeImageAlt: "Before: black and white damaged vintage street scene",
       afterImageAlt: "After: vintage street scene colorized with bringback ai",
-
+      icon: <MapPin size={24} />,
     },
     {
       title: "Old School & Group Photos",
@@ -60,78 +59,78 @@ export default function ColorizeShowcaseSection() {
       afterImage: "/colorized-school-photo.webp",
       beforeImageAlt: "Before: black and white old school group photo",
       afterImageAlt: "After: old school group photo colorized with bringback ai",
+      icon: <GraduationCap size={24} />,
     },
   ]
 
   return (
-    <section className="px-4 py-20 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-6xl mx-auto">
+    <section className="w-full px-4 sm:px-8 py-24 bg-white">
+      <div className="max-w-[1320px] mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-gray-500 italic text-lg mb-4">Real Transformations</p>
-          <h2 className=" text-4xl lg:text-5xl text-black mb-6">
-            Every vintage photo,
-            <br />
-            <span className="text-gray-600">
-              <Cover>beautifully colorized</Cover>
-            </span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            From family portraits to historical moments, see how our AI brings authentic color to every type of vintage
-            photograph.
-          </p>
-        </div>
-
-        {/* Showcase Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {showcaseItems.map((item, index) => (
-            <div key={index} className="group">
-              <div className="bg-white rounded-2xl p-6 border-6 border-gray-200 bg-transparent">
-                {/* Header */}
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-black mb-1">{item.title}</h3>
-                  <p className="text-gray-600 text-sm">{item.description}</p>
-                </div>
-
-                {/* Compare Slider */}
-                <div className="flex justify-center">
-                  <div className="border rounded-xl bg-gray-50 border-gray-200 p-3">
-                    <Compare
-                      firstImage={item.beforeImage}
-                      secondImage={item.afterImage}
-                      firstImageClassName="object-cover"
-                      secondImageClassname="object-cover"
-                      className="sm:h-[220px] sm:w-[300px] h-[190px] w-[280px] rounded-lg"
-                      slideMode="hover"
-                      showHandlebar={true}
-                      firstImageAlt={item.beforeImageAlt}
-                      secondImageAlt={item.afterImageAlt}
-                    />
-                  </div>
-                </div>
-              </div>
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 mb-16">
+          <div className="max-w-4xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-[#FF4D00]">//</span> Real Results <span className="text-[#FF4D00]">//</span>
             </div>
-          ))}
-        </div>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <div className="max-w-2xl mx-auto">
-            <p className="text-gray-600 mb-6">
-              Our AI handles even the most challenging vintage photos. Upload your black and white image and see the
-              magic happen.
+            {/* Title */}
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+              See the magic <br />
+              <span className="text-gray-400">in every detail.</span>
+            </h2>
+          </div>
+
+          {/* Subtitle */}
+          <div className="max-w-sm">
+            <p className="text-lg text-gray-600 font-medium leading-relaxed">
+              From family portraits to historical moments, see how our AI brings authentic color to every type of vintage photograph.
             </p>
-          
-
-            
-              <Link href="/login">
-            
-             <FramerButton variant="primary" icon={<ChevronRight className="w-4 h-4" />} className="text-md py-6 group relative overflow-hidden">
-            Colorize Your Photo Now
-          </FramerButton>
-            </Link>
           </div>
         </div>
+
+        {/* Showcase Grid Container - Gray Background */}
+        <div className="bg-[#F3F4F6] p-3 rounded-[1.8rem]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {showcaseItems.map((item, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-[1.5rem] p-5 flex flex-col gap-6 relative group h-full"
+              >
+                {/* Visual Area (Compare Slider) */}
+                <div className="h-64 w-full rounded-[1.5rem] overflow-hidden border border-gray-100 shadow-inner relative">
+                  <Compare
+                    firstImage={item.beforeImage}
+                    secondImage={item.afterImage}
+                    firstImageClassName="object-cover w-full h-full"
+                    secondImageClassname="object-cover w-full h-full"
+                    className="w-full h-full"
+                    slideMode="hover"
+                    showHandlebar={true}
+                    firstImageAlt={item.beforeImageAlt}
+                    secondImageAlt={item.afterImageAlt}
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col gap-3 px-2 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-brand-black shrink-0">
+                      {item.icon}
+                    </div>
+                    <h3 className="text-lg font-bold text-brand-black leading-tight">{item.title}</h3>
+                  </div>
+
+                  <p className="text-gray-500 font-medium leading-relaxed text-sm pl-[3.25rem]">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+
       </div>
     </section>
   )
