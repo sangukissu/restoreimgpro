@@ -93,8 +93,8 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
                   <span className="text-xl">🎄</span>
                 </div>
                 <div className="text-left">
-                  <p className="font-bold text-gray-900">New: Holiday Magic Mode</p>
-                  <p className="text-sm text-gray-600">Create the perfect Christmas card from separate photos.</p>
+                  <p className="text-sm font-bold text-gray-900">New: Christmas Family Portrait Gifting Card</p>
+                  <p className="text-xs text-gray-600">Create the perfect Christmas card from separate photos.</p>
                 </div>
               </div>
               <div className="hidden sm:block text-xs font-semibold text-red-600 bg-white px-3 py-1 rounded-full border border-red-100">
@@ -103,41 +103,33 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
             </div>
           </div>
 
-          {/* Main grid */}
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Main content */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="border rounded-2xl p-6 bg-white shadow-sm">
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold text-black">Compose Your Portrait</h2>
-                  <p className="text-sm text-gray-600">
-                    Upload 1–4 clear, front-facing photos. For 3–4 people, use wider ratios like 4:3 or 16:9.
-                  </p>
-                </div>
-                <div className="mt-6">
-                  <FamilyPortraitClient />
-                </div>
+          {/* Main content */}
+          <div className="space-y-6">
+            <div className="border-6 border-gray-200 p-6 bg-white rounded-xl">
+
+              <div>
+                <FamilyPortraitClient />
               </div>
             </div>
+          </div>
 
-            {/* Sidebar */}
-            <aside className="space-y-6">
-              <div className="border rounded-2xl p-5 bg-white shadow-sm">
-                <h3 className="text-lg font-semibold text-black">Tips for Best Results</h3>
-                <ul className="mt-3 space-y-2 text-sm text-gray-700 list-disc list-inside">
-                  <li>Use well-lit, front-facing portraits with minimal occlusions.</li>
-                  <li>Upload similar head sizes to simplify composition.</li>
-                  <li>Choose 4:3 or 16:9 for 3–4 people to avoid tight cropping.</li>
-                  <li>Keep backgrounds simple to maintain a cohesive look.</li>
-                </ul>
-              </div>
-              <div className="border rounded-2xl p-5 bg-white shadow-sm">
-                <h3 className="text-lg font-semibold text-black">What You Get</h3>
-                <p className="mt-2 text-sm text-gray-700">
-                  A high‑quality composite image suitable for printing and sharing. No facial swapping — identities preserved.
-                </p>
-              </div>
-            </aside>
+          {/* Info Cards (Bottom) */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="border rounded-2xl p-5 bg-white shadow-sm">
+              <h3 className="text-lg font-semibold text-black">Tips for Best Results</h3>
+              <ul className="mt-3 space-y-2 text-sm text-gray-700 list-disc list-inside">
+                <li>Use well-lit, front-facing portraits with minimal occlusions.</li>
+                <li>Upload similar head sizes to simplify composition.</li>
+                <li>Choose 4:3 or 16:9 for 3–4 people to avoid tight cropping.</li>
+                <li>Keep backgrounds simple to maintain a cohesive look.</li>
+              </ul>
+            </div>
+            <div className="border rounded-2xl p-5 bg-white shadow-sm">
+              <h3 className="text-lg font-semibold text-black">What You Get</h3>
+              <p className="mt-2 text-sm text-gray-700">
+                A high‑quality composite image suitable for printing and sharing. No facial swapping — identities preserved.
+              </p>
+            </div>
           </div>
         </div>
       </main>

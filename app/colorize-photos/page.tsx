@@ -4,7 +4,6 @@ import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
 import { PointerHighlight } from "@/components/pointer-highlight"
 import ColorizeHowItWorksSection from "@/components/pages/colorize-how-it-works-section"
-import ColorizeBenefitsSection from "@/components/pages/colorize-benefits-section"
 import ColorizeShowcaseSection from "@/components/pages/colorize-showcase-section"
 import ColorizeFeaturesSection from "@/components/pages/colorize-features-section"
 import ColorizeFAQSection from "@/components/pages/colorize-faq-section"
@@ -343,7 +342,6 @@ export default function ColorizePage() {
       </section>
 
       <ColorizeHowItWorksSection />
-      <ColorizeBenefitsSection />
       <ColorizeShowcaseSection />
       <ColorizeFeaturesSection />
       {/* Colorization Quality Section */}

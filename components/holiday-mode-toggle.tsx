@@ -42,7 +42,6 @@ export function HolidayModeToggle({ isHolidayMode, onToggle }: HolidayModeToggle
                         isHolidayMode ? "text-white font-bold" : "text-gray-500 hover:text-gray-700"
                     )}
                 >
-                    <Snowflake className={cn("w-4 h-4", isHolidayMode && "animate-pulse")} />
                     <span className="text-sm">Holiday Magic</span>
                 </button>
             </div>
