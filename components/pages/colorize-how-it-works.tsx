@@ -147,7 +147,7 @@ const STEPS = [
 
 export default function ColorizeHowItWorks() {
     return (
-        <section id="how-it-works" className="w-full max-w-[1320px] mx-auto px-4 sm:px-8 py-24 bg-white">
+        <section id="how-it-works" className="w-full max-w-[1320px] mx-auto px-4 sm:px-8 py-24">
 
             {/* Header */}
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
@@ -173,7 +173,7 @@ export default function ColorizeHowItWorks() {
             </div>
 
             {/* Steps Grid Container - Gray Background */}
-            <div className="bg-[#F3F4F6] p-3 rounded-[3rem]">
+            <div className="bg-brand-surface p-3 rounded-[3rem]">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                     {STEPS.map((step) => (
                         <div

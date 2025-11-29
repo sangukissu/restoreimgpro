@@ -4,8 +4,9 @@ import { Footer } from '@/components/landing/Footer';
 import ColorizeHowItWorks from "@/components/pages/colorize-how-it-works"
 import ColorizeShowcaseSection from "@/components/pages/colorize-showcase-section"
 import ColorizeFeaturesSection from "@/components/pages/colorize-features-section"
+import ColorizeQualitySection from "@/components/pages/colorize-quality-section"
 import ColorizeFAQSection from "@/components/pages/colorize-faq-section"
-import ColorizeMemoriesSection from "@/components/pages/colorize-memories-section"
+import { CTA } from '@/components/landing/CTA';
 import ColorizeHero from "@/components/pages/colorize-hero"
 
 
@@ -222,7 +223,7 @@ const colorizeFAQPageJsonLd = {
 
 export default function ColorizePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-brand-bg">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(colorizePageJsonLd) }}
@@ -233,56 +234,12 @@ export default function ColorizePage() {
       />
       <Navbar />
       <ColorizeHero />
-
       <ColorizeHowItWorks />
       <ColorizeShowcaseSection />
       <ColorizeFeaturesSection />
-      {/* Colorization Quality Section */}
-      <section className="px-6 py-20 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-6xl font-bold text-black mb-4">Colorization quality & accuracy</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Understanding what makes AI colorization realistic and when it works best
-            </p>
-          </div>
-
-          {/* Quality Factors */}
-          <div className="space-y-12 mb-16">
-            <div className="border-l-4 border-black pl-6">
-              <h3 className="text-xl font-bold text-black mb-3">Image Quality Matters</h3>
-              <p className="text-gray-600">
-                Sharp, well-exposed photos with clear details produce the most realistic colorization. Blurry or very
-                dark images may have less accurate color predictions.
-              </p>
-            </div>
-
-            <div className="border-l-4 border-black pl-6">
-              <h3 className="text-xl font-bold text-black mb-3">Common Objects Work Best</h3>
-              <p className="text-gray-600">
-                The AI performs exceptionally well on familiar subjects like people, nature, buildings, and everyday
-                objects that appear frequently in training data.
-              </p>
-            </div>
-
-            <div className="border-l-4 border-black pl-6">
-              <h3 className="text-xl font-bold text-black mb-3">Context Helps Accuracy</h3>
-              <p className="text-gray-600">
-                Photos with clear context clues - like outdoor settings, recognizable clothing styles, or familiar
-                objects - help the AI make more accurate color choices.
-              </p>
-            </div>
-          </div>
-
-
-        </div>
-      </section>
-
-
+      <ColorizeQualitySection />
       <ColorizeFAQSection />
-      <ColorizeMemoriesSection />
-
-
+      <CTA />
       <Footer />
     </div>
   )

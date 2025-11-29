@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-import { cn } from "@/lib/utils"
+import React from "react"
 import { Eye, Palette, Search, Clock, Shield, Lock } from "lucide-react"
 
 export default function ColorizeFeaturesSection() {
@@ -39,60 +38,58 @@ export default function ColorizeFeaturesSection() {
   ]
 
   return (
-    <section className="px-4 py-20 bg-white">
-      <div className="max-w-6xl mx-auto">
+    <section className="px-4 sm:px-8 py-24">
+      <div className="max-w-[1320px] mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className=" text-4xl lg:text-5xl font-bold text-black mb-4">Why our Colorization works like magic</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Advanced AI meets art history to bring your vintage photos to life with authentic colors
-          </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+          <div className="max-w-2xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-[#FF4D00]">//</span> Why It Works <span className="text-[#FF4D00]">//</span>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+              Advanced AI <br />
+              <span className="text-gray-400">Colorization.</span>
+            </h2>
+          </div>
+
+          {/* Subtitle */}
+          <div className="max-w-md">
+            <p className="text-lg text-gray-600 font-medium leading-relaxed">
+              Advanced AI meets art history to bring your vintage photos to life with authentic colors.
+            </p>
+          </div>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10 max-w-6xl mx-auto">
-          {features.map((feature, index) => (
-            <Feature key={feature.title} {...feature} index={index} />
-          ))}
+        {/* Grid Container - Gray Background */}
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-[1.5rem] p-6 flex flex-col gap-6 h-full shadow-sm hover:shadow-md transition-shadow duration-300"
+              >
+                {/* Icon */}
+                <div className="w-12 h-12 rounded-2xl bg-[#F3F4F6] flex items-center justify-center text-[#FF4D00]">
+                  {feature.icon}
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col gap-3">
+                  <h3 className="text-xl font-bold text-brand-black leading-tight">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-500 font-medium leading-relaxed text-sm">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
-  )
-}
-
-const Feature = ({
-  title,
-  description,
-  icon,
-  index,
-}: {
-  title: string
-  description: string
-  icon: React.ReactNode
-  index: number
-}) => {
-  return (
-    <div
-      className={cn(
-        "flex flex-col lg:border-r py-10 relative group/feature border-gray-200",
-        (index === 0 || index === 3) && "lg:border-l border-gray-200",
-        index < 3 && "lg:border-b border-gray-200",
-      )}
-    >
-      {index < 3 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-gray-50 to-transparent pointer-events-none" />
-      )}
-      {index >= 3 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-gray-50 to-transparent pointer-events-none" />
-      )}
-      <div className="mb-4 relative z-10 px-10 text-gray-600">{icon}</div>
-      <div className="text-lg font-bold mb-2 relative z-10 px-10">
-        <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-gray-300 group-hover/feature:bg-black transition-all duration-200 origin-center" />
-        <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-black">
-          {title}
-        </span>
-      </div>
-      <p className="text-sm text-gray-600 max-w-xs relative z-10 px-10">{description}</p>
-    </div>
   )
 }

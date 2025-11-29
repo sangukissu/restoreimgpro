@@ -64,7 +64,7 @@ export default function ColorizeShowcaseSection() {
   ]
 
   return (
-    <section className="w-full px-4 sm:px-8 py-24 bg-white">
+    <section className="w-full px-4 sm:px-8 py-24">
       <div className="max-w-[1320px] mx-auto">
         {/* Header */}
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 mb-16">
@@ -90,7 +90,7 @@ export default function ColorizeShowcaseSection() {
         </div>
 
         {/* Showcase Grid Container - Gray Background */}
-        <div className="bg-[#F3F4F6] p-3 rounded-[1.8rem]">
+        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {showcaseItems.map((item, index) => (
               <div
@@ -115,7 +115,7 @@ export default function ColorizeShowcaseSection() {
                 {/* Content */}
                 <div className="flex flex-col gap-3 px-2 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-brand-black shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-brand-surface flex items-center justify-center text-brand-black shrink-0">
                       {item.icon}
                     </div>
                     <h3 className="text-lg font-bold text-brand-black leading-tight">{item.title}</h3>
