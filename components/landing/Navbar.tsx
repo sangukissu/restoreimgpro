@@ -75,7 +75,7 @@ export const Navbar: React.FC = () => {
         <div className="absolute top-[3.9rem] left-1/2 -translate-x-1/2 z-10 hidden lg:block">
           <div className="bg-gradient-to-r from-red-50 to-emerald-50 border border-red-100 text-red-900 px-6 py-1.5 rounded-b-xl flex items-center gap-2 text-xs font-medium animate-in slide-in-from-top-2 duration-500 pt-3 -mt-2">
             <Sparkles className="w-3 h-3 text-red-600 fill-red-600" />
-            <span>Christmas Offer: 10% OFF with code <span className="font-bold font-mono text-emerald-700">MEMORIES</span></span>
+            <span>Christmas Offer: 40% OFF with code <span className="font-bold font-mono text-emerald-700">CHRISTMAS40</span></span>
           </div>
         </div>
 

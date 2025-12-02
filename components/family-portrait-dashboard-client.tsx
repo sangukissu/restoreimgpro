@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import DashboardHeader from "@/components/dashboard-header"
 import PaymentModal from "@/components/payment-modal"
 import PaymentSuccessModal from "@/components/payment-success-modal"
+import ChristmasPortraitShowcase from "@/components/christmas-portrait-showcase"
 
 interface Props {
   user: { email: string; id: string }
@@ -131,6 +132,9 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
               </p>
             </div>
           </div>
+
+          {/* Christmas Showcase Section */}
+          <ChristmasPortraitShowcase />
         </div>
       </main>
 

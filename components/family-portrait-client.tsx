@@ -193,7 +193,7 @@ export default function FamilyPortraitClient() {
                     <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                   </div>
                   <p className="text-gray-800 font-semibold text-lg">Combining your family portrait...</p>
-                  <p className="text-sm text-gray-600">Please wait while we compose the image</p>
+                  <p className="text-sm text-gray-600">Please don't leave or close the page while we compose the image</p>
                 </div>
               ) : resultUrl ? (
                 <div className="space-y-4">
