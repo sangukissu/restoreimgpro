@@ -147,7 +147,7 @@ export default function AIAnimationHero() {
               </div>
             ))}
             <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-              10k+
+              260+
             </div>
           </div>
 
@@ -157,7 +157,7 @@ export default function AIAnimationHero() {
                 <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
               ))}
             </div>
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Trusted by 190+ Families</span>
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Trusted by 260+ Families</span>
           </div>
         </div>
 

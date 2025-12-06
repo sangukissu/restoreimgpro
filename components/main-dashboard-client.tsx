@@ -15,26 +15,8 @@ interface MainDashboardClientProps {
 
 export default function MainDashboardClient({ user, initialCredits, isPaymentSuccess }: MainDashboardClientProps) {
   const [credits, setCredits] = useState(initialCredits)
-  const [showPaymentModal, setShowPaymentModal] = useState(false)
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
-  const [showPaymentSuccess, setShowPaymentSuccess] = useState(isPaymentSuccess)
 
-  const handlePaymentSkip = () => {
-    setShowPaymentModal(false)
-  }
 
-  const handlePaymentSuccess = (newCredits: number) => {
-    setCredits(newCredits)
-    setShowPaymentModal(false)
-    setIsProcessingPayment(false)
-    setShowPaymentSuccess(true)
-    setTimeout(() => setShowPaymentSuccess(false), 5000)
-  }
-
-  const handlePaymentError = (error: string) => {
-    setIsProcessingPayment(false)
-    setShowPaymentModal(false)
-  }
 
   return (
     <main className="mx-auto max-w-[1320px] py-12 px-4 sm:px-8 relative">

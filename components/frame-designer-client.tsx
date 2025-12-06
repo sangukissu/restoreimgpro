@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import FrameDesigner from "@/components/frame-designer"
-import { useToast } from "@/hooks/use-toast"
 
 interface FrameDesignerClientProps {
   user: {

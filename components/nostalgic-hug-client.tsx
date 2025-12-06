@@ -20,9 +20,6 @@ interface NostalgicHugClientProps {
 
 export default function NostalgicHugClient({ user, initialCredits, isPaymentSuccess }: NostalgicHugClientProps) {
     const [credits, setCredits] = useState(initialCredits)
-    const [showPaymentModal, setShowPaymentModal] = useState(false)
-    const [isProcessingPayment, setIsProcessingPayment] = useState(false)
-    const [showPaymentSuccess, setShowPaymentSuccess] = useState(isPaymentSuccess)
 
     const [step, setStep] = useState(1)
     const [loading, setLoading] = useState(false)
@@ -38,14 +35,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
     // Step 3 State
     const [videoUrl, setVideoUrl] = useState<string | null>(null)
 
-    // Show success message if payment was successful
-    useEffect(() => {
-        if (isPaymentSuccess && credits > 0) {
-            setShowPaymentSuccess(true)
-            const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
-            return () => clearTimeout(timer)
-        }
-    }, [isPaymentSuccess, credits])
+ 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setFile: (file: File | null) => void) => {
         if (e.target.files && e.target.files[0]) {
@@ -56,7 +46,6 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
     const checkCredits = (cost: number) => {
         if (credits < cost) {
             toast.error(`Insufficient credits. This action requires ${cost} credits.`)
-            setShowPaymentModal(true)
             return false
         }
         return true
@@ -171,19 +160,6 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
         setVideoUrl(null)
     }
 
-    // Payment handlers
-    const handlePaymentSkip = () => setShowPaymentModal(false)
-    const handlePaymentSuccess = (newCredits: number) => {
-        setCredits(newCredits)
-        setShowPaymentModal(false)
-        setIsProcessingPayment(false)
-        toast.success(`Credits Added Successfully! You now have ${newCredits} credits.`)
-    }
-    const handlePaymentError = (error: string) => {
-        setIsProcessingPayment(false)
-        toast.error(`Payment Failed: ${error}`)
-    }
-    const handleBuyCredits = () => setShowPaymentModal(true)
 
     const LoadingState = ({ message }: { message: string }) => (
         <div className="flex flex-col items-center justify-center py-12 text-center space-y-6 animate-in fade-in duration-300">
@@ -299,6 +275,11 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                                                 Generate Scene
                                                 <ArrowRight className="ml-2 h-5 w-5" />
                                             </Button>
+                                            {credits < 20 && (
+                                                <p className="text-xs text-red-500">
+                                                    You don't have enough credits to generate.
+                                                </p>
+                                            )}
                                         </div>
                                     </>
                                 )}

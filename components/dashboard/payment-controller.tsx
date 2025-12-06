@@ -39,10 +39,6 @@ export default function PaymentController({ user, initialCreditBalance, children
     }
   }, [searchParams])
 
-  const handleBuyCredits = () => {
-    setShowPaymentModal(true)
-  }
-
   const handlePaymentSkip = () => {
     setShowPaymentModal(false)
   }
@@ -62,7 +58,7 @@ export default function PaymentController({ user, initialCreditBalance, children
 
   return (
     <SidebarProvider>
-      <AppSidebar user={user} initialCreditBalance={initialCreditBalance} onBuyCredits={handleBuyCredits} />
+      <AppSidebar user={user} initialCreditBalance={initialCreditBalance} />
       <SidebarInset>
         {/* Header styled like example-layout.md */}
         <header className="flex h-16 shrink-0 items-center gap-2 justify-between">
@@ -75,7 +71,6 @@ export default function PaymentController({ user, initialCreditBalance, children
             <HeaderUser
               user={user}
               initialCreditBalance={initialCreditBalance}
-              onBuyCredits={handleBuyCredits}
             />
           </div>
         </header>

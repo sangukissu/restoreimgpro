@@ -38,7 +38,7 @@ const navSecondary = [
 ]
 
 // Credits Card Component
-function CreditsCard({ initialCreditBalance, onBuyCredits }: { initialCreditBalance?: number, onBuyCredits?: () => void }) {
+function CreditsCard({ initialCreditBalance }: { initialCreditBalance?: number }) {
   const { credits, loading } = useCredits(initialCreditBalance)
   
   if (loading) {
@@ -63,11 +63,11 @@ function CreditsCard({ initialCreditBalance, onBuyCredits }: { initialCreditBala
         <Button
           size="sm"
           className="w-full bg-black hover:bg-black/90 text-white border-0"
-          onClick={() => {
-            if (onBuyCredits) onBuyCredits()
-          }}
+          asChild
         >
-          <Sparkles className="h-3 w-3" /> Get Credits
+          <Link href="/pricing">
+            <Sparkles className="h-3 w-3 mr-2" /> Get Credits
+          </Link>
         </Button>
       </CardContent>
     </Card>
@@ -77,7 +77,6 @@ function CreditsCard({ initialCreditBalance, onBuyCredits }: { initialCreditBala
 export function AppSidebar({ 
   user,
   initialCreditBalance,
-  onBuyCredits,
   ...props 
 }: React.ComponentProps<typeof Sidebar> & {
   user?: {
@@ -87,7 +86,6 @@ export function AppSidebar({
     id?: string
   }
   initialCreditBalance?: number
-  onBuyCredits?: () => void
 }) {
   const userData = user || {
     name: "User",
@@ -129,8 +127,10 @@ export function AppSidebar({
         <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <CreditsCard initialCreditBalance={initialCreditBalance} onBuyCredits={onBuyCredits} />
-        <NavUser user={userData} onBuyCredits={onBuyCredits} />
+        <div className="p-2">
+          <CreditsCard initialCreditBalance={initialCreditBalance} />
+          <NavUser user={userData} />
+        </div>
       </SidebarFooter>
     </Sidebar>
   )

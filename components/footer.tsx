@@ -39,6 +39,9 @@ export default function Footer() {
               <a href="/pricing" className="text-gray-600 hover:text-black transition-colors">
                 Pricing
               </a>
+              <a href="/referral" className="text-gray-600 hover:text-black transition-colors">
+                Referral Program
+              </a>
               <a href="/refunds" className="text-gray-600 hover:text-black transition-colors">
                 Refunds
               </a>
@@ -56,6 +59,12 @@ export default function Footer() {
               </a>
               <a href="/ai-family-portrait" className="text-gray-600 hover:text-black transition-colors">
                 AI Family Portrait
+              </a>
+              <a href="/nostalgic-hug-video" className="text-gray-600 hover:text-black transition-colors">
+                Nostalgic Hug Video
+              </a>
+              <a href="/old-photo-restoration" className="text-gray-600 hover:text-black transition-colors">
+                Old Photo Restoration
               </a>
               <a href="/blog" className="text-gray-600 hover:text-black transition-colors">
                 Blog

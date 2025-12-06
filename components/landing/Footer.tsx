@@ -52,12 +52,16 @@ export const Footer: React.FC = () => {
                             <a href="/colorize-photos" className="font-medium hover:text-brand-orange transition-colors">Colorize Photos</a>
                             <a href="/ai-photo-animation" className="font-medium hover:text-brand-orange transition-colors">AI Photo Animation</a>
                             <a href="/ai-family-portrait" className="font-medium hover:text-brand-orange transition-colors">AI Family Portrait</a>
+                            <a href="/nostalgic-hug-video" className="font-medium hover:text-brand-orange transition-colors">Nostalgic Hug</a>
+                            <a href="/old-photo-restoration" className="font-medium hover:text-brand-orange transition-colors">Old Photo Restoration</a>
                         </div>
                         <div className="flex flex-col gap-6">
                             <h4 className="text-gray-500 font-bold text-sm uppercase tracking-wider">Product</h4>
                             <a href="/pricing" className="font-medium hover:text-brand-orange transition-colors">Pricing</a>
                             <a href="/examples" className="font-medium hover:text-brand-orange transition-colors">Examples</a>
                             <a href="/blog" className="font-medium hover:text-brand-orange transition-colors">Blog</a>
+                            <a href="/referral" className="font-medium hover:text-brand-orange transition-colors">Referral Program</a>
+
                         </div>
                         <div className="flex flex-col gap-6">
                             <h4 className="text-gray-500 font-bold text-sm uppercase tracking-wider">Legal</h4>

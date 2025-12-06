@@ -37,10 +37,44 @@ export default async function MyMediaPage({
     .eq("user_id", data.user.id)
     .order("created_at", { ascending: false });
 
+  // Fetch Image Restorations
+  const { data: restoredImages } = await supabase
+    .from("image_restorations")
+    .select("id, restored_image_url, created_at, status")
+    .eq("user_id", data.user.id)
+    .order("created_at", { ascending: false });
+
+  // Fetch Family Portraits
+  const { data: familyPortraits } = await supabase
+    .from("family_portraits")
+    .select("id, composed_image_url, created_at, status")
+    .eq("user_id", data.user.id)
+    .order("created_at", { ascending: false });
+
   // Combine and sort videos
   const allVideos = [
     ...(videos || []).map((v: any) => ({ ...v, type: 'animation' })),
     ...(nostalgicVideos || []).map((v: any) => ({ ...v, preset_name: 'Nostalgic Hug', type: 'nostalgic-hug' }))
+  ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+  // Combine and sort images
+  const allImages = [
+    ...(restoredImages || []).map((img: any) => ({
+      id: img.id,
+      url: img.restored_image_url,
+      created_at: img.created_at,
+      status: img.status || 'completed',
+      type: 'restoration',
+      title: 'Restored Photo'
+    })),
+    ...(familyPortraits || []).map((img: any) => ({
+      id: img.id,
+      url: img.composed_image_url,
+      created_at: img.created_at,
+      status: img.status || 'completed',
+      type: 'family-portrait',
+      title: 'Family Portrait'
+    }))
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
   const resolvedSearchParams = await searchParams;
@@ -52,6 +86,7 @@ export default async function MyMediaPage({
       initialCredits={credits}
       isPaymentSuccess={isPaymentSuccess}
       videos={allVideos}
+      images={allImages}
     />
   );
 }

@@ -28,10 +28,9 @@ interface ReferralDashboardProps {
     id: string
   }
   initialCredits: number
-  onBuyCredits: () => void
 }
 
-export default function ReferralDashboard({ user, initialCredits, onBuyCredits }: ReferralDashboardProps) {
+export default function ReferralDashboard({ user, initialCredits }: ReferralDashboardProps) {
   const [referralData, setReferralData] = useState<ReferralData | null>(null)
   const [settings, setSettings] = useState<ReferralSettings | null>(null)
   const [loading, setLoading] = useState(true)

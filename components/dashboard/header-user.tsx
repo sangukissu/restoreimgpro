@@ -34,10 +34,9 @@ interface HeaderUserProps {
     id: string
   }
   initialCreditBalance: number
-  onBuyCredits?: () => void
 }
 
-export function HeaderUser({ user, initialCreditBalance, onBuyCredits }: HeaderUserProps) {
+export function HeaderUser({ user, initialCreditBalance }: HeaderUserProps) {
   const { credits } = useCredits(initialCreditBalance)
   return (
     <div className="flex items-center gap-3">
@@ -77,16 +76,11 @@ export function HeaderUser({ user, initialCreditBalance, onBuyCredits }: HeaderU
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => {
-              if (onBuyCredits) onBuyCredits()
-            }}
-          >
-            <div className="flex items-center">
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/pricing" className="flex items-center w-full">
               <Sparkles className="mr-2 h-4 w-4" />
               Buy Credits
-            </div>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

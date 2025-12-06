@@ -217,17 +217,21 @@ export default function RefundsPage() {
                     <div className="mt-6 p-8 bg-gray-50 rounded-2xl border border-gray-100">
                       <div className="space-y-3 mb-8">
                         <p>
-                          <strong>Email:</strong> refunds@bringback.pro
+                          <strong>Email:</strong> support@bringback.pro
                         </p>
                         <p>
                           <strong>Response Time:</strong> Within 24 hours
                         </p>
-                        <p>
-                          <strong>Phone:</strong> 1-800-BRINGBACK (for urgent issues)
-                        </p>
+
                       </div>
                       <div>
-                        <Button className="bg-brand-black text-white hover:bg-gray-800 px-8 py-6 text-lg rounded-xl">Request Refund</Button>
+                        <a
+                          href="mailto:support@bringback.pro?subject=Refund%20Request%20-%20BringBack&body=I%20would%20like%20to%20request%20a%20refund%20for%20my%20recent%20purchase.%20My%20order%20details%20are%3A%0A%0A%5BYour%20Order%20Number%2FEmail%5D%0A%5BReason%20for%20Refund%5D%0A%5BProof%20of%20Issues%20(e.g.%2C%20screenshots%2C%20detailed%20description)%5D"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button className="bg-brand-black text-white hover:bg-gray-800 px-8 py-6 text-lg rounded-xl">Request Refund</Button>
+                        </a>
                       </div>
                     </div>
                   </div>

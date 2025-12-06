@@ -10,7 +10,7 @@ export const CTA: React.FC = () => {
                 <div className="bg-brand-surface p-3 rounded-[2.5rem]">
 
                     {/* Inner Light Container */}
-                    <div className="relative bg-white rounded-[2rem] p-6 sm:p-16 lg:p-20 overflow-hidden group shadow-sm">
+                    <div className="relative bg-white rounded-[2rem] p-6 overflow-hidden group shadow-sm">
 
                         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap:8 sm:gap-16 items-center">
 
@@ -30,8 +30,8 @@ export const CTA: React.FC = () => {
                                     Every photo holds a story. Don't let damage steal your precious moments. Restore them forever in seconds.
                                 </p>
 
-                                <div className="flex flex-col sm:flex-row gap-4">
-                                    <button className="group flex items-center justify-between gap-6 bg-brand-orange text-white pl-6 pr-2 py-2 rounded-full transition-all duration-300 hover:scale-105 shadow-[0_20px_40px_-15px_rgba(255,77,0,0.4)] hover:shadow-[0_25px_50px_-15px_rgba(255,77,0,0.5)]">
+                                <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                                    <button className="group flex items-center justify-between gap-6 bg-brand-orange text-white pl-6 pr-2 py-2 rounded-full shadow-[0_20px_40px_-15px_rgba(255,77,0,0.4)] hover:shadow-[0_25px_50px_-15px_rgba(255,77,0,0.5)]">
                                         <span className="font-bold text-md tracking-tight">Restore Your First Photo</span>
                                         <div className="w-12 h-12 bg-white text-brand-orange rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
                                             <ArrowRight size={20} strokeWidth={3} />
@@ -43,7 +43,7 @@ export const CTA: React.FC = () => {
                             </div>
 
                             {/* Right: Cinematic Scanning Animation (Optimized) */}
-                            <div className="relative h-[500px] w-full flex items-center justify-center lg:justify-end">
+                            <div className="relative h-full w-full flex items-center justify-center lg:justify-end">
 
                                 {/* Card Container */}
                                 <div className="relative w-full max-w-md aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl border border-black/5 group/card bg-gray-100 transform-gpu">

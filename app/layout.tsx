@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
     description: "BringBack AI restores old, damaged photos and animates them with AI. Preserve your history and relive memories in motion.",
     url: 'https://bringback.pro',
-    siteName: 'BringBack',
+    siteName: 'BringBack AI',
     images: [
       {
         url: '/og-image.png',

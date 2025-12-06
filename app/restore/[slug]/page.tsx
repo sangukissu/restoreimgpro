@@ -105,7 +105,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
                       </div>
                     ))}
                     <div className="absolute left-20 top-0 w-10 h-10 rounded-xl bg-[#111111] text-white flex items-center justify-center text-[10px] font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-                      190+
+                      260+
                     </div>
                   </div>
 
@@ -115,7 +115,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
                         <Star key={star} size={12} className="fill-[#FF4D00] text-[#FF4D00]" />
                       ))}
                     </div>
-                    <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 190+ Families</span>
+                    <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 260+ Families</span>
                   </div>
                 </div>
               </div>
@@ -539,7 +539,7 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
                         <Star key={star} size={16} className="fill-[#FF4D00] text-[#FF4D00]" />
                       ))}
                     </div>
-                    <span className="text-sm">Trusted by 190+ customers</span>
+                    <span className="text-sm">Trusted by 260+ customers</span>
                   </div>
                 </div>
               </div>

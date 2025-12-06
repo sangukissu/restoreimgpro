@@ -16,34 +16,12 @@ interface EnhanceClientProps {
 
 export default function EnhanceClient({ user, initialCredits, restoredImageUrl }: EnhanceClientProps) {
   const [userCredits, setUserCredits] = useState(initialCredits)
-  const [showPaymentModal, setShowPaymentModal] = useState(false)
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
-  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false)
   const [enhancedImageUrl, setEnhancedImageUrl] = useState<string | null>(null)
   const [isEnhancing, setIsEnhancing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { toast } = useToast()
 
-  const handleBuyCredits = () => {
-    setShowPaymentModal(true)
-  }
 
-  const handlePaymentSuccess = (newCredits: number) => {
-    setUserCredits(newCredits)
-    setShowPaymentModal(false)
-    setIsProcessingPayment(false)
-    setShowPaymentSuccess(true)
-    setTimeout(() => setShowPaymentSuccess(false), 5000)
-  }
-
-  const handlePaymentError = (error: string) => {
-    setIsProcessingPayment(false)
-    toast.error(`Payment Failed: ${error}`)
-  }
-
-  const handlePaymentSkip = () => {
-    setShowPaymentModal(false)
-  }
 
   const handleEnhance = async () => {
     try {

@@ -12,39 +12,9 @@ interface Props {
 
 export default function FamilyPortraitDashboardClient({ user, initialCredits, isPaymentSuccess }: Props) {
   const [userCredits, setUserCredits] = useState(initialCredits)
-  const [showPaymentModal, setShowPaymentModal] = useState(false)
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
-  const [showPaymentSuccess, setShowPaymentSuccess] = useState(isPaymentSuccess)
 
-  // Optional: auto-hide success toast after redirect success
-  useEffect(() => {
-    if (isPaymentSuccess) {
-      // Hide success modal after a short delay to match other pages
-      const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [isPaymentSuccess])
 
-  const handleBuyCredits = () => {
-    setShowPaymentModal(true)
-  }
 
-  const handlePaymentSkip = () => {
-    setShowPaymentModal(false)
-  }
-
-  const handlePaymentSuccess = (newCredits: number) => {
-    setUserCredits(newCredits)
-    setShowPaymentModal(false)
-    setIsProcessingPayment(false)
-    setShowPaymentSuccess(true)
-    setTimeout(() => setShowPaymentSuccess(false), 5000)
-  }
-
-  const handlePaymentError = (_error: string) => {
-    setIsProcessingPayment(false)
-    // Errors are already surfaced inside PaymentPlan; keep UX consistent
-  }
 
   return (
     <div className="min-h-screen relative">

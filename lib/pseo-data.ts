@@ -2,32 +2,32 @@
 
 // CATEGORY 1: The Problem
 export const problems = [
-  { 
-    slug: 'faded', 
-    name: 'Faded', 
+  {
+    slug: 'faded',
+    name: 'Faded',
     h1_fragment: 'Faded Photo',
-    description: 'Time and sunlight make colors lose their vibrancy. Our AI restores the original contrast, saturation, and color balance to make your photos pop again.' 
+    description: 'Time and sunlight make colors lose their vibrancy. Our AI restores the original contrast, saturation, and color balance to make your photos pop again.'
   },
-  { 
-    slug: 'scratched', 
+  {
+    slug: 'scratched',
     name: 'Scratched',
     h1_fragment: 'Scratched Photo',
     description: 'Scratches, dust, and creases can ruin a perfect memory. BringBack.pro intelligently identifies and removes these imperfections, leaving a clean, smooth image.'
   },
-  { 
-    slug: 'blurry', 
+  {
+    slug: 'blurry',
     name: 'Blurry',
     h1_fragment: 'Blurry Photo',
     description: 'Out-of-focus or shaky photos are hard to look at. Our AI unblurs images, sharpens details, and enhances faces to bring stunning clarity to your pictures.'
   },
-  { 
-    slug: 'water-damaged', 
+  {
+    slug: 'water-damaged',
     name: 'Water-Damaged',
     h1_fragment: 'Water-Damaged',
     description: 'Water stains, mold, or spots can seem impossible to fix. Our AI is trained to detect and remove these blemishes, restoring the photo underneath.'
   },
-  { 
-    slug: 'torn', 
+  {
+    slug: 'torn',
     name: 'Torn or Ripped',
     h1_fragment: 'Torn Photo',
     description: 'Photos torn in half or missing pieces can be digitally reconstructed. Our AI uses surrounding pixels to intelligently fill in and repair the damaged areas.'
@@ -67,26 +67,26 @@ export const problems = [
 
 // CATEGORY 2: The Subject / Type
 export const photoTypes = [
-  { 
-    slug: 'family-portrait', 
+  {
+    slug: 'family-portrait',
     name: 'Family Portrait',
     h1_fragment: 'Family Portrait',
     description: 'Your family portraits are irreplaceable. Whether it\'s a group shot from the 70s or a photo of your grandparents, we ensure every face is clear and vibrant.'
   },
-  { 
-    slug: 'wedding-photo', 
+  {
+    slug: 'wedding-photo',
     name: 'Wedding Photo',
     h1_fragment: 'Wedding Photo',
     description: 'Don\'t let a damaged photo ruin your wedding memories. We specialize in restoring bridal portraits, group shots, and candid moments from your special day.'
   },
-  { 
-    slug: 'childhood-photo', 
+  {
+    slug: 'childhood-photo',
     name: 'Childhood Photo',
     h1_fragment: 'Childhood Photo',
     description: 'Those priceless childhood photos deserve to be preserved. We can fix the damage and even enhance the details to bring those memories back to life.'
   },
-  { 
-    slug: 'military-photo', 
+  {
+    slug: 'military-photo',
     name: 'Military Photo',
     h1_fragment: 'Military Photo',
     description: 'Photos of ancestors in uniform are a vital link to your family\'s history. We restore military portraits with the respect and clarity they deserve.'
@@ -173,7 +173,7 @@ export const restorationKeywords = [
   { keyword: 'Photo restoration app free', slug: 'photo-restoration-app-free' },
   { keyword: 'AI old photo restoration online free', slug: 'ai-old-photo-restoration-online-free' },
   { keyword: 'Restore old damaged photos', slug: 'restore-old-damaged-photos' },
-  { keyword: 'ChatGPT photo restoration', slug: 'chatgpt-photo-restoration' },
+  { keyword: 'Gemini photo restoration', slug: 'gemini-photo-restoration' },
   { keyword: 'Enhance old photo', slug: 'enhance-old-photo' },
   { keyword: 'Old photo restoration online', slug: 'old-photo-restoration-online' },
   { keyword: 'AI photo restoration online', slug: 'ai-photo-restoration-online' },
@@ -182,30 +182,20 @@ export const restorationKeywords = [
 ];
 
 export const howToKeywords = [
-  { keyword: 'how to clean old pictures', slug: 'how-to-clean-old-pictures' },
   { keyword: 'how to clean old photos with ai', slug: 'how-to-clean-old-photos-with-ai' },
   { keyword: 'how do you clean a photograph', slug: 'how-do-you-clean-a-photograph' },
   { keyword: 'how to remove scratches from old photos', slug: 'how-to-remove-scratches-from-old-photos' },
   { keyword: 'remove scratches from pictures', slug: 'remove-scratches-from-pictures' },
-  { keyword: 'how to fix grainy images', slug: 'how-to-fix-grainy-images' },
   { keyword: 'how to fix grainy photos', slug: 'how-to-fix-grainy-photos' },
 ];
 
 export const digitizationKeywords = [
-  { keyword: 'digitising photographs', slug: 'digitising-photographs' },
-  { keyword: 'how to digitize photos', slug: 'how-to-digitize-photos' },
   { keyword: 'how to scan old photos for the best resolution', slug: 'how-to-scan-old-photos-for-the-best-resolution' },
-  { keyword: 'scan photos to digital', slug: 'scan-photos-to-digital' },
-  { keyword: 'where to scan photos', slug: 'where-to-scan-photos' },
   { keyword: 'best way to digitize photos', slug: 'best-way-to-digitize-photos' },
   { keyword: 'how to scan old pictures', slug: 'how-to-scan-old-pictures' },
   { keyword: 'where can i get a photo digitized', slug: 'where-can-i-get-a-photo-digitized' },
   { keyword: 'how can i digitize old photos', slug: 'how-can-i-digitize-old-photos' },
   { keyword: 'where can i get photos scanned', slug: 'where-can-i-get-photos-scanned' },
-  { keyword: 'convert photographs to digital', slug: 'convert-photographs-to-digital' },
-  { keyword: 'how to scan pictures', slug: 'how-to-scan-pictures' },
-  { keyword: 'photographs to digital', slug: 'photographs-to-digital' },
   { keyword: 'convert pictures to digital', slug: 'convert-pictures-to-digital' },
   { keyword: 'best way to scan photos', slug: 'best-way-to-scan-photos' },
-  { keyword: 'how do i digitize old photos', slug: 'how-do-i-digitize-old-photos' },
 ];
