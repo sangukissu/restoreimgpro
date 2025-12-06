@@ -2,7 +2,7 @@ import { type NextRequest } from "next/server"
 import { updateSession } from "@/utils/supabase/middleware"
 import { securityMiddleware, validateOrigin, detectSuspiciousActivity } from "@/middleware/security"
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Apply security middleware first
   const securityResponse = securityMiddleware(request)
   if (securityResponse.status !== 200) {

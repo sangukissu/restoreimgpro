@@ -7,9 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import DashboardHeader from "@/components/dashboard-header"
-import PaymentModal from "@/components/payment-modal"
-import PaymentSuccessModal from "@/components/payment-success-modal"
 import NostalgicHugHowItWorks from "@/components/nostalgic-hug-how-it-works"
 
 interface NostalgicHugClientProps {
@@ -222,19 +219,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                 />
             </div>
 
-            <DashboardHeader
-                user={user}
-                credits={credits}
-                onBuyCredits={handleBuyCredits}
-            />
-
-            <PaymentSuccessModal
-                isOpen={showPaymentSuccess}
-                onClose={() => setShowPaymentSuccess(false)}
-                userCredits={credits}
-            />
-
-            <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
+            <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 sm:px-8 py-6">
                 <div className="mb-10 text-center">
                     <h1 className="font-inter font-bold text-3xl sm:text-4xl text-black mb-2">
                         Nostalgic Hug
@@ -513,15 +498,6 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
 
             <NostalgicHugHowItWorks />
 
-            <PaymentModal
-                isOpen={showPaymentModal}
-                onClose={() => setShowPaymentModal(false)}
-                onSkip={handlePaymentSkip}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
-                isProcessing={isProcessingPayment}
-                setIsProcessing={setIsProcessingPayment}
-            />
         </div>
     )
 }

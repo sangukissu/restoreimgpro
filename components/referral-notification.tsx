@@ -70,19 +70,16 @@ export function ReferralNotification({ referralCode, onClose }: ReferralNotifica
         <div className="flex items-start justify-between mb-2">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5" />
-            <h3 className="font-semibold text-lg">Share & Earn!</h3>
+            <h3 className="font-semibold text-lg">Share & Earn Free Restoration!</h3>
           </div>
           <button
             onClick={handleClose}
             className="text-black/80 hover:text-black transition-colors"
           >
-            <X className="w-4 h-4" />
           </button>
         </div>
         
-        <p className="text-sm text-black/90 mb-2">
-          Share your referral code with friends and both get free restorations when your friend purchase any plan!
-        </p>
+     
         
         <div className="bg-white/20 rounded-md p-2 mb-2 shadow-xs border border-gray-300">
           <div className="flex items-center justify-between">

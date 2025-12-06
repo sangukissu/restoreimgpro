@@ -1,9 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import DashboardHeader from "@/components/dashboard-header"
-import PaymentModal from "@/components/payment-modal"
-import PaymentSuccessModal from "@/components/payment-success-modal"
 import { useToast } from "@/hooks/use-toast"
 
 interface MyMediaClientProps {
@@ -141,19 +138,6 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
         />
       </div>
 
-      {/* Dashboard Header */}
-      <DashboardHeader
-        user={user}
-        credits={credits}
-        onBuyCredits={handleBuyCredits}
-      />
-
-      {/* Payment Success Modal */}
-      <PaymentSuccessModal
-        isOpen={showPaymentSuccess}
-        onClose={() => setShowPaymentSuccess(false)}
-        userCredits={credits}
-      />
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirmation && (
@@ -184,7 +168,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
       )}
 
       {/* Main Content */}
-      <main className="relative z-10 container mx-auto px-4 py-12 pt-24">
+      <main className="relative z-10 container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-8">
           <h1 className="  text-3xl font-bold">My Media</h1>
           {videos && videos.length > 0 && (
@@ -225,17 +209,6 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
           <p>You haven't generated any videos yet.</p>
         )}
       </main>
-
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onSkip={handlePaymentSkip}
-        onSuccess={handlePaymentSuccess}
-        onError={handlePaymentError}
-        isProcessing={isProcessingPayment}
-        setIsProcessing={setIsProcessingPayment}
-      />
     </div>
   )
 }

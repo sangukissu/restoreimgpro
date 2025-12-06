@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Copy, Users, TrendingUp, Clock } from 'lucide-react'
 import { toast } from 'sonner'
-import DashboardHeader from '@/components/dashboard-header'
 
 interface ReferralData {
   code: string
@@ -107,19 +106,6 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
           }} />
         </div>
         
-        <div className="relative z-10 p-6">
-          <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
-          <div className="max-w-6xl mx-auto mt-24">
-            <div className="animate-pulse space-y-6">
-              <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-32 bg-gray-200 rounded"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     )
   }
@@ -137,9 +123,8 @@ export default function ReferralDashboard({ user, initialCredits, onBuyCredits }
       </div>
       
       <div className="relative z-10 p-6">
-        <DashboardHeader user={user} credits={initialCredits} onBuyCredits={onBuyCredits} />
         
-        <div className="max-w-5xl mx-auto mt-24 space-y-8">
+        <div className="max-w-5xl mx-auto space-y-8">
           {/* Header Section */}
           <div className="text-center">
             <h1 className="  text-3xl font-bold text-gray-900 mb-4">Refer Friends & Earn Free Restorations</h1>

@@ -3,6 +3,28 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
+import { Timer } from "lucide-react"
+
+// Custom Christmas Hat Icon
+const ChristmasHat = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M12 22v-2" />
+    <path d="M16 20a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2" />
+    <path d="M12 18a7 7 0 0 1 7-7c0-4-3-6-7-6-4 0-7 2-7 6a7 7 0 0 1 7 7Z" />
+    <circle cx="12" cy="3" r="2" />
+  </svg>
+);
 
 interface PaymentPlanProps {
   onSuccess: (newCredits: number) => void
@@ -18,6 +40,32 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   const [referralCode, setReferralCode] = useState<string>("")
   const [isApplyingReferral, setIsApplyingReferral] = useState(false)
   const [referralApplied, setReferralApplied] = useState(false)
+
+  // Countdown Timer Logic
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
+  const promoEndDate = "2025-12-25T23:59:59";
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const difference = +new Date(promoEndDate) - +new Date();
+      if (difference > 0) {
+        return {
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        };
+      }
+      return null;
+    };
+
+    setTimeLeft(calculateTimeLeft());
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Fetch available plans
   useEffect(() => {
@@ -154,59 +202,66 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
             {plans.map((plan) => {
               // Determine badge and perks based on plan
               const isStarter = plan.credits === 5
-              const isPlus = plan.credits === 15
+              const isPlus = plan.credits === 20
               const isFamily = plan.credits === 60
 
               let badge = ""
               let badgeColor = ""
 
-              if (isPlus) {
-                badge = "BEST VALUE"
-                badgeColor = "bg-green-500"
-              } else if (isStarter) {
-                badge = "POPULAR"
-                badgeColor = "bg-blue-500"
-              } else if (isFamily) {
-                badge = "High-volume discount"
-                badgeColor = "bg-purple-600"
+              // Temporarily disabled other badges for Christmas offer
+              if (isFamily) {
+                badge = "Christmas Offer"
+                badgeColor = "bg-gradient-to-r from-red-600 to-green-600 shadow-sm"
               }
 
               let perks: string[] = []
 
               if (isStarter) {
-                perks = ["5 Credits (Restore 5 Photos)"]
+                perks = ["Restore 5 Photos"]
               } else if (isPlus) {
-                perks = ["20 Credits (20 Photos or 2 Videos)"]
+                perks = ["Restore 20 Photos or 2 Videos"]
               } else if (isFamily) {
-                perks = ["60 Credits (60 Photos or 6 Videos)"]
+                perks = ["Restore 60 Photos or 6 Videos"]
               } else {
-                perks = [`${plan.credits} credits`]
+                perks = [`${plan.credits} Credits`]
               }
 
               return (
                 <button
                   key={plan.id}
                   onClick={() => setSelectedPlanId(plan.id)}
-                  className={`relative w-full text-left border rounded-xl p-4 transition-colors ${selectedPlanId === plan.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"
+                  className={`relative w-full text-left border rounded-xl p-4 transition-all duration-200 ${selectedPlanId === plan.id
+                    ? isFamily
+                      ? "border-red-500 bg-red-50/50 ring-1 ring-red-500/20"
+                      : "border-black bg-gray-50"
+                    : "border-gray-200 hover:border-gray-300"
                     }`}
                 >
                   {/* Conversion Badge */}
                   {badge && (
-                    <div className={`absolute -top-2 left-4 px-2 py-1 ${badgeColor} text-white text-xs font-bold rounded-full`}>
+                    <div className={`absolute -top-2 left-4 px-2 py-1 ${badgeColor} text-white text-xs font-bold rounded-full flex items-center gap-1`}>
+                      {isFamily && <ChristmasHat size={12} />}
                       {badge}
                     </div>
                   )}
 
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <div className="font-semibold text-black mb-1">{plan.name}</div>
-                      <div className="text-sm text-gray-600 mb-2">{plan.credits} credits</div>
+                      <div className="font-semibold text-black mb-1 flex items-center gap-2">
+                        {plan.name}
+                        {isFamily && timeLeft && (
+                          <span className="text-[10px] font-medium text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                            <Timer size={10} />
+                            {timeLeft.days}d {timeLeft.hours}h left
+                          </span>
+                        )}
+                      </div>
 
                       {/* Plan Perks */}
-                      <div className="space-y-1">
+                      <div className="space-y-1 mt-2">
                         {perks.map((perk, index) => (
                           <div key={index} className="flex items-center text-xs text-gray-500">
-                            <svg className="w-3 h-3 text-green-500 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className={`w-3 h-3 mr-1 flex-shrink-0 ${isFamily ? 'text-red-500' : 'text-green-500'}`} fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                             {perk}
@@ -214,7 +269,16 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                         ))}
                       </div>
                     </div>
-                    <div className="text-xl font-bold text-black ml-4">${(plan.price_cents / 100).toFixed(2)}</div>
+                    <div className="flex flex-col items-end">
+                      {isFamily ? (
+                        <>
+                          <div className="text-xl font-bold text-red-600">$14.99</div>
+                          <div className="text-xs text-gray-400 line-through font-medium">$24.99</div>
+                        </>
+                      ) : (
+                        <div className="text-xl font-bold text-black">${(plan.price_cents / 100).toFixed(2)}</div>
+                      )}
+                    </div>
                   </div>
                 </button>
               )
@@ -260,7 +324,10 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
           <Button
             onClick={handlePurchase}
             disabled={isProcessing || !selectedPlanId}
-            className="w-full bg-black hover:bg-gray-800 text-white text-md"
+            className={`w-full text-md text-white ${plans.find(p => p.id === selectedPlanId)?.credits === 60
+              ? "bg-gradient-to-r from-red-600 to-green-600 hover:shadow-lg hover:shadow-red-500/20"
+              : "bg-black hover:bg-gray-800"
+              }`}
           >
             {isProcessing ? "Processing..." : "Continue to Checkout"}
           </Button>

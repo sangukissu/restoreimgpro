@@ -2,9 +2,6 @@
 
 import FamilyPortraitClient from "@/components/family-portrait-client"
 import { useEffect, useState } from "react"
-import DashboardHeader from "@/components/dashboard-header"
-import PaymentModal from "@/components/payment-modal"
-import PaymentSuccessModal from "@/components/payment-success-modal"
 import ChristmasPortraitShowcase from "@/components/christmas-portrait-showcase"
 
 interface Props {
@@ -63,22 +60,10 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
         />
       </div>
 
-      {/* Dashboard Header */}
-      <DashboardHeader
-        user={user}
-        credits={userCredits}
-        onBuyCredits={handleBuyCredits}
-      />
-
-      {/* Payment Success Modal */}
-      <PaymentSuccessModal
-        isOpen={showPaymentSuccess}
-        onClose={() => setShowPaymentSuccess(false)}
-        userCredits={userCredits}
-      />
+    
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="space-y-8">
           {/* Page intro */}
           <div className="text-center max-w-3xl mx-auto">
@@ -138,16 +123,7 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
         </div>
       </main>
 
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onSkip={handlePaymentSkip}
-        onSuccess={handlePaymentSuccess}
-        onError={handlePaymentError}
-        isProcessing={isProcessingPayment}
-        setIsProcessing={setIsProcessingPayment}
-      />
+      
     </div>
   )
 }

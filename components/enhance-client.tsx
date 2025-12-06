@@ -1,9 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import DashboardHeader from "@/components/dashboard-header"
-import PaymentModal from "@/components/payment-modal"
-import PaymentSuccessModal from "@/components/payment-success-modal"
 import EnhancedImageComparison from "@/components/enhanced-image-comparison"
 import { useToast } from "@/hooks/use-toast"
 import LetterGlitch from "@/components/ui/letter-glitch"
@@ -127,22 +124,10 @@ export default function EnhanceClient({ user, initialCredits, restoredImageUrl }
         />
       </div>
 
-      {/* Header */}
-      <DashboardHeader 
-        user={user} 
-        credits={userCredits} 
-        onBuyCredits={handleBuyCredits}
-      />
 
-      {/* Payment Success Modal */}
-      <PaymentSuccessModal 
-        isOpen={showPaymentSuccess}
-        onClose={() => setShowPaymentSuccess(false)}
-        userCredits={userCredits}
-      />
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 sm:px-8 py-6">
         <div className="text-center mb-8">
           <h1 className="  font-inter font-bold text-3xl text-black mb-2">Enhance Your Restored Photo</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">Sharpen details, upscale faces, and add clarity without losing natural look.</p>
@@ -192,16 +177,6 @@ export default function EnhanceClient({ user, initialCredits, restoredImageUrl }
         )}
       </main>
 
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onSkip={handlePaymentSkip}
-        onSuccess={handlePaymentSuccess}
-        onError={handlePaymentError}
-        isProcessing={isProcessingPayment}
-        setIsProcessing={setIsProcessingPayment}
-      />
     </div>
   )
 }

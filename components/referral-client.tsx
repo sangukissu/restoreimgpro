@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react"
 import ReferralDashboard from "@/components/referral-dashboard"
-import PaymentModal from "@/components/payment-modal"
-import PaymentSuccessModal from "@/components/payment-success-modal"
+
 import { toast } from "sonner"
 
 interface ReferralClientProps {
@@ -58,23 +57,8 @@ export default function ReferralClient({ user, initialCredits, isPaymentSuccess 
         onBuyCredits={handleBuyCredits} 
       />
 
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onSkip={handlePaymentSkip}
-        onSuccess={handlePaymentSuccess}
-        onError={handlePaymentError}
-        isProcessing={isProcessingPayment}
-        setIsProcessing={setIsProcessingPayment}
-      />
 
-      {/* Payment Success Modal */}
-      <PaymentSuccessModal 
-        isOpen={showPaymentSuccess}
-        onClose={() => setShowPaymentSuccess(false)}
-        userCredits={credits}
-      />
+ 
     </>
   )
 }

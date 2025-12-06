@@ -3,14 +3,10 @@
 import { useState, useEffect, useRef } from "react"
 import ImageUpload from "@/components/image-upload"
 import ImageComparison from "@/components/image-comparison"
-import PaymentModal from "@/components/payment-modal"
-import PaymentSuccessModal from "@/components/payment-success-modal"
-import DashboardHeader from "@/components/dashboard-header"
 import FeedbackModal from "@/components/feedback-modal"
 import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
 import { useFeedback } from "@/hooks/use-feedback"
-import LetterGlitch from "@/components/ui/letter-glitch"
 import { OrbitSepiaDust } from "@/components/ui/orbit-sepia-dust"
 
 import { analyzeRestoredImage, rerestoreImage, type AnalyzeImageResponse } from "@/lib/api-client"
@@ -33,10 +29,9 @@ interface DashboardClientProps {
     id: string
   }
   initialCredits: number
-  isPaymentSuccess: boolean
 }
 
-export default function DashboardClient({ user, initialCredits, isPaymentSuccess }: DashboardClientProps) {
+export default function DashboardClient({ user, initialCredits }: DashboardClientProps) {
   const [appState, setAppState] = useState<AppState>("upload")
   const [selectedFeature, setSelectedFeature] = useState<FeatureType | null>("restore")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -44,9 +39,6 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   const [restorationData, setRestorationData] = useState<RestorationData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [userCredits, setUserCredits] = useState(initialCredits)
-  const [showPaymentModal, setShowPaymentModal] = useState(false)
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false)
-  const [showPaymentSuccess, setShowPaymentSuccess] = useState(isPaymentSuccess)
   const { toast } = useToast()
   
   // Add ref to track current restoration request
@@ -71,71 +63,6 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
   } = useFeedback()
 
   // Removed automatic payment modal trigger - users should manually buy credits
-
-  // Show success message if payment was successful
-  useEffect(() => {
-    if (isPaymentSuccess && userCredits > 0) {
-      // GA4: purchase event
-      try {
-        if (typeof window !== 'undefined') {
-          const markerStr = localStorage.getItem('buyCheckout')
-          if (markerStr && (window as any).gtag) {
-            const marker = JSON.parse(markerStr)
-            ;(window as any).gtag('event', 'purchase', {
-              transaction_id: marker.paymentId || `${user.id}-${Date.now()}`,
-              value: marker.amount || 0,
-              currency: 'USD',
-              items: [
-                {
-                  item_id: marker.planId,
-                  item_name: marker.planName,
-                  price: marker.amount || 0,
-                  quantity: 1,
-                  credits: marker.credits,
-                }
-              ]
-            })
-            // Clear marker after recording purchase
-            try { localStorage.removeItem('buyCheckout') } catch {}
-          }
-        }
-      } catch { /* ignore analytics errors */ }
-
-      setShowPaymentSuccess(true)
-      // Auto-hide success message after 5 seconds
-      const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [isPaymentSuccess, userCredits])
-
-  // Detect checkout abandonment (user returned without success)
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        const isSuccessParam = new URLSearchParams(window.location.search).get('payment') === 'success'
-        const markerStr = localStorage.getItem('buyCheckout')
-        if (!isSuccessParam && markerStr && (window as any).gtag) {
-          const marker = JSON.parse(markerStr)
-          ;(window as any).gtag('event', 'checkout_abandon', {
-            value: marker.amount || 0,
-            currency: 'USD',
-            items: [
-              {
-                item_id: marker.planId,
-                item_name: marker.planName,
-                price: marker.amount || 0,
-                quantity: 1,
-                credits: marker.credits,
-              }
-            ],
-            started_at: marker.startedAt,
-          })
-          // Clear marker after recording abandon
-          try { localStorage.removeItem('buyCheckout') } catch {}
-        }
-      }
-    } catch { /* ignore analytics errors */ }
-  }, [])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -324,32 +251,6 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
     }
   }
 
-  // Handle payment modal actions
-  const handlePaymentSkip = () => {
-    setShowPaymentModal(false)
-  }
-
-  const handlePaymentSuccess = (newCredits: number) => {
-    setUserCredits(newCredits)
-    setShowPaymentModal(false)
-    setIsProcessingPayment(false)
-    
-    toast.success(`Credits Added Successfully! You now have ${newCredits} credits to restore images.`)
-  }
-
-  const handlePaymentError = (error: string) => {
-    setIsProcessingPayment(false)
-    toast.error(`Payment Failed: ${error}`)
-  }
-
-  const handleBuyCredits = () => {
-    setShowPaymentModal(true)
-  }
-
-
-
-
-
   const handleSignOut = async () => {
     try {
       const response = await fetch('/api/auth/signout', {
@@ -386,22 +287,9 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         />
       </div>
 
-      {/* Dashboard Header */}
-      <DashboardHeader 
-        user={user} 
-        credits={userCredits} 
-        onBuyCredits={handleBuyCredits} 
-      />
-
-      {/* Payment Success Modal */}
-      <PaymentSuccessModal 
-        isOpen={showPaymentSuccess}
-        onClose={() => setShowPaymentSuccess(false)}
-        userCredits={userCredits}
-      />
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 sm:px-8 py-12 pt-24">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 sm:px-8 py-6">
 
 
         {/* Upload State Header */}
@@ -425,7 +313,6 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
             selectedFile={selectedFile}
             selectedImageUrl={selectedImageUrl}
             userCredits={userCredits}
-            onBuyCredits={handleBuyCredits}
           />
         )}
 
@@ -588,16 +475,6 @@ export default function DashboardClient({ user, initialCredits, isPaymentSuccess
         )}
       </main>
 
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onSkip={handlePaymentSkip}
-        onSuccess={handlePaymentSuccess}
-        onError={handlePaymentError}
-        isProcessing={isProcessingPayment}
-        setIsProcessing={setIsProcessingPayment}
-      />
       
       {/* Feedback Modal */}
       <FeedbackModal
