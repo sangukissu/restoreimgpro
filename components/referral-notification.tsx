@@ -75,7 +75,7 @@ export function ReferralNotification({ referralCode, onClose }: ReferralNotifica
           <button
             onClick={handleClose}
             className="text-black/80 hover:text-black transition-colors"
-          >X
+          >            <X className="w-3 h-3" />
           </button>
         </div>
         
