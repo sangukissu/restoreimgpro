@@ -35,12 +35,14 @@ import { useCredits } from "@/hooks/use-credits"
 
 export function NavUser({
   user,
+  onBuyCredits,
 }: {
   user: {
     name: string
     email: string
     avatar: string
   }
+  onBuyCredits?: () => void
 }) {
   const { isMobile } = useSidebar()
   const { credits, loading } = useCredits()
@@ -89,11 +91,16 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/pricing" className="flex items-center w-full">
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  if (onBuyCredits) onBuyCredits()
+                }}
+              >
+                <div className="flex items-center w-full">
                   <Sparkles className="mr-2 h-4 w-4" />
                   Buy Credits
-                </Link>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
