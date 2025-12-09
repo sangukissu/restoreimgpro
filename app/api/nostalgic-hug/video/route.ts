@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
         // Prepare input for Fal AI
         const input = {
-            prompt: "Generate a photorealistic video beginning with the first frame (mother alone on sofa, displaying gentle, natural movements like a subtle head turn or soft posture adjustment). The scene should then transition smoothly by introducing the second figure from second frame moving into the frame from the side, approaching the mother. The mother should react authentically, turning and looking towards the user with immediate recognition and warmth. The video culminates as the the person from second image sits beside the mother and the two figures move into the hug position shown in the final second frame.",
+            prompt: "Generate a photorealistic video beginning with the first frame (the first person alone on sofa, displaying gentle, natural movements like a subtle head turn or soft posture adjustment). The scene should then transition smoothly by introducing the second person from second frame moving into the frame from the side, approaching the first person. The first person should react authentically, turning and looking towards the second person with immediate recognition and warmth. The video culminates as the person from second image sits beside the first person and both move into the family relation hug position shown in the final second frame.",
             image_url: sofaImageUrl,
             duration: "5",
             negative_prompt: "blur, distort, and low quality",
