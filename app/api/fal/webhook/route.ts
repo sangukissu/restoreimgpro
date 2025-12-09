@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
       const { data: generation, error: fetchError } = await supabase
         .from("video_generations")
-        .select("id, user_id")
+        .select("id, user_id, status, video_url")
         .eq("id", generationId)
         .single();
 
@@ -34,6 +34,11 @@ export async function POST(request: NextRequest) {
           { error: "Generation not found" },
           { status: 404 }
         );
+      }
+
+      // Check if generation is already completed to prevent duplicate uploads
+      if (generation.status === "completed" || !!generation.video_url) {
+        return NextResponse.json({ success: true, message: "Already completed" });
       }
 
       const videoBuffer = await downloadVideoFromUrl(videoUrl);
