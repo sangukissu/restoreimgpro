@@ -17,8 +17,8 @@ import { CTA } from '@/components/old-photo-restoration/CTA';
 
 
 export const metadata: Metadata = {
-    title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
-    description: "BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.",
+    title: "Old Photo Restoration | Restore old, faded, and damaged photos online",
+    description: "BringBack AI restores old, faded, and damaged photos to perfection.",
     keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration, digital photo frames, photo framing, custom photo frames",
 
 }
@@ -27,17 +27,17 @@ const homePageJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     '@id': 'https://bringback.pro/#webapp',
-    name: 'Restore, Colorize & Animate Old damaged Photos Online | BringBack AI',
+    name: 'Restore old, faded, and damaged photos online | BringBack AI',
     description: 'BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.',
     url: 'https://bringback.pro/',
     applicationCategory: 'PhotoEditingApplication',
     operatingSystem: 'Web',
     offers: {
         '@type': 'Offer',
-        name: 'BringBack Restoration, Animation & Framing Plans',
+        name: 'BringBack Restoration, Animation & Family Photo Plans',
         url: 'https://bringback.pro/pricing',
         priceCurrency: 'USD',
-        price: '2',
+        price: '4.99',
         eligibleRegion: {
             '@type': 'Place',
             name: 'Worldwide'
