@@ -87,7 +87,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
       // If we want to support image polling, we'd need endpoints.
       // Given "without touching logic", I won't add complex polling for images if it doesn't exist.
       // But I should probably check if any images are processing.
-      
+
       // Actually, the user didn't ask for polling for images, just to show them.
       // I'll leave this alone.
     }, 5000)
@@ -212,7 +212,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
                 <div key={video.id} className="break-inside-avoid mb-6 border rounded-lg overflow-hidden bg-white shadow-sm">
                   {video.video_url ? (
                     <video
-                      src={video.video_url}
+                      src={`/api/video-proxy?key=${encodeURIComponent(video.video_url)}`}
                       className="w-full h-auto"
                       controls
                       playsInline
@@ -225,7 +225,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
                       <p className="text-gray-500">Video processing...</p>
                     </div>
                   )}
-              
+
                 </div>
               ))}
             </div>
@@ -248,7 +248,7 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
                         className="w-full h-auto block"
                         loading="lazy"
                       />
-                      <button 
+                      <button
                         onClick={() => handleDownload(image.url!, `image-${image.id}.jpg`)}
                         className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-1 rounded hover:bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity"
                         title="Download image"

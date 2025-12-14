@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
 import { createClient } from "@/utils/supabase/server"
-import { uploadVideoToBlob, downloadVideoFromUrl } from "@/lib/vercel-blob"
+import { uploadVideoToR2, downloadVideoFromUrl } from "@/lib/r2"
 import { VideoGenerationError, createError, logError } from "@/lib/error-handling"
 
 fal.config({
@@ -85,16 +85,16 @@ export async function GET(request: NextRequest) {
           requestId: generation.fal_video_id
         })
 
-        // Download and upload video to Vercel Blob
+        // Download and upload video to R2
         const videoBuffer = await downloadVideoFromUrl(falResult.data.video.url)
-        const blobUrl = await uploadVideoToBlob(videoBuffer, `video-${generationId}.mp4`, generation.user_id)
+        const r2Key = await uploadVideoToR2(videoBuffer, `video-${generationId}.mp4`, generation.user_id)
 
-        // Update database with completed status and Vercel blob URL
+        // Update database with completed status and R2 key
         await supabase
           .from("video_generations")
-          .update({ 
+          .update({
             status: "completed",
-            video_url: blobUrl,
+            video_url: r2Key, // Now storing R2 key, served via /api/video-proxy
             updated_at: new Date().toISOString()
           })
           .eq("id", generationId)
@@ -102,14 +102,14 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           id: generationId,
           status: "completed",
-          videoUrl: blobUrl,
+          videoUrl: r2Key,
           falVideoId: generation.fal_video_id
         })
       } else if (falStatus.status === "FAILED") {
         // Update database with failed status
         await supabase
           .from("video_generations")
-          .update({ 
+          .update({
             status: "failed",
             error_message: "Video generation failed at FAL",
             updated_at: new Date().toISOString()
@@ -133,13 +133,13 @@ export async function GET(request: NextRequest) {
     } catch (falError) {
       const searchParams = new URL(request.url).searchParams
       const generationId = searchParams.get('id')
-      
+
       logError(falError instanceof Error ? falError : new Error(String(falError)), {
         context: 'FAL status check',
         generationId: generationId,
         falVideoId: generation.fal_video_id
       })
-      
+
       return NextResponse.json({
         id: generationId,
         status: "error",

@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
-import { deleteVideoFromBlob } from "@/lib/vercel-blob";
+import { deleteVideoFromR2 } from "@/lib/r2";
 
 export async function DELETE() {
   try {
@@ -8,7 +8,7 @@ export async function DELETE() {
 
     // Get the authenticated user
     const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
+
     if (authError || !user) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -23,13 +23,13 @@ export async function DELETE() {
       familyPortraits: 0,
       nostalgicHugGenerations: 0,
       storageFiles: 0,
-      blobVideos: 0,
+      r2Videos: 0,
       storageErrors: [] as string[],
-      blobErrors: [] as string[]
+      r2Errors: [] as string[]
     };
 
     // 1. Fetch data to identify external resources to delete
-    
+
     // Get image restorations
     const { data: imageRestorations, error: fetchImageError } = await supabase
       .from("image_restorations")
@@ -75,7 +75,7 @@ export async function DELETE() {
     // 2. Delete Supabase Storage files (restored_photos bucket)
     // This bucket is used by both image_restorations and family_portraits
     // We can list all files in the user's folder and delete them
-    
+
     try {
       const { data: userFiles, error: listError } = await supabase.storage
         .from('restored_photos')
@@ -90,7 +90,7 @@ export async function DELETE() {
       } else if (userFiles && userFiles.length > 0) {
         // Delete all files in the user's folder
         const filePaths = userFiles.map(file => `${user.id}/${file.name}`);
-        
+
         const { error: bulkDeleteError } = await supabase.storage
           .from('restored_photos')
           .remove(filePaths);
@@ -107,30 +107,31 @@ export async function DELETE() {
       deletionResults.storageErrors.push("Unexpected storage deletion error");
     }
 
-    // 3. Delete Vercel Blob videos
+    // 3. Delete R2 videos
     // This includes video_generations and nostalgic_hug_generations
-    
+    // Note: video_url now contains R2 keys like "videos/{userId}/{timestamp}-{filename}"
+
     const videosToDelete = [
       ...(videoGenerations?.map(v => v.video_url) || []),
       ...(nostalgicHugGenerations?.map(v => v.video_url) || [])
     ];
 
     if (videosToDelete.length > 0) {
-      for (const videoUrl of videosToDelete) {
-        if (videoUrl) {
+      for (const videoKey of videosToDelete) {
+        if (videoKey) {
           try {
-            await deleteVideoFromBlob(videoUrl);
-            deletionResults.blobVideos++;
-          } catch (blobError) {
-            console.error(`Error deleting video from Vercel Blob: ${videoUrl}`, blobError);
-            deletionResults.blobErrors.push(`${videoUrl}: ${blobError instanceof Error ? blobError.message : 'Unknown error'}`);
+            await deleteVideoFromR2(videoKey);
+            deletionResults.r2Videos++;
+          } catch (r2Error) {
+            console.error(`Error deleting video from R2: ${videoKey}`, r2Error);
+            deletionResults.r2Errors.push(`${videoKey}: ${r2Error instanceof Error ? r2Error.message : 'Unknown error'}`);
           }
         }
       }
     }
 
     // 4. Delete Database Records
-    
+
     // Delete video generations
     const { error: videoDeleteError, count: videoCount } = await supabase
       .from("video_generations")
@@ -181,7 +182,7 @@ export async function DELETE() {
 
     // Return success response with detailed results
     return NextResponse.json(
-      { 
+      {
         message: "All media deleted successfully",
         deletedTables: ["video_generations", "image_restorations", "family_portraits", "nostalgic_hug_generations"],
         deletionResults: {
@@ -190,9 +191,9 @@ export async function DELETE() {
           familyPortraits: deletionResults.familyPortraits,
           nostalgicHugGenerations: deletionResults.nostalgicHugGenerations,
           storageFiles: deletionResults.storageFiles,
-          blobVideos: deletionResults.blobVideos,
+          r2Videos: deletionResults.r2Videos,
           storageErrors: deletionResults.storageErrors.length > 0 ? deletionResults.storageErrors : undefined,
-          blobErrors: deletionResults.blobErrors.length > 0 ? deletionResults.blobErrors : undefined
+          r2Errors: deletionResults.r2Errors.length > 0 ? deletionResults.r2Errors : undefined
         }
       },
       { status: 200 }

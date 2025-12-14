@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
         // Call Fal model
         const result = await fal.subscribe("fal-ai/nano-banana-pro/edit", {
             input: {
-                prompt: "A heartfelt, warm embrace between both person from reference photos, seated together on that sofa .\n  Both individuals are locked in a genuine, gentle, and loving hugging pose, exactly mathcing the facial identity and clothing they are wearing in reference photos. Their faces are clearly visible towards camera conveying authentic, deep familial affection. They are naturally positioned on the sofa, with their bodies angled towards each other in a believable embrace. Ensure there is no distortion, unnatural melding of bodies, or uncanny valley effect in their interaction.",
+                prompt: "A heartfelt, warm embrace between both person from reference photos, seated together on that sofa, the person from trh second images sits on right to the person already sitting on sofa.\n  Both individuals are locked in a genuine, gentle, and loving hugging pose, exactly mathcing the facial identity and clothing they are wearing in reference photos. Their faces are clearly visible towards camera conveying authentic, deep familial affection. They are naturally positioned on the sofa, with their bodies angled towards each other in a believable embrace. Ensure there is no distortion, unnatural melding of bodies, or uncanny valley effect in their interaction.",
                 num_images: 1,
                 aspect_ratio: "4:3",
                 output_format: "png",

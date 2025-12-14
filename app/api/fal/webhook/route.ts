@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/utils/supabase/admin";
-import { uploadVideoToBlob, downloadVideoFromUrl } from "@/lib/vercel-blob";
+import { uploadVideoToR2, downloadVideoFromUrl } from "@/lib/r2";
 import { logError } from "@/lib/error-handling";
 
 export async function POST(request: NextRequest) {
@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
 
       const videoBuffer = await downloadVideoFromUrl(videoUrl);
 
-      const blobUrl = await uploadVideoToBlob(
+      // Upload to R2 and get the key (not URL)
+      const r2Key = await uploadVideoToR2(
         videoBuffer,
         `video-${generation.id}.mp4`,
         generation.user_id
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
         .from("video_generations")
         .update({
           status: "completed",
-          video_url: blobUrl,
+          video_url: r2Key, // Now storing R2 key, served via /api/video-proxy
           updated_at: new Date().toISOString(),
         })
         .eq("id", generation.id);
