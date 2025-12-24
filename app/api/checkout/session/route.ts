@@ -4,7 +4,13 @@ import { createClient } from "@/utils/supabase/server";
 // Infer Dodo Payments base URL by environment
 function getDodoBaseURL() {
   const mode = (process.env.DODO_ENV || "").toLowerCase();
+  // Prefer explicit test flag
   if (mode === "test" || mode === "testing" || mode === "sandbox") {
+    return "https://test.dodopayments.com";
+  }
+  // Fallback: if running locally, default to test
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
+  if (appUrl.includes("localhost") || appUrl.includes("127.0.0.1")) {
     return "https://test.dodopayments.com";
   }
   return "https://live.dodopayments.com";
@@ -129,10 +135,8 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `${appURL}/dashboard?payment=success`,
-      cancel_url: `${appURL}/dashboard?payment=cancelled`,
-      // Do not prefill customer info; collect on hosted checkout per preference
-      show_order_details: true,
+      return_url: `${appURL}/dashboard?payment=success`,
+      // Collect customer and billing on hosted checkout (no prefill)
       metadata: {
         user_id: user.id,
         plan_id: plan.id,
@@ -141,29 +145,12 @@ export async function POST(request: NextRequest) {
         region_country: country,
       },
       // Do not pre-apply any discount code from site; enable entry on hosted checkout via feature_flags below
-      // Enable collection of customer and billing details directly in hosted checkout
-      feature_flags: {
-        allow_currency_selection: true,
-        allow_discount_code: true,
-        allow_customer_editing_email: true,
-        allow_customer_editing_name: true,
-        allow_customer_editing_country: true,
-        allow_customer_editing_state: true,
-        allow_customer_editing_city: true,
-        allow_customer_editing_street: true,
-        allow_customer_editing_zipcode: true,
-        allow_phone_number_collection: true,
-        allow_tax_id: true,
-        always_create_new_customer: true
-      },
-      // Force full flow instead of jumping to saved methods
-      show_saved_payment_methods: false,
-      allowed_payment_method_types,
+      // Enable hosted page inputs; keep flags to supported minimal set per docs
       // Optionally enforce SCA in higher-risk scenarios:
       // force_3ds: true,
     };
 
-    const resp = await fetch(`${baseURL}/checkout/sessions`, {
+    const resp = await fetch(`${baseURL}/checkouts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -174,6 +161,7 @@ export async function POST(request: NextRequest) {
 
     if (!resp.ok) {
       const errorText = await resp.text().catch(() => "");
+      console.error("Dodo checkout session create failed", resp.status, errorText, "payload:", payload);
       return NextResponse.json(
         {
           error: "Failed to create checkout session",
