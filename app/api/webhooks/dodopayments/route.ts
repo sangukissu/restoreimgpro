@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js"
 import { headers } from "next/headers"
 import crypto from "crypto"
 
-const WEBHOOK_SECRET = process.env.DODO_WEBHOOK_SECRET!
+const WEBHOOK_SECRET = (process.env.DODO_WEBHOOK_SECRET || process.env.DODO_PAYMENTS_WEBHOOK_KEY)!
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 export async function POST(request: NextRequest) {
@@ -27,18 +27,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 })
     }
 
+    // Idempotency: skip if this webhook-id was already processed
+    const { data: existingEvent, error: existingEventError } = await supabase
+      .from("webhook_events")
+      .select("id")
+      .eq("event_id", webhookId)
+      .single()
+
+    if (!existingEventError && existingEvent) {
+      return NextResponse.json({ received: true, duplicate: true })
+    }
+
     // Parse the webhook payload
     const webhookData = JSON.parse(body)
 
-    // Process webhook event
+    // Normalize event type (support both dot and underscore styles)
+    const rawType = webhookData?.type || webhookData?.event || webhookData?.event_type
+    const eventType = typeof rawType === "string" ? rawType.replace(/\./g, "_") : ""
 
-    // Process the webhook based on event type
-    if (webhookData.type === "payment.succeeded") {
-      await handlePaymentSucceeded(webhookData)
-    } else if (webhookData.type === "payment.failed") {
-      await handlePaymentFailed(webhookData)
-    } else if (webhookData.type === "payment.cancelled") {
-      await handlePaymentCancelled(webhookData)
+    // Route by normalized event type
+    if (eventType === "payment_succeeded") {
+      await handlePaymentSucceeded(webhookData, webhookId)
+    } else if (eventType === "payment_failed") {
+      await handlePaymentFailed(webhookData, webhookId)
+    } else if (eventType === "payment_cancelled") {
+      await handlePaymentCancelled(webhookData, webhookId)
     } else {
       // Unhandled webhook type - no action needed
     }
@@ -103,7 +116,7 @@ function timingSafeEqual(a: string, b: string): boolean {
   return crypto.timingSafeEqual(bufferA, bufferB)
 }
 
-async function handlePaymentSucceeded(webhookData: any) {
+async function handlePaymentSucceeded(webhookData: any, webhookId: string) {
   try {
     const paymentData = webhookData.data
     const paymentId = paymentData.id || paymentData.payment_id
@@ -175,19 +188,19 @@ async function handlePaymentSucceeded(webhookData: any) {
     if (profileError) {
       // Get user email from auth.users table
       const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(payment.user_id)
-      
+
       if (authError) {
         return
       }
-      
+
       const userEmail = authUser.user?.email || ""
       const userName = authUser.user?.user_metadata?.name || authUser.user?.email || "User"
-      
+
       // Validate email before creating profile
       if (!userEmail || userEmail.trim() === "") {
         return
       }
-      
+
       // Create new user profile if it doesn't exist
       const { error: createError } = await supabase.from("user_profiles").insert({
         user_id: payment.user_id,
@@ -219,14 +232,19 @@ async function handlePaymentSucceeded(webhookData: any) {
     await processReferralReward(payment.user_id, payment.amount_cents)
 
     // Log the webhook event for tracking using the proper webhook_events table
-    await logWebhookEvent(webhookData.type, payment.id, webhookData.business_id)
+    await logWebhookEvent(
+      webhookId,
+      (typeof webhookData.type === "string" ? webhookData.type.replace(/\./g, "_") : "payment_succeeded"),
+      payment.id,
+      webhookData.business_id
+    )
 
   } catch (error) {
     // Payment processing failed
   }
 }
 
-async function handlePaymentFailed(webhookData: any) {
+async function handlePaymentFailed(webhookData: any, webhookId: string) {
   try {
     const paymentData = webhookData.data
     const paymentId = paymentData.id || paymentData.payment_id
@@ -255,14 +273,19 @@ async function handlePaymentFailed(webhookData: any) {
     }
 
     // Log the webhook event for tracking
-    await logWebhookEvent(webhookData.type, payment.id, webhookData.business_id)
+    await logWebhookEvent(
+      webhookId,
+      (typeof webhookData.type === "string" ? webhookData.type.replace(/\./g, "_") : "payment_failed"),
+      payment.id,
+      webhookData.business_id
+    )
 
   } catch (error) {
     // Payment failed handling error
   }
 }
 
-async function handlePaymentCancelled(webhookData: any) {
+async function handlePaymentCancelled(webhookData: any, webhookId: string) {
   try {
     const paymentData = webhookData.data
     const paymentId = paymentData.id || paymentData.payment_id
@@ -291,7 +314,12 @@ async function handlePaymentCancelled(webhookData: any) {
     }
 
     // Log the webhook event for tracking
-    await logWebhookEvent(webhookData.type, payment.id, webhookData.business_id)
+    await logWebhookEvent(
+      webhookId,
+      (typeof webhookData.type === "string" ? webhookData.type.replace(/\./g, "_") : "payment_cancelled"),
+      payment.id,
+      webhookData.business_id
+    )
 
   } catch (error) {
     // Payment cancelled handling error
@@ -320,10 +348,8 @@ async function processReferralReward(userId: string, amountCents: number) {
 }
 
 // Helper function to log webhook events consistently
-async function logWebhookEvent(eventType: string, paymentId: string, businessId?: string) {
+async function logWebhookEvent(eventId: string, eventType: string, paymentId: string, businessId?: string) {
   try {
-    const eventId = `${businessId || 'unknown'}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    
     const { error: logError } = await supabase.from("webhook_events").insert({
       event_id: eventId,
       event_type: eventType,

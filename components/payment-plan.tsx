@@ -120,7 +120,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
 
   const handlePurchase = async () => {
     setIsProcessing(true)
-    const loadingToastId = loading("Creating payment...")
+    const loadingToastId = loading("Creating checkout session...")
 
     // GA4: Track begin_checkout when user clicks Continue to Checkout
     try {
@@ -156,7 +156,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     } catch { /* ignore analytics errors */ }
 
     try {
-      const response = await fetch("/api/create-payment", {
+      const response = await fetch("/api/checkout/session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -165,26 +165,26 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
       })
 
       if (!response.ok) {
-        throw new Error("Failed to create payment")
+        throw new Error("Failed to create checkout session")
       }
 
-      const { payment_link, payment_id } = await response.json()
+      const { id: session_id, url } = await response.json()
 
-      // Update localStorage marker with payment_id for GA purchase transaction_id
+      // Update localStorage marker with checkout session id for GA attribution
       try {
         const markerStr = localStorage.getItem('buyCheckout')
         if (markerStr) {
           const marker = JSON.parse(markerStr)
-          marker.paymentId = payment_id
+          marker.sessionId = session_id
           localStorage.setItem('buyCheckout', JSON.stringify(marker))
         }
       } catch { /* ignore storage errors */ }
 
       toast.dismiss(loadingToastId)
-      window.location.href = payment_link
+      window.location.href = url
     } catch (error) {
       toast.dismiss(loadingToastId)
-      const errorMessage = error instanceof Error ? error.message : "Failed to create payment. Please try again."
+      const errorMessage = error instanceof Error ? error.message : "Failed to create checkout session. Please try again."
       onError(errorMessage)
     } finally {
       setIsProcessing(false)
