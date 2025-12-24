@@ -76,6 +76,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => ({} as any));
     const selectedPlanId =
       typeof body?.planId === "string" ? body.planId.trim() : "";
+    const discountCode: string =
+      typeof body?.discountCode === "string" ? body.discountCode.trim() : "";
     if (!selectedPlanId) {
       return NextResponse.json({ error: "planId is required" }, { status: 400 });
     }
@@ -129,10 +131,8 @@ export async function POST(request: NextRequest) {
       ],
       success_url: `${appURL}/dashboard?payment=success`,
       cancel_url: `${appURL}/dashboard?payment=cancelled`,
-      customer: {
-        email: user.email || "",
-        name: user.user_metadata?.name || user.email?.split("@")[0] || "User",
-      },
+      // Do not prefill customer info; collect on hosted checkout per preference
+      show_order_details: true,
       metadata: {
         user_id: user.id,
         plan_id: plan.id,
@@ -140,10 +140,24 @@ export async function POST(request: NextRequest) {
         amount_cents: String(plan.price_cents),
         region_country: country,
       },
+      // Do not pre-apply any discount code from site; enable entry on hosted checkout via feature_flags below
+      // Enable collection of customer and billing details directly in hosted checkout
       feature_flags: {
         allow_currency_selection: true,
-        show_order_details: true,
+        allow_discount_code: true,
+        allow_customer_editing_email: true,
+        allow_customer_editing_name: true,
+        allow_customer_editing_country: true,
+        allow_customer_editing_state: true,
+        allow_customer_editing_city: true,
+        allow_customer_editing_street: true,
+        allow_customer_editing_zipcode: true,
+        allow_phone_number_collection: true,
+        allow_tax_id: true,
+        always_create_new_customer: true
       },
+      // Force full flow instead of jumping to saved methods
+      show_saved_payment_methods: false,
       allowed_payment_method_types,
       // Optionally enforce SCA in higher-risk scenarios:
       // force_3ds: true,
