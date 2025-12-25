@@ -3,28 +3,9 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { Timer } from "lucide-react"
+import { Timer, PartyPopper } from "lucide-react"
 
-// Custom Christmas Hat Icon
-const ChristmasHat = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M12 22v-2" />
-    <path d="M16 20a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2" />
-    <path d="M12 18a7 7 0 0 1 7-7c0-4-3-6-7-6-4 0-7 2-7 6a7 7 0 0 1 7 7Z" />
-    <circle cx="12" cy="3" r="2" />
-  </svg>
-);
+// New Year celebration icon from Lucide is imported above
 
 interface PaymentPlanProps {
   onSuccess: (newCredits: number) => void
@@ -43,7 +24,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
 
   // Countdown Timer Logic
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
-  const promoEndDate = "2025-12-25T23:59:59";
+  const promoEndDate = "2026-01-01T23:59:59";
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -208,10 +189,10 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
               let badge = ""
               let badgeColor = ""
 
-              // Temporarily disabled other badges for Christmas offer
+              // Temporarily disabled other badges for New Year offer
               if (isFamily) {
-                badge = "Christmas Offer"
-                badgeColor = "bg-gradient-to-r from-red-600 to-green-600 shadow-sm"
+                badge = "New Year Offer"
+                badgeColor = "bg-gradient-to-r from-yellow-500 to-orange-600 shadow-sm"
               }
 
               let perks: string[] = []
@@ -232,7 +213,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                   onClick={() => setSelectedPlanId(plan.id)}
                   className={`relative w-full text-left border rounded-xl p-4 transition-all duration-200 ${selectedPlanId === plan.id
                     ? isFamily
-                      ? "border-red-500 bg-red-50/50 ring-1 ring-red-500/20"
+                      ? "border-orange-500 bg-orange-50/50 ring-1 ring-orange-500/20"
                       : "border-black bg-gray-50"
                     : "border-gray-200 hover:border-gray-300"
                     }`}
@@ -240,7 +221,6 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                   {/* Conversion Badge */}
                   {badge && (
                     <div className={`absolute -top-2 left-4 px-2 py-1 ${badgeColor} text-white text-xs font-bold rounded-full flex items-center gap-1`}>
-                      {isFamily && <ChristmasHat size={12} />}
                       {badge}
                     </div>
                   )}
@@ -261,7 +241,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                       <div className="space-y-1 mt-2">
                         {perks.map((perk, index) => (
                           <div key={index} className="flex items-center text-xs text-gray-500">
-                            <svg className={`w-3 h-3 mr-1 flex-shrink-0 ${isFamily ? 'text-red-500' : 'text-green-500'}`} fill="currentColor" viewBox="0 0 20 20">
+                            <svg className={`w-3 h-3 mr-1 flex-shrink-0 ${isFamily ? 'text-orange-500' : 'text-green-500'}`} fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                             {perk}
@@ -272,7 +252,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                     <div className="flex flex-col items-end">
                       {isFamily ? (
                         <>
-                          <div className="text-xl font-bold text-red-600">$14.99</div>
+                          <div className="text-xl font-bold text-orange-600">$17.99</div>
                           <div className="text-xs text-gray-400 line-through font-medium">$24.99</div>
                         </>
                       ) : (
@@ -325,7 +305,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
             onClick={handlePurchase}
             disabled={isProcessing || !selectedPlanId}
             className={`w-full text-md text-white ${plans.find(p => p.id === selectedPlanId)?.credits === 60
-              ? "bg-gradient-to-r from-red-600 to-green-600 hover:shadow-lg hover:shadow-red-500/20"
+              ? "bg-gradient-to-r from-yellow-500 to-orange-600 hover:shadow-lg hover:shadow-orange-500/20"
               : "bg-black hover:bg-gray-800"
               }`}
           >

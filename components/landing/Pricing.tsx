@@ -1,28 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Film, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star, MagnetIcon, Timer } from 'lucide-react';
+import { Sparkles, Film, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star, MagnetIcon, Timer, PartyPopper } from 'lucide-react';
 import Link from 'next/link';
 
-// Custom Christmas Hat Icon (Lucide style)
-const ChristmasHat = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M12 22v-2" />
-    <path d="M16 20a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2" />
-    <path d="M12 18a7 7 0 0 1 7-7c0-4-3-6-7-6-4 0-7 2-7 6a7 7 0 0 1 7 7Z" />
-    <circle cx="12" cy="3" r="2" />
-  </svg>
-);
+// New Year celebration icon from Lucide
 
 interface PricingFeature {
   icon: React.ReactNode;
@@ -84,7 +65,7 @@ const PricingCard: React.FC<{
           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${isDark ? 'bg-white text-brand-black' : isPromo ? 'bg-red-600 text-white' : 'bg-brand-black text-white'}`}>
             {icon}
           </div>
-          <div className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${isDark ? 'bg-white/10 text-gray-300' : isPromo ? 'bg-gradient-to-r from-red-600 to-green-600 text-white shadow-sm' : 'bg-black/5 text-gray-500'}`}>
+          <div className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${isDark ? 'bg-white/10 text-gray-300' : isPromo ? 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-sm' : 'bg-black/5 text-gray-500'}`}>
             {badge}
           </div>
         </div>
@@ -237,22 +218,22 @@ export const Pricing: React.FC = () => {
             buttonLink="/dashboard"
             buttonIcon={<Play size={20} fill="currentColor" />}
           />
-          {/* Column 2: Family Plan (Christmas Promo) */}
+          {/* Column 2: Family Plan (New Year Promo) */}
           <PricingCard
             theme="light"
             title="Family"
-            price="$14.99"
+            price="$17.99"
             originalPrice="$24.99"
             description="Perfect for photo animation for your family."
-            badge="Christmas Offer"
+            badge="New Year Offer"
             features={familyFeatures}
-            icon={<ChristmasHat size={24} />}
-            buttonText="Claim Christmas Offer"
+            icon={<PartyPopper size={24} />}
+            buttonText="Claim New Year Offer"
             buttonLink="/login"
             buttonIcon={<ArrowRight size={20} />}
             isPromo={true}
-            promoEndDate="2025-12-25T23:59:59"
-            discountBadge="40% OFF"
+            promoEndDate="2026-01-01T23:59:59"
+            discountBadge="28% OFF"
           />
 
         </div>
