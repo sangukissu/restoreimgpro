@@ -1,0 +1,164 @@
+/// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
+// @ts-nocheck - Deno types not available in Node.js project
+
+// Supabase Edge Function: send-winback-email-2
+// Sends "Discount" email to users 7+ days after signup who still haven't purchased
+// Triggered by cron daily
+
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+const APP_URL = Deno.env.get('NEXT_PUBLIC_APP_URL') || 'https://bringback.pro'
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
+// Email template
+const EMAIL_SUBJECT = 'Is it the price?'
+const getEmailBody = (userName?: string) => `Hi${userName ? ` ${userName}` : ''},
+
+It's been a week since you joined BringBack.pro, but I noticed you haven't tried the Pro Plan yet.
+
+I'm trying to understand what holds users back. Is it the pricing? The features?
+
+If you've been on the fence, I created a small discount code to make the decision a little easier for you.
+
+Code: WELCOME10 (10% OFF the Pro Plan)
+
+The Pro Plan unlocks the Reunion Video feature (where you can hug your loved ones) and 20 restorations. I'd love for you to try it.
+
+Upgrade now: ${APP_URL}/dashboard
+
+Best,
+Harvansh Chaudhary`
+
+serve(async (req: Request) => {
+    try {
+        // Only allow POST requests (from cron or manual invocation)
+        if (req.method !== 'POST') {
+            return new Response('Method not allowed', { status: 405 })
+        }
+
+        console.log('Starting win-back email 2 job...')
+
+        // Query users who:
+        // 1. Signed up 7-14 days ago
+        // 2. Have received win-back email 1 (so we don't skip the sequence)
+        // 3. Have NOT received win-back email 2 yet
+        // 4. Have NO successful payment in the payments table
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+        const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
+
+        // Get users who:
+        // - Have received email 1 (winback_email_1_sent_at is NOT null)
+        // - Have NOT received email 2 (winback_email_2_sent_at IS null)
+        // - Signed up 7-14 days ago
+        const { data: eligibleUsers, error: usersError } = await supabase
+            .from('user_profiles')
+            .select('user_id, email, name')
+            .not('winback_email_1_sent_at', 'is', null)
+            .is('winback_email_2_sent_at', null)
+            .lte('created_at', sevenDaysAgo)
+            .gte('created_at', fourteenDaysAgo)
+
+        if (usersError) {
+            console.error('Error fetching users:', usersError)
+            return new Response(JSON.stringify({ error: usersError.message }), { status: 500 })
+        }
+
+        if (!eligibleUsers || eligibleUsers.length === 0) {
+            console.log('No eligible users found for win-back email 2')
+            return new Response(JSON.stringify({ message: 'No eligible users', sent: 0 }), { status: 200 })
+        }
+
+        console.log(`Found ${eligibleUsers.length} potentially eligible users`)
+
+        // Filter out users who have any successful payment
+        const usersWithoutPayments: typeof eligibleUsers = []
+
+        for (const user of eligibleUsers) {
+            const { data: payments, error: paymentsError } = await supabase
+                .from('payments')
+                .select('id')
+                .eq('user_id', user.user_id)
+                .eq('status', 'succeeded')
+                .limit(1)
+
+            if (paymentsError) {
+                console.error(`Error checking payments for user ${user.user_id}:`, paymentsError)
+                continue
+            }
+
+            // Only include users with NO successful payments
+            if (!payments || payments.length === 0) {
+                usersWithoutPayments.push(user)
+            }
+        }
+
+        console.log(`${usersWithoutPayments.length} users have no successful payments`)
+
+        let sentCount = 0
+        const errors: string[] = []
+
+        // Send emails
+        for (const user of usersWithoutPayments) {
+            try {
+                // Send email via Resend
+                const emailResponse = await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${RESEND_API_KEY}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        from: 'Harvansh <support@bringback.pro>',
+                        to: user.email,
+                        subject: EMAIL_SUBJECT,
+                        text: getEmailBody(user.name),
+                    }),
+                })
+
+                if (!emailResponse.ok) {
+                    const errorText = await emailResponse.text()
+                    console.error(`Failed to send email to ${user.email}:`, errorText)
+                    errors.push(`${user.email}: ${errorText}`)
+                    continue
+                }
+
+                // Mark email as sent
+                const { error: updateError } = await supabase
+                    .from('user_profiles')
+                    .update({ winback_email_2_sent_at: new Date().toISOString() })
+                    .eq('user_id', user.user_id)
+
+                if (updateError) {
+                    console.error(`Failed to update user ${user.user_id}:`, updateError)
+                    errors.push(`${user.email}: update failed`)
+                    continue
+                }
+
+                sentCount++
+                console.log(`Sent win-back email 2 to ${user.email}`)
+            } catch (err) {
+                console.error(`Error processing user ${user.email}:`, err)
+                errors.push(`${user.email}: ${err}`)
+            }
+        }
+
+        console.log(`Win-back email 2 job complete. Sent: ${sentCount}, Errors: ${errors.length}`)
+
+        return new Response(
+            JSON.stringify({
+                message: 'Win-back email 2 job complete',
+                sent: sentCount,
+                errors: errors.length > 0 ? errors : undefined,
+            }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+    } catch (error) {
+        console.error('Unexpected error:', error)
+        return new Response(JSON.stringify({ error: String(error) }), { status: 500 })
+    }
+})
