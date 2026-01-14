@@ -8,7 +8,7 @@ The application is built using a modern **Next.js 15 (App Router)** architecture
 -   **Backend**: Next.js API Routes (`app/api`), Server Actions.
 -   **Database & Auth**: Supabase ("Backend as a Service").
 -   **AI Processing**: Fal.ai (external GPU cluster).
--   **Storage**: Cloudflare R2 & Vercel Blob.
+-   **Storage**: Cloudflare R2.
 -   **Payments**: Dodo Payments.
 
 ---
@@ -36,7 +36,6 @@ Reusable UI elements.
 Utility functions and shared logic.
 -   `api-client.ts`: Helper functions to make API requests to the backend.
 -   `r2.ts`: Configuration and helpers for interacting with Cloudflare R2 storage.
--   `vercel-blob.ts`: Helpers for Vercel Blob storage.
 -   `wordpress.ts`: Fetches blog posts for the blog section.
 
 ### `supabase/`
@@ -54,7 +53,7 @@ Authentication is managed by Supabase.
 
 ### 2. Image Restoration Process
 1.  **Upload**: User drops an image in `image-upload.tsx`.
-2.  **Storage**: The image is uploaded to Vercel Blob or Cloudflare R2 via `lib/vercel-blob.ts` or `lib/r2.ts`.
+2.  **Storage**: The image is uploaded to Cloudflare R2 via `lib/r2.ts`.
 3.  **Processing**: The frontend calls an API route (e.g., `app/api/restore/route.ts`).
 4.  **AI Generation**: The API route sends the image URL to **Fal.ai**.
 5.  **Result**: Fal.ai returns the restored image.

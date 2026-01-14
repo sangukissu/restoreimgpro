@@ -20,8 +20,7 @@ The application architecture relies on a microservices approach for specialized 
 | **Supabase** | Relational Database (PostgreSQL), Auth, & Realtime | **Critical** |
 | **Fal.ai** | GPU Infrastructure for Image Inference | **Critical** |
 | **Dodo Payments** | Payment Gateway & Ledger | **Critical** |
-| **Cloudflare R2** | Blob Storage (Origin) | High |
-| **Vercel Blob** | Blob Storage (Edge Cache) | High |
+| **Cloudflare R2** | Media Storage (Origin) | High |
 | **Resend** | Transactional Email Delivery | High |
 
 ---

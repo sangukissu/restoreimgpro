@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
 import { createClient } from "@/utils/supabase/server"
-import { uploadVideoToBlob, downloadVideoFromUrl } from "@/lib/vercel-blob"
 import { VideoGenerationError, createError, logError, withErrorHandling } from "@/lib/error-handling"
 
 // Configure Fal AI client
