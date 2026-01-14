@@ -14,7 +14,7 @@ interface EnhanceClientProps {
   restoredImageUrl: string
 }
 
-export default function EnhanceClient({ user, initialCredits, restoredImageUrl }: EnhanceClientProps) {
+export default function EnhanceClient({ initialCredits, restoredImageUrl }: EnhanceClientProps) {
   const [userCredits, setUserCredits] = useState(initialCredits)
   const [enhancedImageUrl, setEnhancedImageUrl] = useState<string | null>(null)
   const [isEnhancing, setIsEnhancing] = useState(false)

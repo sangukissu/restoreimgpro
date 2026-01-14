@@ -17,32 +17,8 @@ import {
 import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
 import { FramerButton } from "@/components/ui/framer-button"
-import { PointerHighlight } from "@/components/pointer-highlight"
 
 export default function ReferralPublicPage() {
-  const successStories = [
-    {
-      name: "Sarah Johnson",
-      role: "Photography Enthusiast",
-      restorations: "12 free restorations",
-      period: "in 6 months",
-      quote: "I've helped so many friends restore their family photos and earned free restorations for my own collection. It's amazing!"
-    },
-    {
-      name: "Mike Chen",
-      role: "Family Historian",
-      restorations: "8 free restorations",
-      period: "in 3 months",
-      quote: "Sharing this service with my extended family has been incredible. Everyone gets their memories restored!"
-    },
-    {
-      name: "Lisa Rodriguez",
-      role: "Community Leader",
-      restorations: "20 free restorations",
-      period: "in 8 months",
-      quote: "I love helping people in my community preserve their precious memories while building my own restoration credits."
-    }
-  ]
 
   return (
     <div>

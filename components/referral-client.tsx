@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import ReferralDashboard from "@/components/referral-dashboard"
 
-import { toast } from "sonner"
 
 interface ReferralClientProps {
   user: {
@@ -20,13 +19,13 @@ export default function ReferralClient({ user, initialCredits }: ReferralClientP
 
   return (
     <>
-      <ReferralDashboard 
-        user={user} 
-        initialCredits={credits} 
+      <ReferralDashboard
+        user={user}
+        initialCredits={credits}
       />
 
 
- 
+
     </>
   )
 }
