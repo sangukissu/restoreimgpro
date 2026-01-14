@@ -162,13 +162,11 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
           <Link href="/dashboard/nostalgic-hug" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             {/* Visual Area - 4:3 Aspect Ratio */}
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-900">
-              <video
-                src="/hug/final-video.mp4"
-                className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
-                autoPlay
-                loop
-                muted
-                playsInline
+              <iframe
+                src="https://www.youtube.com/embed/Y0rdFdDdd10?autoplay=1&mute=1&loop=1&playlist=Y0rdFdDdd10&controls=0&modestbranding=1&rel=0&iv_load_policy=3"
+                className="absolute inset-0 w-full h-full opacity-90 group-hover:scale-105 transition-transform duration-700 pointer-events-none"
+                allow="autoplay; encrypted-media"
+                title="Nostalgic Hug"
               />
               <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse"></div>

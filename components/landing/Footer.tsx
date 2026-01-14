@@ -52,7 +52,6 @@ export const Footer: React.FC = () => {
                             <a href="/colorize-photos" className="font-medium hover:text-brand-orange transition-colors">Colorize Photos</a>
                             <a href="/ai-photo-animation" className="font-medium hover:text-brand-orange transition-colors">AI Photo Animation</a>
                             <a href="/ai-family-portrait" className="font-medium hover:text-brand-orange transition-colors">AI Family Portrait</a>
-                            <a href="/nostalgic-hug-video" className="font-medium hover:text-brand-orange transition-colors">Nostalgic Hug</a>
                             <a href="/old-photo-restoration" className="font-medium hover:text-brand-orange transition-colors">Old Photo Restoration</a>
                         </div>
                         <div className="flex flex-col gap-6">

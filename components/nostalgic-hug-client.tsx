@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import NostalgicHugHowItWorks from "@/components/nostalgic-hug-how-it-works"
 
 interface NostalgicHugClientProps {
     user: {
@@ -35,7 +34,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
     // Step 3 State
     const [videoUrl, setVideoUrl] = useState<string | null>(null)
 
- 
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setFile: (file: File | null) => void) => {
         if (e.target.files && e.target.files[0]) {
@@ -353,7 +352,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                                                     disabled={!personBFile || loading || credits < 20}
                                                     className="w-full bg-black hover:bg-gray-800 text-white h-10 rounded-md"
                                                 >
-                                                    Create Hug 
+                                                    Create Hug
                                                     <ArrowRight className="ml-2 h-4 w-4" />
                                                 </Button>
                                             </div>
@@ -477,7 +476,6 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                 </div>
             </main>
 
-            <NostalgicHugHowItWorks />
 
         </div>
     )

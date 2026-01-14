@@ -30,7 +30,7 @@ function buildPrompt(subjectCount: number, aspectRatio: string, backgroundStyleT
     : 'Generate new, appropriate, three-quarter (half-body) or full-body studio poses for all subjects. Subjects should be posed naturally as a group, oriented toward the camera.'
 
   return `You are an experienced, expert photographer and compositor.
-Generate a single, high-resolution, photorealistic family portrait in a professional studio setting.
+Generate a single, high-resolution, photorealistic family portrait.
 Identity & Subjects: Identify every unique individual from the provided input images. Use the exact facial identity of each person.
 Scene & Composition: Place all identified individuals together in a classic, cohesive group portrait arrangement. 
 against ${backgroundStyleText}
