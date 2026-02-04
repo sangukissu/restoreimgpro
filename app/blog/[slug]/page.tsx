@@ -10,7 +10,7 @@ import { getPostBySlug, getAllPostSlugs, formatDate, calculateReadingTime, type 
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import { CTA } from '@/components/landing/CTA';
-
+export const revalidate = 3600
 // Generate static paths for all blog posts
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
