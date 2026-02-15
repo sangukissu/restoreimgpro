@@ -184,9 +184,11 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     if (isRestoring) {
       return
     }
-    // If no paid credits and no trial left, send user to pricing instead of attempting restore
+    // If no paid credits and no trial left, open in-app payment modal instead of attempting restore
     if (userCredits <= 0 && trialCredits <= 0) {
-      window.location.href = "/pricing"
+      try {
+        window.dispatchEvent(new Event("bb:open-payment-modal"))
+      } catch {}
       return
     }
     setIsRestoring(true)
