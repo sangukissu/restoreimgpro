@@ -190,7 +190,7 @@ export const Pricing: React.FC = () => {
                 <Sparkles size={18} />
               </div>
               <p className="text-sm sm:text-base font-semibold">
-                Try 1 free restoration before buying
+                Try 1 free Photo Restoration before buying
               </p>
             </div>
             <Link href="/login" className="w-full sm:w-auto">
