@@ -281,7 +281,9 @@ export default function ImageComparison({
             {/* Free Enhance Button */}
             <Button
               onClick={handleNavigateEnhance}
-              className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+              disabled={!!isLocked}
+              title={isLocked ? "Unlock to use Enhance" : undefined}
+              className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ImageUpIcon className="w-4 h-4" />
               Free Enhance
@@ -289,7 +291,9 @@ export default function ImageComparison({
 
             <Button
               onClick={handleGenerateVideo}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+              disabled={!!isLocked}
+              title={isLocked ? "Unlock to generate video" : undefined}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Videotape className="w-4 h-4" />
               Generate Video
