@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     // Get current user profile with row-level security check
     const { data: profile, error: profileError } = await supabase
       .from("user_profiles")
-      .select("credits")
+      .select("credits, trial_credits")
       .eq("user_id", user.id)
       .single()
 
@@ -33,26 +33,31 @@ export async function POST(request: NextRequest) {
     }
 
     const currentCredits = profile.credits || 0
+    const currentTrial = (profile as any).trial_credits || 0
+    const totalAvailable = currentCredits + currentTrial
 
     // Check if user has sufficient credits
-    if (currentCredits < amount) {
+    if (totalAvailable < amount) {
       return NextResponse.json({ 
         error: "Insufficient credits", 
-        currentCredits,
+        currentCredits: totalAvailable,
         requiredCredits: amount 
       }, { status: 402 })
     }
 
-    // Deduct credits atomically using a transaction-like approach
-    const newCredits = currentCredits - amount
+    // Deduct credits preferring paid credits first, then trial credits
+    let deductFromPaid = Math.min(amount, currentCredits)
+    let deductFromTrial = amount - deductFromPaid
+    const newCredits = currentCredits - deductFromPaid
+    const newTrial = currentTrial - deductFromTrial
 
     const { error: updateError } = await supabase
       .from("user_profiles")
       .update({ 
-        credits: newCredits
+        credits: newCredits,
+        trial_credits: newTrial
       })
       .eq("user_id", user.id)
-      .eq("credits", currentCredits) // Optimistic locking to prevent race conditions
 
     if (updateError) {
       return NextResponse.json({ error: "Failed to update credits" }, { status: 500 })
@@ -60,8 +65,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      newCredits,
-      deductedCredits: amount 
+      newCredits: newCredits + newTrial,
+      deductedCredits: amount,
+      creditsRemaining: newCredits,
+      trialCreditsRemaining: newTrial
     })
 
   } catch (error) {

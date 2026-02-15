@@ -63,10 +63,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Check user credits from user_profiles table
-
     const { data: userProfile, error: profileError } = await supabase
       .from("user_profiles")
-      .select("credits")
+      .select("credits, trial_credits")
       .eq("user_id", user.id)
       .single()
 
@@ -74,7 +73,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to check credits" }, { status: 500 })
     }
 
-    if (!userProfile || userProfile.credits <= 0) {
+    const availableCredits = (userProfile?.credits ?? 0) + (userProfile?.trial_credits ?? 0)
+    if (!userProfile || availableCredits <= 0) {
       return NextResponse.json({ error: "Insufficient credits" }, { status: 402 })
     }
 
@@ -250,9 +250,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Update user credits in user_profiles table
+    // Prefer deducting paid credits first; if none, use trial_credits
+    let remainingCredits = userProfile.credits ?? 0
+    let remainingTrial = (userProfile as any).trial_credits ?? 0
+    if (remainingCredits > 0) {
+      remainingCredits = remainingCredits - 1
+    } else if (remainingTrial > 0) {
+      remainingTrial = remainingTrial - 1
+    }
     const { error: updateError } = await supabase
       .from("user_profiles")
-      .update({ credits: userProfile.credits - 1 })
+      .update({ credits: remainingCredits, trial_credits: remainingTrial })
       .eq("user_id", user.id)
 
     if (updateError) {
@@ -265,7 +273,9 @@ export async function POST(request: NextRequest) {
       restoredImageUrl: finalImageUrl,
       originalFileName: file.name,
       processedAt: new Date().toISOString(),
-      creditsRemaining: userProfile.credits - 1,
+      creditsRemaining: remainingCredits,
+      trialCreditsRemaining: remainingTrial,
+      availableCreditsRemaining: remainingCredits + remainingTrial,
     })
   } catch (error) {
 
