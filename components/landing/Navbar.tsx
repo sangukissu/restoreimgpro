@@ -71,13 +71,7 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Hanging Promo Badge */}
-        <div className="absolute top-[3.9rem] left-1/2 -translate-x-1/2 z-10 hidden lg:block">
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 text-orange-900 px-6 py-1.5 rounded-b-xl flex items-center gap-2 text-xs font-medium animate-in slide-in-from-top-2 duration-500 pt-3 -mt-2">
-            <Sparkles className="w-3 h-3 text-yellow-600 fill-yellow-600" />
-            <span>New Year Offer: <span className="font-bold font-mono text-orange-700">FLAT 28% OFF</span></span>
-          </div>
-        </div>
+        
 
         {/* Mobile Menu Dropdown */}
         {isMenuOpen && (

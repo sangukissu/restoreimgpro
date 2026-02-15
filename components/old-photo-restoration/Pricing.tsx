@@ -175,7 +175,7 @@ export const Pricing: React.FC = () => {
           <PricingCard
             theme="light"
             title="Family"
-            price="$24.99"
+            price="$21.99"
             description="Perfect for photo animation for your family."
             badge="One-time payment"
             features={familyFeatures}

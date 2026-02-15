@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Film, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star, MagnetIcon, Timer, PartyPopper } from 'lucide-react';
+import { Sparkles, Film, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star, MagnetIcon, Timer } from 'lucide-react';
 import Link from 'next/link';
-
-// New Year celebration icon from Lucide
 
 interface PricingFeature {
   icon: React.ReactNode;
@@ -218,22 +216,18 @@ export const Pricing: React.FC = () => {
             buttonLink="/dashboard"
             buttonIcon={<Play size={20} fill="currentColor" />}
           />
-          {/* Column 2: Family Plan (New Year Promo) */}
+          {/* Column 2: Family Plan */}
           <PricingCard
             theme="light"
             title="Family"
-            price="$17.99"
-            originalPrice="$24.99"
+            price="$21.99"
             description="Perfect for photo animation for your family."
-            badge="New Year Offer"
+            badge="One-time payment"
             features={familyFeatures}
-            icon={<PartyPopper size={24} />}
-            buttonText="Claim New Year Offer"
+            icon={<Sparkles size={24} />}
+            buttonText="Get Family Plan"
             buttonLink="/login"
             buttonIcon={<ArrowRight size={20} />}
-            isPromo={true}
-            promoEndDate="2026-01-01T23:59:59"
-            discountBadge="28% OFF"
           />
 
         </div>

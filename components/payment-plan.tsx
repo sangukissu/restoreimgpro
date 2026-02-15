@@ -3,9 +3,6 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { Timer, PartyPopper } from "lucide-react"
-
-// New Year celebration icon from Lucide is imported above
 
 interface PaymentPlanProps {
   onSuccess: (newCredits: number) => void
@@ -22,31 +19,6 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   const [isApplyingReferral, setIsApplyingReferral] = useState(false)
   const [referralApplied, setReferralApplied] = useState(false)
 
-  // Countdown Timer Logic
-  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
-  const promoEndDate = "2026-01-01T23:59:59";
-
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const difference = +new Date(promoEndDate) - +new Date();
-      if (difference > 0) {
-        return {
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-        };
-      }
-      return null;
-    };
-
-    setTimeLeft(calculateTimeLeft());
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   // Fetch available plans
   useEffect(() => {
@@ -186,15 +158,6 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
               const isPlus = plan.credits === 20
               const isFamily = plan.credits === 60
 
-              let badge = ""
-              let badgeColor = ""
-
-              // Temporarily disabled other badges for New Year offer
-              if (isFamily) {
-                badge = "New Year Offer"
-                badgeColor = "bg-gradient-to-r from-yellow-500 to-orange-600 shadow-sm"
-              }
-
               let perks: string[] = []
 
               if (isStarter) {
@@ -211,37 +174,19 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                 <button
                   key={plan.id}
                   onClick={() => setSelectedPlanId(plan.id)}
-                  className={`relative w-full text-left border rounded-xl p-4 transition-all duration-200 ${selectedPlanId === plan.id
-                    ? isFamily
-                      ? "border-orange-500 bg-orange-50/50 ring-1 ring-orange-500/20"
-                      : "border-black bg-gray-50"
-                    : "border-gray-200 hover:border-gray-300"
-                    }`}
+                  className={`relative w-full text-left border rounded-xl p-4 transition-all duration-200 ${selectedPlanId === plan.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"}`}
                 >
-                  {/* Conversion Badge */}
-                  {badge && (
-                    <div className={`absolute -top-2 left-4 px-2 py-1 ${badgeColor} text-white text-xs font-bold rounded-full flex items-center gap-1`}>
-                      {badge}
-                    </div>
-                  )}
-
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="font-semibold text-black mb-1 flex items-center gap-2">
                         {plan.name}
-                        {isFamily && timeLeft && (
-                          <span className="text-[10px] font-medium text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full flex items-center gap-1">
-                            <Timer size={10} />
-                            {timeLeft.days}d {timeLeft.hours}h left
-                          </span>
-                        )}
                       </div>
 
                       {/* Plan Perks */}
                       <div className="space-y-1 mt-2">
                         {perks.map((perk, index) => (
                           <div key={index} className="flex items-center text-xs text-gray-500">
-                            <svg className={`w-3 h-3 mr-1 flex-shrink-0 ${isFamily ? 'text-orange-500' : 'text-green-500'}`} fill="currentColor" viewBox="0 0 20 20">
+                            <svg className={`w-3 h-3 mr-1 flex-shrink-0 text-green-500`} fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                             {perk}
@@ -250,14 +195,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
                       </div>
                     </div>
                     <div className="flex flex-col items-end">
-                      {isFamily ? (
-                        <>
-                          <div className="text-xl font-bold text-orange-600">$17.99</div>
-                          <div className="text-xs text-gray-400 line-through font-medium">$24.99</div>
-                        </>
-                      ) : (
-                        <div className="text-xl font-bold text-black">${(plan.price_cents / 100).toFixed(2)}</div>
-                      )}
+                      <div className="text-xl font-bold text-black">${(plan.price_cents / 100).toFixed(2)}</div>
                     </div>
                   </div>
                 </button>
@@ -304,10 +242,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
           <Button
             onClick={handlePurchase}
             disabled={isProcessing || !selectedPlanId}
-            className={`w-full text-md text-white ${plans.find(p => p.id === selectedPlanId)?.credits === 60
-              ? "bg-gradient-to-r from-yellow-500 to-orange-600 hover:shadow-lg hover:shadow-orange-500/20"
-              : "bg-black hover:bg-gray-800"
-              }`}
+            className="w-full text-md text-white bg-black hover:bg-gray-800"
           >
             {isProcessing ? "Processing..." : "Continue to Checkout"}
           </Button>
