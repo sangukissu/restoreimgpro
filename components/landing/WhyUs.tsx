@@ -5,13 +5,13 @@ import { Heart, ShieldCheck, Sparkles, Users } from 'lucide-react';
 const STATS = [
   {
     value: '1.4K+',
-    label: 'Families have trusted us to restore their albums.',
+    label: 'Families have trusted us to restore their memories.',
     dots: [true, true, true, false], // Visual progress
     bullet: false,
     icon: <Users size={20} />
   },
   {
-    value: 'Simple',
+    value: 'Simple Process',
     label: 'No tech skills needed. Just upload and click one button.',
     dots: [true, true, false, false],
     bullet: true,

@@ -65,20 +65,20 @@ export const PhotoAnimation: React.FC = () => {
           <div className="max-w-2xl">
             {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Live Portrait <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> AI Photo Animation <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
-              Bring photos <br />
-              <span className="text-gray-400">to life with AI.</span>
+             Make your photos <br />
+              <span className="text-gray-400"> with AI Photo Animation.</span>
             </h2>
           </div>
 
           {/* Subtitle */}
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Transform static portraits into realistic videos. Choose from a variety of emotional expressions and gestures.
+              Transform still old photos into realistic videos. Choose from a variety of emotional expressions and gestures.
             </p>
           </div>
         </div>
@@ -118,7 +118,7 @@ export const PhotoAnimation: React.FC = () => {
               <div className="absolute bottom-8 left-8 z-20">
                 <h3 className="text-white text-3xl font-bold mb-2">{activeStyle.title}</h3>
                 <p className="text-white/70 text-sm max-w-md backdrop-blur-sm">
-                  AI generated motion based on a single still image.
+                  AI Photo Animation created from a single still image.
                 </p>
               </div>
 

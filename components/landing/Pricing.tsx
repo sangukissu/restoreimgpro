@@ -183,7 +183,23 @@ export const Pricing: React.FC = () => {
             </p>
           </div>
         </div>
-
+  <div className="mb-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-black text-white rounded-2xl p-4 sm:p-5 shadow-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-white text-black">
+                <Sparkles size={18} />
+              </div>
+              <p className="text-sm sm:text-base font-semibold">
+                Try 1 free restoration before buying
+              </p>
+            </div>
+            <Link href="/login" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto px-5 py-2 rounded-full bg-white text-black font-bold hover:scale-[1.02] active:scale-[0.98] transition-transform">
+                Try Free Preview
+              </button>
+            </Link>
+          </div>
+        </div>
         {/* Pricing Grid: 3 Equal Columns - Removing items-start allows stretch by default */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
