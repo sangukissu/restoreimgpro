@@ -32,9 +32,10 @@ interface DashboardClientProps {
     id: string
   }
   initialCredits: number
+  initialTrialCredits?: number
 }
 
-export default function DashboardClient({ user, initialCredits }: DashboardClientProps) {
+export default function DashboardClient({ user, initialCredits, initialTrialCredits = 0 }: DashboardClientProps) {
   const [appState, setAppState] = useState<AppState>("upload")
   const [selectedFeature, setSelectedFeature] = useState<FeatureType | null>("restore")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -42,6 +43,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
   const [restorationData, setRestorationData] = useState<RestorationData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [userCredits, setUserCredits] = useState(initialCredits)
+  const [trialCredits, setTrialCredits] = useState<number>(initialTrialCredits)
   const { toast } = useToast()
   
   // Add ref to track current restoration request
@@ -119,11 +121,9 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       const displayUrl = response.previewUrl || response.restoredImageUrl
 
       if (response.success && displayUrl) {
-        if (typeof response.availableCreditsRemaining === "number") {
-          setUserCredits(response.availableCreditsRemaining)
-        } else if (typeof response.creditsRemaining === "number") {
-          setUserCredits(response.creditsRemaining)
-        }
+        // Update balances — keep separate paid vs trial for UI logic
+        if (typeof response.creditsRemaining === "number") setUserCredits(response.creditsRemaining)
+        if (typeof response.trialCreditsRemaining === "number") setTrialCredits(response.trialCreditsRemaining)
 
         const newData: RestorationData = {
           originalFile: selectedFile,
@@ -333,6 +333,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
             selectedFile={selectedFile}
             selectedImageUrl={selectedImageUrl}
             userCredits={userCredits}
+            trialCredits={trialCredits}
           />
         )}
 

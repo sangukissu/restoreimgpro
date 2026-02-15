@@ -3,7 +3,9 @@ import { createClient } from "@/utils/supabase/server"
 
 export async function POST(request: NextRequest) {
   try {
-    const { amount = 1 } = await request.json()
+    const body = await request.json()
+    const amount = typeof body?.amount === 'number' ? body.amount : 1
+    const consumeTrialForRestore = Boolean(body?.consumeTrialForRestore)
 
     // Validate amount
     if (typeof amount !== 'number' || amount <= 0 || amount > 100) {
@@ -37,17 +39,25 @@ export async function POST(request: NextRequest) {
     const totalAvailable = currentCredits + currentTrial
 
     // Check if user has sufficient credits
-    if (totalAvailable < amount) {
+    // By default, DO NOT consume trial credits.
+    // Only allow consuming trial when explicitly requested AND only for single-image restore (amount === 1).
+    const canUseTrial = consumeTrialForRestore && amount === 1
+    if ((!canUseTrial && currentCredits < amount) || (canUseTrial && totalAvailable < amount)) {
       return NextResponse.json({ 
         error: "Insufficient credits", 
-        currentCredits: totalAvailable,
+        currentCredits: canUseTrial ? totalAvailable : currentCredits,
         requiredCredits: amount 
       }, { status: 402 })
     }
 
-    // Deduct credits preferring paid credits first, then trial credits
+    // Deduct logic:
+    // - Always deduct from paid credits first.
+    // - Only if canUseTrial and paid credits are insufficient, consume remaining from trial.
     let deductFromPaid = Math.min(amount, currentCredits)
-    let deductFromTrial = amount - deductFromPaid
+    let deductFromTrial = 0
+    if (amount > deductFromPaid && canUseTrial) {
+      deductFromTrial = amount - deductFromPaid
+    }
     const newCredits = currentCredits - deductFromPaid
     const newTrial = currentTrial - deductFromTrial
 
@@ -65,6 +75,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
+      // Back-compat field used by some clients; represents paid credits only
+      remainingCredits: newCredits,
+      // Extended fields
       newCredits: newCredits + newTrial,
       deductedCredits: amount,
       creditsRemaining: newCredits,

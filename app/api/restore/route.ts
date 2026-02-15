@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
 import { createClient } from "@/utils/supabase/server"
+import { watermarkBringBack, normalizeToPng } from "@/lib/watermark"
 
 // Configure Fal AI client
 fal.config({
@@ -193,8 +194,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid URI format from restoration service" }, { status: 500 })
     }
 
+    // Decide if this restoration uses a trial preview (paid credits take precedence)
+    const usesTrialPreview = (userProfile.credits ?? 0) <= 0 && ((userProfile as any).trial_credits ?? 0) > 0
+
     // Download the restored image and save it to Supabase storage
     let finalImageUrl: string
+    let previewImageUrl: string | undefined
+    let previewImagePath: string | undefined
+    let cleanImagePath: string | undefined
 
 
     try {
@@ -206,19 +213,27 @@ export async function POST(request: NextRequest) {
 
       const imageBuffer = await imageResponse.arrayBuffer()
       const contentType = imageResponse.headers.get('content-type') || 'image/jpeg'
-      const imageBlob = new Blob([imageBuffer], { type: contentType })
+      const rawBuffer = Buffer.from(imageBuffer)
+      const pngBuffer = await normalizeToPng(rawBuffer)
+
+      // Prepare preview buffer with watermark only when using trial
+      const previewBuffer = usesTrialPreview ? await watermarkBringBack(pngBuffer, "BringBack.ai • Preview") : undefined
 
       // Generate a unique filename with user folder structure
       const timestamp = Date.now()
       const randomId = Math.random().toString(36).substring(2, 15)
-      const fileExtension = restoredImageUrl.split('.').pop() || 'png'
-      const fileName = `${user.id}/${timestamp}_${randomId}.${fileExtension}`
+      const fileExtension = "png"
+      const fileBase = `${user.id}/${timestamp}_${randomId}`
+      const cleanFileName = `${fileBase}.${fileExtension}`
+      const previewFileName = `${fileBase}_preview.${fileExtension}`
 
       // Upload directly to the restored_photos bucket (bucket already exists with policies)
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      // Upload clean PNG
+      const uint8Clean = new Uint8Array(pngBuffer)
+      const { error: uploadError } = await supabase.storage
         .from('restored_photos')
-        .upload(fileName, imageBlob, {
-          contentType: contentType,
+        .upload(cleanFileName, uint8Clean as any, {
+          contentType: 'image/png',
           cacheControl: '3600'
         })
 
@@ -229,9 +244,28 @@ export async function POST(request: NextRequest) {
       // Get the public URL for the uploaded image
       const { data: urlData } = supabase.storage
         .from('restored_photos')
-        .getPublicUrl(fileName)
+        .getPublicUrl(cleanFileName)
 
       finalImageUrl = urlData.publicUrl
+      cleanImagePath = cleanFileName
+
+      // Upload preview if needed
+      if (previewBuffer) {
+        const uint8Prev = new Uint8Array(previewBuffer)
+        const { error: prevErr } = await supabase.storage
+          .from('restored_photos')
+          .upload(previewFileName, uint8Prev as any, {
+            contentType: 'image/png',
+            cacheControl: '3600'
+          })
+        if (!prevErr) {
+          const { data: prevUrl } = supabase.storage
+            .from('restored_photos')
+            .getPublicUrl(previewFileName)
+          previewImageUrl = prevUrl.publicUrl
+          previewImagePath = previewFileName
+        }
+      }
 
     } catch (storageError) {
       // Fallback: use the original Fal AI URL if storage fails
@@ -239,11 +273,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Save restoration record to database (matching your actual schema)
-    const { error: insertError } = await supabase.from("image_restorations").insert({
-      user_id: user.id,
-      restored_image_url: finalImageUrl,
-      status: "completed",
-    })
+    const { data: inserted, error: insertError } = await supabase
+      .from("image_restorations")
+      .insert({
+        user_id: user.id,
+        restored_image_url: finalImageUrl,
+        preview_image_path: previewImagePath || null,
+        clean_image_path: cleanImagePath || null,
+        is_unlocked: !usesTrialPreview,
+        status: "completed",
+      })
+      .select('id')
+      .single()
 
     if (insertError) {
       return NextResponse.json({ error: "Failed to save restoration record" }, { status: 500 })
@@ -270,7 +311,11 @@ export async function POST(request: NextRequest) {
     // Return the final image URL (from Supabase storage)
     return NextResponse.json({
       success: true,
-      restoredImageUrl: finalImageUrl,
+      restoredImageUrl: previewImageUrl && usesTrialPreview ? previewImageUrl : finalImageUrl,
+      previewUrl: previewImageUrl,
+      downloadUrl: finalImageUrl,
+      isLocked: usesTrialPreview,
+      restorationId: inserted?.id,
       originalFileName: file.name,
       processedAt: new Date().toISOString(),
       creditsRemaining: remainingCredits,

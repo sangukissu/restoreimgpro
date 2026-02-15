@@ -20,17 +20,19 @@ export default async function Dashboard({
   // Fetch user credits from database
   const { data: profile } = await supabase
     .from("user_profiles")
-    .select("credits")
+    .select("credits, trial_credits")
     .eq("user_id", user.id)
     .single()
 
   const credits = profile?.credits || 0
+  const trialCredits = (profile as any)?.trial_credits || 0
   const resolvedSearchParams = await searchParams
 
   return (
     <DashboardClient 
       user={{ email: user.email || "", id: user.id }} 
       initialCredits={credits}
+      initialTrialCredits={trialCredits}
     />
   )
 }
