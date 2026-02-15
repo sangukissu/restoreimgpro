@@ -11,7 +11,7 @@ type BackgroundStyle = "black" | "gray" | "beige" | "gradient" | "brown" | "boke
 
 // Note: Do NOT compress user-uploaded images. Preserve full quality for model fidelity.
 
-export default function FamilyPortraitClient() {
+export default function FamilyPortraitClient({ userCredits }: { userCredits: number }) {
   const [files, setFiles] = useState<File[]>([])
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("4:3")
   const [backgroundStyle, setBackgroundStyle] = useState<BackgroundStyle>("black")
@@ -27,40 +27,58 @@ export default function FamilyPortraitClient() {
   const acceptTypes = "image/jpeg,image/jpg,image/png,image/webp"
   const maxSizeBytes = 20 * 1024 * 1024
 
-  const validateFile = (file: File) => {
+  const validateFile = useCallback((file: File) => {
     if (!acceptTypes.split(",").includes(file.type)) {
       throw new Error("Only JPG, PNG and WebP images are supported")
     }
     if (file.size > maxSizeBytes) {
       throw new Error("Image must be less than 20MB")
     }
-  }
+  }, [])
 
-  const applyFiles = (incoming: FileList | File[]) => {
-    const arr = Array.from(incoming).slice(0, 4)
+  const addFiles = useCallback((incoming: FileList | File[]) => {
+    const arr = Array.from(incoming)
     const validated: File[] = []
     for (const f of arr) {
-      try { validateFile(f); validated.push(f) } catch (e: any) { setError(e?.message || "Invalid file") }
+      try {
+        validateFile(f)
+        validated.push(f)
+      } catch (e: any) {
+        setError(e?.message || "Invalid file")
+      }
     }
-    const next = validated.slice(0, 4)
-    setFiles(next)
-    // Auto-adjust aspect ratio if invalid for count
-    if (next.length > 2 && (aspectRatio === "1:1" || aspectRatio === "3:4")) {
-      setAspectRatio("4:3")
-    }
-  }
+
+    setFiles((prev) => {
+      if (prev.length >= 4) return prev
+      const existing = new Set(prev.map((f) => `${f.name}:${f.size}:${f.lastModified}`))
+      const toAdd: File[] = []
+      for (const f of validated) {
+        const key = `${f.name}:${f.size}:${f.lastModified}`
+        if (existing.has(key)) continue
+        existing.add(key)
+        toAdd.push(f)
+        if (prev.length + toAdd.length >= 4) break
+      }
+      const next = [...prev, ...toAdd].slice(0, 4)
+      if (next.length > 2 && (aspectRatio === "1:1" || aspectRatio === "3:4")) {
+        setAspectRatio("4:3")
+      }
+      return next
+    })
+  }, [aspectRatio, validateFile])
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    applyFiles(e.target.files || [])
+    addFiles(e.target.files || [])
+    e.target.value = ""
   }
 
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault(); e.stopPropagation();
     setIsDragging(false)
     if (e.dataTransfer?.files?.length) {
-      applyFiles(e.dataTransfer.files)
+      addFiles(e.dataTransfer.files)
     }
-  }, [applyFiles])
+  }, [addFiles])
 
   const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault(); e.stopPropagation();
@@ -78,8 +96,16 @@ export default function FamilyPortraitClient() {
       setError(null)
       setResultUrl(null)
 
-      if (files.length === 0) {
-        setError("Please upload 1–4 individual portrait photos.")
+      if (files.length < 2) {
+        setError("Please upload at least 2 individual portrait photos.")
+        setIsLoading(false)
+        return
+      }
+
+      if (userCredits < 2) {
+        const message = "You need 2 credits to generate a family portrait."
+        toast.error(message)
+        setError(message)
         setIsLoading(false)
         return
       }
@@ -166,9 +192,9 @@ export default function FamilyPortraitClient() {
         <div className="space-y-6">
           {/* Dropzone */}
           <div className="space-y-2">
-            <label className="block text-lg font-semibold text-black">Upload 1–4 photos</label>
+            <label className="block text-lg font-semibold text-black">Upload photos ({files.length}/4)</label>
             <div
-              onClick={() => (!isLoading && !resultUrl) && fileInputRef.current?.click()}
+              onClick={() => (!isLoading && !resultUrl && files.length < 4) && fileInputRef.current?.click()}
               onDrop={handleDrop}
               onDragEnter={handleDrag}
               onDragOver={handleDrag}
@@ -233,6 +259,19 @@ export default function FamilyPortraitClient() {
                       </button>
                     </div>
                   ))}
+                  {files.length < 4 && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        fileInputRef.current?.click()
+                      }}
+                      className="rounded-xl border-2 border-dashed border-gray-300 hover:border-gray-400 transition-colors h-32 sm:h-36 flex flex-col items-center justify-center gap-2 bg-gray-50"
+                    >
+                      <Upload className="w-6 h-6 text-gray-700" />
+                      <span className="text-sm font-semibold text-gray-900">Add photo</span>
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -301,7 +340,7 @@ export default function FamilyPortraitClient() {
           <div className="flex items-center gap-3">
             <Button
               onClick={handleGenerate}
-              disabled={isLoading || files.length === 0}
+              disabled={isLoading || files.length < 2 || userCredits < 2}
               className="bg-black hover:bg-gray-800 text-white px-6 py-4 w-full text-lg h-12"
             >
               {isLoading ? "Combining..." : "Generate Family Portrait"}

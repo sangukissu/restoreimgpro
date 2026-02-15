@@ -12,9 +12,20 @@ interface ImageComparisonProps {
   restoredUrl: string
   onStartOver: () => void
   onDownload?: (restoredUrl: string) => void
+  isLocked?: boolean
+  downloadUrl?: string
+  onUnlock?: () => void
 }
 
-export default function ImageComparison({ originalUrl, restoredUrl, onStartOver, onDownload }: ImageComparisonProps) {
+export default function ImageComparison({
+  originalUrl,
+  restoredUrl,
+  onStartOver,
+  onDownload,
+  isLocked,
+  downloadUrl,
+  onUnlock,
+}: ImageComparisonProps) {
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -101,28 +112,36 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
     }
   }, [])
 
-  const handleDownload = async () => {
+  const downloadFrom = async (url: string) => {
     if (onDownload) {
       // Use the parent's download handler (with feedback tracking)
-      onDownload(restoredUrl)
+      onDownload(url)
     } else {
       // Fallback to default download behavior
       try {
-        const response = await fetch(restoredUrl)
+        const response = await fetch(url)
         const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
+        const blobUrl = window.URL.createObjectURL(blob)
         const a = document.createElement("a")
-        a.href = url
+        a.href = blobUrl
         a.download = `restored-image-${Date.now()}.png`
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)
-        window.URL.revokeObjectURL(url)
+        window.URL.revokeObjectURL(blobUrl)
       } catch (error) {
         console.error("Error downloading image:", error)
         alert("Failed to download image")
       }
     }
+  }
+
+  const handleDownload = async () => {
+    await downloadFrom(downloadUrl || restoredUrl)
+  }
+
+  const handleDownloadPreview = async () => {
+    await downloadFrom(restoredUrl)
   }
 
   const handleGenerateVideo = () => {
@@ -232,13 +251,32 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
 
           {/* Buttons */}
           <div className="flex flex-wrap gap-3 justify-center items-center pt-2">
-            <Button
-              onClick={handleDownload}
-              className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
-            >
-              <DownloadIcon className="w-4 h-4" />
-              Download
-            </Button>
+            {isLocked ? (
+              <>
+                <Button
+                  onClick={handleDownloadPreview}
+                  className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[160px] justify-center"
+                >
+                  <DownloadIcon className="w-4 h-4" />
+                  Download Preview
+                </Button>
+                <Button
+                  onClick={onUnlock}
+                  className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[220px] justify-center"
+                >
+                  <DownloadIcon className="w-4 h-4" />
+                  Download without watermark
+                </Button>
+              </>
+            ) : (
+              <Button
+                onClick={handleDownload}
+                className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+              >
+                <DownloadIcon className="w-4 h-4" />
+                Download
+              </Button>
+            )}
 
             {/* Free Enhance Button */}
             <Button

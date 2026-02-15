@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
     }
 
-    // Check user credits (must have at least 1)
+    // Check user credits (requires 2 credits)
     const { data: userProfile, error: profileError } = await supabase
       .from('user_profiles')
       .select('credits')
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to check credits' }, { status: 500 })
     }
 
-    if (!userProfile || (userProfile.credits ?? 0) <= 0) {
+    if (!userProfile || (userProfile.credits ?? 0) < 2) {
       return NextResponse.json({
         error: 'Insufficient credits',
         code: 'INSUFFICIENT_CREDITS',

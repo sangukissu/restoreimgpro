@@ -269,10 +269,10 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
             <div className="flex gap-3">
               <Button
                 onClick={handleRestoreClick}
-                disabled={isRestoring || userCredits <= 0}
+                disabled={isRestoring}
                 className="flex-1 bg-black text-white hover:bg-gray-800 h-11 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isRestoring ? "Restoring..." : userCredits > 0 ? "Restore Image" : "Not Enough Credits"}
+                {isRestoring ? "Restoring..." : userCredits > 0 ? "Restore Image" : "Try Free Preview"}
               </Button>
               <Button
                 onClick={() => window.location.reload()}

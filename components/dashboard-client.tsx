@@ -21,6 +21,9 @@ interface RestorationData {
   restoredUrl: string
   initialRestoredUrl: string
   featureType: FeatureType
+  restorationId?: string
+  downloadUrl?: string
+  isLocked?: boolean
 }
 
 interface DashboardClientProps {
@@ -109,24 +112,28 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     setAppState("loading")
     setError(null)
 
-    let finalCredits = userCredits
-    
     try {
       // Make API call to restore image
       const response: RestoreImageResponse = await restoreImage(selectedFile)
       
-      if (response.success && response.restoredImageUrl) {
-        // Deduct credit after successful restoration
-        const newCredits = userCredits - 1
-        finalCredits = newCredits
-        setUserCredits(newCredits)
-        
+      const displayUrl = response.previewUrl || response.restoredImageUrl
+
+      if (response.success && displayUrl) {
+        if (typeof response.availableCreditsRemaining === "number") {
+          setUserCredits(response.availableCreditsRemaining)
+        } else if (typeof response.creditsRemaining === "number") {
+          setUserCredits(response.creditsRemaining)
+        }
+
         const newData: RestorationData = {
           originalFile: selectedFile,
           originalUrl: selectedImageUrl!,
-          restoredUrl: response.restoredImageUrl,
-          initialRestoredUrl: response.restoredImageUrl,
+          restoredUrl: displayUrl,
+          initialRestoredUrl: displayUrl,
           featureType: selectedFeature!,
+          restorationId: response.restorationId,
+          downloadUrl: response.downloadUrl,
+          isLocked: response.isLocked,
         }
         setRestorationData(newData)
         setHasUsedSecondPass(false)
@@ -154,8 +161,12 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         // Track restoration completion for feedback system
         await trackRestoration()
         
-        // Show success toast
-        toast.success(`Image Restored Successfully! 1 credit deducted. ${newCredits} credits remaining.`)
+        if (response.isLocked) {
+          toast.success("Preview ready. Download without watermark requires purchase.")
+        } else {
+          const remaining = typeof response.creditsRemaining === "number" ? response.creditsRemaining : userCredits
+          toast.success(`Image Restored Successfully! ${remaining} credits remaining.`)
+        }
       } else {
         setError(response.error || "Failed to restore image")
         setAppState("error")
@@ -220,6 +231,15 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       console.error("Error downloading image:", error)
       toast.error("Failed to download image")
     }
+  }
+
+  const openPaymentModal = (restorationId?: string) => {
+    try {
+      if (restorationId) {
+        localStorage.setItem("pending_unlock_restoration_id", restorationId)
+      }
+    } catch {}
+    window.dispatchEvent(new Event("bb:open-payment-modal"))
   }
   
   // Handle feedback submission
@@ -381,8 +401,15 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
                             setIsAnalyzing(false)
                             setAppState("loading")
                             const res = await rerestoreImage(restorationData.restoredUrl, analysis.analysis.recommended_second_pass_prompt, restorationData.initialRestoredUrl)
-                            if (res.success && res.imageUrl) {
-                              const updatedData = { ...restorationData, restoredUrl: res.imageUrl }
+                            const displayUrl = res.previewUrl || res.imageUrl
+                            if (res.success && displayUrl) {
+                              const updatedData = {
+                                ...restorationData,
+                                restoredUrl: displayUrl,
+                                restorationId: res.restorationId || restorationData.restorationId,
+                                downloadUrl: res.downloadUrl || restorationData.downloadUrl,
+                                isLocked: typeof res.isLocked === "boolean" ? res.isLocked : restorationData.isLocked,
+                              }
                               setRestorationData(updatedData)
                               setHasUsedSecondPass(true)
                               toast.success("We improved your photo — enjoy the enhanced result!")
@@ -430,6 +457,9 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
               restoredUrl={restorationData.restoredUrl}
               onStartOver={handleStartOver}
               onDownload={handleDownload}
+              isLocked={!!restorationData.isLocked}
+              downloadUrl={restorationData.downloadUrl}
+              onUnlock={() => openPaymentModal(restorationData.restorationId)}
             />
           </>
         )}
