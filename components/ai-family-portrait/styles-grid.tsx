@@ -5,10 +5,10 @@ import { Wand2, SunMedium, Palette, LayoutList, Camera, ArrowRight, Sparkles } f
 
 const InputMosaic = () => {
   const images = [
-    { src: "/family-photo1.png", label: "Father" },
-    { src: "/family-photo2.jpg", label: "Mother" },
-    { src: "/family-photo3.png", label: "Son" },
-    { src: "/family-photo4.png", label: "Daughter" },
+    { src: "/family-photo1.png", label: "Son" },
+    { src: "/family-photo2.jpg", label: "Grandpa" },
+    { src: "/family-photo3.png", label: "Father" },
+    { src: "/family-photo4.png", label: "Mother" },
   ];
 
   return (

@@ -13,16 +13,16 @@ import { Pricing } from "@/components/landing/Pricing"
 
 
 export const metadata: Metadata = {
-  title: "AI Family Portrait: Combine Photos to Create a Family Portrait with AI | BringBack AI",
+  title: "Create Professional Family Portraits from Separate Photos | BringBack AI",
   description:
-    "Create a unified family portrait from up to 4 individual photos—across time, distance, and even black-and-white. Private, high‑resolution family portrait in seconds.",
+    "Don't settle for cheap collages. Our AI generates realistic, high-resolution studio portraits from individual photos. Perfect for framing and printing.",
   alternates: {
     canonical: "/ai-family-portrait",
   },
   openGraph: {
-    title: "AI Family Portrait: Combine Photos to Create a Family Portrait with AI | BringBack AI",
+    title: "Create Professional Family Portraits from Separate Photos | BringBack AI",
     description:
-      "Create a unified family portrait from up to 4 individual photos—across time, distance, and even black-and-white. Private, high‑resolution family portrait in seconds.",
+      "Don't settle for cheap collages. Our AI generates realistic, high-resolution studio quality family photos from individual photos. Perfect for framing and printing.",
     type: "website",
     url: "https://bringback.pro/ai-family-portrait",
   },
@@ -66,7 +66,7 @@ const familyPortraitImageJsonLd = {
   '@type': 'ImageObject',
   name: 'AI Family Portrait Example',
   description:
-    'Example of a unified modern family portrait generated from separate photos.',
+    'Example of a professional family portrait generated from separate photos.',
   contentUrl: 'https://bringback.pro/family-portrait.png',
   url: 'https://bringback.pro/ai-family-portrait#hero',
 }

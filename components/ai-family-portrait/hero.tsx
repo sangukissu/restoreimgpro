@@ -17,16 +17,16 @@ export default function AIAnimationHero() {
         </div>
 
         {/* Heading - Exact Typography */}
-        <h1 className="max-w-5xl text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[1.1] text-[#111111] mb-8">
-          Bring Your Family <br />
+        <h1 className="max-w-5xl text-[3.5rem] sm:text-[3rem] md:text-[3rem] xl:text-[4rem] tracking-tighter leading-[1.1] text-[#111111] mb-8">
+         Turn Separate Photos into One  <br />
           <span className="text-gray-400">
-            Together.
+            Studio-Quality Family Photo
           </span>
         </h1>
 
         {/* Subheading - Exact Typography */}
         <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mb-12 font-medium leading-relaxed">
-          Create a unified, heartwarming family portrait from separate photos. Perfect for long-distance families, memorials, and gifts.
+Unite generations in one frame without a photoshoot. We transform separate images into a realistic, high-definition family photo. A premium service for moments that matter.
         </p>
 
         {/* CTA Buttons - Exact Match */}
@@ -58,7 +58,7 @@ export default function AIAnimationHero() {
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white bg-gray-100 aspect-[3/2]">
             <Image
               src="/family-portrait.png"
-              alt="Unified modern family portrait"
+              alt="Professional family portrait"
               fill
               className="object-cover"
               priority
