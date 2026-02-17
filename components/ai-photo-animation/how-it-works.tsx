@@ -174,7 +174,7 @@ export default function AIAnimationHowItWorks() {
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[1.1]">
-              Living Memories <br />
+              How to Animate Old Photos <br />
               <span className="text-gray-400">in 3 Steps.</span>
             </h2>
           </div>

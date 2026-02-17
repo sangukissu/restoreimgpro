@@ -45,8 +45,8 @@ export default function AIAnimationFeatures() {
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
-              More Than Motion. <br />
-              <span className="text-gray-400">A Living Memory.</span>
+              AI Photo Animation Technology: <br />
+              <span className="text-gray-400">Realistic & Respectful.</span>
             </h2>
           </div>
 

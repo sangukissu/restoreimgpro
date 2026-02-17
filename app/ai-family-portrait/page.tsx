@@ -13,14 +13,14 @@ import { Pricing } from "@/components/landing/Pricing"
 
 
 export const metadata: Metadata = {
-  title: "Create Professional Family Portraits from Separate Photos | BringBack AI",
+  title: "Turn Separate Photos into One Studio-Quality Family Portrait | BringBack AI",
   description:
     "Don't settle for cheap collages. Our AI generates realistic, high-resolution studio portraits from individual photos. Perfect for framing and printing.",
   alternates: {
     canonical: "/ai-family-portrait",
   },
   openGraph: {
-    title: "Create Professional Family Portraits from Separate Photos | BringBack AI",
+    title: "Turn Separate Photos into One Studio-Quality Family Portrait | BringBack AI",
     description:
       "Don't settle for cheap collages. Our AI generates realistic, high-resolution studio quality family photos from individual photos. Perfect for framing and printing.",
     type: "website",

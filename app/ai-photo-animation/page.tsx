@@ -8,6 +8,9 @@ import AIAnimationFeatures from "@/components/ai-photo-animation/features"
 import { CTA } from '@/components/landing/CTA';
 import AIAnimationFAQ from "@/components/ai-photo-animation/faq"
 import { Pricing } from "@/components/landing/Pricing"
+import { AIAnimationCrossSell } from "@/components/ai-photo-animation/cross-sell"
+import { AIAnimationUseCases } from "@/components/ai-photo-animation/use-cases"
+import { AIAnimationPrivacy } from "@/components/ai-photo-animation/privacy-shield"
 
 
 export const metadata: Metadata = {
@@ -182,11 +185,16 @@ export default function Page() {
       <Navbar />
       <AIAnimationHero />
       <AnimationStylesGrid />
+      <AIAnimationCrossSell />
+      <AIAnimationUseCases />
       <AIAnimationHowItWorks />
       <Pricing />
       <AIAnimationFeatures />
+      <AIAnimationPrivacy />
       <AIAnimationFAQ />
       <CTA />
+
+
 
       <Footer />
     </div>

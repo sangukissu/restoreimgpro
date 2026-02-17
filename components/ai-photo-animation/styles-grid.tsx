@@ -14,55 +14,55 @@ type StyleItem = {
 const styles: StyleItem[] = [
   {
     name: "Gentle Smile",
-    description: "A warm, natural smile that appears gradually and holds for a moment.",
+    description: "A warm, natural smile perfect for solemn ancestors or driver's license photos. Brings deceased relatives to life without exaggeration.",
     src: "/videos/gentle-smile.mp4",
     photoSrc: "/gentle-smile.webp",
   },
   {
     name: "Smile + Wave",
-    description: "Smiles warmly and waves their hand in a friendly greeting gesture.",
+    description: "Smiles warmly and waves their hand in a friendly greeting gesture. Ideal for creating video messages or digital family reunions from static portraits.",
     src: "/videos/video-animation1.mp4",
     photoSrc: "/vintage-family-portraits-colorized.webp",
   },
   {
     name: "Subtle Blink + Head Tilt",
-    description: "Blinks naturally and tilts their head slightly with a gentle expression.",
+    description: "Blinks naturally and tilts their head slightly with a gentle expression, making old photos feel alive without dramatic motion.",
     src: "/videos/head-tilt.mp4",
     photoSrc: "/head-tilt.webp",
   },
   {
     name: "Smile + Look Around",
-    description: "Smiles and looks around curiously, moving their eyes and head naturally.",
+    description: "Smiles and looks around curiously with natural eye movement, great for animating family portraits and storytelling slideshows.",
     src: "/videos/smile-and-look.mp4",
     photoSrc: "/look-around.webp",
   },
   {
     name: "Warm Gaze",
-    description: "Maintains steady, warm eye contact with a loving, subtle smile.",
+    description: "Maintains steady, warm eye contact with a loving, subtle smile, ideal for memorial videos and restored vintage portraits.",
     src: "/videos/warm-gaze.mp4",
     photoSrc: "/torn-restored.webp",
   },
   {
     name: "Soft Nod",
-    description: "Gives a single, slow, gentle nod of acknowledgment with a peaceful expression.",
+    description: "Gives a single, slow, gentle nod of acknowledgment with a peaceful expression for respectful tributes and formal portraits.",
     src: "/videos/gentle-node.mp4",
     photoSrc: "/after-noise-removal.webp",
   },
   {
     name: "Peaceful Presence",
-    description: "Subtle, natural micro-movements that suggest life and presence.",
+    description: "Subtle, natural micro-movements that suggest life and presence, perfect for dignified ancestor photos and black-and-white portraits.",
     src: "/videos/peaceful-presence.mp4",
     photoSrc: "/water-damage-restored.webp",
   },
   {
     name: "Loving Recognition",
-    description: "A moment of gentle recognition, with eyes softening and a hint of a smile.",
+    description: "A moment of gentle recognition, with eyes softening and a hint of a smile for couples photos and family reunion keepsakes.",
     src: "/videos/loving.mp4",
     photoSrc: "/historical-wedding-photo-colorized.webp",
   },
   {
     name: "Gentle Talking",
-    description: "Calm, serene expression with minimal natural movement, as if speaking softly.",
+    description: "Calm, serene expression with minimal natural movement, as if speaking softly for oral history clips and family tree videos.",
     src: "/videos/speaking.mp4",
     photoSrc: "/fade-restored.webp",
   },
@@ -137,14 +137,17 @@ export default function AnimationStylesGrid() {
             </div>
 
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
-              Lifelike Motion. <br />
-              <span className="text-gray-400">Respectful Results.</span>
+              Choose Your Animation Style: <br />
+              <span className="text-gray-400">Smile, Blink, & Tilt.</span>
             </h2>
           </div>
 
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
               Each animation is carefully designed to be natural, realistic, and respectful, preserving the true character of the person in your photo.
+            </p>
+            <p className="text-lg text-gray-600 font-medium leading-relaxed mt-4">
+              These AI photo animation styles work especially well for old photos, restored portraits, and family images where you want subtle, human motion instead of flashy effects.
             </p>
           </div>
         </div>
