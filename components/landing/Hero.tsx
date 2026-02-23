@@ -141,18 +141,17 @@ export const Hero: React.FC = () => {
 
 
           {/* Heading */}
-          <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-            Old Photo Restoration & <br />
+          <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
+            Professional Photo Restoration <br />
             <span className="text-gray-400 relative">
-              AI Photo Animation
+              and Lifelike Animation
 
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-lg sm:text-xl text-gray-600 max-w-xl mb-10 font-medium leading-relaxed">
-            Our powerful photo restoration tool automatically repairs scratches, tears, and fading with precision. Restore damaged photos to their former glory in seconds.
-          </p>
+Restore damaged family heirlooms to 4K glory in under 30 seconds. Our precision tools fix deep scratches and fading, while our advanced animation engine turns old memories into 5-second cinematic videos.          </p>
 
           {/* CTA Buttons - Matches Formix Design */}
           <div className="flex flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-12 w-full max-w-full overflow-visible">
