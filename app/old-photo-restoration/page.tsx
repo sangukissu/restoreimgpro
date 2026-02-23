@@ -126,7 +126,7 @@ const homeFAQPageJsonLd = {
             name: 'Is there a free way to restore old photos online?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'BringBack offers a free trial so you can test the power of our AI restoration before committing. You can upload a photo to see the \"Before vs. After\" results instantly. Premium plans are available for high-resolution downloads without watermarks.'
+                text: 'You can go for free tools on internet, there are multiples but we recommend BringBack AI or any other tool that offers high-quality results and fast processing time.'
             }
         },
         {

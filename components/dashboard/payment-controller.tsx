@@ -39,12 +39,6 @@ export default function PaymentController({ user, initialCreditBalance, children
     }
   }, [searchParams])
 
-  useEffect(() => {
-    const handler = () => setShowPaymentModal(true)
-    window.addEventListener("bb:open-payment-modal", handler)
-    return () => window.removeEventListener("bb:open-payment-modal", handler)
-  }, [])
-
   const handleBuyCredits = () => {
     setShowPaymentModal(true)
   }

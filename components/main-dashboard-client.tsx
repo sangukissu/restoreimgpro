@@ -10,11 +10,10 @@ interface MainDashboardClientProps {
     id: string
   }
   initialCredits: number
-  trialCredits: number
   isPaymentSuccess: boolean
 }
 
-export default function MainDashboardClient({ user, initialCredits, trialCredits, isPaymentSuccess }: MainDashboardClientProps) {
+export default function MainDashboardClient({ user, initialCredits, isPaymentSuccess }: MainDashboardClientProps) {
   const [credits, setCredits] = useState(initialCredits)
 
 
@@ -59,7 +58,7 @@ export default function MainDashboardClient({ user, initialCredits, trialCredits
               </div>
 
               <div className="flex items-center gap-2 text-[#FF4D00] font-bold text-sm mt-auto group-hover:translate-x-1 transition-transform">
-                {trialCredits > 0 ? "Try 1 Free Restoration" : "Start Restoration"} <ChevronRight className="w-4 h-4" />
+                Start Restoration <ChevronRight className="w-4 h-4" />
               </div>
             </div>
 

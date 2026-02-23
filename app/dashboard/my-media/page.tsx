@@ -38,27 +38,9 @@ export default async function MyMediaPage({
     .order("created_at", { ascending: false });
 
   // Fetch Image Restorations
-  const { data: paid } = await supabase
-    .from("payments")
-    .select("id")
-    .eq("user_id", data.user.id)
-    .eq("status", "completed")
-    .limit(1)
-
-  const hasPaid = !!(paid && paid.length > 0)
-
-  if (hasPaid) {
-    await supabase
-      .from("image_restorations")
-      .update({ is_unlocked: true, unlocked_at: new Date().toISOString() })
-      .eq("user_id", data.user.id)
-      .eq("is_unlocked", false)
-      .eq("was_trial", true)
-  }
-
   const { data: restoredImages } = await supabase
     .from("image_restorations")
-    .select("id, restored_image_url, created_at, status, is_unlocked, preview_image_path, clean_image_path")
+    .select("id, restored_image_url, created_at, status")
     .eq("user_id", data.user.id)
     .order("created_at", { ascending: false });
 
@@ -77,19 +59,14 @@ export default async function MyMediaPage({
 
   // Combine and sort images
   const allImages = [
-    ...(restoredImages || [])
-      .filter((img: any) => {
-        const legacy = !img.preview_image_path && !img.clean_image_path && !!img.restored_image_url
-        return !!img.is_unlocked || legacy
-      })
-      .map((img: any) => ({
-        id: img.id,
-        url: img.preview_image_path || img.clean_image_path ? `/api/restorations/${img.id}/preview` : img.restored_image_url,
-        created_at: img.created_at,
-        status: img.status || 'completed',
-        type: 'restoration',
-        title: 'Restored Photo'
-      })),
+    ...(restoredImages || []).map((img: any) => ({
+      id: img.id,
+      url: img.restored_image_url,
+      created_at: img.created_at,
+      status: img.status || 'completed',
+      type: 'restoration',
+      title: 'Restored Photo'
+    })),
     ...(familyPortraits || []).map((img: any) => ({
       id: img.id,
       url: img.composed_image_url,

@@ -256,7 +256,7 @@ export function generatePseoPages(): PseoPageData[] {
 
       // **THIS IS THE HIGH-QUALITY CONTENT**
       // It combines unique snippets into a new, useful paragraph.
-      const metaDescription = `Restore your ${problem.slug} ${photoType.slug} instantly with AI. Professional-quality results in 30 seconds for just $2.49. ${problem.description.split('.')[0]}. Free preview available - upload now!`;
+      const metaDescription = `Restore your ${problem.slug} ${photoType.slug} instantly with AI. Professional-quality results in 30 seconds for just $2.49. ${problem.description.split('.')[0]}. Try it now!`;
       // V V V V V  NEW FAQ GENERATION V V V V V
       // 1. Create a highly specific question based on the page keyword
       const specificFaq = {

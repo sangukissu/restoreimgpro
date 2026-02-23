@@ -3,7 +3,6 @@ import { GoogleGenAI, Part } from '@google/genai'
 import mime from 'mime'
 import { createClient } from '@/utils/supabase/server'
 import crypto from 'crypto'
-import { normalizeToPng, watermarkBringBack } from '@/lib/watermark'
 
 // Initialize Google AI client
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
@@ -50,15 +49,6 @@ export async function POST(req: NextRequest) {
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json({ error: 'Gemini API key not configured' }, { status: 500 })
     }
-
-    const { data: paid } = await supabase
-      .from('payments')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('status', 'completed')
-      .limit(1)
-
-    const hasPaid = !!(paid && paid.length > 0)
 
     // One-free-second-pass-gating using webhook_events; key off the initial restored URL when available
     const eventKey: string = typeof originalUrl === 'string' && originalUrl.length > 0 ? originalUrl : imageUrl
@@ -120,53 +110,33 @@ export async function POST(req: NextRequest) {
     }
 
     const buffer = Buffer.from(base64Data, 'base64')
-    const cleanPng = await normalizeToPng(buffer)
-    const isLocked = !hasPaid
-    const previewPng = isLocked ? await watermarkBringBack(cleanPng, 'BringBack.ai') : cleanPng
+    const imageBlob = new Blob([buffer], { type: mimeType })
 
     const timestamp = Date.now()
     const randomId = Math.random().toString(36).substring(2, 10)
-    const baseKey = `${user.id}/${timestamp}_rerestore_${randomId}`
-    const cleanPath = `${baseKey}_clean.png`
-    const previewPath = isLocked ? `${baseKey}_preview.png` : cleanPath
+    const extension = mime.getExtension(mimeType) || 'png'
+    const fileName = `${user.id}/${timestamp}_rerestore_${randomId}.${extension}`
 
-    const { error: cleanUploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('restored_photos')
-      .upload(cleanPath, new Blob([new Uint8Array(cleanPng)], { type: 'image/png' }), { contentType: 'image/png', cacheControl: '3600' })
+      .upload(fileName, imageBlob, { contentType: mimeType, cacheControl: '3600' })
 
-    if (cleanUploadError) {
-      return NextResponse.json({ error: 'Failed to store restored image' }, { status: 500 })
-    }
-
-    if (previewPath !== cleanPath) {
-      const { error: previewUploadError } = await supabase.storage
+    let finalImageUrl: string
+    if (uploadError) {
+      finalImageUrl = `data:${mimeType};base64,${base64Data}`
+    } else {
+      const { data: publicUrlData } = await supabase.storage
         .from('restored_photos')
-        .upload(previewPath, new Blob([new Uint8Array(previewPng)], { type: 'image/png' }), { contentType: 'image/png', cacheControl: '3600' })
-
-      if (previewUploadError) {
-        return NextResponse.json({ error: 'Failed to store preview image' }, { status: 500 })
-      }
+        .getPublicUrl(fileName)
+      finalImageUrl = (publicUrlData && publicUrlData.publicUrl) ? publicUrlData.publicUrl : `data:${mimeType};base64,${base64Data}`
     }
 
-    const { data: inserted, error: insertError } = await supabase
-      .from('image_restorations')
-      .insert({
-        user_id: user.id,
-        preview_image_path: previewPath,
-        clean_image_path: cleanPath,
-        is_unlocked: !isLocked,
-        was_trial: isLocked,
-        status: 'completed',
-      })
-      .select('id')
-      .single()
-
-    if (insertError || !inserted) {
-      return NextResponse.json({ error: 'Failed to save restoration record' }, { status: 500 })
-    }
-
-    const previewUrl = `/api/restorations/${inserted.id}/preview`
-    const downloadUrl = `/api/restorations/${inserted.id}/download`
+    // Persist record (status must match schema)
+    await supabase.from('image_restorations').insert({
+      user_id: user.id,
+      restored_image_url: finalImageUrl,
+      status: 'completed',
+    })
 
     // Mark second-pass usage to prevent future free passes for same image
     await supabase.from('webhook_events').insert({
@@ -179,17 +149,11 @@ export async function POST(req: NextRequest) {
     await supabase.from('second_pass_usage').insert({
       user_id: user.id,
       image_key: eventKey,
-      restored_image_url: previewUrl,
+      restored_image_url: finalImageUrl,
       used_at: new Date().toISOString(),
     })
 
-    return NextResponse.json({
-      restoredImageUrl: previewUrl,
-      restorationId: inserted.id,
-      previewUrl,
-      downloadUrl,
-      isLocked,
-    })
+    return NextResponse.json({ restoredImageUrl: finalImageUrl })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })

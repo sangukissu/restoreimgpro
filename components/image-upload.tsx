@@ -11,7 +11,6 @@ interface ImageUploadProps {
   selectedFile: File | null
   selectedImageUrl: string | null
   userCredits: number
-  trialCredits?: number
 }
 
 // Security constants
@@ -20,7 +19,7 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const MAX_DIMENSIONS = 7680 // Max width/height in pixels
 const MIN_DIMENSIONS = 100 // Min width/height in pixels
 
-export default function ImageUpload({ onImageSelect, onRestore, selectedFile, selectedImageUrl, userCredits, trialCredits = 0 }: ImageUploadProps) {
+export default function ImageUpload({ onImageSelect, onRestore, selectedFile, selectedImageUrl, userCredits }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -184,13 +183,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     if (isRestoring) {
       return
     }
-    // If no paid credits and no trial left, open in-app payment modal instead of attempting restore
-    if (userCredits <= 0 && trialCredits <= 0) {
-      try {
-        window.dispatchEvent(new Event("bb:open-payment-modal"))
-      } catch {}
-      return
-    }
+    
     setIsRestoring(true)
     onRestore()
     
@@ -276,16 +269,10 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
             <div className="flex gap-3">
               <Button
                 onClick={handleRestoreClick}
-                disabled={isRestoring}
+                disabled={isRestoring || userCredits <= 0}
                 className="flex-1 bg-black text-white hover:bg-gray-800 h-11 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isRestoring
-                  ? "Restoring..."
-                  : userCredits > 0
-                  ? "Restore Image"
-                  : trialCredits > 0
-                  ? "Try Free Preview"
-                  : "Buy Credits"}
+                {isRestoring ? "Restoring..." : userCredits > 0 ? "Restore Image" : "Not Enough Credits"}
               </Button>
               <Button
                 onClick={() => window.location.reload()}

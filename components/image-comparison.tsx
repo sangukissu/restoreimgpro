@@ -12,20 +12,9 @@ interface ImageComparisonProps {
   restoredUrl: string
   onStartOver: () => void
   onDownload?: (restoredUrl: string) => void
-  isLocked?: boolean
-  downloadUrl?: string
-  onUnlock?: () => void
 }
 
-export default function ImageComparison({
-  originalUrl,
-  restoredUrl,
-  onStartOver,
-  onDownload,
-  isLocked,
-  downloadUrl,
-  onUnlock,
-}: ImageComparisonProps) {
+export default function ImageComparison({ originalUrl, restoredUrl, onStartOver, onDownload }: ImageComparisonProps) {
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -112,36 +101,28 @@ export default function ImageComparison({
     }
   }, [])
 
-  const downloadFrom = async (url: string) => {
+  const handleDownload = async () => {
     if (onDownload) {
       // Use the parent's download handler (with feedback tracking)
-      onDownload(url)
+      onDownload(restoredUrl)
     } else {
       // Fallback to default download behavior
       try {
-        const response = await fetch(url)
+        const response = await fetch(restoredUrl)
         const blob = await response.blob()
-        const blobUrl = window.URL.createObjectURL(blob)
+        const url = window.URL.createObjectURL(blob)
         const a = document.createElement("a")
-        a.href = blobUrl
+        a.href = url
         a.download = `restored-image-${Date.now()}.png`
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)
-        window.URL.revokeObjectURL(blobUrl)
+        window.URL.revokeObjectURL(url)
       } catch (error) {
         console.error("Error downloading image:", error)
         alert("Failed to download image")
       }
     }
-  }
-
-  const handleDownload = async () => {
-    await downloadFrom(downloadUrl || restoredUrl)
-  }
-
-  const handleDownloadPreview = async () => {
-    await downloadFrom(restoredUrl)
   }
 
   const handleGenerateVideo = () => {
@@ -251,39 +232,18 @@ export default function ImageComparison({
 
           {/* Buttons */}
           <div className="flex flex-wrap gap-3 justify-center items-center pt-2">
-            {isLocked ? (
-              <>
-                <Button
-                  onClick={handleDownloadPreview}
-                  className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[160px] justify-center"
-                >
-                  <DownloadIcon className="w-4 h-4" />
-                  Download Preview
-                </Button>
-                <Button
-                  onClick={onUnlock}
-                  className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[220px] justify-center"
-                >
-                  <DownloadIcon className="w-4 h-4" />
-                  Download without watermark
-                </Button>
-              </>
-            ) : (
-              <Button
-                onClick={handleDownload}
-                className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
-              >
-                <DownloadIcon className="w-4 h-4" />
-                Download
-              </Button>
-            )}
+            <Button
+              onClick={handleDownload}
+              className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+            >
+              <DownloadIcon className="w-4 h-4" />
+              Download
+            </Button>
 
             {/* Free Enhance Button */}
             <Button
               onClick={handleNavigateEnhance}
-              disabled={!!isLocked}
-              title={isLocked ? "Unlock to use Enhance" : undefined}
-              className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
             >
               <ImageUpIcon className="w-4 h-4" />
               Free Enhance
@@ -291,9 +251,7 @@ export default function ImageComparison({
 
             <Button
               onClick={handleGenerateVideo}
-              disabled={!!isLocked}
-              title={isLocked ? "Unlock to generate video" : undefined}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
             >
               <Videotape className="w-4 h-4" />
               Generate Video

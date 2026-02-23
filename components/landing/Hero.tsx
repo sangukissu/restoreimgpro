@@ -134,7 +134,7 @@ export const Hero: React.FC = () => {
           <Link href="/dashboard">
             <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-4 py-2 rounded-full mb-8 shadow-lg shadow-black/5 hover:scale-105 transition-transform cursor-pointer border border-white/10">
               <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
-              <span className="text-sm font-semibold tracking-wide">Try 1 Free Photo Restoration</span>
+              <span className="text-sm font-semibold tracking-wide">BringBack Your Memories</span>
             </div>
           </Link>
 
@@ -142,9 +142,9 @@ export const Hero: React.FC = () => {
 
           {/* Heading */}
           <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-            Restore Old Photos & <br />
+            Old Photo Restoration & <br />
             <span className="text-gray-400 relative">
-              Faded Memories.
+              AI Photo Animation
 
             </span>
           </h1>

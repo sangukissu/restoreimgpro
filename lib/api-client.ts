@@ -1,13 +1,6 @@
 export interface RestoreImageResponse {
   success: boolean
   restoredImageUrl?: string
-  restorationId?: string
-  previewUrl?: string
-  downloadUrl?: string
-  isLocked?: boolean
-  creditsRemaining?: number
-  trialCreditsRemaining?: number
-  availableCreditsRemaining?: number
   error?: string
 }
 
@@ -33,13 +26,6 @@ export async function restoreImage(imageFile: File): Promise<RestoreImageRespons
     return {
       success: true,
       restoredImageUrl: data.restoredImageUrl,
-      restorationId: data.restorationId,
-      previewUrl: data.previewUrl,
-      downloadUrl: data.downloadUrl,
-      isLocked: data.isLocked,
-      creditsRemaining: data.creditsRemaining,
-      trialCreditsRemaining: data.trialCreditsRemaining,
-      availableCreditsRemaining: data.availableCreditsRemaining,
     }
   } catch (error) {
     return {
@@ -104,10 +90,6 @@ export async function analyzeRestoredImage(originalUrl: string | null, restoredU
 export interface RerestoreResponse {
   success: boolean
   imageUrl?: string
-  restorationId?: string
-  previewUrl?: string
-  downloadUrl?: string
-  isLocked?: boolean
   error?: string
 }
 
@@ -128,14 +110,7 @@ export async function rerestoreImage(imageUrl: string, prompt: string, originalU
       return { success: false, error: data.error || "Failed to re-restore image" }
     }
 
-    return {
-      success: true,
-      imageUrl: data.restoredImageUrl,
-      restorationId: data.restorationId,
-      previewUrl: data.previewUrl,
-      downloadUrl: data.downloadUrl,
-      isLocked: data.isLocked,
-    }
+    return { success: true, imageUrl: data.restoredImageUrl }
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Unknown error occurred" }
   }
