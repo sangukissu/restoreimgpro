@@ -18,7 +18,7 @@ export async function GET(
 
   const { data: restoration, error: restorationError } = await supabase
     .from("image_restorations")
-    .select("id, user_id, is_unlocked, was_trial, clean_image_path, restored_image_url")
+    .select("id, user_id, restored_image_url")
     .eq("id", id)
     .single()
 
@@ -30,50 +30,20 @@ export async function GET(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
-  let isUnlocked = !!restoration.is_unlocked
-
-  if (!isUnlocked) {
-    const { data: paid } = await supabase
-      .from("payments")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("status", "completed")
-      .limit(1)
-
-    if (paid && paid.length > 0) {
-      const { error: unlockError } = await supabase
-        .from("image_restorations")
-        .update({ is_unlocked: true, unlocked_at: new Date().toISOString() })
-        .eq("id", restoration.id)
-
-      if (!unlockError) {
-        isUnlocked = true
-      }
-    }
-  }
-
-  if (!isUnlocked) {
-    return NextResponse.json({ error: "Payment required" }, { status: 402 })
-  }
-
-  if (!restoration.clean_image_path) {
-    const url = restoration.restored_image_url
-    if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
-      return NextResponse.redirect(url)
-    }
+  const url = restoration.restored_image_url
+  if (!url || (!url.startsWith("http://") && !url.startsWith("https://"))) {
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }
 
-  const { data: blob, error: downloadError } = await supabase.storage
-    .from("restored_photos")
-    .download(restoration.clean_image_path)
-
-  if (downloadError || !blob) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 })
+  // Fetch the image from the public URL
+  const response = await fetch(url)
+  if (!response.ok) {
+    return NextResponse.json({ error: "Failed to fetch image" }, { status: 500 })
   }
 
-  const buffer = Buffer.from(await blob.arrayBuffer())
-  const contentType = blob.type || "image/png"
+  const arrayBuffer = await response.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+  const contentType = response.headers.get("content-type") || "image/png"
 
   return new NextResponse(buffer, {
     status: 200,

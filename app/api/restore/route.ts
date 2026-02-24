@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Check user credits from user_profiles table
     const { data: userProfile, error: profileError } = await supabase
       .from("user_profiles")
-      .select("credits, trial_credits")
+      .select("credits")
       .eq("user_id", user.id)
       .single()
 
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to check credits" }, { status: 500 })
     }
 
-    const availableCredits = (userProfile?.credits ?? 0) + (userProfile?.trial_credits ?? 0)
+    const availableCredits = userProfile?.credits ?? 0
     if (!userProfile || availableCredits <= 0) {
       return NextResponse.json({ error: "Insufficient credits" }, { status: 402 })
     }
@@ -194,15 +194,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid URI format from restoration service" }, { status: 500 })
     }
 
-    // Decide if this restoration uses a trial preview (paid credits take precedence)
-    const usesTrialPreview = (userProfile.credits ?? 0) <= 0 && ((userProfile as any).trial_credits ?? 0) > 0
-
     // Download the restored image and save it to Supabase storage
     let finalImageUrl: string
-    let previewImageUrl: string | undefined
-    let previewImagePath: string | undefined
-    let cleanImagePath: string | undefined
-
 
     try {
       // Download the image from Fal AI
@@ -212,12 +205,8 @@ export async function POST(request: NextRequest) {
       }
 
       const imageBuffer = await imageResponse.arrayBuffer()
-      const contentType = imageResponse.headers.get('content-type') || 'image/jpeg'
       const rawBuffer = Buffer.from(imageBuffer)
       const pngBuffer = await normalizeToPng(rawBuffer)
-
-      // Prepare preview buffer with watermark only when using trial
-      const previewBuffer = usesTrialPreview ? await watermarkBringBack(pngBuffer, "BringBack.ai • Preview") : undefined
 
       // Generate a unique filename with user folder structure
       const timestamp = Date.now()
@@ -225,10 +214,8 @@ export async function POST(request: NextRequest) {
       const fileExtension = "png"
       const fileBase = `${user.id}/${timestamp}_${randomId}`
       const cleanFileName = `${fileBase}.${fileExtension}`
-      const previewFileName = `${fileBase}_preview.${fileExtension}`
 
       // Upload directly to the restored_photos bucket (bucket already exists with policies)
-      // Upload clean PNG
       const uint8Clean = new Uint8Array(pngBuffer)
       const { error: uploadError } = await supabase.storage
         .from('restored_photos')
@@ -247,25 +234,6 @@ export async function POST(request: NextRequest) {
         .getPublicUrl(cleanFileName)
 
       finalImageUrl = urlData.publicUrl
-      cleanImagePath = cleanFileName
-
-      // Upload preview if needed
-      if (previewBuffer) {
-        const uint8Prev = new Uint8Array(previewBuffer)
-        const { error: prevErr } = await supabase.storage
-          .from('restored_photos')
-          .upload(previewFileName, uint8Prev as any, {
-            contentType: 'image/png',
-            cacheControl: '3600'
-          })
-        if (!prevErr) {
-          const { data: prevUrl } = supabase.storage
-            .from('restored_photos')
-            .getPublicUrl(previewFileName)
-          previewImageUrl = prevUrl.publicUrl
-          previewImagePath = previewFileName
-        }
-      }
 
     } catch (storageError) {
       // Fallback: use the original Fal AI URL if storage fails
@@ -278,9 +246,6 @@ export async function POST(request: NextRequest) {
       .insert({
         user_id: user.id,
         restored_image_url: finalImageUrl,
-        preview_image_path: previewImagePath || null,
-        clean_image_path: cleanImagePath || null,
-        is_unlocked: !usesTrialPreview,
         status: "completed",
       })
       .select('id')
@@ -291,17 +256,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Update user credits in user_profiles table
-    // Prefer deducting paid credits first; if none, use trial_credits
     let remainingCredits = userProfile.credits ?? 0
-    let remainingTrial = (userProfile as any).trial_credits ?? 0
     if (remainingCredits > 0) {
       remainingCredits = remainingCredits - 1
-    } else if (remainingTrial > 0) {
-      remainingTrial = remainingTrial - 1
     }
+
     const { error: updateError } = await supabase
       .from("user_profiles")
-      .update({ credits: remainingCredits, trial_credits: remainingTrial })
+      .update({ credits: remainingCredits })
       .eq("user_id", user.id)
 
     if (updateError) {
@@ -311,16 +273,12 @@ export async function POST(request: NextRequest) {
     // Return the final image URL (from Supabase storage)
     return NextResponse.json({
       success: true,
-      restoredImageUrl: previewImageUrl && usesTrialPreview ? previewImageUrl : finalImageUrl,
-      previewUrl: previewImageUrl,
+      restoredImageUrl: finalImageUrl,
       downloadUrl: finalImageUrl,
-      isLocked: usesTrialPreview,
       restorationId: inserted?.id,
       originalFileName: file.name,
       processedAt: new Date().toISOString(),
       creditsRemaining: remainingCredits,
-      trialCreditsRemaining: remainingTrial,
-      availableCreditsRemaining: remainingCredits + remainingTrial,
     })
   } catch (error) {
 

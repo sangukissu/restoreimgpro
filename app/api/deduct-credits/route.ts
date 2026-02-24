@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     // Get current user profile with row-level security check
     const { data: profile, error: profileError } = await supabase
       .from("user_profiles")
-      .select("credits, trial_credits")
+      .select("credits")
       .eq("user_id", user.id)
       .single()
 
@@ -35,37 +35,23 @@ export async function POST(request: NextRequest) {
     }
 
     const currentCredits = profile.credits || 0
-    const currentTrial = (profile as any).trial_credits || 0
-    const totalAvailable = currentCredits + currentTrial
-
+    
     // Check if user has sufficient credits
-    // By default, DO NOT consume trial credits.
-    // Only allow consuming trial when explicitly requested AND only for single-image restore (amount === 1).
-    const canUseTrial = consumeTrialForRestore && amount === 1
-    if ((!canUseTrial && currentCredits < amount) || (canUseTrial && totalAvailable < amount)) {
+    if (currentCredits < amount) {
       return NextResponse.json({ 
         error: "Insufficient credits", 
-        currentCredits: canUseTrial ? totalAvailable : currentCredits,
+        currentCredits: currentCredits,
         requiredCredits: amount 
       }, { status: 402 })
     }
 
     // Deduct logic:
-    // - Always deduct from paid credits first.
-    // - Only if canUseTrial and paid credits are insufficient, consume remaining from trial.
-    let deductFromPaid = Math.min(amount, currentCredits)
-    let deductFromTrial = 0
-    if (amount > deductFromPaid && canUseTrial) {
-      deductFromTrial = amount - deductFromPaid
-    }
-    const newCredits = currentCredits - deductFromPaid
-    const newTrial = currentTrial - deductFromTrial
+    const newCredits = currentCredits - amount
 
     const { error: updateError } = await supabase
       .from("user_profiles")
       .update({ 
-        credits: newCredits,
-        trial_credits: newTrial
+        credits: newCredits
       })
       .eq("user_id", user.id)
 
@@ -75,13 +61,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      // Back-compat field used by some clients; represents paid credits only
       remainingCredits: newCredits,
-      // Extended fields
-      newCredits: newCredits + newTrial,
+      newCredits: newCredits,
       deductedCredits: amount,
-      creditsRemaining: newCredits,
-      trialCreditsRemaining: newTrial
+      creditsRemaining: newCredits
     })
 
   } catch (error) {
