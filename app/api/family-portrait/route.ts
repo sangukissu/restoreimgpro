@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
     // Call Fal nano-banana edit model to compose images
     let falOutput: any
     try {
-      const result = await fal.subscribe('fal-ai/nano-banana-pro/edit', {
+      const result = await fal.subscribe('fal-ai/nano-banana-2/edit', {
         input: {
           prompt,
           image_urls: uploadedUrls,
