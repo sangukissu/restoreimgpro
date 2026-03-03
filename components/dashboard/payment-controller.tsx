@@ -43,6 +43,13 @@ export default function PaymentController({ user, initialCreditBalance, children
     setShowPaymentModal(true)
   }
 
+  // Listen for custom event from child components (e.g., animate page)
+  useEffect(() => {
+    const handler = () => handleBuyCredits()
+    window.addEventListener('open-payment-modal', handler)
+    return () => window.removeEventListener('open-payment-modal', handler)
+  }, [])
+
   const handlePaymentSkip = () => {
     setShowPaymentModal(false)
   }

@@ -69,9 +69,15 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
                 alt="Restore preview"
                 className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#FF4D00] animate-pulse"></div>
-                1 CREDIT
+              <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                <div className="bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#FF4D00] animate-pulse"></div>
+                  1 CREDIT
+                </div>
+                <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-[10px] px-2 py-1 rounded-full font-bold flex items-center gap-1 shadow-lg">
+                  <img src="/icons/pro-icon.svg" alt="Pro" className="w-3 h-3" />
+                  PRO
+                </div>
               </div>
             </div>
           </Link>
@@ -88,9 +94,15 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
                 muted
                 playsInline
               />
-              <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></div>
-                10 CREDITS
+              <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                <div className="bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></div>
+                  10 CREDITS
+                </div>
+                <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-[10px] px-2 py-1 rounded-full font-bold flex items-center gap-1 shadow-lg">
+                  <img src="/icons/pro-icon.svg" alt="Pro" className="w-3 h-3" />
+                  PRO
+                </div>
               </div>
             </div>
 
@@ -113,9 +125,15 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
             {/* Visual Area - 4:3 Aspect Ratio */}
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
               <img src="/family-portrait.png" alt="Family portrait" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-              <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                2 CREDITS
+              <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                <div className="bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                  2 CREDITS
+                </div>
+                <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-[10px] px-2 py-1 rounded-full font-bold flex items-center gap-1 shadow-lg">
+                  <img src="/icons/pro-icon.svg" alt="Pro" className="w-3 h-3" />
+                  PRO
+                </div>
               </div>
             </div>
 
@@ -168,9 +186,15 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
                 allow="autoplay; encrypted-media"
                 title="Nostalgic Hug"
               />
-              <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse"></div>
-                20 CREDITS
+              <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                <div className="bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse"></div>
+                  20 CREDITS
+                </div>
+                <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-[10px] px-2 py-1 rounded-full font-bold flex items-center gap-1 shadow-lg">
+                  <img src="/icons/pro-icon.svg" alt="Pro" className="w-3 h-3" />
+                  PRO
+                </div>
               </div>
             </div>
 

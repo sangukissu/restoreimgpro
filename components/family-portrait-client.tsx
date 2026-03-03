@@ -3,7 +3,7 @@
 import { useCallback, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import NextImage from "next/image"
-import { Upload, X, Loader2 } from "lucide-react"
+import { Upload, X, Loader2, Coins } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 type AspectRatio = "1:1" | "4:3" | "3:4" | "16:9"
@@ -338,14 +338,25 @@ export default function FamilyPortraitClient({ userCredits }: { userCredits: num
           </div>
 
           <div className="flex items-center gap-3">
-            <Button
-              onClick={handleGenerate}
-              disabled={isLoading || files.length < 2 || userCredits < 2}
-              className="bg-black hover:bg-gray-800 text-white px-6 py-4 w-full text-lg h-12"
-            >
-              {isLoading ? "Combining..." : "Generate Family Portrait"}
-            </Button>
-            {error && <span className="text-sm text-red-600">{error}</span>}
+            {userCredits < 2 ? (
+              <Button
+                onClick={() => window.dispatchEvent(new Event('open-payment-modal'))}
+                className="w-full bg-[#FF4D00] hover:bg-[#e64500] text-white px-6 py-4 text-lg h-12 font-semibold transition-colors"
+                disabled={isLoading || files.length < 2}
+              >
+                <Coins className="w-5 h-5 mr-2" />
+                Buy Credits to Generate
+              </Button>
+            ) : (
+              <Button
+                onClick={handleGenerate}
+                disabled={isLoading || files.length < 2}
+                className="bg-black hover:bg-gray-800 text-white px-6 py-4 w-full text-lg h-12"
+              >
+                {isLoading ? "Combining..." : "Generate Family Portrait"}
+              </Button>
+            )}
+            {error && <span className="text-sm text-red-600 w-full text-center mt-2 block">{error}</span>}
           </div>
         </div>
       </div>

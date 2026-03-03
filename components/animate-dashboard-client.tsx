@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Upload, Play, Download, Loader2, ArrowLeft, Sparkles, AlertCircle } from "lucide-react"
+import { Upload, Play, Download, Loader2, ArrowLeft, Sparkles, AlertCircle, Coins } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -108,7 +108,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
   const [currentGeneration, setCurrentGeneration] = useState<VideoGeneration | null>(null)
   const [generations, setGenerations] = useState<VideoGeneration[]>([])
   const [error, setError] = useState<string | null>(null)
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { toast } = useToast()
 
@@ -317,7 +317,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
 
 
 
-   
+
 
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -453,15 +453,61 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                     )}
 
                     {/* Generate Button for Desktop */}
+                    {credits < 10 ? (
+                      <Button
+                        onClick={() => window.dispatchEvent(new Event('open-payment-modal'))}
+                        className="hidden lg:flex w-full bg-[#FF4D00] hover:bg-[#e64500] text-white py-4 text-sm font-semibold rounded-md transition-colors"
+                      >
+                        <Coins className="w-5 h-5 mr-2" />
+                        Buy Credits to Generate
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={handleGenerate}
+                        disabled={
+                          !selectedFile ||
+                          isProcessing ||
+                          isPreloadingImage
+                        }
+                        className="hidden lg:flex w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
+                      >
+                        {isProcessing ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-5 h-5 mr-2" />
+                            Generate Video (10 credits)
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Generate Button for mobile when no side-by-side layout */}
+              {selectedFile && (
+                <div className="lg:hidden mt-6">
+                  {credits < 10 ? (
+                    <Button
+                      onClick={() => window.dispatchEvent(new Event('open-payment-modal'))}
+                      className="w-full bg-[#FF4D00] hover:bg-[#e64500] text-white py-4 text-sm font-semibold rounded-md transition-colors"
+                    >
+                      <Coins className="w-5 h-5 mr-2" />
+                      Buy Credits to Generate
+                    </Button>
+                  ) : (
                     <Button
                       onClick={handleGenerate}
                       disabled={
                         !selectedFile ||
                         isProcessing ||
-                        credits < 10 ||
                         isPreloadingImage
                       }
-                      className="hidden lg:flex w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
+                      className="w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
                     >
                       {isProcessing ? (
                         <>
@@ -475,35 +521,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                         </>
                       )}
                     </Button>
-                  </div>
-                )}
-              </div>
-
-              {/* Generate Button for mobile when no side-by-side layout */}
-              {selectedFile && (
-                <div className="lg:hidden mt-6">
-                  <Button
-                    onClick={handleGenerate}
-                    disabled={
-                      !selectedFile ||
-                      isProcessing ||
-                      credits < 10 ||
-                      isPreloadingImage
-                    }
-                    className="w-full bg-black hover:bg-gray-800 text-white py-4 text-sm font-semibold rounded-md transition-colors"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Play className="w-5 h-5 mr-2" />
-                        Generate Video (10 credits)
-                      </>
-                    )}
-                  </Button>
+                  )}
                 </div>
               )}
             </div>
@@ -649,7 +667,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
 
       </main>
 
-      
+
     </div>
   )
 }

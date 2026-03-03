@@ -57,7 +57,6 @@ export const Footer: React.FC = () => {
                         <div className="flex flex-col gap-6">
                             <h4 className="text-gray-500 font-bold text-sm uppercase tracking-wider">Product</h4>
                             <a href="/pricing" className="font-medium hover:text-brand-orange transition-colors">Pricing</a>
-                            <a href="/examples" className="font-medium hover:text-brand-orange transition-colors">Examples</a>
                             <a href="/blog" className="font-medium hover:text-brand-orange transition-colors">Blog</a>
                             <a href="/referral" className="font-medium hover:text-brand-orange transition-colors">Referral Program</a>
 

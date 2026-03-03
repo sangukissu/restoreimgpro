@@ -1,22 +1,13 @@
 import type React from "react"
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
-import { EB_Garamond } from "next/font/google"
-import { Special_Elite } from "next/font/google"
-import { Cinzel } from "next/font/google"
 import { Suspense } from "react"
 import { DashboardSkeleton } from "@/components/ui/skeleton"
 import { ReferralNotificationManager } from "@/components/referral-notification-manager"
 import PaymentController from "@/components/dashboard/payment-controller"
+import { ExitIntentPopup } from "@/components/exit-intent-popup"
 
-const ebGaramond = EB_Garamond({ subsets: ["latin"], display: "swap", variable: "--font-eb-garamond" })
-const specialElite = Special_Elite({
-  subsets: ["latin"],
-  display: "swap",
-  weight: "400",
-  variable: "--font-special-elite",
-})
-const cinzel = Cinzel({ subsets: ["latin"], display: "swap", variable: "--font-cinzel" })
+
 
 export default async function DashboardLayout({
   children,
@@ -24,10 +15,10 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }) {
   const supabase = await createClient()
-  
+
   // Check if user is authenticated
   const { data: { user }, error } = await supabase.auth.getUser()
-  
+
   if (error || !user) {
     redirect("/login")
   }
@@ -48,12 +39,23 @@ export default async function DashboardLayout({
 
   const initialCreditBalance = profile?.credits ?? 0
 
+  // Check if user has made any successful purchase
+  const { data: payments } = await supabase
+    .from("payments")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("status", "completed")
+    .limit(1)
+
+  const hasPurchased = !!(payments && payments.length > 0)
+
   return (
     <PaymentController user={layoutUser} initialCreditBalance={initialCreditBalance}>
       <Suspense fallback={<DashboardSkeleton />}>
         {children}
       </Suspense>
       <ReferralNotificationManager />
+      <ExitIntentPopup hasPurchased={hasPurchased} />
     </PaymentController>
   )
 }

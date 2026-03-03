@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useRef, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Paperclip, AlertTriangle, Shield } from "lucide-react"
+import { Paperclip, AlertTriangle, Shield, Coins } from "lucide-react"
 
 interface ImageUploadProps {
   onImageSelect: (file: File) => void
@@ -29,7 +29,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
   const lastUploadTime = useRef(0)
   const componentId = useRef(Math.random().toString(36).substring(2, 15))
   const renderCount = useRef(0)
-  
+
   // Increment render count on every render
   renderCount.current += 1
 
@@ -49,17 +49,17 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
   const checkSpamProtection = () => {
     const now = Date.now()
     const timeSinceLastUpload = now - lastUploadTime.current
-    
+
     // Prevent more than 5 uploads per minute
     if (uploadAttempts.current >= 5 && timeSinceLastUpload < 60000) {
       throw new Error("Too many upload attempts. Please wait a moment before trying again.")
     }
-    
+
     // Prevent uploads faster than 2 seconds apart
     if (timeSinceLastUpload < 2000) {
       throw new Error("Please wait a moment before uploading another image.")
     }
-    
+
     return true
   }
 
@@ -85,28 +85,28 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     return new Promise((resolve, reject) => {
       const img = new Image()
       const url = URL.createObjectURL(file)
-      
+
       img.onload = () => {
         URL.revokeObjectURL(url)
-        
+
         if (img.width > MAX_DIMENSIONS || img.height > MAX_DIMENSIONS) {
           reject(new Error(`Image dimensions must be less than ${MAX_DIMENSIONS}x${MAX_DIMENSIONS} pixels`))
           return
         }
-        
+
         if (img.width < MIN_DIMENSIONS || img.height < MIN_DIMENSIONS) {
           reject(new Error(`Image dimensions must be at least ${MIN_DIMENSIONS}x${MIN_DIMENSIONS} pixels`))
           return
         }
-        
+
         resolve(true)
       }
-      
+
       img.onerror = () => {
         URL.revokeObjectURL(url)
         reject(new Error("Invalid image file. Please check the file and try again"))
       }
-      
+
       img.src = url
     })
   }
@@ -118,22 +118,22 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
       try {
         setIsProcessing(true)
         setUploadError(null)
-        
+
         // Anti-spam check
         checkSpamProtection()
-        
+
         const file = files[0]
-        
+
         // Validate file
         await validateFile(file)
-        
+
         // Update spam protection
         uploadAttempts.current++
         lastUploadTime.current = Date.now()
-        
+
         // Success - process file
         onImageSelect(file)
-        
+
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "Upload failed. Please try again."
         setUploadError(errorMessage)
@@ -183,10 +183,10 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     if (isRestoring) {
       return
     }
-    
+
     setIsRestoring(true)
     onRestore()
-    
+
     // Reset the restoring state after a delay to allow the API call to complete
     setTimeout(() => {
       setIsRestoring(false)
@@ -197,26 +197,26 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
     try {
       setIsProcessing(true)
       setUploadError(null)
-      
+
       // Anti-spam check for sample images too
       checkSpamProtection()
-      
+
       const response = await fetch(imageSrc)
       if (!response.ok) throw new Error("Failed to fetch sample image")
-      
+
       const blob = await response.blob()
       const filename = imageSrc.split("/").pop() || "sample-image.png"
       const file = new File([blob], filename, { type: blob.type })
-      
+
       // Validate sample image
       await validateFile(file)
-      
+
       // Update spam protection
       uploadAttempts.current++
       lastUploadTime.current = Date.now()
-      
+
       onImageSelect(file)
-      
+
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Failed to load sample image"
       setUploadError(errorMessage)
@@ -267,13 +267,24 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
 
             {/* Action Buttons */}
             <div className="flex gap-3">
-              <Button
-                onClick={handleRestoreClick}
-                disabled={isRestoring || userCredits <= 0}
-                className="flex-1 bg-black text-white hover:bg-gray-800 h-11 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isRestoring ? "Restoring..." : userCredits > 0 ? "Restore Image" : "Not Enough Credits"}
-              </Button>
+              {userCredits > 0 ? (
+                <Button
+                  onClick={handleRestoreClick}
+                  disabled={isRestoring}
+                  className="flex-1 bg-black text-white hover:bg-gray-800 h-11 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isRestoring ? "Restoring..." : "Restore Image"}
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => window.dispatchEvent(new Event('open-payment-modal'))}
+                  disabled={isRestoring}
+                  className="flex-1 bg-[#FF4D00] hover:bg-[#e64500] text-white h-11 text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Coins className="w-4 h-4 mr-2" />
+                  Buy Credits
+                </Button>
+              )}
               <Button
                 onClick={() => window.location.reload()}
                 variant="outline"
@@ -312,19 +323,18 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
 
       {/* Main Upload Area */}
       <div
-        className={`relative bg-white border-2 border-dashed rounded-xl p-8 sm:p-12 text-center transition-all duration-200 shadow-sm ${
-          dragActive ? "border-gray-400 bg-gray-50" : "border-gray-300 hover:border-gray-400"
-        } ${isProcessing ? "opacity-75 pointer-events-none" : ""}`}
+        className={`relative bg-white border-2 border-dashed rounded-xl p-8 sm:p-12 text-center transition-all duration-200 shadow-sm ${dragActive ? "border-gray-400 bg-gray-50" : "border-gray-300 hover:border-gray-400"
+          } ${isProcessing ? "opacity-75 pointer-events-none" : ""}`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <input 
-          ref={fileInputRef} 
-          type="file" 
-          accept="image/jpeg,image/jpg,image/png,image/webp" 
-          onChange={handleChange} 
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/jpg,image/png,image/webp"
+          onChange={handleChange}
           className="hidden"
           disabled={isProcessing}
         />
@@ -334,9 +344,8 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
           {/* Upload Icon with Animation */}
           <div className="relative mx-auto w-20 h-20 p-2 sm:w-24 sm:h-24 group">
             <div
-              className={`absolute inset-0 rounded-full bg-gray-100 opacity-50 transition-all duration-300 ${
-                dragActive ? "opacity-75 scale-110" : "group-hover:opacity-75 group-hover:scale-105"
-              }`}
+              className={`absolute inset-0 rounded-full bg-gray-100 opacity-50 transition-all duration-300 ${dragActive ? "opacity-75 scale-110" : "group-hover:opacity-75 group-hover:scale-105"
+                }`}
             ></div>
             {isProcessing ? (
               <div className="relative w-full h-full flex items-center justify-center">
@@ -366,7 +375,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
               {isProcessing ? "Processing..." : dragActive ? "Drop your image here!" : "Upload your image"}
             </h3>
             <p className="text-sm text-gray-500 max-w-xs mx-auto">
-              {isProcessing 
+              {isProcessing
                 ? "Please wait while we validate your image..."
                 : "Drag and drop an image, or click below to browse files."
               }
