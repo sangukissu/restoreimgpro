@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Manrope, Inter, Patrick_Hand } from "next/font/google"
 import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
+import ClarityProvider from "@/components/clarity-provider"
 import Script from "next/script"
 import "./globals.css"
 
@@ -158,6 +159,7 @@ export default function RootLayout({
       <body className={`antialiased`}>
         {children}
 
+        <ClarityProvider />
         <NetworkStatus />
         <Toaster />
 
