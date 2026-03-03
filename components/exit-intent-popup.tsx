@@ -93,7 +93,7 @@ export function ExitIntentPopup({ hasPurchased }: { hasPurchased: boolean }) {
                             </button>
                         </div>
                         <p className="text-sm text-gray-600 mt-2">
-                            For 10% off your first purchase!
+                            For 10% off your first purchase on Pro & Family Plans!
                         </p>
                     </div>
 
