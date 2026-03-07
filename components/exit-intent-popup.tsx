@@ -91,7 +91,7 @@ export function ExitIntentPopup({ hasPurchased }: { hasPurchased: boolean }) {
 
                     <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 my-6">
                         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                            Use this code at checkout
+                            Use this code at checkout page at discount field
                         </p>
                         <div className="flex items-center justify-center gap-2">
                             <span className="text-3xl font-black text-brand-orange tracking-wider font-mono">
