@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { Download } from "lucide-react"
 
 interface MyMediaClientProps {
   user: {
@@ -28,7 +29,7 @@ interface MyMediaClientProps {
   }[]
 }
 
-export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, videos, images = [] }: MyMediaClientProps) {
+export default function MyMediaClient({ user, initialCredits, videos, images = [] }: MyMediaClientProps) {
   const [credits, setCredits] = useState(initialCredits)
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
@@ -209,17 +210,31 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
           {videos && videos.length > 0 ? (
             <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
               {videos.map((video) => (
-                <div key={video.id} className="break-inside-avoid mb-6 border rounded-lg overflow-hidden bg-white shadow-sm">
+                <div key={video.id} className="break-inside-avoid mb-6 border rounded-lg overflow-hidden bg-white shadow-sm flex flex-col">
                   {video.video_url ? (
-                    <video
-                      src={`/api/video-proxy?key=${encodeURIComponent(video.video_url)}`}
-                      className="w-full h-auto"
-                      controls
-                      playsInline
-                      preload="metadata"
-                    >
-                      Your browser does not support the video tag.
-                    </video>
+                    <>
+                      <video
+                        src={`/api/video-proxy?key=${encodeURIComponent(video.video_url)}`}
+                        className="w-full h-auto"
+                        controls
+                        playsInline
+                        preload="metadata"
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                      <div className="p-3 flex justify-between items-center bg-gray-50 border-t">
+                        <div className="text-sm text-gray-500">
+                          {new Date(video.created_at).toLocaleDateString()}
+                        </div>
+                        <button
+                          onClick={() => handleDownload(`/api/video-proxy?key=${encodeURIComponent(video.video_url!)}`, `video-${video.id}.mp4`)}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                        >
+                          <Download className="w-4 h-4" />
+                          Download
+                        </button>
+                      </div>
+                    </>
                   ) : (
                     <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
                       <p className="text-gray-500">Video processing...</p>
@@ -239,31 +254,33 @@ export default function MyMediaClient({ user, initialCredits, isPaymentSuccess, 
           {images && images.length > 0 ? (
             <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
               {images.map((image) => (
-                <div key={image.id} className="break-inside-avoid mb-6 border rounded-lg overflow-hidden bg-white shadow-sm group relative">
+                <div key={image.id} className="break-inside-avoid mb-6 border rounded-lg overflow-hidden bg-white shadow-sm group relative flex flex-col">
                   {image.url ? (
                     <div className="relative">
                       <img
-                        src={image.url}
+                        src={image.url.startsWith("images/") ? `/api/image-proxy?key=${encodeURIComponent(image.url)}` : image.url}
                         alt={image.title}
                         className="w-full h-auto block"
                         loading="lazy"
                       />
-                      <button
-                        onClick={() => handleDownload(image.url!, `image-${image.id}.jpg`)}
-                        className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-1 rounded hover:bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity"
-                        title="Download image"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      </button>
                     </div>
                   ) : (
                     <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
                       <p className="text-gray-500">Processing...</p>
                     </div>
                   )}
-                  <div className="p-3">
-                    <p className="text-sm font-medium text-gray-900">{image.title}</p>
-                    <p className="text-xs text-gray-500">{new Date(image.created_at).toLocaleDateString()}</p>
+                  <div className="p-3 flex justify-between items-center bg-gray-50 border-t">
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{image.title}</p>
+                      <p className="text-xs text-gray-500">{new Date(image.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <button
+                      onClick={() => handleDownload(image.url!.startsWith("images/") ? `/api/image-proxy?key=${encodeURIComponent(image.url!)}` : image.url!, `image-${image.id}.jpg`)}
+                      className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download
+                    </button>
                   </div>
                 </div>
               ))}

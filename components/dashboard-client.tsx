@@ -121,11 +121,17 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         finalCredits = newCredits
         setUserCredits(newCredits)
         
+        // If the URL is an R2 key (starts with "images/"), convert it to a proxy URL
+        let displayUrl = response.restoredImageUrl;
+        if (displayUrl.startsWith("images/")) {
+            displayUrl = `/api/image-proxy?key=${encodeURIComponent(displayUrl)}`;
+        }
+
         const newData: RestorationData = {
           originalFile: selectedFile,
           originalUrl: selectedImageUrl!,
-          restoredUrl: response.restoredImageUrl,
-          initialRestoredUrl: response.restoredImageUrl,
+          restoredUrl: displayUrl,
+          initialRestoredUrl: displayUrl,
           featureType: selectedFeature!,
         }
         setRestorationData(newData)

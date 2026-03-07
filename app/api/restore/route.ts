@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
 import { createClient } from "@/utils/supabase/server"
 import { watermarkBringBack, normalizeToPng } from "@/lib/watermark"
+import { uploadImageToR2 } from "@/lib/r2"
 
 // Configure Fal AI client
 fal.config({
@@ -194,7 +195,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid URI format from restoration service" }, { status: 500 })
     }
 
-    // Download the restored image and save it to Supabase storage
+    // Download the restored image and save it to R2 storage
     let finalImageUrl: string
 
     try {
@@ -208,35 +209,22 @@ export async function POST(request: NextRequest) {
       const rawBuffer = Buffer.from(imageBuffer)
       const pngBuffer = await normalizeToPng(rawBuffer)
 
-      // Generate a unique filename with user folder structure
-      const timestamp = Date.now()
+      // Generate a clean filename
       const randomId = Math.random().toString(36).substring(2, 15)
       const fileExtension = "png"
-      const fileBase = `${user.id}/${timestamp}_${randomId}`
-      const cleanFileName = `${fileBase}.${fileExtension}`
+      const cleanFileName = `restored_${randomId}.${fileExtension}`
 
-      // Upload directly to the restored_photos bucket (bucket already exists with policies)
-      const uint8Clean = new Uint8Array(pngBuffer)
-      const { error: uploadError } = await supabase.storage
-        .from('restored_photos')
-        .upload(cleanFileName, uint8Clean as any, {
-          contentType: 'image/png',
-          cacheControl: '3600'
-        })
-
-      if (uploadError) {
-        throw new Error(`Storage upload failed: ${uploadError.message}`)
-      }
-
-      // Get the public URL for the uploaded image
-      const { data: urlData } = supabase.storage
-        .from('restored_photos')
-        .getPublicUrl(cleanFileName)
-
-      finalImageUrl = urlData.publicUrl
+      // Upload directly to R2
+      // This returns the R2 key, not the full URL
+      const r2Key = await uploadImageToR2(pngBuffer, cleanFileName, user.id, 'image/png')
+      
+      // We'll store the R2 key in the database
+      finalImageUrl = r2Key
 
     } catch (storageError) {
+      console.error("Storage upload failed, falling back to original URL:", storageError)
       // Fallback: use the original Fal AI URL if storage fails
+      // Note: Fal AI URLs are temporary, so this is just a fallback
       finalImageUrl = restoredImageUrl
     }
 

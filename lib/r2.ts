@@ -54,7 +54,7 @@ export async function putR2Object(
   const client = getR2Client();
 
   const command = new PutObjectCommand({
-    Bucket: R2_BUCKET_NAME,
+    Bucket: process.env.R2_BUCKET_NAME,
     Key: key,
     Body: body,
     ContentType: contentType,
@@ -62,7 +62,45 @@ export async function putR2Object(
   });
 
   await client.send(command);
-  return { bucket: R2_BUCKET_NAME, key };
+  return { bucket: process.env.R2_BUCKET_NAME, key };
+}
+
+/**
+ * Upload an image file to R2 storage
+ * @param imageBuffer - The image file buffer
+ * @param filename - The filename for the image
+ * @param userId - The user ID for organizing files
+ * @param contentType - The MIME type of the image
+ * @returns Promise with the R2 key
+ */
+export async function uploadImageToR2(
+  imageBuffer: Buffer,
+  filename: string,
+  userId: string,
+  contentType: string = 'image/png'
+): Promise<string> {
+  try {
+    // Create a unique key with user ID prefix
+    // Use images/ folder to keep separate from videos
+    const uniqueKey = `images/${userId}/${Date.now()}-${filename}`;
+
+    await putR2Object(uniqueKey, imageBuffer, contentType, 'private, max-age=31536000');
+
+    return uniqueKey;
+  } catch (error) {
+    console.error('Error uploading image to R2:', error);
+    throw new Error('Failed to upload image to R2 storage');
+  }
+}
+
+/**
+ * Delete an image from R2 storage by key
+ * @param key - The R2 key of the image to delete
+ * @returns Promise<void>
+ */
+export async function deleteImageFromR2(key: string): Promise<void> {
+  // Same implementation as deleteVideoFromR2 as S3 treats all objects the same
+  return deleteVideoFromR2(key);
 }
 
 /**

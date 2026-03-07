@@ -119,7 +119,10 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
       setIsPreloadingImage(true)
       // Convert URL to File object
       fetch(preloadedImageUrl)
-        .then(response => response.blob())
+        .then(async response => {
+          if (!response.ok) throw new Error('Failed to fetch image')
+          return response.blob()
+        })
         .then(blob => {
           const file = new File([blob], 'restored-image.png', { type: 'image/png' })
           setSelectedFile(file)
@@ -358,13 +361,14 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                         </div>
                       ) : selectedImageUrl ? (
                         <div className="space-y-4 ">
-                          <Image
-                            src={selectedImageUrl}
-                            alt="Selected image"
-                            width={200}
-                            height={200}
-                            className="mx-auto rounded-xl object-cover"
-                          />
+                          <div className="relative w-[200px] h-[200px] mx-auto">
+                            {/* Use standard img tag for proxy URLs to avoid Next.js Image Optimization auth issues */}
+                            <img
+                              src={selectedImageUrl}
+                              alt="Selected image"
+                              className="w-full h-full rounded-xl object-cover"
+                            />
+                          </div>
                           <p className="text-sm text-gray-600">Click to change image</p>
                         </div>
                       ) : (
