@@ -13,27 +13,40 @@ export function ExitIntentPopup({ hasPurchased }: { hasPurchased: boolean }) {
         if (hasPurchased) return
 
         // Check if they've dismissed it before (in this browser)
-        const hasSeenPopup = localStorage.getItem("hasSeenExitPopup")
+        const hasSeenPopup = localStorage.getItem("hasSeenDiscountPopup")
         if (hasSeenPopup === "true") return
 
-        const handleMouseOut = (e: MouseEvent) => {
-            // If mouse moves out of the document at the top edge (intended to close tab or edit URL)
-            if (!e.relatedTarget && e.clientY < 50) {
-                setShowPopup(true)
-                // Only trigger once
-                document.removeEventListener("mouseout", handleMouseOut)
-            }
+        // Logic for tracking time across dashboard pages
+        const TIME_THRESHOLD = 40000 // 40 seconds
+        const STORAGE_KEY_START_TIME = "dashboardSessionStartTime"
+
+        // Get or set the session start time
+        let startTime = sessionStorage.getItem(STORAGE_KEY_START_TIME)
+        
+        if (!startTime) {
+            startTime = Date.now().toString()
+            sessionStorage.setItem(STORAGE_KEY_START_TIME, startTime)
         }
 
-        document.addEventListener("mouseout", handleMouseOut)
+        const elapsedTime = Date.now() - parseInt(startTime, 10)
+        const remainingTime = Math.max(0, TIME_THRESHOLD - elapsedTime)
+
+        // Set timeout to show popup
+        const timer = setTimeout(() => {
+            // Re-check conditions before showing
+            const currentHasSeen = localStorage.getItem("hasSeenDiscountPopup")
+            if (currentHasSeen !== "true") {
+                setShowPopup(true)
+            }
+        }, remainingTime)
 
         return () => {
-            document.removeEventListener("mouseout", handleMouseOut)
+            clearTimeout(timer)
         }
     }, [hasPurchased])
 
     const handleDismiss = () => {
-        localStorage.setItem("hasSeenExitPopup", "true")
+        localStorage.setItem("hasSeenDiscountPopup", "true")
         setShowPopup(false)
     }
 
@@ -69,11 +82,11 @@ export function ExitIntentPopup({ hasPurchased }: { hasPurchased: boolean }) {
                     </div>
 
                     <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-                        Wait! Before you go...
+                        A Special Gift For You!
                     </h2>
 
                     <p className="text-gray-600 text-sm leading-relaxed">
-                        We noticed you haven't tried bringing your photos to life yet. We'd love for you to experience the magic of BringBack.
+                        Thanks for exploring BringBack! Here's a little something to help you get started with restoring your precious memories.
                     </p>
 
                     <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 my-6">
