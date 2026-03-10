@@ -3,15 +3,17 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
+import { X } from "lucide-react"
 
 interface PaymentPlanProps {
   onSuccess: (newCredits: number) => void
   onError: (error: string) => void
   isProcessing: boolean
   setIsProcessing: (processing: boolean) => void
+  onClose?: () => void
 }
 
-export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsProcessing }: PaymentPlanProps) {
+export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsProcessing, onClose }: PaymentPlanProps) {
   const { toast, loading } = useToast()
   const [plans, setPlans] = useState<Array<{ id: string; name: string; price_cents: number; credits: number }>>([])
   const [selectedPlanId, setSelectedPlanId] = useState<string>("")
@@ -145,9 +147,26 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-8 shadow-xs hover:shadow-sm transition-shadow duration-200">
+    <div className="relative bg-white rounded-2xl border border-gray-200 p-4 sm:p-8 shadow-xs hover:shadow-sm transition-shadow duration-200">
+      {onClose && (
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      )}
       <div className="text-center">
-
+        {/* Persuasive Header */}
+        <div className="mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 tracking-tight">
+            Preserve Your Family Legacy
+          </h2>
+          <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-md mx-auto">
+            Don&apos;t let your precious memories fade away. Invest in restoring your history today so future generations can see where they came from.
+          </p>
+        </div>
 
         {/* Plan Selector */}
         <div className="mb-2">
@@ -229,7 +248,8 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
           </div>
         </div>
 
-        {/* Referral Code Section */}
+        {/* Referral Code Section (Hidden) */}
+        {/*
         <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
           <div className="text-sm font-medium text-gray-700 mb-2">Have a referral code?</div>
           {!referralApplied ? (
@@ -261,6 +281,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
             </div>
           )}
         </div>
+        */}
 
         {/* Purchase Button */}
         <div className="mb-2">
@@ -272,7 +293,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
             {isProcessing ? "Processing..." : "Continue to Checkout"}
           </Button>
         </div>
-        <p className="text-xs text-gray-500">Secure payments by dodopayments</p>
+        <p className="text-xs text-gray-500">Secure payments by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer" className="underline text-green-700">dodopayments</a></p>
       </div>
     </div>
   )

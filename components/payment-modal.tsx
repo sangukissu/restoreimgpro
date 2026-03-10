@@ -36,6 +36,7 @@ export default function PaymentModal({
               onError={onError}
               isProcessing={isProcessing}
               setIsProcessing={setIsProcessing}
+              onClose={onClose}
             />
           </div>
 

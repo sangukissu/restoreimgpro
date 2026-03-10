@@ -8,6 +8,7 @@ import { restoreImage, type RestoreImageResponse } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
 import { useFeedback } from "@/hooks/use-feedback"
 import { OrbitSepiaDust } from "@/components/ui/orbit-sepia-dust"
+import { DemoVideoModal } from "./demo-video-modal"
 
 import { analyzeRestoredImage, rerestoreImage, type AnalyzeImageResponse } from "@/lib/api-client"
 
@@ -304,9 +305,12 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
             <h1 className="  font-inter font-bold text-3xl text-black">
               Revive Your Photo
             </h1>
-            <p className="text-lg text-gray-600 leading-tight">
+            <p className="text-lg text-gray-600 leading-tight mb-4">
               Upload your old, damaged, or low-quality photos and let our AI bring back your memories to life.
             </p>
+            <div className="flex justify-center">
+               <DemoVideoModal videoSrc="/videos/tear-torn-restoration.mp4" triggerText="See Restoration in Action" />
+            </div>
           </div>
         )}
 

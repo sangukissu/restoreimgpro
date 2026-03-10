@@ -7,6 +7,7 @@ import {
   Home,
   LogOut,
   Sparkles,
+  Plus,
 } from "lucide-react"
 import Link from "next/link"
 import {
@@ -42,11 +43,25 @@ export function HeaderUser({ user, initialCreditBalance, onBuyCredits }: HeaderU
   return (
     <div className="flex items-center gap-3">
       {/* Credit Display */}
-      <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/50 rounded-md">
-        <Coins className="h-4 w-4 text-amber-600" />
-        <span className="text-sm font-medium text-foreground">
-          {Number(credits || 0).toLocaleString()}
-        </span>
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/50 rounded-md">
+          <Coins className="h-4 w-4 text-amber-600" />
+          <span className="text-sm font-medium text-foreground">
+            {Number(credits || 0).toLocaleString()}
+          </span>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-7 px-2 text-xs gap-1 bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 hover:text-amber-800 hover:border-amber-300 transition-colors"
+          onClick={() => {
+            if (onBuyCredits) onBuyCredits()
+          }}
+        >
+          <Plus className="h-3 w-3" />
+          <span className="hidden sm:inline">Buy Credits</span>
+          <span className="sm:hidden">Buy</span>
+        </Button>
       </div>
       
       {/* User Dropdown */}

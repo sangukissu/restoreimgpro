@@ -3,7 +3,6 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import { Suspense } from "react"
 import { DashboardSkeleton } from "@/components/ui/skeleton"
-import { ReferralNotificationManager } from "@/components/referral-notification-manager"
 import PaymentController from "@/components/dashboard/payment-controller"
 import { ExitIntentPopup } from "@/components/exit-intent-popup"
 
@@ -54,7 +53,6 @@ export default async function DashboardLayout({
       <Suspense fallback={<DashboardSkeleton />}>
         {children}
       </Suspense>
-      <ReferralNotificationManager />
       <ExitIntentPopup hasPurchased={hasPurchased} />
     </PaymentController>
   )

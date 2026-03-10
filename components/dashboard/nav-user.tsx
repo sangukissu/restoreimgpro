@@ -109,10 +109,6 @@ export function NavUser({
             <Home className="mr-2 h-4 w-4" />
             <Link href="/dashboard">Dashboard</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <BadgeCheck className="mr-2 h-4 w-4" />
-            <Link href="/account">Account</Link>  
-          </DropdownMenuItem>
         </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem

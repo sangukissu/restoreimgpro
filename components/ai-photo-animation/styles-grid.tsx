@@ -73,6 +73,7 @@ function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: str
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [activeSrc, setActiveSrc] = useState<string | null>(null);
   const [inView, setInView] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -89,20 +90,29 @@ function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: str
   }, []);
 
   useEffect(() => {
+    if (inView && !activeSrc) {
+      setActiveSrc(src);
+    }
+  }, [inView, activeSrc, src]);
+
+  const togglePlay = (e: React.MouseEvent) => {
+    e.preventDefault();
     const v = videoRef.current;
     if (!v) return;
-    if (inView) {
-      if (!activeSrc) setActiveSrc(src);
-      v.play().catch(() => { });
+
+    if (v.paused) {
+      v.play().then(() => setIsPlaying(true)).catch((err) => console.error("Play failed:", err));
     } else {
       v.pause();
+      setIsPlaying(false);
     }
-  }, [inView, src, activeSrc]);
+  };
 
   return (
     <div
       ref={containerRef}
-      className="relative h-[240px] w-full overflow-hidden rounded-2xl bg-gray-100 group-hover:scale-[1.02] transition-transform duration-500"
+      className="relative h-[240px] w-full overflow-hidden rounded-2xl bg-gray-100 group-hover:scale-[1.02] transition-transform duration-500 cursor-pointer"
+      onClick={togglePlay}
     >
       <video
         ref={videoRef}
@@ -113,13 +123,17 @@ function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: str
         playsInline
         preload="none"
         className="w-full h-full object-cover"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
       />
       {/* Play Icon Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors duration-300">
-        <div className="w-12 h-12 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 scale-75 group-hover:scale-100">
-          <Play size={20} fill="currentColor" />
+      {!isPlaying && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors duration-300">
+          <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-black shadow-lg transition-transform duration-300 hover:scale-110">
+            <Play size={32} fill="currentColor" className="ml-1" />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

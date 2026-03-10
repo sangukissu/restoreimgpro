@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import CustomVideoPlayer from './custom-video-player'
+import { DemoVideoModal } from "./demo-video-modal"
 
 type AppState = "upload" | "processing" | "results"
 
@@ -333,7 +334,11 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
               <h1 className="  font-inter font-bold text-3xl sm:text-4xl text-black mb-2">
                 Photo Animation
               </h1>
-              <p className="text-lg text-gray-600">Bring your photos to life with AI-powered animations</p>
+              <p className="text-lg text-gray-600 mb-6">Bring your photos to life with AI-powered animations</p>
+              
+              <div className="flex justify-center">
+                <DemoVideoModal videoSrc="/videos/video-animation.mp4" triggerText="Watch Example" />
+              </div>
             </div>
 
             <div className="max-w-5xl mx-auto bg-white rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-4 border-gray-200">
