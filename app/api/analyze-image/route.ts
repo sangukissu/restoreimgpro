@@ -36,11 +36,17 @@ export async function POST(req: NextRequest) {
   const reqStart = Date.now()
   try {
     const body = await req.json();
-    const restoredUrl: string | undefined = body?.restoredUrl || body?.imageUrl; // support old clients
+    let restoredUrl: string | undefined = body?.restoredUrl || body?.imageUrl; // support old clients
     const originalUrl: string | undefined = body?.originalUrl;
 
     if (!restoredUrl || typeof restoredUrl !== 'string') {
       return NextResponse.json({ error: 'restoredUrl is required' }, { status: 400 });
+    }
+
+    // Resolve relative URLs to absolute URLs
+    if (restoredUrl.startsWith('/')) {
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin
+      restoredUrl = new URL(restoredUrl, baseUrl).toString()
     }
 
     const imagePart = await urlToGenerativePart(restoredUrl);
