@@ -43,11 +43,31 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`Starting image enhancement for: ${imageUrl}`)
+
+    // Check if the URL is accessible by Fal.ai (not localhost)
+    let falInputImageUrl = imageUrl
+    if (imageUrl.includes('localhost')) {
+      console.log('Localhost URL detected, uploading to Fal storage...')
+      try {
+        const imageResponse = await fetch(imageUrl)
+        if (!imageResponse.ok) {
+          throw new Error(`Failed to fetch image from localhost: ${imageResponse.status}`)
+        }
+        const imageBuffer = await imageResponse.arrayBuffer()
+        const contentType = imageResponse.headers.get('content-type') || 'image/png'
+        const imageBlob = new Blob([imageBuffer], { type: contentType })
+        falInputImageUrl = await fal.storage.upload(imageBlob)
+        console.log('Uploaded to Fal storage:', falInputImageUrl)
+      } catch (uploadError) {
+        console.error('Failed to upload local image to Fal storage:', uploadError)
+        // Fallback to original URL, though it will likely fail
+      }
+    }
     
     // Submit enhancement request to FAL
     const result = await fal.subscribe('fal-ai/codeformer', {
       input: {
-        image_url: imageUrl,
+        image_url: falInputImageUrl,
         fidelity: 0.5,
         upscaling: 2,
         face_upscale: true,

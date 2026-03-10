@@ -372,7 +372,7 @@ export default function ImageUpload({ onImageSelect, onRestore, selectedFile, se
           {/* Text and Button Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900">
-              {isProcessing ? "Processing..." : dragActive ? "Drop your image here!" : "Upload your image"}
+              {isProcessing ? "Processing..." : dragActive ? "Drop your image here!" : "Upload your old photos"}
             </h3>
             <p className="text-sm text-gray-500 max-w-xs mx-auto">
               {isProcessing

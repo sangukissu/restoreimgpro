@@ -34,7 +34,6 @@ export async function restoreImage(imageFile: File): Promise<RestoreImageRespons
     }
   }
 }
-
 export interface AnalyzeImageResponse {
   analysis?: {
     overall_quality_score: number

@@ -187,12 +187,12 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
               } else if (isPlus) {
                 perks = [
                   { text: "Restore 20 Photos", available: true },
-                  { text: "OR Animation 2 Photos", available: true, highlight: true },
+                  { text: "OR Animate 2 Photos", available: true, highlight: true },
                 ]
               } else if (isFamily) {
                 perks = [
                   { text: "Restore 60 Photos", available: true },
-                  { text: "OR Animation 6 Photos", available: true, highlight: true },
+                  { text: "OR Animate 6 Photos", available: true, highlight: true },
                 ]
               } else {
                 perks = [{ text: `${plan.credits} Credits`, available: true }]

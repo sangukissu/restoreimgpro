@@ -114,12 +114,18 @@ export async function POST(request: NextRequest) {
 
     // Prepare input for Fal AI photo restoration API with sanitization
     const input: any = {
-      image_url: uploadedFile,
-      safety_tolerance: "6",
-      output_format: "png",
+      prompt: "Restore this damaged or aged photograph to its original quality while maintaining complete faithfulness to the original context and historical authenticity. Remove all physical damage including scratches, tears, creases, dust spots, stains, and missing sections. target and eradicate all persistent, shiny fold artifacts, scanner glare, and deep emulsion cracks, fully reconstructing the underlying visual details. Repair fading and discoloration by restoring original colors and tones without over-saturation. Fully colorize the image, converting black-and-white or sepia originals into vibrant, lifelike, and historically accurate full color. Enhance clarity and sharpness by reconstructing blurry details into accurate physical details based on surrounding context. Apply natural lighting correction with proper shadows and highlights. Add authentic surface textures including natural skin pores, fabric properties, and material accuracy where damaged areas need reconstruction. Preserve all original composition, poses, expressions, and historical characteristics. Use proper depth of field and realistic color grading that matches the original time period. Output should appear as a clean, well-preserved version of the original photograph with all damage repaired and quality improved while remaining completely true to the source image at maximum resolution. The identity of person to be kept intact wihtout modifications. 8K resolution, ultra-high definition, UHD, HDR, razor-sharp focus, tack-sharp details, extreme micro-detailing, highly intricate surface textures, hyper-realistic, pristine image quality, flawless photographic execution.",
+      num_images: 1,
+      aspect_ratio: "auto",
+      output_format: outputFormat || "png",
+      image_urls: [uploadedFile]
     }
 
     // Add optional parameters if provided
+    if (safetyTolerance) {
+      input.safety_tolerance = safetyTolerance
+    }
+
     if (seed) {
       const sanitizedSeed = sanitizeInput(Number.parseInt(seed))
       if (!isNaN(sanitizedSeed)) {
@@ -127,27 +133,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Override with form data if provided
-    if (outputFormat) {
-      const sanitizedFormat = sanitizeInput(outputFormat)
-      if (["jpeg", "png"].includes(sanitizedFormat)) {
-        input.output_format = sanitizedFormat
-      }
-    }
-
-    if (safetyTolerance) {
-      const sanitizedTolerance = sanitizeInput(safetyTolerance)
-      if (["1", "2", "3", "4", "5", "6"].includes(sanitizedTolerance)) {
-        input.safety_tolerance = sanitizedTolerance
-      }
-    }
-
-
-
     let output: any
     try {
       // Use Fal AI photo restoration model
-      const result = await fal.subscribe("fal-ai/image-editing/photo-restoration", {
+      const result = await fal.subscribe("fal-ai/nano-banana/edit", {
         input: input,
         logs: true,
         onQueueUpdate: (update) => {
