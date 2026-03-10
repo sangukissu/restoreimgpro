@@ -158,44 +158,69 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
               const isPlus = plan.credits === 20
               const isFamily = plan.credits === 60
 
-              let perks: string[] = []
+              let perks: Array<{ text: string; available: boolean; highlight?: boolean }> = []
 
               if (isStarter) {
-                perks = ["Restore 5 Photos"]
+                perks = [
+                  { text: "Restore 5 Photos", available: true, highlight: true },
+                  { text: "No Photo Animation (Requires 10 credits)", available: false, highlight: true },
+                ]
               } else if (isPlus) {
-                perks = ["Restore 20 Photos or 2 Videos"]
+                perks = [
+                  { text: "Restore 20 Photos", available: true },
+                  { text: "OR Animation 2 Photos", available: true, highlight: true },
+                ]
               } else if (isFamily) {
-                perks = ["Restore 60 Photos or 6 Videos"]
+                perks = [
+                  { text: "Restore 60 Photos", available: true },
+                  { text: "OR Animation 6 Photos", available: true, highlight: true },
+                ]
               } else {
-                perks = [`${plan.credits} Credits`]
+                perks = [{ text: `${plan.credits} Credits`, available: true }]
               }
 
               return (
                 <button
                   key={plan.id}
                   onClick={() => setSelectedPlanId(plan.id)}
-                  className={`relative w-full text-left border rounded-xl p-4 transition-all duration-200 ${selectedPlanId === plan.id ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"}`}
+                  className={`relative w-full text-left border rounded-xl p-4 transition-all duration-200 ${selectedPlanId === plan.id ? "border-black bg-gray-50 ring-1 ring-black" : "border-gray-200 hover:border-gray-300"}`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="font-semibold text-black mb-1 flex items-center gap-2">
                         {plan.name}
+                        {isStarter && <span className="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full border border-gray-200">Starter</span>}
+                        {isPlus && <span className="bg-blue-50 text-blue-600 text-[10px] px-2 py-0.5 rounded-full border border-blue-100">Popular</span>}
                       </div>
 
                       {/* Plan Perks */}
-                      <div className="space-y-1 mt-2">
+                      <div className="space-y-1.5 mt-3">
                         {perks.map((perk, index) => (
-                          <div key={index} className="flex items-center text-xs text-gray-500">
-                            <svg className={`w-3 h-3 mr-1 flex-shrink-0 text-green-500`} fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            {perk}
+                          <div key={index} className={`flex items-center text-xs ${perk.available ? "text-gray-700" : "text-gray-400"} ${perk.highlight ? "font-medium" : ""}`}>
+                            {perk.available ? (
+                              <svg className="w-3.5 h-3.5 mr-2 flex-shrink-0 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            ) : (
+                              <svg className="w-3.5 h-3.5 mr-2 flex-shrink-0 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                            <span className={perk.available ? "" : "line-through opacity-75"}>
+                              {perk.text.replace(" (Requires 10 credits)", "")}
+                            </span>
+                            {!perk.available && perk.text.includes("Requires") && (
+                                <span className="ml-1 text-red-500 font-medium text-[10px] no-underline opacity-100">
+                                  (Needs 10 credits)
+                                </span>
+                            )}
                           </div>
                         ))}
                       </div>
                     </div>
                     <div className="flex flex-col items-end">
                       <div className="text-xl font-bold text-black">${(plan.price_cents / 100).toFixed(2)}</div>
+                      <div className="text-xs text-gray-500 mt-1">{plan.credits} Credits</div>
                     </div>
                   </div>
                 </button>
