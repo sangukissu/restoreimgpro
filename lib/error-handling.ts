@@ -29,6 +29,28 @@ export class VideoGenerationError extends Error {
   }
 }
 
+export class ImageEnhancementError extends Error {
+  public readonly code: string
+  public readonly statusCode: number
+  public readonly details?: any
+
+  constructor(code: string, message: string, statusCode: number = 500, details?: any) {
+    super(message)
+    this.name = 'ImageEnhancementError'
+    this.code = code
+    this.statusCode = statusCode
+    this.details = details
+  }
+
+  toApiResponse() {
+    return {
+      error: this.message,
+      code: this.code,
+      details: this.details
+    }
+  }
+}
+
 // Predefined error types
 export const ErrorCodes = {
   // Authentication errors

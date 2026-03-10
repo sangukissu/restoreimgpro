@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
 import { createClient } from "@/utils/supabase/server"
-import { VideoGenerationError, createError, logError, withErrorHandling } from "@/lib/error-handling"
+import { ImageEnhancementError, createError, logError, withErrorHandling } from "@/lib/error-handling"
 
 // Configure Fal AI client
 fal.config({
@@ -22,19 +22,27 @@ export async function POST(request: NextRequest) {
 
     // Check if Fal AI API key is configured
     if (!process.env.FAL_KEY) {
-      const error = new VideoGenerationError('FAL_API_KEY_MISSING', 'FAL API key not configured', 500)
+      const error = new ImageEnhancementError('FAL_API_KEY_MISSING', 'FAL API key not configured', 500)
       logError(error)
       return NextResponse.json(error.toApiResponse(), { status: error.statusCode })
     }
 
     // Parse the JSON body from the request
-    const { imageUrl } = await request.json()
+    let { imageUrl } = await request.json()
 
     // Validate required fields
     if (!imageUrl) {
-      const error = new VideoGenerationError('NO_IMAGE_URL_PROVIDED', 'No image URL provided', 400)
+      const error = new ImageEnhancementError('NO_IMAGE_URL_PROVIDED', 'No image URL provided', 400)
       return NextResponse.json(error.toApiResponse(), { status: error.statusCode })
     }
+
+    // Resolve relative URLs to absolute URLs
+    if (imageUrl.startsWith('/')) {
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin
+      imageUrl = new URL(imageUrl, baseUrl).toString()
+    }
+
+    console.log(`Starting image enhancement for: ${imageUrl}`)
     
     // Submit enhancement request to FAL
     const result = await fal.subscribe('fal-ai/codeformer', {
@@ -62,7 +70,7 @@ export async function POST(request: NextRequest) {
       (Array.isArray(output?.images) ? output.images[0]?.url : undefined)
 
     if (!enhancedImageUrl || typeof enhancedImageUrl !== 'string' || (!enhancedImageUrl.startsWith('http://') && !enhancedImageUrl.startsWith('https://'))) {
-      const error = new VideoGenerationError('INVALID_ENHANCED_IMAGE_URL', 'Invalid or missing enhanced image URL returned', 500)
+      const error = new ImageEnhancementError('INVALID_ENHANCED_IMAGE_URL', 'Invalid or missing enhanced image URL returned', 500)
       logError(error)
       return NextResponse.json(error.toApiResponse(), { status: error.statusCode })
     }
@@ -116,7 +124,7 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     const e = error as Error
-    const apiError = new VideoGenerationError('ENHANCEMENT_FAILED', e.message, 500)
+    const apiError = new ImageEnhancementError('ENHANCEMENT_FAILED', e.message, 500)
     logError(apiError)
     return NextResponse.json(apiError.toApiResponse(), { status: apiError.statusCode })
   }
