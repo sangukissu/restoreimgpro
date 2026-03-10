@@ -241,13 +241,13 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
             </Button>
 
             {/* Free Enhance Button */}
-            <Button
+            {/* <Button
               onClick={handleNavigateEnhance}
               className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
             >
               <ImageUpIcon className="w-4 h-4" />
               Free Enhance
-            </Button>
+            </Button> */}
 
             <Button
               onClick={handleGenerateVideo}
