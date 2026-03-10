@@ -46,22 +46,24 @@ export async function POST(request: NextRequest) {
 
     // Check if the URL is accessible by Fal.ai (not localhost)
     let falInputImageUrl = imageUrl
-    if (imageUrl.includes('localhost')) {
-      console.log('Localhost URL detected, uploading to Fal storage...')
-      try {
-        const imageResponse = await fetch(imageUrl)
-        if (!imageResponse.ok) {
-          throw new Error(`Failed to fetch image from localhost: ${imageResponse.status}`)
-        }
-        const imageBuffer = await imageResponse.arrayBuffer()
-        const contentType = imageResponse.headers.get('content-type') || 'image/png'
-        const imageBlob = new Blob([imageBuffer], { type: contentType })
-        falInputImageUrl = await fal.storage.upload(imageBlob)
-        console.log('Uploaded to Fal storage:', falInputImageUrl)
-      } catch (uploadError) {
-        console.error('Failed to upload local image to Fal storage:', uploadError)
-        // Fallback to original URL, though it will likely fail
+    
+    // Always upload to Fal storage to ensure accessibility by Fal's GPU workers
+    // This handles localhost, private R2 URLs, and prevents "invalid URL" errors
+    try {
+      console.log('Fetching image to upload to Fal storage...')
+      const imageResponse = await fetch(imageUrl)
+      if (!imageResponse.ok) {
+        throw new Error(`Failed to fetch image: ${imageResponse.status} ${imageResponse.statusText}`)
       }
+      const imageBuffer = await imageResponse.arrayBuffer()
+      const contentType = imageResponse.headers.get('content-type') || 'image/png'
+      const imageBlob = new Blob([imageBuffer], { type: contentType })
+      falInputImageUrl = await fal.storage.upload(imageBlob)
+      console.log('Uploaded to Fal storage:', falInputImageUrl)
+    } catch (uploadError) {
+      console.error('Failed to upload image to Fal storage:', uploadError)
+      // If upload fails, we fall back to the original URL and hope for the best
+      // But we should probably log this clearly
     }
     
     // Submit enhancement request to FAL
