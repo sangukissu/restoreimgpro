@@ -79,15 +79,12 @@ export const featuresData: Record<string, FeaturePageData> = {
       h1: "Create a flawless group photo from individual portraits using AI",
       heading: {
         primary: "Create a flawless group photo",
-        secondary: "from individual portraits using AI"
+        secondary: "from individual portraits"
       },
-      subheadline: "Distance or busy schedules keeping your family apart? Upload individual photos, and our AI will adjust scale, lighting, and perspective to generate a realistic family portrait.",
+      subheadline: "Missing a beloved elder who passed before everyone could gather? Upload individual photos, and our AI will adjust scale, lighting, and perspective to generate a realistic family portrait that includes them once more.",
       ctaText: "Create Group Photo Now",
       trustBadge: "Group Portraits",
-      images: {
-        inputs: ["/family-photo1.png", "/family-photo2.jpg", "/family-photo3.png", "/family-photo4.png"],
-        output: "/family-portrait.png"
-      }
+      
     },
     qualityAnalysis: {
       heading: "Professional Studio-Quality Compositing",
@@ -112,9 +109,10 @@ export const featuresData: Record<string, FeaturePageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/family-photo1.png", label: "Different Lighting" },
-          { src: "/family-photo2.jpg", label: "Low Resolution" },
-          { src: "/family-photo3.png", label: "Wrong Angle" }
+          { src: "/family-photo1.png", label: "Family member 1" },
+          { src: "/family-photo2.jpg", label: "Family member 2" },
+          { src: "/family-photo3.png", label: "Family member 3" },
+          { src: "/family-photo4.png", label: "Family member 4" }
         ],
         output: { src: "/family-portrait.png", label: "Unified Studio Portrait" }
       }
@@ -222,10 +220,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       subheadline: "Bridge the generational gap. Upload an old photo of a lost family member and a current family portrait, and our AI will carefully combine them into a unified, high-resolution memory.",
       ctaText: "Create a Memorial Portrait",
       trustBadge: "Memorial Portraits",
-      images: {
-        inputs: ["/old-image1.webp", "/family-photo1.png"],
-        output: "/family-portrait.png"
-      }
+     
     },
     qualityAnalysis: {
       heading: "Respectful & Realistic Memorial Portraits",
@@ -250,10 +245,10 @@ export const featuresData: Record<string, FeaturePageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/old-image1.webp", label: "Late Grandfather" }, 
-          { src: "/old-image1.webp", label: "Late Grandfather" },
-           { src: "/old-image1.webp", label: "Late Grandfather" },
-          { src: "/family-photo1.png", label: "Current Family" }
+           { src: "/family-photo1.png", label: "Family member 1" },
+          { src: "/family-photo2.jpg", label: "Family member 2" },
+          { src: "/family-photo3.png", label: "Family member 3" },
+          { src: "/family-photo4.png", label: "Family member 4" }
         ],
         output: { src: "/family-portrait.png", label: "United Across Time" }
       }
@@ -361,10 +356,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       subheadline: "Merge vintage and modern photos into a cohesive, classic masterpiece. Our AI balances tones and contrast for a unified look.",
       ctaText: "Create Vintage Composite",
       trustBadge: "Timeless Portraits",
-      images: {
-        inputs: ["/family-photo2.jpg", "/family-photo3.png"],
-        output: "/vintage-family-portraits.webp"
-      }
+     
     },
     qualityAnalysis: {
       heading: "Timeless Monochrome Masterpieces",
@@ -389,8 +381,10 @@ export const featuresData: Record<string, FeaturePageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/family-photo2.jpg", label: "Modern Digital" },
-          { src: "/family-photo3.png", label: "Vintage Print" }
+           { src: "/family-photo1.png", label: "Family member 1" },
+          { src: "/family-photo2.jpg", label: "Family member 2" },
+          { src: "/family-photo3.png", label: "Family member 3" },
+          { src: "/family-photo4.png", label: "Family member 4" }
         ],
         output: { src: "/vintage-family-portraits.webp", label: "Timeless Classic" }
       }
@@ -498,10 +492,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       subheadline: "Don't have a recent photo together? Merge individual photos into a natural, heartwarming portrait perfect for Father's Day or birthdays.",
       ctaText: "Create Portrait with Dad",
       trustBadge: "Father & Child",
-      images: {
-        inputs: ["/family-photo4.png", "/family-photo1.png"],
-        output: "/family-portrait.png"
-      }
+
     },
     qualityAnalysis: {
       heading: "Generational Connection Perfected",
@@ -526,8 +517,10 @@ export const featuresData: Record<string, FeaturePageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/family-photo4.png", label: "Father" },
-          { src: "/family-photo1.png", label: "Child" }
+          { src: "/family-photo1.png", label: "Family member 1" },
+          { src: "/family-photo2.jpg", label: "Family member 2" },
+          { src: "/family-photo3.png", label: "Family member 3" },
+          { src: "/family-photo4.png", label: "Family member 4" }
         ],
         output: { src: "/family-portrait.png", label: "Reunited" }
       }
@@ -635,10 +628,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       subheadline: "Combine subjects from different photos into a single, natural scene. Perfect for creative projects, family albums, and professional composites.",
       ctaText: "Merge Images Now",
       trustBadge: "Pro Blending",
-      images: {
-        inputs: ["/family-photo3.png", "/family-photo2.jpg"],
-        output: "/family-portrait.png"
-      }
+
     },
     qualityAnalysis: {
       heading: "Advanced AI Image Blending",
@@ -663,8 +653,10 @@ export const featuresData: Record<string, FeaturePageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/family-photo3.png", label: "Subject" },
-          { src: "/family-photo2.jpg", label: "Background" }
+          { src: "/family-photo1.png", label: "Family member 1" },
+          { src: "/family-photo2.jpg", label: "Family member 2" },
+          { src: "/family-photo3.png", label: "Family member 3" },
+          { src: "/family-photo4.png", label: "Family member 4" }
         ],
         output: { src: "/family-portrait.png", label: "Seamless Blend" }
       }
@@ -766,10 +758,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       subheadline: "Automatically combine photos with intelligent layout and blending. Ideal for social media, presentations, and personal memories.",
       ctaText: "Combine Photos",
       trustBadge: "Smart Combiner",
-      images: {
-        inputs: ["/family-photo1.png", "/family-photo2.jpg", "/family-photo3.png"],
-        output: "/family-portrait.png"
-      }
+
     },
     qualityAnalysis: {
       heading: "Intelligent Photo Combination",
@@ -794,9 +783,10 @@ export const featuresData: Record<string, FeaturePageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/family-photo1.png", label: "Photo 1" },
-          { src: "/family-photo2.jpg", label: "Photo 2" },
-          { src: "/family-photo3.png", label: "Photo 3" }
+          { src: "/family-photo1.png", label: "Family member 1" },
+          { src: "/family-photo2.jpg", label: "Family member 2" },
+          { src: "/family-photo3.png", label: "Family member 3" },
+          { src: "/family-photo4.png", label: "Family member 4" }
         ],
         output: { src: "/family-portrait.png", label: "Balanced Composition" }
       }

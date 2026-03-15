@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 import { getAllPostSlugs } from '@/lib/wordpress'
 import { allPseoPages } from '@/lib/generate-pages'
+import { featuresData } from '@/lib/featuresdata'
+import { countryPages } from '@/lib/countrypages'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://bringback.pro'
@@ -123,5 +125,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7, // Higher priority than blog posts as these are core service pages
   }))
 
-  return [...staticPages, ...blogPages, ...pseoPages]
+  // Feature pages
+  const featurePages: MetadataRoute.Sitemap = Object.values(featuresData).map((page) => ({
+    url: `${baseUrl}${page.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
+
+  // Country specific pages
+  const countryPagesSitemap: MetadataRoute.Sitemap = Object.values(countryPages).map((page) => ({
+    url: `${baseUrl}${page.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
+
+  return [...staticPages, ...blogPages, ...pseoPages, ...featurePages, ...countryPagesSitemap]
 }
