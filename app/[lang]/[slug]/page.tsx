@@ -99,6 +99,7 @@ export default async function LocalizedCountryPage({ params }: { params: Promise
         applicationCategory: "PhotoEditingApplication",
         operatingSystem: "Web",
         inLanguage: page.locale,
+        browserRequirements: "Requires JavaScript. Requires HTML5.",
         offers:
           typeof lowPrice === "number" && typeof highPrice === "number"
             ? {
@@ -113,6 +114,7 @@ export default async function LocalizedCountryPage({ params }: { params: Promise
                 "@type": "Offer",
                 url: "https://bringback.pro/pricing",
                 priceCurrency: "USD",
+                availability: "https://schema.org/OnlineOnly",
               },
       },
       page.faq?.length

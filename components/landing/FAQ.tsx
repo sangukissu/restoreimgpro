@@ -77,7 +77,24 @@ const AccordionItem: React.FC<{
   );
 };
 
-export const FAQ: React.FC = () => {
+export interface FAQProps {
+  items?: FAQItem[];
+  title?: React.ReactNode;
+  subtitle?: string;
+  badge?: string;
+}
+
+export const FAQ: React.FC<FAQProps> = ({ 
+  items = FAQS, 
+  title = (
+    <>
+      Questions <br />
+      <span className="text-gray-400">& answers.</span>
+    </>
+  ),
+  subtitle = "Everything you need to know about AI photo restoration and how BringBack works.",
+  badge = "FAQs"
+}) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const handleToggle = (index: number) => {
@@ -94,18 +111,17 @@ export const FAQ: React.FC = () => {
           <div className="lg:col-span-5 sm:sticky top-32">
             {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> FAQs <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> {badge} <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
-              Questions <br />
-              <span className="text-gray-400">& answers.</span>
+              {title}
             </h2>
 
             {/* Subtitle */}
             <p className="text-lg text-gray-600 font-medium leading-relaxed max-w-md">
-              Everything you need to know about AI photo restoration and how BringBack works.
+              {subtitle}
             </p>
           </div>
 
@@ -113,7 +129,7 @@ export const FAQ: React.FC = () => {
           <div className="lg:col-span-7">
             <div className="bg-brand-surface p-3 rounded-[1.8rem]">
               <div className="flex flex-col gap-3">
-                {FAQS.map((faq, index) => (
+                {items.map((faq, index) => (
                   <AccordionItem
                     key={index}
                     item={faq}
