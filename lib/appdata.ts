@@ -115,10 +115,9 @@ export const appData: Record<string, AppPageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/old-photo-bw.jpg", label: "Original B&W" },
-          { src: "/old-photo-faded.jpg", label: "Faded Color" }
+          { src: "/gentle-smile.webp", label: "Original Portrait" },
         ],
-        output: { src: "/animated-photo.gif", label: "Animated Result" }
+        output: { src: "/videos/gentle-smile.mp4", label: "Back to Life Animation" }
       }
     },
     showcaseCaptions: [
@@ -242,9 +241,9 @@ export const appData: Record<string, AppPageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/serious-portrait.jpg", label: "Serious Portrait" }
+          { src: "/historical-wedding-photo.webp", label: "blurred wedding photo" }
         ],
-        output: { src: "/smiling-portrait.gif", label: "Smiling Animation" }
+        output: { src: "/historical-wedding-photo-colorized.webp", label: "sharpened and enhanced wedding photo" }
       }
     },
     showcaseCaptions: [
@@ -363,9 +362,9 @@ export const appData: Record<string, AppPageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/vintage-photo.jpg", label: "Vintage Original" }
+          { src: "/vintage-family-portraits.webp", label: "Vintage Original" }
         ],
-        output: { src: "/restored-animated.mp4", label: "Restored & Animated" }
+        output: { src: "/videos/blink-tilt-animation.mp4", label: "Restored & Animated" }
       }
     },
     showcaseCaptions: [
@@ -484,9 +483,9 @@ export const appData: Record<string, AppPageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/blurry-wedding.jpg", label: "Blurry Original" }
+          { src: "/historical-wedding-photo.webp", label: "Blurry Original" }
         ],
-        output: { src: "/sharp-wedding.jpg", label: "Sharpened Result" }
+        output: { src: "/historical-wedding-photo-colorized.webp", label: "Sharpened Result" }
       }
     },
     showcaseCaptions: [

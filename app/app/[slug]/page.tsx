@@ -8,7 +8,7 @@ import { Pricing } from '@/components/landing/Pricing';
 import { FAQ } from '@/components/landing/FAQ';
 import { Clients } from '@/components/landing/Clients';
 import Link from 'next/link';
-import { Upload, Sparkles, Star, Clock, Shield, ArrowRight, Zap, CheckCircle2, Heart, Palette, Image as ImageIcon, Camera, Layers, History, Gift, Printer, Cloud, Globe, Sun, Wallet, Minimize, Grid, Mouse, Maximize, Layout, Users, Smartphone, Download } from 'lucide-react';
+import { Upload, Star, Clock, Shield, ArrowRight, Zap, CheckCircle2, Heart, Palette, Image as ImageIcon, Camera, Layers, History, Gift, Printer, Cloud, Globe, Sun, Wallet, Minimize, Grid, Mouse, Maximize, Layout, Users, Smartphone, Download } from 'lucide-react';
 import React from 'react';
 
 // 1. Generate Static Params
@@ -83,6 +83,24 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   if (!page) {
     notFound();
   }
+
+  const firstImageInput = page.qualityAnalysis?.visuals.inputs.find((item) => !item.src.endsWith('.mp4'));
+  const isWeddingSharpenPage = slug === 'sharpen-wedding-photos';
+  const fallbackVideoBySlug: Record<string, string> = {
+    'back-to-life-photo-app': '/videos/gentle-smile.mp4',
+    'make-pictures-smile': '/videos/smile-and-look.mp4',
+    'animate-old-photos': '/videos/blink-tilt-animation.mp4',
+    'sharpen-wedding-photos': '/videos/warm-gaze.mp4',
+  };
+  const outputIsVideo = page.qualityAnalysis?.visuals.output.src.endsWith('.mp4') || false;
+  const qualityVideoSrc = page.qualityAnalysis && !isWeddingSharpenPage
+    ? page.qualityAnalysis.visuals.output.src.endsWith('.mp4')
+      ? page.qualityAnalysis.visuals.output.src
+      : fallbackVideoBySlug[slug] || '/videos/video-animation.mp4'
+    : null;
+  const qualityImageOutputSrc = page.qualityAnalysis && !outputIsVideo
+    ? page.qualityAnalysis.visuals.output.src
+    : null;
 
   // JSON-LD Schema
   const jsonLd = {
@@ -215,7 +233,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               <div className="bg-white rounded-[2.5rem] p-8 sm:p-12 lg:p-16 border border-gray-200 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#FF4D00]/5 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
                 
-                <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+                <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-start">
                   <div>
                     <div className="inline-flex items-center gap-2 bg-[#FF4D00]/10 text-[#FF4D00] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
                       <Smartphone size={14} />
@@ -237,28 +255,68 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                         <span className="text-sm font-bold text-gray-700">0 MB Download</span>
                       </div>
                     </div>
+                    <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3">
+                      <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 bg-[#FF4D00] text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-[#e64500] transition-colors">
+                        Start in Browser
+                        <ArrowRight size={16} />
+                      </Link>
+                      <span className="text-sm text-gray-500 font-semibold">Live in under 10 seconds</span>
+                    </div>
                   </div>
-                  <div className="relative">
-                    {/* Visual representation of "Instant App" */}
-                    <div className="bg-[#111111] rounded-[2rem] p-6 text-white shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                       <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
-                          <div className="flex gap-2">
-                             <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                             <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                             <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <div className="space-y-4">
+                    <div className="bg-[#111111] text-white rounded-3xl p-6 border border-white/10 shadow-xl">
+                      <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Typical App Store Friction</p>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-3">
+                          <span className="text-sm text-gray-300 font-medium">Download, install, open account</span>
+                          <span className="text-xs font-bold text-red-400">Slow start</span>
+                        </div>
+                        <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-3">
+                          <span className="text-sm text-gray-300 font-medium">Storage + battery drain from heavy app</span>
+                          <span className="text-xs font-bold text-red-400">Device cost</span>
+                        </div>
+                        <div className="flex items-center justify-between gap-4">
+                          <span className="text-sm text-gray-300 font-medium">More ads, more taps before first result</span>
+                          <span className="text-xs font-bold text-red-400">Lower completion</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm">
+                      <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">BringBack Web App Advantage</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                        <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Clock size={14} className="text-[#FF4D00]" />
+                            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Speed</span>
                           </div>
-                          <div className="text-xs font-mono text-gray-500">bringback.pro/app</div>
-                       </div>
-                       <div className="space-y-4">
-                          <div className="h-40 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center">
-                             <Zap size={48} className="text-[#FF4D00]" />
+                          <p className="text-sm font-semibold text-[#111111]">Ready in seconds</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Smartphone size={14} className="text-[#FF4D00]" />
+                            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Compatibility</span>
                           </div>
-                          <div className="space-y-2">
-                             <div className="h-4 bg-white/10 rounded w-3/4"></div>
-                             <div className="h-4 bg-white/10 rounded w-1/2"></div>
+                          <p className="text-sm font-semibold text-[#111111]">iPhone + Android</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Shield size={14} className="text-[#FF4D00]" />
+                            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Privacy</span>
                           </div>
-                          <button className="w-full bg-[#FF4D00] py-3 rounded-lg font-bold text-sm mt-4">Launch App Instantly</button>
-                       </div>
+                          <p className="text-sm font-semibold text-[#111111]">Secure processing</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Download size={14} className="text-[#FF4D00]" />
+                            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Storage</span>
+                          </div>
+                          <p className="text-sm font-semibold text-[#111111]">No install needed</p>
+                        </div>
+                      </div>
+                      <Link href="/dashboard" className="w-full inline-flex items-center justify-center gap-2 bg-[#111111] text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-black transition-colors">
+                        Open BringBack App
+                        <ArrowRight size={16} />
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -308,60 +366,48 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                     </div>
                   </div>
 
-                  {/* Visual Transformation Side */}
+                  {/* Conversion Proof Side */}
                   <div className="relative w-full min-w-0">
-                    <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-6 lg:p-8 backdrop-blur-sm w-full">
-                       {/* Inputs */}
-                       <div className="flex gap-4 mb-8 overflow-x-auto pb-4 no-scrollbar mask-gradient-r w-full">
-                          {page.qualityAnalysis.visuals.inputs.map((input, idx) => (
-                            <div key={idx} className="flex-shrink-0 w-32 relative group">
-                               <div className="aspect-[3/4] rounded-xl overflow-hidden mb-3 border-2 border-white/10 relative">
-                                  <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-[10px] font-bold px-2 py-0.5 rounded text-white">IN</div>
-                                  <img src={input.src} className="w-full h-full object-cover" alt={input.label} />
-                               </div>
-                               <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 text-center">{input.label}</p>
+                    <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-5 lg:p-6 backdrop-blur-sm w-full">
+                      <div className="mb-4">
+                        <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+                          {isWeddingSharpenPage ? 'One image in, one image out' : 'One image in, one video out'}
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div className="bg-black/20 border border-white/10 rounded-xl p-2">
+                            <div className="aspect-[4/3] rounded-lg overflow-hidden border border-white/10 bg-black">
+                              {firstImageInput ? (
+                                <img src={firstImageInput.src} className="w-full h-full object-cover" alt={`${firstImageInput.label} input image`} />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-xs font-bold uppercase tracking-wider text-gray-500">No Image</div>
+                              )}
                             </div>
-                          ))}
+                            <div className="flex items-center justify-between mt-2 px-1">
+                              <span className="text-[11px] font-semibold text-gray-200">{firstImageInput?.label || 'Input Photo'}</span>
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Image</span>
+                            </div>
+                          </div>
+                          <div className="bg-black/20 border border-white/10 rounded-xl p-2">
+                            <div className="aspect-[4/3] rounded-lg overflow-hidden border border-white/10 bg-black">
+                              {qualityVideoSrc ? (
+                                <video src={qualityVideoSrc} className="w-full h-full object-cover" controls preload="metadata" playsInline />
+                              ) : qualityImageOutputSrc ? (
+                                <img src={qualityImageOutputSrc} className="w-full h-full object-cover" alt={`${page.qualityAnalysis.visuals.output.label} output image`} />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-xs font-bold uppercase tracking-wider text-gray-500">No Preview</div>
+                              )}
+                            </div>
+                            <div className="flex items-center justify-between mt-2 px-1">
+                              <span className="text-[11px] font-semibold text-gray-200">{page.qualityAnalysis.visuals.output.label}</span>
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#FF4D00]">{qualityVideoSrc ? 'Video' : 'Image'}</span>
+                            </div>
+                          </div>
+                        </div>
                        </div>
 
-                       {/* Process Arrow */}
-                       <div className="flex justify-center mb-8 relative">
-                          <div className="bg-[#FF4D00] text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg shadow-[#FF4D00]/20 flex items-center gap-2 z-10">
-                             AI Processing <Sparkles size={14} fill="currentColor" />
-                          </div>
-                          <div className="absolute top-1/2 left-0 right-0 h-px bg-white/10 -z-0"></div>
-                       </div>
-
-                       {/* Result */}
-                       <div className="relative rounded-2xl overflow-hidden border border-white/10 group shadow-2xl shadow-black/50">
-                          <div className="absolute top-4 left-4 z-10 bg-[#FF4D00] text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg">FINAL RESULT</div>
-                          {page.qualityAnalysis.visuals.output.src.endsWith('.mp4') ? (
-                            <video 
-                              src={page.qualityAnalysis.visuals.output.src} 
-                              className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" 
-                              autoPlay 
-                              loop 
-                              muted 
-                              playsInline 
-                            />
-                          ) : (
-                            <img 
-                              src={page.qualityAnalysis.visuals.output.src} 
-                              className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" 
-                              alt={page.qualityAnalysis.visuals.output.label} 
-                            />
-                          )}
-                          
-                          {/* Floating Detail Badges */}
-                          <div className="absolute bottom-4 left-4 right-4 flex gap-2 overflow-x-auto no-scrollbar">
-                             {['Perfect Lighting', 'Unified Scale', 'HD Detail'].map((tag, i) => (
-                                <div key={i} className="flex-shrink-0 bg-black/60 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-                                   <CheckCircle2 size={10} className="text-[#FF4D00]" /> {tag}
-                                </div>
-                             ))}
-                          </div>
-                       </div>
-                       <p className="text-center text-xs font-bold uppercase tracking-wider text-gray-500 mt-4">{page.qualityAnalysis.visuals.output.label}</p>
+                      {qualityVideoSrc && (
+                        <p className="text-[11px] font-semibold text-gray-500 px-1">Use the play button to preview motion quality before you continue.</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -407,7 +453,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                                <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">{item.beforeLabel} → {item.afterLabel}</p>
                                <p className="font-bold text-lg leading-tight text-white">{item.caption}</p>
                             </div>
-                         </div>
+                          </div>
                        </div>
                      ))}
                    </div>

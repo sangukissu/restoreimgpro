@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server"
 import { Suspense } from "react"
 import { DashboardSkeleton } from "@/components/ui/skeleton"
 import PaymentController from "@/components/dashboard/payment-controller"
-import { ExitIntentPopup } from "@/components/exit-intent-popup"
+import { ExitIntentPopup, TrustpilotReviewPrompt } from "@/components/exit-intent-popup"
 
 
 
@@ -54,6 +54,7 @@ export default async function DashboardLayout({
         {children}
       </Suspense>
       <ExitIntentPopup hasPurchased={hasPurchased} />
+      <TrustpilotReviewPrompt hasPurchased={hasPurchased} />
     </PaymentController>
   )
 }
