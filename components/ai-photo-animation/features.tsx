@@ -5,28 +5,28 @@ import { Heart, Shield, Award, Sparkles } from "lucide-react";
 
 const PRINCIPLES = [
   {
-    icon: <Heart size={24} />,
-    title: "Respectful Realism",
+    icon: <Sparkles size={24} />,
+    title: "Natural Animation Styles",
     description:
-      "Our first commitment is to honor the person in your photo. We focus on subtle micro-expressions to create a moment of connection, not a deepfake.",
+      "Pick from subtle styles like Gentle Smile, Smile + Wave, Blink + Head Tilt, and Warm Gaze to keep movement realistic and identity-safe.",
   },
   {
-    icon: <Shield size={24} />,
-    title: "Absolute Privacy",
+    icon: <Heart size={24} />,
+    title: "Built for Family Memories",
     description:
-      "Your memories are yours alone. Photos are deleted in minutes, and we never use your family portraits for AI training. Your trust is our foundation.",
+      "Designed for old portraits, memorial tributes, genealogy storytelling, and family keepsakes where authentic expression matters most.",
   },
   {
     icon: <Award size={24} />,
-    title: "Uncompromising Quality",
+    title: "High-Resolution MP4 Output",
     description:
-      "Every living memory is delivered as a high-resolution MP4 video, ensuring crisp detail and universal compatibility for sharing and saving.",
+      "Export clean, share-ready animation videos you can use in slideshows, social posts, digital frames, and family documentaries.",
   },
   {
-    icon: <Sparkles size={24} />,
-    title: "The Magic of Simplicity",
+    icon: <Shield size={24} />,
+    title: "Private by Default",
     description:
-      "This complex technology is powered by a single click. No settings to adjust, no learning curve. Just a simple, intuitive way to create something magical.",
+      "Uploaded photos are auto-deleted after processing, generated animations are auto-deleted after 24 hours, and personal photos are never used for AI training.",
   },
 ];
 
@@ -40,20 +40,20 @@ export default function AIAnimationFeatures() {
           <div className="max-w-2xl">
             {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Our Philosophy <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> Why BringBack <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
-              AI Photo Animation Technology: <br />
-              <span className="text-gray-400">Realistic & Respectful.</span>
+              AI Photo Animation <br />
+              <span className="text-gray-400">Made for Real Memories.</span>
             </h2>
           </div>
 
           {/* Subtitle */}
           <div className="max-w-md">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              We built our AI with a deep respect for the people in your photos. These are the principles that guide every living portrait we create.
+              Everything is focused on practical outcomes: realistic motion, easy workflow, clean exports, and strong privacy controls for family photos.
             </p>
           </div>
         </div>

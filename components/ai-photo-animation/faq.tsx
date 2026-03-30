@@ -10,6 +10,16 @@ const faqs = [
       "This is the most common concern. Our AI is specifically trained to produce gentle, respectful, and natural movements. We focus on subtle smiles, blinks, and head tilts—not exaggerated or unrealistic motion. The goal is a touching moment of recognition, not a deepfake.",
   },
   {
+    question: "What file types and image quality work best for AI photo animation?",
+    answer:
+      "You can upload JPG, PNG, and WEBP photos. Clear portraits with visible facial details produce the most realistic animations. If your image is blurry, torn, or faded, run it through restoration first to improve facial landmarks before animation.",
+  },
+  {
+    question: "Which animation styles can I choose from?",
+    answer:
+      "You can choose from Gentle Smile, Smile + Wave, Subtle Blink + Head Tilt, Smile + Look Around, Warm Gaze, Soft Nod, Peaceful Presence, Loving Recognition, and Gentle Talking. Each style is designed for subtle, respectful, natural movement.",
+  },
+  {
     question: "Can I animate a photo with multiple people in it?",
     answer:
       "Our AI is designed to focus on and animate one primary face in a photograph to ensure the highest quality and most natural result. For group photos, the AI will typically identify and animate the most prominent or clearest face.",
@@ -17,7 +27,7 @@ const faqs = [
   {
     question: "What happens to my photos after I upload them? Is my data used for AI training?",
     answer:
-      "Absolutely not. Your privacy is our top priority. Your uploaded photos are processed securely and automatically deleted from our servers within 30 minutes. The final animated video is deleted after 7 days. We never use your personal photos for AI training or any other purpose. Your memories remain yours alone.",
+      "Absolutely not. Your privacy is our top priority. Uploaded photos are processed securely and automatically deleted within 30 minutes, and generated animations are deleted after 24 hours. We never use your personal photos for AI training or any other purpose.",
   },
   {
     question: "Can I animate low-quality, blurry, or very old photos?",

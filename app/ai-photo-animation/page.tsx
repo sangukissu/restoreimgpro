@@ -14,16 +14,16 @@ import { AIAnimationPrivacy } from "@/components/ai-photo-animation/privacy-shie
 
 
 export const metadata: Metadata = {
-  title: "AI Photo Animation: Bring Your Old Photos to Life | BringBack AI",
+  title: "AI Photo Animation - Make Old Photos Move Instantly | BringBack AI",
   description:
-    "Watch your loved ones smile and wave again. Our advanced AI Photo Animation tool turns still portraits into beautiful, living memories in seconds. Try it now.",
+    "Transform still photos into captivating animated memories with BringBack AI's advanced AI photo animation tool. Easy to use, incredible results. Animate your past today!",
   alternates: {
-    canonical: "/ai-photo-animation",
+    canonical: "https://bringback.pro/ai-photo-animation",
   },
   openGraph: {
-    title: "AI Photo Animation: Bring Your Old Photos to Life | BringBack AI",
+    title: "AI Photo Animation - Make Old Photos Move Instantly | BringBack AI",
     description:
-      "Watch your loved ones smile and wave again. Our advanced AI Photo Animation tool turns still portraits into beautiful, living memories in seconds. Try it now.",
+      "Transform still photos into captivating animated memories with BringBack AI's advanced AI photo animation tool. Easy to use, incredible results. Animate your past today!",
     type: "website",
     url: "https://bringback.pro/ai-photo-animation",
   },
@@ -118,6 +118,22 @@ const animationFAQPageJsonLd = {
     },
     {
       "@type": "Question",
+      "name": "What file types and image quality work best for AI photo animation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can upload JPG, PNG, and WEBP photos. Clear portraits with visible facial details produce the most realistic animations. If your image is blurry, torn, or faded, run it through restoration first to improve facial landmarks before animation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which animation styles can I choose from?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can choose from several subtle styles such as Gentle Smile, Smile + Wave, Subtle Blink + Head Tilt, Smile + Look Around, Warm Gaze, Soft Nod, Peaceful Presence, Loving Recognition, and Gentle Talking. Each style is designed for natural, respectful movement."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "Can I animate a photo with multiple people in it?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -129,7 +145,7 @@ const animationFAQPageJsonLd = {
       "name": "What happens to my photos after I upload them? Is my data used for AI training?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely not. Your privacy is our top priority. Your uploaded photos are processed securely and automatically deleted from our servers within 30 minutes. The final animated video is deleted after 7 days. We never use your personal photos for AI training or any other purpose. Your memories remain yours alone."
+        "text": "Absolutely not. Your privacy is our top priority. Uploaded photos are processed securely and automatically deleted within 30 minutes, and generated animations are deleted after 24 hours. We never use your personal photos for AI training or any other purpose."
       }
     },
     {

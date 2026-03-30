@@ -39,7 +39,7 @@ const denoisePageJsonLd = {
   "@type": ["WebPage", "WebApplication"],
   "@id": "https://bringback.pro/#denoise-webapp",
   "name": "BringBack – AI Photo Denoise Web App",
-  "url": "https://bringback.pro/denoise",
+  "url": "https://bringback.pro/denoise-photos",
   "applicationCategory": "PhotoEditingApplication",
   "operatingSystem": "Web",
   "browserRequirements": "Requires JavaScript and modern web browser.",

@@ -77,7 +77,7 @@ export const appData: Record<string, AppPageData> = {
         "bring photos to life app",
         "animate old photos app",
         "photo animator app",
-        "ai photo animator free",
+        "ai photo animator",
         "moving photos app",
         "bring pictures to life"
       ],
@@ -89,7 +89,7 @@ export const appData: Record<string, AppPageData> = {
         secondary: "Back to Life Instantly"
       },
       subheadline: "Instantly animate faces, restore faded colors, and bring your loved ones back to life. App downloads are a thing of the past—use our powerful AI directly from your mobile browser.",
-      ctaText: "Animate Your First Photo Free",
+      ctaText: "Animate Your First Photo",
       trustBadge: "Used by 100k+ Users",
     },
     appStoreFriction: {
@@ -177,15 +177,23 @@ export const appData: Record<string, AppPageData> = {
     faq: [
       {
         question: "What is the best app to bring pictures to life?",
-        answer: "The best solution is one that combines high-definition AI animation with ease of use. Our web-based platform serves as a complete back to life app, offering professional-grade facial animation without requiring you to download heavy software to your mobile device."
+        answer: "A strong solution should combine restoration quality, natural motion, and privacy controls. BringBack is built for family-photo restoration and realistic animation in one workflow, so you can upload a vintage photo and get a polished result without switching tools."
       },
       {
         question: "Can I use this to bring my loved ones back to life (app feature)?",
         answer: "Yes. This tool was specifically designed with genealogy and family history in mind. Our \"nostalgia engine\" is calibrated to treat vintage, damaged, or faded photos with care, allowing you to bring your loved ones back to life with respectful, natural-looking animations."
       },
       {
-        question: "Is the \"backtolife app\" free to use?",
-        answer: "We offer a free trial tier so you can experience the magic of seeing a historical photo move for the first time. For bulk processing entire family albums, we offer affordable premium web passes."
+        question: "Is BringBack a free or trial tool?",
+        answer: "No. BringBack is a premium paid service. Every restoration and animation run uses compute-intensive AI processing, so access is offered through paid credits and plans."
+      },
+      {
+        question: "How does this compare to free animation apps?",
+        answer: "Most free tools focus only on basic motion effects. BringBack combines restoration and animation with stronger facial detail recovery, cleaner motion, and privacy-focused processing for important family memories."
+      },
+      {
+        question: "Can this replace hiring a photo editor for old family photos?",
+        answer: "For many common restoration and animation jobs, yes. BringBack is designed to deliver professional-grade results quickly for damaged, faded, or low-quality portraits without a long manual editing process."
       },
       {
         question: "Does it work on iPhone and Android?",
@@ -197,7 +205,7 @@ export const appData: Record<string, AppPageData> = {
     slug: "/app/make-pictures-smile",
     meta: {
       title: "App That Makes Pictures Move and Smile | BringBack AI",
-      description: "Discover the best app to make old photos move and smile. Turn static portraits into lifelike animations instantly. Try our free online tool now.",
+      description: "Discover the best app to make old photos move and smile. Turn static portraits into lifelike animations instantly. Try our online tool now.",
       keywords: [
         "app that makes pictures move and smile",
         "app to make old photos move",
@@ -215,7 +223,7 @@ export const appData: Record<string, AppPageData> = {
         secondary: "Move and Smile"
       },
       subheadline: "Turn static portraits into heartwarming animations. Our AI adds natural smiles, blinks, and head movements to any photo in seconds—no download required.",
-      ctaText: "Make a Photo Smile Free",
+      ctaText: "Make a Photo Smile",
       trustBadge: "Viral on TikTok",
     },
     appStoreFriction: {
@@ -306,8 +314,20 @@ export const appData: Record<string, AppPageData> = {
         answer: "Yes, BringBack AI is a leading web application that does exactly that. It uses advanced artificial intelligence to animate static photos, adding realistic smiles and head movements."
       },
       {
-        question: "How do I make old photos come to life for free?",
-        answer: "Simply upload your photo to our free online tool. We offer a trial that lets you animate photos without paying upfront, so you can see the results instantly."
+        question: "How do I make old photos come to life online?",
+        answer: "Simply upload your photo to our online tool. Our AI will instantly animate the photo, adding a natural smile and head movements."
+      },
+      {
+        question: "How is BringBack different from basic face animation tools?",
+        answer: "BringBack is built for old and sentimental photos where quality matters. It focuses on natural expressions, smoother motion, and better handling of vintage or imperfect images instead of quick novelty effects."
+      },
+      {
+        question: "Is this a premium service or a free trial app?",
+        answer: "BringBack is a premium paid service. It is designed for users who want dependable, high-quality outputs for meaningful photos rather than ad-heavy trial-style experiences."
+      },
+      {
+        question: "Can I use it for client work or memorial projects?",
+        answer: "Yes. Many users apply it to family documentaries, tribute videos, and professional storytelling where realistic output quality is more important than one-tap filters."
       },
       {
         question: "Can I use this on my PC?",
@@ -318,11 +338,11 @@ export const appData: Record<string, AppPageData> = {
   "animate-old-photos": {
     slug: "/app/animate-old-photos",
     meta: {
-      title: "Best App for Animating Old Photos | Free AI Photo Animator",
+      title: "Best App for Animating Old Photos | AI Photo Animator",
       description: "Looking for the best app for animating old photos? Our AI tool brings vintage pictures to life instantly. Supports Dutch users searching for 'ai app om fotos te laten bewegen'.",
       keywords: [
         "best app for animating old photos",
-        "free app to animate old photos",
+        "app to animate old photos",
         "ai app om fotos te laten bewegen",
         "animate old photos online",
         "old photo animator",
@@ -362,7 +382,7 @@ export const appData: Record<string, AppPageData> = {
       ],
       visuals: {
         inputs: [
-          { src: "/vintage-family-portraits.webp", label: "Vintage Original" }
+          { src: "/childhood-memories-black-and-white.webp", label: "Vintage Original" }
         ],
         output: { src: "/videos/blink-tilt-animation.mp4", label: "Restored & Animated" }
       }
@@ -415,8 +435,8 @@ export const appData: Record<string, AppPageData> = {
           icon: "Shield"
         },
         {
-          title: "No Subscriptions Needed",
-          description: "Pay only for what you use, or try our free tier. No recurring monthly bills just to animate a few photos.",
+          title: "Transparent Paid Credits",
+          description: "Pay for the processing you use with clear pricing, built for users who need reliable premium output quality.",
           icon: "Wallet"
         }
       ]
@@ -424,16 +444,24 @@ export const appData: Record<string, AppPageData> = {
     faq: [
       {
         question: "What is the best app for animating old photos?",
-        answer: "BringBack AI is widely considered the best web-based app because it combines restoration and animation in one step, without requiring a download."
+        answer: "A top solution should restore image quality before animation, then generate natural motion. BringBack is designed around that full workflow, so old photos look cleaner and more lifelike in the final result."
       },
       {
-        question: "Is there a free app to animate old photos?",
-        answer: "Yes, we offer free credits for new users to try the service. You can animate your first few photos completely free of charge."
+        question: "How does BringBack compare with free old photo animator apps?",
+        answer: "Free tools often prioritize speed and effects, while BringBack prioritizes restoration detail, realistic movement, and stable output quality for sentimental family photos."
       },
       {
-        question: "Hoe kan ik foto's laten bewegen met een app?",
-        answer: "Onze web-app is de makkelijkste manier. Upload gewoon je foto en onze AI doet de rest. Geen installatie nodig!"
-      }
+        question: "Is BringBack premium-only or does it have a free trial?",
+        answer: "BringBack is premium-only. It is a paid AI service built for users who need dependable quality for restoration and animation projects."
+      },
+      {
+        question: "Can I animate damaged photos without editing them first elsewhere?",
+        answer: "Yes. BringBack is built to handle restoration and animation together, so you can upload an old damaged photo and process it in one place."
+      },
+      {
+        question: "Is this better than standard video editing apps for old photos?",
+        answer: "For old-photo restoration and lifelike face motion, yes. Standard editors are general-purpose, while BringBack is specialized for vintage-photo repair plus realistic AI animation."
+      },
     ]
   },
   "sharpen-wedding-photos": {
@@ -457,7 +485,7 @@ export const appData: Record<string, AppPageData> = {
         secondary: "Relive the Special Day"
       },
       subheadline: "Don't let blurriness fade your most precious memories. Our AI sharpens faces, enhances details, and restores the magic of your wedding day photos.",
-      ctaText: "Sharpen Wedding Photo Free",
+      ctaText: "Sharpen Wedding Photo instantly",
       trustBadge: "Wedding Photographer Approved",
     },
     appStoreFriction: {
@@ -550,6 +578,18 @@ export const appData: Record<string, AppPageData> = {
       {
         question: "Can it fix very blurry faces?",
         answer: "Yes, our Face Recovery technology is specifically designed to reconstruct facial features even in significantly blurred or out-of-focus images."
+      },
+      {
+        question: "How does this compare to one-tap sharpen filters?",
+        answer: "One-tap filters mostly increase contrast and edge halos. BringBack uses AI reconstruction aimed at recovering facial and texture detail, which is more suitable for valuable wedding memories."
+      },
+      {
+        question: "Is this a premium restoration service?",
+        answer: "Yes. BringBack is a premium paid service focused on high-quality results for important personal photos, including weddings and family archives."
+      },
+      {
+        question: "Can I use restored wedding photos for reprints and albums?",
+        answer: "Yes. Outputs are designed for practical reuse, including digital albums, framed prints, and anniversary slideshows."
       },
       {
         question: "Is it safe for private photos?",

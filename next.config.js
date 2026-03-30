@@ -84,6 +84,11 @@ const nextConfig = {
   // Force HTTPS in production
   async redirects() {
     return [
+      {
+        source: '/restore/animate-old-photos',
+        destination: '/ai-photo-animation',
+        permanent: true
+      },
       // Redirect HTTP to HTTPS in production
       process.env.NODE_ENV === 'production' ? {
         source: '/(.*)',

@@ -92,6 +92,39 @@ export interface PseoPageData {
   };
 }
 
+const excludedPseoSlugs = new Set([
+  'fix-scratched-childhood-photo',
+  'fix-low-resolution-military-photo',
+  'fix-water-damaged-wedding-photo',
+  'fix-yellowed-family-portrait',
+  'fix-scratched-wedding-photo',
+  'old-photo-color-restoration-online',
+  'fix-yellowed-military-photo',
+  'fix-creased-ancestor-photo',
+  'fix-blurry-graduation-photo',
+  'fix-yellowed-graduation-photo',
+  'fix-water-damaged-ancestor-photo',
+  'fix-scratched-graduation-photo',
+  'fix-blurry-ancestor-photo',
+  'fix-faded-military-photo',
+  'enhance-photo-quality',
+  'colorize-black-and-white',
+  'fix-low-resolution-family-portrait',
+  'fix-water-damaged-graduation-photo',
+  'fix-low-resolution-holiday-snap',
+  'fix-water-damaged-family-portrait',
+  'fix-blurry-military-photo',
+  'fix-scratched-ancestor-photo',
+  'fix-faded-graduation-photo',
+  'fix-low-resolution-childhood-photo',
+  'fix-torn-wedding-photo',
+  'fix-yellowed-childhood-photo',
+  'fix-dusty-baby-photo',
+  'fix-faded-ancestor-photo',
+  'fix-faded-baby-photo',
+  'fix-scratched-family-portrait',
+]);
+
 export function generatePseoPages(): PseoPageData[] {
   const pages: PseoPageData[] = [];
 
@@ -241,6 +274,120 @@ export function generatePseoPages(): PseoPageData[] {
       ]
     }
   });
+
+  const generateIntentSeoContent = (keyword: string, intent: 'restoration' | 'howto' | 'digitization') => {
+    const base = generateStandardSeoContent(
+      keyword,
+      `Use our premium AI workflow to ${keyword.toLowerCase()} with consistent, high-resolution output.`
+    );
+
+    if (intent === 'restoration') {
+      base.howItWorks.title = `Premium Workflow to ${keyword}`;
+      base.howItWorks.description = `Designed for users comparing serious restoration solutions, this workflow restores damaged photos in under 30 seconds.`;
+      base.comparisonTable.title = `How BringBack Compares for "${keyword}"`;
+      base.comparisonTable.description = `Compare reliability, consistency, and total ownership cost across premium AI and manual alternatives.`;
+      base.comparisonTable.rows = [
+        {
+          feature: "Output Consistency",
+          bringback: "Consistent, model-trained quality",
+          competitors: "Mixed across photo types",
+          manual: "Expert-dependent, varies by editor"
+        },
+        {
+          feature: "Turnaround Time",
+          bringback: "Under 30 seconds",
+          competitors: "Minutes to days",
+          manual: "Days to weeks"
+        },
+        {
+          feature: "Total Cost at Scale",
+          bringback: "Predictable credit pricing",
+          competitors: "Tier limits and upsells",
+          manual: "High per-photo fees"
+        },
+        {
+          feature: "Privacy Handling",
+          bringback: "Secure processing workflow",
+          competitors: "Varies by platform",
+          manual: "Email/file-transfer dependent"
+        }
+      ];
+      base.useCases.title = `Where "${keyword}" Matters Most`;
+      base.useCases.description = "High-intent scenarios where quality consistency and turnaround directly impact outcomes.";
+    }
+
+    if (intent === 'howto') {
+      base.howItWorks.title = `Execution Plan: ${keyword}`;
+      base.howItWorks.description = `Skip manual editing complexity and follow a premium automation workflow built for reliable, repeatable output.`;
+      base.comparisonTable.title = `Manual Tutorial vs AI Workflow for "${keyword}"`;
+      base.comparisonTable.description = `See why advanced users replace fragile tutorial chains with one controlled AI workflow.`;
+      base.comparisonTable.rows = [
+        {
+          feature: "Learning Curve",
+          bringback: "No editor training required",
+          competitors: "Multiple tool interfaces",
+          manual: "Steep, software-specific"
+        },
+        {
+          feature: "Error Recovery",
+          bringback: "Re-run instantly",
+          competitors: "Limited undo workflows",
+          manual: "Often restart from scratch"
+        },
+        {
+          feature: "Time Per Photo",
+          bringback: "Seconds",
+          competitors: "Minutes",
+          manual: "30-90 minutes"
+        },
+        {
+          feature: "Result Reliability",
+          bringback: "Model-driven consistency",
+          competitors: "Preset-dependent",
+          manual: "Operator-dependent"
+        }
+      ];
+      base.useCases.title = `Practical Scenarios for "${keyword}"`;
+      base.useCases.description = "Use this path when you need dependable output without buying or mastering pro editing suites.";
+    }
+
+    if (intent === 'digitization') {
+      base.howItWorks.title = `Digitize + Restore Pipeline for "${keyword}"`;
+      base.howItWorks.description = `Use a two-step archival workflow: capture clean scans, then run premium AI restoration for production-ready output.`;
+      base.comparisonTable.title = `Scan-Only vs Scan + AI Enhancement`;
+      base.comparisonTable.description = "Digitization preserves files, but enhancement restores visual fidelity and print usability.";
+      base.comparisonTable.rows = [
+        {
+          feature: "Dust/Scratch Cleanup",
+          bringback: "Automated post-scan repair",
+          competitors: "Partial cleanup tools",
+          manual: "Frame-by-frame retouch"
+        },
+        {
+          feature: "Print Readiness",
+          bringback: "High-resolution optimized files",
+          competitors: "May require extra tools",
+          manual: "Manual export tuning"
+        },
+        {
+          feature: "Archive Throughput",
+          bringback: "Batch-friendly workflow",
+          competitors: "Limited queue controls",
+          manual: "Slow one-by-one editing"
+        },
+        {
+          feature: "Operational Cost",
+          bringback: "Predictable plan pricing",
+          competitors: "Feature-gated tiers",
+          manual: "High labor overhead"
+        }
+      ];
+      base.useCases.title = `Archive-Ready Use Cases for "${keyword}"`;
+      base.useCases.description = "Built for family archivists, historians, and institutions converting physical collections into premium digital assets.";
+    }
+
+    return base;
+  };
 
   // --- BUILDER 1: Problem + Type Pages ---
   // Generates pages like:
@@ -424,7 +571,9 @@ export function generatePseoPages(): PseoPageData[] {
         }
       };
 
-      pages.push(pageData);
+      if (!excludedPseoSlugs.has(pageData.slug)) {
+        pages.push(pageData);
+      }
     }
   }
 
@@ -598,74 +747,123 @@ export function generatePseoPages(): PseoPageData[] {
         ]
       }
     };
-    pages.push(pageData);
+    if (!excludedPseoSlugs.has(pageData.slug)) {
+      pages.push(pageData);
+    }
   }
 
   // --- BUILDLER 3: Restoration Keyword Pages ---
   restorationKeywords.forEach(keyword => {
-    const standardSeoContent = generateStandardSeoContent(keyword.keyword, `Use our AI-powered tool to ${keyword.keyword.toLowerCase()}. Get high-quality results in seconds.`);
+    const specificFaq = {
+      question: `How effective is AI when you need to ${keyword.keyword.toLowerCase()}?`,
+      answer: `Our advanced AI is specifically trained to ${keyword.keyword.toLowerCase()} with a 95% success rate. By analyzing millions of similar images, the system intelligently reconstructs missing details, corrects color imbalances, and repairs damage while preserving the original character of your photo. The results are often indistinguishable from expensive manual restoration.`
+    };
+    const specificFaq2 = {
+      question: `How long does it take to ${keyword.keyword.toLowerCase()}?`,
+      answer: `While traditional manual services can take weeks, our AI platform allows you to ${keyword.keyword.toLowerCase()} in just 30 seconds. You simply upload your photo, and our secure, automated system processes it instantly, providing you with a high-resolution, print-ready result.`
+    };
+
+    const standardSeoContent = generateIntentSeoContent(keyword.keyword, 'restoration');
 
     const pageData: PseoPageData = {
       slug: keyword.slug,
       h1: keyword.keyword,
-      metaTitle: `${keyword.keyword} - Restore Photo Online`,
-      metaDescription: `Use our AI-powered tool to ${keyword.keyword.toLowerCase()}. Get high-quality results in seconds.`,
+      metaTitle: `${keyword.keyword} | Premium AI Photo Restoration`,
+      metaDescription: `Looking to ${keyword.keyword.toLowerCase()}? BringBack.pro offers professional AI photo restoration in seconds. High-resolution results, secure processing, and 30-day guarantee.`,
       content: {
-        problem: `Are you looking to ${keyword.keyword.toLowerCase()}? You\'ve come to the right place. Our online tool uses advanced AI to restore your photos to their former glory. Whether you need to fix scratches, remove blemishes, or colorize black and white photos, we can help.`,
-        solution: `Our tool is easy to use. Simply upload your photo, and our AI will automatically detect and repair any damage. You\'ll be amazed at the results.`,
-        subject: `Don\'t let your precious memories fade away. ${keyword.keyword} today and see the difference for yourself.`
+        problem: `When you need to ${keyword.keyword.toLowerCase()}, relying on basic filters or attempting manual edits often leads to frustrating, unnatural results. Traditional professional restoration services are highly expensive—often costing between $50 and $300 per photo—and can take several weeks to deliver a finished product. For irreplaceable family memories, you need a solution that is both reliable and accessible.`,
+        solution: `BringBack.pro provides a premium AI-driven platform specifically engineered to ${keyword.keyword.toLowerCase()}. Our cutting-edge neural networks process your image in under 30 seconds, intelligently repairing damage and enhancing clarity at a fraction of the cost of manual services. We guarantee privacy with auto-deletion protocols and deliver print-ready, high-definition results.`,
+        subject: `Don't let your precious memories fade away or remain damaged. Whether it's a family heirloom or a vintage portrait, use our secure platform to ${keyword.keyword.toLowerCase()} today and preserve your legacy for future generations.`
       },
-      faqs: generalFaqs,
+      faqs: [specificFaq, specificFaq2, ...generalFaqs],
       beforeImageUrl: `/faded.webp`,
       afterImageUrl: `/fade-restored.webp`,
       ...standardSeoContent
     };
-    pages.push(pageData);
+    // Customize How It Works steps for the specific keyword
+    pageData.howItWorks.title = `How to ${keyword.keyword}`;
+    pageData.howItWorks.steps[0].description = `Simply drag and drop your photo onto our secure platform to start the process to ${keyword.keyword.toLowerCase()}.`;
+
+    if (!excludedPseoSlugs.has(pageData.slug)) {
+      pages.push(pageData);
+    }
   });
 
   // --- BUILDLER 4: How-To Keyword Pages ---
   howToKeywords.forEach(keyword => {
-    const standardSeoContent = generateStandardSeoContent(keyword.keyword, `Learn ${keyword.keyword.toLowerCase()} with our easy-to-follow guide. Then, use our AI-powered tool to get perfect results.`);
+    const specificFaq = {
+      question: `What is the best method if I want to learn ${keyword.keyword.toLowerCase()}?`,
+      answer: `The most efficient and high-quality method to ${keyword.keyword.toLowerCase()} is using a specialized AI tool like BringBack.pro. While you can learn complex manual software like Photoshop, our AI is trained on professional restorations, allowing you to achieve expert-level results instantly without a steep learning curve.`
+    };
+    const specificFaq2 = {
+      question: `Can I achieve professional results when I ${keyword.keyword.toLowerCase()} at home?`,
+      answer: `Yes, absolutely. By leveraging our premium AI restoration platform, you can ${keyword.keyword.toLowerCase()} directly from your browser. Our system provides studio-quality output, repairing damage and enhancing details automatically, so you get professional results without needing expensive equipment or software.`
+    };
+
+    const standardSeoContent = generateIntentSeoContent(keyword.keyword, 'howto');
 
     const pageData: PseoPageData = {
       slug: keyword.slug,
       h1: keyword.keyword,
-      metaTitle: `${keyword.keyword} - Restore Photo Online`,
-      metaDescription: `Learn ${keyword.keyword.toLowerCase()} with our easy-to-follow guide. Then, use our AI-powered tool to get perfect results.`,
+      metaTitle: `${keyword.keyword} | Step-by-Step AI Guide`,
+      metaDescription: `Learn the easiest and most professional way to ${keyword.keyword.toLowerCase()}. Our premium AI tool delivers stunning, high-resolution results instantly. Start restoring today.`,
       content: {
-        problem: `Do you want to learn ${keyword.keyword.toLowerCase()}? It can be tricky to get right, but we\'re here to help.`,
-        solution: `This guide will walk you through the steps to ${keyword.keyword.toLowerCase()}. We\'ll also show you how our AI-powered tool can make the process even easier.`,
-        subject: `Whether you\'re a beginner or a pro, you\'ll find this guide helpful. Let\'s get started!`
+        problem: `Figuring out how to ${keyword.keyword.toLowerCase()} can be overwhelming. Many tutorials suggest purchasing expensive software subscriptions and spending hours learning complex editing techniques. If you make a mistake, you risk permanently altering your digital copy, and manual editing often results in an artificial, over-processed look.`,
+        solution: `We've simplified the entire process. The absolute best way to ${keyword.keyword.toLowerCase()} is by letting our purpose-built AI handle the heavy lifting. Instead of spending weeks learning photo editing, you can upload your image to BringBack.pro. Our AI analyzes the specific damage and applies precise, historically accurate corrections in under 30 seconds.`,
+        subject: `Whether you are preserving a single cherished portrait or an entire family archive, knowing how to ${keyword.keyword.toLowerCase()} efficiently saves you time and money. Experience the magic of AI restoration and see your photos brought back to life.`
       },
-      faqs: generalFaqs,
+      faqs: [specificFaq, specificFaq2, ...generalFaqs],
       beforeImageUrl: `/torn.webp`,
       afterImageUrl: `/torn-restored.webp`,
       ...standardSeoContent
     };
-    pages.push(pageData);
+    
+    pageData.howItWorks.title = `The Easiest Way to ${keyword.keyword}`;
+    pageData.howItWorks.steps[1].title = `Automated Processing`;
+    pageData.howItWorks.steps[1].description = `Our specialized algorithms automatically execute the steps to ${keyword.keyword.toLowerCase()}, ensuring perfect color balance and damage repair.`;
+
+    if (!excludedPseoSlugs.has(pageData.slug)) {
+      pages.push(pageData);
+    }
   });
 
   // --- BUILDLER 5: Digitization Keyword Pages ---
   digitizationKeywords.forEach(keyword => {
-    const standardSeoContent = generateStandardSeoContent(keyword.keyword, `Thinking about ${keyword.keyword.toLowerCase()}? We can help. Learn the best ways to digitize your photos and how our tool can improve the quality.`);
+    const specificFaq = {
+      question: `What should I do after I ${keyword.keyword.toLowerCase()}?`,
+      answer: `Once you ${keyword.keyword.toLowerCase()}, the digital files often reveal hidden dust, scratches, and fading that weren't visible on the physical copy. We highly recommend running your freshly digitized photos through BringBack.pro's AI restoration to clean up the scans, enhance the resolution, and bring back the original vibrancy.`
+    };
+    const specificFaq2 = {
+      question: `Does the quality of the scan matter when I ${keyword.keyword.toLowerCase()}?`,
+      answer: `Yes, capturing the highest quality scan possible is important. However, even if you ${keyword.keyword.toLowerCase()} using a basic smartphone app, our premium AI can upscale the resolution, remove grain, and sharpen facial details, turning a mediocre scan into a stunning, print-ready digital memory.`
+    };
+
+    const standardSeoContent = generateIntentSeoContent(keyword.keyword, 'digitization');
 
     const pageData: PseoPageData = {
       slug: keyword.slug,
       h1: keyword.keyword,
-      metaTitle: `${keyword.keyword} - Restore Photo Online`,
-      metaDescription: `Thinking about ${keyword.keyword.toLowerCase()}? We can help. Learn the best ways to digitize your photos and how our tool can improve the quality.`,
+      metaTitle: `${keyword.keyword} & AI Enhancement | BringBack.pro`,
+      metaDescription: `Planning to ${keyword.keyword.toLowerCase()}? Learn how to digitize your memories and use our premium AI to instantly restore, sharpen, and colorize your scans.`,
       content: {
-        problem: `Want to ${keyword.keyword.toLowerCase()}? It\'s a great way to preserve your memories, but it can be a daunting task.`,
-        solution: `This guide will explain the different methods for digitizing your photos, from using a scanner to your smartphone. We\'ll also show you how our AI-powered tool can enhance your digitized photos.`,
-        subject: `Don\'t let your photos gather dust in a shoebox. Digitize them today and enjoy them for years to come.`
+        problem: `When you decide to ${keyword.keyword.toLowerCase()}, you're taking a great first step in preserving family history. However, raw digital scans are often disappointing. They highlight every speck of dust, scratch, and faded color present on the physical photo. Scanning alone doesn't fix the damage time has caused to your precious memories.`,
+        solution: `To truly preserve your heritage, you need to restore the images after you ${keyword.keyword.toLowerCase()}. BringBack.pro acts as the perfect companion to your digitization project. Upload your scanned files, and our AI will automatically remove scratches, fix color degradation, and enhance facial clarity, delivering a pristine digital archive.`,
+        subject: `Don't just store damaged photos on your hard drive. Once you ${keyword.keyword.toLowerCase()}, use our secure, automated platform to breathe new life into your family's most important moments.`
       },
-      faqs: generalFaqs,
+      faqs: [specificFaq, specificFaq2, ...generalFaqs],
       beforeImageUrl: `/vintage-family-portraits.webp`,
       afterImageUrl: `/vintage-family-portraits-colorized.webp`,
 
       ...standardSeoContent
     };
-    pages.push(pageData);
+    
+    pageData.howItWorks.title = `What to Do When You ${keyword.keyword}`;
+    pageData.howItWorks.steps[0].title = `Digitize & Upload`;
+    pageData.howItWorks.steps[0].description = `After you ${keyword.keyword.toLowerCase()}, upload the raw digital files to our secure platform for immediate enhancement.`;
+
+    if (!excludedPseoSlugs.has(pageData.slug)) {
+      pages.push(pageData);
+    }
   });
 
   return pages;
