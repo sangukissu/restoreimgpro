@@ -73,6 +73,72 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     }
 
     const supabase = createSupabaseClient()
+    let isResolved = false
+
+    const applyRestorationResult = async (restoration: {
+      status: string
+      restored_image_url?: string | null
+      error_message?: string | null
+    }) => {
+      if (isResolved) {
+        return true
+      }
+
+      if (restoration.status === "completed" && restoration.restored_image_url) {
+        let displayUrl = restoration.restored_image_url
+        if (displayUrl.startsWith("images/")) {
+          displayUrl = `/api/image-proxy?key=${encodeURIComponent(displayUrl)}`
+        }
+
+        const newData: RestorationData = {
+          originalFile: selectedFile,
+          originalUrl: selectedImageUrl,
+          restoredUrl: displayUrl,
+          initialRestoredUrl: displayUrl,
+          featureType: selectedFeature,
+        }
+
+        isResolved = true
+        setRestorationData(newData)
+        setPendingRestorationId(null)
+        setAppState("comparison")
+
+        try {
+          const signature = `${selectedFile.name}:${selectedFile.size}:${selectedFile.lastModified}`
+          sessionStorage.setItem(`restore_signature:${signature}`, "completed")
+        } catch {}
+
+        await trackRestoration()
+        toast.success(`Image Restored Successfully! ${userCredits} credits remaining.`)
+        return true
+      }
+
+      if (restoration.status === "failed") {
+        isResolved = true
+        setPendingRestorationId(null)
+        setError(restoration.error_message || "Failed to restore image")
+        setAppState("error")
+        toast.error(restoration.error_message || "Failed to restore image")
+        return true
+      }
+
+      return false
+    }
+
+    const syncRestorationStatus = async () => {
+      const { data, error } = await supabase
+        .from("image_restorations")
+        .select("status, restored_image_url, error_message")
+        .eq("id", pendingRestorationId)
+        .single()
+
+      if (error || !data) {
+        return
+      }
+
+      await applyRestorationResult(data)
+    }
+
     const channel = supabase
       .channel(`image-restoration-${pendingRestorationId}`)
       .on(
@@ -89,46 +155,18 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
             restored_image_url?: string | null
             error_message?: string | null
           }
-
-          if (restoration.status === "completed" && restoration.restored_image_url) {
-            let displayUrl = restoration.restored_image_url
-            if (displayUrl.startsWith("images/")) {
-              displayUrl = `/api/image-proxy?key=${encodeURIComponent(displayUrl)}`
-            }
-
-            const newData: RestorationData = {
-              originalFile: selectedFile,
-              originalUrl: selectedImageUrl,
-              restoredUrl: displayUrl,
-              initialRestoredUrl: displayUrl,
-              featureType: selectedFeature,
-            }
-
-            setRestorationData(newData)
-            setPendingRestorationId(null)
-            setAppState("comparison")
-
-            try {
-              const signature = `${selectedFile.name}:${selectedFile.size}:${selectedFile.lastModified}`
-              sessionStorage.setItem(`restore_signature:${signature}`, "completed")
-            } catch {}
-
-            await trackRestoration()
-            toast.success(`Image Restored Successfully! ${userCredits} credits remaining.`)
-            return
-          }
-
-          if (restoration.status === "failed") {
-            setPendingRestorationId(null)
-            setError(restoration.error_message || "Failed to restore image")
-            setAppState("error")
-            toast.error(restoration.error_message || "Failed to restore image")
-          }
+          await applyRestorationResult(restoration)
         }
       )
       .subscribe()
 
+    syncRestorationStatus()
+    const intervalId = window.setInterval(() => {
+      syncRestorationStatus()
+    }, 4000)
+
     return () => {
+      window.clearInterval(intervalId)
       supabase.removeChannel(channel)
     }
   }, [pendingRestorationId, selectedFile, selectedImageUrl, selectedFeature, toast, trackRestoration, userCredits])
