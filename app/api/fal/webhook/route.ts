@@ -1,10 +1,104 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/utils/supabase/admin";
-import { uploadVideoToR2, downloadVideoFromUrl } from "@/lib/r2";
+import { uploadImageToR2, uploadVideoToR2, downloadVideoFromUrl } from "@/lib/r2";
+import { normalizeToPng } from "@/lib/watermark";
 import { logError } from "@/lib/error-handling";
+
+type FalWebhookStatus = "OK" | "ERROR"
+
+interface ParsedFalWebhookBody {
+  requestId: string
+  gatewayRequestId?: string
+  status: FalWebhookStatus
+  payload: Record<string, unknown> | null
+  error?: string
+  payloadError?: string
+}
+
+async function downloadImageFromUrl(imageUrl: string) {
+  const response = await fetch(imageUrl);
+
+  if (!response.ok) {
+    throw new Error(`Failed to download image: ${response.status}`);
+  }
+
+  const imageBuffer = await response.arrayBuffer();
+  return Buffer.from(imageBuffer);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null
+}
+
+function parseFalWebhookBody(body: unknown): ParsedFalWebhookBody {
+  if (!isRecord(body)) {
+    throw new Error("Invalid FAL webhook payload: body must be an object")
+  }
+
+  const requestId = body.request_id
+  const gatewayRequestId = body.gateway_request_id
+  const status = body.status
+  const payload = body.payload
+  const error = body.error
+  const payloadError = body.payload_error
+
+  if (typeof requestId !== "string" || requestId.length === 0) {
+    throw new Error("Invalid FAL webhook payload: request_id is required")
+  }
+
+  if (gatewayRequestId !== undefined && typeof gatewayRequestId !== "string") {
+    throw new Error("Invalid FAL webhook payload: gateway_request_id must be a string")
+  }
+
+  if (status !== "OK" && status !== "ERROR") {
+    throw new Error("Invalid FAL webhook payload: status must be OK or ERROR")
+  }
+
+  if (payload !== null && payload !== undefined && !isRecord(payload)) {
+    throw new Error("Invalid FAL webhook payload: payload must be an object or null")
+  }
+
+  if (error !== undefined && typeof error !== "string") {
+    throw new Error("Invalid FAL webhook payload: error must be a string")
+  }
+
+  if (payloadError !== undefined && typeof payloadError !== "string") {
+    throw new Error("Invalid FAL webhook payload: payload_error must be a string")
+  }
+
+  return {
+    requestId,
+    gatewayRequestId: typeof gatewayRequestId === "string" ? gatewayRequestId : undefined,
+    status,
+    payload: isRecord(payload) ? payload : null,
+    error: typeof error === "string" ? error : undefined,
+    payloadError: typeof payloadError === "string" ? payloadError : undefined,
+  }
+}
+
+function getRestorationImageUrl(payload: Record<string, unknown> | null) {
+  if (Array.isArray(payload?.images) && isRecord(payload.images[0]) && typeof payload.images[0].url === "string") {
+    return payload.images[0].url;
+  }
+
+  if (isRecord(payload?.image) && typeof payload.image.url === "string") {
+    return payload.image.url;
+  }
+
+  return null;
+}
+
+function getVideoUrl(payload: Record<string, unknown> | null) {
+  if (isRecord(payload?.video) && typeof payload.video.url === "string") {
+    return payload.video.url
+  }
+
+  return null
+}
 
 export async function POST(request: NextRequest) {
   const generationId = request.nextUrl.searchParams.get("generationId");
+  const type = request.nextUrl.searchParams.get("type") || "video";
 
   if (!generationId) {
     console.error("Missing generationId in webhook call");
@@ -15,10 +109,107 @@ export async function POST(request: NextRequest) {
     const supabase = supabaseAdmin;
     const bodyText = await request.text();
     const body = JSON.parse(bodyText);
-    const { status, error, payload } = body;
+    const webhook = parseFalWebhookBody(body);
 
-    if (status === "OK") {
-      const videoUrl = payload.video.url;
+    if (type === "restoration") {
+      const { data: restoration, error: fetchError } = await supabase
+        .from("image_restorations")
+        .select("id, user_id, status, restored_image_url, fal_request_id")
+        .eq("id", generationId)
+        .single();
+
+      if (fetchError || !restoration) {
+        logError(new Error("Restoration not found"), {
+          generationId,
+          type,
+          requestId: webhook.requestId,
+        });
+        return NextResponse.json(
+          { error: "Restoration not found" },
+          { status: 404 }
+        );
+      }
+
+      if (!restoration.fal_request_id) {
+        return NextResponse.json(
+          { error: "Restoration request is missing fal_request_id" },
+          { status: 409 }
+        );
+      }
+
+      if (restoration.fal_request_id !== webhook.requestId) {
+        return NextResponse.json(
+          { error: "Webhook request_id does not match restoration fal_request_id" },
+          { status: 409 }
+        );
+      }
+
+      if (restoration.status === "completed" || !!restoration.restored_image_url) {
+        return NextResponse.json({ success: true, message: "Already completed" });
+      }
+
+      if (webhook.payloadError) {
+        return NextResponse.json(
+          { error: `FAL payload error: ${webhook.payloadError}` },
+          { status: 400 }
+        );
+      }
+
+      if (webhook.status === "OK") {
+        const restoredImageUrl = getRestorationImageUrl(webhook.payload);
+
+        if (!restoredImageUrl) {
+          return NextResponse.json(
+            { error: "Restoration payload did not contain an image URL" },
+            { status: 400 }
+          );
+        }
+
+        const imageBuffer = await downloadImageFromUrl(restoredImageUrl);
+        const pngBuffer = await normalizeToPng(imageBuffer);
+        const r2Key = await uploadImageToR2(
+          pngBuffer,
+          `restored-${restoration.id}.png`,
+          restoration.user_id,
+          "image/png"
+        );
+
+        await supabase
+          .from("image_restorations")
+          .update({
+            status: "completed",
+            restored_image_url: r2Key,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", restoration.id)
+          .eq("fal_request_id", webhook.requestId);
+      } else if (webhook.status === "ERROR") {
+        await supabase
+          .from("image_restorations")
+          .update({
+            status: "failed",
+            error_message: webhook.error || "Image restoration failed at FAL",
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", generationId)
+          .eq("fal_request_id", webhook.requestId);
+      }
+    } else if (webhook.status === "OK") {
+      if (webhook.payloadError) {
+        return NextResponse.json(
+          { error: `FAL payload error: ${webhook.payloadError}` },
+          { status: 400 }
+        );
+      }
+
+      const videoUrl = getVideoUrl(webhook.payload);
+
+      if (!videoUrl) {
+        return NextResponse.json(
+          { error: "Video payload did not contain a video URL" },
+          { status: 400 }
+        );
+      }
 
       const { data: generation, error: fetchError } = await supabase
         .from("video_generations")
@@ -29,6 +220,7 @@ export async function POST(request: NextRequest) {
       if (fetchError || !generation) {
         logError(new Error("Generation not found"), {
           generationId,
+          type,
         });
         return NextResponse.json(
           { error: "Generation not found" },
@@ -36,14 +228,11 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Check if generation is already completed to prevent duplicate uploads
       if (generation.status === "completed" || !!generation.video_url) {
         return NextResponse.json({ success: true, message: "Already completed" });
       }
 
       const videoBuffer = await downloadVideoFromUrl(videoUrl);
-
-      // Upload to R2 and get the key (not URL)
       const r2Key = await uploadVideoToR2(
         videoBuffer,
         `video-${generation.id}.mp4`,
@@ -54,16 +243,16 @@ export async function POST(request: NextRequest) {
         .from("video_generations")
         .update({
           status: "completed",
-          video_url: r2Key, // Now storing R2 key, served via /api/video-proxy
+          video_url: r2Key,
           updated_at: new Date().toISOString(),
         })
         .eq("id", generation.id);
-    } else if (status === "ERROR") {
+    } else if (webhook.status === "ERROR") {
       await supabase
         .from("video_generations")
         .update({
           status: "failed",
-          error_message: error || "Video generation failed at FAL",
+          error_message: webhook.error || "Video generation failed at FAL",
           updated_at: new Date().toISOString(),
         })
         .eq("id", generationId);

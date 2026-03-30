@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
 import { createClient } from "@/utils/supabase/server"
-import { watermarkBringBack, normalizeToPng } from "@/lib/watermark"
-import { uploadImageToR2 } from "@/lib/r2"
 
 // Configure Fal AI client
 fal.config({
@@ -51,6 +49,11 @@ function validateFile(file: File): { valid: boolean; error?: string } {
   }
 
   return { valid: true }
+}
+
+function getWebhookBaseUrl(request: NextRequest) {
+  const configuredBaseUrl = process.env.NEXT_PUBLIC_APP_URL?.trim()
+  return configuredBaseUrl || request.nextUrl.origin
 }
 
 export async function POST(request: NextRequest) {
@@ -134,20 +137,67 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    let output: any
+    const webhookBaseUrl = getWebhookBaseUrl(request)
+
+    const { data: restoration, error: insertError } = await supabase
+      .from("image_restorations")
+      .insert({
+        user_id: user.id,
+        status: "processing",
+      })
+      .select("id")
+      .single()
+
+    if (insertError || !restoration) {
+      return NextResponse.json({ error: "Failed to create restoration record" }, { status: 500 })
+    }
+
     try {
-      // Use Fal AI photo restoration model
-      const result = await fal.subscribe("fal-ai/nano-banana-2/edit", {
+      const queueResult = await fal.queue.submit("fal-ai/nano-banana-2/edit", {
         input: input,
-        logs: true,
-        onQueueUpdate: (update) => {
-          // Processing updates handled silently in production
-        },
+        webhookUrl: `${webhookBaseUrl}/api/fal/webhook?generationId=${restoration.id}&type=restoration`
       })
 
-      output = result.data
+      const requestId = queueResult.request_id
+
+      const { error: metadataError } = await supabase
+        .from("image_restorations")
+        .update({
+          fal_request_id: requestId,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", restoration.id)
+
+      if (metadataError) {
+        throw metadataError
+      }
+
+      const remainingCredits = Math.max(0, availableCredits - 1)
+
+      await supabase
+        .from("user_profiles")
+        .update({ credits: remainingCredits })
+        .eq("user_id", user.id)
+
+      return NextResponse.json({
+        success: true,
+        restorationId: restoration.id,
+        requestId,
+        status: "processing",
+        creditsRemaining: remainingCredits,
+        message: "Image restoration started."
+      })
 
     } catch (falError) {
+      await supabase
+        .from("image_restorations")
+        .update({
+          status: "failed",
+          error_message: falError instanceof Error ? falError.message : "Unknown error",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", restoration.id)
+
       if (falError instanceof Error) {
         if (falError.message.includes('authentication') || falError.message.includes('401')) {
           return NextResponse.json({ error: "Authentication failed with restoration service. Please check your API key." }, { status: 401 })
@@ -164,103 +214,7 @@ export async function POST(request: NextRequest) {
       }
       return NextResponse.json({ error: "Restoration service temporarily unavailable. Please try again." }, { status: 503 })
     }
-
-
-
-    // Validate output - According to Fal AI docs, output should have images array
-    if (!output || !output.images || !Array.isArray(output.images) || output.images.length === 0) {
-      return NextResponse.json({ error: "No response from restoration service" }, { status: 500 })
-    }
-
-    // Extract the restored image URL from Fal AI response
-    const restoredImageUrl = output.images[0].url
-
-    // Validate that the restored image URL is a valid URI
-    if (!restoredImageUrl || typeof restoredImageUrl !== "string") {
-      return NextResponse.json({ error: "Invalid response from restoration service" }, { status: 500 })
-    }
-
-    // Check if it's a valid URI (should start with http:// or https://)
-    if (!restoredImageUrl.startsWith('http://') && !restoredImageUrl.startsWith('https://')) {
-      return NextResponse.json({ error: "Invalid URI format from restoration service" }, { status: 500 })
-    }
-
-    // Download the restored image and save it to R2 storage
-    let finalImageUrl: string
-
-    try {
-      // Download the image from Fal AI
-      const imageResponse = await fetch(restoredImageUrl)
-      if (!imageResponse.ok) {
-        throw new Error(`Failed to download image: ${imageResponse.status}`)
-      }
-
-      const imageBuffer = await imageResponse.arrayBuffer()
-      const rawBuffer = Buffer.from(imageBuffer)
-      const pngBuffer = await normalizeToPng(rawBuffer)
-
-      // Generate a clean filename
-      const randomId = Math.random().toString(36).substring(2, 15)
-      const fileExtension = "png"
-      const cleanFileName = `restored_${randomId}.${fileExtension}`
-
-      // Upload directly to R2
-      // This returns the R2 key, not the full URL
-      const r2Key = await uploadImageToR2(pngBuffer, cleanFileName, user.id, 'image/png')
-      
-      // We'll store the R2 key in the database
-      finalImageUrl = r2Key
-
-    } catch (storageError) {
-      console.error("Storage upload failed, falling back to original URL:", storageError)
-      // Fallback: use the original Fal AI URL if storage fails
-      // Note: Fal AI URLs are temporary, so this is just a fallback
-      finalImageUrl = restoredImageUrl
-    }
-
-    // Save restoration record to database (matching your actual schema)
-    const { data: inserted, error: insertError } = await supabase
-      .from("image_restorations")
-      .insert({
-        user_id: user.id,
-        restored_image_url: finalImageUrl,
-        status: "completed",
-      })
-      .select('id')
-      .single()
-
-    if (insertError) {
-      return NextResponse.json({ error: "Failed to save restoration record" }, { status: 500 })
-    }
-
-    // Update user credits in user_profiles table
-    let remainingCredits = userProfile.credits ?? 0
-    if (remainingCredits > 0) {
-      remainingCredits = remainingCredits - 1
-    }
-
-    const { error: updateError } = await supabase
-      .from("user_profiles")
-      .update({ credits: remainingCredits })
-      .eq("user_id", user.id)
-
-    if (updateError) {
-      // Credits update failed but continue with response
-    }
-
-    // Return the final image URL (from Supabase storage)
-    return NextResponse.json({
-      success: true,
-      restoredImageUrl: finalImageUrl,
-      downloadUrl: finalImageUrl,
-      restorationId: inserted?.id,
-      originalFileName: file.name,
-      processedAt: new Date().toISOString(),
-      creditsRemaining: remainingCredits,
-    })
   } catch (error) {
-
-    // Handle specific Fal AI errors
     if (error instanceof Error) {
       if (error.message.includes("authentication")) {
         return NextResponse.json({ error: "Authentication failed with restoration service" }, { status: 401 })

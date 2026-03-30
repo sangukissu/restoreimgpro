@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { Download } from "lucide-react"
+import { createClient as createSupabaseClient } from "@/utils/supabase/client"
 
 interface MyMediaClientProps {
   user: {
@@ -31,70 +32,151 @@ interface MyMediaClientProps {
 
 export default function MyMediaClient({ user, initialCredits, videos, images = [] }: MyMediaClientProps) {
   const [credits, setCredits] = useState(initialCredits)
+  const [mediaVideos, setMediaVideos] = useState(videos)
+  const [mediaImages, setMediaImages] = useState(images)
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [isDeletingAllMedia, setIsDeletingAllMedia] = useState(false)
   const { toast } = useToast()
 
-  // Poll for status updates
   useEffect(() => {
-    const pendingVideos = videos.filter(v => v.status === 'generating' || v.status === 'uploading')
-
-    if (pendingVideos.length === 0) return
-
-    const intervalId = setInterval(async () => {
-      let hasUpdates = false
-
-      for (const video of pendingVideos) {
-        try {
-          // Determine which endpoint to call based on video type
-          const endpoint = (video as any).type === 'nostalgic-hug'
-            ? `/api/nostalgic-hug/status?id=${video.id}`
-            : `/api/fal/animate/status?id=${video.id}`
-
-          const response = await fetch(endpoint)
-          const data = await response.json()
-
-          if (data.status === 'completed' || data.status === 'failed') {
-            hasUpdates = true
-          }
-        } catch (error) {
-          console.error('Error checking status:', error)
-        }
-      }
-
-      if (hasUpdates) {
-        window.location.reload()
-      }
-    }, 5000) // Poll every 5 seconds
-
-    return () => clearInterval(intervalId)
+    setMediaVideos(videos)
   }, [videos])
 
-
-
-  // Poll for image status updates
   useEffect(() => {
-    const pendingImages = images.filter(img => img.status !== 'completed' && img.status !== 'failed')
-
-    if (pendingImages.length === 0) return
-
-    const intervalId = setInterval(() => {
-      // Since we don't have a specific status endpoint for images yet, we'll just reload 
-      // if there are pending images, assuming the user might be waiting.
-      // However, to avoid constant reloads, we might just want to rely on manual refresh 
-      // or implement a proper check if endpoints existed.
-      // For now, let's stick to the video polling logic which reloads on updates.
-      // If we want to support image polling, we'd need endpoints.
-      // Given "without touching logic", I won't add complex polling for images if it doesn't exist.
-      // But I should probably check if any images are processing.
-
-      // Actually, the user didn't ask for polling for images, just to show them.
-      // I'll leave this alone.
-    }, 5000)
-
-    return () => clearInterval(intervalId)
+    setMediaImages(images)
   }, [images])
+
+  useEffect(() => {
+    const supabase = createSupabaseClient()
+
+    const mergeVideo = (video: {
+      id: string
+      video_url: string | null
+      preset_name: string
+      created_at: string
+      status?: string
+      type?: string
+    }) => {
+      setMediaVideos((current) => {
+        const next = current.filter((item) => !(item.id === video.id && item.type === video.type))
+        return [video, ...next].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      })
+    }
+
+    const mergeImage = (image: {
+      id: string
+      url: string | null
+      created_at: string
+      status: string
+      type: string
+      title: string
+    }) => {
+      setMediaImages((current) => {
+        const next = current.filter((item) => !(item.id === image.id && item.type === image.type))
+        return [image, ...next].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      })
+    }
+
+    const channel = supabase
+      .channel(`my-media-${user.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'video_generations',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const record = payload.new as {
+            id: string
+            video_url: string | null
+            preset_name: string
+            created_at: string
+            status?: string
+          }
+
+          if (!record?.id) {
+            return
+          }
+
+          mergeVideo({
+            id: record.id,
+            video_url: record.video_url,
+            preset_name: record.preset_name,
+            created_at: record.created_at,
+            status: record.status,
+            type: 'animation',
+          })
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'nostalgic_hug_generations',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const record = payload.new as {
+            id: string
+            video_url: string | null
+            created_at: string
+            status?: string
+          }
+
+          if (!record?.id) {
+            return
+          }
+
+          mergeVideo({
+            id: record.id,
+            video_url: record.video_url,
+            preset_name: 'Nostalgic Hug',
+            created_at: record.created_at,
+            status: record.status,
+            type: 'nostalgic-hug',
+          })
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'image_restorations',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const record = payload.new as {
+            id: string
+            restored_image_url: string | null
+            created_at: string
+            status: string
+          }
+
+          if (!record?.id) {
+            return
+          }
+
+          mergeImage({
+            id: record.id,
+            url: record.restored_image_url,
+            created_at: record.created_at,
+            status: record.status || 'processing',
+            type: 'restoration',
+            title: 'Restored Photo',
+          })
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [user.id])
 
 
   const handleDeleteAllMedia = async () => {
@@ -194,7 +276,7 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
       <main className="relative z-10 container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">My Media</h1>
-          {(videos && videos.length > 0 || images && images.length > 0) && (
+          {(mediaVideos && mediaVideos.length > 0 || mediaImages && mediaImages.length > 0) && (
             <button
               onClick={() => setShowDeleteConfirmation(true)}
               className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
@@ -207,9 +289,9 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
 
         <div className="mb-12">
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Videos</h2>
-          {videos && videos.length > 0 ? (
+          {mediaVideos && mediaVideos.length > 0 ? (
             <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
-              {videos.map((video) => (
+              {mediaVideos.map((video) => (
                 <div key={video.id} className="break-inside-avoid mb-6 border rounded-lg overflow-hidden bg-white shadow-sm flex flex-col">
                   {video.video_url ? (
                     <>
@@ -251,9 +333,9 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
 
         <div>
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Photos</h2>
-          {images && images.length > 0 ? (
+          {mediaImages && mediaImages.length > 0 ? (
             <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
-              {images.map((image) => (
+              {mediaImages.map((image) => (
                 <div key={image.id} className="break-inside-avoid mb-6 border rounded-lg overflow-hidden bg-white shadow-sm group relative flex flex-col">
                   {image.url ? (
                     <div className="relative">

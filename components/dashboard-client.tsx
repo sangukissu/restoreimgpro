@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useFeedback } from "@/hooks/use-feedback"
 import { OrbitSepiaDust } from "@/components/ui/orbit-sepia-dust"
 import { DemoVideoModal } from "./demo-video-modal"
+import { createClient as createSupabaseClient } from "@/utils/supabase/client"
 
 type AppState = "upload" | "loading" | "comparison" | "error"
 
@@ -36,6 +37,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [restorationData, setRestorationData] = useState<RestorationData | null>(null)
+  const [pendingRestorationId, setPendingRestorationId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [userCredits, setUserCredits] = useState(initialCredits)
   const { toast } = useToast()
@@ -64,6 +66,72 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       isRestoringRef.current = false
     }
   }, [])
+
+  useEffect(() => {
+    if (!pendingRestorationId || !selectedFile || !selectedImageUrl || !selectedFeature) {
+      return
+    }
+
+    const supabase = createSupabaseClient()
+    const channel = supabase
+      .channel(`image-restoration-${pendingRestorationId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "image_restorations",
+          filter: `id=eq.${pendingRestorationId}`,
+        },
+        async (payload) => {
+          const restoration = payload.new as {
+            status: string
+            restored_image_url?: string | null
+            error_message?: string | null
+          }
+
+          if (restoration.status === "completed" && restoration.restored_image_url) {
+            let displayUrl = restoration.restored_image_url
+            if (displayUrl.startsWith("images/")) {
+              displayUrl = `/api/image-proxy?key=${encodeURIComponent(displayUrl)}`
+            }
+
+            const newData: RestorationData = {
+              originalFile: selectedFile,
+              originalUrl: selectedImageUrl,
+              restoredUrl: displayUrl,
+              initialRestoredUrl: displayUrl,
+              featureType: selectedFeature,
+            }
+
+            setRestorationData(newData)
+            setPendingRestorationId(null)
+            setAppState("comparison")
+
+            try {
+              const signature = `${selectedFile.name}:${selectedFile.size}:${selectedFile.lastModified}`
+              sessionStorage.setItem(`restore_signature:${signature}`, "completed")
+            } catch {}
+
+            await trackRestoration()
+            toast.success(`Image Restored Successfully! ${userCredits} credits remaining.`)
+            return
+          }
+
+          if (restoration.status === "failed") {
+            setPendingRestorationId(null)
+            setError(restoration.error_message || "Failed to restore image")
+            setAppState("error")
+            toast.error(restoration.error_message || "Failed to restore image")
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [pendingRestorationId, selectedFile, selectedImageUrl, selectedFeature, toast, trackRestoration, userCredits])
 
   const handleImageSelect = (file: File) => {
     setSelectedFile(file)
@@ -104,44 +172,14 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     let finalCredits = userCredits
     
     try {
-      // Make API call to restore image
       const response: RestoreImageResponse = await restoreImage(selectedFile)
       
-      if (response.success && response.restoredImageUrl) {
-        // Deduct credit after successful restoration
-        const newCredits = userCredits - 1
+      if (response.success && response.restorationId) {
+        const newCredits = response.creditsRemaining ?? Math.max(0, userCredits - 1)
         finalCredits = newCredits
         setUserCredits(newCredits)
-        
-        // If the URL is an R2 key (starts with "images/"), convert it to a proxy URL
-        let displayUrl = response.restoredImageUrl;
-        if (displayUrl.startsWith("images/")) {
-            displayUrl = `/api/image-proxy?key=${encodeURIComponent(displayUrl)}`;
-        }
-
-        const newData: RestorationData = {
-          originalFile: selectedFile,
-          originalUrl: selectedImageUrl!,
-          restoredUrl: displayUrl,
-          initialRestoredUrl: displayUrl,
-          featureType: selectedFeature!,
-        }
-        setRestorationData(newData)
-        setAppState("comparison")
-
-        // Mark this file signature as restored in this session to prevent duplicates
-        try {
-          const signature = `${selectedFile.name}:${selectedFile.size}:${selectedFile.lastModified}`
-          if (typeof window !== 'undefined') {
-            sessionStorage.setItem(`restore_signature:${signature}`, 'completed')
-          }
-        } catch { /* ignore storage access errors */ }
-        
-        // Track restoration completion for feedback system
-        await trackRestoration()
-        
-        // Show success toast
-        toast.success(`Image Restored Successfully! 1 credit deducted. ${newCredits} credits remaining.`)
+        setPendingRestorationId(response.restorationId)
+        toast.success(`Restoration started. 1 credit deducted. ${newCredits} credits remaining.`)
       } else {
         setError(response.error || "Failed to restore image")
         setAppState("error")
@@ -170,6 +208,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     setSelectedFile(null)
     setSelectedImageUrl(null)
     setRestorationData(null)
+    setPendingRestorationId(null)
     setError(null)
   }
   

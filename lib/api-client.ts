@@ -1,7 +1,26 @@
 export interface RestoreImageResponse {
   success: boolean
   restoredImageUrl?: string
+  restorationId?: string
+  status?: string
+  creditsRemaining?: number
   error?: string
+}
+
+function normalizeRestoreError(message?: string) {
+  if (!message) {
+    return "Restoration failed. Please try again."
+  }
+
+  if (
+    message.includes("Unexpected token") ||
+    message.includes("<!DOCTYPE") ||
+    message.includes("not valid JSON")
+  ) {
+    return "Restoration failed. Please try again."
+  }
+
+  return message
 }
 
 export async function restoreImage(imageFile: File): Promise<RestoreImageResponse> {
@@ -15,10 +34,30 @@ export async function restoreImage(imageFile: File): Promise<RestoreImageRespons
     })
 
     if (!response.ok) {
-      const errorData = await response.json()
+      let errorMessage = "Failed to restore image"
+
+      const contentType = response.headers.get("content-type") || ""
+      if (contentType.includes("application/json")) {
+        const errorData = await response.json()
+        errorMessage = errorData.error || errorMessage
+      } else {
+        const errorText = await response.text()
+        if (errorText) {
+          errorMessage = errorText
+        }
+      }
+
       return {
         success: false,
-        error: errorData.error || "Failed to restore image",
+        error: normalizeRestoreError(errorMessage),
+      }
+    }
+
+    const contentType = response.headers.get("content-type") || ""
+    if (!contentType.includes("application/json")) {
+      return {
+        success: false,
+        error: "Restoration failed. Please try again.",
       }
     }
 
@@ -26,11 +65,14 @@ export async function restoreImage(imageFile: File): Promise<RestoreImageRespons
     return {
       success: true,
       restoredImageUrl: data.restoredImageUrl,
+      restorationId: data.restorationId,
+      status: data.status,
+      creditsRemaining: data.creditsRemaining,
     }
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error occurred",
+      error: normalizeRestoreError(error instanceof Error ? error.message : "Unknown error occurred"),
     }
   }
 }

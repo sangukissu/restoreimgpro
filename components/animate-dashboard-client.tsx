@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import CustomVideoPlayer from './custom-video-player'
 import { DemoVideoModal } from "./demo-video-modal"
+import { createClient as createSupabaseClient } from "@/utils/supabase/client"
 
 type AppState = "upload" | "processing" | "results"
 
@@ -141,6 +142,66 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
     }
   }, [])
 
+  useEffect(() => {
+    if (!currentGeneration || currentGeneration.id.startsWith('temp-')) {
+      return
+    }
+
+    if (currentGeneration.status !== 'uploading' && currentGeneration.status !== 'generating') {
+      return
+    }
+
+    const supabase = createSupabaseClient()
+    const channel = supabase
+      .channel(`video-generation-${currentGeneration.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'video_generations',
+          filter: `id=eq.${currentGeneration.id}`,
+        },
+        (payload) => {
+          const updatedGeneration = payload.new as {
+            status: VideoGeneration['status']
+            video_url?: string | null
+            error_message?: string | null
+          }
+
+          const resolvedVideoUrl = updatedGeneration.video_url
+            ? updatedGeneration.video_url.startsWith('videos/')
+              ? `/api/video-proxy?key=${encodeURIComponent(updatedGeneration.video_url)}`
+              : updatedGeneration.video_url
+            : undefined
+
+          setCurrentGeneration((previous) => previous
+            ? {
+                ...previous,
+                status: updatedGeneration.status,
+                videoUrl: resolvedVideoUrl || previous.videoUrl,
+              }
+            : previous
+          )
+
+          if (updatedGeneration.status === 'completed') {
+            setAppState('results')
+            toast.success('Video is ready')
+          }
+
+          if (updatedGeneration.status === 'failed') {
+            setError(updatedGeneration.error_message || 'Video generation failed')
+            toast.error(updatedGeneration.error_message || 'Video generation failed')
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [currentGeneration, toast])
+
 
 
   const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -245,11 +306,6 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
 
       setCurrentGeneration(newGeneration)
       setGenerations(prev => [newGeneration, ...prev])
-
-      // Redirect to my-media page after a short delay
-      setTimeout(() => {
-        window.location.href = '/dashboard/my-media'
-      }, 1000)
     } catch (error: any) {
       setError(error.message)
       toast.error(error.message)
