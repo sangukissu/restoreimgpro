@@ -10,7 +10,7 @@ export const WINBACK_SENDER = 'Harvansh <support@bringback.pro>'
 // Email 1: Inspiration email (4 hours after signup)
 export const winbackEmail1 = {
     subject: 'Quick tip for your first restoration',
-    getBody: (userName?: string) => `Hey${userName ? ` ${userName}` : ''},
+    getBody: `Hey,
 
 Saw you joined BringBack.pro—welcome!
 
@@ -28,7 +28,7 @@ Founder, BringBack.pro`,
 // Email 2: Discount email (7 days after signup)
 export const winbackEmail2 = {
     subject: 'Is it the price?',
-    getBody: (userName?: string) => `Hi${userName ? ` ${userName}` : ''},
+    getBody: `Hi,
 
 It's been a week since you joined BringBack.pro, but I noticed you haven't tried the Pro Plan yet.
 

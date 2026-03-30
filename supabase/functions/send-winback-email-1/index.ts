@@ -11,7 +11,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-const WINBACK_FROM = Deno.env.get('WINBACK_FROM') || 'onboarding@resend.dev'
+const WINBACK_FROM = Deno.env.get('WINBACK_FROM') || 'updates.bringback.pro'
 const WINBACK_REPLY_TO = Deno.env.get('WINBACK_REPLY_TO') || 'support@bringback.pro'
 const WINBACK_CRON_SECRET = Deno.env.get('WINBACK_CRON_SECRET')
 
@@ -19,7 +19,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 // Email template
 const EMAIL_SUBJECT = 'Quick tip for your first restoration'
-const getEmailBody = (userName?: string) => `Hey${userName ? ` ${userName}` : ''},
+const getEmailBody = `Hi,
 
 Saw you joined BringBack.pro—welcome!
 
@@ -117,11 +117,11 @@ serve(async (req: Request) => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        from: 'Harvansh <harvansh@updates.bringback.pro>',
-                        reply_to: 'support@bringback.pro',
+                        from: WINBACK_FROM,
+                        reply_to: WINBACK_REPLY_TO,
                         to: user.email,
                         subject: EMAIL_SUBJECT,
-                        text: getEmailBody(user.name),
+                        text: getEmailBody,
                     }),
                 })
 
