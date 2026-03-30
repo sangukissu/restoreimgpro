@@ -30,6 +30,30 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null
 }
 
+function normalizeWebhookMessage(value: unknown): string | undefined {
+  if (value === undefined || value === null) {
+    return undefined
+  }
+
+  if (typeof value === "string") {
+    return value
+  }
+
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value)
+  }
+
+  if (isRecord(value) && typeof value.message === "string") {
+    return value.message
+  }
+
+  try {
+    return JSON.stringify(value)
+  } catch {
+    return "Unknown webhook error"
+  }
+}
+
 function parseFalWebhookBody(body: unknown): ParsedFalWebhookBody {
   if (!isRecord(body)) {
     throw new Error("Invalid FAL webhook payload: body must be an object")
@@ -58,21 +82,13 @@ function parseFalWebhookBody(body: unknown): ParsedFalWebhookBody {
     throw new Error("Invalid FAL webhook payload: payload must be an object or null")
   }
 
-  if (error !== undefined && typeof error !== "string") {
-    throw new Error("Invalid FAL webhook payload: error must be a string")
-  }
-
-  if (payloadError !== undefined && typeof payloadError !== "string") {
-    throw new Error("Invalid FAL webhook payload: payload_error must be a string")
-  }
-
   return {
     requestId,
     gatewayRequestId: typeof gatewayRequestId === "string" ? gatewayRequestId : undefined,
     status,
     payload: isRecord(payload) ? payload : null,
-    error: typeof error === "string" ? error : undefined,
-    payloadError: typeof payloadError === "string" ? payloadError : undefined,
+    error: normalizeWebhookMessage(error),
+    payloadError: normalizeWebhookMessage(payloadError),
   }
 }
 
