@@ -5,6 +5,8 @@ import ColorizeHowItWorks from "@/components/pages/colorize-how-it-works"
 import ColorizeShowcaseSection from "@/components/pages/colorize-showcase-section"
 import ColorizeFeaturesSection from "@/components/pages/colorize-features-section"
 import ColorizeQualitySection from "@/components/pages/colorize-quality-section"
+import ColorizeProfessionalService from "@/components/pages/colorize-professional-service"
+import ColorizeHowItWorksDeepDive from "@/components/pages/colorize-how-it-works-deep-dive"
 import ColorizeFAQSection from "@/components/pages/colorize-faq-section"
 import { CTA } from '@/components/landing/CTA';
 import ColorizeHero from "@/components/pages/colorize-hero"
@@ -13,19 +15,19 @@ import ColorizeHero from "@/components/pages/colorize-hero"
 
 
 export const metadata: Metadata = {
-  title: "AI Photo Colorization - Colorize Black & White Photos | BringBack",
+  title: "Professional AI Photo Colorization Service | Colorize Photos Online",
   description:
-    "Transform black and white photos into vibrant color images with AI. Colorize old family photos, vintage portraits, and historical images in seconds.",
+    "How does AI photo colorization work? BringBack uses advanced AI to colorize black and white photos instantly. Professional quality photo colorization service at a fraction of the price.",
   keywords:
-    "colorize photo, black and white to color, AI photo colorization, vintage photo coloring, historical photo restoration",
+    "photo colorization service, colorize black and white photos, how does ai photo colorization work, professional photo colorization service price, colorized photos, vintage photo colorization services, how much does it cost to colorize a photo, bring back color",
   robots: "index, follow",
   alternates: {
     canonical: "/colorize-photos",
   },
   openGraph: {
-    title: "AI Photo Colorization - Colorize Black & White Photos | BringBack",
+    title: "Professional AI Photo Colorization Service | Colorize Photos Online",
     description:
-      "Transform black and white photos into vibrant color images with AI. Colorize old family photos, vintage portraits, and historical images in seconds.",
+      "BringBack uses advanced AI to colorize black and white photos instantly. Professional quality photo colorization service at a fraction of the price.",
     type: "website",
     url: "https://bringback.pro/colorize-photos",
   },
@@ -35,12 +37,12 @@ const colorizePageJsonLd = {
   "@context": "https://schema.org",
   "@type": ["WebPage", "WebApplication"],
   "@id": "https://bringback.pro/#colorize-webapp",
-  "name": "BringBack – AI Photo Colorization Web App",
-  "url": "https://bringback.pro/colorize",
+  "name": "BringBack – Professional AI Photo Colorization Service",
+  "url": "https://bringback.pro/colorize-photos",
   "applicationCategory": "PhotoEditingApplication",
   "operatingSystem": "Web",
   "browserRequirements": "Requires JavaScript and modern web browser.",
-  "description": "BringBack is an AI-powered web app that allows users to upload black and white photos and instantly receive realistic colorized images with intelligent color mapping.",
+  "description": "BringBack is a professional AI photo colorization service that allows users to upload black and white photos and instantly receive realistic colorized images. It answers the question of how does ai photo colorization work by showing real-time vintage photo colorization.",
   "provider": {
     "@type": "Organization",
     "@id": "https://bringback.pro/#organization",
@@ -237,7 +239,9 @@ export default function ColorizePage() {
       <ColorizeHowItWorks />
       <ColorizeShowcaseSection />
       <ColorizeFeaturesSection />
+      <ColorizeHowItWorksDeepDive />
       <ColorizeQualitySection />
+      <ColorizeProfessionalService />
       <ColorizeFAQSection />
       <CTA />
       <Footer />
