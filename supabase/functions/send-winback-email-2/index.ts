@@ -12,11 +12,57 @@ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const APP_URL = Deno.env.get('NEXT_PUBLIC_APP_URL') || 'https://bringback.pro'
-const WINBACK_FROM = Deno.env.get('WINBACK_FROM') || 'updates.bringback.pro'
+const WINBACK_FROM = Deno.env.get('WINBACK_FROM') || 'Harvansh <harvansh@updates.bringback.pro>'
 const WINBACK_REPLY_TO = Deno.env.get('WINBACK_REPLY_TO') || 'support@bringback.pro'
 const WINBACK_CRON_SECRET = Deno.env.get('WINBACK_CRON_SECRET')
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+async function sendEmailWithRetry(email: string, subject: string, text: string) {
+    let lastStatus = 500
+    let lastErrorText = 'Unknown email error'
+
+    for (let attempt = 0; attempt < 3; attempt++) {
+        const emailResponse = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${RESEND_API_KEY}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                from: WINBACK_FROM,
+                reply_to: WINBACK_REPLY_TO,
+                to: email,
+                subject,
+                text,
+            }),
+        })
+
+        if (emailResponse.ok) {
+            return { ok: true as const }
+        }
+
+        lastStatus = emailResponse.status
+        lastErrorText = await emailResponse.text()
+
+        if (emailResponse.status !== 429 || attempt === 2) {
+            break
+        }
+
+        const retryAfterHeader = emailResponse.headers.get('retry-after')
+        const retryAfterSeconds = retryAfterHeader ? Number.parseInt(retryAfterHeader, 10) : NaN
+        const waitMs = Number.isFinite(retryAfterSeconds) ? retryAfterSeconds * 1000 : 1250
+        await sleep(waitMs)
+    }
+
+    return {
+        ok: false as const,
+        status: lastStatus,
+        errorText: lastErrorText,
+    }
+}
 
 // Email template
 const EMAIL_SUBJECT = 'Is it the price?'
@@ -118,26 +164,11 @@ serve(async (req: Request) => {
         // Send emails
         for (const user of usersWithoutPayments) {
             try {
-                // Send email via Resend
-                const emailResponse = await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${RESEND_API_KEY}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        from: WINBACK_FROM,
-                        reply_to: WINBACK_REPLY_TO,
-                        to: user.email,
-                        subject: EMAIL_SUBJECT,
-                        text: getEmailBody,
-                    }),
-                })
+                const sendResult = await sendEmailWithRetry(user.email, EMAIL_SUBJECT, getEmailBody)
 
-                if (!emailResponse.ok) {
-                    const errorText = await emailResponse.text()
-                    console.error(`Failed to send email to ${user.email}:`, errorText)
-                    errors.push(`${user.email}: send failed (${emailResponse.status}) ${errorText}`)
+                if (!sendResult.ok) {
+                    console.error(`Failed to send email to ${user.email}:`, sendResult.errorText)
+                    errors.push(`${user.email}: send failed (${sendResult.status}) ${sendResult.errorText}`)
                     continue
                 }
 
@@ -156,6 +187,7 @@ serve(async (req: Request) => {
                 sentCount++
                 sentUserIds.push(user.user_id)
                 console.log(`Sent win-back email 2 to ${user.email}`)
+                await sleep(250)
             } catch (err) {
                 console.error(`Error processing user ${user.email}:`, err)
                 errors.push(`${user.email}: ${err}`)

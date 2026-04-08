@@ -66,11 +66,18 @@ export const featuresData: Record<string, FeaturePageData> = {
     slug: "/features/individual-photos-into-group",
     meta: {
       title: "Create Group Photo from Individual Photos AI | BringBack AI",
-      description: "Easily create a family portrait from individual photos online. Our AI accurately blends lighting and perspective to generate realistic group photos.",
+      description: "Create a group photo from individual photos online with AI. BringBack AI blends lighting, scale, and perspective to generate realistic family portraits and large group shots from separate pictures.",
       keywords: [
         "create group photo from individual photos ai",
+        "create a group photo from individual photos",
+        "create a group photo from individual photos online free",
+        "create group photo from individual photos",
+        "individual photo to group photo ai",
+        "individual photos to group photo",
+        "generate group photo ai",
         "family portrait from individual photos free",
         "ai family portrait from individual photos online free",
+        "20 people group photo",
         "combine photos into one",
         "ai image combiner"
       ],
@@ -81,7 +88,7 @@ export const featuresData: Record<string, FeaturePageData> = {
         primary: "Create a flawless group photo",
         secondary: "from individual portraits"
       },
-      subheadline: "Missing a beloved elder who passed before everyone could gather? Upload individual photos, and our AI will adjust scale, lighting, and perspective to generate a realistic family portrait that includes them once more.",
+      subheadline: "Need to create a group photo from individual photos because your family lives in different cities, countries, or time zones? Upload each portrait, and our AI will match lighting, scale, and perspective to turn separate pictures into one realistic family portrait or large group photo.",
       ctaText: "Create Group Photo Now",
       trustBadge: "Group Portraits",
       
@@ -131,32 +138,32 @@ export const featuresData: Record<string, FeaturePageData> = {
     ],
     howItWorks: {
       heading: "From Scattered Photos to a Unified Portrait",
-      subheading: "No need for complex software. Just upload, and let our AI handle the lighting, perspective, and blending for you.",
+      subheading: "If you want to turn individual photos into a group photo online, you do not need Photoshop or manual masking. Upload each person, and our AI handles the lighting, perspective, blending, and layout for you.",
       steps: [
         {
           step: 1,
           title: "Upload Your Snapshots",
-          description: "Upload individual photos of each person. Don't worry about different backgrounds or lighting—our AI handles that.",
+          description: "Upload individual photos of each person. Different backgrounds, camera quality, and lighting are fine because the AI is built to normalize them.",
         },
         {
           step: 2,
           title: "AI Unification",
-          description: "Our engine analyzes the scene geometry and lighting to blend everyone into a single, cohesive environment naturally.",
+          description: "Our engine analyzes scene geometry, eye level, and light direction to create a realistic group photo from individual photos instead of a fake-looking cut-and-paste collage.",
         },
         {
           step: 3,
           title: "Download & Print",
-          description: "Receive your high-resolution family portrait, ready to be framed and cherished for generations.",
+          description: "Receive your high-resolution AI family portrait, ready to share online, print, frame, or use as a reunion memory.",
         },
       ]
     },
     benefits: {
       heading: "Bring Everyone Together, Finally",
-      subheading: "Creating a group photo shouldn't mean waiting years for a reunion. We make it possible today.",
+      subheading: "Creating a group photo should not require a studio shoot, travel planning, or waiting for the next reunion. We make it possible from individual photos today.",
       items: [
         {
           title: "Bridge the Distance Instantly",
-          description: "Families are spread across the globe. You no longer have to wait years for everyone to be in the same city to update the family portrait. Combine photos from different continents into one shared moment.",
+          description: "Families are spread across the globe. You no longer have to wait years for everyone to be in the same city to update the family portrait. Combine separate photos from different continents into one shared moment.",
           icon: "Globe",
         },
         {
@@ -165,8 +172,13 @@ export const featuresData: Record<string, FeaturePageData> = {
           icon: "Sun",
         },
         {
+          title: "Works for Small and Large Groups",
+          description: "Whether you need a simple 3-person portrait or a 20 people group photo, the layout engine can arrange faces, spacing, and proportions so the final image still feels natural.",
+          icon: "Users",
+        },
+        {
           title: "Save Time & Money",
-          description: "Coordinating outfits, booking a studio, and getting everyone together costs hundreds of dollars and hours of time. Do it online in minutes for a fraction of the cost.",
+          description: "Coordinating outfits, booking a studio, and getting everyone together costs hundreds of dollars and hours of time. Create the group portrait online in minutes for a fraction of the cost.",
           icon: "Wallet",
         },
       ]
@@ -181,12 +193,24 @@ export const featuresData: Record<string, FeaturePageData> = {
         answer: "We offer free basic upscaling, but generating a complex composite portrait requires advanced processing. We offer highly affordable one-time credit packages starting at $4.99.",
       },
       {
+        question: "Are any of these free?",
+        answer: "We offer free basic tools like upscaling, but a realistic group photo from individual photos uses heavier AI compositing and is part of our paid credit workflow. That keeps the final result high quality and watermark-free.",
+      },
+      {
         question: "How many people can I combine into one photo?",
         answer: "Our system can handle multiple subjects. Whether it's a small family of 3 or a large group of 10+, the AI adjusts the layout to fit everyone naturally.",
       },
       {
+        question: "Can you make a 20 people group photo from separate pictures?",
+        answer: "Yes, large group photos are possible when each face is clearly visible in the source image. For very large groups like 20 people, we recommend using well-lit portraits so the AI can place everyone naturally and preserve facial detail.",
+      },
+      {
         question: "What resolution do the individual photos need to be?",
         answer: "For the best results, use photos where faces are clear and visible. However, our built-in upscaler can enhance lower-quality images before combining them.",
+      },
+      {
+        question: "Can I create a group photo from individual photos online without Photoshop?",
+        answer: "Yes. This page is built exactly for people who want an individual photo to group photo AI workflow without learning Photoshop. Upload the separate portraits and the AI handles blending, relighting, layout, and final export.",
       },
       {
         question: "Can I add a pet to the family portrait?",
@@ -338,45 +362,50 @@ export const featuresData: Record<string, FeaturePageData> = {
   "black-and-white-composite": {
     slug: "/features/black-and-white-composite",
     meta: {
-      title: "Black and White Composite Family Portrait AI | BringBack AI",
-      description: "Create timeless black and white composite family portraits. Merge color and vintage photos into a cohesive, classic style.",
+      title: "Black and White Family Portrait from Separate Photos | BringBack AI",
+      description: "Turn separate photos into a timeless black and white family portrait. Merge old and new pictures, match tones, repair damage, and create vintage wall art.",
       keywords: [
+        "black and white family portrait from separate photos",
+        "create black and white family portrait online",
         "black and white composite family portrait",
-        "vintage photo colorization services",
+        "merge old and new family photos",
+        "combine black and white and color photos",
+        "vintage family portrait from individual photos",
+        "memorial black and white family portrait",
         "merge black and white photos",
         "classic family portrait composite"
       ],
     },
     hero: {
-      h1: "Create timeless black and white composite family portraits",
+      h1: "Create a black and white family portrait from separate photos",
       heading: {
-        primary: "Create timeless black and white",
-        secondary: "composite family portraits"
+        primary: "Create a black and white",
+        secondary: "family portrait from separate photos"
       },
-      subheadline: "Merge vintage and modern photos into a cohesive, classic masterpiece. Our AI balances tones and contrast for a unified look.",
+      subheadline: "Merge old black and white photos with newer color pictures to create one timeless family portrait. Our AI restores damage, matches tones, and builds a realistic vintage composite ready for framing.",
       ctaText: "Create Vintage Composite",
       trustBadge: "Timeless Portraits",
      
     },
     qualityAnalysis: {
-      heading: "Timeless Monochrome Masterpieces",
-      subheading: "Black and white photography forgives time. We unify different eras by matching film grain, contrast, and tone for a seamless classic look.",
+      heading: "A Vintage Composite That Looks Like One Original Portrait",
+      subheading: "If you want a black and white family portrait from separate photos, monochrome is often the best choice. It removes color mismatches, softens era differences, and makes old scans and modern portraits feel naturally connected.",
       features: [
         {
-          title: "Intelligent Desaturation",
-          description: "We don't just remove color; we analyze the luminance values to create deep, rich black and white tones that retain detail."
+          title: "Black and White Tone Matching",
+          description: "We analyze every source photo and rebuild the luminance so each face shares the same black and white tonal range instead of looking like separate edits."
         },
         {
-          title: "Grain Matching",
-          description: "If one photo is grainy film and another is digital, we harmonize the texture so they look like they were shot on the same roll."
+          title: "Old Photo Repair Before Merging",
+          description: "Scratches, dust, fading, and small tears in vintage family photos are cleaned up before compositing, which gives the final portrait a much more polished look."
         },
         {
-          title: "Contrast Balancing",
-          description: "We adjust the dynamic range of each subject to ensure consistent exposure levels across the entire composite."
+          title: "Film Grain and Texture Blending",
+          description: "If one image comes from film and another comes from a phone camera, we harmonize grain and texture so the final black and white portrait feels cohesive."
         },
         {
-          title: "Era Unification",
-          description: "Perfect for blending 1920s ancestors with 2020s descendants without the jarring visual clash of different technologies."
+          title: "Print-Ready Contrast Control",
+          description: "We balance highlights, shadows, and midtones for a black and white family portrait that stays elegant on screen and holds detail when printed large."
         }
       ],
       visuals: {
@@ -393,80 +422,101 @@ export const featuresData: Record<string, FeaturePageData> = {
       {
         beforeLabel: "Mixed Sources",
         afterLabel: "Classic Composite",
-        caption: "Combining a color photo from 2020 with a black and white photo from 1950 into a seamless vintage style.",
+        caption: "Combining a 1950s black and white portrait with a recent color photo into one seamless vintage family portrait.",
       },
       {
         beforeLabel: "Separate Portraits",
         afterLabel: "Unified B&W",
-        caption: "Merging individual portraits into a sophisticated black and white family tableau.",
+        caption: "Turning separate photos into a black and white family portrait that looks consistent enough for framing or memorial display.",
       },
     ],
     howItWorks: {
-      heading: "Create a Timeless Classic in Seconds",
-      subheading: "Combine modern and vintage photos into a unified black and white masterpiece with perfect tonal balance.",
+      heading: "From Separate Photos to One Vintage Family Portrait",
+      subheading: "You do not need Photoshop to create a black and white composite family portrait. Upload the photos, and our AI handles restoration, monochrome conversion, tone matching, and final layout.",
       steps: [
         {
           step: 1,
-          title: "Mix Your Eras",
-          description: "Upload any combination of color digital files and scans of old black-and-white prints.",
+          title: "Upload Old and New Photos",
+          description: "Add scans of vintage prints, recent phone photos, or studio portraits. Mixed sources are fine, even when one image is black and white and another is full color.",
         },
         {
           step: 2,
-          title: "Intelligent Unification",
-          description: "Our AI balances the contrast, exposure, and grain structure to make every subject look like they belong in the same era.",
+          title: "Restore and Unify",
+          description: "Our AI repairs visible damage, converts or preserves monochrome tones, and blends lighting, grain, and contrast so the family portrait feels like a single original shot.",
         },
         {
           step: 3,
-          title: "Print & Frame",
-          description: "Download a high-resolution file optimized for fine art printing on canvas or photo paper.",
+          title: "Download and Frame",
+          description: "Receive a high-resolution black and white family portrait that is ready for wall art, memorial prints, gifts, or archival keepsakes.",
         },
       ]
     },
     benefits: {
-      heading: "The Elegance of Black & White",
-      subheading: "Unify generations and styles with a classic, high-contrast look that stands the test of time.",
+      heading: "Why Black and White Works So Well for Composite Portraits",
+      subheading: "A monochrome family portrait solves most of the blending problems that make separate photos look fake, while also giving the final image a more timeless emotional feel.",
       items: [
         {
           title: "Timeless Aesthetic",
-          description: "Black and white photography strips away distractions and unifies different eras, creating a classic look that never goes out of fashion.",
+          description: "A black and white family portrait feels elegant, classic, and less dated than heavily color-graded composites. It fits both modern homes and heritage displays.",
           icon: "Camera",
         },
         {
-          title: "Seamless Integration",
-          description: "By removing color disparities, our AI creates a more seamless and believable composite from varied sources, making them look like a single shot.",
+          title: "Better Blending Across Different Photos",
+          description: "Removing color differences makes it much easier to merge old scans, faded prints, and modern digital portraits into one believable family portrait from separate photos.",
           icon: "Layers",
         },
         {
-          title: "Honoring History",
-          description: "Perfect for merging ancestors from the 1900s with current generations without the jarring clash of color technologies. History meets the present.",
+          title: "Ideal for Memorial and Tribute Portraits",
+          description: "Black and white is a natural fit when you want to honor parents, grandparents, or ancestors and bring generations together in a respectful, emotionally strong composition.",
           icon: "History",
+        },
+        {
+          title: "Made for Framing",
+          description: "The final result is designed to work beautifully as printed wall art, remembrance gifts, anniversary presents, or a centerpiece family portrait in your home.",
+          icon: "Printer",
         },
       ]
     },
     faq: [
       {
+        question: "Can I create a black and white family portrait from separate photos?",
+        answer: "Yes. This page is built specifically for turning separate photos into one black and white family portrait. Upload each person individually, and the AI blends them into a single realistic composition.",
+      },
+      {
         question: "Can I combine color and black & white photos?",
-        answer: "Yes! This is the perfect style for mixing sources. We convert everything to a matching black and white tone.",
+        answer: "Yes. We can merge modern color portraits with vintage black and white photos by converting everything into a consistent monochrome style and matching the tone curve across all subjects.",
       },
       {
-        question: "Does the AI fix scratches on old photos?",
-        answer: "Yes, our restoration engine automatically detects and repairs minor scratches, dust, and tears before creating the composite.",
+        question: "Can you merge old family photos with recent pictures?",
+        answer: "Yes. This is one of the strongest use cases for a vintage composite. Older family photos can be restored and then blended with newer portraits into a single black and white image.",
       },
       {
-        question: "Can I choose the level of contrast?",
-        answer: "Our AI defaults to a balanced, professional contrast, but you can request different tonal styles like high-contrast noir or soft vintage.",
+        question: "Does the AI fix scratches on old photos before merging them?",
+        answer: "Yes. Our restoration engine automatically repairs many common issues like dust, fading, scratches, and light tears before building the final black and white composite.",
       },
       {
-        question: "Will the resolution be high enough to print?",
-        answer: "Yes, we upscale all source images before compositing to ensure the final result is crisp and suitable for large prints.",
+        question: "Is black and white better than full color for composite portraits?",
+        answer: "Often, yes. Black and white removes color mismatch between cameras, lighting setups, and time periods, which usually makes separate photos look more naturally unified.",
+      },
+      {
+        question: "Can I choose the contrast or vintage look?",
+        answer: "Yes. The default style is balanced and classic, but black and white composites can be guided toward softer vintage tones, richer contrast, or a more dramatic fine-art look.",
+      },
+      {
+        question: "Will the resolution be high enough to print and frame?",
+        answer: "Yes. We upscale and optimize the final portrait so it is sharp enough for photo paper, canvas, and framed wall prints.",
+      },
+      {
+        question: "Is this good for memorial or tribute family portraits?",
+        answer: "Yes. A black and white composite is one of the best formats for memorial portraits because it respectfully brings together generations and reduces visual differences between old and new photos.",
       },
       {
         question: "How do you handle different film grain textures?",
-        answer: "We analyze the grain structure of the oldest photo and apply a matching grain overlay to the modern digital photos for a unified look.",
+        answer: "We study the grain and texture in the vintage source and adapt newer images to match, which helps the final portrait feel like it came from one original session.",
       },
       {
         question: "Is this safe?",
-        answer: "Your privacy is our priority. All uploaded and generated images are deleted permanently within 30 minutes.",
+        answer: "Yes. Your privacy is our priority. All uploaded and generated images are deleted permanently within 30 minutes.",
       },
     ]
   },

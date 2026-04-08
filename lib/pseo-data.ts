@@ -180,22 +180,3 @@ export const restorationKeywords = [
   { keyword: 'Old photo color restoration online', slug: 'old-photo-color-restoration-online' },
   { keyword: 'Nero AI Photo Restoration', slug: 'nero-ai-photo-restoration' },
 ];
-
-export const howToKeywords = [
-  { keyword: 'how to clean old photos with ai', slug: 'how-to-clean-old-photos-with-ai' },
-  { keyword: 'how do you clean a photograph', slug: 'how-do-you-clean-a-photograph' },
-  { keyword: 'how to remove scratches from old photos', slug: 'how-to-remove-scratches-from-old-photos' },
-  { keyword: 'remove scratches from pictures', slug: 'remove-scratches-from-pictures' },
-  { keyword: 'how to fix grainy photos', slug: 'how-to-fix-grainy-photos' },
-];
-
-export const digitizationKeywords = [
-  { keyword: 'how to scan old photos for the best resolution', slug: 'how-to-scan-old-photos-for-the-best-resolution' },
-  { keyword: 'best way to digitize photos', slug: 'best-way-to-digitize-photos' },
-  { keyword: 'how to scan old pictures', slug: 'how-to-scan-old-pictures' },
-  { keyword: 'where can i get a photo digitized', slug: 'where-can-i-get-a-photo-digitized' },
-  { keyword: 'how can i digitize old photos', slug: 'how-can-i-digitize-old-photos' },
-  { keyword: 'where can i get photos scanned', slug: 'where-can-i-get-photos-scanned' },
-  { keyword: 'convert pictures to digital', slug: 'convert-pictures-to-digital' },
-  { keyword: 'best way to scan photos', slug: 'best-way-to-scan-photos' },
-];

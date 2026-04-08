@@ -82,12 +82,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/nostalgic-hug-video`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
+
     {
       url: `${baseUrl}/old-photo-restoration`,
       lastModified: new Date(),
