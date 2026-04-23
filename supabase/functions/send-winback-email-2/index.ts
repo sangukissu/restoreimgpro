@@ -2,8 +2,6 @@
 // @ts-nocheck - Deno types not available in Node.js project
 
 // Supabase Edge Function: send-winback-email-2
-// Sends "Discount" email to users 7+ days after signup who still haven't purchased
-// Triggered by cron daily
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
@@ -64,7 +62,6 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
     }
 }
 
-// Email template
 const EMAIL_SUBJECT = 'Is it the price?'
 const getEmailBody = `Hi,
 
@@ -85,7 +82,6 @@ Harvansh Chaudhary`
 
 serve(async (req: Request) => {
     try {
-        // Only allow POST requests (from cron or manual invocation)
         if (req.method !== 'POST') {
             return new Response('Method not allowed', { status: 405 })
         }
@@ -96,25 +92,14 @@ serve(async (req: Request) => {
 
         console.log('Starting win-back email 2 job...')
 
-        // Query users who:
-        // 1. Signed up 7-14 days ago
-        // 2. Have received win-back email 1 (so we don't skip the sequence)
-        // 3. Have NOT received win-back email 2 yet
-        // 4. Have NO successful payment in the payments table
         const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-        const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
 
-        // Get users who:
-        // - Have received email 1 (winback_email_1_sent_at is NOT null)
-        // - Have NOT received email 2 (winback_email_2_sent_at IS null)
-        // - Signed up 7-14 days ago
         const { data: eligibleUsers, error: usersError } = await supabase
             .from('user_profiles')
             .select('user_id, email, name')
             .not('winback_email_1_sent_at', 'is', null)
             .is('winback_email_2_sent_at', null)
-            .lte('created_at', sevenDaysAgo)
-            .gte('created_at', fourteenDaysAgo)
+            .lte('winback_email_1_sent_at', sevenDaysAgo)
 
         if (usersError) {
             console.error('Error fetching users:', usersError)
@@ -128,7 +113,6 @@ serve(async (req: Request) => {
 
         console.log(`Found ${eligibleUsers.length} potentially eligible users`)
 
-        // Filter out users who have any successful payment
         const usersWithoutPayments: typeof eligibleUsers = []
 
         for (const user of eligibleUsers) {
@@ -149,7 +133,6 @@ serve(async (req: Request) => {
                 continue
             }
 
-            // Only include users with NO successful payments
             if (!payments || payments.length === 0) {
                 usersWithoutPayments.push({ ...user, email })
             }
@@ -161,7 +144,6 @@ serve(async (req: Request) => {
         const sentUserIds: string[] = []
         const errors: string[] = []
 
-        // Send emails
         for (const user of usersWithoutPayments) {
             try {
                 const sendResult = await sendEmailWithRetry(user.email, EMAIL_SUBJECT, getEmailBody)
@@ -172,7 +154,6 @@ serve(async (req: Request) => {
                     continue
                 }
 
-                // Mark email as sent
                 const { error: updateError } = await supabase
                     .from('user_profiles')
                     .update({ winback_email_2_sent_at: new Date().toISOString() })

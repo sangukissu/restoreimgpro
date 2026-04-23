@@ -42,22 +42,84 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
         }
     }
 
-    const checkCredits = (cost: number) => {
+    const checkCredits = (cost: number, stepName: string = "") => {
         if (credits < cost) {
-            toast.error(`Insufficient credits. This action requires ${cost} credits.`)
+            toast.error(`Insufficient credits. ${stepName} requires ${cost} credits to complete the flow.`)
             return false
         }
         return true
     }
 
+    const compressImage = async (file: File): Promise<File> => {
+        // Only compress if the file is larger than 4MB. 
+        // Small/low-quality files are left completely untouched!
+        if (file.size <= 4 * 1024 * 1024) {
+            return file
+        }
+
+        return new Promise((resolve, reject) => {
+            const img = new window.Image()
+            img.src = URL.createObjectURL(file)
+            img.onload = () => {
+                const canvas = document.createElement("canvas")
+                const ctx = canvas.getContext("2d")
+                if (!ctx) {
+                    resolve(file)
+                    return
+                }
+
+                // Increase max dimensions to preserve high quality for large files
+                // The AI model processes at 1K (1024x1024) anyway, so 2048 is more than enough
+                const MAX_WIDTH = 2048
+                const MAX_HEIGHT = 2048
+                let width = img.width
+                let height = img.height
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height = Math.round((height *= MAX_WIDTH / width))
+                        width = MAX_WIDTH
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width = Math.round((width *= MAX_HEIGHT / height))
+                        height = MAX_HEIGHT
+                    }
+                }
+
+                canvas.width = width
+                canvas.height = height
+                ctx.drawImage(img, 0, 0, width, height)
+
+                canvas.toBlob(
+                    (blob) => {
+                        if (blob) {
+                            const newFile = new File([blob], file.name, {
+                                type: "image/jpeg",
+                                lastModified: Date.now(),
+                            })
+                            resolve(newFile)
+                        } else {
+                            resolve(file)
+                        }
+                    },
+                    "image/jpeg",
+                    0.95 // High quality setting
+                )
+            }
+            img.onerror = () => resolve(file)
+        })
+    }
+
     const generateSofaImage = async () => {
         if (!personAFile) return
-        if (!checkCredits(20)) return
+        if (!checkCredits(19, "The full nostalgic hug process")) return
 
         setLoading(true)
         try {
+            const compressedFile = await compressImage(personAFile)
             const formData = new FormData()
-            formData.append("image", personAFile)
+            formData.append("image", compressedFile)
 
             const response = await fetch("/api/nostalgic-hug/sofa", {
                 method: "POST",
@@ -83,12 +145,13 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
 
     const generateHugImage = async () => {
         if (!personBFile || !sofaImageUrl) return
-        if (!checkCredits(20)) return
+        if (!checkCredits(17, "The remaining steps")) return
 
         setLoading(true)
         try {
+            const compressedFile = await compressImage(personBFile)
             const formData = new FormData()
-            formData.append("image", personBFile)
+            formData.append("image", compressedFile)
             formData.append("sofaImageUrl", sofaImageUrl)
 
             const response = await fetch("/api/nostalgic-hug/hug", {
@@ -115,7 +178,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
 
     const generateVideo = async () => {
         if (!sofaImageUrl || !hugImageUrl) return
-        if (!checkCredits(20)) return
+        if (!checkCredits(15, "The final video generation")) return
 
         setLoading(true)
         try {
@@ -238,7 +301,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                                                         accept="image/*"
                                                         onChange={(e) => handleFileChange(e, setPersonAFile)}
                                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                                        disabled={credits < 20 || loading}
+                                                        disabled={loading}
                                                     />
                                                     {!personAFile ? (
                                                         <div className="space-y-4">
@@ -268,15 +331,15 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
 
                                             <Button
                                                 onClick={generateSofaImage}
-                                                disabled={!personAFile || loading || credits < 20}
+                                                disabled={!personAFile || loading || credits < 19}
                                                 className="w-full max-w-xs bg-black hover:bg-gray-800 text-white h-10 text-md rounded-md"
                                             >
                                                 Generate Scene
                                                 <ArrowRight className="ml-2 h-5 w-5" />
                                             </Button>
-                                            {credits < 20 && (
+                                            {credits < 19 && (
                                                 <p className="text-xs text-red-500">
-                                                    You don't have enough credits to generate.
+                                                    You need 19 credits for the full Nostalgic Hug process.
                                                 </p>
                                             )}
                                         </div>
@@ -323,7 +386,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                                                             accept="image/*"
                                                             onChange={(e) => handleFileChange(e, setPersonBFile)}
                                                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                                            disabled={credits < 20 || loading}
+                                                            disabled={loading}
                                                         />
                                                         {!personBFile ? (
                                                             <div className="space-y-3">
@@ -349,12 +412,17 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
 
                                                 <Button
                                                     onClick={generateHugImage}
-                                                    disabled={!personBFile || loading || credits < 20}
+                                                    disabled={!personBFile || loading || credits < 17}
                                                     className="w-full bg-black hover:bg-gray-800 text-white h-10 rounded-md"
                                                 >
                                                     Create Hug
                                                     <ArrowRight className="ml-2 h-4 w-4" />
                                                 </Button>
+                                                {credits < 17 && (
+                                                    <p className="text-xs text-red-500">
+                                                        You need 17 credits to complete the remaining steps.
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     </>
@@ -396,22 +464,31 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                                         <div className="flex justify-center">
                                             <Button
                                                 onClick={generateVideo}
-                                                disabled={loading}
-                                                className="w-full max-w-md bg-black text-white h-14 text-md rounded-xl shadow-lg hover:shadow-xl transition-all"
+                                                disabled={loading || credits < 15}
+                                                className="w-full max-w-md bg-black text-white h-14 text-md rounded-xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center py-2"
                                             >
                                                 {loading ? (
-                                                    <>
+                                                    <div className="flex items-center">
                                                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                                                         Generating Video Magic...
-                                                    </>
+                                                    </div>
                                                 ) : (
-                                                    <>
-                                                        <Video className="mr-2 h-5 w-5" />
-                                                        Generate Video Memory (15 Credits)
-                                                    </>
+                                                    <div className="flex flex-col items-center">
+                                                        <div className="flex items-center">
+                                                            <Video className="mr-2 h-5 w-5" />
+                                                            Generate Video Memory
+                                                        </div>
+                                                        <span className="text-xs text-gray-300 mt-1">(15 Credits)</span>
+                                                    </div>
                                                 )}
                                             </Button>
                                         </div>
+                                    )}
+                                    
+                                    {(!videoUrl && credits < 15) && (
+                                        <p className="text-xs text-red-500 text-center mt-2">
+                                            You need 15 credits to generate the final video.
+                                        </p>
                                     )}
 
                                     {videoUrl && (
