@@ -14,14 +14,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
         }
 
-        // Check user credits - Video is 15 credits
+        // Check user credits - Full flow is 19 credits
         const { data: userProfile, error: profileError } = await supabase
             .from('user_profiles')
             .select('credits')
             .eq('user_id', user.id)
             .single()
 
-        if (profileError || !userProfile || (userProfile.credits ?? 0) < 15) {
+        if (profileError || !userProfile || (userProfile.credits ?? 0) < 19) {
             return NextResponse.json({
                 error: 'Insufficient credits',
                 code: 'INSUFFICIENT_CREDITS',
@@ -29,19 +29,34 @@ export async function POST(req: NextRequest) {
             }, { status: 402 })
         }
 
-        const { sofaImageUrl, hugImageUrl } = await req.json()
+        const formData = await req.formData()
+        const image1 = formData.get('image1') as File
+        const image2 = formData.get('image2') as File
 
-        if (!sofaImageUrl || !hugImageUrl) {
-            return NextResponse.json({ error: 'Missing image URLs' }, { status: 400 })
+        if (!image1 || !image2) {
+            return NextResponse.json({ error: 'Missing images' }, { status: 400 })
         }
 
-        // Create initial database record
+        // Upload both images to Fal storage
+        const uploadToFal = async (file: File) => {
+            const arrayBuf = await file.arrayBuffer()
+            const contentType = file.type || 'image/png'
+            const blob = new Blob([arrayBuf], { type: contentType })
+            return await fal.storage.upload(blob)
+        }
+
+        const [firstUrl, secondUrl] = await Promise.all([
+            uploadToFal(image1),
+            uploadToFal(image2)
+        ])
+
+        // Create initial database record (reusing existing columns to avoid migration)
         const { data: generation, error: insertError } = await supabase
             .from("nostalgic_hug_generations")
             .insert({
                 user_id: user.id,
-                sofa_image_url: sofaImageUrl,
-                hug_image_url: hugImageUrl,
+                sofa_image_url: firstUrl,
+                hug_image_url: secondUrl,
                 status: "uploading",
             })
             .select()
@@ -52,20 +67,13 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Failed to create generation record" }, { status: 500 })
         }
 
-        // Prepare input for Fal AI
-        const input = {
-            prompt: "Generate a photorealistic video beginning with the first frame (the first person alone on sofa, displaying gentle, natural movements like a subtle head turn or soft posture adjustment). The scene should then transition smoothly by introducing the second person from second frame moving into the frame from the side, approaching the first person who was already sitting on sofa in first frame. The first person should react authentically with very small subtle smile, turning and looking towards the second person with immediate recognition and warmth. The video culminates as the person from second image sits beside the first person and both move into the family relation hug position shown in the final second frame.",
-            image_url: sofaImageUrl,
-            duration: "5",
-            negative_prompt: "blur, distort, and low quality",
-            cfg_scale: 0.5,
-            tail_image_url: hugImageUrl
-        }
-
         try {
-            // Submit to Fal queue
-            const queueResult = await fal.queue.submit("fal-ai/kling-video/v2.5-turbo/pro/image-to-video", {
-                input: input,
+            // Submit to Fal workflow queue
+            const queueResult = await fal.queue.submit("workflows/KissuChaudhary/nostalgic-hug", {
+                input: {
+                    first_user_image_url: firstUrl,
+                    second_user_image_url: secondUrl
+                },
                 webhookUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/nostalgic-hug/webhook?generationId=${generation.id}`
             })
 
@@ -80,10 +88,10 @@ export async function POST(req: NextRequest) {
                 })
                 .eq("id", generation.id)
 
-            // Deduct credits immediately
+            // Deduct full flow credits immediately (19)
             await supabase
                 .from('user_profiles')
-                .update({ credits: (userProfile.credits ?? 0) - 15 })
+                .update({ credits: (userProfile.credits ?? 0) - 19 })
                 .eq('user_id', user.id)
 
             return NextResponse.json({
@@ -91,7 +99,7 @@ export async function POST(req: NextRequest) {
                 generationId: generation.id,
                 requestId: requestId,
                 status: "generating",
-                creditsRemaining: (userProfile.credits ?? 0) - 15,
+                creditsRemaining: (userProfile.credits ?? 0) - 19,
                 message: "Video generation started. Check My Media for progress."
             })
 

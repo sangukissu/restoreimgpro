@@ -18,7 +18,15 @@ export async function POST(request: NextRequest) {
         const { status, error, payload } = body;
 
         if (status === "OK") {
-            const videoUrl = payload.video.url;
+            // Depending on how the Fal workflow is configured, the video URL might be in different places.
+            // We check the standard payload.video.url, but fallback to other common workflow output patterns.
+            const videoUrl = payload?.video?.url || payload?.video_url || payload?.output?.video?.url || payload?.url;
+            
+            if (!videoUrl) {
+                console.error("Could not find video URL in Fal webhook payload:", JSON.stringify(payload));
+                return NextResponse.json({ error: "Invalid payload format" }, { status: 400 });
+            }
+
             // Fetch generation including current status and video_url for idempotency
             const { data: generation, error: fetchError } = await supabase
                 .from("nostalgic_hug_generations")
