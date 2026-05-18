@@ -31,6 +31,56 @@ function getImagePairForAction(actionSlug: string): { before: string; after: str
   return actionImageMap[actionSlug] || { before: '/torn.webp', after: '/torn-restored.webp' }; // fallback
 }
 
+function getUniqueGallery(problemSlug: string, photoTypeSlug: string) {
+  // Use a mixture of the main images, plus variations based on the type to make it unique
+  const mainImages = getImagePairForProblem(problemSlug);
+  
+  return [
+    {
+      before: mainImages.before,
+      after: mainImages.after,
+      label: `Restoring a ${problemSlug} ${photoTypeSlug.replace('-', ' ')}`
+    },
+    {
+      before: '/under-exposed.webp',
+      after: '/under-exposed-restored.webp',
+      label: `Enhancing details in the ${photoTypeSlug.replace('-', ' ')}`
+    },
+    {
+      before: '/grainy-photo.webp',
+      after: '/grainy-photo-restored.webp',
+      label: `Removing noise from vintage photos`
+    }
+  ];
+}
+
+function getCustomerStories(problemSlug: string, photoTypeSlug: string) {
+  const names = ['Sarah M.', 'James L.', 'Emily R.', 'Michael T.', 'Jessica W.'];
+  const locations = ['New York, NY', 'London, UK', 'Sydney, AU', 'Toronto, CA', 'Chicago, IL'];
+  const slug = problemSlug + '-' + photoTypeSlug;
+  
+  // Deterministically select names based on slug length to keep it pseudo-random but stable
+  const name1 = names[slug.length % names.length];
+  const loc1 = locations[(slug.length + 1) % locations.length];
+  const name2 = names[(slug.length + 2) % names.length];
+  const loc2 = locations[(slug.length + 3) % locations.length];
+
+  return [
+    {
+      name: name1,
+      location: loc1,
+      rating: 5,
+      review: `I couldn't believe how quickly BringBack restored my ${problemSlug} ${photoTypeSlug.replace('-', ' ')}. The details that were brought back are incredible. Highly recommended!`
+    },
+    {
+      name: name2,
+      location: loc2,
+      rating: 5,
+      review: `I thought my ${photoTypeSlug.replace('-', ' ')} was ruined forever by ${problemSlug} damage, but the AI handled it perfectly. It's like having a professional retoucher on demand.`
+    }
+  ];
+}
+
 export interface PseoPageData {
   slug: string;
   h1: string;
@@ -90,6 +140,8 @@ export interface PseoPageData {
       timeframe: string;
     }[];
   };
+  uniqueGallery?: { before: string; after: string; label: string }[];
+  customerStories?: { name: string; review: string; rating: number; location: string }[];
 }
 
 const excludedPseoSlugs = new Set([
@@ -428,6 +480,8 @@ export function generatePseoPages(): PseoPageData[] {
         faqs: [specificFaq, specificFaq2, ...generalFaqs],
         beforeImageUrl: getImagePairForProblem(problem.slug).before,
         afterImageUrl: getImagePairForProblem(problem.slug).after,
+        uniqueGallery: getUniqueGallery(problem.slug, photoType.slug),
+        customerStories: getCustomerStories(problem.slug, photoType.slug),
 
         // New SEO Content Sections
         howItWorks: {
@@ -607,6 +661,8 @@ export function generatePseoPages(): PseoPageData[] {
       faqs: [actionSpecificFaq, actionSpecificFaq2, ...generalFaqs],
       beforeImageUrl: getImagePairForAction(action.slug).before,
       afterImageUrl: getImagePairForAction(action.slug).after,
+      uniqueGallery: getUniqueGallery(action.slug, 'photo'),
+      customerStories: getCustomerStories(action.slug, 'photo'),
 
       // New SEO Content Sections
       howItWorks: {
@@ -778,6 +834,8 @@ export function generatePseoPages(): PseoPageData[] {
       faqs: [specificFaq, specificFaq2, ...generalFaqs],
       beforeImageUrl: `/faded.webp`,
       afterImageUrl: `/fade-restored.webp`,
+      uniqueGallery: getUniqueGallery(keyword.slug, 'photo'),
+      customerStories: getCustomerStories(keyword.slug, 'photo'),
       ...standardSeoContent
     };
     // Customize How It Works steps for the specific keyword

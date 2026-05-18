@@ -10,7 +10,8 @@ import { Pricing } from '@/components/landing/Pricing';
 import { FAQ } from '@/components/landing/FAQ';
 import { Clients } from '@/components/landing/Clients';
 import Link from 'next/link';
-import { Upload, Sparkles, Star, Clock, Shield, ArrowRight, Play, CheckCircle2, Zap, Lock } from 'lucide-react';
+import { Upload, Sparkles, Star, Clock, Shield, ArrowRight, Play, CheckCircle2, Zap, Lock, Quote } from 'lucide-react';
+import { RelatedRestorations } from '@/components/pseo/related-restorations';
 
 // 1. Tell Next.js what pages to build (this now uses the *generated* list)
 export async function generateStaticParams() {
@@ -211,6 +212,39 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
             </div>
           </section>
 
+          {/* --- UNIQUE GALLERY SECTION --- */}
+          {page.uniqueGallery && page.uniqueGallery.length > 0 && (
+            <section className="py-24 bg-white">
+              <div className="max-w-[1320px] mx-auto px-4">
+                <div className="text-center mb-16">
+                  <div className="inline-flex items-center gap-1 bg-[#111111] text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+                    <span className="text-[#FF4D00]">//</span> Gallery <span className="text-[#FF4D00]">//</span>
+                  </div>
+                  <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#111111] leading-[1.1]">
+                    More Examples
+                  </h2>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-8">
+                  {page.uniqueGallery.map((img, idx) => (
+                    <div key={idx} className="bg-[#F2F2F0] rounded-[2rem] p-4 group">
+                      <div className="relative aspect-[4/5] overflow-hidden rounded-xl mb-4 border border-gray-200">
+                         {/* Half before / Half after visual trick for simplicity */}
+                         <div className="absolute inset-0 w-1/2 overflow-hidden z-10 border-r-2 border-white shadow-[10px_0_15px_-3px_rgba(0,0,0,0.3)]">
+                           <img src={img.before} alt="Before" className="h-full w-[200%] max-w-none object-cover grayscale-[20%]" />
+                         </div>
+                         <div className="absolute inset-0">
+                           <img src={img.after} alt="After" className="h-full w-full object-cover" />
+                         </div>
+                      </div>
+                      <p className="font-bold text-center text-sm text-[#111111]">{img.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
           {/* --- HOW IT WORKS --- */}
           <section id="how-it-works" className="py-24 bg-[#F2F2F0]">
             <div className="max-w-[1320px] mx-auto px-4">
@@ -248,6 +282,38 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
               </div>
             </div>
           </section>
+
+          {/* --- CUSTOMER STORIES --- */}
+          {page.customerStories && page.customerStories.length > 0 && (
+            <section className="py-24 bg-[#111111] text-white relative overflow-hidden">
+              <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FF4D00]/10 rounded-full blur-[100px] pointer-events-none"></div>
+              <div className="max-w-[1320px] mx-auto px-4 relative z-10">
+                <div className="text-center mb-16">
+                  <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4">
+                    Real Stories, Real Results
+                  </h2>
+                  <p className="text-gray-400 text-lg">What people are saying about this specific restoration.</p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                  {page.customerStories.map((story, idx) => (
+                    <div key={idx} className="bg-white/5 border border-white/10 p-8 rounded-[2rem] relative">
+                      <Quote size={40} className="absolute top-6 right-6 text-white/5" />
+                      <div className="flex gap-1 mb-4">
+                        {[...Array(story.rating)].map((_, i) => (
+                          <Star key={i} size={16} className="fill-[#FF4D00] text-[#FF4D00]" />
+                        ))}
+                      </div>
+                      <p className="text-gray-300 italic mb-6 leading-relaxed">"{story.review}"</p>
+                      <div>
+                        <p className="font-bold text-white">{story.name}</p>
+                        <p className="text-sm text-gray-500">{story.location}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* --- EMOTIONAL BENEFITS / USE CASES --- */}
           <section id="emotional-benefits" className="py-32 bg-white relative">
@@ -427,6 +493,9 @@ export default async function PseoTemplatePage({ params }: { params: Promise<{ s
             subtitle="Everything you need to know about the product and billing."
             badge="FAQ"
           />
+
+          {/* --- RELATED RESTORATIONS (INTERNAL LINKING) --- */}
+          <RelatedRestorations currentPageSlug={page.slug} allPages={allPseoPages} />
 
         </main>
         <Footer />

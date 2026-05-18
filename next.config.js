@@ -94,6 +94,171 @@ const nextConfig = {
         destination: '/ai-photo-animation',
         permanent: true
       },
+      {
+        source: '/restore/fix-scratched-childhood-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/how-can-i-digitize-old-photos',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-low-resolution-military-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/best-way-to-scan-photos',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-yellowed-family-portrait',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/remove-scratches-from-pictures',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-creased-ancestor-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-blurry-graduation-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-water-damaged-ancestor-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/convert-pictures-to-digital',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-yellowed-graduation-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-blurry-ancestor-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/enhance-photo-quality',
+        destination: '/denoise-photos',
+        permanent: true
+      },
+      {
+        source: '/restore/colorize-black-and-white',
+        destination: '/colorize-photos',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-low-resolution-family-portrait',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-water-damaged-graduation-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-low-resolution-holiday-snap',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-water-damaged-family-portrait',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-blurry-military-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-scratched-ancestor-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-faded-graduation-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-low-resolution-childhood-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-torn-wedding-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-yellowed-childhood-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-faded-ancestor-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-faded-baby-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-scratched-family-portrait',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/old-photo-color-restoration-online',
+        destination: '/colorize-photos',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-yellowed-military-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-scratched-graduation-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-scratched-wedding-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-water-damaged-wedding-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
+      {
+        source: '/restore/fix-dusty-baby-photo',
+        destination: '/old-photo-restoration',
+        permanent: true
+      },
       // Redirect HTTP to HTTPS in production
       process.env.NODE_ENV === 'production' ? {
         source: '/(.*)',
