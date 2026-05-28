@@ -141,7 +141,7 @@ export default function FamilyPortraitClient({
 
         const { uploadUrl, key } = await presignedRes.json()
 
-        setUploadStatus(`Uploading photo ${i + 1} of ${files.length} directly to Cloudflare R2...`)
+        setUploadStatus(`Uploading photo ${i + 1} of ${files.length} Now...`)
 
         // Direct S3 PUT request to Cloudflare R2 (completely bypassing Vercel limits)
         const uploadRes = await fetch(uploadUrl, {
