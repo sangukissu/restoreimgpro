@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { fal } from '@fal-ai/client'
 import mime from 'mime'
 import { createClient } from '@/utils/supabase/server'
+import { getR2SignedUrl } from '@/lib/r2'
 
 // Configure Fal AI client
 fal.config({
@@ -135,13 +136,20 @@ export async function POST(req: NextRequest) {
             const url = await fal.storage.upload(blob)
             uploadedUrls.push(url)
           } else {
+            // Check if it is an R2 key or a standard URL
+            let fetchUrl = img
+            if (!img.startsWith('http') && !img.startsWith('data:')) {
+              // It's an R2 key, generate a temporary signed GET URL
+              fetchUrl = await getR2SignedUrl(img)
+            }
+
             // Fetch remote URL and re-upload to Fal storage for reliability
-            const resp = await fetch(img)
+            const resp = await fetch(fetchUrl)
             if (!resp.ok) {
               throw new Error(`Failed to fetch image: ${resp.status}`)
             }
             const arrayBuf = await resp.arrayBuffer()
-            const contentType = resp.headers.get('content-type') || mime.getType(img) || 'image/png'
+            const contentType = resp.headers.get('content-type') || mime.getType(fetchUrl) || 'image/png'
             const blob = new Blob([arrayBuf], { type: contentType })
             const url = await fal.storage.upload(blob)
             uploadedUrls.push(url)

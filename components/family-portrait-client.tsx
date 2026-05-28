@@ -11,11 +11,18 @@ type BackgroundStyle = "black" | "gray" | "beige" | "gradient" | "brown" | "boke
 
 // Note: Do NOT compress user-uploaded images. Preserve full quality for model fidelity.
 
-export default function FamilyPortraitClient({ userCredits }: { userCredits: number }) {
+export default function FamilyPortraitClient({
+  userCredits,
+  user,
+}: {
+  userCredits: number
+  user: { email: string; id: string }
+}) {
   const [files, setFiles] = useState<File[]>([])
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("4:3")
   const [backgroundStyle, setBackgroundStyle] = useState<BackgroundStyle>("black")
   const [isLoading, setIsLoading] = useState(false)
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [resultUrl, setResultUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -95,6 +102,7 @@ export default function FamilyPortraitClient({ userCredits }: { userCredits: num
       setIsLoading(true)
       setError(null)
       setResultUrl(null)
+      setUploadStatus("Validating photos...")
 
       if (files.length < 2) {
         setError("Please upload at least 2 individual portrait photos.")
@@ -110,25 +118,64 @@ export default function FamilyPortraitClient({ userCredits }: { userCredits: num
         return
       }
 
-      // Send originals via multipart/form-data to preserve quality
-      const form = new FormData()
-      form.append("aspectRatio", aspectRatio)
-      form.append("backgroundStyle", backgroundStyle)
-      for (const f of files) {
-        form.append("images", f, f.name)
+      // 1. Upload files to Cloudflare R2 directly from browser using presigned PUT URLs
+      const uploadedKeys: string[] = []
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        setUploadStatus(`Preparing secure storage for photo ${i + 1} of ${files.length}...`)
+
+        // Request presigned URL from backend
+        const presignedRes = await fetch("/api/r2/presigned-upload-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: file.name,
+            contentType: file.type,
+          }),
+        })
+
+        if (!presignedRes.ok) {
+          const errData = await presignedRes.json().catch(() => ({}))
+          throw new Error(errData?.error || `Failed to prepare storage for ${file.name}`)
+        }
+
+        const { uploadUrl, key } = await presignedRes.json()
+
+        setUploadStatus(`Uploading photo ${i + 1} of ${files.length} directly to Cloudflare R2...`)
+
+        // Direct S3 PUT request to Cloudflare R2 (completely bypassing Vercel limits)
+        const uploadRes = await fetch(uploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": file.type },
+          body: file,
+        })
+
+        if (!uploadRes.ok) {
+          throw new Error(`Failed to upload ${file.name} to R2 storage`)
+        }
+
+        uploadedKeys.push(key)
       }
 
+      setUploadStatus("Composing your family portrait (this may take 1-2 minutes)...")
+
+      // 2. Trigger AI synthesis with the lightweight R2 keys
       const res = await fetch("/api/family-portrait", {
         method: "POST",
-        body: form,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          aspectRatio,
+          backgroundStyle,
+          images: uploadedKeys,
+        }),
       })
+
       const contentType = res.headers.get("content-type") || ""
       let payload: any = null
       if (contentType.includes("application/json")) {
         try {
           payload = await res.json()
         } catch (e) {
-          // Fallback to text if JSON parsing fails
           const text = await res.text()
           payload = { error: text }
         }
@@ -140,11 +187,6 @@ export default function FamilyPortraitClient({ userCredits }: { userCredits: num
       if (!res.ok) {
         if (res.status === 402) {
           const message = payload?.error || "You don't have enough credits."
-          toast.error(message)
-          throw new Error(message)
-        }
-        if (res.status === 413 || /entity too large|FUNCTION_PAYLOAD_TOO_LARGE/i.test(payload?.error || "")) {
-          const message = "Images are too large to send. Try smaller files."
           toast.error(message)
           throw new Error(message)
         }
@@ -161,6 +203,7 @@ export default function FamilyPortraitClient({ userCredits }: { userCredits: num
       if (msg) toast.error(msg)
     } finally {
       setIsLoading(false)
+      setUploadStatus(null)
     }
   }
 
@@ -206,7 +249,7 @@ export default function FamilyPortraitClient({ userCredits }: { userCredits: num
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2">
                     <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                   </div>
-                  <p className="text-gray-800 font-semibold text-lg">Combining your family portrait...</p>
+                  <p className="text-gray-800 font-semibold text-lg">{uploadStatus || "Combining your family portrait..."}</p>
                   <p className="text-sm text-gray-600">Please don't leave or close the page while we compose the image</p>
                 </div>
               ) : resultUrl ? (
@@ -235,7 +278,7 @@ export default function FamilyPortraitClient({ userCredits }: { userCredits: num
                   </div>
                   <div>
                     <p className="text-base font-semibold text-gray-900">Drag & drop or click to upload</p>
-                    <p className="text-sm text-gray-600">JPG, PNG, WebP up to 10MB each</p>
+                    <p className="text-sm text-gray-600">JPG, PNG, WebP up to 20MB each</p>
                     <p className="text-xs text-gray-500 mt-2">Upload 1–4 clear, front-facing photos. For 3–4 people, use wider ratios like 4:3 or 16:9..</p>
                   </div>
                 </div>

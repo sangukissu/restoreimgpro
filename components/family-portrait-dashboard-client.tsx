@@ -47,7 +47,7 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
             <div className="border-6 border-gray-200 p-6 bg-white rounded-xl">
 
               <div>
-                <FamilyPortraitClient userCredits={userCredits} />
+                <FamilyPortraitClient userCredits={userCredits} user={user} />
               </div>
             </div>
           </div>

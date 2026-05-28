@@ -170,3 +170,30 @@ export async function deleteVideoFromR2(key: string): Promise<void> {
     throw new Error('Failed to delete video from R2 storage');
   }
 }
+
+/**
+ * Generate a presigned S3 PUT URL for direct browser uploads to R2.
+ * @param key - The unique storage key/path for the file
+ * @param contentType - The MIME type of the file (must match what the browser PUTs)
+ * @param expiresInSeconds - Expiration time (default 10 minutes)
+ */
+export async function getR2PresignedUploadUrl(
+  key: string,
+  contentType: string,
+  expiresInSeconds = 600
+): Promise<string> {
+  try {
+    const client = getR2Client();
+    const command = new PutObjectCommand({
+      Bucket: R2_BUCKET_NAME,
+      Key: key,
+      ContentType: contentType,
+    });
+
+    const uploadUrl = await getSignedUrl(client, command, { expiresIn: expiresInSeconds });
+    return uploadUrl;
+  } catch (error) {
+    console.error('Error generating presigned R2 upload URL:', error);
+    throw new Error('Failed to generate presigned upload URL');
+  }
+}
