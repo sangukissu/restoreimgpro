@@ -35,6 +35,7 @@ const baseConfig: SecurityConfig = {
       'https://*.fal.ai',
       'https://dodopayments.com',
       'https://*.dodopayments.com',
+      'https://*.r2.cloudflarestorage.com',
       'https://1262a1778d74.ngrok-free.app',
       'https://*.ngrok-free.app'
     ],
