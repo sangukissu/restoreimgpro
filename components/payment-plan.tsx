@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { X } from "lucide-react"
+import posthog from "posthog-js"
 
 interface PaymentPlanProps {
   onSuccess: (newCredits: number) => void
@@ -13,13 +14,64 @@ interface PaymentPlanProps {
   onClose?: () => void
 }
 
+type PaymentPlanOption = {
+  id: string
+  name: string
+  price_cents: number
+  credits: number
+}
+
+type CheckoutMarker = {
+  planId: string
+  planName: string
+  planTier: string
+  credits: number
+  amount: number
+  currency: string
+  startedAt: string
+  sessionId?: string
+}
+
+function getPlanTier(plan: PaymentPlanOption) {
+  const name = plan.name.toLowerCase()
+
+  if (name.includes("starter") || plan.credits === 5) return "starter"
+  if (name.includes("pro") || name.includes("plus") || plan.credits === 20) return "pro"
+  if (name.includes("family") || plan.credits === 60) return "family"
+
+  return "custom"
+}
+
+function getPlanAnalytics(plan: PaymentPlanOption) {
+  return {
+    plan_id: plan.id,
+    plan_name: plan.name,
+    plan_tier: getPlanTier(plan),
+    credits: plan.credits,
+    amount: Number((plan.price_cents / 100).toFixed(2)),
+    amount_cents: plan.price_cents,
+    currency: "USD",
+    payment_provider: "dodopayments",
+    checkout_flow: "hosted",
+  }
+}
+
+function saveCheckoutMarker(marker: CheckoutMarker) {
+  try {
+    localStorage.setItem("buyCheckout", JSON.stringify(marker))
+  } catch {
+    // Ignore storage issues so checkout can continue.
+  }
+}
+
 export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsProcessing, onClose }: PaymentPlanProps) {
   const { toast, loading } = useToast()
-  const [plans, setPlans] = useState<Array<{ id: string; name: string; price_cents: number; credits: number }>>([])
+  const [plans, setPlans] = useState<PaymentPlanOption[]>([])
   const [selectedPlanId, setSelectedPlanId] = useState<string>("")
   const [referralCode, setReferralCode] = useState<string>("")
   const [isApplyingReferral, setIsApplyingReferral] = useState(false)
   const [referralApplied, setReferralApplied] = useState(false)
+  const hasTrackedCartViewRef = useRef(false)
 
 
   // Fetch available plans
@@ -40,6 +92,20 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     }
     fetchPlans()
   }, [onError])
+
+  useEffect(() => {
+    const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
+    if (!selectedPlan || hasTrackedCartViewRef.current) {
+      return
+    }
+
+    // Step 1: the user can now see the selected checkout cart in the payment modal.
+    posthog.capture("cart_viewed", {
+      ...getPlanAnalytics(selectedPlan),
+      checkout_entrypoint: "buy_credits_modal",
+    })
+    hasTrackedCartViewRef.current = true
+  }, [plans, selectedPlanId])
 
   const handleApplyReferral = async () => {
     if (!referralCode.trim()) {
@@ -74,41 +140,48 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   }
 
   const handlePurchase = async () => {
+    const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
+    if (!selectedPlan) {
+      onError("Please select a plan before continuing.")
+      return
+    }
+
+    const planAnalytics = getPlanAnalytics(selectedPlan)
     setIsProcessing(true)
     const loadingToastId = loading("Creating checkout session...")
 
-    // GA4: Track begin_checkout when user clicks Continue to Checkout
+    // Step 2: the user intentionally starts the hosted checkout flow.
     try {
-      const selectedPlan = plans.find((p) => p.id === selectedPlanId)
-      if (selectedPlan && typeof window !== "undefined") {
-        // Persist a local marker to detect checkout return without success
-        try {
-          localStorage.setItem('buyCheckout', JSON.stringify({
-            planId: selectedPlan.id,
-            planName: selectedPlan.name,
-            credits: selectedPlan.credits,
-            amount: Number((selectedPlan.price_cents / 100).toFixed(2)),
-            startedAt: new Date().toISOString(),
-          }))
-        } catch { /* ignore storage errors */ }
+      saveCheckoutMarker({
+        planId: selectedPlan.id,
+        planName: selectedPlan.name,
+        planTier: getPlanTier(selectedPlan),
+        credits: selectedPlan.credits,
+        amount: planAnalytics.amount,
+        currency: "USD",
+        startedAt: new Date().toISOString(),
+      })
 
-        if ((window as any).gtag) {
-          (window as any).gtag('event', 'begin_checkout', {
-            value: Number((selectedPlan.price_cents / 100).toFixed(2)),
-            currency: 'USD',
-            items: [
-              {
-                item_id: selectedPlan.id,
-                item_name: selectedPlan.name,
-                price: Number((selectedPlan.price_cents / 100).toFixed(2)),
-                quantity: 1,
-                credits: selectedPlan.credits,
-              }
-            ]
-          })
-        }
+      posthog.capture("checkout_started", planAnalytics)
+
+      if ((window as any).gtag) {
+        (window as any).gtag("event", "begin_checkout", {
+          value: planAnalytics.amount,
+          currency: "USD",
+          items: [
+            {
+              item_id: selectedPlan.id,
+              item_name: selectedPlan.name,
+              price: planAnalytics.amount,
+              quantity: 1,
+              credits: selectedPlan.credits,
+            }
+          ]
+        })
       }
-    } catch { /* ignore analytics errors */ }
+    } catch {
+      // Ignore analytics errors so checkout can continue.
+    }
 
     try {
       const response = await fetch("/api/checkout/session", {
@@ -120,24 +193,40 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
       })
 
       if (!response.ok) {
+        posthog.capture("checkout_session_failed", {
+          ...planAnalytics,
+          status_code: response.status,
+        })
         throw new Error("Failed to create checkout session")
       }
 
       const { id: session_id, url } = await response.json()
 
-      // Update localStorage marker with checkout session id for GA attribution
-      try {
-        const markerStr = localStorage.getItem('buyCheckout')
-        if (markerStr) {
-          const marker = JSON.parse(markerStr)
-          marker.sessionId = session_id
-          localStorage.setItem('buyCheckout', JSON.stringify(marker))
-        }
-      } catch { /* ignore storage errors */ }
+      saveCheckoutMarker({
+        planId: selectedPlan.id,
+        planName: selectedPlan.name,
+        planTier: getPlanTier(selectedPlan),
+        credits: selectedPlan.credits,
+        amount: planAnalytics.amount,
+        currency: "USD",
+        startedAt: new Date().toISOString(),
+        sessionId: session_id,
+      })
+
+      // Step 3: we hand the user off to Dodo's hosted payment page.
+      posthog.capture("payment_info_entered", {
+        ...planAnalytics,
+        checkout_session_id: session_id,
+        payment_step_source: "hosted_checkout_redirect",
+      })
 
       toast.dismiss(loadingToastId)
       window.location.href = url
     } catch (error) {
+      posthog.capture("checkout_failed", {
+        ...planAnalytics,
+        error_message: error instanceof Error ? error.message : "unknown_error",
+      })
       toast.dismiss(loadingToastId)
       const errorMessage = error instanceof Error ? error.message : "Failed to create checkout session. Please try again."
       onError(errorMessage)

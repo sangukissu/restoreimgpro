@@ -3,6 +3,15 @@ import { updateSession } from "@/utils/supabase/middleware"
 import { securityMiddleware, validateOrigin, detectSuspiciousActivity } from "@/middleware/security"
 
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname === '/restore' || request.nextUrl.pathname.startsWith('/restore/')) {
+    return new Response('Gone', {
+      status: 410,
+      headers: {
+        'X-Robots-Tag': 'noindex',
+      },
+    })
+  }
+
   // Apply security middleware first
   const securityResponse = securityMiddleware(request)
   if (securityResponse.status !== 200) {

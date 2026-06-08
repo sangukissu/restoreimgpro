@@ -50,14 +50,14 @@ const nextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://settings.crisp.chat",
-          "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://settings.crisp.chat",
+          "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://settings.crisp.chat https://us-assets.i.posthog.com https://us.i.posthog.com https://us.posthog.com",
+          "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://settings.crisp.chat https://us-assets.i.posthog.com https://us.i.posthog.com https://us.posthog.com",
           "style-src 'self' 'unsafe-inline' https://client.crisp.chat",
           "img-src 'self' data: https: blob: https://www.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://*.crisp.chat",
           "font-src 'self' data: https://client.crisp.chat",
-          "connect-src 'self' https://api.supabase.co https://*.supabase.co wss://*.supabase.co https://fal.ai https://*.fal.ai https://*.fal.media wss://*.fal.ai https://dodopayments.com https://*.dodopayments.com https://*.r2.cloudflarestorage.com https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://storage.crisp.chat wss://client.relay.crisp.chat wss://stream.relay.crisp.chat",
+          "connect-src 'self' https://api.supabase.co https://*.supabase.co wss://*.supabase.co https://fal.ai https://*.fal.ai https://*.fal.media wss://*.fal.ai https://dodopayments.com https://*.dodopayments.com https://*.r2.cloudflarestorage.com https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://storage.crisp.chat wss://client.relay.crisp.chat wss://stream.relay.crisp.chat https://us-assets.i.posthog.com https://us.i.posthog.com https://us.posthog.com",
           "media-src 'self' blob: https://*.public.blob.vercel-storage.com https://*.fal.media https://blog.bringback.pro https://*.wordpress.com",
-          "frame-src 'self' https://www.youtube.com https://youtube.com https://challenges.cloudflare.com https://*.cloudflare.com https://*.crisp.chat",
+          "frame-src 'self' https://www.youtube.com https://youtube.com https://challenges.cloudflare.com https://*.cloudflare.com https://*.crisp.chat https://us.posthog.com",
           "object-src 'none'",
           "base-uri 'self'",
           "form-action 'self'",
@@ -105,176 +105,6 @@ const nextConfig = {
   // Force HTTPS in production
   async redirects() {
     return [
-      {
-        source: '/restore/animate-old-photos',
-        destination: '/ai-photo-animation',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-scratched-childhood-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/how-can-i-digitize-old-photos',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-low-resolution-military-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/best-way-to-scan-photos',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-yellowed-family-portrait',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/remove-scratches-from-pictures',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-creased-ancestor-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-blurry-graduation-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-water-damaged-ancestor-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/convert-pictures-to-digital',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-yellowed-graduation-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-blurry-ancestor-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/enhance-photo-quality',
-        destination: '/denoise-photos',
-        permanent: true
-      },
-      {
-        source: '/restore/colorize-black-and-white',
-        destination: '/colorize-photos',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-low-resolution-family-portrait',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-water-damaged-graduation-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-low-resolution-holiday-snap',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-water-damaged-family-portrait',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-blurry-military-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-scratched-ancestor-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-faded-graduation-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-low-resolution-childhood-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-torn-wedding-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-yellowed-childhood-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-faded-ancestor-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-faded-baby-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-scratched-family-portrait',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/old-photo-color-restoration-online',
-        destination: '/colorize-photos',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-yellowed-military-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-scratched-graduation-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-scratched-wedding-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-water-damaged-wedding-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
-      {
-        source: '/restore/fix-dusty-baby-photo',
-        destination: '/old-photo-restoration',
-        permanent: true
-      },
       // Redirect HTTP to HTTPS in production
       process.env.NODE_ENV === 'production' ? {
         source: '/(.*)',

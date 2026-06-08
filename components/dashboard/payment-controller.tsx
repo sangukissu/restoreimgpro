@@ -10,6 +10,7 @@ import PaymentSuccessModal from "@/components/payment-success-modal"
 import { useSearchParams } from "next/navigation"
 import { useCredits } from "@/hooks/use-credits"
 import { Separator } from "@/components/ui/separator"
+import posthog from "posthog-js"
 
 interface PaymentControllerProps {
   user: {
@@ -20,6 +21,34 @@ interface PaymentControllerProps {
   }
   initialCreditBalance: number
   children: React.ReactNode
+}
+
+type CheckoutMarker = {
+  planId?: string
+  planName?: string
+  planTier?: string
+  credits?: number
+  amount?: number
+  currency?: string
+  startedAt?: string
+  sessionId?: string
+}
+
+function readCheckoutMarker(): CheckoutMarker | null {
+  try {
+    const marker = localStorage.getItem("buyCheckout")
+    return marker ? JSON.parse(marker) : null
+  } catch {
+    return null
+  }
+}
+
+function clearCheckoutMarker() {
+  try {
+    localStorage.removeItem("buyCheckout")
+  } catch {
+    // Ignore storage issues after checkout completion.
+  }
 }
 
 export default function PaymentController({ user, initialCreditBalance, children }: PaymentControllerProps) {
@@ -33,6 +62,41 @@ export default function PaymentController({ user, initialCreditBalance, children
   useEffect(() => {
     const paymentStatus = searchParams.get("payment")
     if (paymentStatus === "success") {
+      const marker = readCheckoutMarker()
+      const completedKey = marker?.sessionId || marker?.startedAt || "payment-success"
+
+      try {
+        const dedupeKey = `posthog_payment_completed:${completedKey}`
+        if (!sessionStorage.getItem(dedupeKey)) {
+          // Step 4: the hosted payment flow returned successfully.
+          posthog.capture("payment_completed", {
+            plan_id: marker?.planId,
+            plan_name: marker?.planName,
+            plan_tier: marker?.planTier,
+            credits: marker?.credits,
+            amount: marker?.amount,
+            currency: marker?.currency || "USD",
+            payment_provider: "dodopayments",
+            checkout_flow: "hosted",
+            checkout_session_id: marker?.sessionId,
+          })
+          sessionStorage.setItem(dedupeKey, "1")
+        }
+      } catch {
+        posthog.capture("payment_completed", {
+          plan_id: marker?.planId,
+          plan_name: marker?.planName,
+          plan_tier: marker?.planTier,
+          credits: marker?.credits,
+          amount: marker?.amount,
+          currency: marker?.currency || "USD",
+          payment_provider: "dodopayments",
+          checkout_flow: "hosted",
+          checkout_session_id: marker?.sessionId,
+        })
+      }
+
+      clearCheckoutMarker()
       setShowPaymentSuccess(true)
       const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
       return () => clearTimeout(timer)

@@ -3,7 +3,6 @@ import path from 'path';
 
 // Need to import the data to check
 // Since this is a TS project, we can run this script with `npx tsx check_urls.ts`
-import { allPseoPages } from './lib/generate-pages';
 import { featuresData } from './lib/featuresdata';
 import { countryPages } from './lib/countrypages';
 import { appData } from './lib/appdata';
@@ -20,11 +19,6 @@ const staticPaths = [
   '/ai-family-portrait', '/old-photo-restoration', '/referral'
 ];
 staticPaths.forEach(p => validUrls.add(`${baseUrl}${p}`));
-
-// PSEO pages
-allPseoPages.forEach(page => {
-  validUrls.add(`${baseUrl}/restore/${page.slug}`);
-});
 
 // Features pages
 Object.values(featuresData).forEach(page => {

@@ -1,6 +1,5 @@
 import { MetadataRoute } from 'next'
 import { getAllPostSlugs } from '@/lib/wordpress'
-import { allPseoPages } from '@/lib/generate-pages'
 import { featuresData } from '@/lib/featuresdata'
 import { countryPages } from '@/lib/countrypages'
 import { appData } from '@/lib/appdata'
@@ -113,14 +112,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Continue without blog pages if WordPress is unavailable
   }
 
-  // Programmatic SEO pages
-  const pseoPages: MetadataRoute.Sitemap = allPseoPages.map((page) => ({
-    url: `${baseUrl}/restore/${page.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.7, // Higher priority than blog posts as these are core service pages
-  }))
-
   // Feature pages
   const featurePages: MetadataRoute.Sitemap = Object.values(featuresData).map((page) => ({
     url: `${baseUrl}${page.slug}`,
@@ -145,5 +136,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }))
 
-  return [...staticPages, ...blogPages, ...pseoPages, ...featurePages, ...countryPagesSitemap, ...appPages]
+  return [...staticPages, ...blogPages, ...featurePages, ...countryPagesSitemap, ...appPages]
 }
