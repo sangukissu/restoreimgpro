@@ -125,9 +125,7 @@ Pages to Create:
 
 6. Target: Fotor (https://www.fotor.com/features/ai-portrait-generator/family/)
 * URL: /compare/fotor-vs-bringback
-* Target Keywords: fotor family portrait alternative, how to make family portrait in fotor
-
-
+* Target Keywords: fotor family portrait alternative, how to make family portrait in foto
 
 
 
