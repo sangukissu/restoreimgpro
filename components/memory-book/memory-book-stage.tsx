@@ -28,7 +28,7 @@ export function MemoryBookStage({
   track = LOFI_TRACK,
 }: MemoryBookStageProps) {
   return (
-    <main className={[styles.stageShell, className || ""].join(" ")}>
+    <main className={[styles.stageShell, className || ""].filter(Boolean).join(" ")}>
       <div className={styles.cardstockNoise} aria-hidden="true" />
       <DecorativeScene isBookOpen={isBookOpen} />
 

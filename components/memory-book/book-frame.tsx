@@ -28,6 +28,8 @@ export function BookFrame({
   onForward,
 }: BookFrameProps) {
   const isClosed = turnedSheets === 0
+  const canGoBack = turnedSheets > 0
+  const canGoForward = turnedSheets < sheets.length
 
   return (
     <section
@@ -35,12 +37,17 @@ export function BookFrame({
       aria-label="Interactive anniversary memory book"
     >
       <div className={styles.leftBase} aria-hidden={turnedSheets < sheets.length} />
-      <div className={styles.rightBase}>{finalRightPage}</div>
+      <div
+        className={[
+          styles.rightBase,
+          turnedSheets === sheets.length ? styles.rightBaseActive : "",
+        ].filter(Boolean).join(" ")}
+      >
+        {finalRightPage}
+      </div>
 
       {sheets.map((sheet, index) => {
         const isTurned = index < turnedSheets
-        const canTurnForward = index === turnedSheets
-        const canTurnBack = index === turnedSheets - 1
         const zIndex = isTurned ? index + 3 : sheets.length - index + 10
 
         return (
@@ -49,18 +56,71 @@ export function BookFrame({
             front={sheet.front}
             back={sheet.back}
             isTurned={isTurned}
-            canTurnForward={canTurnForward}
-            canTurnBack={canTurnBack}
-            isTurning={isTurning}
-            forwardLabel={index === 0 ? "Open memory book" : "Turn page forward"}
-            onBack={onBack}
-            onForward={onForward}
             zIndex={zIndex}
           />
         )
       })}
 
       <div className={styles.spineCrease} aria-hidden="true" />
+
+      <div
+        className={[
+          styles.bookTurnLayer,
+          styles.bookTurnLayerTop,
+          isClosed ? styles.bookTurnLayerTopClosed : "",
+        ].filter(Boolean).join(" ")}
+      >
+        {isClosed && canGoForward ? (
+          <button
+            type="button"
+            className={[styles.bookTurnButton, styles.bookTurnClosed].join(" ")}
+            onClick={onForward}
+            disabled={isTurning}
+            aria-label="Open memory book"
+          />
+        ) : null}
+        {!isClosed && canGoBack ? (
+          <button
+            type="button"
+            className={[styles.bookTurnButton, styles.bookTurnBack].join(" ")}
+            onClick={onBack}
+            disabled={isTurning}
+            aria-label="Turn page back"
+          />
+        ) : null}
+        {!isClosed && canGoForward ? (
+          <button
+            type="button"
+            className={[styles.bookTurnButton, styles.bookTurnForward].join(" ")}
+            onClick={onForward}
+            disabled={isTurning}
+            aria-label="Turn page forward"
+          />
+        ) : null}
+      </div>
+
+      {!isClosed ? (
+        <div className={[styles.bookTurnLayer, styles.bookTurnLayerBottom].join(" ")} aria-hidden="true">
+          {canGoBack ? (
+            <button
+              type="button"
+              className={[styles.bookTurnButton, styles.bookTurnBack].join(" ")}
+              onClick={onBack}
+              disabled={isTurning}
+              tabIndex={-1}
+            />
+          ) : null}
+          {canGoForward ? (
+            <button
+              type="button"
+              className={[styles.bookTurnButton, styles.bookTurnForward].join(" ")}
+              onClick={onForward}
+              disabled={isTurning}
+              tabIndex={-1}
+            />
+          ) : null}
+        </div>
+      ) : null}
     </section>
   )
 }

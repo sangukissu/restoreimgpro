@@ -209,7 +209,7 @@ export function FamilyHeritageViewer({
 
   return (
     <>
-      <div className={[styles.viewerShell, className || ""].join(" ")}>
+      <div className={[styles.viewerShell, className || ""].filter(Boolean).join(" ")}>
         {document.music.enabled ? (
           <MemoryBookAudioDeck
             track={{

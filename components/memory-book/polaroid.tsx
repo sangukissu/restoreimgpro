@@ -36,12 +36,10 @@ export function Polaroid({ photo, src, alt, rotation, compact = false, onPhotoOp
         className={className}
         style={style}
         data-memory-book-interactive="true"
-        onPointerDown={(event) => event.stopPropagation()}
-        onPointerUp={(event) => {
+        onClick={(event) => {
           event.stopPropagation()
           onPhotoOpen(photo)
         }}
-        onClick={(event) => event.stopPropagation()}
         aria-label={`Open ${imageAlt}`}
       >
         {content}
