@@ -1,7 +1,12 @@
 .viewerShell {
+  --stage-height: calc(100svh - 4rem);
   position: relative;
   isolation: isolate;
   width: 100%;
+}
+
+.publicViewer {
+  --stage-height: 100svh;
 }
 
 .desktopPresentation {
@@ -17,7 +22,7 @@
   position: relative;
   isolation: isolate;
   width: 100%;
-  height: calc(100svh - 4rem);
+  height: var(--stage-height);
   min-height: 680px;
   overflow: hidden;
   background:
@@ -1015,7 +1020,7 @@
 .mobileJournal {
   position: relative;
   isolation: isolate;
-  min-height: calc(100svh - 4rem);
+  min-height: var(--stage-height);
   overflow: hidden;
   padding: 74px 12px 24px;
   background:
@@ -1478,7 +1483,7 @@
 @media (max-width: 900px) {
   .stageShell {
     --book-center-y: 53%;
-    min-height: calc(100svh - 4rem);
+    min-height: var(--stage-height);
   }
 
   .bookMount {
@@ -1518,7 +1523,7 @@
 
 @media (max-width: 767px) {
   .viewerShell {
-    min-height: calc(100svh - 4rem);
+    min-height: var(--stage-height);
     background: #f8f4ec;
   }
 

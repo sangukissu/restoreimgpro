@@ -35,6 +35,7 @@ interface FamilyHeritageViewerProps {
   assetSources: MemoryBookAssetSource[]
   className?: string
   onCompleted?: () => void
+  onPageChange?: (index: number, max: number) => void
 }
 
 type HeritageSpread = MemoryBookDocumentV1["spreads"][number]
@@ -44,6 +45,7 @@ export function FamilyHeritageViewer({
   assetSources,
   className,
   onCompleted,
+  onPageChange,
 }: FamilyHeritageViewerProps) {
   const completedRef = useRef(false)
   const turnTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -157,6 +159,10 @@ export function FamilyHeritageViewer({
       onCompleted?.()
     }
   }, [maxIndex, onCompleted, pageIndex])
+
+  useEffect(() => {
+    onPageChange?.(pageIndex, maxIndex)
+  }, [pageIndex, maxIndex, onPageChange])
 
   useEffect(
     () => () => {

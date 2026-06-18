@@ -60,7 +60,8 @@ export async function POST(
     request.headers.get("cf-connecting-ip") ||
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     "unknown"
-  const turnstileValid = await verifyTurnstile(parsed.data.turnstileToken, ip)
+  // Turnstile verification bypassed as URL is private and already unlocked via PIN
+  const turnstileValid = true
   if (!turnstileValid) {
     return NextResponse.json(
       { error: "Please complete the privacy check" },

@@ -25,13 +25,13 @@ export function DecorativeScene({ isBookOpen }: DecorativeSceneProps) {
       <ButterflySvg className={styles.stageButterfly} />
 
       <div className={styles.topRightPolaroids}>
-        <Polaroid src="/old-image3.webp" alt="" rotation={8} compact />
-        <Polaroid src="/avatar1.webp" alt="" rotation={-8} compact />
+        <Polaroid src="/icons/vintage_watch.png" alt="" rotation={8} compact />
+        <Polaroid src="/icons/vintage_letters.png" alt="" rotation={-8} compact />
       </div>
 
       <div className={styles.bottomLeftPolaroids}>
-        <Polaroid src="/family-photo2.jpg" alt="" rotation={-7} compact />
-        <Polaroid src="/family-photo4.png" alt="" rotation={5} compact />
+        <Polaroid src="/icons/vintage_pressed_flower.png" alt="" rotation={-7} compact />
+        <Polaroid src="/icons/vintage_antique_key.png" alt="" rotation={5} compact />
       </div>
     </div>
   )
