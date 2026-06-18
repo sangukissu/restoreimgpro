@@ -5,22 +5,60 @@ interface BookSheetProps {
   front: ReactNode
   back: ReactNode
   isTurned: boolean
-  isInteractive: boolean
+  canTurnForward: boolean
+  canTurnBack: boolean
+  isTurning: boolean
+  forwardLabel: string
+  onBack: () => void
+  onForward: () => void
   zIndex: number
 }
 
-export function BookSheet({ front, back, isTurned, isInteractive, zIndex }: BookSheetProps) {
+export function BookSheet({
+  front,
+  back,
+  isTurned,
+  canTurnForward,
+  canTurnBack,
+  isTurning,
+  forwardLabel,
+  onBack,
+  onForward,
+  zIndex,
+}: BookSheetProps) {
   return (
     <div
       className={[
         styles.bookSheet,
         isTurned ? styles.sheetTurned : "",
-        isInteractive ? styles.bookSheetInteractive : "",
+        canTurnForward || canTurnBack ? styles.bookSheetInteractive : "",
       ].join(" ")}
       style={{ "--sheet-z": zIndex } as CSSProperties}
     >
-      <div className={[styles.sheetFace, styles.sheetFront].join(" ")}>{front}</div>
-      <div className={[styles.sheetFace, styles.sheetBack].join(" ")}>{back}</div>
+      <div className={[styles.sheetFace, styles.sheetFront].join(" ")}>
+        {front}
+        {canTurnForward ? (
+          <button
+            type="button"
+            className={styles.sheetTurnButton}
+            onClick={onForward}
+            disabled={isTurning}
+            aria-label={forwardLabel}
+          />
+        ) : null}
+      </div>
+      <div className={[styles.sheetFace, styles.sheetBack].join(" ")}>
+        {back}
+        {canTurnBack ? (
+          <button
+            type="button"
+            className={styles.sheetTurnButton}
+            onClick={onBack}
+            disabled={isTurning}
+            aria-label="Turn page back"
+          />
+        ) : null}
+      </div>
     </div>
   )
 }

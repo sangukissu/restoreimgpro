@@ -15,7 +15,9 @@ import type {
 import { BookCover } from "./book-cover"
 import { BookFrame, type MemoryBookSheet } from "./book-frame"
 import { InnerPage } from "./inner-page"
+import { MemoryBookAudioDeck } from "./memory-book-audio-deck"
 import { MemoryBookStage } from "./memory-book-stage"
+import { MobileSpiralJournal } from "./mobile-spiral-journal"
 import { PaperTexture } from "./paper-texture"
 import { Polaroid } from "./polaroid"
 import styles from "./memory-book.module.css"
@@ -44,7 +46,11 @@ export function FamilyHeritageViewer({
   onCompleted,
 }: FamilyHeritageViewerProps) {
   const completedRef = useRef(false)
-  const [turnedSheets, setTurnedSheets] = useState(0)
+  const turnTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const turnLockRef = useRef(false)
+  const [pageIndex, setPageIndex] = useState(0)
+  const [direction, setDirection] = useState(1)
+  const [isTurning, setIsTurning] = useState(false)
   const [activeAssetId, setActiveAssetId] = useState<string | null>(null)
   const sourceMap = useMemo(
     () => new Map(assetSources.map((source) => [source.id, source])),
@@ -70,7 +76,7 @@ export function FamilyHeritageViewer({
         <HeritageScrapbookPage
           spread={spread}
           sourceMap={sourceMap}
-          textureId={`${document.bookId}-story-${index + 1}`}
+          textureId={`desktop-${document.bookId}-story-${index + 1}`}
           onAssetOpen={setActiveAssetId}
         />
       ),
@@ -92,29 +98,74 @@ export function FamilyHeritageViewer({
     ]
   }, [coverPeriodLines, coverTitleLines, document.bookId, document.spreads, sourceMap])
 
-  const maxSheets = sheets.length
+  const maxIndex = sheets.length
   const finalSpread = document.spreads.at(-1)
 
+  const turnTo = useCallback(
+    (next: number) => {
+      if (turnLockRef.current) {
+        return
+      }
+
+      const resolved = Math.max(0, Math.min(maxIndex, next))
+
+      if (resolved === pageIndex) {
+        return
+      }
+
+      setDirection(resolved > pageIndex ? 1 : -1)
+      turnLockRef.current = true
+      setIsTurning(true)
+      setPageIndex(resolved)
+
+      if (turnTimerRef.current) {
+        clearTimeout(turnTimerRef.current)
+      }
+
+      turnTimerRef.current = setTimeout(() => {
+        turnLockRef.current = false
+        setIsTurning(false)
+      }, 920)
+    },
+    [maxIndex, pageIndex]
+  )
+
   const goForward = useCallback(() => {
-    setTurnedSheets((current) => Math.min(current + 1, maxSheets))
-  }, [maxSheets])
+    turnTo(pageIndex + 1)
+  }, [pageIndex, turnTo])
 
   const goBack = useCallback(() => {
-    setTurnedSheets((current) => Math.max(current - 1, 0))
-  }, [])
+    turnTo(pageIndex - 1)
+  }, [pageIndex, turnTo])
 
   useEffect(() => {
-    setTurnedSheets(0)
+    if (turnTimerRef.current) {
+      clearTimeout(turnTimerRef.current)
+    }
+
+    turnLockRef.current = false
+    setPageIndex(0)
+    setDirection(1)
+    setIsTurning(false)
     setActiveAssetId(null)
     completedRef.current = false
   }, [document.bookId])
 
   useEffect(() => {
-    if (turnedSheets === maxSheets && !completedRef.current) {
+    if (pageIndex === maxIndex && !completedRef.current) {
       completedRef.current = true
       onCompleted?.()
     }
-  }, [maxSheets, onCompleted, turnedSheets])
+  }, [maxIndex, onCompleted, pageIndex])
+
+  useEffect(
+    () => () => {
+      if (turnTimerRef.current) {
+        clearTimeout(turnTimerRef.current)
+      }
+    },
+    []
+  )
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -131,13 +182,13 @@ export function FamilyHeritageViewer({
       }
 
       if (event.key === "Home") {
-        setTurnedSheets(0)
+        turnTo(0)
       }
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [activeAssetId, goBack, goForward])
+  }, [activeAssetId, goBack, goForward, turnTo])
 
   const activeDocumentAsset = useMemo(() => {
     if (!activeAssetId) {
@@ -158,34 +209,52 @@ export function FamilyHeritageViewer({
 
   return (
     <>
-      <MemoryBookStage
-        className={className}
-        isBookOpen={turnedSheets > 0}
-        track={
-          document.music.enabled
-            ? {
-                src: document.music.src,
-                title: document.music.title,
-                attribution: document.music.attribution,
+      <div className={[styles.viewerShell, className || ""].join(" ")}>
+        {document.music.enabled ? (
+          <MemoryBookAudioDeck
+            track={{
+              src: document.music.src,
+              title: document.music.title,
+              attribution: document.music.attribution,
+            }}
+          />
+        ) : null}
+
+        <div className={styles.desktopPresentation}>
+          <MemoryBookStage isBookOpen={pageIndex > 0} track={null}>
+            <BookFrame
+              sheets={sheets}
+              turnedSheets={pageIndex}
+              finalRightPage={
+                <HeritageScrapbookPage
+                  spread={finalSpread}
+                  sourceMap={sourceMap}
+                  textureId={`desktop-${document.bookId}-final`}
+                  onAssetOpen={setActiveAssetId}
+                />
               }
-            : null
-        }
-      >
-        <BookFrame
-          sheets={sheets}
-          turnedSheets={turnedSheets}
-          finalRightPage={
-            <HeritageScrapbookPage
-              spread={finalSpread}
-              sourceMap={sourceMap}
-              textureId={`${document.bookId}-final`}
-              onAssetOpen={setActiveAssetId}
+              isTurning={isTurning}
+              onBack={goBack}
+              onForward={goForward}
             />
-          }
-          onBack={goBack}
-          onForward={goForward}
-        />
-      </MemoryBookStage>
+          </MemoryBookStage>
+        </div>
+
+        <div className={styles.mobilePresentation}>
+          <MobileSpiralJournal
+            document={document}
+            sourceMap={sourceMap}
+            pageIndex={pageIndex}
+            direction={direction}
+            isTurning={isTurning}
+            titleLines={coverTitleLines}
+            periodLines={coverPeriodLines}
+            onBack={goBack}
+            onForward={goForward}
+            onAssetOpen={setActiveAssetId}
+          />
+        </div>
+      </div>
 
       <MemoryLightbox
         asset={activeDocumentAsset}

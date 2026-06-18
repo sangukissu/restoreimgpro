@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { BookFrame, type MemoryBookSheet } from "./book-frame"
 import { BookCover } from "./book-cover"
 import { InnerPage } from "./inner-page"
@@ -9,7 +9,10 @@ import { PageScrapbook } from "./page-scrapbook"
 import { PhotoModal, type MemoryPhoto } from "./photo-modal"
 
 export default function MemoryBookClient() {
+  const turnTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const turnLockRef = useRef(false)
   const [turnedSheets, setTurnedSheets] = useState(0)
+  const [isTurning, setIsTurning] = useState(false)
   const [activePhoto, setActivePhoto] = useState<MemoryPhoto | null>(null)
 
   const sheets = useMemo<MemoryBookSheet[]>(
@@ -30,17 +33,52 @@ export default function MemoryBookClient() {
 
   const maxSheets = sheets.length
 
+  const turnTo = useCallback(
+    (next: number) => {
+      if (turnLockRef.current) {
+        return
+      }
+
+      const resolved = Math.max(0, Math.min(maxSheets, next))
+
+      setTurnedSheets((current) => {
+        if (current === resolved) {
+          return current
+        }
+
+        turnLockRef.current = true
+        setIsTurning(true)
+        turnTimerRef.current = setTimeout(() => {
+          turnLockRef.current = false
+          setIsTurning(false)
+        }, 920)
+
+        return resolved
+      })
+    },
+    [maxSheets]
+  )
+
   const goForward = useCallback(() => {
-    setTurnedSheets((current) => Math.min(current + 1, maxSheets))
-  }, [maxSheets])
+    turnTo(turnedSheets + 1)
+  }, [turnTo, turnedSheets])
 
   const goBack = useCallback(() => {
-    setTurnedSheets((current) => Math.max(current - 1, 0))
-  }, [])
+    turnTo(turnedSheets - 1)
+  }, [turnTo, turnedSheets])
 
   const resetBook = useCallback(() => {
-    setTurnedSheets(0)
-  }, [])
+    turnTo(0)
+  }, [turnTo])
+
+  useEffect(
+    () => () => {
+      if (turnTimerRef.current) {
+        clearTimeout(turnTimerRef.current)
+      }
+    },
+    []
+  )
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -68,6 +106,7 @@ export default function MemoryBookClient() {
           sheets={sheets}
           turnedSheets={turnedSheets}
           finalRightPage={<PageScrapbook variant="keepsake" onPhotoOpen={setActivePhoto} />}
+          isTurning={isTurning}
           onBack={goBack}
           onForward={goForward}
         />
