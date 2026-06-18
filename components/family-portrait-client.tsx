@@ -24,6 +24,7 @@ export default function FamilyPortraitClient({
   const [isLoading, setIsLoading] = useState(false)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [resultUrl, setResultUrl] = useState<string | null>(null)
+  const [familyPortraitId, setFamilyPortraitId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -196,6 +197,7 @@ export default function FamilyPortraitClient({
       }
 
       setResultUrl(payload.imageUrl)
+      setFamilyPortraitId(payload.familyPortraitId || null)
       toast.success("Family portrait generated!")
     } catch (err: any) {
       const msg = err?.message || "Unexpected error"
@@ -259,9 +261,17 @@ export default function FamilyPortraitClient({
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2 justify-center">
                     <Button onClick={handleDownload} className="text-sm px-4 py-2 rounded-md bg-black text-white hover:bg-gray-800">Download</Button>
+                    {familyPortraitId ? (
+                      <a
+                        href={`/dashboard/memory-book?sourceType=family_portrait&sourceId=${familyPortraitId}`}
+                        className="text-sm px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50"
+                      >
+                        Add to keepsake
+                      </a>
+                    ) : null}
                     <a href={resultUrl || ""} target="_blank" rel="noreferrer" className="text-sm px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50">Open in new tab</a>
                     <button
-                      onClick={() => { setResultUrl(null); setFiles([]); }}
+                      onClick={() => { setResultUrl(null); setFamilyPortraitId(null); setFiles([]); }}
                       className="text-sm px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50"
                     >
                       Create Another

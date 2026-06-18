@@ -20,14 +20,18 @@ export async function proxy(request: NextRequest) {
 
   // Check for suspicious activity on sensitive routes
   if (request.nextUrl.pathname.startsWith('/api/')) {
-    if (detectSuspiciousActivity(request)) {
+    const isTrustedCallbackRoute =
+      request.nextUrl.pathname.includes('/webhook') ||
+      request.nextUrl.pathname === '/api/memory-books/worker'
+
+    if (!isTrustedCallbackRoute && detectSuspiciousActivity(request)) {
       return new Response('Forbidden', { status: 403 })
     }
 
     // Validate origin for state-changing operations
     if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
       // Skip origin check for webhooks
-      if (!request.nextUrl.pathname.includes('/webhook')) {
+      if (!isTrustedCallbackRoute) {
         if (!validateOrigin(request)) {
           return new Response('Invalid origin', { status: 403 })
         }

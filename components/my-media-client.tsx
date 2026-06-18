@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useToast } from "@/hooks/use-toast"
-import { Download } from "lucide-react"
+import { BookOpen, Download } from "lucide-react"
+import Link from "next/link"
 import { createClient as createSupabaseClient } from "@/utils/supabase/client"
 
 interface MyMediaClientProps {
@@ -250,7 +251,9 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
           <div className="bg-white rounded-lg p-6 max-w-md mx-4">
             <h3 className="text-lg font-semibold mb-4">Delete All Media</h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to delete all your media? This action cannot be undone and will permanently remove all your restored images and generated videos.
+              Are you sure you want to delete all media from My Media? Published
+              Family Heritage keepsakes retain separate preserved copies and must be
+              deleted from the Memory Book area.
             </p>
             <div className="flex gap-3 justify-end">
               <button
@@ -308,13 +311,22 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
                         <div className="text-sm text-gray-500">
                           {new Date(video.created_at).toLocaleDateString()}
                         </div>
-                        <button
-                          onClick={() => handleDownload(`/api/video-proxy?key=${encodeURIComponent(video.video_url!)}`, `video-${video.id}.mp4`)}
-                          className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
-                        >
-                          <Download className="w-4 h-4" />
-                          Download
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/dashboard/memory-book?sourceType=${video.type === "nostalgic-hug" ? "nostalgic_hug" : "animation"}&sourceId=${video.id}`}
+                            className="flex items-center gap-2 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm font-medium hover:bg-gray-100"
+                          >
+                            <BookOpen className="w-4 h-4" />
+                            Keepsake
+                          </Link>
+                          <button
+                            onClick={() => handleDownload(`/api/video-proxy?key=${encodeURIComponent(video.video_url!)}`, `video-${video.id}.mp4`)}
+                            className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                          >
+                            <Download className="w-4 h-4" />
+                            Download
+                          </button>
+                        </div>
                       </div>
                     </>
                   ) : (
@@ -356,13 +368,22 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
                       <p className="text-sm font-medium text-gray-900">{image.title}</p>
                       <p className="text-xs text-gray-500">{new Date(image.created_at).toLocaleDateString()}</p>
                     </div>
-                    <button
-                      onClick={() => handleDownload(image.url!.startsWith("images/") ? `/api/image-proxy?key=${encodeURIComponent(image.url!)}` : image.url!, `image-${image.id}.jpg`)}
-                      className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
-                    >
-                      <Download className="w-4 h-4" />
-                      Download
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/dashboard/memory-book?sourceType=${image.type === "family-portrait" ? "family_portrait" : "restoration"}&sourceId=${image.id}`}
+                        className="flex items-center gap-2 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm font-medium hover:bg-gray-100"
+                      >
+                        <BookOpen className="w-4 h-4" />
+                        Keepsake
+                      </Link>
+                      <button
+                        onClick={() => handleDownload(image.url!.startsWith("images/") ? `/api/image-proxy?key=${encodeURIComponent(image.url!)}` : image.url!, `image-${image.id}.jpg`)}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

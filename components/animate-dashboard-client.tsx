@@ -706,6 +706,15 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                   {currentGeneration.status === "completed" && currentGeneration.videoUrl && (
                     <div className="flex flex-col sm:flex-row gap-4 pt-4 text-center justify-center">
                       <Button
+                        asChild
+                        variant="outline"
+                        className="text-xs px-3 py-1.5 rounded font-medium transition-colors bg-white"
+                      >
+                        <a href={`/dashboard/memory-book?sourceType=animation&sourceId=${currentGeneration.id}`}>
+                          Add to keepsake
+                        </a>
+                      </Button>
+                      <Button
                         onClick={() => handleDownloadVideo(currentGeneration.videoUrl!)}
                         className="text-xs px-3 py-1.5 rounded font-medium transition-colors bg-black text-white hover:bg-gray-800"
                       >

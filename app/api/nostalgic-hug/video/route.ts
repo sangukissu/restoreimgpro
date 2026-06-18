@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { fal } from '@fal-ai/client'
 import { createClient } from '@/utils/supabase/server'
+import { uploadImageToR2 } from '@/lib/r2'
 
 fal.config({
     credentials: process.env.FAL_KEY,
@@ -49,14 +50,22 @@ export async function POST(req: NextRequest) {
             uploadToFal(image1),
             uploadToFal(image2)
         ])
+        const [firstBuffer, secondBuffer] = await Promise.all([
+            image1.arrayBuffer(),
+            image2.arrayBuffer(),
+        ])
+        const [preservedFirstKey, preservedSecondKey] = await Promise.all([
+            uploadImageToR2(Buffer.from(firstBuffer), `nostalgic-hug-source-a-${Date.now()}.jpg`, user.id, image1.type || 'image/jpeg'),
+            uploadImageToR2(Buffer.from(secondBuffer), `nostalgic-hug-source-b-${Date.now()}.jpg`, user.id, image2.type || 'image/jpeg'),
+        ])
 
         // Create initial database record (reusing existing columns to avoid migration)
         const { data: generation, error: insertError } = await supabase
             .from("nostalgic_hug_generations")
             .insert({
                 user_id: user.id,
-                sofa_image_url: firstUrl,
-                hug_image_url: secondUrl,
+                sofa_image_url: preservedFirstKey,
+                hug_image_url: preservedSecondKey,
                 status: "uploading",
             })
             .select()

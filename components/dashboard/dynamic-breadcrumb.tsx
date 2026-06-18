@@ -13,6 +13,7 @@ import {
 // Map of routes to display names
 const routeDisplayNames: Record<string, string> = {
   dashboard: "Dashboard",
+  "memory-book": "Memory Book",
   "demo-tool": "Demo Tool",
   reports: "Reports",
   settings: "Settings",

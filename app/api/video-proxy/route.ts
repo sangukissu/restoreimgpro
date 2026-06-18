@@ -30,7 +30,8 @@ export async function GET(request: Request) {
         }
 
         // 4. Stream video from R2
-        const { body, contentType, contentLength, lastModified } = await getR2ObjectStream(key);
+        const range = request.headers.get("range");
+        const { body, contentType, contentLength, lastModified, contentRange } = await getR2ObjectStream(key, range);
 
         const headers: Record<string, string> = {
             "Content-Type": contentType || "video/mp4",
@@ -40,9 +41,13 @@ export async function GET(request: Request) {
 
         if (contentLength) headers["Content-Length"] = String(contentLength);
         if (lastModified) headers["Last-Modified"] = lastModified;
+        if (contentRange) headers["Content-Range"] = contentRange;
 
         // Return video stream
-        return new Response(body as any, { headers });
+        return new Response(body as any, {
+            status: range && contentRange ? 206 : 200,
+            headers,
+        });
 
     } catch (err: any) {
         const code = err?.$metadata?.httpStatusCode || 500;

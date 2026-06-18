@@ -1,4 +1,4 @@
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { CopyObjectCommand, S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
@@ -26,16 +26,26 @@ export function getR2Client() {
   });
 }
 
-export async function getR2ObjectStream(key: string) {
+export async function getR2ObjectStream(key: string, range?: string | null) {
   const client = getR2Client();
-  const command = new GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: key });
+  const command = new GetObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: key,
+    Range: range || undefined,
+  });
   const result = await client.send(command);
   const body = result.Body as any; // Node.js Readable or Web ReadableStream depending on runtime
   const contentType = result.ContentType || "application/octet-stream";
   const contentLength = result.ContentLength || undefined;
   const lastModified = result.LastModified?.toUTCString();
 
-  return { body, contentType, contentLength, lastModified };
+  return {
+    body,
+    contentType,
+    contentLength,
+    lastModified,
+    contentRange: result.ContentRange,
+  };
 }
 
 export async function getR2SignedUrl(key: string, expiresInSeconds = 900) {
@@ -196,4 +206,19 @@ export async function getR2PresignedUploadUrl(
     console.error('Error generating presigned R2 upload URL:', error);
     throw new Error('Failed to generate presigned upload URL');
   }
+}
+
+export async function copyR2Object(sourceKey: string, destinationKey: string, contentType?: string) {
+  const client = getR2Client();
+  const command = new CopyObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    CopySource: `${R2_BUCKET_NAME}/${sourceKey}`,
+    Key: destinationKey,
+    ContentType: contentType,
+    MetadataDirective: contentType ? "REPLACE" : "COPY",
+    CacheControl: "private, max-age=31536000, immutable",
+  });
+
+  await client.send(command);
+  return destinationKey;
 }

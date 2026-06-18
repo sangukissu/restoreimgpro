@@ -10,6 +10,7 @@ import {
   Upload,
   Sparkles as SparklesIcon,
   FolderOpen,
+  BookOpen,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -97,6 +98,7 @@ export function AppSidebar({
     { title: "Dashboard", url: "/dashboard", icon: SquareTerminal },
     { title: "Restore", url: "/dashboard/restore", icon: SparklesIcon },
     { title: "Animate", url: "/dashboard/animate", icon: Sparkles },
+    { title: "Memory Book", url: "/dashboard/memory-book", icon: BookOpen },
     { title: "Family Portrait", url: "/dashboard/family-portrait", icon: ImageIcon },
     { title: "Nostalgic Hug", url: "/dashboard/nostalgic-hug", icon: ImageIcon },
     { title: "My Media", url: "/dashboard/my-media", icon: Upload },

@@ -1,0 +1,115 @@
+import { NextResponse } from "next/server"
+import { z } from "zod"
+import { processMemoryBookJobs } from "@/lib/memory-book/jobs"
+import {
+  enqueueMemoryBookJob,
+  getMemoryBookAssets,
+  getOwnedMemoryBook,
+  requireMemoryBookUser,
+  resolveMemorySource,
+} from "@/lib/memory-book/server"
+import { supabaseAdmin } from "@/utils/supabase/admin"
+
+const addAssetSchema = z.object({
+  sourceType: z.enum([
+    "restoration",
+    "family_portrait",
+    "animation",
+    "nostalgic_hug",
+  ]),
+  sourceId: z.string().uuid(),
+})
+
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { user } = await requireMemoryBookUser()
+  if (!user) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+  }
+
+  const parsed = addAssetSchema.safeParse(await request.json().catch(() => ({})))
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid media selection" }, { status: 400 })
+  }
+
+  const { id } = await params
+  const book = await getOwnedMemoryBook(id, user.id)
+  if (!book) {
+    return NextResponse.json({ error: "Memory book not found" }, { status: 404 })
+  }
+
+  const assets = await getMemoryBookAssets(id, user.id)
+  if (assets.filter((asset) => !asset.is_hidden).length >= 12) {
+    return NextResponse.json(
+      { error: "A Family Heritage book can contain up to 12 memories" },
+      { status: 409 }
+    )
+  }
+
+  const existing = assets.find(
+    (asset) =>
+      asset.source_type === parsed.data.sourceType &&
+      asset.source_id === parsed.data.sourceId
+  )
+  if (existing) {
+    return NextResponse.json({ asset: existing })
+  }
+
+  const source = await resolveMemorySource(
+    user.id,
+    parsed.data.sourceType,
+    parsed.data.sourceId
+  )
+  if (!source) {
+    return NextResponse.json(
+      { error: "This media is unavailable or still processing" },
+      { status: 404 }
+    )
+  }
+
+  const { data: asset, error } = await supabaseAdmin
+    .from("memory_book_assets")
+    .insert({
+      book_id: id,
+      user_id: user.id,
+      source_type: parsed.data.sourceType,
+      source_id: parsed.data.sourceId,
+      media_type: source.mediaType,
+      source_locator: source.locator,
+      original_label: source.label,
+      alt_text: source.label,
+      position: assets.length,
+      metadata: source.posterLocator
+        ? { posterLocator: source.posterLocator }
+        : {},
+    })
+    .select("*")
+    .single()
+
+  if (error || !asset) {
+    return NextResponse.json(
+      { error: error?.message || "Unable to add memory" },
+      { status: 500 }
+    )
+  }
+
+  await enqueueMemoryBookJob({
+    userId: user.id,
+    bookId: id,
+    assetId: asset.id,
+    jobType: "preserve_asset",
+    idempotencyKey: `preserve-asset:${asset.id}`,
+  })
+
+  await processMemoryBookJobs(1).catch(() => null)
+
+  const { data: refreshedAsset } = await supabaseAdmin
+    .from("memory_book_assets")
+    .select("*")
+    .eq("id", asset.id)
+    .single()
+
+  return NextResponse.json({ asset: refreshedAsset || asset }, { status: 201 })
+}

@@ -1,0 +1,437 @@
+import { GoogleGenAI } from "@google/genai"
+import { resend } from "@/lib/resend"
+import { deleteImageFromR2 } from "@/lib/r2"
+import { supabaseAdmin } from "@/utils/supabase/admin"
+import { preserveMemoryBookLocator } from "./storage"
+
+type MemoryBookJob = {
+  id: string
+  book_id: string | null
+  asset_id: string | null
+  user_id: string
+  job_type: "preserve_asset" | "polish_copy" | "reaction_email" | "delete_storage" | "draft_expiry_warning"
+  payload: Record<string, unknown>
+  attempts: number
+  max_attempts: number
+}
+
+const POLISH_PROMPT_VERSION = "family-heritage-copy-v1"
+
+async function preserveAsset(job: MemoryBookJob) {
+  if (!job.book_id || !job.asset_id) {
+    throw new Error("Preservation job is missing book or asset")
+  }
+
+  const { data: asset, error } = await supabaseAdmin
+    .from("memory_book_assets")
+    .select("*")
+    .eq("id", job.asset_id)
+    .eq("book_id", job.book_id)
+    .eq("user_id", job.user_id)
+    .single()
+
+  if (error || !asset) {
+    throw new Error("Memory asset not found")
+  }
+
+  if (asset.status === "ready" && asset.preserved_key) {
+    return { preservedKey: asset.preserved_key, posterKey: asset.poster_key }
+  }
+
+  if (!asset.source_locator) {
+    throw new Error("Memory asset has no source locator")
+  }
+
+  await supabaseAdmin
+    .from("memory_book_assets")
+    .update({ status: "processing", error_message: null })
+    .eq("id", asset.id)
+
+  const preservedKey = await preserveMemoryBookLocator({
+    locator: asset.source_locator,
+    userId: job.user_id,
+    bookId: job.book_id,
+    assetId: asset.id,
+    mediaType: asset.media_type,
+  })
+
+  let posterKey: string | null = null
+  const posterLocator =
+    typeof asset.metadata?.posterLocator === "string"
+      ? asset.metadata.posterLocator
+      : null
+
+  if (asset.media_type === "video" && posterLocator) {
+    posterKey = await preserveMemoryBookLocator({
+      locator: posterLocator,
+      userId: job.user_id,
+      bookId: job.book_id,
+      assetId: `${asset.id}-poster`,
+      mediaType: "image",
+    })
+  }
+
+  await supabaseAdmin
+    .from("memory_book_assets")
+    .update({
+      status: "ready",
+      preserved_key: preservedKey,
+      poster_key: posterKey,
+      error_message: null,
+    })
+    .eq("id", asset.id)
+
+  return { preservedKey, posterKey }
+}
+
+async function polishCopy(job: MemoryBookJob) {
+  if (!job.book_id) {
+    throw new Error("Polish job is missing book")
+  }
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("Gemini API key is not configured")
+  }
+
+  const { data: book, error } = await supabaseAdmin
+    .from("memory_books")
+    .select("id, user_id, title, honoree, period_label, dedication, notes, draft_version")
+    .eq("id", job.book_id)
+    .eq("user_id", job.user_id)
+    .single()
+
+  if (error || !book) {
+    throw new Error("Memory book not found")
+  }
+
+  const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+  const prompt = [
+    "Polish this family keepsake copy with restraint and warmth.",
+    "Do not invent names, dates, relationships, events, or facts.",
+    "Keep title <= 90 chars, dedication <= 600 chars, notes <= 420 chars.",
+    "Return strict JSON with keys title, dedication, notes only.",
+    JSON.stringify({
+      title: book.title,
+      honoree: book.honoree,
+      periodLabel: book.period_label,
+      dedication: book.dedication,
+      notes: book.notes,
+    }),
+  ].join("\n")
+
+  const response = await genAI.models.generateContent({
+    model: "gemini-flash-lite-latest",
+    contents: [{ text: prompt }],
+  })
+  const responseText =
+    (response as { text?: string }).text ||
+    response.candidates?.[0]?.content?.parts?.find((part) => "text" in part)?.text
+
+  if (!responseText) {
+    throw new Error("Copy polish returned no text")
+  }
+
+  const parsed = JSON.parse(
+    responseText.replace(/```json/g, "").replace(/```/g, "").trim()
+  ) as { title?: unknown; dedication?: unknown; notes?: unknown }
+
+  if (
+    typeof parsed.title !== "string" ||
+    typeof parsed.dedication !== "string" ||
+    typeof parsed.notes !== "string"
+  ) {
+    throw new Error("Copy polish returned an invalid response")
+  }
+
+  const previousCopy = {
+    title: book.title,
+    dedication: book.dedication,
+    notes: book.notes,
+    draftVersion: book.draft_version,
+  }
+
+  await supabaseAdmin
+    .from("memory_books")
+    .update({
+      title: parsed.title.slice(0, 90),
+      dedication: parsed.dedication.slice(0, 600),
+      notes: parsed.notes.slice(0, 420),
+      draft_version: book.draft_version + 1,
+      draft_document: {
+        polishPromptVersion: POLISH_PROMPT_VERSION,
+        previousCopy,
+      },
+    })
+    .eq("id", book.id)
+    .eq("draft_version", book.draft_version)
+
+  return { promptVersion: POLISH_PROMPT_VERSION, previousCopy }
+}
+
+async function sendReactionEmail(job: MemoryBookJob) {
+  if (!job.book_id) {
+    throw new Error("Reaction email job is missing book")
+  }
+
+  const { data: book } = await supabaseAdmin
+    .from("memory_books")
+    .select("title, user_id")
+    .eq("id", job.book_id)
+    .single()
+  if (!book) {
+    throw new Error("Memory book not found")
+  }
+
+  const { data: profile } = await supabaseAdmin
+    .from("user_profiles")
+    .select("email, name")
+    .eq("user_id", book.user_id)
+    .single()
+  if (!profile?.email) {
+    throw new Error("Book owner has no email")
+  }
+
+  const { data: reactions } = await supabaseAdmin
+    .from("memory_book_reactions")
+    .select("id, reaction, display_name, note, created_at")
+    .eq("book_id", job.book_id)
+    .in("notification_status", ["pending", "queued"])
+    .order("created_at", { ascending: true })
+    .limit(20)
+
+  if (!reactions?.length) {
+    return { sent: 0 }
+  }
+
+  const reactionLines = reactions.map((reaction) => {
+    const sender = reaction.display_name || "Someone you shared it with"
+    const note = reaction.note ? `: “${reaction.note}”` : ""
+    return `- ${sender} reacted ${reaction.reaction.replace("_", " ")}${note}`
+  })
+
+  const result = await resend.emails.send({
+    from: "BringBack <updates@bringback.pro>",
+    replyTo: "support@bringback.pro",
+    to: profile.email,
+    subject: `New love for “${book.title}”`,
+    text: [
+      `Hi ${profile.name || "there"},`,
+      "",
+      "Your Family Heritage keepsake received a new private reaction.",
+      "",
+      ...reactionLines,
+      "",
+      `${process.env.NEXT_PUBLIC_APP_URL || "https://bringback.pro"}/dashboard/memory-book/${job.book_id}`,
+    ].join("\n"),
+  })
+
+  if (result.error) {
+    throw new Error(result.error.message)
+  }
+
+  await supabaseAdmin
+    .from("memory_book_reactions")
+    .update({ notification_status: "sent" })
+    .in("id", reactions.map((reaction) => reaction.id))
+
+  return { sent: reactions.length }
+}
+
+async function deleteStorage(job: MemoryBookJob) {
+  const keys = Array.isArray(job.payload.keys)
+    ? job.payload.keys.filter((key): key is string => typeof key === "string")
+    : []
+
+  for (const key of keys) {
+    await deleteImageFromR2(key)
+  }
+
+  return { deleted: keys.length }
+}
+
+async function sendDraftExpiryWarning(job: MemoryBookJob) {
+  if (!job.book_id) {
+    return { skipped: true }
+  }
+
+  const [{ data: book }, { data: profile }] = await Promise.all([
+    supabaseAdmin
+      .from("memory_books")
+      .select("id, title, status, expires_at")
+      .eq("id", job.book_id)
+      .eq("user_id", job.user_id)
+      .single(),
+    supabaseAdmin
+      .from("user_profiles")
+      .select("email, name")
+      .eq("user_id", job.user_id)
+      .single(),
+  ])
+
+  if (!book || book.status === "published" || !profile?.email) {
+    return { skipped: true }
+  }
+
+  const result = await resend.emails.send({
+    from: "BringBack <updates@bringback.pro>",
+    replyTo: "support@bringback.pro",
+    to: profile.email,
+    subject: `Your Family Heritage draft is waiting`,
+    text: [
+      `Hi ${profile.name || "there"},`,
+      "",
+      `Your unpublished keepsake “${book.title}” has been inactive and is scheduled for cleanup on ${new Date(book.expires_at).toLocaleDateString("en-US")}.`,
+      "Opening or editing the draft resets the 90-day preservation period.",
+      "",
+      `${process.env.NEXT_PUBLIC_APP_URL || "https://bringback.pro"}/dashboard/memory-book/${book.id}`,
+      "",
+      "Published keepsakes do not expire.",
+    ].join("\n"),
+  })
+
+  if (result.error) {
+    throw new Error(result.error.message)
+  }
+
+  return { sent: true }
+}
+
+async function processJob(job: MemoryBookJob) {
+  if (job.job_type === "preserve_asset") return preserveAsset(job)
+  if (job.job_type === "polish_copy") return polishCopy(job)
+  if (job.job_type === "reaction_email") return sendReactionEmail(job)
+  if (job.job_type === "delete_storage") return deleteStorage(job)
+  if (job.job_type === "draft_expiry_warning") return sendDraftExpiryWarning(job)
+  return { skipped: true }
+}
+
+async function enqueueLifecycleWork() {
+  const now = new Date()
+  const warningCutoff = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+
+  const { data: warningBooks } = await supabaseAdmin
+    .from("memory_books")
+    .select("id, user_id, expires_at")
+    .neq("status", "published")
+    .gt("expires_at", now.toISOString())
+    .lte("expires_at", warningCutoff.toISOString())
+    .limit(100)
+
+  for (const book of warningBooks || []) {
+    await supabaseAdmin.from("memory_book_jobs").upsert(
+      {
+        user_id: book.user_id,
+        book_id: book.id,
+        job_type: "draft_expiry_warning",
+        idempotency_key: `draft-expiry-warning:${book.id}:${book.expires_at.slice(0, 10)}`,
+        payload: { expiresAt: book.expires_at },
+      },
+      { onConflict: "idempotency_key", ignoreDuplicates: true }
+    )
+  }
+
+  const { data: expiredBooks } = await supabaseAdmin
+    .from("memory_books")
+    .select("id, user_id")
+    .neq("status", "published")
+    .lte("expires_at", now.toISOString())
+    .limit(20)
+
+  for (const book of expiredBooks || []) {
+    const { data: assets } = await supabaseAdmin
+      .from("memory_book_assets")
+      .select("source_locator, preserved_key, poster_key")
+      .eq("book_id", book.id)
+
+    const keys = Array.from(
+      new Set(
+        (assets || []).flatMap((asset) =>
+          [asset.preserved_key, asset.poster_key, asset.source_locator].filter(
+            (key): key is string =>
+              typeof key === "string" && key.startsWith("memory-books/")
+          )
+        )
+      )
+    )
+
+    await supabaseAdmin.from("memory_book_jobs").upsert(
+      {
+        user_id: book.user_id,
+        book_id: book.id,
+        job_type: "delete_storage",
+        idempotency_key: `expire-draft-storage:${book.id}`,
+        payload: { keys },
+      },
+      { onConflict: "idempotency_key", ignoreDuplicates: true }
+    )
+
+    await supabaseAdmin
+      .from("memory_books")
+      .delete()
+      .eq("id", book.id)
+      .eq("user_id", book.user_id)
+  }
+}
+
+export async function processMemoryBookJobs(limit = 10) {
+  await enqueueLifecycleWork()
+  const workerId = `memory-book-${crypto.randomUUID()}`
+  const { data, error } = await supabaseAdmin.rpc("claim_memory_book_jobs", {
+    p_worker_id: workerId,
+    p_limit: Math.max(1, Math.min(limit, 25)),
+  })
+
+  if (error) {
+    throw error
+  }
+
+  const jobs = (data || []) as MemoryBookJob[]
+  const results: Array<{ id: string; status: string; error?: string }> = []
+
+  for (const job of jobs) {
+    try {
+      const result = await processJob(job)
+      await supabaseAdmin
+        .from("memory_book_jobs")
+        .update({
+          status: "completed",
+          result,
+          completed_at: new Date().toISOString(),
+          lease_expires_at: null,
+          locked_by: null,
+        })
+        .eq("id", job.id)
+        .eq("locked_by", workerId)
+      results.push({ id: job.id, status: "completed" })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown job failure"
+      const exhausted = job.attempts >= job.max_attempts
+      const retryDelayMinutes = Math.min(60, 2 ** Math.max(0, job.attempts - 1))
+
+      await supabaseAdmin
+        .from("memory_book_jobs")
+        .update({
+          status: exhausted ? "dead" : "failed",
+          error_message: message.slice(0, 1000),
+          available_at: new Date(Date.now() + retryDelayMinutes * 60_000).toISOString(),
+          lease_expires_at: null,
+          locked_by: null,
+        })
+        .eq("id", job.id)
+        .eq("locked_by", workerId)
+
+      if (job.asset_id && job.job_type === "preserve_asset") {
+        await supabaseAdmin
+          .from("memory_book_assets")
+          .update({
+            status: exhausted ? "failed" : "pending",
+            error_message: message.slice(0, 500),
+          })
+          .eq("id", job.asset_id)
+      }
+
+      results.push({ id: job.id, status: exhausted ? "dead" : "failed", error: message })
+    }
+  }
+
+  return results
+}

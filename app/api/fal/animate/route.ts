@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
 import { createClient } from "@/utils/supabase/server"
 import { VideoGenerationError, createError, logError, withErrorHandling } from "@/lib/error-handling"
+import { uploadImageToR2 } from "@/lib/r2"
 
 // Configure Fal AI client
 fal.config({
@@ -159,13 +160,19 @@ export async function POST(request: NextRequest) {
 
     // Upload file to Fal AI storage
     const uploadedFile = await fal.storage.upload(blob)
+    const preservedPosterKey = await uploadImageToR2(
+      buffer,
+      `animation-source-${Date.now()}.${file.type.includes("png") ? "png" : "jpg"}`,
+      user.id,
+      file.type
+    )
 
     // Create initial database record
     const { data: videoGeneration, error: insertError } = await supabase
       .from("video_generations")
       .insert({
         user_id: user.id,
-        original_image_url: uploadedFile,
+        original_image_url: preservedPosterKey,
         status: "uploading",
         preset_id: presetId,
         preset_name: preset.name,

@@ -144,10 +144,10 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                 <h3 className="text-xl font-bold text-gray-900">{message}</h3>
                 <div className="space-y-1">
                     <p className="text-gray-600 font-medium">
-                        Please do not refresh or close the browser.
+                        You may safely leave this page.
                     </p>
                     <p className="text-sm text-gray-500">
-                        Uploading your images and starting the AI generation process...
+                        Progress is saved to your account and continues in the background.
                     </p>
                 </div>
             </div>

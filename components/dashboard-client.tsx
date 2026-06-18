@@ -16,6 +16,7 @@ type AppState = "upload" | "loading" | "comparison" | "error"
 type FeatureType = "restore"
 
 interface RestorationData {
+  id: string
   originalFile: File
   originalUrl: string
   restoredUrl: string
@@ -76,6 +77,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     let isResolved = false
 
     const applyRestorationResult = async (restoration: {
+      id?: string
       status: string
       restored_image_url?: string | null
       error_message?: string | null
@@ -91,6 +93,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         }
 
         const newData: RestorationData = {
+          id: restoration.id || pendingRestorationId,
           originalFile: selectedFile,
           originalUrl: selectedImageUrl,
           restoredUrl: displayUrl,
@@ -408,6 +411,14 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
               onStartOver={handleStartOver}
               onDownload={handleDownload}
             />
+            <div className="mx-auto mt-4 flex max-w-5xl justify-center">
+              <a
+                href={`/dashboard/memory-book?sourceType=restoration&sourceId=${restorationData.id}`}
+                className="inline-flex items-center rounded-md border border-black/10 bg-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-gray-50"
+              >
+                Add to Family Heritage keepsake
+              </a>
+            </div>
           </>
         )}
 

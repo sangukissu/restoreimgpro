@@ -32,11 +32,7 @@ export default function PrivacyPage() {
               Your privacy is important to us. This policy explains how we collect, use, and protect your information.
             </p>
             <div className="mt-4 text-sm text-gray-500">
-              Last updated: {new Date().toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+              Last updated: June 18, 2026
             </div>
           </div>
 
@@ -73,8 +69,8 @@ export default function PrivacyPage() {
                   <div className="text-gray-600 space-y-4">
                     <p>We use your information solely to:</p>
                     <ul className="list-disc pl-6 space-y-2">
-                      <li>Process and restore your photos using AI technology</li>
-                      <li>Deliver restored images to you</li>
+                      <li>Process, restore, animate, or compose media using AI technology</li>
+                      <li>Deliver generated media and user-requested keepsakes to you</li>
                       <li>Process payments for our services</li>
                       <li>Send service-related communications</li>
                       <li>Improve our restoration algorithms (using anonymized data only)</li>
@@ -89,17 +85,21 @@ export default function PrivacyPage() {
                       <span>🔒</span> Your Photos Are Safe
                     </h3>
                     <p className="text-blue-800">
-                      All uploaded photos are automatically deleted from our servers within 30 minutes of processing. Generated media is automatically deleted after 7 days. We
-                      never store, share, or use your personal photos for any purpose other than restoration.
+                      Media uploaded only for AI processing remains temporary and follows the
+                      deletion period shown in the applicable product. When you explicitly add
+                      selected media to a Family Heritage keepsake and consent to preservation,
+                      BringBack stores private keepsake-owned copies until you delete the
+                      keepsake or close your account.
                     </p>
                   </div>
                   <div className="text-gray-600 space-y-4">
                     <ul className="list-disc pl-6 space-y-2">
                       <li>Photos are encrypted during upload and processing</li>
                       <li>Access is restricted to authorized restoration systems only</li>
-                      <li>No human employees view your personal photos</li>
-                      <li>Automatic deletion of uploaded media within 30 minutes of processing guaranteed</li>
-                      <li>Automatic deletion of generated media after 7 days guaranteed</li>
+                      <li>We do not use your family media to train general-purpose AI models</li>
+                      <li>Unpublished keepsake drafts expire after 90 days of inactivity, with advance notice</li>
+                      <li>Published keepsakes remain private, unlisted, and stored only with your explicit consent</li>
+                      <li>You can revoke a share link, unpublish, export, or delete a keepsake at any time</li>
                     </ul>
                   </div>
                 </section>
@@ -126,6 +126,7 @@ export default function PrivacyPage() {
                       <li>Correct inaccurate information</li>
                       <li>Opt out of marketing communications</li>
                       <li>Data portability where applicable</li>
+                      <li>Control recipient downloads and optional PIN access for shared keepsakes</li>
                     </ul>
                   </div>
                 </section>
