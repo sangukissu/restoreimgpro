@@ -24,7 +24,6 @@
     radial-gradient(circle at 82% 78%, rgba(232, 205, 151, 0.18), transparent 26%),
     #f9f6f0;
   color: #2c2420;
-  perspective: 2500px;
   font-family: var(--font-manrope), sans-serif;
 }
 
@@ -108,8 +107,8 @@
   z-index: 4;
   width: min(1000px, 86%, calc((100svh - 120px) * 1.52));
   aspect-ratio: 1000 / 650;
-  transform: translate(-50%, -50%);
-  transform-style: preserve-3d;
+  transform: translate(-50%, -50%) rotateX(2deg) rotateZ(-0.2deg);
+  perspective: 2200px;
 }
 
 .decorativeScene {
@@ -147,7 +146,7 @@
   width: clamp(44px, 5vw, 82px);
   z-index: 1;
   filter: drop-shadow(5px 10px 8px rgba(50, 30, 10, 0.16));
-  transform: rotate(0deg) translateZ(20px);
+  transform: rotate(0deg);
   transform-origin: 50% 82%;
   transition:
     top 900ms cubic-bezier(0.645, 0.045, 0.355, 1),
@@ -163,7 +162,7 @@
   right: auto;
   left: calc(50% + min(43vw, 500px, calc((100svh - 120px) * 0.76)) - clamp(30px, 3.2vw, 48px));
   width: clamp(50px, 5.8vw, 86px);
-  transform: rotate(18deg) translateZ(16px);
+  transform: rotate(18deg);
 }
 
 .stageButterfly {
@@ -180,7 +179,6 @@
   right: clamp(24px, 7vw, 130px);
   width: clamp(110px, 13vw, 175px);
   height: clamp(112px, 13vw, 185px);
-  transform: translateZ(75px);
 }
 
 .topRightPolaroids .polaroid {
@@ -199,7 +197,6 @@
   bottom: clamp(62px, 10vh, 130px);
   width: clamp(124px, 15vw, 210px);
   height: clamp(112px, 12vw, 178px);
-  transform: translateZ(70px);
 }
 
 .bottomLeftPolaroids .polaroid {
@@ -226,7 +223,7 @@
   box-shadow:
     0 16px 24px -14px rgba(32, 27, 22, 0.42),
     0 1px 2px rgba(32, 27, 22, 0.22);
-  transform: rotate(var(--rotate)) translateZ(18px);
+  transform: rotate(var(--rotate));
   transform-origin: 50% 22%;
   appearance: none;
 }
@@ -367,11 +364,16 @@
 }
 
 .bookClosed {
-  transform: translateX(-25%) rotateX(2deg) rotateZ(-0.4deg);
+  transform: translateX(-25%);
 }
 
 .bookOpen {
-  transform: translateX(0) rotateX(2deg) rotateZ(0deg);
+  transform: translateX(0);
+}
+
+.bookFrameTurning {
+  cursor: wait;
+  pointer-events: none;
 }
 
 .leftBase,
@@ -405,6 +407,7 @@
 
 .rightBaseActive {
   z-index: 40;
+  pointer-events: auto;
 }
 
 .bookClosed .leftBase,
@@ -441,7 +444,7 @@
   overflow: hidden;
   border-radius: 30px;
   backface-visibility: hidden;
-  transform-style: preserve-3d;
+  pointer-events: none;
 }
 
 .sheetFront {
@@ -452,60 +455,11 @@
   transform: rotateY(180deg);
 }
 
-.bookTurnLayer {
-  position: absolute;
-  right: 0;
-  left: 0;
-  pointer-events: none;
-}
-
-.bookTurnLayerTop {
-  top: 0;
-  z-index: 200;
-  height: 66%;
-}
-
-.bookTurnLayerTopClosed {
-  height: 100%;
-}
-
-.bookTurnLayerBottom {
-  top: 66%;
-  bottom: 0;
-  z-index: 2;
-}
-
-.bookTurnButton {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  appearance: none;
+.sheetFaceVisible {
   pointer-events: auto;
 }
 
-.bookTurnClosed,
-.bookTurnForward {
-  right: 0;
-  width: 50%;
-}
 
-.bookTurnBack {
-  left: 0;
-  width: 50%;
-}
-
-.bookTurnButton:focus-visible {
-  outline: 3px solid rgba(34, 98, 150, 0.78);
-  outline-offset: -10px;
-}
-
-.bookTurnButton:disabled {
-  cursor: wait;
-}
 
 .spineCrease {
   position: absolute;
@@ -1486,11 +1440,11 @@
 @keyframes butterflyFloat {
   0%,
   100% {
-    transform: translate3d(0, 0, 90px) rotate(-8deg);
+    transform: translateY(0) rotate(-8deg);
   }
 
   50% {
-    transform: translate3d(0, -16px, 90px) rotate(-3deg);
+    transform: translateY(-16px) rotate(-3deg);
   }
 }
 

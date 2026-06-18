@@ -19,11 +19,33 @@ export function BookSheet({
       className={[
         styles.bookSheet,
         isTurned ? styles.sheetTurned : "",
-      ].join(" ")}
+      ]
+        .filter(Boolean)
+        .join(" ")}
       style={{ "--sheet-z": zIndex } as CSSProperties}
     >
-      <div className={[styles.sheetFace, styles.sheetFront].join(" ")}>{front}</div>
-      <div className={[styles.sheetFace, styles.sheetBack].join(" ")}>{back}</div>
+      <div
+        className={[
+          styles.sheetFace,
+          styles.sheetFront,
+          !isTurned ? styles.sheetFaceVisible : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {front}
+      </div>
+      <div
+        className={[
+          styles.sheetFace,
+          styles.sheetBack,
+          isTurned ? styles.sheetFaceVisible : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {back}
+      </div>
     </div>
   )
 }

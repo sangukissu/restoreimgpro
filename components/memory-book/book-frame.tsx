@@ -1,6 +1,6 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { useCallback, useRef, type ReactNode } from "react"
 import { BookSheet } from "./book-sheet"
 import styles from "./memory-book.module.css"
 
@@ -27,21 +27,66 @@ export function BookFrame({
   onBack,
   onForward,
 }: BookFrameProps) {
+  const frameRef = useRef<HTMLElement>(null)
   const isClosed = turnedSheets === 0
   const canGoBack = turnedSheets > 0
   const canGoForward = turnedSheets < sheets.length
 
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      /* ── Guard: animation in progress ────────────────────────── */
+      if (isTurning) return
+
+      /* ── Guard: click on an interactive child (e.g. Polaroid) ─ */
+      const target = event.target as HTMLElement
+      if (target.closest('[data-memory-book-interactive="true"]')) return
+
+      /* ── Closed book: any click opens it ──────────────────────── */
+      if (isClosed) {
+        if (canGoForward) onForward()
+        return
+      }
+
+      /* ── Open book: left half → back, right half → forward ───── */
+      const frame = frameRef.current
+      if (!frame) return
+
+      const rect = frame.getBoundingClientRect()
+      const midpoint = rect.left + rect.width / 2
+
+      if (event.clientX < midpoint) {
+        if (canGoBack) onBack()
+      } else {
+        if (canGoForward) onForward()
+      }
+    },
+    [isTurning, isClosed, canGoBack, canGoForward, onBack, onForward],
+  )
+
   return (
     <section
-      className={[styles.bookFrame, isClosed ? styles.bookClosed : styles.bookOpen].join(" ")}
+      ref={frameRef}
+      className={[
+        styles.bookFrame,
+        isClosed ? styles.bookClosed : styles.bookOpen,
+        isTurning ? styles.bookFrameTurning : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       aria-label="Interactive anniversary memory book"
+      onClick={handleClick}
     >
-      <div className={styles.leftBase} aria-hidden={turnedSheets < sheets.length} />
+      <div
+        className={styles.leftBase}
+        aria-hidden={turnedSheets < sheets.length}
+      />
       <div
         className={[
           styles.rightBase,
           turnedSheets === sheets.length ? styles.rightBaseActive : "",
-        ].filter(Boolean).join(" ")}
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         {finalRightPage}
       </div>
@@ -62,65 +107,6 @@ export function BookFrame({
       })}
 
       <div className={styles.spineCrease} aria-hidden="true" />
-
-      <div
-        className={[
-          styles.bookTurnLayer,
-          styles.bookTurnLayerTop,
-          isClosed ? styles.bookTurnLayerTopClosed : "",
-        ].filter(Boolean).join(" ")}
-      >
-        {isClosed && canGoForward ? (
-          <button
-            type="button"
-            className={[styles.bookTurnButton, styles.bookTurnClosed].join(" ")}
-            onClick={onForward}
-            disabled={isTurning}
-            aria-label="Open memory book"
-          />
-        ) : null}
-        {!isClosed && canGoBack ? (
-          <button
-            type="button"
-            className={[styles.bookTurnButton, styles.bookTurnBack].join(" ")}
-            onClick={onBack}
-            disabled={isTurning}
-            aria-label="Turn page back"
-          />
-        ) : null}
-        {!isClosed && canGoForward ? (
-          <button
-            type="button"
-            className={[styles.bookTurnButton, styles.bookTurnForward].join(" ")}
-            onClick={onForward}
-            disabled={isTurning}
-            aria-label="Turn page forward"
-          />
-        ) : null}
-      </div>
-
-      {!isClosed ? (
-        <div className={[styles.bookTurnLayer, styles.bookTurnLayerBottom].join(" ")} aria-hidden="true">
-          {canGoBack ? (
-            <button
-              type="button"
-              className={[styles.bookTurnButton, styles.bookTurnBack].join(" ")}
-              onClick={onBack}
-              disabled={isTurning}
-              tabIndex={-1}
-            />
-          ) : null}
-          {canGoForward ? (
-            <button
-              type="button"
-              className={[styles.bookTurnButton, styles.bookTurnForward].join(" ")}
-              onClick={onForward}
-              disabled={isTurning}
-              tabIndex={-1}
-            />
-          ) : null}
-        </div>
-      ) : null}
     </section>
   )
 }
