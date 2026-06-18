@@ -13,6 +13,7 @@
 }
 
 .stageShell {
+  --book-center-y: 52%;
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -102,7 +103,7 @@
 
 .bookMount {
   position: absolute;
-  top: 52%;
+  top: var(--book-center-y);
   left: 50%;
   z-index: 4;
   width: min(1000px, 86%, calc((100svh - 120px) * 1.52));
@@ -119,10 +120,11 @@
 }
 
 .stageFlowers {
+  --stage-flowers-width: clamp(180px, 22vw, 340px);
   position: absolute;
-  top: 10%;
-  left: clamp(8px, 6vw, 110px);
-  width: clamp(120px, 17vw, 270px);
+  top: calc(var(--book-center-y) - (var(--stage-flowers-width) * 0.75));
+  left: calc(50% - min(22vw, 250px, calc((100svh - 120px) * 0.38)) - clamp(110px, 14vw, 200px));
+  width: var(--stage-flowers-width);
   z-index: 1;
   filter: drop-shadow(14px 20px 16px rgba(49, 42, 31, 0.18));
   transform-origin: 58% 82%;
@@ -134,16 +136,18 @@
 }
 
 .stageFlowersOpen {
-  top: 15%;
+  --stage-flowers-open-width: clamp(142px, 18vw, 250px);
+  top: calc(var(--book-center-y) - (var(--stage-flowers-open-width) * 0.75));
   left: calc(50% - min(43vw, 500px, calc((100svh - 120px) * 0.76)) - clamp(72px, 6vw, 106px));
-  width: clamp(142px, 18vw, 250px);
+  width: var(--stage-flowers-open-width);
 }
 
 .stagePencils {
+  --stage-pencils-width: clamp(60px, 7vw, 110px);
   position: absolute;
-  top: 26%;
-  right: clamp(150px, 24vw, 420px);
-  width: clamp(44px, 5vw, 82px);
+  top: calc(var(--book-center-y) - (var(--stage-pencils-width) * 2));
+  right: calc(50% - min(22vw, 250px, calc((100svh - 120px) * 0.38)) - clamp(40px, 5vw, 80px));
+  width: var(--stage-pencils-width);
   z-index: 1;
   filter: drop-shadow(5px 10px 8px rgba(50, 30, 10, 0.16));
   transform: rotate(0deg);
@@ -158,10 +162,11 @@
 }
 
 .stagePencilsOpen {
-  top: 31.5%;
+  --stage-pencils-open-width: clamp(50px, 5.8vw, 86px);
+  top: calc(var(--book-center-y) - (var(--stage-pencils-open-width) * 2));
   right: auto;
   left: calc(50% + min(43vw, 500px, calc((100svh - 120px) * 0.76)) - clamp(30px, 3.2vw, 48px));
-  width: clamp(50px, 5.8vw, 86px);
+  width: var(--stage-pencils-open-width);
   transform: rotate(18deg);
 }
 
@@ -436,6 +441,8 @@
 
 .sheetTurned {
   transform: rotateY(-180deg);
+  transition: transform 900ms cubic-bezier(0.645, 0.045, 0.355, 1),
+              z-index 0ms 450ms;
 }
 
 .sheetFace {
@@ -1451,7 +1458,7 @@
 @media (max-width: 1180px) {
   .stageFlowers {
     opacity: 0.82;
-    left: clamp(-34px, 3vw, 42px);
+    left: calc(50% - min(24vw, 250px, calc((100svh - 130px) * 0.38)) - clamp(90px, 12vw, 170px));
   }
 
   .stageFlowersOpen {
@@ -1459,7 +1466,7 @@
   }
 
   .stagePencils {
-    right: 13%;
+    right: calc(50% - min(24vw, 250px, calc((100svh - 130px) * 0.38)) - clamp(36px, 4.5vw, 70px));
   }
 
   .stagePencilsOpen {
@@ -1470,30 +1477,36 @@
 
 @media (max-width: 900px) {
   .stageShell {
+    --book-center-y: 53%;
     min-height: calc(100svh - 4rem);
   }
 
   .bookMount {
-    top: 53%;
+    top: var(--book-center-y);
     width: min(940px, 94vw, calc((100svh - 130px) * 1.52));
   }
 
-  .stageFlowers,
+  .stageFlowers {
+    --stage-flowers-width: clamp(150px, 20vw, 280px);
+    opacity: 0.6;
+    left: calc(50% - min(24vw, 235px, calc((100svh - 130px) * 0.38)) - clamp(80px, 11vw, 150px));
+  }
+
   .stagePencils {
-    opacity: 0.55;
+    --stage-pencils-width: clamp(54px, 6.5vw, 96px);
+    opacity: 0.6;
+    right: calc(50% - min(24vw, 235px, calc((100svh - 130px) * 0.38)) - clamp(30px, 4vw, 60px));
   }
 
   .stageFlowersOpen {
-    top: 18%;
+    --stage-flowers-open-width: clamp(124px, 21vw, 178px);
     left: calc(50% - min(47vw, 470px, calc((100svh - 130px) * 0.76)) - 58px);
-    width: clamp(124px, 21vw, 178px);
     opacity: 0.82;
   }
 
   .stagePencilsOpen {
-    top: 34%;
+    --stage-pencils-open-width: clamp(44px, 7vw, 66px);
     left: calc(50% + min(47vw, 470px, calc((100svh - 130px) * 0.76)) - 28px);
-    width: clamp(44px, 7vw, 66px);
     opacity: 0.82;
   }
 
@@ -1531,8 +1544,11 @@
     transform: translateX(-50%) scale(0.9);
   }
 
+  .stageShell {
+    --book-center-y: 51%;
+  }
+
   .bookMount {
-    top: 51%;
     width: min(900px, 112vw, calc((100svh - 160px) * 1.52));
   }
 

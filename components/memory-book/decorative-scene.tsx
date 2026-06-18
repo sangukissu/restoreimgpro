@@ -1,7 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { BotanicalSvg } from "./botanical-svg"
 import { ButterflySvg } from "./butterfly-svg"
 import { PencilsSvg } from "./pencils-svg"
 import { Polaroid } from "./polaroid"
@@ -20,7 +19,7 @@ export function DecorativeScene({ isBookOpen }: DecorativeSceneProps) {
         animate={isBookOpen ? { rotate: -8, y: 18, scale: 1.08 } : { rotate: -3, y: 0, scale: 1 }}
         transition={{ duration: 0.9, ease: [0.645, 0.045, 0.355, 1] }}
       >
-        <BotanicalSvg />
+        <img src="/icons/left-flower.webp" alt="" draggable={false} style={{ display: "block", width: "100%" }} />
       </motion.div>
       <PencilsSvg className={[styles.stagePencils, isBookOpen ? styles.stagePencilsOpen : ""].join(" ")} />
       <ButterflySvg className={styles.stageButterfly} />
