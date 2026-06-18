@@ -5,7 +5,7 @@ import {
   type MemoryBookRecord,
 } from "./types"
 
-const SPREAD_HEADINGS = [
+export const SPREAD_HEADINGS = [
   "Where our story begins",
   "The faces we carry",
   "Days worth remembering",
@@ -14,7 +14,7 @@ const SPREAD_HEADINGS = [
   "Still with us",
 ]
 
-const SPREAD_BODIES = [
+export const SPREAD_BODIES = [
   "A few photographs can hold an entire generation: its tenderness, its courage, and the ordinary days that became precious.",
   "These are the people whose expressions, rituals, and stories continue to shape the family we know today.",
   "Time changes the paper, but it does not take away the warmth inside the moment.",
@@ -22,6 +22,13 @@ const SPREAD_BODIES = [
   "Gathered here are the fragments that deserve to remain together, close enough to be revisited.",
   "The years move forward. What mattered stays, ready to be shared again.",
 ]
+
+export function limitWords(text: string, maxWords: number): string {
+  if (!text) return ""
+  const words = text.trim().split(/\s+/).filter(Boolean)
+  if (words.length <= maxWords) return text
+  return words.slice(0, maxWords).join(" ")
+}
 
 export function buildMemoryBookDocument(
   book: MemoryBookRecord,
@@ -34,6 +41,22 @@ export function buildMemoryBookDocument(
 
   const spreads = Array.from({ length: Math.ceil(visibleAssets.length / 2) }, (_, index) => {
     const spreadAssets = visibleAssets.slice(index * 2, index * 2 + 2)
+    const firstAsset = spreadAssets[0]
+
+    // Read custom overrides from first asset's metadata JSON
+    const metadata = (firstAsset?.metadata || {}) as Record<string, unknown>
+    const customHeading = metadata.customHeading as string | undefined
+    const customBody = metadata.customBody as string | undefined
+
+    const heading = customHeading !== undefined
+      ? customHeading
+      : (SPREAD_HEADINGS[index] || `Family memory ${index + 1}`)
+
+    const rawBody = index === 0 && book.notes.trim()
+      ? book.notes.trim()
+      : (customBody !== undefined ? customBody : SPREAD_BODIES[index])
+
+    const body = limitWords(rawBody, 40).slice(0, 420)
 
     return {
       id: `heritage-spread-${index + 1}`,
@@ -43,12 +66,12 @@ export function buildMemoryBookDocument(
       },
       right: {
         kind: "memories" as const,
-        heading: SPREAD_HEADINGS[index] || `Family memory ${index + 1}`,
-        body: index === 0 && book.notes.trim() ? book.notes.trim().slice(0, 420) : SPREAD_BODIES[index],
+        heading,
+        body,
         assets: spreadAssets.map((asset) => ({
           id: asset.id,
           mediaType: asset.media_type,
-          caption: asset.caption.trim().slice(0, 280),
+          caption: limitWords(asset.caption, 15).trim().slice(0, 280),
           alt: asset.alt_text.trim().slice(0, 180) || "Family memory",
           featured: asset.is_featured,
         })),
@@ -62,7 +85,7 @@ export function buildMemoryBookDocument(
     bookId: book.id,
     cover: {
       title: book.title.trim() || "Our Family Heritage",
-      subtitle: book.honoree.trim() ? `For ${book.honoree.trim()}` : "A family keepsake",
+      subtitle: book.honoree.trim() ? `For ${book.honoree.trim()}` : "",
       periodLabel: book.period_label.trim(),
     },
     dedication: book.dedication.trim(),

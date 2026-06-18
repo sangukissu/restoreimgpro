@@ -67,7 +67,23 @@ export function MobileSpiralJournal({
         <div className={styles.mobileSpiralRail} aria-hidden="true">
           {SPIRAL_RINGS.map((ring) => (
             <span className={styles.mobileSpiralRing} key={ring}>
-              <i />
+              <svg width="24" height="48" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id={`wire-metal-${ring}`} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#4a4641"/>
+                    <stop offset="25%" stopColor="#a8a39d"/>
+                    <stop offset="45%" stopColor="#ffffff"/>
+                    <stop offset="70%" stopColor="#807b75"/>
+                    <stop offset="100%" stopColor="#3c3834"/>
+                  </linearGradient>
+                  <filter id={`wire-shadow-${ring}`} x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.15   0 0 0 0 0.12   0 0 0 0 0.09  0 0 0 0.35 0"/>
+                  </filter>
+                </defs>
+                <path d="M 11,20 C 11,4 17,4 17,39.5" fill="none" stroke="black" strokeWidth="3.2" filter={`url(#wire-shadow-${ring})`} />
+                <path d="M 9,20 C 9,2 15,2 15,39.5" fill="none" stroke={`url(#wire-metal-${ring})`} strokeWidth="3.2" strokeLinecap="round" />
+              </svg>
             </span>
           ))}
         </div>
@@ -166,11 +182,13 @@ function MobileJournalCover({
           <span key={line}>{line}</span>
         ))}
       </div>
-      <div className={styles.mobileCoverPeriod}>
-        {periodLines.map((line) => (
-          <span key={line}>{line}</span>
-        ))}
-      </div>
+      {periodLines.length > 0 && (
+        <div className={styles.mobileCoverPeriod}>
+          {periodLines.map((line) => (
+            <span key={line}>{line}</span>
+          ))}
+        </div>
+      )}
       <div className={styles.mobileCoverPencils} aria-hidden="true">
         <PencilsSvg />
       </div>

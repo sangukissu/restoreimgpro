@@ -97,7 +97,7 @@ export function PublicMemoryBook({
               onClick={() => {
                 setShowReactionsSection(true)
                 setTimeout(() => {
-                  const target = document.getElementById("reaction-section")
+                  const target = window.document.getElementById("reaction-section")
                   target?.scrollIntoView({ behavior: "smooth" })
                 }, 100)
               }}

@@ -14,6 +14,8 @@ const updateAssetSchema = z.object({
   position: z.number().int().min(0).max(11).optional(),
   featured: z.boolean().optional(),
   hidden: z.boolean().optional(),
+  heading: z.string().trim().max(80).optional().or(z.literal("")),
+  body: z.string().trim().max(420).optional().or(z.literal("")),
 })
 
 export async function PATCH(
@@ -70,6 +72,12 @@ export async function PATCH(
     )
   }
 
+  const updatedMetadata = {
+    ...(asset.metadata || {}),
+    ...(parsed.data.heading !== undefined ? { customHeading: parsed.data.heading } : {}),
+    ...(parsed.data.body !== undefined ? { customBody: parsed.data.body } : {}),
+  }
+
   const { data: updatedAsset, error } = await supabaseAdmin
     .from("memory_book_assets")
     .update({
@@ -78,6 +86,7 @@ export async function PATCH(
       position: parsed.data.position ?? asset.position,
       is_featured: parsed.data.featured ?? asset.is_featured,
       is_hidden: parsed.data.hidden ?? asset.is_hidden,
+      metadata: updatedMetadata,
     })
     .eq("id", assetId)
     .eq("book_id", id)

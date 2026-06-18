@@ -45,7 +45,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { buildMemoryBookDocument } from "@/lib/memory-book/document"
+import { buildMemoryBookDocument, SPREAD_HEADINGS, SPREAD_BODIES } from "@/lib/memory-book/document"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import type {
   CuratorMediaOption,
   MemoryBookAssetRecord,
@@ -108,7 +114,6 @@ export function MemoryBookCurator({
   const [workingId, setWorkingId] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [publishing, setPublishing] = useState(false)
-  const [polishing, setPolishing] = useState(false)
   const [publishOpen, setPublishOpen] = useState(false)
   const [shareUrl, setShareUrl] = useState(initialShareUrl)
   const [copied, setCopied] = useState(false)
@@ -404,6 +409,8 @@ export function MemoryBookCurator({
       caption?: string
       featured?: boolean
       hidden?: boolean
+      heading?: string
+      body?: string
     }
   ) => {
     await flushBookPatch()
@@ -461,24 +468,7 @@ export function MemoryBookCurator({
     setAssets(result.assets)
   }
 
-  const polishCopy = async () => {
-    await flushBookPatch()
-    setPolishing(true)
-    setError(null)
-    try {
-      const response = await fetch(`/api/memory-books/${book.id}/polish`, {
-        method: "POST",
-      })
-      const result = await response.json()
-      if (!response.ok) throw new Error(result.error || "Unable to polish copy")
-      posthog.capture("memory_book_copy_polish_requested")
-      await refreshBook()
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Unable to polish copy")
-    } finally {
-      setPolishing(false)
-    }
-  }
+
 
   const publishBook = async () => {
     await flushBookPatch()
@@ -615,9 +605,7 @@ export function MemoryBookCurator({
           book={book}
           assets={assets}
           assetSources={assetSources}
-          polishing={polishing}
           onPatch={queueBookPatch}
-          onPolish={polishCopy}
           onAssetUpdate={updateAsset}
           onMove={moveAsset}
           onBack={() => setStep("memories")}
@@ -820,13 +808,153 @@ function MemorySelectionStep({
   )
 }
 
+function getWordCount(text: string): number {
+  if (!text) return 0
+  const clean = text.trim()
+  if (!clean) return 0
+  return clean.split(/\s+/).filter(Boolean).length
+}
+
+function limitWordsForEditing(text: string, maxWords: number): string {
+  if (!text) return ""
+  const tokens = text.split(/(\s+)/)
+  let wordCount = 0
+  let result = ""
+  for (const token of tokens) {
+    if (token === "") continue
+    const isWhitespace = /^\s+$/.test(token)
+    if (!isWhitespace) {
+      if (wordCount >= maxWords) {
+        break
+      }
+      wordCount++
+    }
+    result += token
+  }
+  return result
+}
+
+function WordLimitedTextarea({
+  defaultValue,
+  maxWords,
+  placeholder,
+  className = "",
+  onSave,
+}: {
+  defaultValue: string
+  maxWords: number
+  placeholder?: string
+  className?: string
+  onSave: (value: string) => void
+}) {
+  const [value, setValue] = useState(defaultValue)
+
+  useEffect(() => {
+    setValue(defaultValue)
+  }, [defaultValue])
+
+  const wordCount = getWordCount(value)
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value
+    const limited = limitWordsForEditing(val, maxWords)
+    setValue(limited)
+  }
+
+  const handleBlur = () => {
+    if (value !== defaultValue) {
+      onSave(value)
+    }
+  }
+
+  return (
+    <Field
+      label="Page story / note"
+      hint={
+        <span className={wordCount > maxWords ? "text-red-500 font-bold" : ""}>
+          {wordCount}/{maxWords} words
+        </span>
+      }
+    >
+      <Textarea
+        value={value}
+        maxLength={420}
+        placeholder={placeholder}
+        className={`${className} min-h-20 ${
+          wordCount > maxWords
+            ? "border-red-500 focus-visible:ring-red-500 bg-red-50/20"
+            : ""
+        }`}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+    </Field>
+  )
+}
+
+function WordLimitedInput({
+  defaultValue,
+  maxWords,
+  placeholder,
+  className = "",
+  onSave,
+  originalLabel,
+}: {
+  defaultValue: string
+  maxWords: number
+  placeholder?: string
+  className?: string
+  onSave: (value: string) => void
+  originalLabel: string
+}) {
+  const [value, setValue] = useState(defaultValue)
+
+  useEffect(() => {
+    setValue(defaultValue)
+  }, [defaultValue])
+
+  const wordCount = getWordCount(value)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value
+    const limited = limitWordsForEditing(val, maxWords)
+    setValue(limited)
+  }
+
+  const handleBlur = () => {
+    if (value !== defaultValue) {
+      onSave(value)
+    }
+  }
+
+  return (
+    <div className="mt-2">
+      <div className="flex justify-between items-center mb-1">
+        <p className="truncate text-sm font-semibold">{originalLabel}</p>
+        <span className={`text-[10px] ${wordCount > maxWords ? "text-red-500 font-bold" : "text-black/38"}`}>
+          {wordCount}/{maxWords} words
+        </span>
+      </div>
+      <Input
+        value={value}
+        maxLength={280}
+        className={`${className} ${
+          wordCount > maxWords ? "border-red-500 focus-visible:ring-red-500 bg-red-50/20" : ""
+        }`}
+        placeholder={placeholder}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+    </div>
+  )
+}
+
+
 function StoryStep({
   book,
   assets,
   assetSources,
-  polishing,
   onPatch,
-  onPolish,
   onAssetUpdate,
   onMove,
   onBack,
@@ -835,19 +963,22 @@ function StoryStep({
   book: MemoryBookRecord
   assets: MemoryBookAssetRecord[]
   assetSources: MemoryBookAssetSource[]
-  polishing: boolean
   onPatch: (patch: BookPatch) => void
-  onPolish: () => void
   onAssetUpdate: (
     asset: MemoryBookAssetRecord,
-    patch: { caption?: string; featured?: boolean; hidden?: boolean }
-  ) => void
-  onMove: (assetId: string, direction: -1 | 1) => void
+    patch: { caption?: string; featured?: boolean; hidden?: boolean; heading?: string; body?: string }
+  ) => Promise<void>
+  onMove: (assetId: string, direction: -1 | 1) => Promise<void>
   onBack: () => void
   onContinue: () => void
 }) {
   const sourceMap = new Map(assetSources.map((source) => [source.id, source]))
   const ordered = [...assets].sort((a, b) => a.position - b.position)
+  const visibleAssets = assets
+    .filter((asset) => asset.status === "ready" && !asset.is_hidden)
+    .sort((a, b) => a.position - b.position)
+    .slice(0, 12)
+  const numSpreads = Math.ceil(visibleAssets.length / 2)
 
   return (
     <section className="mx-auto grid max-w-7xl gap-8 px-5 py-7 md:px-8 md:py-10 lg:grid-cols-[minmax(0,420px)_1fr]">
@@ -858,61 +989,140 @@ function StoryStep({
           Write naturally. BringBack uses your words without inventing family facts.
         </p>
 
-        <div className="mt-7 space-y-5">
-          <Field label="Book title" hint={`${book.title.length}/90`}>
-            <Input
-              value={book.title}
-              maxLength={90}
-              onChange={(event) => onPatch({ title: event.target.value })}
-            />
-          </Field>
-          <Field label="Who is this for?">
-            <Input
-              value={book.honoree}
-              maxLength={100}
-              placeholder="The Sharma family, Grandma Rose…"
-              onChange={(event) => onPatch({ honoree: event.target.value })}
-            />
-          </Field>
-          <Field label="Approximate period">
-            <Input
-              value={book.period_label}
-              maxLength={80}
-              placeholder="1948–1986, Three generations…"
-              onChange={(event) => onPatch({ periodLabel: event.target.value })}
-            />
-          </Field>
-          <Field label="Dedication" hint={`${book.dedication.length}/600`}>
-            <Textarea
-              value={book.dedication}
-              maxLength={600}
-              className="min-h-28"
-              placeholder="For the people who gave us our beginning…"
-              onChange={(event) => onPatch({ dedication: event.target.value })}
-            />
-          </Field>
-          <Field label="A note for the opening spread" hint={`${book.notes.length}/420`}>
-            <Textarea
-              value={book.notes}
-              maxLength={420}
-              className="min-h-24"
-              placeholder="Share only what you know. This remains editable."
-              onChange={(event) => onPatch({ notes: event.target.value })}
-            />
-          </Field>
-          <Button
-            variant="outline"
-            onClick={onPolish}
-            disabled={polishing || (!book.dedication.trim() && !book.notes.trim())}
-          >
-            {polishing ? <Loader2 className="animate-spin" /> : <Sparkles />}
-            Polish my writing
-          </Button>
-          <p className="text-xs leading-5 text-black/45">
-            Optional. Only the text above is sent for one restrained writing pass.
-            Photos, account data, and hidden metadata are never included.
-          </p>
-        </div>
+        <Accordion type="single" collapsible defaultValue="basic-details" className="mt-6 border-y border-black/8 divide-y divide-black/8">
+          <AccordionItem value="basic-details" className="border-none py-1">
+            <AccordionTrigger className="text-xs font-bold uppercase tracking-wider text-[#47736c] hover:no-underline [&[data-state=open]]:pb-2">
+              Book Cover & Dedication Details
+            </AccordionTrigger>
+            <AccordionContent className="space-y-5 pt-3 pb-6">
+              <Field label="Book title" hint={`${book.title.length}/90`}>
+                <Input
+                  value={book.title}
+                  maxLength={90}
+                  onChange={(event) => onPatch({ title: event.target.value })}
+                />
+              </Field>
+              <Field label="Who is this for?">
+                <Input
+                  value={book.honoree}
+                  maxLength={100}
+                  placeholder="The Sharma family, Grandma Rose…"
+                  onChange={(event) => onPatch({ honoree: event.target.value })}
+                />
+              </Field>
+              <Field label="Cover bottom text">
+                <Input
+                  value={book.period_label}
+                  maxLength={80}
+                  placeholder="Leave blank to hide. Examples: 1980–present, A family archive..."
+                  onChange={(event) => onPatch({ periodLabel: event.target.value })}
+                />
+              </Field>
+              <Field label="Dedication" hint={`${book.dedication.length}/600`}>
+                <Textarea
+                  value={book.dedication}
+                  maxLength={600}
+                  className="min-h-28"
+                  placeholder="For the people who gave us our beginning…"
+                  onChange={(event) => onPatch({ dedication: event.target.value })}
+                />
+              </Field>
+              <Field
+                label="A note for the opening spread"
+                hint={
+                  <span>
+                    {getWordCount(book.notes)}/40 words
+                  </span>
+                }
+              >
+                <Textarea
+                  value={book.notes}
+                  maxLength={420}
+                  className="min-h-24"
+                  placeholder="Share only what you know. This remains editable."
+                  onChange={(event) => {
+                    const val = event.target.value
+                    const limited = limitWordsForEditing(val, 40)
+                    onPatch({ notes: limited })
+                  }}
+                />
+              </Field>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="custom-pages" className="border-none py-1">
+            <AccordionTrigger className="text-xs font-bold uppercase tracking-wider text-[#47736c] hover:no-underline [&[data-state=open]]:pb-2">
+              Customize Page Titles & Stories
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4 pt-3 pb-6">
+              <p className="text-xs text-black/45">
+                Customize the titles and descriptions printed on the pages of your keepsake.
+              </p>
+              <div className="divide-y divide-black/8 mt-4">
+                {Array.from({ length: numSpreads }).map((_, idx) => {
+                  const firstAsset = visibleAssets[idx * 2]
+                  if (!firstAsset) return null
+
+                  const customHeading = (firstAsset.metadata?.customHeading as string) || ""
+                  const customBody = (firstAsset.metadata?.customBody as string) || ""
+                  const photosLabel = [
+                    firstAsset.original_label,
+                    visibleAssets[idx * 2 + 1]?.original_label,
+                  ]
+                    .filter(Boolean)
+                    .join(", ")
+
+                  const headingCount = customHeading.length
+
+                  return (
+                    <div
+                      key={idx}
+                      className="py-5 first:pt-2 last:pb-2 space-y-4"
+                    >
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-xs font-bold text-[#47736c] uppercase tracking-wide">
+                          Page {idx * 2 + 1} & {idx * 2 + 2}
+                        </span>
+                        <span className="text-[10px] text-black/40 truncate max-w-[220px]">
+                          ({photosLabel})
+                        </span>
+                      </div>
+
+                      <Field label="Page title" hint={`${headingCount}/80`}>
+                        <Input
+                          key={`${firstAsset.id}:heading:${customHeading}`}
+                          defaultValue={customHeading}
+                          placeholder={`Family memory ${idx + 1}`}
+                          maxLength={80}
+                          onBlur={(event) => {
+                            if (event.target.value !== customHeading) {
+                              void onAssetUpdate(firstAsset, { heading: event.target.value })
+                            }
+                          }}
+                        />
+                      </Field>
+
+                      {idx > 0 ? (
+                        <WordLimitedTextarea
+                          key={`${firstAsset.id}:body`}
+                          defaultValue={customBody}
+                          maxWords={40}
+                          onSave={(val) => {
+                            void onAssetUpdate(firstAsset, { body: val })
+                          }}
+                        />
+                      ) : (
+                        <p className="text-[11px] text-black/45 leading-relaxed bg-[#f2f2ef] p-2.5 rounded-sm">
+                          ℹ️ The story body for this first page is set via the **"A note for the opening spread"** field inside the cover details section.
+                        </p>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
 
       <div>
@@ -929,12 +1139,13 @@ function StoryStep({
         <div className="mt-4 space-y-3">
           {ordered.map((asset, index) => {
             const source = sourceMap.get(asset.id)
+            const captionCount = getWordCount(asset.caption)
             return (
               <article
                 key={asset.id}
-                className="grid gap-3 rounded-md border border-black/8 bg-white p-3 md:grid-cols-[88px_1fr_auto] md:items-center"
+                className="flex items-start gap-4 rounded-lg border border-black/5 bg-white p-3 shadow-sm"
               >
-                <div className="relative aspect-square overflow-hidden rounded bg-[#dde3df]">
+                <div className="relative size-14 shrink-0 overflow-hidden rounded bg-[#f4f1ea] border border-black/5">
                   {source?.poster || (source?.mediaType === "image" && source.src) ? (
                     <img
                       src={source.poster || source.src}
@@ -956,18 +1167,15 @@ function StoryStep({
                     </span>
                   ) : null}
                 </div>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold">{asset.original_label}</p>
-                  <Input
+                <div className="min-w-0 flex-1">
+                  <WordLimitedInput
                     key={`${asset.id}:${asset.caption}`}
                     defaultValue={asset.caption}
-                    maxLength={280}
-                    className="mt-2"
+                    maxWords={15}
                     placeholder="Add a short caption"
-                    onBlur={(event) => {
-                      if (event.target.value !== asset.caption) {
-                        void onAssetUpdate(asset, { caption: event.target.value })
-                      }
+                    originalLabel={asset.original_label}
+                    onSave={(val) => {
+                      void onAssetUpdate(asset, { caption: val })
                     }}
                   />
                 </div>
@@ -1291,7 +1499,7 @@ function Field({
   children,
 }: {
   label: string
-  hint?: string
+  hint?: React.ReactNode
   children: React.ReactNode
 }) {
   return (

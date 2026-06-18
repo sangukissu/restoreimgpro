@@ -91,7 +91,7 @@ export function FamilyHeritageViewer({
         front: (
           <BookCover
             titleLines={coverTitleLines}
-            periodLines={coverPeriodLines.length ? coverPeriodLines : undefined}
+            periodLines={coverPeriodLines}
           />
         ),
         back: <InnerPage variant="botanical" />,

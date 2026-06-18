@@ -151,7 +151,7 @@
   --stage-pencils-width: clamp(60px, 7vw, 110px);
   position: absolute;
   top: calc(var(--book-center-y) - (var(--stage-pencils-width) * 2));
-  right: calc(50% - min(22vw, 250px, calc((100svh - 120px) * 0.38)) - clamp(40px, 5vw, 80px));
+  left: calc(50% + min(22vw, 250px, calc((100svh - 120px) * 0.38)) + clamp(40px, 5vw, 80px) - var(--stage-pencils-width));
   width: var(--stage-pencils-width);
   z-index: 1;
   filter: drop-shadow(5px 10px 8px rgba(50, 30, 10, 0.16));
@@ -159,7 +159,6 @@
   transform-origin: 50% 82%;
   transition:
     top 900ms cubic-bezier(0.645, 0.045, 0.355, 1),
-    right 900ms cubic-bezier(0.645, 0.045, 0.355, 1),
     left 900ms cubic-bezier(0.645, 0.045, 0.355, 1),
     width 900ms cubic-bezier(0.645, 0.045, 0.355, 1),
     transform 900ms cubic-bezier(0.645, 0.045, 0.355, 1),
@@ -169,7 +168,6 @@
 .stagePencilsOpen {
   --stage-pencils-open-width: clamp(50px, 5.8vw, 86px);
   top: calc(var(--book-center-y) - (var(--stage-pencils-open-width) * 2));
-  right: auto;
   left: calc(50% + min(43vw, 500px, calc((100svh - 120px) * 0.76)) - clamp(30px, 3.2vw, 48px));
   width: var(--stage-pencils-open-width);
   transform: rotate(18deg);
@@ -1066,8 +1064,8 @@
 .mobileSpiralRail {
   position: absolute;
   top: 0;
-  left: 18px;
-  right: 18px;
+  left: 6px;
+  right: 6px;
   z-index: 50;
   display: flex;
   justify-content: space-between;
@@ -1077,26 +1075,13 @@
 .mobileSpiralRing {
   position: relative;
   display: block;
-  width: 21px;
-  height: 47px;
-  border: 4px solid #7b7770;
-  border-bottom-color: #aaa69e;
-  border-radius: 50%;
-  background: linear-gradient(90deg, #5f5b55, #c7c4bd 42%, #716d66 72%);
-  box-shadow:
-    inset 0 0 0 2px rgba(255, 255, 255, 0.35),
-    2px 4px 5px rgba(48, 39, 30, 0.24);
-  transform: rotateX(7deg);
+  width: 24px;
+  height: 48px;
+  background: transparent;
 }
 
 .mobileSpiralRing i {
-  position: absolute;
-  right: 3px;
-  bottom: 5px;
-  left: 3px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(35, 29, 24, 0.22);
+  display: none;
 }
 
 .mobileSheet {
@@ -1206,12 +1191,12 @@
 
 .mobileCoverPencils {
   position: absolute;
-  top: 42%;
-  right: 21px;
+  top: 54%;
+  left: 50%;
   z-index: 4;
-  width: 54px;
-  filter: drop-shadow(5px 9px 7px rgba(28, 21, 14, 0.2));
-  transform: rotate(18deg);
+  width: 68px;
+  filter: drop-shadow(8px 12px 10px rgba(28, 21, 14, 0.25));
+  transform: translate(-50%, -50%) rotate(42deg);
 }
 
 .mobileCoverPencils svg {
@@ -1471,11 +1456,10 @@
   }
 
   .stagePencils {
-    right: calc(50% - min(24vw, 250px, calc((100svh - 130px) * 0.38)) - clamp(36px, 4.5vw, 70px));
+    left: calc(50% + min(24vw, 250px, calc((100svh - 130px) * 0.38)) + clamp(36px, 4.5vw, 70px) - var(--stage-pencils-width));
   }
 
   .stagePencilsOpen {
-    right: auto;
     left: calc(50% + min(47vw, 470px, calc((100svh - 130px) * 0.76)) - clamp(26px, 3.5vw, 42px));
   }
 }
@@ -1500,7 +1484,7 @@
   .stagePencils {
     --stage-pencils-width: clamp(54px, 6.5vw, 96px);
     opacity: 0.6;
-    right: calc(50% - min(24vw, 235px, calc((100svh - 130px) * 0.38)) - clamp(30px, 4vw, 60px));
+    left: calc(50% + min(24vw, 235px, calc((100svh - 130px) * 0.38)) + clamp(30px, 4vw, 60px) - var(--stage-pencils-width));
   }
 
   .stageFlowersOpen {
