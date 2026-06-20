@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import {
+  assignAssetToMemoryBookDraft,
+  parseMemoryBookDraft,
+  reconcileMemoryBookDraft,
+} from "@/lib/memory-book/draft"
+import {
+  enqueueMemoryBookJob,
+  getMemoryBookAssets,
   getOwnedMemoryBook,
   requireMemoryBookUser,
 } from "@/lib/memory-book/server"
@@ -41,7 +48,7 @@ export async function POST(
     .update({
       source_locator: parsed.data.key,
       preserved_key: parsed.data.key,
-      status: "ready",
+      status: "pending",
       error_message: null,
     })
     .eq("id", parsed.data.assetId)
@@ -58,11 +65,62 @@ export async function POST(
     )
   }
 
-  await supabaseAdmin
+  await enqueueMemoryBookJob({
+    userId: user.id,
+    bookId: id,
+    assetId: asset.id,
+    jobType: "preserve_asset",
+    idempotencyKey: `generate-memory-book-previews:${asset.id}`,
+  })
+  const { data: derivative } = await supabaseAdmin
+    .from("memory_book_media_derivatives")
+    .upsert({
+      user_id: user.id,
+      source_type: "upload",
+      source_id: asset.id,
+      media_type: "image",
+      source_locator: parsed.data.key,
+      preview_locator: parsed.data.key,
+    }, { onConflict: "user_id,source_type,source_id" })
+    .select("id, status")
+    .single()
+  if (derivative?.status === "queued") {
+    await enqueueMemoryBookJob({
+      userId: user.id,
+      jobType: "generate_media_derivatives",
+      idempotencyKey: `media-derivative:${derivative.id}`,
+      payload: { derivativeId: derivative.id },
+    })
+  }
+
+  const refreshedAssets = await getMemoryBookAssets(id, user.id)
+  const draftDocument = assignAssetToMemoryBookDraft(
+    reconcileMemoryBookDraft(
+      parseMemoryBookDraft(book.draft_document),
+      refreshedAssets
+    ),
+    asset.id
+  )
+  const { data: versionedBook } = await supabaseAdmin
     .from("memory_books")
-    .update({ draft_version: book.draft_version + 1 })
+    .update({
+      title: draftDocument.cover.title.trim() || "Our Family Heritage",
+      draft_document: draftDocument,
+      draft_version: book.draft_version + 1,
+    })
     .eq("id", id)
     .eq("draft_version", book.draft_version)
+    .select("*")
+    .maybeSingle()
 
-  return NextResponse.json({ asset })
+  const { data: refreshedAsset } = await supabaseAdmin
+    .from("memory_book_assets")
+    .select("*")
+    .eq("id", asset.id)
+    .single()
+
+  return NextResponse.json({
+    asset: refreshedAsset || asset,
+    book: versionedBook || book,
+  })
 }

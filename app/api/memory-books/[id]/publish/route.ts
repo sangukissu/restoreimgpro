@@ -46,6 +46,29 @@ export async function POST(
     )
   }
 
+  const assets = await getMemoryBookAssets(id, user.id)
+  let document
+  try {
+    document = buildMemoryBookDocument(
+      {
+        ...current,
+        preservation_consent: true,
+        downloads_enabled: parsed.data.downloadsEnabled,
+        music_enabled: parsed.data.musicEnabled,
+      },
+      assets
+    )
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Complete every page and prepare every assigned memory before publishing",
+      },
+      { status: 409 }
+    )
+  }
   const pinHash = parsed.data.pin
     ? await hashMemoryBookPin(parsed.data.pin)
     : null
@@ -72,17 +95,6 @@ export async function POST(
   if (!preparedBook) {
     return NextResponse.json(
       { error: "This draft changed elsewhere" },
-      { status: 409 }
-    )
-  }
-
-  const assets = await getMemoryBookAssets(id, user.id)
-  let document
-  try {
-    document = buildMemoryBookDocument(preparedBook, assets)
-  } catch {
-    return NextResponse.json(
-      { error: "Select 6–12 prepared memories before publishing" },
       { status: 409 }
     )
   }

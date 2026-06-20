@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { processMemoryBookJobs } from "@/lib/memory-book/jobs"
+import {
+  assignAssetToMemoryBookDraft,
+  parseMemoryBookDraft,
+  reconcileMemoryBookDraft,
+} from "@/lib/memory-book/draft"
 import {
   enqueueMemoryBookJob,
   getMemoryBookAssets,
@@ -103,7 +107,6 @@ export async function POST(
     idempotencyKey: `preserve-asset:${asset.id}`,
   })
 
-  await processMemoryBookJobs(1).catch(() => null)
 
   const { data: refreshedAsset } = await supabaseAdmin
     .from("memory_book_assets")
@@ -111,5 +114,29 @@ export async function POST(
     .eq("id", asset.id)
     .single()
 
-  return NextResponse.json({ asset: refreshedAsset || asset }, { status: 201 })
+  const refreshedAssets = await getMemoryBookAssets(id, user.id)
+  const draftDocument = assignAssetToMemoryBookDraft(
+    reconcileMemoryBookDraft(
+      parseMemoryBookDraft(book.draft_document),
+      refreshedAssets
+    ),
+    asset.id
+  )
+  const { data: versionedBook } = await supabaseAdmin
+    .from("memory_books")
+    .update({
+      title: draftDocument.cover.title.trim() || "Our Family Heritage",
+      draft_document: draftDocument,
+      draft_version: book.draft_version + 1,
+    })
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .eq("draft_version", book.draft_version)
+    .select("*")
+    .maybeSingle()
+
+  return NextResponse.json(
+    { asset: refreshedAsset || asset, book: versionedBook || book },
+    { status: 201 }
+  )
 }

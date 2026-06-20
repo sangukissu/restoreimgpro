@@ -4,7 +4,7 @@ import {
   getCuratorMediaLibrary,
   getMemoryBookAssets,
   getOwnedMemoryBook,
-  ownerMediaUrl,
+  getOwnerMemoryBookAssetSources,
 } from "@/lib/memory-book/server"
 import { signMemoryBookShare } from "@/lib/memory-book/security"
 import { isMemoryBookEnabled } from "@/lib/memory-book/feature"
@@ -27,7 +27,7 @@ export default async function MemoryBookCuratorPage({
   const book = await getOwnedMemoryBook(id, user.id)
   if (!book) notFound()
 
-  const [assets, mediaLibrary, { data: reactions }, { data: entitlement }] =
+  const [assets, mediaLibraryPage, { data: reactions }, { data: entitlement }] =
     await Promise.all([
       getMemoryBookAssets(id, user.id),
       getCuratorMediaLibrary(user.id),
@@ -43,29 +43,15 @@ export default async function MemoryBookCuratorPage({
         .maybeSingle(),
     ])
 
-  const assetSources = assets.map((asset) => ({
-    id: asset.id,
-    mediaType: asset.media_type,
-    src: ownerMediaUrl(
-      asset.preserved_key || asset.source_locator || "",
-      asset.media_type
-    ),
-    poster: asset.poster_key
-      ? ownerMediaUrl(asset.poster_key, "image")
-      : typeof asset.metadata.posterLocator === "string"
-        ? asset.metadata.posterLocator
-        : null,
-    downloadUrl: asset.preserved_key
-      ? ownerMediaUrl(asset.preserved_key, asset.media_type)
-      : null,
-  }))
+  const assetSources = await getOwnerMemoryBookAssetSources(assets)
 
   return (
     <MemoryBookCurator
       initialBook={book}
       initialAssets={assets}
       initialAssetSources={assetSources}
-      mediaLibrary={mediaLibrary}
+      mediaLibrary={mediaLibraryPage.items}
+      initialMediaCursor={mediaLibraryPage.nextCursor}
       reactions={reactions || []}
       entitlement={entitlement}
       initialShareUrl={

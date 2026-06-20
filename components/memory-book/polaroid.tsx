@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react"
+import { CircleAlert, Loader2, Play } from "lucide-react"
 import type { MemoryPhoto } from "./photo-modal"
 import styles from "./memory-book.module.css"
 
@@ -8,13 +9,24 @@ interface PolaroidProps {
   alt?: string
   rotation: number
   compact?: boolean
+  mediaType?: "image" | "video"
+  status?: "queued" | "processing" | "ready" | "failed"
   onPhotoOpen?: (photo: MemoryPhoto) => void
 }
 
-export function Polaroid({ photo, src, alt, rotation, compact = false, onPhotoOpen }: PolaroidProps) {
+export function Polaroid({
+  photo,
+  src,
+  alt,
+  rotation,
+  compact = false,
+  mediaType = "image",
+  status = "ready",
+  onPhotoOpen,
+}: PolaroidProps) {
   const imageSrc = photo?.src || src || ""
   const imageAlt = photo?.alt || alt || "Memory photo"
-  const isInteractive = Boolean(photo && onPhotoOpen)
+  const isInteractive = Boolean(photo && onPhotoOpen && status === "ready")
   const className = [
     styles.polaroid,
     compact ? styles.polaroidCompact : "",
@@ -25,7 +37,24 @@ export function Polaroid({ photo, src, alt, rotation, compact = false, onPhotoOp
     <>
       <span className={[styles.tapeStrip, styles.tapeTopLeft].join(" ")} />
       <span className={[styles.tapeStrip, styles.tapeTopRight].join(" ")} />
-      <img src={imageSrc} alt={imageAlt} draggable={false} />
+      <span className={styles.polaroidMedia}>
+        {imageSrc ? (
+          <img src={imageSrc} alt={imageAlt} draggable={false} />
+        ) : (
+          <span className={styles.polaroidPlaceholder} aria-label="Preparing memory preview">
+            {status === "failed" ? (
+              <CircleAlert size={24} />
+            ) : (
+              <Loader2 size={24} className="animate-spin" />
+            )}
+          </span>
+        )}
+        {mediaType === "video" ? (
+          <span className={styles.polaroidVideoBadge} aria-hidden="true">
+            <Play size={15} fill="currentColor" />
+          </span>
+        ) : null}
+      </span>
     </>
   )
 
@@ -38,8 +67,9 @@ export function Polaroid({ photo, src, alt, rotation, compact = false, onPhotoOp
         data-memory-book-interactive="true"
         onClick={(event) => {
           event.stopPropagation()
-          onPhotoOpen(photo)
+          if (isInteractive) onPhotoOpen(photo)
         }}
+        disabled={!isInteractive}
         aria-label={`Open ${imageAlt}`}
       >
         {content}

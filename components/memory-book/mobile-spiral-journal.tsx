@@ -38,9 +38,14 @@ export function MobileSpiralJournal({
   onAssetOpen,
 }: MobileSpiralJournalProps) {
   const reduceMotion = useReducedMotion()
-  const spread = pageIndex > 0 ? document.spreads[pageIndex - 1] : null
+  const totalPages = document.spreads.length + 1
+  const spread =
+    pageIndex > 0 && pageIndex <= document.spreads.length
+      ? document.spreads[pageIndex - 1]
+      : null
+  const isClosing = pageIndex === totalPages
   const canGoBack = pageIndex > 0
-  const canGoForward = pageIndex < document.spreads.length
+  const canGoForward = pageIndex < totalPages
   const transition = reduceMotion
     ? { duration: 0.16 }
     : { duration: 0.58, ease: [0.22, 1, 0.36, 1] as const }
@@ -130,6 +135,8 @@ export function MobileSpiralJournal({
                 sourceMap={sourceMap}
                 onAssetOpen={onAssetOpen}
               />
+            ) : isClosing ? (
+              <MobileJournalClosing message={document.dedication} />
             ) : null}
 
             {canGoBack ? (
@@ -156,7 +163,7 @@ export function MobileSpiralJournal({
 
       <div className={styles.mobileJournalFooter}>
         <span className={styles.mobilePageCounter}>
-          {pageIndex === 0 ? "Cover" : `${pageIndex} / ${document.spreads.length}`}
+          {pageIndex === 0 ? "Cover" : isClosing ? "Closing message" : `${pageIndex} / ${document.spreads.length}`}
         </span>
         {pageIndex === 0 ? (
           <span className={styles.mobileSwipeHint}>Swipe or tap the edge</span>
@@ -247,6 +254,19 @@ function MobileJournalStory({
             </button>
           )
         })}
+      </div>
+    </div>
+  )
+}
+
+function MobileJournalClosing({ message }: { message: string }) {
+  return (
+    <div className={[styles.mobileStoryContent, styles.mobileClosingContent].join(" ")}>
+      <PaperTexture textureId="mobile-closing-message" />
+      <img className={styles.mobilePressedFlower} src="/icons/daisy.webp" alt="" draggable={false} />
+      <div className={styles.mobileStoryCopy}>
+        <h2>A closing message</h2>
+        <p>{message || "A final note can live here after the last memory."}</p>
       </div>
     </div>
   )

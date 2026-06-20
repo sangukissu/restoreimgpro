@@ -24,6 +24,7 @@ import {
   Music2,
   Play,
   RefreshCw,
+  RotateCcw,
   Save,
   ShieldCheck,
   Sparkles,
@@ -45,7 +46,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { buildMemoryBookDocument, SPREAD_HEADINGS, SPREAD_BODIES } from "@/lib/memory-book/document"
+import { buildMemoryBookDocument } from "@/lib/memory-book/document"
+import { parseMemoryBookDraft, reconcileMemoryBookDraft } from "@/lib/memory-book/draft"
 import {
   Accordion,
   AccordionContent,
@@ -56,19 +58,14 @@ import type {
   CuratorMediaOption,
   MemoryBookAssetRecord,
   MemoryBookDocumentV1,
+  MemoryBookDraftDocument,
   MemoryBookRecord,
 } from "@/lib/memory-book/types"
-import {
-  FamilyHeritageViewer,
-  type MemoryBookAssetSource,
-} from "./family-heritage-viewer"
+import type { MemoryBookAssetSource } from "./family-heritage-viewer"
+import { MemoryBookPageComposer } from "./memory-book-page-composer"
 
 type BookPatch = Partial<{
-  title: string
-  honoree: string
-  periodLabel: string
-  dedication: string
-  notes: string
+  draftDocument: MemoryBookDraftDocument
   preservationConsent: boolean
   downloadsEnabled: boolean
   musicEnabled: boolean
@@ -89,6 +86,7 @@ export function MemoryBookCurator({
   initialAssets,
   initialAssetSources,
   mediaLibrary,
+  initialMediaCursor,
   reactions,
   entitlement,
   initialShareUrl,
@@ -97,6 +95,7 @@ export function MemoryBookCurator({
   initialAssets: MemoryBookAssetRecord[]
   initialAssetSources: MemoryBookAssetSource[]
   mediaLibrary: CuratorMediaOption[]
+  initialMediaCursor: string | null
   reactions: Reaction[]
   entitlement: { live_book_id: string | null; source: string; granted_at: string } | null
   initialShareUrl: string | null
@@ -104,9 +103,9 @@ export function MemoryBookCurator({
   const router = useRouter()
   const [book, setBook] = useState(initialBook)
   const [assets, setAssets] = useState(initialAssets)
-  const [step, setStep] = useState<"memories" | "story" | "review">(
-    initialAssets.filter((asset) => asset.status === "ready" && !asset.is_hidden)
-      .length >= 6
+  const [assetSources, setAssetSources] = useState(initialAssetSources)
+  const [step, setStep] = useState<"memories" | "story">(
+    initialAssets.filter((asset) => !asset.is_hidden).length >= 6
       ? "story"
       : "memories"
   )
@@ -119,11 +118,15 @@ export function MemoryBookCurator({
   const [copied, setCopied] = useState(false)
   const [pin, setPin] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [libraryItems, setLibraryItems] = useState(mediaLibrary)
+  const [mediaCursor, setMediaCursor] = useState(initialMediaCursor)
+  const [loadingMoreMedia, setLoadingMoreMedia] = useState(false)
 
   const bookRef = useRef(book)
   const pendingPatchRef = useRef<BookPatch>({})
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const savingRef = useRef(false)
+  const mediaRefreshRef = useRef(false)
   const outboxKey = `memory-book-outbox:${book.id}`
 
   useEffect(() => {
@@ -133,11 +136,8 @@ export function MemoryBookCurator({
   const applyPatchLocally = useCallback((patch: BookPatch) => {
     setBook((current) => ({
       ...current,
-      title: patch.title ?? current.title,
-      honoree: patch.honoree ?? current.honoree,
-      period_label: patch.periodLabel ?? current.period_label,
-      dedication: patch.dedication ?? current.dedication,
-      notes: patch.notes ?? current.notes,
+      title: patch.draftDocument?.cover.title ?? current.title,
+      draft_document: patch.draftDocument ?? current.draft_document,
       preservation_consent:
         patch.preservationConsent ?? current.preservation_consent,
       downloads_enabled: patch.downloadsEnabled ?? current.downloads_enabled,
@@ -223,6 +223,7 @@ export function MemoryBookCurator({
     setBook(result.book)
     bookRef.current = result.book
     setAssets(result.assets)
+    if (Array.isArray(result.assetSources)) setAssetSources(result.assetSources)
   }, [book.id])
 
   useEffect(() => {
@@ -302,17 +303,111 @@ export function MemoryBookCurator({
       ),
     [assets]
   )
+  const editableDraft = useMemo(
+    () => reconcileMemoryBookDraft(parseMemoryBookDraft(book.draft_document), assets),
+    [assets, book.draft_document]
+  )
+  const assignedAssetIds = useMemo(
+    () => editableDraft.spreads.flatMap((spread) => spread.assetIds),
+    [editableDraft.spreads]
+  )
+  const assignedReadyCount = useMemo(() => {
+    const assigned = new Set(assignedAssetIds)
+    return assets.filter(
+      (asset) => assigned.has(asset.id) && asset.status === "ready" && !asset.is_hidden
+    ).length
+  }, [assignedAssetIds, assets])
+  const canPublishDraft =
+    assignedAssetIds.length >= 6 &&
+    assignedAssetIds.length <= 12 &&
+    new Set(assignedAssetIds).size === assignedAssetIds.length &&
+    editableDraft.spreads.every((spread) => spread.assetIds.length > 0) &&
+    assignedReadyCount === assignedAssetIds.length
   const previewDocument = useMemo<MemoryBookDocumentV1 | null>(() => {
     try {
-      return buildMemoryBookDocument(book, assets)
+      return buildMemoryBookDocument(
+        { ...book, draft_document: editableDraft },
+        assets
+      )
     } catch {
       return null
     }
-  }, [assets, book])
-  const assetSources = useMemo(
-    () => buildOwnerAssetSources(assets, initialAssetSources),
-    [assets, initialAssetSources]
-  )
+  }, [assets, book, editableDraft])
+
+
+  const refreshMediaUrls = useCallback(async () => {
+    if (mediaRefreshRef.current) return
+    mediaRefreshRef.current = true
+    try {
+      const response = await fetch("/api/memory-books/media-urls", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          assetIds: assets.map((asset) => asset.id),
+          sources: libraryItems.map((item) => ({
+            sourceType: item.sourceType,
+            sourceId: item.id,
+          })),
+        }),
+      })
+      if (!response.ok) return
+      const result = await response.json()
+      if (Array.isArray(result.assetSources)) {
+        setAssetSources(result.assetSources)
+      }
+      if (Array.isArray(result.libraryItems)) {
+        const refreshed = new Map<string, Partial<CuratorMediaOption> & Pick<CuratorMediaOption, "id" | "sourceType">>(
+          result.libraryItems.map((item: Partial<CuratorMediaOption> & Pick<CuratorMediaOption, "id" | "sourceType">) => [
+            `${item.sourceType}:${item.id}`,
+            item,
+          ])
+        )
+        setLibraryItems((current) =>
+          current.map((item) => {
+            const update = refreshed.get(`${item.sourceType}:${item.id}`)
+            return update ? { ...item, ...update } : item
+          })
+        )
+      }
+    } finally {
+      mediaRefreshRef.current = false
+    }
+  }, [assets, libraryItems])
+
+  useEffect(() => {
+    const timer = window.setInterval(() => void refreshMediaUrls(), 50 * 60 * 1000)
+    return () => window.clearInterval(timer)
+  }, [refreshMediaUrls])
+
+  const retryAsset = async (asset: MemoryBookAssetRecord) => {
+    const response = await fetch(
+      `/api/memory-books/${book.id}/assets/${asset.id}/retry`,
+      { method: "POST" }
+    )
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({}))
+      setError(result.error || "Unable to retry memory preparation")
+      return
+    }
+    await refreshBook()
+  }
+
+  const retryLibraryPreview = async (option: CuratorMediaOption) => {
+    const response = await fetch("/api/memory-books/media-library/retry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sourceType: option.sourceType, sourceId: option.id }),
+    })
+    if (response.ok) {
+      setLibraryItems((current) =>
+        current.map((item) =>
+          item.id === option.id && item.sourceType === option.sourceType
+            ? { ...item, previewStatus: "queued", previewUrl: "", posterUrl: undefined }
+            : item
+        )
+      )
+    }
+  }
 
   const toggleLibraryAsset = async (option: CuratorMediaOption) => {
     setError(null)
@@ -403,6 +498,39 @@ export function MemoryBookCurator({
     }
   }
 
+  const loadMoreMedia = async () => {
+    if (!mediaCursor || loadingMoreMedia) return
+    setLoadingMoreMedia(true)
+    try {
+      const response = await fetch(
+        `/api/memory-books/media-library?before=${encodeURIComponent(mediaCursor)}`
+      )
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to load more memories")
+      }
+      setLibraryItems((current) => {
+        const existing = new Set(
+          current.map((item) => `${item.sourceType}:${item.id}`)
+        )
+        return [
+          ...current,
+          ...result.items.filter(
+            (item: CuratorMediaOption) =>
+              !existing.has(`${item.sourceType}:${item.id}`)
+          ),
+        ]
+      })
+      setMediaCursor(result.nextCursor)
+    } catch (cause) {
+      setError(
+        cause instanceof Error ? cause.message : "Unable to load more memories"
+      )
+    } finally {
+      setLoadingMoreMedia(false)
+    }
+  }
+
   const updateAsset = async (
     asset: MemoryBookAssetRecord,
     patch: {
@@ -466,6 +594,7 @@ export function MemoryBookCurator({
     setBook(result.book)
     bookRef.current = result.book
     setAssets(result.assets)
+    if (Array.isArray(result.assetSources)) setAssetSources(result.assetSources)
   }
 
 
@@ -529,8 +658,7 @@ export function MemoryBookCurator({
 
   const steps = [
     { id: "memories" as const, label: "1. Memories" },
-    { id: "story" as const, label: "2. Story" },
-    { id: "review" as const, label: "3. Review" },
+    { id: "story" as const, label: "2. Compose" },
   ]
 
   return (
@@ -565,7 +693,7 @@ export function MemoryBookCurator({
           </div>
           <Button
             onClick={() => setPublishOpen(true)}
-            disabled={!previewDocument || readyAssets.length < 6}
+            disabled={!canPublishDraft}
             className="bg-[#1f2c27] text-white hover:bg-[#304139]"
           >
             {book.status === "published" ? "Republish" : "Publish"}
@@ -590,37 +718,35 @@ export function MemoryBookCurator({
         <MemorySelectionStep
           book={book}
           assets={assets}
-          mediaLibrary={mediaLibrary}
+          mediaLibrary={libraryItems}
           selectedSourceKeys={selectedSourceKeys}
           workingId={workingId}
           uploading={uploading}
           onToggle={toggleLibraryAsset}
+          onRetryPreview={retryLibraryPreview}
+          onMediaError={refreshMediaUrls}
           onUpload={uploadPhotos}
+          hasMore={Boolean(mediaCursor)}
+          loadingMore={loadingMoreMedia}
+          onLoadMore={loadMoreMedia}
           onContinue={() => setStep("story")}
         />
       ) : null}
 
       {step === "story" ? (
-        <StoryStep
-          book={book}
-          assets={assets}
-          assetSources={assetSources}
-          onPatch={queueBookPatch}
-          onAssetUpdate={updateAsset}
-          onMove={moveAsset}
-          onBack={() => setStep("memories")}
-          onContinue={() => setStep("review")}
-        />
-      ) : null}
-
-      {step === "review" ? (
-        <ReviewStep
-          book={book}
+        <MemoryBookPageComposer
+          draft={editableDraft}
           document={previewDocument}
+          assets={assets}
           assetSources={assetSources}
           shareUrl={shareUrl}
           copied={copied}
           reactions={reactions}
+          onDraftChange={(draftDocument) => queueBookPatch({ draftDocument })}
+          onAssetUpdate={updateAsset}
+          onRetryAsset={retryAsset}
+          onMediaError={refreshMediaUrls}
+          onBack={() => setStep("memories")}
           onCopy={async () => {
             if (!shareUrl) return
             await navigator.clipboard.writeText(
@@ -631,11 +757,8 @@ export function MemoryBookCurator({
           }}
           onRegenerate={regenerateLink}
           onUnpublish={unpublishBook}
-          onBack={() => setStep("story")}
-          onPublish={() => setPublishOpen(true)}
         />
       ) : null}
-
       <PublishDialog
         open={publishOpen}
         onOpenChange={setPublishOpen}
@@ -660,7 +783,12 @@ function MemorySelectionStep({
   workingId,
   uploading,
   onToggle,
+  onRetryPreview,
+  onMediaError,
   onUpload,
+  hasMore,
+  loadingMore,
+  onLoadMore,
   onContinue,
 }: {
   book: MemoryBookRecord
@@ -670,7 +798,12 @@ function MemorySelectionStep({
   workingId: string | null
   uploading: boolean
   onToggle: (option: CuratorMediaOption) => void
+  onRetryPreview: (option: CuratorMediaOption) => void
+  onMediaError: () => void
   onUpload: (files: FileList | null) => void
+  hasMore: boolean
+  loadingMore: boolean
+  onLoadMore: () => void
   onContinue: () => void
 }) {
   const selectedCount = assets.filter((asset) => !asset.is_hidden).length
@@ -695,10 +828,10 @@ function MemorySelectionStep({
           </span>
           <Button
             onClick={onContinue}
-            disabled={readyCount < 6 || readyCount > 12}
+            disabled={selectedCount < 6 || selectedCount > 12}
             className="bg-[#1f2c27] text-white"
           >
-            Add the story
+            Compose pages
             <ArrowRight />
           </Button>
         </div>
@@ -722,19 +855,38 @@ function MemorySelectionStep({
                   : "border-black/8 hover:border-black/20",
               ].join(" ")}
             >
-              {option.posterUrl || option.mediaType === "image" ? (
+              {option.posterUrl || option.previewUrl || option.fallbackUrl ? (
                 <img
-                  src={option.posterUrl || option.previewUrl}
+                  src={option.posterUrl || option.previewUrl || option.fallbackUrl}
                   alt={option.title}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover"
+                  onError={onMediaError}
                 />
+              ) : option.previewStatus === "failed" ? (
+                <span className="grid h-full place-items-center bg-red-50 px-4 text-center text-red-700">
+                  <span>
+                    <CircleAlert className="mx-auto size-7" />
+                    <span className="mt-2 block text-xs font-semibold">Preview unavailable</span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="mt-3"
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        onRetryPreview(option)
+                      }}
+                    >
+                      <RotateCcw className="size-3.5" /> Retry
+                    </Button>
+                  </span>
+                </span>
               ) : (
-                <video
-                  src={option.previewUrl}
-                  className="h-full w-full object-cover"
-                  muted
-                  preload="metadata"
-                />
+                <span className="grid h-full place-items-center bg-[#e9ece8] text-[#47736c]">
+                  <Loader2 className="size-7 animate-spin" />
+                </span>
               )}
               <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 to-transparent px-3 pb-3 pt-10 text-white">
                 <span className="block truncate text-sm font-semibold">{option.title}</span>
@@ -793,6 +945,15 @@ function MemorySelectionStep({
         </label>
       </div>
 
+      {hasMore ? (
+        <div className="mt-6 text-center">
+          <Button variant="outline" disabled={loadingMore} onClick={onLoadMore}>
+            {loadingMore ? <Loader2 className="animate-spin" /> : null}
+            Load more memories
+          </Button>
+        </div>
+      ) : null}
+
       {!mediaLibrary.length && !assets.length ? (
         <div className="mt-8 border-y border-black/8 bg-white px-6 py-12 text-center">
           <ImagePlus className="mx-auto size-8 text-[#47736c]" />
@@ -804,540 +965,6 @@ function MemorySelectionStep({
       ) : null}
 
       <p className="sr-only">Editing {book.title}</p>
-    </section>
-  )
-}
-
-function getWordCount(text: string): number {
-  if (!text) return 0
-  const clean = text.trim()
-  if (!clean) return 0
-  return clean.split(/\s+/).filter(Boolean).length
-}
-
-function limitWordsForEditing(text: string, maxWords: number): string {
-  if (!text) return ""
-  const tokens = text.split(/(\s+)/)
-  let wordCount = 0
-  let result = ""
-  for (const token of tokens) {
-    if (token === "") continue
-    const isWhitespace = /^\s+$/.test(token)
-    if (!isWhitespace) {
-      if (wordCount >= maxWords) {
-        break
-      }
-      wordCount++
-    }
-    result += token
-  }
-  return result
-}
-
-function WordLimitedTextarea({
-  defaultValue,
-  maxWords,
-  placeholder,
-  className = "",
-  onSave,
-}: {
-  defaultValue: string
-  maxWords: number
-  placeholder?: string
-  className?: string
-  onSave: (value: string) => void
-}) {
-  const [value, setValue] = useState(defaultValue)
-
-  useEffect(() => {
-    setValue(defaultValue)
-  }, [defaultValue])
-
-  const wordCount = getWordCount(value)
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val = e.target.value
-    const limited = limitWordsForEditing(val, maxWords)
-    setValue(limited)
-  }
-
-  const handleBlur = () => {
-    if (value !== defaultValue) {
-      onSave(value)
-    }
-  }
-
-  return (
-    <Field
-      label="Page story / note"
-      hint={
-        <span className={wordCount > maxWords ? "text-red-500 font-bold" : ""}>
-          {wordCount}/{maxWords} words
-        </span>
-      }
-    >
-      <Textarea
-        value={value}
-        maxLength={420}
-        placeholder={placeholder}
-        className={`${className} min-h-20 ${
-          wordCount > maxWords
-            ? "border-red-500 focus-visible:ring-red-500 bg-red-50/20"
-            : ""
-        }`}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-    </Field>
-  )
-}
-
-function WordLimitedInput({
-  defaultValue,
-  maxWords,
-  placeholder,
-  className = "",
-  onSave,
-  originalLabel,
-}: {
-  defaultValue: string
-  maxWords: number
-  placeholder?: string
-  className?: string
-  onSave: (value: string) => void
-  originalLabel: string
-}) {
-  const [value, setValue] = useState(defaultValue)
-
-  useEffect(() => {
-    setValue(defaultValue)
-  }, [defaultValue])
-
-  const wordCount = getWordCount(value)
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value
-    const limited = limitWordsForEditing(val, maxWords)
-    setValue(limited)
-  }
-
-  const handleBlur = () => {
-    if (value !== defaultValue) {
-      onSave(value)
-    }
-  }
-
-  return (
-    <div className="mt-2">
-      <div className="flex justify-between items-center mb-1">
-        <p className="truncate text-sm font-semibold">{originalLabel}</p>
-        <span className={`text-[10px] ${wordCount > maxWords ? "text-red-500 font-bold" : "text-black/38"}`}>
-          {wordCount}/{maxWords} words
-        </span>
-      </div>
-      <Input
-        value={value}
-        maxLength={280}
-        className={`${className} ${
-          wordCount > maxWords ? "border-red-500 focus-visible:ring-red-500 bg-red-50/20" : ""
-        }`}
-        placeholder={placeholder}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-    </div>
-  )
-}
-
-
-function StoryStep({
-  book,
-  assets,
-  assetSources,
-  onPatch,
-  onAssetUpdate,
-  onMove,
-  onBack,
-  onContinue,
-}: {
-  book: MemoryBookRecord
-  assets: MemoryBookAssetRecord[]
-  assetSources: MemoryBookAssetSource[]
-  onPatch: (patch: BookPatch) => void
-  onAssetUpdate: (
-    asset: MemoryBookAssetRecord,
-    patch: { caption?: string; featured?: boolean; hidden?: boolean; heading?: string; body?: string }
-  ) => Promise<void>
-  onMove: (assetId: string, direction: -1 | 1) => Promise<void>
-  onBack: () => void
-  onContinue: () => void
-}) {
-  const sourceMap = new Map(assetSources.map((source) => [source.id, source]))
-  const ordered = [...assets].sort((a, b) => a.position - b.position)
-  const visibleAssets = assets
-    .filter((asset) => asset.status === "ready" && !asset.is_hidden)
-    .sort((a, b) => a.position - b.position)
-    .slice(0, 12)
-  const numSpreads = Math.ceil(visibleAssets.length / 2)
-
-  return (
-    <section className="mx-auto grid max-w-7xl gap-8 px-5 py-7 md:px-8 md:py-10 lg:grid-cols-[minmax(0,420px)_1fr]">
-      <div>
-        <p className="text-sm font-semibold text-[#47736c]">Give it meaning</p>
-        <h1 className="mt-1 text-2xl font-bold">A little context goes a long way.</h1>
-        <p className="mt-2 text-sm leading-6 text-black/55">
-          Write naturally. BringBack uses your words without inventing family facts.
-        </p>
-
-        <Accordion type="single" collapsible defaultValue="basic-details" className="mt-6 border-y border-black/8 divide-y divide-black/8">
-          <AccordionItem value="basic-details" className="border-none py-1">
-            <AccordionTrigger className="text-xs font-bold uppercase tracking-wider text-[#47736c] hover:no-underline [&[data-state=open]]:pb-2">
-              Book Cover & Dedication Details
-            </AccordionTrigger>
-            <AccordionContent className="space-y-5 pt-3 pb-6">
-              <Field label="Book title" hint={`${book.title.length}/90`}>
-                <Input
-                  value={book.title}
-                  maxLength={90}
-                  onChange={(event) => onPatch({ title: event.target.value })}
-                />
-              </Field>
-              <Field label="Who is this for?">
-                <Input
-                  value={book.honoree}
-                  maxLength={100}
-                  placeholder="The Sharma family, Grandma Rose…"
-                  onChange={(event) => onPatch({ honoree: event.target.value })}
-                />
-              </Field>
-              <Field label="Cover bottom text">
-                <Input
-                  value={book.period_label}
-                  maxLength={80}
-                  placeholder="Leave blank to hide. Examples: 1980–present, A family archive..."
-                  onChange={(event) => onPatch({ periodLabel: event.target.value })}
-                />
-              </Field>
-              <Field label="Dedication" hint={`${book.dedication.length}/600`}>
-                <Textarea
-                  value={book.dedication}
-                  maxLength={600}
-                  className="min-h-28"
-                  placeholder="For the people who gave us our beginning…"
-                  onChange={(event) => onPatch({ dedication: event.target.value })}
-                />
-              </Field>
-              <Field
-                label="A note for the opening spread"
-                hint={
-                  <span>
-                    {getWordCount(book.notes)}/40 words
-                  </span>
-                }
-              >
-                <Textarea
-                  value={book.notes}
-                  maxLength={420}
-                  className="min-h-24"
-                  placeholder="Share only what you know. This remains editable."
-                  onChange={(event) => {
-                    const val = event.target.value
-                    const limited = limitWordsForEditing(val, 40)
-                    onPatch({ notes: limited })
-                  }}
-                />
-              </Field>
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="custom-pages" className="border-none py-1">
-            <AccordionTrigger className="text-xs font-bold uppercase tracking-wider text-[#47736c] hover:no-underline [&[data-state=open]]:pb-2">
-              Customize Page Titles & Stories
-            </AccordionTrigger>
-            <AccordionContent className="space-y-4 pt-3 pb-6">
-              <p className="text-xs text-black/45">
-                Customize the titles and descriptions printed on the pages of your keepsake.
-              </p>
-              <div className="divide-y divide-black/8 mt-4">
-                {Array.from({ length: numSpreads }).map((_, idx) => {
-                  const firstAsset = visibleAssets[idx * 2]
-                  if (!firstAsset) return null
-
-                  const customHeading = (firstAsset.metadata?.customHeading as string) || ""
-                  const customBody = (firstAsset.metadata?.customBody as string) || ""
-                  const photosLabel = [
-                    firstAsset.original_label,
-                    visibleAssets[idx * 2 + 1]?.original_label,
-                  ]
-                    .filter(Boolean)
-                    .join(", ")
-
-                  const headingCount = customHeading.length
-
-                  return (
-                    <div
-                      key={idx}
-                      className="py-5 first:pt-2 last:pb-2 space-y-4"
-                    >
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs font-bold text-[#47736c] uppercase tracking-wide">
-                          Page {idx * 2 + 1} & {idx * 2 + 2}
-                        </span>
-                        <span className="text-[10px] text-black/40 truncate max-w-[220px]">
-                          ({photosLabel})
-                        </span>
-                      </div>
-
-                      <Field label="Page title" hint={`${headingCount}/80`}>
-                        <Input
-                          key={`${firstAsset.id}:heading:${customHeading}`}
-                          defaultValue={customHeading}
-                          placeholder={`Family memory ${idx + 1}`}
-                          maxLength={80}
-                          onBlur={(event) => {
-                            if (event.target.value !== customHeading) {
-                              void onAssetUpdate(firstAsset, { heading: event.target.value })
-                            }
-                          }}
-                        />
-                      </Field>
-
-                      {idx > 0 ? (
-                        <WordLimitedTextarea
-                          key={`${firstAsset.id}:body`}
-                          defaultValue={customBody}
-                          maxWords={40}
-                          onSave={(val) => {
-                            void onAssetUpdate(firstAsset, { body: val })
-                          }}
-                        />
-                      ) : (
-                        <p className="text-[11px] text-black/45 leading-relaxed bg-[#f2f2ef] p-2.5 rounded-sm">
-                          ℹ️ The story body for this first page is set via the **"A note for the opening spread"** field inside the cover details section.
-                        </p>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-
-      <div>
-        <div className="flex items-end justify-between border-b border-black/8 pb-4">
-          <div>
-            <p className="text-sm font-semibold">Memory order</p>
-            <p className="mt-1 text-xs text-black/48">
-              BringBack pairs consecutive memories into each right-hand page.
-            </p>
-          </div>
-          <span className="text-xs font-semibold text-black/45">{ordered.length} memories</span>
-        </div>
-
-        <div className="mt-4 space-y-3">
-          {ordered.map((asset, index) => {
-            const source = sourceMap.get(asset.id)
-            const captionCount = getWordCount(asset.caption)
-            return (
-              <article
-                key={asset.id}
-                className="flex items-start gap-4 rounded-lg border border-black/5 bg-white p-3 shadow-sm"
-              >
-                <div className="relative size-14 shrink-0 overflow-hidden rounded bg-[#f4f1ea] border border-black/5">
-                  {source?.poster || (source?.mediaType === "image" && source.src) ? (
-                    <img
-                      src={source.poster || source.src}
-                      alt={asset.alt_text}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="grid h-full place-items-center text-[#47736c]">
-                      <Play fill="currentColor" />
-                    </div>
-                  )}
-                  {asset.status !== "ready" ? (
-                    <span className="absolute inset-0 grid place-items-center bg-white/78">
-                      {asset.status === "failed" ? (
-                        <CircleAlert className="text-red-600" />
-                      ) : (
-                        <Loader2 className="animate-spin text-[#47736c]" />
-                      )}
-                    </span>
-                  ) : null}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <WordLimitedInput
-                    key={`${asset.id}:${asset.caption}`}
-                    defaultValue={asset.caption}
-                    maxWords={15}
-                    placeholder="Add a short caption"
-                    originalLabel={asset.original_label}
-                    onSave={(val) => {
-                      void onAssetUpdate(asset, { caption: val })
-                    }}
-                  />
-                </div>
-                <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={index === 0}
-                    title="Move earlier"
-                    onClick={() => onMove(asset.id, -1)}
-                  >
-                    <ArrowUp />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={index === ordered.length - 1}
-                    title="Move later"
-                    onClick={() => onMove(asset.id, 1)}
-                  >
-                    <ArrowDown />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    title="Remove from book"
-                    onClick={() => void onAssetUpdate(asset, { hidden: true })}
-                  >
-                    <Trash2 />
-                  </Button>
-                </div>
-              </article>
-            )
-          })}
-        </div>
-
-        <div className="mt-7 flex justify-between">
-          <Button variant="outline" onClick={onBack}>
-            <ArrowLeft />
-            Memories
-          </Button>
-          <Button onClick={onContinue} className="bg-[#1f2c27] text-white">
-            Review book
-            <BookOpen />
-          </Button>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function ReviewStep({
-  book,
-  document,
-  assetSources,
-  shareUrl,
-  copied,
-  reactions,
-  onCopy,
-  onRegenerate,
-  onUnpublish,
-  onBack,
-  onPublish,
-}: {
-  book: MemoryBookRecord
-  document: MemoryBookDocumentV1 | null
-  assetSources: MemoryBookAssetSource[]
-  shareUrl: string | null
-  copied: boolean
-  reactions: Reaction[]
-  onCopy: () => void
-  onRegenerate: () => void
-  onUnpublish: () => void
-  onBack: () => void
-  onPublish: () => void
-}) {
-  return (
-    <section>
-      {document ? (
-        <FamilyHeritageViewer
-          document={document}
-          assetSources={assetSources}
-          onCompleted={() => posthog.capture("memory_book_preview_completed")}
-        />
-      ) : (
-        <div className="grid min-h-[560px] place-items-center px-6 text-center">
-          <div>
-            <CircleAlert className="mx-auto size-8 text-amber-600" />
-            <h2 className="mt-4 text-xl font-bold">The book needs 6 prepared memories.</h2>
-            <Button className="mt-5" onClick={onBack}>
-              Return to curation
-            </Button>
-          </div>
-        </div>
-      )}
-
-      <div className="border-t border-black/8 bg-white px-5 py-7 md:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="font-bold">
-                {shareUrl ? "Your private keepsake is live." : "Ready when it feels right."}
-              </p>
-              <p className="mt-1 text-sm text-black/50">
-                Published guests see the last complete revision, never unfinished edits.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button variant="outline" onClick={onBack}>
-                <ArrowLeft />
-                Edit story
-              </Button>
-              {shareUrl ? (
-                <>
-                  <Button variant="outline" onClick={onCopy}>
-                    {copied ? <Check /> : <Copy />}
-                    {copied ? "Copied" : "Copy link"}
-                  </Button>
-                  <Button variant="outline" asChild>
-                    <a href={shareUrl} target="_blank" rel="noreferrer">
-                      <ExternalLink />
-                      Open
-                    </a>
-                  </Button>
-                  <Button variant="outline" onClick={onRegenerate}>
-                    <RefreshCw />
-                    New link
-                  </Button>
-                  <Button variant="outline" onClick={onUnpublish}>
-                    Unpublish
-                  </Button>
-                </>
-              ) : (
-                <Button onClick={onPublish} className="bg-[#1f2c27] text-white">
-                  <ShieldCheck />
-                  Publish privately
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {reactions.length ? (
-            <div className="mt-8 border-t border-black/8 pt-6">
-              <h2 className="text-sm font-bold">Private reactions</h2>
-              <div className="mt-3 grid gap-2 md:grid-cols-2">
-                {reactions.map((reaction) => (
-                  <div key={reaction.id} className="rounded-md bg-[#f5f5f2] px-4 py-3">
-                    <p className="text-sm font-semibold">
-                      {reaction.display_name || "Someone you shared it with"} ·{" "}
-                      {reaction.reaction.replace("_", " ")}
-                    </p>
-                    {reaction.note ? (
-                      <p className="mt-1 text-sm leading-5 text-black/58">{reaction.note}</p>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </div>
-      <p className="sr-only">{book.title}</p>
     </section>
   )
 }
@@ -1538,17 +1165,30 @@ function buildOwnerAssetSources(
     const fallback = initialMap.get(asset.id)
     const locator = asset.preserved_key || asset.source_locator || ""
     const src = ownerLocatorUrl(locator, asset.media_type)
-    const poster =
-      asset.poster_key
-        ? ownerLocatorUrl(asset.poster_key, "image")
+    const thumbnailSmallKey =
+      typeof asset.metadata.thumbnailSmallKey === "string"
+        ? asset.metadata.thumbnailSmallKey
+        : null
+    const thumbnailMediumKey =
+      typeof asset.metadata.thumbnailMediumKey === "string"
+        ? asset.metadata.thumbnailMediumKey
+        : null
+    const thumbnail = thumbnailSmallKey
+      ? ownerLocatorUrl(thumbnailSmallKey, "image")
+      : fallback?.thumbnail
+    const poster = thumbnailMediumKey
+      ? ownerLocatorUrl(thumbnailMediumKey, "image")
+      : asset.poster_key
+        ? ownerLocatorUrl(asset.poster_key, "image", 640)
         : typeof asset.metadata.posterLocator === "string"
-          ? asset.metadata.posterLocator
+          ? ownerLocatorUrl(asset.metadata.posterLocator, "image", 640)
           : fallback?.poster
 
     return {
       id: asset.id,
       mediaType: asset.media_type,
       src: src || fallback?.src || "",
+      thumbnail,
       poster,
       downloadUrl: asset.preserved_key
         ? ownerLocatorUrl(asset.preserved_key, asset.media_type)
@@ -1557,13 +1197,18 @@ function buildOwnerAssetSources(
   })
 }
 
-function ownerLocatorUrl(locator: string, mediaType: "image" | "video") {
+function ownerLocatorUrl(
+  locator: string,
+  mediaType: "image" | "video",
+  width?: 320 | 640
+) {
   if (!locator) return ""
   if (
     locator.startsWith("images/") ||
     (locator.startsWith("memory-books/") && mediaType === "image")
   ) {
-    return `/api/image-proxy?key=${encodeURIComponent(locator)}`
+    const resize = width ? `&width=${width}` : ""
+    return `/api/image-proxy?key=${encodeURIComponent(locator)}${resize}`
   }
   if (
     locator.startsWith("videos/") ||

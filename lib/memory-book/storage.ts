@@ -1,6 +1,8 @@
 import { extname } from "node:path"
+import sharp from "sharp"
 import {
   copyR2Object,
+  getR2ObjectBuffer,
   getR2ObjectStream,
   putR2Object,
 } from "@/lib/r2"
@@ -61,4 +63,74 @@ export async function preserveMemoryBookLocator(input: {
 
 export async function readMemoryBookAsset(key: string, range?: string | null) {
   return getR2ObjectStream(key, range)
+}
+export async function createMemoryBookImagePreviews(input: {
+  sourceKey: string
+  userId: string
+  bookId: string
+  assetId: string
+}) {
+  const { body } = await getR2ObjectBuffer(input.sourceKey)
+  const smallKey = memoryBookAssetKey({
+    ...input,
+    assetId: `${input.assetId}-thumb-320`,
+    mediaType: "image",
+    extension: ".webp",
+  })
+  const mediumKey = memoryBookAssetKey({
+    ...input,
+    assetId: `${input.assetId}-preview-640`,
+    mediaType: "image",
+    extension: ".webp",
+  })
+  const image = sharp(body, { failOn: "none" }).rotate()
+  const [small, medium] = await Promise.all([
+    image.clone().resize({ width: 320, withoutEnlargement: true }).webp({ quality: 72 }).toBuffer(),
+    image.clone().resize({ width: 640, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer(),
+  ])
+  await Promise.all([
+    putR2Object(smallKey, small, "image/webp", "private, max-age=31536000, immutable"),
+    putR2Object(mediumKey, medium, "image/webp", "private, max-age=31536000, immutable"),
+  ])
+  return { thumbnailSmallKey: smallKey, thumbnailMediumKey: mediumKey }
+}
+
+export function sharedMediaDerivativeKey(input: {
+  userId: string
+  sourceType: string
+  sourceId: string
+  width: 320 | 640
+}) {
+  return `media-derivatives/${input.userId}/${input.sourceType}/${input.sourceId}-${input.width}.webp`
+}
+
+export async function createSharedMediaDerivatives(input: {
+  locator: string
+  userId: string
+  sourceType: string
+  sourceId: string
+}) {
+  let body: Buffer
+  if (/^(images|videos|memory-books|media-derivatives)\//.test(input.locator)) {
+    body = (await getR2ObjectBuffer(input.locator)).body
+  } else {
+    const response = await fetch(input.locator, { signal: AbortSignal.timeout(30_000) })
+    if (!response.ok) {
+      throw new Error(`Unable to read preview source (${response.status})`)
+    }
+    body = Buffer.from(await response.arrayBuffer())
+  }
+
+  const smallKey = sharedMediaDerivativeKey({ ...input, width: 320 })
+  const mediumKey = sharedMediaDerivativeKey({ ...input, width: 640 })
+  const image = sharp(body, { failOn: "none" }).rotate()
+  const [small, medium] = await Promise.all([
+    image.clone().resize({ width: 320, withoutEnlargement: true }).webp({ quality: 72 }).toBuffer(),
+    image.clone().resize({ width: 640, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer(),
+  ])
+  await Promise.all([
+    putR2Object(smallKey, small, "image/webp", "private, max-age=31536000, immutable"),
+    putR2Object(mediumKey, medium, "image/webp", "private, max-age=31536000, immutable"),
+  ])
+  return { thumbnailSmallKey: smallKey, thumbnailMediumKey: mediumKey }
 }

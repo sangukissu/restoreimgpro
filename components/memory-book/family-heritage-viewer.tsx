@@ -12,22 +12,28 @@ import type {
   MemoryBookAssetDocument,
   MemoryBookDocumentV1,
 } from "@/lib/memory-book/types"
-import { BookCover } from "./book-cover"
 import { BookFrame, type MemoryBookSheet } from "./book-frame"
 import { InnerPage } from "./inner-page"
 import { MemoryBookAudioDeck } from "./memory-book-audio-deck"
 import { MemoryBookStage } from "./memory-book-stage"
+import {
+  MemoryBookClosingPage,
+  MemoryBookCoverPage,
+  MemoryBookStoryPage,
+  splitCoverTitle,
+} from "./memory-book-page"
 import { MobileSpiralJournal } from "./mobile-spiral-journal"
-import { PaperTexture } from "./paper-texture"
-import { Polaroid } from "./polaroid"
 import styles from "./memory-book.module.css"
 
 export interface MemoryBookAssetSource {
   id: string
   mediaType: "image" | "video"
   src: string
+  thumbnail?: string | null
   poster?: string | null
   downloadUrl?: string | null
+  previewStatus?: "queued" | "processing" | "ready" | "failed"
+  expiresAt?: string
 }
 
 interface FamilyHeritageViewerProps {
@@ -72,11 +78,11 @@ export function FamilyHeritageViewer({
   )
 
   const sheets = useMemo<MemoryBookSheet[]>(() => {
-    const storySheets = document.spreads.slice(0, -1).map((spread, index) => ({
+    const storySheets = document.spreads.map((spread, index) => ({
       id: spread.id,
       front: (
-        <HeritageScrapbookPage
-          spread={spread}
+        <MemoryBookStoryPage
+          page={{ id: spread.id, ...spread.right }}
           sourceMap={sourceMap}
           textureId={`desktop-${document.bookId}-story-${index + 1}`}
           onAssetOpen={setActiveAssetId}
@@ -89,19 +95,18 @@ export function FamilyHeritageViewer({
       {
         id: "cover",
         front: (
-          <BookCover
-            titleLines={coverTitleLines}
-            periodLines={coverPeriodLines}
+          <MemoryBookCoverPage
+            title={document.cover.title}
+            periodLabel={coverPeriodLines.join(" · ")}
           />
         ),
         back: <InnerPage variant="botanical" />,
       },
       ...storySheets,
     ]
-  }, [coverPeriodLines, coverTitleLines, document.bookId, document.spreads, sourceMap])
+  }, [coverPeriodLines, document.bookId, document.cover.title, document.spreads, sourceMap])
 
   const maxIndex = sheets.length
-  const finalSpread = document.spreads.at(-1)
 
   const turnTo = useCallback(
     (next: number) => {
@@ -209,9 +214,6 @@ export function FamilyHeritageViewer({
   }, [activeAssetId, document.spreads])
   const activeSource = activeAssetId ? sourceMap.get(activeAssetId) : null
 
-  if (!finalSpread) {
-    return null
-  }
 
   return (
     <>
@@ -232,11 +234,9 @@ export function FamilyHeritageViewer({
               sheets={sheets}
               turnedSheets={pageIndex}
               finalRightPage={
-                <HeritageScrapbookPage
-                  spread={finalSpread}
-                  sourceMap={sourceMap}
-                  textureId={`desktop-${document.bookId}-final`}
-                  onAssetOpen={setActiveAssetId}
+                <MemoryBookClosingPage
+                  message={document.dedication}
+                  textureId={`desktop-${document.bookId}-closing`}
                 />
               }
               isTurning={isTurning}
@@ -274,71 +274,6 @@ export function FamilyHeritageViewer({
       />
     </>
   )
-}
-
-function HeritageScrapbookPage({
-  spread,
-  sourceMap,
-  textureId,
-  onAssetOpen,
-}: {
-  spread: HeritageSpread
-  sourceMap: Map<string, MemoryBookAssetSource>
-  textureId: string
-  onAssetOpen: (assetId: string) => void
-}) {
-  return (
-    <article className={[styles.innerPage, styles.scrapbookPage, styles.keepsakePage].join(" ")}>
-      <PaperTexture textureId={textureId} />
-      <img className={styles.pageFlowerGhost} src="/icons/rose.webp" alt="" draggable={false} />
-
-      <div className={styles.keepsakeCopy}>
-        <p className={styles.inkHeading}>{spread.right.heading}</p>
-        <p>{spread.right.body}</p>
-      </div>
-
-      <div className={styles.keepsakeGrid}>
-        {spread.right.assets.map((asset, index) => {
-          const source = sourceMap.get(asset.id)
-          const previewSrc =
-            source?.poster ||
-            (source?.mediaType === "image" ? source.src : "") ||
-            "/icons/rose.webp"
-
-          return (
-            <Polaroid
-              key={asset.id}
-              photo={{
-                src: previewSrc,
-                alt: asset.alt,
-                caption: asset.caption || "A memory preserved by BringBack.",
-              }}
-              rotation={index === 0 ? -5 : 4}
-              compact
-              onPhotoOpen={() => onAssetOpen(asset.id)}
-            />
-          )
-        })}
-      </div>
-    </article>
-  )
-}
-
-function splitCoverTitle(title: string) {
-  const words = title.trim().split(/\s+/).filter(Boolean)
-
-  if (words.length <= 3) {
-    return words.length ? words : ["Our", "Family", "Heritage."]
-  }
-
-  const wordsPerLine = Math.ceil(words.length / 3)
-  const lines: string[] = []
-
-  for (let index = 0; index < words.length; index += wordsPerLine) {
-    lines.push(words.slice(index, index + wordsPerLine).join(" "))
-  }
-
-  return lines
 }
 
 function MemoryLightbox({

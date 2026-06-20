@@ -48,6 +48,20 @@ export async function getR2ObjectStream(key: string, range?: string | null) {
   };
 }
 
+export async function getR2ObjectBuffer(key: string) {
+  const client = getR2Client()
+  const result = await client.send(
+    new GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: key })
+  )
+  if (!result.Body) {
+    throw new Error("R2 object has no body")
+  }
+  const bytes = await result.Body.transformToByteArray()
+  return {
+    body: Buffer.from(bytes),
+    contentType: result.ContentType || "application/octet-stream",
+  }
+}
 export async function getR2SignedUrl(key: string, expiresInSeconds = 900) {
   const client = getR2Client();
   const command = new GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: key });

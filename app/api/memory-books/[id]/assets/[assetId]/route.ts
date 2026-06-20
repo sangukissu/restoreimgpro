@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import {
+  parseMemoryBookDraft,
+  reconcileMemoryBookDraft,
+} from "@/lib/memory-book/draft"
+import {
   enqueueMemoryBookJob,
+  getMemoryBookAssets,
   getOwnedMemoryBook,
   requireMemoryBookUser,
 } from "@/lib/memory-book/server"
@@ -14,8 +19,6 @@ const updateAssetSchema = z.object({
   position: z.number().int().min(0).max(11).optional(),
   featured: z.boolean().optional(),
   hidden: z.boolean().optional(),
-  heading: z.string().trim().max(80).optional().or(z.literal("")),
-  body: z.string().trim().max(420).optional().or(z.literal("")),
 })
 
 export async function PATCH(
@@ -72,12 +75,6 @@ export async function PATCH(
     )
   }
 
-  const updatedMetadata = {
-    ...(asset.metadata || {}),
-    ...(parsed.data.heading !== undefined ? { customHeading: parsed.data.heading } : {}),
-    ...(parsed.data.body !== undefined ? { customBody: parsed.data.body } : {}),
-  }
-
   const { data: updatedAsset, error } = await supabaseAdmin
     .from("memory_book_assets")
     .update({
@@ -86,7 +83,6 @@ export async function PATCH(
       position: parsed.data.position ?? asset.position,
       is_featured: parsed.data.featured ?? asset.is_featured,
       is_hidden: parsed.data.hidden ?? asset.is_hidden,
-      metadata: updatedMetadata,
     })
     .eq("id", assetId)
     .eq("book_id", id)
@@ -97,7 +93,27 @@ export async function PATCH(
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  return NextResponse.json({ asset: updatedAsset, book: versionedBook })
+  const refreshedAssets = await getMemoryBookAssets(id, user.id)
+  const draftDocument = reconcileMemoryBookDraft(
+    parseMemoryBookDraft(versionedBook.draft_document),
+    refreshedAssets
+  )
+  const { data: synchronizedBook } = await supabaseAdmin
+    .from("memory_books")
+    .update({
+      title: draftDocument.cover.title.trim() || "Our Family Heritage",
+      draft_document: draftDocument,
+    })
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .eq("draft_version", nextVersion)
+    .select("*")
+    .maybeSingle()
+
+  return NextResponse.json({
+    asset: updatedAsset,
+    book: synchronizedBook || versionedBook,
+  })
 }
 
 export async function DELETE(
@@ -117,7 +133,7 @@ export async function DELETE(
 
   const { data: asset } = await supabaseAdmin
     .from("memory_book_assets")
-    .select("source_locator, preserved_key, poster_key")
+    .select("source_locator, preserved_key, poster_key, metadata")
     .eq("id", assetId)
     .eq("book_id", id)
     .eq("user_id", user.id)
@@ -129,7 +145,7 @@ export async function DELETE(
 
   const keys = Array.from(
     new Set(
-      [asset.preserved_key, asset.poster_key, asset.source_locator].filter(
+      [asset.preserved_key, asset.poster_key, asset.source_locator, asset.metadata?.thumbnailSmallKey, asset.metadata?.thumbnailMediumKey].filter(
         (key): key is string =>
           typeof key === "string" && key.startsWith("memory-books/")
       )
@@ -152,9 +168,18 @@ export async function DELETE(
     .eq("id", assetId)
     .eq("book_id", id)
 
+  const refreshedAssets = await getMemoryBookAssets(id, user.id)
+  const draftDocument = reconcileMemoryBookDraft(
+    parseMemoryBookDraft(book.draft_document),
+    refreshedAssets
+  )
   await supabaseAdmin
     .from("memory_books")
-    .update({ draft_version: book.draft_version + 1 })
+    .update({
+      title: draftDocument.cover.title.trim() || "Our Family Heritage",
+      draft_document: draftDocument,
+      draft_version: book.draft_version + 1,
+    })
     .eq("id", id)
     .eq("draft_version", book.draft_version)
 

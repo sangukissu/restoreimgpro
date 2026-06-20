@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { requireMemoryBookUser } from "@/lib/memory-book/server"
+import { createMemoryBookDraft } from "@/lib/memory-book/draft"
 import { isMemoryBookEnabled } from "@/lib/memory-book/feature"
 
 const createBookSchema = z.object({
@@ -60,6 +61,7 @@ export async function POST(request: Request) {
       user_id: user.id,
       title: parsed.data.title || "Our Family Heritage",
       theme: "family_heritage_v1",
+      draft_document: createMemoryBookDraft(parsed.data.title),
     })
     .select("*")
     .single()

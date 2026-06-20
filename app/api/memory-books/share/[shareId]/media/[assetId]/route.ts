@@ -15,6 +15,7 @@ export async function GET(
   const signature = url.searchParams.get("s") || ""
   const wantsDownload = url.searchParams.get("download") === "1"
   const wantsPoster = url.searchParams.get("poster") === "1"
+  const wantsPreview = url.searchParams.get("preview") === "1"
 
   const shared = await getPublishedMemoryBookShare(shareId, signature)
   if (!shared?.document || !shared.unlocked) {
@@ -33,13 +34,21 @@ export async function GET(
 
   const { data: asset } = await supabaseAdmin
     .from("memory_book_assets")
-    .select("preserved_key, poster_key, media_type, original_label")
+    .select("preserved_key, poster_key, media_type, original_label, metadata")
     .eq("id", assetId)
     .eq("book_id", shared.book.id)
     .eq("status", "ready")
     .single()
 
-  const key = wantsPoster ? asset?.poster_key : asset?.preserved_key
+  const previewKey =
+    typeof asset?.metadata?.thumbnailMediumKey === "string"
+      ? asset.metadata.thumbnailMediumKey
+      : null
+  const key = wantsPreview
+    ? previewKey
+    : wantsPoster
+      ? asset?.poster_key
+      : asset?.preserved_key
   if (!asset || !key) {
     return NextResponse.json({ error: "Memory is unavailable" }, { status: 404 })
   }
@@ -50,7 +59,9 @@ export async function GET(
       await readMemoryBookAsset(key, range)
     const headers = new Headers({
       "Content-Type": contentType || "application/octet-stream",
-      "Cache-Control": "private, max-age=300",
+      "Cache-Control": wantsPreview
+        ? "private, max-age=31536000, immutable"
+        : "private, max-age=300",
       "Accept-Ranges": "bytes",
       "X-Robots-Tag": "noindex, noarchive",
     })

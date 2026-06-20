@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
-import { getR2ObjectStream } from "@/lib/r2";
+import sharp from "sharp";
+import { getR2ObjectBuffer, getR2ObjectStream } from "@/lib/r2";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs"; // Node runtime for streaming
@@ -18,6 +19,11 @@ export async function GET(request: Request) {
         // 2. Get and validate key parameter
         const url = new URL(request.url);
         const key = url.searchParams.get("key");
+        const requestedWidth = Number(url.searchParams.get("width"));
+        const width =
+            requestedWidth === 320 || requestedWidth === 640
+                ? requestedWidth
+                : null;
 
         if (!key) {
             return NextResponse.json({ error: "Missing 'key' query parameter" }, { status: 400 });
@@ -29,7 +35,25 @@ export async function GET(request: Request) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
-        // 4. Stream image from R2
+        if (width) {
+            const { body } = await getR2ObjectBuffer(key);
+            const resized = await sharp(body, { failOn: "none" })
+                .rotate()
+                .resize({ width, withoutEnlargement: true })
+                .webp({ quality: width === 320 ? 72 : 80 })
+                .toBuffer();
+
+            return new Response(new Uint8Array(resized), {
+                headers: {
+                    "Content-Type": "image/webp",
+                    "Content-Length": String(resized.byteLength),
+                    "Cache-Control": "private, max-age=31536000, immutable",
+                    "Vary": "Cookie",
+                },
+            });
+        }
+
+        // 4. Stream the original image from R2
         const { body, contentType, contentLength, lastModified } = await getR2ObjectStream(key);
 
         const headers: Record<string, string> = {

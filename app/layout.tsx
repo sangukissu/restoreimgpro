@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
 import ClarityProvider from "@/components/clarity-provider"
 import { CrispChat } from "@/components/crisp-chat"
-import PostHogProvider from "@/components/posthog-provider"
 import Script from "next/script"
 import "./globals.css"
 
@@ -159,9 +158,7 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={`antialiased`}>
-        <PostHogProvider>
           {children}
-        </PostHogProvider>
 
         <ClarityProvider />
         <CrispChat />

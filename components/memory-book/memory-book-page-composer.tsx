@@ -1,0 +1,633 @@
+"use client"
+
+import dynamic from "next/dynamic"
+import { useEffect, useMemo, useState } from "react"
+import {
+  ArrowDown,
+  ArrowLeft,
+  ArrowUp,
+  BookOpen,
+  Check,
+  CircleAlert,
+  Copy,
+  ExternalLink,
+  ImageIcon,
+  Loader2,
+  Plus,
+  RefreshCw,
+  Replace,
+  RotateCcw,
+  Trash2,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  assignAssetToMemoryBookDraft,
+  createEmptyMemoryBookSpread,
+} from "@/lib/memory-book/draft"
+import type {
+  MemoryBookAssetRecord,
+  MemoryBookDocumentV1,
+  MemoryBookDraftDocument,
+} from "@/lib/memory-book/types"
+import type { MemoryBookAssetSource } from "./family-heritage-viewer"
+import {
+  MemoryBookClosingPage,
+  MemoryBookCoverPage,
+  MemoryBookStaticPage,
+  MemoryBookStoryPage,
+  type MemoryBookStoryPageData,
+} from "./memory-book-page"
+
+const FullBookPreview = dynamic(
+  () =>
+    import("./family-heritage-viewer").then(
+      (module) => module.FamilyHeritageViewer
+    ),
+  { ssr: false }
+)
+
+type SelectedPage = "cover" | "closing" | number
+type ReplacementTarget = { pageIndex: number; slotIndex: number } | null
+
+type Reaction = {
+  id: string
+  reaction: string
+  display_name: string
+  note: string
+  created_at: string
+}
+
+export function MemoryBookPageComposer({
+  draft,
+  document,
+  assets,
+  assetSources,
+  shareUrl,
+  copied,
+  reactions,
+  onDraftChange,
+  onAssetUpdate,
+  onRetryAsset,
+  onMediaError,
+  onBack,
+  onCopy,
+  onRegenerate,
+  onUnpublish,
+}: {
+  draft: MemoryBookDraftDocument
+  document: MemoryBookDocumentV1 | null
+  assets: MemoryBookAssetRecord[]
+  assetSources: MemoryBookAssetSource[]
+  shareUrl: string | null
+  copied: boolean
+  reactions: Reaction[]
+  onDraftChange: (draft: MemoryBookDraftDocument) => void
+  onAssetUpdate: (
+    asset: MemoryBookAssetRecord,
+    patch: { caption?: string }
+  ) => Promise<void>
+  onRetryAsset: (asset: MemoryBookAssetRecord) => Promise<void>
+  onMediaError: () => void
+  onBack: () => void
+  onCopy: () => void
+  onRegenerate: () => void
+  onUnpublish: () => void
+}) {
+  const [selectedPage, setSelectedPage] = useState<SelectedPage>(
+    draft.spreads.length ? 0 : "cover"
+  )
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [replacementTarget, setReplacementTarget] =
+    useState<ReplacementTarget>(null)
+  const sourceMap = useMemo(
+    () => new Map(assetSources.map((source) => [source.id, source])),
+    [assetSources]
+  )
+  const assetMap = useMemo(
+    () => new Map(assets.map((asset) => [asset.id, asset])),
+    [assets]
+  )
+  const assignedIds = useMemo(
+    () => new Set(draft.spreads.flatMap((spread) => spread.assetIds)),
+    [draft.spreads]
+  )
+  const unusedAssets = useMemo(
+    () =>
+      assets
+        .filter((asset) => !asset.is_hidden && !assignedIds.has(asset.id))
+        .sort((a, b) => a.position - b.position),
+    [assets, assignedIds]
+  )
+
+  useEffect(() => {
+    if (
+      typeof selectedPage === "number" &&
+      selectedPage >= draft.spreads.length
+    ) {
+      setSelectedPage(draft.spreads.length ? draft.spreads.length - 1 : "cover")
+    }
+  }, [draft.spreads.length, selectedPage])
+
+  const updateCover = (patch: Partial<MemoryBookDraftDocument["cover"]>) => {
+    onDraftChange({ ...draft, cover: { ...draft.cover, ...patch } })
+  }
+
+  const updateSpread = (
+    index: number,
+    patch: Partial<MemoryBookDraftDocument["spreads"][number]>
+  ) => {
+    onDraftChange({
+      ...draft,
+      spreads: draft.spreads.map((spread, spreadIndex) =>
+        spreadIndex === index ? { ...spread, ...patch } : spread
+      ),
+    })
+  }
+
+  const movePage = (index: number, direction: -1 | 1) => {
+    const target = index + direction
+    if (target < 0 || target >= draft.spreads.length) return
+    const spreads = [...draft.spreads]
+    ;[spreads[index], spreads[target]] = [spreads[target], spreads[index]]
+    onDraftChange({ ...draft, spreads })
+    setSelectedPage(target)
+  }
+
+  const removePage = (index: number) => {
+    const spreads = draft.spreads.filter((_, spreadIndex) => spreadIndex !== index)
+    onDraftChange({ ...draft, spreads })
+    setSelectedPage(spreads.length ? Math.min(index, spreads.length - 1) : "cover")
+  }
+
+  const removeFromPage = (pageIndex: number, assetId: string) => {
+    const spread = draft.spreads[pageIndex]
+    updateSpread(pageIndex, {
+      assetIds: spread.assetIds.filter((id) => id !== assetId),
+    })
+  }
+
+  const moveAssetToPage = (assetId: string, targetPageIndex: number) => {
+    const target = draft.spreads[targetPageIndex]
+    if (!target || target.assetIds.length >= 2) return
+    onDraftChange({
+      ...draft,
+      spreads: draft.spreads.map((spread, index) => ({
+        ...spread,
+        assetIds:
+          index === targetPageIndex
+            ? [...spread.assetIds.filter((id) => id !== assetId), assetId]
+            : spread.assetIds.filter((id) => id !== assetId),
+      })),
+    })
+    setSelectedPage(targetPageIndex)
+  }
+
+  const replaceAsset = (assetId: string) => {
+    if (!replacementTarget) return
+    onDraftChange({
+      ...draft,
+      spreads: draft.spreads.map((spread, index) => {
+        const withoutReplacement = spread.assetIds.filter((id) => id !== assetId)
+        if (index !== replacementTarget.pageIndex) {
+          return { ...spread, assetIds: withoutReplacement }
+        }
+        const next = [...withoutReplacement]
+        next[replacementTarget.slotIndex] = assetId
+        return { ...spread, assetIds: next.filter(Boolean).slice(0, 2) }
+      }),
+    })
+    setSelectedPage(replacementTarget.pageIndex)
+    setReplacementTarget(null)
+  }
+
+  const addUnusedAsset = (assetId: string) => {
+    const next = assignAssetToMemoryBookDraft(draft, assetId)
+    onDraftChange(next)
+    const pageIndex = next.spreads.findIndex((spread) =>
+      spread.assetIds.includes(assetId)
+    )
+    if (pageIndex >= 0) setSelectedPage(pageIndex)
+  }
+
+  const selectedPreview = (
+    <ExactPagePreview
+      selectedPage={selectedPage}
+      draft={draft}
+      assetMap={assetMap}
+      sourceMap={sourceMap}
+    />
+  )
+
+  return (
+    <section className="mx-auto max-w-[1500px] px-4 py-6 md:px-7 md:py-8">
+      <div className="mb-6 flex flex-col gap-4 border-b border-black/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold text-[#47736c]">Page composer</p>
+          <h1 className="mt-1 text-2xl font-bold">Edit the page you can see.</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
+            Photos, page copy, and captions stay together. Unused memories remain available below.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={onBack}>
+            <ArrowLeft /> Memories
+          </Button>
+          <Button
+            onClick={() => setPreviewOpen(true)}
+            disabled={!document}
+            title={document ? undefined : "Prepare every assigned memory and fill every page first"}
+            className="bg-[#1f2c27] text-white"
+          >
+            <BookOpen /> Preview full book
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid items-start gap-7 lg:grid-cols-[minmax(0,610px)_minmax(460px,1fr)]">
+        <div className="order-2 space-y-4 lg:order-1">
+          <ComposerCard
+            title="Cover"
+            subtitle="The first thing your family sees"
+            selected={selectedPage === "cover"}
+            onSelect={() => setSelectedPage("cover")}
+          >
+            {selectedPage === "cover" ? (
+              <div className="space-y-5 pt-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Book title" hint={`${draft.cover.title.length}/90`}>
+                    <Input
+                      value={draft.cover.title}
+                      maxLength={90}
+                      onChange={(event) => updateCover({ title: event.target.value })}
+                    />
+                  </Field>
+                  <Field label="Optional bottom line" hint={`${draft.cover.periodLabel.length}/80`}>
+                    <Input
+                      value={draft.cover.periodLabel}
+                      maxLength={80}
+                      placeholder="1980–present, A family archive…"
+                      onChange={(event) => updateCover({ periodLabel: event.target.value })}
+                    />
+                  </Field>
+                </div>
+                <div className="lg:hidden">{selectedPreview}</div>
+              </div>
+            ) : null}
+          </ComposerCard>
+
+          {draft.spreads.map((spread, index) => {
+            const spreadAssets = spread.assetIds
+              .map((assetId) => assetMap.get(assetId))
+              .filter((asset): asset is MemoryBookAssetRecord => Boolean(asset))
+            const selected = selectedPage === index
+
+            return (
+              <ComposerCard
+                key={spread.id}
+                title={`Page ${index + 1}`}
+                subtitle={spreadAssets.length ? `${spreadAssets.length} ${spreadAssets.length === 1 ? "memory" : "memories"}` : "Empty page"}
+                selected={selected}
+                onSelect={() => setSelectedPage(index)}
+              >
+                {selected ? (
+                  <div className="space-y-5 pt-4">
+                    <div className="flex flex-wrap items-center gap-1 border-b border-black/8 pb-3">
+                      <span className="mr-auto text-xs font-semibold text-black/45">Move this page</span>
+                      <Button type="button" variant="ghost" size="sm" disabled={index === 0} onClick={() => movePage(index, -1)}>
+                        <ArrowUp className="size-4" /> Earlier
+                      </Button>
+                      <Button type="button" variant="ghost" size="sm" disabled={index === draft.spreads.length - 1} onClick={() => movePage(index, 1)}>
+                        <ArrowDown className="size-4" /> Later
+                      </Button>
+                      <Button type="button" variant="ghost" size="sm" disabled={spread.assetIds.length > 0} className="text-red-600" onClick={() => removePage(index)}>
+                        <Trash2 className="size-4" /> Delete empty page
+                      </Button>
+                    </div>
+
+                    {spreadAssets.length ? (
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {spreadAssets.map((asset, slotIndex) => (
+                          <article key={asset.id} className="rounded-xl border border-black/8 bg-[#faf9f6] p-3">
+                            <MemoryThumbnail
+                              asset={asset}
+                              source={sourceMap.get(asset.id)}
+                              className="aspect-[4/3] w-full rounded-lg"
+                              onError={onMediaError}
+                            />
+                            <div className="mt-3 flex items-center gap-1">
+                              <p className="min-w-0 flex-1 truncate text-xs font-semibold text-black/55">{asset.original_label}</p>
+                              <Button type="button" variant="ghost" size="icon" className="size-8" title="Replace memory" onClick={() => setReplacementTarget({ pageIndex: index, slotIndex })}>
+                                <Replace className="size-4" />
+                              </Button>
+                              <Button type="button" variant="ghost" size="icon" className="size-8" title="Move to unused memories" onClick={() => removeFromPage(index, asset.id)}>
+                                <Trash2 className="size-4" />
+                              </Button>
+                            </div>
+                            <label className="mt-2 block text-xs font-semibold text-black/55">
+                              Move to page
+                              <select
+                                value=""
+                                className="mt-1 h-9 w-full rounded-md border border-black/10 bg-white px-2 text-sm"
+                                onChange={(event) => {
+                                  const target = Number(event.target.value)
+                                  if (Number.isInteger(target)) moveAssetToPage(asset.id, target)
+                                }}
+                              >
+                                <option value="">Choose page…</option>
+                                {draft.spreads.map((targetSpread, targetIndex) => (
+                                  <option key={targetSpread.id} value={targetIndex} disabled={targetIndex === index || targetSpread.assetIds.length >= 2}>
+                                    Page {targetIndex + 1}{targetSpread.assetIds.length >= 2 ? " (full)" : ""}
+                                  </option>
+                                ))}
+                              </select>
+                            </label>
+                            <Field label="Photo caption" hint={`${wordCount(asset.caption)}/15 words`} compact>
+                              <Input
+                                key={`${asset.id}:${asset.caption}`}
+                                defaultValue={asset.caption}
+                                maxLength={280}
+                                placeholder="A short caption"
+                                onBlur={(event) => {
+                                  const caption = limitWords(event.target.value, 15)
+                                  if (caption !== asset.caption) void onAssetUpdate(asset, { caption })
+                                }}
+                              />
+                            </Field>
+                            {asset.status !== "ready" ? (
+                              <div className="mt-3 flex items-center justify-between rounded-md bg-white px-2 py-2 text-xs text-black/55">
+                                <span>{asset.status === "failed" ? "Preparation failed" : "Preparing preview…"}</span>
+                                {asset.status === "failed" ? (
+                                  <Button type="button" variant="ghost" size="sm" onClick={() => void onRetryAsset(asset)}>
+                                    <RotateCcw className="size-3.5" /> Retry
+                                  </Button>
+                                ) : null}
+                              </div>
+                            ) : null}
+                          </article>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="rounded-xl border border-dashed border-black/15 bg-[#faf9f6] px-5 py-8 text-center">
+                        <ImageIcon className="mx-auto size-6 text-black/28" />
+                        <p className="mt-2 text-sm font-semibold">This page is empty.</p>
+                        <p className="mt-1 text-xs text-black/45">Add a memory from the unused tray below.</p>
+                      </div>
+                    )}
+
+                    <Field label="Page title" hint={`${spread.heading.length}/80`}>
+                      <Input value={spread.heading} maxLength={80} onChange={(event) => updateSpread(index, { heading: event.target.value })} />
+                    </Field>
+                    <Field label="Page story" hint={`${wordCount(spread.body)}/40 words`}>
+                      <Textarea
+                        value={spread.body}
+                        maxLength={420}
+                        className="min-h-28"
+                        onChange={(event) => updateSpread(index, { body: limitWords(event.target.value, 40) })}
+                      />
+                    </Field>
+                    <div className="lg:hidden">{selectedPreview}</div>
+                  </div>
+                ) : null}
+              </ComposerCard>
+            )
+          })}
+
+          <Button
+            type="button"
+            variant="outline"
+            disabled={draft.spreads.length >= 6}
+            onClick={() => {
+              const next = createEmptyMemoryBookSpread(draft)
+              onDraftChange(next)
+              setSelectedPage(next.spreads.length - 1)
+            }}
+          >
+            <Plus /> Add page
+          </Button>
+
+          <ComposerCard
+            title="Closing message"
+            subtitle="The final page of the book"
+            selected={selectedPage === "closing"}
+            onSelect={() => setSelectedPage("closing")}
+          >
+            {selectedPage === "closing" ? (
+              <div className="space-y-5 pt-4">
+                <Field label="Closing message" hint={`${draft.closingMessage.length}/600`}>
+                  <Textarea
+                    value={draft.closingMessage}
+                    maxLength={600}
+                    className="min-h-28"
+                    placeholder="A final message for the people receiving this book…"
+                    onChange={(event) => onDraftChange({ ...draft, closingMessage: event.target.value })}
+                  />
+                </Field>
+                <div className="lg:hidden">{selectedPreview}</div>
+              </div>
+            ) : null}
+          </ComposerCard>
+
+          <UnusedMemories
+            assets={unusedAssets}
+            sourceMap={sourceMap}
+            canAdd={draft.spreads.some((spread) => spread.assetIds.length < 2) || draft.spreads.length < 6}
+            onAdd={addUnusedAsset}
+            onError={onMediaError}
+          />
+
+          {shareUrl ? (
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+              <p className="font-semibold text-emerald-900">Your private keepsake is live.</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button variant="outline" onClick={onCopy}>{copied ? <Check /> : <Copy />}{copied ? "Copied" : "Copy link"}</Button>
+                <Button variant="outline" asChild><a href={shareUrl} target="_blank" rel="noreferrer"><ExternalLink /> Open</a></Button>
+                <Button variant="outline" onClick={onRegenerate}><RefreshCw /> New link</Button>
+                <Button variant="outline" onClick={onUnpublish}>Unpublish</Button>
+              </div>
+            </div>
+          ) : null}
+
+          {reactions.length ? (
+            <div className="rounded-xl border border-black/8 bg-white p-4">
+              <p className="font-bold">Private reactions</p>
+              <div className="mt-3 space-y-2">
+                {reactions.slice(0, 6).map((reaction) => (
+                  <div key={reaction.id} className="rounded-lg bg-[#f5f5f2] px-3 py-2 text-sm">
+                    <p className="font-semibold">{reaction.display_name || "Someone you shared it with"} · {reaction.reaction.replace("_", " ")}</p>
+                    {reaction.note ? <p className="mt-1 text-black/58">{reaction.note}</p> : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="order-1 hidden lg:order-2 lg:sticky lg:top-24 lg:block">
+          <div className="mb-3 flex items-center justify-between">
+            <div><p className="text-sm font-semibold">Exact page preview</p><p className="text-xs text-black/45">The same page renderer recipients see</p></div>
+            <span className="rounded-full bg-[#e9efec] px-3 py-1 text-xs font-semibold text-[#47736c]">
+              {selectedPage === "cover" ? "Cover" : selectedPage === "closing" ? "Closing message" : `Page ${selectedPage + 1}`}
+            </span>
+          </div>
+          {selectedPreview}
+        </div>
+      </div>
+
+      <Dialog open={Boolean(replacementTarget)} onOpenChange={(open) => !open && setReplacementTarget(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogTitle>Replace this memory</DialogTitle>
+          <DialogDescription>The current memory returns to the unused tray.</DialogDescription>
+          {unusedAssets.length ? (
+            <div className="grid max-h-[65svh] grid-cols-2 gap-3 overflow-auto sm:grid-cols-3 md:grid-cols-4">
+              {unusedAssets.map((asset) => (
+                <button key={asset.id} type="button" className="overflow-hidden rounded-xl border border-black/8 bg-white text-left" onClick={() => replaceAsset(asset.id)}>
+                  <MemoryThumbnail asset={asset} source={sourceMap.get(asset.id)} className="aspect-square w-full" onError={onMediaError} />
+                  <span className="block truncate p-2 text-xs font-semibold">{asset.original_label}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="rounded-lg bg-[#f5f5f2] p-5 text-sm text-black/55">There are no unused memories. Add another memory first.</p>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DialogContent className="h-[94svh] w-[96vw] !max-w-[96vw] overflow-auto border-0 bg-[#f8f5ef] p-0 sm:!max-w-[96vw]">
+          <DialogTitle className="sr-only">Full memory book preview</DialogTitle>
+          <DialogDescription className="sr-only">Preview the complete interactive memory book.</DialogDescription>
+          {document ? <FullBookPreview document={document} assetSources={assetSources} /> : null}
+        </DialogContent>
+      </Dialog>
+    </section>
+  )
+}
+
+function ExactPagePreview({ selectedPage, draft, assetMap, sourceMap }: {
+  selectedPage: SelectedPage
+  draft: MemoryBookDraftDocument
+  assetMap: Map<string, MemoryBookAssetRecord>
+  sourceMap: Map<string, MemoryBookAssetSource>
+}) {
+  if (selectedPage === "cover") {
+    return <MemoryBookStaticPage><MemoryBookCoverPage title={draft.cover.title} periodLabel={draft.cover.periodLabel} /></MemoryBookStaticPage>
+  }
+  if (selectedPage === "closing") {
+    return <MemoryBookStaticPage><MemoryBookClosingPage message={draft.closingMessage} textureId="composer-closing" /></MemoryBookStaticPage>
+  }
+  const spread = draft.spreads[selectedPage]
+  if (!spread) return null
+  const page: MemoryBookStoryPageData = {
+    id: spread.id,
+    heading: spread.heading,
+    body: spread.body,
+    assets: spread.assetIds.map((assetId) => assetMap.get(assetId)).filter((asset): asset is MemoryBookAssetRecord => Boolean(asset)).map((asset) => ({
+      id: asset.id,
+      mediaType: asset.media_type,
+      caption: asset.caption,
+      alt: asset.alt_text,
+      status: assetStatus(asset),
+    })),
+  }
+  return <MemoryBookStaticPage><MemoryBookStoryPage page={page} sourceMap={sourceMap} textureId={`composer-${spread.id}`} /></MemoryBookStaticPage>
+}
+
+function UnusedMemories({ assets, sourceMap, canAdd, onAdd, onError }: {
+  assets: MemoryBookAssetRecord[]
+  sourceMap: Map<string, MemoryBookAssetSource>
+  canAdd: boolean
+  onAdd: (assetId: string) => void
+  onError: () => void
+}) {
+  return (
+    <section className="rounded-xl border border-black/8 bg-white p-4">
+      <div><p className="font-bold">Unused memories</p><p className="mt-1 text-xs text-black/45">Removing a photo from a page keeps it here.</p></div>
+      {assets.length ? (
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {assets.map((asset) => (
+            <article key={asset.id} className="overflow-hidden rounded-lg border border-black/8">
+              <MemoryThumbnail asset={asset} source={sourceMap.get(asset.id)} className="aspect-square w-full" onError={onError} />
+              <div className="p-2">
+                <p className="truncate text-xs font-semibold">{asset.original_label}</p>
+                <Button type="button" variant="ghost" size="sm" className="mt-1 w-full" disabled={!canAdd} onClick={() => onAdd(asset.id)}><Plus className="size-4" /> Add to page</Button>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : <p className="mt-4 rounded-lg bg-[#f5f5f2] p-4 text-sm text-black/45">Every selected memory is currently used.</p>}
+    </section>
+  )
+}
+
+function ComposerCard({ title, subtitle, selected, thumbnailStrip, onSelect, children }: {
+  title: string
+  subtitle: string
+  selected: boolean
+  thumbnailStrip?: React.ReactNode
+  onSelect: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <article className={["rounded-xl border bg-white px-4 py-4 shadow-sm transition", selected ? "border-[#47736c] ring-2 ring-[#47736c]/12" : "border-black/8 hover:border-black/18"].join(" ")}>
+      <button type="button" className="flex w-full items-center gap-3 text-left" onClick={onSelect}>
+        <div className="min-w-0 flex-1"><p className="font-bold">{title}</p><p className="mt-0.5 text-xs text-black/45">{subtitle}</p></div>
+        {thumbnailStrip}
+        <span className="text-xs font-semibold text-[#47736c]">{selected ? "Editing" : "Edit"}</span>
+      </button>
+      {children}
+    </article>
+  )
+}
+
+function MemoryThumbnail({ asset, source, className, onError }: {
+  asset: MemoryBookAssetRecord
+  source?: MemoryBookAssetSource
+  className: string
+  onError: () => void
+}) {
+  const src = source?.poster || source?.thumbnail || ""
+  const status = assetStatus(asset)
+  return (
+    <div className={`relative overflow-hidden bg-[#eee9df] ${className}`}>
+      {src ? (
+        <img src={src} alt={asset.alt_text} loading="lazy" decoding="async" className="h-full w-full object-cover" onError={onError} />
+      ) : status === "failed" ? (
+        <span className="grid h-full place-items-center text-red-500"><CircleAlert className="size-5" /></span>
+      ) : (
+        <span className="grid h-full place-items-center text-black/25"><Loader2 className="size-5 animate-spin" /></span>
+      )}
+      {asset.media_type === "video" ? <span className="absolute bottom-2 right-2 rounded-full bg-black/65 px-2 py-1 text-[10px] font-bold text-white">VIDEO</span> : null}
+    </div>
+  )
+}
+
+function Field({ label, hint, compact = false, children }: {
+  label: string
+  hint?: React.ReactNode
+  compact?: boolean
+  children: React.ReactNode
+}) {
+  return <label className={compact ? "mt-3 block" : "block"}><span className="mb-2 flex items-center justify-between text-sm font-semibold">{label}{hint ? <span className="text-xs font-normal text-black/38">{hint}</span> : null}</span>{children}</label>
+}
+
+function assetStatus(asset: MemoryBookAssetRecord) {
+  if (asset.status === "ready") return "ready" as const
+  if (asset.status === "failed") return "failed" as const
+  if (asset.status === "processing") return "processing" as const
+  return "queued" as const
+}
+
+function wordCount(value: string) { return value.trim() ? value.trim().split(/\s+/).length : 0 }
+function limitWords(value: string, maxWords: number) {
+  const words = value.trim().split(/\s+/).filter(Boolean)
+  if (words.length <= maxWords) return value
+  return words.slice(0, maxWords).join(" ")
+}

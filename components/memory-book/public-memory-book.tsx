@@ -117,13 +117,7 @@ export function PublicMemoryBook({
             className="border-t border-black/8 bg-white px-5 py-16 scroll-mt-4"
           >
             <div className="mx-auto max-w-2xl text-center">
-              {document.dedication ? (
-                <blockquote className="font-hand text-2xl leading-tight text-black/72 md:text-3xl">
-                  “{document.dedication}”
-                </blockquote>
-              ) : null}
-
-              <div className="mt-12 border-t border-black/8 pt-8">
+              <div className="border-t border-black/8 pt-8">
                 {sent ? (
                   <div className="py-8">
                     <span className="mx-auto grid size-12 place-items-center rounded-full bg-emerald-50 text-emerald-700">

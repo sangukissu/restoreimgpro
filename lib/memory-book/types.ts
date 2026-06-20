@@ -3,6 +3,39 @@ import { z } from "zod"
 export const memoryBookThemeSchema = z.literal("family_heritage_v1")
 export const memoryBookMediaTypeSchema = z.enum(["image", "video"])
 
+export const memoryBookDraftSpreadSchema = z.object({
+  id: z.string().min(1).max(80),
+  assetIds: z.array(z.string().uuid()).max(2),
+  heading: z.string().max(80),
+  body: z.string().max(420),
+})
+
+export const memoryBookDraftDocumentSchema = z
+  .object({
+    schemaVersion: z.literal(1),
+    cover: z.object({
+      title: z.string().max(90),
+      periodLabel: z.string().max(80),
+    }),
+    spreads: z.array(memoryBookDraftSpreadSchema).max(6),
+    closingMessage: z.string().max(600),
+  })
+  .superRefine((draft, context) => {
+    const assigned = new Set<string>()
+    draft.spreads.forEach((spread, spreadIndex) => {
+      spread.assetIds.forEach((assetId, assetIndex) => {
+        if (assigned.has(assetId)) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "A memory can only appear on one page",
+            path: ["spreads", spreadIndex, "assetIds", assetIndex],
+          })
+        }
+        assigned.add(assetId)
+      })
+    })
+  })
+
 export const memoryBookAssetDocumentSchema = z.object({
   id: z.string().uuid(),
   mediaType: memoryBookMediaTypeSchema,
@@ -52,19 +85,16 @@ export const memoryBookDocumentV1Schema = z.object({
 
 export type MemoryBookDocumentV1 = z.infer<typeof memoryBookDocumentV1Schema>
 export type MemoryBookAssetDocument = z.infer<typeof memoryBookAssetDocumentSchema>
+export type MemoryBookDraftDocument = z.infer<typeof memoryBookDraftDocumentSchema>
 
 export interface MemoryBookRecord {
   id: string
   user_id: string
   theme: "family_heritage_v1"
   title: string
-  honoree: string
-  period_label: string
-  dedication: string
-  notes: string
   status: "draft" | "preparing" | "published" | "needs_attention"
   draft_version: number
-  draft_document: Record<string, unknown>
+  draft_document: MemoryBookDraftDocument
   preservation_consent: boolean
   share_token: string
   share_version: number
@@ -114,4 +144,7 @@ export interface CuratorMediaOption {
   createdAt: string
   previewUrl: string
   posterUrl?: string
+  fallbackUrl?: string
+  previewStatus: "queued" | "processing" | "ready" | "failed"
+  expiresAt?: string
 }

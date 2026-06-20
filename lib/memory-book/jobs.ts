@@ -2,14 +2,20 @@ import { GoogleGenAI } from "@google/genai"
 import { resend } from "@/lib/resend"
 import { deleteImageFromR2 } from "@/lib/r2"
 import { supabaseAdmin } from "@/utils/supabase/admin"
-import { preserveMemoryBookLocator } from "./storage"
+import {
+  createMemoryBookImagePreviews,
+  createSharedMediaDerivatives,
+  preserveMemoryBookLocator,
+} from "./storage"
+import { memoryBookDraftDocumentSchema } from "./types"
+import { parseMemoryBookDraft } from "./draft"
 
 type MemoryBookJob = {
   id: string
   book_id: string | null
   asset_id: string | null
   user_id: string
-  job_type: "preserve_asset" | "polish_copy" | "reaction_email" | "delete_storage" | "draft_expiry_warning"
+  job_type: "preserve_asset" | "generate_media_derivatives" | "polish_copy" | "reaction_email" | "delete_storage" | "draft_expiry_warning"
   payload: Record<string, unknown>
   attempts: number
   max_attempts: number
@@ -34,12 +40,21 @@ async function preserveAsset(job: MemoryBookJob) {
     throw new Error("Memory asset not found")
   }
 
-  if (asset.status === "ready" && asset.preserved_key) {
-    return { preservedKey: asset.preserved_key, posterKey: asset.poster_key }
-  }
-
   if (!asset.source_locator) {
     throw new Error("Memory asset has no source locator")
+  }
+
+  const existingMetadata = (asset.metadata || {}) as Record<string, unknown>
+  const hasPreviews =
+    typeof existingMetadata.thumbnailSmallKey === "string" &&
+    typeof existingMetadata.thumbnailMediumKey === "string"
+  if (asset.status === "ready" && asset.preserved_key && hasPreviews) {
+    return {
+      preservedKey: asset.preserved_key,
+      posterKey: asset.poster_key,
+      thumbnailSmallKey: existingMetadata.thumbnailSmallKey,
+      thumbnailMediumKey: existingMetadata.thumbnailMediumKey,
+    }
   }
 
   await supabaseAdmin
@@ -47,21 +62,23 @@ async function preserveAsset(job: MemoryBookJob) {
     .update({ status: "processing", error_message: null })
     .eq("id", asset.id)
 
-  const preservedKey = await preserveMemoryBookLocator({
-    locator: asset.source_locator,
-    userId: job.user_id,
-    bookId: job.book_id,
-    assetId: asset.id,
-    mediaType: asset.media_type,
-  })
+  const preservedKey =
+    asset.preserved_key ||
+    (await preserveMemoryBookLocator({
+      locator: asset.source_locator,
+      userId: job.user_id,
+      bookId: job.book_id,
+      assetId: asset.id,
+      mediaType: asset.media_type,
+    }))
 
-  let posterKey: string | null = null
+  let posterKey: string | null = asset.poster_key
   const posterLocator =
     typeof asset.metadata?.posterLocator === "string"
       ? asset.metadata.posterLocator
       : null
 
-  if (asset.media_type === "video" && posterLocator) {
+  if (asset.media_type === "video" && posterLocator && !posterKey) {
     posterKey = await preserveMemoryBookLocator({
       locator: posterLocator,
       userId: job.user_id,
@@ -71,17 +88,91 @@ async function preserveAsset(job: MemoryBookJob) {
     })
   }
 
+  const previewSourceKey =
+    asset.media_type === "image" ? preservedKey : posterKey
+  let previews: {
+    thumbnailSmallKey: string
+    thumbnailMediumKey: string
+  } | null = null
+  let previewError: string | null = null
+  if (previewSourceKey) {
+    try {
+      previews = await createMemoryBookImagePreviews({
+        sourceKey: previewSourceKey,
+        userId: job.user_id,
+        bookId: job.book_id,
+        assetId: asset.id,
+      })
+    } catch (error) {
+      previewError =
+        error instanceof Error ? error.message : "Preview generation failed"
+    }
+  }
+
   await supabaseAdmin
     .from("memory_book_assets")
     .update({
       status: "ready",
       preserved_key: preservedKey,
       poster_key: posterKey,
+      metadata: {
+        ...existingMetadata,
+        ...(previews || {}),
+        previewStatus: previews ? "ready" : previewError ? "failed" : "queued",
+        ...(previewError ? { previewError: previewError.slice(0, 500) } : {}),
+      },
       error_message: null,
     })
     .eq("id", asset.id)
 
-  return { preservedKey, posterKey }
+  return { preservedKey, posterKey, ...previews, previewError }
+}
+
+async function generateMediaDerivatives(job: MemoryBookJob) {
+  const derivativeId =
+    typeof job.payload.derivativeId === "string"
+      ? job.payload.derivativeId
+      : null
+  if (!derivativeId) throw new Error("Derivative job is missing its record")
+
+  const { data: derivative } = await supabaseAdmin
+    .from("memory_book_media_derivatives")
+    .select("*")
+    .eq("id", derivativeId)
+    .eq("user_id", job.user_id)
+    .single()
+  if (!derivative) throw new Error("Media derivative record not found")
+
+  await supabaseAdmin
+    .from("memory_book_media_derivatives")
+    .update({ status: "processing", error_message: null })
+    .eq("id", derivative.id)
+
+  try {
+    const previews = await createSharedMediaDerivatives({
+      locator: derivative.preview_locator,
+      userId: derivative.user_id,
+      sourceType: derivative.source_type,
+      sourceId: derivative.source_id,
+    })
+    await supabaseAdmin
+      .from("memory_book_media_derivatives")
+      .update({
+        status: "ready",
+        thumbnail_small_key: previews.thumbnailSmallKey,
+        thumbnail_medium_key: previews.thumbnailMediumKey,
+        error_message: null,
+      })
+      .eq("id", derivative.id)
+    return previews
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Preview generation failed"
+    await supabaseAdmin
+      .from("memory_book_media_derivatives")
+      .update({ status: "failed", error_message: message.slice(0, 500) })
+      .eq("id", derivative.id)
+    throw error
+  }
 }
 
 async function polishCopy(job: MemoryBookJob) {
@@ -94,7 +185,7 @@ async function polishCopy(job: MemoryBookJob) {
 
   const { data: book, error } = await supabaseAdmin
     .from("memory_books")
-    .select("id, user_id, title, honoree, period_label, dedication, notes, draft_version")
+    .select("id, user_id, title, draft_document, draft_version")
     .eq("id", job.book_id)
     .eq("user_id", job.user_id)
     .single()
@@ -103,19 +194,15 @@ async function polishCopy(job: MemoryBookJob) {
     throw new Error("Memory book not found")
   }
 
+  const currentDraft = parseMemoryBookDraft(book.draft_document)
   const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
   const prompt = [
     "Polish this family keepsake copy with restraint and warmth.",
     "Do not invent names, dates, relationships, events, or facts.",
-    "Keep title <= 90 chars, dedication <= 600 chars, notes <= 420 chars.",
-    "Return strict JSON with keys title, dedication, notes only.",
-    JSON.stringify({
-      title: book.title,
-      honoree: book.honoree,
-      periodLabel: book.period_label,
-      dedication: book.dedication,
-      notes: book.notes,
-    }),
+    "Preserve every id and assetIds array exactly.",
+    "Keep the cover title <= 90 chars, period label <= 80 chars, every heading <= 80 chars, every body <= 420 chars and 40 words, and closingMessage <= 600 chars.",
+    "Return only the complete JSON object with the exact same schema.",
+    JSON.stringify(currentDraft),
   ].join("\n")
 
   const response = await genAI.models.generateContent({
@@ -130,43 +217,33 @@ async function polishCopy(job: MemoryBookJob) {
     throw new Error("Copy polish returned no text")
   }
 
-  const parsed = JSON.parse(
-    responseText.replace(/```json/g, "").replace(/```/g, "").trim()
-  ) as { title?: unknown; dedication?: unknown; notes?: unknown }
-
-  if (
-    typeof parsed.title !== "string" ||
-    typeof parsed.dedication !== "string" ||
-    typeof parsed.notes !== "string"
-  ) {
-    throw new Error("Copy polish returned an invalid response")
-  }
-
-  const previousCopy = {
-    title: book.title,
-    dedication: book.dedication,
-    notes: book.notes,
-    draftVersion: book.draft_version,
+  const polishedDraft = memoryBookDraftDocumentSchema.parse(
+    JSON.parse(responseText.replace(/```json/g, "").replace(/```/g, "").trim())
+  )
+  const sameStructure = polishedDraft.spreads.every(
+    (spread, index) =>
+      spread.id === currentDraft.spreads[index]?.id &&
+      spread.assetIds.join(":") === currentDraft.spreads[index]?.assetIds.join(":")
+  )
+  if (!sameStructure || polishedDraft.spreads.length !== currentDraft.spreads.length) {
+    throw new Error("Copy polish changed the page structure")
   }
 
   await supabaseAdmin
     .from("memory_books")
     .update({
-      title: parsed.title.slice(0, 90),
-      dedication: parsed.dedication.slice(0, 600),
-      notes: parsed.notes.slice(0, 420),
+      title: polishedDraft.cover.title,
+      draft_document: polishedDraft,
       draft_version: book.draft_version + 1,
-      draft_document: {
-        polishPromptVersion: POLISH_PROMPT_VERSION,
-        previousCopy,
-      },
     })
     .eq("id", book.id)
     .eq("draft_version", book.draft_version)
 
-  return { promptVersion: POLISH_PROMPT_VERSION, previousCopy }
+  return {
+    promptVersion: POLISH_PROMPT_VERSION,
+    previousDraft: currentDraft,
+  }
 }
-
 async function sendReactionEmail(job: MemoryBookJob) {
   if (!job.book_id) {
     throw new Error("Reaction email job is missing book")
@@ -297,6 +374,7 @@ async function sendDraftExpiryWarning(job: MemoryBookJob) {
 
 async function processJob(job: MemoryBookJob) {
   if (job.job_type === "preserve_asset") return preserveAsset(job)
+  if (job.job_type === "generate_media_derivatives") return generateMediaDerivatives(job)
   if (job.job_type === "polish_copy") return polishCopy(job)
   if (job.job_type === "reaction_email") return sendReactionEmail(job)
   if (job.job_type === "delete_storage") return deleteStorage(job)
@@ -339,13 +417,13 @@ async function enqueueLifecycleWork() {
   for (const book of expiredBooks || []) {
     const { data: assets } = await supabaseAdmin
       .from("memory_book_assets")
-      .select("source_locator, preserved_key, poster_key")
+      .select("source_locator, preserved_key, poster_key, metadata")
       .eq("book_id", book.id)
 
     const keys = Array.from(
       new Set(
         (assets || []).flatMap((asset) =>
-          [asset.preserved_key, asset.poster_key, asset.source_locator].filter(
+          [asset.preserved_key, asset.poster_key, asset.source_locator, asset.metadata?.thumbnailSmallKey, asset.metadata?.thumbnailMediumKey].filter(
             (key): key is string =>
               typeof key === "string" && key.startsWith("memory-books/")
           )

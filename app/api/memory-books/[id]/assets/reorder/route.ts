@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import {
+  parseMemoryBookDraft,
+  reconcileMemoryBookDraft,
+} from "@/lib/memory-book/draft"
+import {
   getMemoryBookAssets,
   getOwnedMemoryBook,
   requireMemoryBookUser,
@@ -67,5 +71,24 @@ export async function POST(
   )
 
   const reorderedAssets = await getMemoryBookAssets(id, user.id)
-  return NextResponse.json({ book: versionedBook, assets: reorderedAssets })
+  const draftDocument = reconcileMemoryBookDraft(
+    parseMemoryBookDraft(versionedBook.draft_document),
+    reorderedAssets
+  )
+  const { data: synchronizedBook } = await supabaseAdmin
+    .from("memory_books")
+    .update({
+      title: draftDocument.cover.title.trim() || "Our Family Heritage",
+      draft_document: draftDocument,
+    })
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .eq("draft_version", versionedBook.draft_version)
+    .select("*")
+    .maybeSingle()
+
+  return NextResponse.json({
+    book: synchronizedBook || versionedBook,
+    assets: reorderedAssets,
+  })
 }

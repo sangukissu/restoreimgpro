@@ -51,26 +51,28 @@ export default async function SharedMemoryBookPage({
   )
   const { data: storedAssets } = await supabaseAdmin
     .from("memory_book_assets")
-    .select("id, poster_key")
+    .select("id, poster_key, metadata")
     .eq("book_id", shared.book.id)
     .in(
       "id",
       documentAssets.map((asset) => asset.id)
     )
-  const posterIds = new Set(
-    (storedAssets || [])
-      .filter((asset) => asset.poster_key)
-      .map((asset) => asset.id)
+  const storedAssetMap = new Map(
+    (storedAssets || []).map((asset) => [asset.id, asset])
   )
 
   const assetSources = documentAssets.map((asset) => {
       const base = `/api/memory-books/share/${shareId}/media/${asset.id}?s=${encodeURIComponent(signature)}`
+      const storedAsset = storedAssetMap.get(asset.id)
+      const hasPreview =
+        typeof storedAsset?.metadata?.thumbnailMediumKey === "string"
       return {
         id: asset.id,
         mediaType: asset.mediaType,
         src: base,
-        poster:
-          asset.mediaType === "video" && posterIds.has(asset.id)
+        poster: hasPreview
+          ? `${base}&preview=1`
+          : asset.mediaType === "video" && storedAsset?.poster_key
             ? `${base}&poster=1`
             : null,
         downloadUrl: shared.book.downloads_enabled ? `${base}&download=1` : null,

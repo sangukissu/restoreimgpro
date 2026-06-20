@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import { memoryBookDraftDocumentSchema } from "@/lib/memory-book/types"
 import {
   enqueueMemoryBookJob,
   getMemoryBookAssets,
+  getOwnerMemoryBookAssetSources,
   getOwnedMemoryBook,
   requireMemoryBookUser,
 } from "@/lib/memory-book/server"
@@ -10,11 +12,7 @@ import { supabaseAdmin } from "@/utils/supabase/admin"
 
 const updateBookSchema = z.object({
   expectedVersion: z.number().int().positive(),
-  title: z.string().trim().min(1).max(90).optional(),
-  honoree: z.string().trim().max(100).optional(),
-  periodLabel: z.string().trim().max(80).optional(),
-  dedication: z.string().trim().max(600).optional(),
-  notes: z.string().trim().max(420).optional(),
+  draftDocument: memoryBookDraftDocumentSchema.optional(),
   preservationConsent: z.boolean().optional(),
   downloadsEnabled: z.boolean().optional(),
   musicEnabled: z.boolean().optional(),
@@ -49,9 +47,11 @@ export async function GET(
       .maybeSingle(),
   ])
 
+  const assetSources = await getOwnerMemoryBookAssetSources(assets)
   return NextResponse.json({
     book,
     assets,
+    assetSources,
     reactions: reactions || [],
     entitlement,
   })
@@ -86,19 +86,29 @@ export async function PATCH(
     )
   }
 
-  const nextVersion = current.draft_version + 1
+  const nextDraft = parsed.data.draftDocument ?? current.draft_document
+  if (parsed.data.draftDocument) {
+    const assets = await getMemoryBookAssets(id, user.id)
+    const availableIds = new Set(
+      assets.filter((asset) => !asset.is_hidden).map((asset) => asset.id)
+    )
+    const assignedIds = nextDraft.spreads.flatMap((spread) => spread.assetIds)
+    if (assignedIds.some((assetId) => !availableIds.has(assetId))) {
+      return NextResponse.json(
+        { error: "One or more page memories are unavailable" },
+        { status: 400 }
+      )
+    }
+  }
   const update = {
-    title: parsed.data.title ?? current.title,
-    honoree: parsed.data.honoree ?? current.honoree,
-    period_label: parsed.data.periodLabel ?? current.period_label,
-    dedication: parsed.data.dedication ?? current.dedication,
-    notes: parsed.data.notes ?? current.notes,
+    title: nextDraft.cover.title.trim() || "Our Family Heritage",
+    draft_document: nextDraft,
     preservation_consent:
       parsed.data.preservationConsent ?? current.preservation_consent,
     downloads_enabled:
       parsed.data.downloadsEnabled ?? current.downloads_enabled,
     music_enabled: parsed.data.musicEnabled ?? current.music_enabled,
-    draft_version: nextVersion,
+    draft_version: current.draft_version + 1,
   }
 
   const { data: book, error } = await supabaseAdmin
@@ -142,7 +152,7 @@ export async function DELETE(
   const keys = Array.from(
     new Set(
       assets.flatMap((asset) =>
-        [asset.preserved_key, asset.poster_key, asset.source_locator].filter(
+        [asset.preserved_key, asset.poster_key, asset.source_locator, asset.metadata?.thumbnailSmallKey, asset.metadata?.thumbnailMediumKey].filter(
           (key): key is string =>
             typeof key === "string" && key.startsWith("memory-books/")
         )
