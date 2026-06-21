@@ -55,6 +55,9 @@ export function Polaroid({
           </span>
         ) : null}
       </span>
+      {photo?.caption ? (
+        <span className={styles.polaroidCaption}>{photo.caption}</span>
+      ) : null}
     </>
   )
 

@@ -13,7 +13,6 @@ export interface MemoryBookSheet {
 interface BookFrameProps {
   sheets: MemoryBookSheet[]
   turnedSheets: number
-  finalRightPage: ReactNode
   isTurning: boolean
   onBack: () => void
   onForward: () => void
@@ -22,13 +21,13 @@ interface BookFrameProps {
 export function BookFrame({
   sheets,
   turnedSheets,
-  finalRightPage,
   isTurning,
   onBack,
   onForward,
 }: BookFrameProps) {
   const frameRef = useRef<HTMLElement>(null)
-  const isClosed = turnedSheets === 0
+  const isFrontClosed = turnedSheets === 0
+  const isBackClosed = turnedSheets === sheets.length
   const canGoBack = turnedSheets > 0
   const canGoForward = turnedSheets < sheets.length
 
@@ -40,10 +39,14 @@ export function BookFrame({
       /* ── Guard: click on an interactive child (e.g. Polaroid) ─ */
       const target = event.target as HTMLElement
       if (target.closest('[data-memory-book-interactive="true"]')) return
-
-      /* ── Closed book: any click opens it ──────────────────────── */
-      if (isClosed) {
+      /* A closed front cover opens forward; the closed back cover reopens backward. */
+      if (isFrontClosed) {
         if (canGoForward) onForward()
+        return
+      }
+
+      if (isBackClosed) {
+        if (canGoBack) onBack()
         return
       }
 
@@ -60,7 +63,7 @@ export function BookFrame({
         if (canGoForward) onForward()
       }
     },
-    [isTurning, isClosed, canGoBack, canGoForward, onBack, onForward],
+    [isTurning, isFrontClosed, isBackClosed, canGoBack, canGoForward, onBack, onForward],
   )
 
   return (
@@ -68,7 +71,11 @@ export function BookFrame({
       ref={frameRef}
       className={[
         styles.bookFrame,
-        isClosed ? styles.bookClosed : styles.bookOpen,
+        isFrontClosed
+          ? styles.bookClosed
+          : isBackClosed
+            ? styles.bookBackClosed
+            : styles.bookOpen,
         isTurning ? styles.bookFrameTurning : "",
       ]
         .filter(Boolean)
@@ -80,16 +87,7 @@ export function BookFrame({
         className={styles.leftBase}
         aria-hidden={turnedSheets < sheets.length}
       />
-      <div
-        className={[
-          styles.rightBase,
-          turnedSheets === sheets.length ? styles.rightBaseActive : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        {finalRightPage}
-      </div>
+      <div className={styles.rightBase} />
 
       {sheets.map((sheet, index) => {
         const isTurned = index < turnedSheets

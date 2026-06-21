@@ -95,7 +95,7 @@ export async function getCuratorMediaLibrary(
         derivative?.thumbnail_medium_key
           ? getR2SignedUrl(derivative.thumbnail_medium_key, 3600)
           : Promise.resolve(undefined),
-        status === "failed"
+        item.previewLocator
           ? signOwnerLocator(item.previewLocator)
           : Promise.resolve(undefined),
       ])
@@ -229,10 +229,9 @@ export async function getOwnerCuratorMediaUrls(
         posterUrl: row.thumbnail_medium_key
           ? await getR2SignedUrl(row.thumbnail_medium_key, 3600)
           : undefined,
-        fallbackUrl:
-          row.status === "failed"
-            ? await signOwnerLocator(row.preview_locator)
-            : undefined,
+        fallbackUrl: row.preview_locator
+          ? await signOwnerLocator(row.preview_locator)
+          : undefined,
         previewStatus: row.status as CuratorMediaOption["previewStatus"],
         expiresAt,
       }))
@@ -253,7 +252,7 @@ export async function getOwnerMemoryBookAssetSources(assets: MemoryBookAssetReco
         signOwnerLocator(asset.preserved_key || asset.source_locator || ""),
         smallKey ? getR2SignedUrl(smallKey, 3600) : Promise.resolve(undefined),
         mediumKey ? getR2SignedUrl(mediumKey, 3600) : Promise.resolve(undefined),
-        previewFailed && fallbackPreview ? signOwnerLocator(fallbackPreview) : Promise.resolve(undefined),
+        fallbackPreview ? signOwnerLocator(fallbackPreview) : Promise.resolve(undefined),
       ])
       const previewStatus: "queued" | "processing" | "ready" | "failed" =
         asset.status === "failed"

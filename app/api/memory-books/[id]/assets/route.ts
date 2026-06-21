@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import {
   assignAssetToMemoryBookDraft,
+  assignAssetToMemoryBookSpread,
   parseMemoryBookDraft,
   reconcileMemoryBookDraft,
 } from "@/lib/memory-book/draft"
@@ -22,6 +23,7 @@ const addAssetSchema = z.object({
     "nostalgic_hug",
   ]),
   sourceId: z.string().uuid(),
+  targetSpreadId: z.string().min(1).max(80).optional(),
 })
 
 export async function POST(
@@ -115,13 +117,17 @@ export async function POST(
     .single()
 
   const refreshedAssets = await getMemoryBookAssets(id, user.id)
-  const draftDocument = assignAssetToMemoryBookDraft(
-    reconcileMemoryBookDraft(
-      parseMemoryBookDraft(book.draft_document),
-      refreshedAssets
-    ),
-    asset.id
+  const reconciledDraft = reconcileMemoryBookDraft(
+    parseMemoryBookDraft(book.draft_document),
+    refreshedAssets
   )
+  const draftDocument = parsed.data.targetSpreadId
+    ? assignAssetToMemoryBookSpread(
+        reconciledDraft,
+        asset.id,
+        parsed.data.targetSpreadId
+      )
+    : assignAssetToMemoryBookDraft(reconciledDraft, asset.id)
   const { data: versionedBook } = await supabaseAdmin
     .from("memory_books")
     .update({

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import {
   assignAssetToMemoryBookDraft,
+  assignAssetToMemoryBookSpread,
   parseMemoryBookDraft,
   reconcileMemoryBookDraft,
 } from "@/lib/memory-book/draft"
@@ -16,6 +17,7 @@ import { supabaseAdmin } from "@/utils/supabase/admin"
 const completeSchema = z.object({
   assetId: z.string().uuid(),
   key: z.string().min(1).max(500),
+  targetSpreadId: z.string().min(1).max(80).optional(),
 })
 
 export async function POST(
@@ -38,8 +40,20 @@ export async function POST(
     return NextResponse.json({ error: "Memory book not found" }, { status: 404 })
   }
 
-  const expectedPrefix = `memory-books/${user.id}/${id}/${parsed.data.assetId}`
-  if (!parsed.data.key.startsWith(expectedPrefix)) {
+  const { data: pendingAsset } = await supabaseAdmin
+    .from("memory_book_assets")
+    .select("id, source_locator, status")
+    .eq("id", parsed.data.assetId)
+    .eq("book_id", id)
+    .eq("user_id", user.id)
+    .eq("source_type", "upload")
+    .single()
+
+  if (
+    !pendingAsset ||
+    pendingAsset.source_locator !== parsed.data.key ||
+    !parsed.data.key.startsWith(`memory-books/${user.id}/${id}/`)
+  ) {
     return NextResponse.json({ error: "Invalid upload key" }, { status: 403 })
   }
 
@@ -94,13 +108,17 @@ export async function POST(
   }
 
   const refreshedAssets = await getMemoryBookAssets(id, user.id)
-  const draftDocument = assignAssetToMemoryBookDraft(
-    reconcileMemoryBookDraft(
-      parseMemoryBookDraft(book.draft_document),
-      refreshedAssets
-    ),
-    asset.id
+  const reconciledDraft = reconcileMemoryBookDraft(
+    parseMemoryBookDraft(book.draft_document),
+    refreshedAssets
   )
+  const draftDocument = parsed.data.targetSpreadId
+    ? assignAssetToMemoryBookSpread(
+        reconciledDraft,
+        asset.id,
+        parsed.data.targetSpreadId
+      )
+    : assignAssetToMemoryBookDraft(reconciledDraft, asset.id)
   const { data: versionedBook } = await supabaseAdmin
     .from("memory_books")
     .update({

@@ -25,7 +25,7 @@ export default function MemoryBookClient() {
       {
         id: "first-story",
         front: <PageScrapbook variant="anniversary" onPhotoOpen={setActivePhoto} />,
-        back: <InnerPage variant="botanical" />,
+        back: <PageScrapbook variant="keepsake" onPhotoOpen={setActivePhoto} />,
       },
     ],
     []
@@ -101,11 +101,10 @@ export default function MemoryBookClient() {
 
   return (
     <>
-      <MemoryBookStage isBookOpen={turnedSheets > 0}>
+      <MemoryBookStage isBookOpen={turnedSheets > 0 && turnedSheets < maxSheets}>
         <BookFrame
           sheets={sheets}
           turnedSheets={turnedSheets}
-          finalRightPage={<PageScrapbook variant="keepsake" onPhotoOpen={setActivePhoto} />}
           isTurning={isTurning}
           onBack={goBack}
           onForward={goForward}

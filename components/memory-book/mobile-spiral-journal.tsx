@@ -7,6 +7,7 @@ import type { MemoryBookDocumentV1 } from "@/lib/memory-book/types"
 import { ButterflySvg } from "./butterfly-svg"
 import type { MemoryBookAssetSource } from "./family-heritage-viewer"
 import { PaperTexture } from "./paper-texture"
+import { MemoryBookBackCoverPage } from "./memory-book-page"
 import { PencilsSvg } from "./pencils-svg"
 import styles from "./memory-book.module.css"
 
@@ -43,7 +44,7 @@ export function MobileSpiralJournal({
     pageIndex > 0 && pageIndex <= document.spreads.length
       ? document.spreads[pageIndex - 1]
       : null
-  const isClosing = pageIndex === totalPages
+  const isBackCover = pageIndex === totalPages
   const canGoBack = pageIndex > 0
   const canGoForward = pageIndex < totalPages
   const transition = reduceMotion
@@ -98,7 +99,11 @@ export function MobileSpiralJournal({
             key={pageIndex}
             className={[
               styles.mobileSheet,
-              pageIndex === 0 ? styles.mobileCoverSheet : styles.mobileStorySheet,
+              pageIndex === 0
+                ? styles.mobileCoverSheet
+                : isBackCover
+                  ? styles.mobileBackCoverSheet
+                  : styles.mobileStorySheet,
             ].join(" ")}
             custom={direction}
             initial={
@@ -135,8 +140,11 @@ export function MobileSpiralJournal({
                 sourceMap={sourceMap}
                 onAssetOpen={onAssetOpen}
               />
-            ) : isClosing ? (
-              <MobileJournalClosing message={document.dedication} />
+            ) : isBackCover ? (
+              <MemoryBookBackCoverPage
+                message={document.dedication}
+                className={styles.mobileBackCoverContent}
+              />
             ) : null}
 
             {canGoBack ? (
@@ -163,7 +171,7 @@ export function MobileSpiralJournal({
 
       <div className={styles.mobileJournalFooter}>
         <span className={styles.mobilePageCounter}>
-          {pageIndex === 0 ? "Cover" : isClosing ? "Closing message" : `${pageIndex} / ${document.spreads.length}`}
+          {pageIndex === 0 ? "Cover" : isBackCover ? "Back cover" : `${pageIndex} / ${document.spreads.length}`}
         </span>
         {pageIndex === 0 ? (
           <span className={styles.mobileSwipeHint}>Swipe or tap the edge</span>
@@ -254,19 +262,6 @@ function MobileJournalStory({
             </button>
           )
         })}
-      </div>
-    </div>
-  )
-}
-
-function MobileJournalClosing({ message }: { message: string }) {
-  return (
-    <div className={[styles.mobileStoryContent, styles.mobileClosingContent].join(" ")}>
-      <PaperTexture textureId="mobile-closing-message" />
-      <img className={styles.mobilePressedFlower} src="/icons/daisy.webp" alt="" draggable={false} />
-      <div className={styles.mobileStoryCopy}>
-        <h2>A closing message</h2>
-        <p>{message || "A final note can live here after the last memory."}</p>
       </div>
     </div>
   )

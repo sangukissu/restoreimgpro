@@ -18,6 +18,7 @@ import {
   Replace,
   RotateCcw,
   Trash2,
+  Upload,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -33,13 +34,14 @@ import {
   createEmptyMemoryBookSpread,
 } from "@/lib/memory-book/draft"
 import type {
+  CuratorMediaOption,
   MemoryBookAssetRecord,
   MemoryBookDocumentV1,
   MemoryBookDraftDocument,
 } from "@/lib/memory-book/types"
 import type { MemoryBookAssetSource } from "./family-heritage-viewer"
 import {
-  MemoryBookClosingPage,
+  MemoryBookBackCoverPage,
   MemoryBookCoverPage,
   MemoryBookStaticPage,
   MemoryBookStoryPage,
@@ -73,6 +75,15 @@ export function MemoryBookPageComposer({
   shareUrl,
   copied,
   reactions,
+  mediaLibrary,
+  selectedSourceKeys,
+  workingId,
+  uploading,
+  hasMoreMedia,
+  loadingMoreMedia,
+  onAddGalleryAsset,
+  onUploadToPage,
+  onLoadMoreMedia,
   onDraftChange,
   onAssetUpdate,
   onRetryAsset,
@@ -89,6 +100,21 @@ export function MemoryBookPageComposer({
   shareUrl: string | null
   copied: boolean
   reactions: Reaction[]
+  mediaLibrary: CuratorMediaOption[]
+  selectedSourceKeys: Set<string>
+  workingId: string | null
+  uploading: boolean
+  hasMoreMedia: boolean
+  loadingMoreMedia: boolean
+  onAddGalleryAsset: (
+    option: CuratorMediaOption,
+    targetSpreadId: string
+  ) => Promise<boolean>
+  onUploadToPage: (
+    files: FileList | File[],
+    targetSpreadId: string
+  ) => Promise<boolean>
+  onLoadMoreMedia: () => void
   onDraftChange: (draft: MemoryBookDraftDocument) => void
   onAssetUpdate: (
     asset: MemoryBookAssetRecord,
@@ -107,6 +133,7 @@ export function MemoryBookPageComposer({
   const [previewOpen, setPreviewOpen] = useState(false)
   const [replacementTarget, setReplacementTarget] =
     useState<ReplacementTarget>(null)
+  const [pageMediaTarget, setPageMediaTarget] = useState<string | null>(null)
   const sourceMap = useMemo(
     () => new Map(assetSources.map((source) => [source.id, source])),
     [assetSources]
@@ -125,6 +152,13 @@ export function MemoryBookPageComposer({
         .filter((asset) => !asset.is_hidden && !assignedIds.has(asset.id))
         .sort((a, b) => a.position - b.position),
     [assets, assignedIds]
+  )
+  const availableGallery = useMemo(
+    () =>
+      mediaLibrary.filter(
+        (item) => !selectedSourceKeys.has(`${item.sourceType}:${item.id}`)
+      ),
+    [mediaLibrary, selectedSourceKeys]
   )
 
   useEffect(() => {
@@ -175,17 +209,42 @@ export function MemoryBookPageComposer({
   }
 
   const moveAssetToPage = (assetId: string, targetPageIndex: number) => {
+    const sourcePageIndex = draft.spreads.findIndex((spread) =>
+      spread.assetIds.includes(assetId)
+    )
     const target = draft.spreads[targetPageIndex]
-    if (!target || target.assetIds.length >= 2) return
+    if (sourcePageIndex < 0 || !target || sourcePageIndex === targetPageIndex) {
+      return
+    }
+
+    const source = draft.spreads[sourcePageIndex]
+    const sourceSlot = source.assetIds.indexOf(assetId)
+    const nextSourceIds = source.assetIds.filter((id) => id !== assetId)
+    const nextTargetIds = [...target.assetIds]
+
+    if (nextTargetIds.length >= 2) {
+      const displacedAssetId = nextTargetIds[nextTargetIds.length - 1]
+      nextTargetIds[nextTargetIds.length - 1] = assetId
+      nextSourceIds.splice(
+        Math.min(sourceSlot, nextSourceIds.length),
+        0,
+        displacedAssetId
+      )
+    } else {
+      nextTargetIds.push(assetId)
+    }
+
     onDraftChange({
       ...draft,
-      spreads: draft.spreads.map((spread, index) => ({
-        ...spread,
-        assetIds:
-          index === targetPageIndex
-            ? [...spread.assetIds.filter((id) => id !== assetId), assetId]
-            : spread.assetIds.filter((id) => id !== assetId),
-      })),
+      spreads: draft.spreads.map((spread, index) => {
+        if (index === sourcePageIndex) {
+          return { ...spread, assetIds: nextSourceIds }
+        }
+        if (index === targetPageIndex) {
+          return { ...spread, assetIds: nextTargetIds }
+        }
+        return spread
+      }),
     })
     setSelectedPage(targetPageIndex)
   }
@@ -217,6 +276,33 @@ export function MemoryBookPageComposer({
     if (pageIndex >= 0) setSelectedPage(pageIndex)
   }
 
+  const addExistingAssetToPage = (assetId: string, spreadId: string) => {
+    const target = draft.spreads.find((spread) => spread.id === spreadId)
+    if (!target || target.assetIds.length >= 2) return
+    onDraftChange({
+      ...draft,
+      spreads: draft.spreads.map((spread) => ({
+        ...spread,
+        assetIds:
+          spread.id === spreadId
+            ? [...spread.assetIds.filter((id) => id !== assetId), assetId]
+            : spread.assetIds.filter((id) => id !== assetId),
+      })),
+    })
+    setSelectedPage(
+      draft.spreads.findIndex((spread) => spread.id === spreadId)
+    )
+    setPageMediaTarget(null)
+  }
+
+  const pageMediaTargetSpread = pageMediaTarget
+    ? draft.spreads.find((spread) => spread.id === pageMediaTarget) || null
+    : null
+  const pageMediaSlotsRemaining = pageMediaTargetSpread
+    ? 2 - pageMediaTargetSpread.assetIds.length
+    : 0
+  const canAddNewAsset = assets.filter((asset) => !asset.is_hidden).length < 12
+
   const selectedPreview = (
     <ExactPagePreview
       selectedPage={selectedPage}
@@ -227,12 +313,11 @@ export function MemoryBookPageComposer({
   )
 
   return (
-    <section className="mx-auto max-w-[1500px] px-4 py-6 md:px-7 md:py-8">
+    <section className="mx-auto max-w-[1500px] px-4 py-6 ">
       <div className="mb-6 flex flex-col gap-4 border-b border-black/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-semibold text-[#47736c]">Page composer</p>
-          <h1 className="mt-1 text-2xl font-bold">Edit the page you can see.</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
+          <h2 className="text-2xl font-bold">Edit the page you can see.</h2>
+          <p className="max-w-2xl text-sm leading-6 text-black/55">
             Photos, page copy, and captions stay together. Unused memories remain available below.
           </p>
         </div>
@@ -343,8 +428,15 @@ export function MemoryBookPageComposer({
                               >
                                 <option value="">Choose page…</option>
                                 {draft.spreads.map((targetSpread, targetIndex) => (
-                                  <option key={targetSpread.id} value={targetIndex} disabled={targetIndex === index || targetSpread.assetIds.length >= 2}>
-                                    Page {targetIndex + 1}{targetSpread.assetIds.length >= 2 ? " (full)" : ""}
+                                  <option
+                                    key={targetSpread.id}
+                                    value={targetIndex}
+                                    disabled={targetIndex === index}
+                                  >
+                                    Page {targetIndex + 1}
+                                    {targetSpread.assetIds.length >= 2
+                                      ? " (swap)"
+                                      : ""}
                                   </option>
                                 ))}
                               </select>
@@ -382,6 +474,17 @@ export function MemoryBookPageComposer({
                       </div>
                     )}
 
+                    {spread.assetIds.length < 2 ? (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full border-dashed"
+                        onClick={() => setPageMediaTarget(spread.id)}
+                      >
+                        <Plus /> Add memory to this page
+                      </Button>
+                    ) : null}
+
                     <Field label="Page title" hint={`${spread.heading.length}/80`}>
                       <Input value={spread.heading} maxLength={80} onChange={(event) => updateSpread(index, { heading: event.target.value })} />
                     </Field>
@@ -406,27 +509,29 @@ export function MemoryBookPageComposer({
             disabled={draft.spreads.length >= 6}
             onClick={() => {
               const next = createEmptyMemoryBookSpread(draft)
+              const newSpread = next.spreads.at(-1)
               onDraftChange(next)
               setSelectedPage(next.spreads.length - 1)
+              if (newSpread) setPageMediaTarget(newSpread.id)
             }}
           >
             <Plus /> Add page
           </Button>
 
           <ComposerCard
-            title="Closing message"
-            subtitle="The final page of the book"
+            title="Back cover message"
+            subtitle="Shown after the final page closes"
             selected={selectedPage === "closing"}
             onSelect={() => setSelectedPage("closing")}
           >
             {selectedPage === "closing" ? (
               <div className="space-y-5 pt-4">
-                <Field label="Closing message" hint={`${draft.closingMessage.length}/600`}>
+                <Field label="Back cover message" hint={`${draft.closingMessage.length}/600`}>
                   <Textarea
                     value={draft.closingMessage}
                     maxLength={600}
                     className="min-h-28"
-                    placeholder="A final message for the people receiving this book…"
+                    placeholder="A final message printed on the back cover..."
                     onChange={(event) => onDraftChange({ ...draft, closingMessage: event.target.value })}
                   />
                 </Field>
@@ -474,12 +579,158 @@ export function MemoryBookPageComposer({
           <div className="mb-3 flex items-center justify-between">
             <div><p className="text-sm font-semibold">Exact page preview</p><p className="text-xs text-black/45">The same page renderer recipients see</p></div>
             <span className="rounded-full bg-[#e9efec] px-3 py-1 text-xs font-semibold text-[#47736c]">
-              {selectedPage === "cover" ? "Cover" : selectedPage === "closing" ? "Closing message" : `Page ${selectedPage + 1}`}
+              {selectedPage === "cover" ? "Cover" : selectedPage === "closing" ? "Back cover" : `Page ${selectedPage + 1}`}
             </span>
           </div>
           {selectedPreview}
         </div>
       </div>
+
+      <Dialog
+        open={Boolean(pageMediaTarget)}
+        onOpenChange={(open) => !open && setPageMediaTarget(null)}
+      >
+        <DialogContent className="max-h-[90svh] max-w-4xl overflow-y-auto">
+          <DialogTitle>
+            Add memory to page {pageMediaTargetSpread
+              ? draft.spreads.indexOf(pageMediaTargetSpread) + 1
+              : ""}
+          </DialogTitle>
+          <DialogDescription>
+            Choose from memories already in this book, your BringBack gallery,
+            or upload from this device.
+          </DialogDescription>
+
+          <label className="mt-2 flex cursor-pointer items-center justify-center gap-3 rounded-xl border border-dashed border-[#47736c]/40 bg-[#f7faf8] px-5 py-6 text-sm font-semibold text-[#315d55] hover:bg-[#edf5f1]">
+            {uploading ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : (
+              <Upload className="size-5" />
+            )}
+            Upload {pageMediaSlotsRemaining > 1 ? "photos" : "a photo"} from this device
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple={pageMediaSlotsRemaining > 1}
+              className="sr-only"
+              disabled={
+                uploading ||
+                pageMediaSlotsRemaining <= 0 ||
+                !canAddNewAsset
+              }
+              onChange={(event) => {
+                if (!pageMediaTarget || !event.target.files?.length) return
+                const files = Array.from(event.target.files).slice(
+                  0,
+                  pageMediaSlotsRemaining
+                )
+                void onUploadToPage(files, pageMediaTarget).then((added) => {
+                  if (added) setPageMediaTarget(null)
+                })
+                event.target.value = ""
+              }}
+            />
+          </label>
+
+          {unusedAssets.length ? (
+            <section className="mt-5">
+              <h3 className="text-sm font-bold">Unused memories in this book</h3>
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                {unusedAssets.map((asset) => (
+                  <button
+                    key={asset.id}
+                    type="button"
+                    className="overflow-hidden rounded-xl border border-black/8 bg-white text-left hover:border-[#47736c]"
+                    onClick={() =>
+                      pageMediaTarget &&
+                      addExistingAssetToPage(asset.id, pageMediaTarget)
+                    }
+                  >
+                    <MemoryThumbnail
+                      asset={asset}
+                      source={sourceMap.get(asset.id)}
+                      className="aspect-square w-full"
+                      onError={onMediaError}
+                    />
+                    <span className="block truncate p-2 text-xs font-semibold">
+                      {asset.original_label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          <section className="mt-5">
+            <h3 className="text-sm font-bold">Your BringBack gallery</h3>
+            {availableGallery.length ? (
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                {availableGallery.map((option) => {
+                  const preview =
+                    option.posterUrl || option.previewUrl || option.fallbackUrl
+                  return (
+                    <button
+                      key={`${option.sourceType}:${option.id}`}
+                      type="button"
+                      disabled={workingId === option.id || !canAddNewAsset}
+                      className="overflow-hidden rounded-xl border border-black/8 bg-white text-left hover:border-[#47736c] disabled:opacity-60"
+                      onClick={() => {
+                        if (!pageMediaTarget) return
+                        void onAddGalleryAsset(option, pageMediaTarget).then((added) => {
+                          if (added) setPageMediaTarget(null)
+                        })
+                      }}
+                    >
+                      <span className="relative block aspect-square bg-[#eee9df]">
+                        {preview ? (
+                          <img
+                            src={preview}
+                            alt={option.title}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover"
+                            onError={onMediaError}
+                          />
+                        ) : (
+                          <span className="grid h-full place-items-center text-black/30">
+                            <Loader2 className="size-5 animate-spin" />
+                          </span>
+                        )}
+                        {workingId === option.id ? (
+                          <span className="absolute inset-0 grid place-items-center bg-white/70">
+                            <Loader2 className="size-5 animate-spin" />
+                          </span>
+                        ) : null}
+                      </span>
+                      <span className="block truncate p-2 text-xs font-semibold">
+                        {option.title}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            ) : (
+              <p className="mt-3 rounded-lg bg-[#f5f5f2] p-4 text-sm text-black/50">
+                No additional gallery memories are available on this page.
+              </p>
+            )}
+            {hasMoreMedia ? (
+              <Button
+                type="button"
+                variant="outline"
+                className="mt-4"
+                disabled={loadingMoreMedia}
+                onClick={onLoadMoreMedia}
+              >
+                {loadingMoreMedia ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : null}
+                Load more gallery memories
+              </Button>
+            ) : null}
+          </section>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={Boolean(replacementTarget)} onOpenChange={(open) => !open && setReplacementTarget(null)}>
         <DialogContent className="max-w-3xl">
@@ -504,7 +755,7 @@ export function MemoryBookPageComposer({
         <DialogContent className="h-[94svh] w-[96vw] !max-w-[96vw] overflow-auto border-0 bg-[#f8f5ef] p-0 sm:!max-w-[96vw]">
           <DialogTitle className="sr-only">Full memory book preview</DialogTitle>
           <DialogDescription className="sr-only">Preview the complete interactive memory book.</DialogDescription>
-          {document ? <FullBookPreview document={document} assetSources={assetSources} /> : null}
+          {previewOpen && document ? <FullBookPreview document={document} assetSources={assetSources} /> : null}
         </DialogContent>
       </Dialog>
     </section>
@@ -521,7 +772,7 @@ function ExactPagePreview({ selectedPage, draft, assetMap, sourceMap }: {
     return <MemoryBookStaticPage><MemoryBookCoverPage title={draft.cover.title} periodLabel={draft.cover.periodLabel} /></MemoryBookStaticPage>
   }
   if (selectedPage === "closing") {
-    return <MemoryBookStaticPage><MemoryBookClosingPage message={draft.closingMessage} textureId="composer-closing" /></MemoryBookStaticPage>
+    return <MemoryBookStaticPage><MemoryBookBackCoverPage message={draft.closingMessage} /></MemoryBookStaticPage>
   }
   const spread = draft.spreads[selectedPage]
   if (!spread) return null
@@ -576,7 +827,7 @@ function ComposerCard({ title, subtitle, selected, thumbnailStrip, onSelect, chi
   children: React.ReactNode
 }) {
   return (
-    <article className={["rounded-xl border bg-white px-4 py-4 shadow-sm transition", selected ? "border-[#47736c] ring-2 ring-[#47736c]/12" : "border-black/8 hover:border-black/18"].join(" ")}>
+    <article className={["rounded-xl border bg-white px-4 py-4 transition", selected ? "border-[#47736c] ring-2 ring-[#47736c]/12" : "border-black/8 hover:border-black/18"].join(" ")}>
       <button type="button" className="flex w-full items-center gap-3 text-left" onClick={onSelect}>
         <div className="min-w-0 flex-1"><p className="font-bold">{title}</p><p className="mt-0.5 text-xs text-black/45">{subtitle}</p></div>
         {thumbnailStrip}

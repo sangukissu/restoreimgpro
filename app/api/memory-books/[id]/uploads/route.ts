@@ -39,7 +39,8 @@ export async function POST(
   }
 
   const assets = await getMemoryBookAssets(id, user.id)
-  if (assets.length >= 12) {
+  const activeAssetCount = assets.filter((asset) => !asset.is_hidden).length
+  if (activeAssetCount >= 12) {
     return NextResponse.json(
       { error: "A Family Heritage book can contain up to 12 memories" },
       { status: 409 }
@@ -55,7 +56,12 @@ export async function POST(
       media_type: "image",
       original_label: parsed.data.filename.replace(/[<>]/g, ""),
       alt_text: "Uploaded family memory",
-      position: assets.length,
+      position:
+        assets.reduce(
+          (highest, existingAsset) =>
+            Math.max(highest, existingAsset.position),
+          -1
+        ) + 1,
       status: "pending",
       metadata: {
         originalFilename: parsed.data.filename,
@@ -86,12 +92,39 @@ export async function POST(
     mediaType: "image",
     extension,
   })
-  const uploadUrl = await getR2PresignedUploadUrl(key, parsed.data.contentType)
+  try {
+    const uploadUrl = await getR2PresignedUploadUrl(
+      key,
+      parsed.data.contentType
+    )
 
-  await supabaseAdmin
-    .from("memory_book_assets")
-    .update({ source_locator: key })
-    .eq("id", asset.id)
+    const { error: locatorError } = await supabaseAdmin
+      .from("memory_book_assets")
+      .update({ source_locator: key })
+      .eq("id", asset.id)
+      .eq("book_id", id)
+      .eq("user_id", user.id)
+      .eq("source_type", "upload")
 
-  return NextResponse.json({ assetId: asset.id, key, uploadUrl })
+    if (locatorError) throw locatorError
+
+    return NextResponse.json({ assetId: asset.id, key, uploadUrl })
+  } catch (cause) {
+    await supabaseAdmin
+      .from("memory_book_assets")
+      .delete()
+      .eq("id", asset.id)
+      .eq("book_id", id)
+      .eq("user_id", user.id)
+
+    return NextResponse.json(
+      {
+        error:
+          cause instanceof Error
+            ? cause.message
+            : "Unable to prepare secure upload",
+      },
+      { status: 500 }
+    )
+  }
 }

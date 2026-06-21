@@ -48,12 +48,6 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { buildMemoryBookDocument } from "@/lib/memory-book/document"
 import { parseMemoryBookDraft, reconcileMemoryBookDraft } from "@/lib/memory-book/draft"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import type {
   CuratorMediaOption,
   MemoryBookAssetRecord,
@@ -287,13 +281,6 @@ export function MemoryBookCurator({
     }
   }, [book.id, refreshBook])
 
-  const readyAssets = useMemo(
-    () =>
-      assets
-        .filter((asset) => asset.status === "ready" && !asset.is_hidden)
-        .sort((a, b) => a.position - b.position),
-    [assets]
-  )
   const selectedSourceKeys = useMemo(
     () =>
       new Set(
@@ -327,7 +314,8 @@ export function MemoryBookCurator({
     try {
       return buildMemoryBookDocument(
         { ...book, draft_document: editableDraft },
-        assets
+        assets,
+        { requireReady: false }
       )
     } catch {
       return null
@@ -448,13 +436,90 @@ export function MemoryBookCurator({
     }
   }
 
-  const uploadPhotos = async (files: FileList | null) => {
-    if (!files?.length) return
+  const removeUploadedAsset = async (asset: MemoryBookAssetRecord) => {
+    setError(null)
+    await flushBookPatch()
+    setWorkingId(asset.id)
+    try {
+      const response = await fetch(
+        `/api/memory-books/${book.id}/assets/${asset.id}`,
+        { method: "DELETE" }
+      )
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to remove uploaded photo")
+      }
+      await refreshBook()
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : "Unable to remove uploaded photo"
+      )
+    } finally {
+      setWorkingId(null)
+    }
+  }
+
+  const addLibraryAssetToPage = async (
+    option: CuratorMediaOption,
+    targetSpreadId: string
+  ): Promise<boolean> => {
+    setError(null)
+    await flushBookPatch()
+    setWorkingId(option.id)
+    try {
+      const response = await fetch(`/api/memory-books/${book.id}/assets`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sourceType: option.sourceType,
+          sourceId: option.id,
+          targetSpreadId,
+        }),
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to add this memory")
+      }
+      await refreshBook()
+      posthog.capture("memory_book_asset_selection_changed", {
+        action: "added_from_composer",
+        source_type: option.sourceType,
+        media_type: option.mediaType,
+      })
+      return true
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to add this memory")
+      return false
+    } finally {
+      setWorkingId(null)
+    }
+  }
+
+  const uploadPhotos = async (
+    files: FileList | File[] | null,
+    targetSpreadId?: string
+  ): Promise<boolean> => {
+    if (!files?.length) return false
+    // FileList is live and becomes empty when the input is reset. Snapshot it
+    // before the first await so the selected files survive that reset.
+    const pendingFiles = Array.from(files)
+    if (!pendingFiles.length) return false
     await flushBookPatch()
     setUploading(true)
     setError(null)
     try {
-      for (const file of Array.from(files)) {
+      const remainingSlots = Math.max(
+        0,
+        12 - assets.filter((asset) => !asset.is_hidden).length
+      )
+      if (remainingSlots === 0) {
+        throw new Error("This memory book already contains 12 memories")
+      }
+      const selectedFiles = pendingFiles.slice(0, remainingSlots)
+
+      for (const file of selectedFiles) {
         const createResponse = await fetch(
           `/api/memory-books/${book.id}/uploads`,
           {
@@ -482,7 +547,11 @@ export function MemoryBookCurator({
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ assetId: upload.assetId, key: upload.key }),
+            body: JSON.stringify({
+              assetId: upload.assetId,
+              key: upload.key,
+              targetSpreadId,
+            }),
           }
         )
         const complete = await completeResponse.json()
@@ -491,8 +560,10 @@ export function MemoryBookCurator({
         }
       }
       await refreshBook()
+      return true
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to upload photos")
+      return false
     } finally {
       setUploading(false)
     }
@@ -566,38 +637,6 @@ export function MemoryBookCurator({
     )
   }
 
-  const moveAsset = async (assetId: string, direction: -1 | 1) => {
-    await flushBookPatch()
-    const ordered = [...assets].sort((a, b) => a.position - b.position)
-    const index = ordered.findIndex((asset) => asset.id === assetId)
-    const target = index + direction
-    if (index < 0 || target < 0 || target >= ordered.length) return
-    ;[ordered[index], ordered[target]] = [ordered[target], ordered[index]]
-
-    const response = await fetch(
-      `/api/memory-books/${book.id}/assets/reorder`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          expectedVersion: bookRef.current.draft_version,
-          assetIds: ordered.map((asset) => asset.id),
-        }),
-      }
-    )
-    const result = await response.json()
-    if (!response.ok) {
-      setError(result.error || "Unable to reorder memories")
-      await refreshBook()
-      return
-    }
-    setBook(result.book)
-    bookRef.current = result.book
-    setAssets(result.assets)
-    if (Array.isArray(result.assetSources)) setAssetSources(result.assetSources)
-  }
-
-
 
   const publishBook = async () => {
     await flushBookPatch()
@@ -626,7 +665,7 @@ export function MemoryBookCurator({
       setPublishOpen(false)
       posthog.capture("memory_book_published", {
         revision_number: result.revisionNumber,
-        asset_count: readyAssets.length,
+        asset_count: assignedAssetIds.length,
         pin_enabled: Boolean(pin),
       })
       await refreshBook()
@@ -664,7 +703,7 @@ export function MemoryBookCurator({
   return (
     <main className="min-h-[calc(100svh-4rem)] bg-[#f7f7f5]">
       <header className="sticky top-0 z-30 border-b border-black/8 bg-white/94 px-4 py-3 backdrop-blur-xl md:px-7">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+        <div className="mx-auto flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard/memory-book")}>
               <ArrowLeft />
@@ -718,11 +757,13 @@ export function MemoryBookCurator({
         <MemorySelectionStep
           book={book}
           assets={assets}
+          assetSources={assetSources}
           mediaLibrary={libraryItems}
           selectedSourceKeys={selectedSourceKeys}
           workingId={workingId}
           uploading={uploading}
           onToggle={toggleLibraryAsset}
+          onRemoveUploadedAsset={removeUploadedAsset}
           onRetryPreview={retryLibraryPreview}
           onMediaError={refreshMediaUrls}
           onUpload={uploadPhotos}
@@ -742,6 +783,15 @@ export function MemoryBookCurator({
           shareUrl={shareUrl}
           copied={copied}
           reactions={reactions}
+          mediaLibrary={libraryItems}
+          selectedSourceKeys={selectedSourceKeys}
+          workingId={workingId}
+          uploading={uploading}
+          hasMoreMedia={Boolean(mediaCursor)}
+          loadingMoreMedia={loadingMoreMedia}
+          onAddGalleryAsset={addLibraryAssetToPage}
+          onUploadToPage={uploadPhotos}
+          onLoadMoreMedia={loadMoreMedia}
           onDraftChange={(draftDocument) => queueBookPatch({ draftDocument })}
           onAssetUpdate={updateAsset}
           onRetryAsset={retryAsset}
@@ -764,7 +814,7 @@ export function MemoryBookCurator({
         onOpenChange={setPublishOpen}
         book={book}
         entitlement={entitlement}
-        readyCount={readyAssets.length}
+        readyCount={assignedReadyCount}
         pin={pin}
         publishing={publishing}
         onPinChange={setPin}
@@ -778,11 +828,13 @@ export function MemoryBookCurator({
 function MemorySelectionStep({
   book,
   assets,
+  assetSources,
   mediaLibrary,
   selectedSourceKeys,
   workingId,
   uploading,
   onToggle,
+  onRemoveUploadedAsset,
   onRetryPreview,
   onMediaError,
   onUpload,
@@ -793,11 +845,13 @@ function MemorySelectionStep({
 }: {
   book: MemoryBookRecord
   assets: MemoryBookAssetRecord[]
+  assetSources: MemoryBookAssetSource[]
   mediaLibrary: CuratorMediaOption[]
   selectedSourceKeys: Set<string>
   workingId: string | null
   uploading: boolean
   onToggle: (option: CuratorMediaOption) => void
+  onRemoveUploadedAsset: (asset: MemoryBookAssetRecord) => void
   onRetryPreview: (option: CuratorMediaOption) => void
   onMediaError: () => void
   onUpload: (files: FileList | null) => void
@@ -810,6 +864,12 @@ function MemorySelectionStep({
   const readyCount = assets.filter(
     (asset) => asset.status === "ready" && !asset.is_hidden
   ).length
+  const assetSourceMap = new Map(
+    assetSources.map((source) => [source.id, source])
+  )
+  const uploadedAssets = assets
+    .filter((asset) => asset.source_type === "upload" && !asset.is_hidden)
+    .sort((a, b) => a.position - b.position)
 
   return (
     <section className="mx-auto max-w-7xl px-5 py-7 md:px-8 md:py-10">
@@ -838,6 +898,55 @@ function MemorySelectionStep({
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {uploadedAssets.map((asset) => {
+          const source = assetSourceMap.get(asset.id)
+          const preview = source?.thumbnail || source?.poster || source?.src
+          return (
+            <button
+              key={asset.id}
+              type="button"
+              onClick={() => onRemoveUploadedAsset(asset)}
+              disabled={workingId === asset.id}
+              className="group relative aspect-[4/5] overflow-hidden rounded-md border border-[#47736c] bg-white text-left shadow-sm ring-2 ring-[#47736c]/25 disabled:opacity-60"
+              title="Remove this uploaded photo from the memory book"
+            >
+              {preview ? (
+                <img
+                  src={preview}
+                  alt={asset.alt_text}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                  onError={onMediaError}
+                />
+              ) : asset.status === "failed" ? (
+                <span className="grid h-full place-items-center bg-red-50 text-red-700">
+                  <CircleAlert className="size-7" />
+                </span>
+              ) : (
+                <span className="grid h-full place-items-center bg-[#e9ece8] text-[#47736c]">
+                  <Loader2 className="size-7 animate-spin" />
+                </span>
+              )}
+              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 to-transparent px-3 pb-3 pt-10 text-white">
+                <span className="block truncate text-sm font-semibold">
+                  {asset.original_label}
+                </span>
+                <span className="mt-0.5 block text-[11px] text-white/72">
+                  Uploaded photo
+                </span>
+              </span>
+              <span className="absolute right-2 top-2 grid size-7 place-items-center rounded-full border border-[#47736c] bg-[#47736c] text-white">
+                {workingId === asset.id ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <Check className="size-4" />
+                )}
+              </span>
+            </button>
+          )
+        })}
+
         {mediaLibrary.map((option) => {
           const selected = selectedSourceKeys.has(
             `${option.sourceType}:${option.id}`
@@ -846,7 +955,18 @@ function MemorySelectionStep({
             <button
               key={`${option.sourceType}:${option.id}`}
               type="button"
-              onClick={() => onToggle(option)}
+              onClick={() => {
+                if (
+                  option.previewStatus === "failed" &&
+                  !option.previewUrl &&
+                  !option.posterUrl &&
+                  !option.fallbackUrl
+                ) {
+                  onRetryPreview(option)
+                } else {
+                  onToggle(option)
+                }
+              }}
               disabled={workingId === option.id || (!selected && selectedCount >= 12)}
               className={[
                 "group relative aspect-[4/5] overflow-hidden rounded-md border bg-white text-left shadow-sm outline-none transition",
@@ -869,18 +989,9 @@ function MemorySelectionStep({
                   <span>
                     <CircleAlert className="mx-auto size-7" />
                     <span className="mt-2 block text-xs font-semibold">Preview unavailable</span>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="mt-3"
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        onRetryPreview(option)
-                      }}
-                    >
-                      <RotateCcw className="size-3.5" /> Retry
-                    </Button>
+<span className="mt-3 inline-flex items-center gap-1 rounded-md border border-red-200 bg-white px-2 py-1 text-xs font-semibold">
+                      <RotateCcw className="size-3.5" /> Click to retry
+                    </span>
                   </span>
                 </span>
               ) : (
@@ -937,9 +1048,13 @@ function MemorySelectionStep({
             ) : (
               <Upload className="mx-auto size-6 text-[#47736c]" />
             )}
-            <span className="mt-3 block text-sm font-semibold">Add family photos</span>
+            <span className="mt-3 block text-sm font-semibold">
+              {uploading ? "Uploading photos..." : "Add family photos"}
+            </span>
             <span className="mt-1 block text-xs leading-5 text-black/45">
-              JPG, PNG, or WebP up to 12MB
+              {uploading
+                ? "Please keep this page open"
+                : "JPG, PNG, or WebP up to 12MB"}
             </span>
           </span>
         </label>
@@ -1154,67 +1269,4 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
       {content.label}
     </span>
   )
-}
-
-function buildOwnerAssetSources(
-  assets: MemoryBookAssetRecord[],
-  initial: MemoryBookAssetSource[]
-) {
-  const initialMap = new Map(initial.map((source) => [source.id, source]))
-  return assets.map((asset) => {
-    const fallback = initialMap.get(asset.id)
-    const locator = asset.preserved_key || asset.source_locator || ""
-    const src = ownerLocatorUrl(locator, asset.media_type)
-    const thumbnailSmallKey =
-      typeof asset.metadata.thumbnailSmallKey === "string"
-        ? asset.metadata.thumbnailSmallKey
-        : null
-    const thumbnailMediumKey =
-      typeof asset.metadata.thumbnailMediumKey === "string"
-        ? asset.metadata.thumbnailMediumKey
-        : null
-    const thumbnail = thumbnailSmallKey
-      ? ownerLocatorUrl(thumbnailSmallKey, "image")
-      : fallback?.thumbnail
-    const poster = thumbnailMediumKey
-      ? ownerLocatorUrl(thumbnailMediumKey, "image")
-      : asset.poster_key
-        ? ownerLocatorUrl(asset.poster_key, "image", 640)
-        : typeof asset.metadata.posterLocator === "string"
-          ? ownerLocatorUrl(asset.metadata.posterLocator, "image", 640)
-          : fallback?.poster
-
-    return {
-      id: asset.id,
-      mediaType: asset.media_type,
-      src: src || fallback?.src || "",
-      thumbnail,
-      poster,
-      downloadUrl: asset.preserved_key
-        ? ownerLocatorUrl(asset.preserved_key, asset.media_type)
-        : fallback?.downloadUrl,
-    }
-  })
-}
-
-function ownerLocatorUrl(
-  locator: string,
-  mediaType: "image" | "video",
-  width?: 320 | 640
-) {
-  if (!locator) return ""
-  if (
-    locator.startsWith("images/") ||
-    (locator.startsWith("memory-books/") && mediaType === "image")
-  ) {
-    const resize = width ? `&width=${width}` : ""
-    return `/api/image-proxy?key=${encodeURIComponent(locator)}${resize}`
-  }
-  if (
-    locator.startsWith("videos/") ||
-    (locator.startsWith("memory-books/") && mediaType === "video")
-  ) {
-    return `/api/video-proxy?key=${encodeURIComponent(locator)}`
-  }
-  return locator
 }

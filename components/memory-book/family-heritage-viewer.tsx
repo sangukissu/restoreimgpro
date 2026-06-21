@@ -17,7 +17,7 @@ import { InnerPage } from "./inner-page"
 import { MemoryBookAudioDeck } from "./memory-book-audio-deck"
 import { MemoryBookStage } from "./memory-book-stage"
 import {
-  MemoryBookClosingPage,
+  MemoryBookBackCoverPage,
   MemoryBookCoverPage,
   MemoryBookStoryPage,
   splitCoverTitle,
@@ -88,7 +88,12 @@ export function FamilyHeritageViewer({
           onAssetOpen={setActiveAssetId}
         />
       ),
-      back: <InnerPage variant="botanical" />,
+      back:
+        index === document.spreads.length - 1 ? (
+          <MemoryBookBackCoverPage message={document.dedication} />
+        ) : (
+          <InnerPage variant="botanical" />
+        ),
     }))
 
     return [
@@ -104,7 +109,14 @@ export function FamilyHeritageViewer({
       },
       ...storySheets,
     ]
-  }, [coverPeriodLines, document.bookId, document.cover.title, document.spreads, sourceMap])
+  }, [
+    coverPeriodLines,
+    document.bookId,
+    document.cover.title,
+    document.dedication,
+    document.spreads,
+    sourceMap,
+  ])
 
   const maxIndex = sheets.length
 
@@ -229,16 +241,13 @@ export function FamilyHeritageViewer({
         ) : null}
 
         <div className={styles.desktopPresentation}>
-          <MemoryBookStage isBookOpen={pageIndex > 0} track={null}>
+          <MemoryBookStage
+            isBookOpen={pageIndex > 0 && pageIndex < maxIndex}
+            track={null}
+          >
             <BookFrame
               sheets={sheets}
               turnedSheets={pageIndex}
-              finalRightPage={
-                <MemoryBookClosingPage
-                  message={document.dedication}
-                  textureId={`desktop-${document.bookId}-closing`}
-                />
-              }
               isTurning={isTurning}
               onBack={goBack}
               onForward={goForward}

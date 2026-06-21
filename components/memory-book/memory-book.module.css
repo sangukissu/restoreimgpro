@@ -222,7 +222,7 @@
   position: relative;
   display: block;
   width: 190px;
-  aspect-ratio: 1.22 / 1;
+  aspect-ratio: 1 / 0.96;
   margin: 0;
   padding: 8px 8px 18px;
   border: 0;
@@ -257,7 +257,7 @@
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 0.78;
+  aspect-ratio: 1 / 0.7;
   overflow: hidden;
   border-radius: 1px;
   background: #eee8dc;
@@ -282,6 +282,19 @@
   background: linear-gradient(110deg, #e8e1d4 25%, #f5efe5 45%, #e8e1d4 65%);
   background-size: 220% 100%;
   animation: memoryPreviewShimmer 1.4s linear infinite;
+}
+
+.polaroidCaption {
+  display: -webkit-box;
+  margin-top: 7px;
+  overflow: hidden;
+  color: rgba(47, 38, 32, 0.67);
+  font-family: var(--font-patrick-hand), cursive;
+  font-size: clamp(10px, 1vw, 13px);
+  line-height: 1.05;
+  text-align: center;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .polaroidVideoBadge {
@@ -417,6 +430,10 @@
   transform: translateX(0);
 }
 
+.bookBackClosed {
+  transform: translateX(25%);
+}
+
 .bookFrameTurning {
   cursor: wait;
   pointer-events: none;
@@ -457,7 +474,9 @@
 }
 
 .bookClosed .leftBase,
-.bookClosed .rightBase {
+.bookClosed .rightBase,
+.bookBackClosed .leftBase,
+.bookBackClosed .rightBase {
   opacity: 0;
 }
 
@@ -544,6 +563,122 @@
     inset 0 0 0 2px rgba(211, 230, 241, 0.4),
     inset -12px 0 32px rgba(36, 72, 103, 0.32),
     0 25px 60px -15px rgba(0, 0, 0, 0.35);
+}
+
+.backCover {
+  display: grid;
+  place-items: center;
+  padding: clamp(42px, 8%, 72px);
+  background:
+    linear-gradient(215deg, rgba(255, 255, 255, 0.2), transparent 30%),
+    linear-gradient(45deg, rgba(16, 44, 70, 0.3), transparent 52%),
+    #5484b3;
+  box-shadow:
+    inset 0 0 0 2px rgba(211, 230, 241, 0.4),
+    inset 12px 0 32px rgba(36, 72, 103, 0.32),
+    0 25px 60px -15px rgba(0, 0, 0, 0.35);
+}
+
+.backCoverVines {
+  position: absolute;
+  inset: 7% 8% 7% auto;
+  width: 34%;
+  opacity: 0.2;
+  transform: scaleX(-1);
+}
+
+.backCoverVines span {
+  position: absolute;
+  inset: 0;
+  border-right: 12px solid transparent;
+  border-radius: 48% 52% 42% 58%;
+  box-shadow:
+    inset 1px 2px 3px rgba(0, 0, 0, 0.38),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.28);
+}
+
+.backCoverVines span:nth-child(1) {
+  transform: translateX(-12%) rotate(14deg);
+}
+
+.backCoverVines span:nth-child(2) {
+  transform: translateX(14%) rotate(-8deg) scaleX(0.76);
+}
+
+.backCoverVines span:nth-child(3) {
+  transform: translateX(34%) rotate(19deg) scaleX(0.52);
+}
+
+.backCoverMessage {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 360px);
+  color: rgba(250, 253, 255, 0.94);
+  font-family: var(--font-patrick-hand), cursive !important;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.12;
+  text-align: center;
+  text-wrap: balance;
+  text-shadow: 0 2px 2px rgba(25, 55, 81, 0.3);
+  transform: rotate(-0.7deg);
+}
+
+.backCoverMessageLong {
+  font-size: clamp(17px, 1.65vw, 23px);
+  line-height: 1.08;
+}
+
+.backCoverMessageVeryLong {
+  font-size: clamp(15px, 1.45vw, 20px);
+  line-height: 1.06;
+}
+
+.backCoverMessage p {
+  margin: 0;
+}
+
+.backCoverKicker {
+  margin-bottom: 18px !important;
+  color: rgba(190, 238, 157, 0.95);
+  font-size: clamp(22px, 2.4vw, 34px);
+  line-height: 0.95;
+}
+
+.backCoverRule {
+  display: block;
+  width: 74px;
+  height: 2px;
+  margin: 24px auto 0;
+  border-radius: 999px;
+  background: rgba(190, 238, 157, 0.76);
+  transform: rotate(-2deg);
+}
+
+.backCoverBloom {
+  position: absolute;
+  right: 12%;
+  bottom: 10%;
+  z-index: 2;
+  width: 82px;
+  height: 82px;
+  opacity: 0.3;
+  transform: rotate(-16deg);
+}
+
+.backCoverBloom span {
+  position: absolute;
+  inset: 16px 30px;
+  border-radius: 50%;
+  background: rgba(207, 238, 181, 0.82);
+  transform-origin: 50% 25px;
+}
+
+.backCoverBloom span:nth-child(2) {
+  transform: rotate(70deg);
+}
+
+.backCoverBloom span:nth-child(3) {
+  transform: rotate(140deg);
 }
 
 .coverWeave {
@@ -1161,6 +1296,34 @@
 
 .mobileStorySheet {
   background: #f9f3e7;
+}
+
+.mobileBackCoverSheet {
+  background: #5484b3;
+}
+
+.mobileBackCoverContent {
+  min-height: inherit;
+  border-radius: inherit;
+  box-shadow: none;
+}
+
+.mobileBackCoverContent .backCoverMessage {
+  width: min(84%, 330px);
+  font-size: clamp(22px, 6.4vw, 29px);
+}
+
+.mobileBackCoverContent .backCoverMessageLong {
+  font-size: clamp(18px, 5.1vw, 22px);
+}
+
+.mobileBackCoverContent .backCoverMessageVeryLong {
+  font-size: clamp(15px, 4.4vw, 19px);
+  line-height: 1.04;
+}
+
+.mobileBackCoverContent .backCoverKicker {
+  font-size: clamp(27px, 8vw, 36px);
 }
 
 .mobileCoverContent,

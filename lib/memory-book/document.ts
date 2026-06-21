@@ -15,8 +15,10 @@ export function limitWords(text: string, maxWords: number): string {
 
 export function buildMemoryBookDocument(
   book: MemoryBookRecord,
-  assets: MemoryBookAssetRecord[]
+  assets: MemoryBookAssetRecord[],
+  options: { requireReady?: boolean } = {}
 ): MemoryBookDocumentV1 {
+  const requireReady = options.requireReady ?? true
   const draft = reconcileMemoryBookDraft(
     parseMemoryBookDraft(book.draft_document),
     assets
@@ -45,7 +47,7 @@ export function buildMemoryBookDocument(
       .filter((asset): asset is MemoryBookAssetRecord => Boolean(asset))
     if (
       spreadAssets.length !== draftSpread.assetIds.length ||
-      spreadAssets.some((asset) => asset.status !== "ready")
+      (requireReady && spreadAssets.some((asset) => asset.status !== "ready"))
     ) {
       throw new Error("Every assigned memory must be prepared before publishing")
     }

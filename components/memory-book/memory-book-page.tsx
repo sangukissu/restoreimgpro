@@ -84,21 +84,44 @@ export function MemoryBookStoryPage({
   )
 }
 
-export function MemoryBookClosingPage({
+export function MemoryBookBackCoverPage({
   message,
-  textureId,
+  className = "",
 }: {
   message: string
-  textureId: string
+  className?: string
 }) {
+  const resolvedMessage =
+    message.trim() || "A final note can live here on the back cover of your book."
+  const messageSizeClass =
+    resolvedMessage.length > 480
+      ? styles.backCoverMessageVeryLong
+      : resolvedMessage.length > 320
+        ? styles.backCoverMessageLong
+        : ""
+
   return (
-    <article className={[styles.innerPage, styles.letterPage, styles.closingPage].join(" ")}>
-      <PaperTexture textureId={textureId} />
-      <div className={styles.letterCopy}>
-        <p className={styles.letterKicker}>A closing message</p>
-        <p>{message || "A final note can live here after the last memory."}</p>
+    <article
+      className={[styles.bookCover, styles.backCover, className]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <div className={styles.coverWeave} aria-hidden="true" />
+      <div className={styles.backCoverVines} aria-hidden="true">
+        <span />
+        <span />
+        <span />
       </div>
-      <div className={styles.tinyPressedBloom} aria-hidden="true">
+      <div
+        className={[styles.backCoverMessage, messageSizeClass]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        <p className={styles.backCoverKicker}>With love, always</p>
+        <p>{resolvedMessage}</p>
+        <span className={styles.backCoverRule} aria-hidden="true" />
+      </div>
+      <div className={styles.backCoverBloom} aria-hidden="true">
         <span />
         <span />
         <span />

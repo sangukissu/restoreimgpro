@@ -186,6 +186,30 @@ export function assignAssetToMemoryBookDraft(
   })
 }
 
+export function assignAssetToMemoryBookSpread(
+  draft: MemoryBookDraftDocument,
+  assetId: string,
+  spreadId: string
+): MemoryBookDraftDocument {
+  if (draft.spreads.some((spread) => spread.assetIds.includes(assetId))) {
+    return draft
+  }
+
+  const target = draft.spreads.find((spread) => spread.id === spreadId)
+  if (!target || target.assetIds.length >= 2) {
+    return assignAssetToMemoryBookDraft(draft, assetId)
+  }
+
+  return memoryBookDraftDocumentSchema.parse({
+    ...draft,
+    spreads: draft.spreads.map((spread) =>
+      spread.id === spreadId
+        ? { ...spread, assetIds: [...spread.assetIds, assetId] }
+        : spread
+    ),
+  })
+}
+
 export function createEmptyMemoryBookSpread(
   draft: MemoryBookDraftDocument
 ): MemoryBookDraftDocument {
