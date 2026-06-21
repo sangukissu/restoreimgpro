@@ -109,23 +109,32 @@ async function preserveAsset(job: MemoryBookJob) {
     }
   }
 
+  const requiresImagePreviews = asset.media_type === "image"
+  const previewReady = !requiresImagePreviews || Boolean(previews)
   await supabaseAdmin
     .from("memory_book_assets")
     .update({
-      status: "ready",
+      status: previewReady ? "ready" : "failed",
       preserved_key: preservedKey,
       poster_key: posterKey,
       metadata: {
         ...existingMetadata,
+        preservationStatus: "ready",
         ...(previews || {}),
         previewStatus: previews ? "ready" : previewError ? "failed" : "queued",
         ...(previewError ? { previewError: previewError.slice(0, 500) } : {}),
       },
-      error_message: null,
+      error_message: previewReady ? null : previewError || "Preview generation failed",
     })
     .eq("id", asset.id)
+    .eq("book_id", job.book_id)
+    .eq("user_id", job.user_id)
 
-  return { preservedKey, posterKey, ...previews, previewError }
+  if (!previewReady) {
+    throw new Error(previewError || "Preview generation failed")
+  }
+
+  return { preservedKey, posterKey, ...previews }
 }
 
 async function generateMediaDerivatives(job: MemoryBookJob) {
