@@ -19,6 +19,13 @@ export function BookCover({
         draggable={false}
         aria-hidden="true"
       />
+      <img
+        className={styles.coverCornerTree}
+        src="/icons/cover-tree.webp"
+        alt=""
+        draggable={false}
+        aria-hidden="true"
+      />
 
       <div className={styles.coverTitle}>
         {titleLines.map((line) => (

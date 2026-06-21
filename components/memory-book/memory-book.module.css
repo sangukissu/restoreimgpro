@@ -694,6 +694,19 @@
   user-select: none;
 }
 
+.coverCornerTree {
+  position: absolute;
+  left: -8%;
+  bottom: -6%;
+  z-index: 1;
+  width: 70%;
+  opacity: 0.13;
+  filter: invert(1);
+  pointer-events: none;
+  user-select: none;
+  transform: rotate(12deg);
+}
+
 .coverWeave {
   position: absolute;
   inset: 0;
