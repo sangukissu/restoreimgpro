@@ -12,11 +12,13 @@ export function BookCover({
   return (
     <article className={styles.bookCover}>
       <div className={styles.coverWeave} aria-hidden="true" />
-      <div className={styles.coverVines} aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </div>
+      <img
+        className={styles.coverCornerFlower}
+        src="/icons/daisy.webp"
+        alt=""
+        draggable={false}
+        aria-hidden="true"
+      />
 
       <div className={styles.coverTitle}>
         {titleLines.map((line) => (
