@@ -23,7 +23,16 @@ export function DynamicBreadcrumb() {
   const pathname = usePathname()
   
   // Split pathname and filter out empty strings
-  const pathSegments = pathname.split("/").filter(Boolean)
+  const rawSegments = pathname.split("/").filter(Boolean)
+  const isMemoryBookEditor =
+    rawSegments[0] === "dashboard" &&
+    rawSegments[1] === "memory-book" &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      rawSegments[2] || ""
+    )
+  const pathSegments = isMemoryBookEditor
+    ? rawSegments.slice(0, 2)
+    : rawSegments
   
   // If we're at root or just "/", show home
   if (pathSegments.length === 0) {

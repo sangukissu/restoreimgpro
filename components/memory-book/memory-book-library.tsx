@@ -66,7 +66,7 @@ export function MemoryBookLibrary({
   }
 
   return (
-    <main className="min-h-[calc(100svh-4rem)] bg-[#f7f7f5]">
+    <main className="min-h-[calc(100svh-4rem)]">
       <section className="border-b border-black/8 bg-white px-5 py-8 md:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>

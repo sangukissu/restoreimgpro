@@ -1,11 +1,13 @@
 import { after, NextResponse } from "next/server"
-import { processMemoryBookJobs } from "@/lib/memory-book/jobs"
+import { processMemoryBookAssetJobs } from "@/lib/memory-book/jobs"
 import {
   enqueueMemoryBookJob,
   getOwnedMemoryBook,
   requireMemoryBookUser,
 } from "@/lib/memory-book/server"
 import { supabaseAdmin } from "@/utils/supabase/admin"
+
+export const maxDuration = 60
 
 export async function POST(
   _request: Request,
@@ -38,7 +40,12 @@ export async function POST(
     idempotencyKey: `retry-preserve-asset:${assetId}:${Date.now()}`,
   })
   after(async () => {
-    await processMemoryBookJobs(2).catch((error) => {
+    await processMemoryBookAssetJobs({
+      userId: user.id,
+      bookId: id,
+      assetIds: [assetId],
+      limit: 1,
+    }).catch((error) => {
       console.error("Unable to retry memory preparation", error)
     })
   })

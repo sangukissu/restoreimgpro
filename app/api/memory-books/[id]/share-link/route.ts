@@ -4,6 +4,7 @@ import {
   requireMemoryBookUser,
 } from "@/lib/memory-book/server"
 import { signMemoryBookShare } from "@/lib/memory-book/security"
+import { buildMemoryBookSharePath } from "@/lib/memory-book/share-slug"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
 export async function POST(
@@ -27,7 +28,7 @@ export async function POST(
     .update({ share_version: nextShareVersion })
     .eq("id", id)
     .eq("user_id", user.id)
-    .select("share_token, share_version")
+    .select("share_token, share_slug, share_version")
     .single()
 
   if (error || !updated) {
@@ -45,6 +46,8 @@ export async function POST(
     process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin
 
   return NextResponse.json({
-    shareUrl: `${baseUrl}/m/${updated.share_token}?s=${signature}`,
+    shareSlug: updated.share_slug,
+    displayUrl: `/m/${updated.share_slug}`,
+    shareUrl: `${baseUrl}${buildMemoryBookSharePath(updated.share_slug, signature)}`,
   })
 }

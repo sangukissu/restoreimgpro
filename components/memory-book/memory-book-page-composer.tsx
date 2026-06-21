@@ -1,20 +1,13 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import { useEffect, useMemo, useState } from "react"
 import {
   ArrowDown,
-  ArrowLeft,
   ArrowUp,
-  BookOpen,
-  Check,
   CircleAlert,
-  Copy,
-  ExternalLink,
   ImageIcon,
   Loader2,
   Plus,
-  RefreshCw,
   Replace,
   RotateCcw,
   Trash2,
@@ -45,16 +38,16 @@ import {
   MemoryBookCoverPage,
   MemoryBookStaticPage,
   MemoryBookStoryPage,
+  splitCoverTitle,
   type MemoryBookStoryPageData,
 } from "./memory-book-page"
-
-const FullBookPreview = dynamic(
-  () =>
-    import("./family-heritage-viewer").then(
-      (module) => module.FamilyHeritageViewer
-    ),
-  { ssr: false }
-)
+import {
+  MobileBackCoverSurface,
+  MobileCoverSurface,
+  MobileNotebookFrame,
+  MobileNotebookSheet,
+  MobileStorySurface,
+} from "./mobile-memory-book-page"
 
 type SelectedPage = "cover" | "closing" | number
 type ReplacementTarget = { pageIndex: number; slotIndex: number } | null
@@ -72,8 +65,6 @@ export function MemoryBookPageComposer({
   document,
   assets,
   assetSources,
-  shareUrl,
-  copied,
   reactions,
   mediaLibrary,
   selectedSourceKeys,
@@ -88,17 +79,11 @@ export function MemoryBookPageComposer({
   onAssetUpdate,
   onRetryAsset,
   onMediaError,
-  onBack,
-  onCopy,
-  onRegenerate,
-  onUnpublish,
 }: {
   draft: MemoryBookDraftDocument
   document: MemoryBookDocumentV1 | null
   assets: MemoryBookAssetRecord[]
   assetSources: MemoryBookAssetSource[]
-  shareUrl: string | null
-  copied: boolean
   reactions: Reaction[]
   mediaLibrary: CuratorMediaOption[]
   selectedSourceKeys: Set<string>
@@ -122,15 +107,10 @@ export function MemoryBookPageComposer({
   ) => Promise<void>
   onRetryAsset: (asset: MemoryBookAssetRecord) => Promise<void>
   onMediaError: () => void
-  onBack: () => void
-  onCopy: () => void
-  onRegenerate: () => void
-  onUnpublish: () => void
 }) {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(
     draft.spreads.length ? 0 : "cover"
   )
-  const [previewOpen, setPreviewOpen] = useState(false)
   const [replacementTarget, setReplacementTarget] =
     useState<ReplacementTarget>(null)
   const [pageMediaTarget, setPageMediaTarget] = useState<string | null>(null)
@@ -303,39 +283,25 @@ export function MemoryBookPageComposer({
     : 0
   const canAddNewAsset = assets.filter((asset) => !asset.is_hidden).length < 12
 
-  const selectedPreview = (
-    <ExactPagePreview
-      selectedPage={selectedPage}
-      draft={draft}
-      assetMap={assetMap}
-      sourceMap={sourceMap}
-    />
+  const previewProps = {
+    selectedPage,
+    draft,
+    assetMap,
+    sourceMap,
+  }
+  const desktopSelectedPreview = <ExactPagePreview {...previewProps} />
+  const mobileSelectedPreview = <MobileExactPagePreview {...previewProps} />
+  const inlineSelectedPreview = (
+    <>
+      <div className="md:hidden">{mobileSelectedPreview}</div>
+      <div className="hidden md:block lg:hidden">
+        {desktopSelectedPreview}
+      </div>
+    </>
   )
 
   return (
-    <section className="mx-auto max-w-[1500px] px-4 py-6 ">
-      <div className="mb-6 flex flex-col gap-4 border-b border-black/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Edit the page you can see.</h2>
-          <p className="max-w-2xl text-sm leading-6 text-black/55">
-            Photos, page copy, and captions stay together. Unused memories remain available below.
-          </p>
-        </div>
-        <div className="flex gap-2 justify-between sm:justify-start">
-          <Button variant="outline" onClick={onBack}>
-            <ArrowLeft /> Memories
-          </Button>
-          <Button
-            onClick={() => setPreviewOpen(true)}
-            disabled={!document}
-            title={document ? undefined : "Prepare every assigned memory and fill every page first"}
-            className="bg-[#1f2c27] text-white"
-          >
-            <BookOpen /> Preview full book
-          </Button>
-        </div>
-      </div>
-
+    <section className="mx-auto max-w-[1500px] px-4 py-4">
       <div className="grid items-start gap-7 lg:grid-cols-[minmax(0,610px)_minmax(460px,1fr)]">
         <div className="order-2 space-y-4 lg:order-1">
           <ComposerCard
@@ -363,7 +329,7 @@ export function MemoryBookPageComposer({
                     />
                   </Field>
                 </div>
-                <div className="lg:hidden">{selectedPreview}</div>
+                {inlineSelectedPreview}
               </div>
             ) : null}
           </ComposerCard>
@@ -496,7 +462,7 @@ export function MemoryBookPageComposer({
                         onChange={(event) => updateSpread(index, { body: limitWords(event.target.value, 40) })}
                       />
                     </Field>
-                    <div className="lg:hidden">{selectedPreview}</div>
+                    {inlineSelectedPreview}
                   </div>
                 ) : null}
               </ComposerCard>
@@ -535,7 +501,7 @@ export function MemoryBookPageComposer({
                     onChange={(event) => onDraftChange({ ...draft, closingMessage: event.target.value })}
                   />
                 </Field>
-                <div className="lg:hidden">{selectedPreview}</div>
+                {inlineSelectedPreview}
               </div>
             ) : null}
           </ComposerCard>
@@ -548,17 +514,6 @@ export function MemoryBookPageComposer({
             onError={onMediaError}
           />
 
-          {shareUrl ? (
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-              <p className="font-semibold text-emerald-900">Your private keepsake is live.</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Button variant="outline" onClick={onCopy}>{copied ? <Check /> : <Copy />}{copied ? "Copied" : "Copy link"}</Button>
-                <Button variant="outline" asChild><a href={shareUrl} target="_blank" rel="noreferrer"><ExternalLink /> Open</a></Button>
-                <Button variant="outline" onClick={onRegenerate}><RefreshCw /> New link</Button>
-                <Button variant="outline" onClick={onUnpublish}>Unpublish</Button>
-              </div>
-            </div>
-          ) : null}
 
           {reactions.length ? (
             <div className="rounded-xl border border-black/8 bg-white p-4">
@@ -582,7 +537,7 @@ export function MemoryBookPageComposer({
               {selectedPage === "cover" ? "Cover" : selectedPage === "closing" ? "Back cover" : `Page ${selectedPage + 1}`}
             </span>
           </div>
-          {selectedPreview}
+          {desktopSelectedPreview}
         </div>
       </div>
 
@@ -751,17 +706,59 @@ export function MemoryBookPageComposer({
         </DialogContent>
       </Dialog>
 
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="h-[94svh] w-[96vw] !max-w-[96vw] overflow-auto border-0 bg-[#f8f5ef] p-0 sm:!max-w-[96vw]">
-          <DialogTitle className="sr-only">Full memory book preview</DialogTitle>
-          <DialogDescription className="sr-only">Preview the complete interactive memory book.</DialogDescription>
-          {previewOpen && document ? <FullBookPreview document={document} assetSources={assetSources} /> : null}
-        </DialogContent>
-      </Dialog>
     </section>
   )
 }
 
+function MobileExactPagePreview({
+  selectedPage,
+  draft,
+  assetMap,
+  sourceMap,
+}: {
+  selectedPage: SelectedPage
+  draft: MemoryBookDraftDocument
+  assetMap: Map<string, MemoryBookAssetRecord>
+  sourceMap: Map<string, MemoryBookAssetSource>
+}) {
+  let variant: "cover" | "story" | "back-cover" = "story"
+  let surface: React.ReactNode
+
+  if (selectedPage === "cover") {
+    variant = "cover"
+    surface = (
+      <MobileCoverSurface
+        titleLines={splitCoverTitle(draft.cover.title)}
+        periodLines={
+          draft.cover.periodLabel.trim() ? [draft.cover.periodLabel.trim()] : []
+        }
+      />
+    )
+  } else if (selectedPage === "closing") {
+    variant = "back-cover"
+    surface = <MobileBackCoverSurface message={draft.closingMessage} />
+  } else {
+    const spread = draft.spreads[selectedPage]
+    if (!spread) return null
+    surface = (
+      <MobileStorySurface
+        page={buildPreviewStoryPage(spread, assetMap)}
+        sourceMap={sourceMap}
+        textureId={`composer-mobile-${spread.id}`}
+      />
+    )
+  }
+
+  return (
+    <div className="mx-auto w-full max-w-[430px] py-2">
+      <MobileNotebookFrame compact>
+        <MobileNotebookSheet variant={variant} compact>
+          {surface}
+        </MobileNotebookSheet>
+      </MobileNotebookFrame>
+    </div>
+  )
+}
 function ExactPagePreview({ selectedPage, draft, assetMap, sourceMap }: {
   selectedPage: SelectedPage
   draft: MemoryBookDraftDocument
@@ -776,19 +773,29 @@ function ExactPagePreview({ selectedPage, draft, assetMap, sourceMap }: {
   }
   const spread = draft.spreads[selectedPage]
   if (!spread) return null
-  const page: MemoryBookStoryPageData = {
+  const page = buildPreviewStoryPage(spread, assetMap)
+  return <MemoryBookStaticPage><MemoryBookStoryPage page={page} sourceMap={sourceMap} textureId={`composer-${spread.id}`} /></MemoryBookStaticPage>
+}
+
+function buildPreviewStoryPage(
+  spread: MemoryBookDraftDocument["spreads"][number],
+  assetMap: Map<string, MemoryBookAssetRecord>
+): MemoryBookStoryPageData {
+  return {
     id: spread.id,
     heading: spread.heading,
     body: spread.body,
-    assets: spread.assetIds.map((assetId) => assetMap.get(assetId)).filter((asset): asset is MemoryBookAssetRecord => Boolean(asset)).map((asset) => ({
-      id: asset.id,
-      mediaType: asset.media_type,
-      caption: asset.caption,
-      alt: asset.alt_text,
-      status: assetStatus(asset),
-    })),
+    assets: spread.assetIds
+      .map((assetId) => assetMap.get(assetId))
+      .filter((asset): asset is MemoryBookAssetRecord => Boolean(asset))
+      .map((asset) => ({
+        id: asset.id,
+        mediaType: asset.media_type,
+        caption: asset.caption,
+        alt: asset.alt_text,
+        status: assetStatus(asset),
+      })),
   }
-  return <MemoryBookStaticPage><MemoryBookStoryPage page={page} sourceMap={sourceMap} textureId={`composer-${spread.id}`} /></MemoryBookStaticPage>
 }
 
 function UnusedMemories({ assets, sourceMap, canAdd, onAdd, onError }: {

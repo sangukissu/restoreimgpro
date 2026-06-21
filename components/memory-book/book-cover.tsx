@@ -3,17 +3,21 @@ import styles from "./memory-book.module.css"
 interface BookCoverProps {
   titleLines?: string[]
   periodLines?: string[]
+  className?: string
 }
 
 export function BookCover({
   titleLines = ["An", "Anniversary", "Special."],
   periodLines = ["3 Years,", "1,095 Days"],
+  className = "",
 }: BookCoverProps) {
   const displayTitle = titleLines.at(-1) || "Heritage"
   const scriptTitle = titleLines.slice(0, -1).join(" ")
 
   return (
-    <article className={styles.bookCover}>
+    <article
+      className={[styles.bookCover, className].filter(Boolean).join(" ")}
+    >
       <div className={styles.coverWeave} aria-hidden="true" />
       <div className={styles.coverGoldFrame} aria-hidden="true" />
       <img

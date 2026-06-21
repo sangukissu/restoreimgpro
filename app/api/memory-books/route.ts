@@ -1,8 +1,10 @@
+import { randomUUID } from "node:crypto"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { requireMemoryBookUser } from "@/lib/memory-book/server"
 import { createMemoryBookDraft } from "@/lib/memory-book/draft"
 import { isMemoryBookEnabled } from "@/lib/memory-book/feature"
+import { createMemoryBookSlugCandidates } from "@/lib/memory-book/share-slug"
 
 const createBookSchema = z.object({
   title: z.string().trim().min(1).max(90).optional(),
@@ -55,16 +57,49 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid memory book details" }, { status: 400 })
   }
 
-  const { data: book, error } = await supabase
+  const title = parsed.data.title || "Our Family Heritage"
+  const bookId = randomUUID()
+  const [preferredSlug] = createMemoryBookSlugCandidates(title)
+  const { data: existingSlug } = await supabase
+    .from("memory_books")
+    .select("id")
+    .eq("share_slug", preferredSlug)
+    .maybeSingle()
+  const shareSlug = existingSlug
+    ? `${preferredSlug.slice(0, 52)}-${bookId.slice(0, 7)}`
+    : preferredSlug
+
+  const draftDocument = createMemoryBookDraft(parsed.data.title)
+  let { data: book, error } = await supabase
     .from("memory_books")
     .insert({
+      id: bookId,
       user_id: user.id,
-      title: parsed.data.title || "Our Family Heritage",
+      title,
       theme: "family_heritage_v1",
-      draft_document: createMemoryBookDraft(parsed.data.title),
+      share_slug: shareSlug,
+      draft_document: draftDocument,
     })
     .select("*")
     .single()
+
+  if (error?.code === "23505" && shareSlug === preferredSlug) {
+    const fallbackSlug = `${preferredSlug.slice(0, 52)}-${bookId.slice(0, 7)}`
+    const retry = await supabase
+      .from("memory_books")
+      .insert({
+        id: bookId,
+        user_id: user.id,
+        title,
+        theme: "family_heritage_v1",
+        share_slug: fallbackSlug,
+        draft_document: draftDocument,
+      })
+      .select("*")
+      .single()
+    book = retry.data
+    error = retry.error
+  }
 
   if (error || !book) {
     return NextResponse.json(

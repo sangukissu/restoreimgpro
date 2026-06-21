@@ -1,6 +1,6 @@
 import { after, NextResponse } from "next/server"
 import { z } from "zod"
-import { processMemoryBookJobs } from "@/lib/memory-book/jobs"
+import { processMemoryBookAssetJobs } from "@/lib/memory-book/jobs"
 import {
   assignAssetToMemoryBookDraft,
   assignAssetToMemoryBookSpread,
@@ -20,6 +20,8 @@ const completeSchema = z.object({
   key: z.string().min(1).max(500),
   targetSpreadId: z.string().min(1).max(80).optional(),
 })
+
+export const maxDuration = 60
 
 export async function POST(
   request: Request,
@@ -43,7 +45,7 @@ export async function POST(
 
   const { data: pendingAsset } = await supabaseAdmin
     .from("memory_book_assets")
-    .select("id, source_locator, status")
+    .select("id, source_locator, status, metadata")
     .eq("id", parsed.data.assetId)
     .eq("book_id", id)
     .eq("user_id", user.id)
@@ -64,6 +66,11 @@ export async function POST(
       source_locator: parsed.data.key,
       preserved_key: parsed.data.key,
       status: "pending",
+      metadata: {
+        ...(pendingAsset.metadata || {}),
+        preservationStatus: "ready",
+        previewStatus: "queued",
+      },
       error_message: null,
     })
     .eq("id", parsed.data.assetId)
@@ -85,29 +92,9 @@ export async function POST(
     bookId: id,
     assetId: asset.id,
     jobType: "preserve_asset",
-    idempotencyKey: `generate-memory-book-previews:${asset.id}`,
+    idempotencyKey: `upload-preview-v2:${asset.id}:${parsed.data.key}`,
+    payload: { previewOnly: true },
   })
-  const { data: derivative } = await supabaseAdmin
-    .from("memory_book_media_derivatives")
-    .upsert({
-      user_id: user.id,
-      source_type: "upload",
-      source_id: asset.id,
-      media_type: "image",
-      source_locator: parsed.data.key,
-      preview_locator: parsed.data.key,
-    }, { onConflict: "user_id,source_type,source_id" })
-    .select("id, status")
-    .single()
-  if (derivative?.status === "queued") {
-    await enqueueMemoryBookJob({
-      userId: user.id,
-      jobType: "generate_media_derivatives",
-      idempotencyKey: `media-derivative:${derivative.id}`,
-      payload: { derivativeId: derivative.id },
-    })
-  }
-
   const refreshedAssets = await getMemoryBookAssets(id, user.id)
   const reconciledDraft = reconcileMemoryBookDraft(
     parseMemoryBookDraft(book.draft_document),
@@ -133,8 +120,13 @@ export async function POST(
     .maybeSingle()
 
   after(async () => {
-    await processMemoryBookJobs(4).catch((error) => {
-      console.error("Unable to process uploaded memory", error)
+    await processMemoryBookAssetJobs({
+      userId: user.id,
+      bookId: id,
+      assetIds: [asset.id],
+      limit: 1,
+    }).catch((error) => {
+      console.error("Unable to process uploaded memory preview", error)
     })
   })
 

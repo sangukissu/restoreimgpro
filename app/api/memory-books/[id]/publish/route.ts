@@ -7,6 +7,7 @@ import {
   requireMemoryBookUser,
 } from "@/lib/memory-book/server"
 import { hashMemoryBookPin, signMemoryBookShare } from "@/lib/memory-book/security"
+import { buildMemoryBookSharePath, memoryBookShareSlugSchema } from "@/lib/memory-book/share-slug"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
 const publishSchema = z.object({
@@ -14,6 +15,7 @@ const publishSchema = z.object({
   preservationConsent: z.literal(true),
   downloadsEnabled: z.boolean(),
   musicEnabled: z.boolean(),
+  shareSlug: memoryBookShareSlugSchema.optional(),
   pin: z.string().regex(/^\d{4,8}$/).optional().or(z.literal("")),
 })
 
@@ -55,6 +57,7 @@ export async function POST(
         preservation_consent: true,
         downloads_enabled: parsed.data.downloadsEnabled,
         music_enabled: parsed.data.musicEnabled,
+      share_slug: parsed.data.shareSlug || current.share_slug,
       },
       assets
     )
@@ -79,6 +82,7 @@ export async function POST(
       preservation_consent: true,
       downloads_enabled: parsed.data.downloadsEnabled,
       music_enabled: parsed.data.musicEnabled,
+      share_slug: parsed.data.shareSlug || current.share_slug,
       pin_hash: pinHash,
       pin_updated_at: pinHash ? new Date().toISOString() : null,
       draft_version: nextVersion,
@@ -89,6 +93,9 @@ export async function POST(
     .select("*")
     .maybeSingle()
 
+  if (preparationError?.code === "23505") {
+    return NextResponse.json({ error: "That address was just taken" }, { status: 409 })
+  }
   if (preparationError) {
     return NextResponse.json({ error: preparationError.message }, { status: 500 })
   }
@@ -127,6 +134,8 @@ export async function POST(
     published: true,
     revisionId: result.revision_id,
     revisionNumber: result.revision_number,
-    shareUrl: `${baseUrl}/m/${result.share_token}?s=${signature}`,
+    shareSlug: preparedBook.share_slug,
+    displayUrl: `/m/${preparedBook.share_slug}`,
+    shareUrl: `${baseUrl}${buildMemoryBookSharePath(preparedBook.share_slug, signature)}`,
   })
 }

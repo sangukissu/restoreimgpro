@@ -83,7 +83,11 @@ export async function createMemoryBookImagePreviews(input: {
     mediaType: "image",
     extension: ".webp",
   })
-  const image = sharp(body, { failOn: "none" }).rotate()
+  const image = sharp(body, {
+    failOn: "none",
+    limitInputPixels: 60_000_000,
+    sequentialRead: true,
+  }).rotate()
   const [small, medium] = await Promise.all([
     image.clone().resize({ width: 320, withoutEnlargement: true }).webp({ quality: 72 }).toBuffer(),
     image.clone().resize({ width: 640, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer(),
@@ -123,7 +127,11 @@ export async function createSharedMediaDerivatives(input: {
 
   const smallKey = sharedMediaDerivativeKey({ ...input, width: 320 })
   const mediumKey = sharedMediaDerivativeKey({ ...input, width: 640 })
-  const image = sharp(body, { failOn: "none" }).rotate()
+  const image = sharp(body, {
+    failOn: "none",
+    limitInputPixels: 60_000_000,
+    sequentialRead: true,
+  }).rotate()
   const [small, medium] = await Promise.all([
     image.clone().resize({ width: 320, withoutEnlargement: true }).webp({ quality: 72 }).toBuffer(),
     image.clone().resize({ width: 640, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer(),

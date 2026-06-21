@@ -46,7 +46,7 @@ export async function POST(
   cookieStore.set(
     MEMORY_BOOK_VIEWER_COOKIE,
     createMemoryBookViewerSession(
-      shareId,
+      shared.book.share_token,
       shared.book.share_version,
       shared.book.pin_updated_at
     ),

@@ -246,7 +246,9 @@ export async function getOwnerMemoryBookAssetSources(assets: MemoryBookAssetReco
       const mediumKey = typeof metadata.thumbnailMediumKey === "string" ? metadata.thumbnailMediumKey : null
       const previewFailed = metadata.previewStatus === "failed"
       const fallbackPreview = asset.media_type === "image"
-        ? asset.preserved_key || asset.source_locator
+        ? asset.source_type === "upload" && !mediumKey && !previewFailed
+          ? null
+          : asset.preserved_key || asset.source_locator
         : asset.poster_key || (typeof metadata.posterLocator === "string" ? metadata.posterLocator : null)
       const [src, thumbnail, generatedPoster, fallbackPoster] = await Promise.all([
         signOwnerLocator(asset.preserved_key || asset.source_locator || ""),

@@ -1,5 +1,6 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import {
   useCallback,
   useEffect,
@@ -16,8 +17,6 @@ import {
   BookOpen,
   Check,
   CircleAlert,
-  Copy,
-  ExternalLink,
   ImagePlus,
   Loader2,
   LockKeyhole,
@@ -26,6 +25,7 @@ import {
   RefreshCw,
   RotateCcw,
   Save,
+  Share2,
   ShieldCheck,
   Sparkles,
   Trash2,
@@ -47,6 +47,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { buildMemoryBookDocument } from "@/lib/memory-book/document"
+import { memoryBookShareSlugSchema, normalizeMemoryBookShareSlug } from "@/lib/memory-book/share-slug"
 import { parseMemoryBookDraft, reconcileMemoryBookDraft } from "@/lib/memory-book/draft"
 import type {
   CuratorMediaOption,
@@ -57,6 +58,15 @@ import type {
 } from "@/lib/memory-book/types"
 import type { MemoryBookAssetSource } from "./family-heritage-viewer"
 import { MemoryBookPageComposer } from "./memory-book-page-composer"
+import { MemoryBookShareDialog } from "./memory-book-share-dialog"
+
+const FullBookPreview = dynamic(
+  () =>
+    import("./family-heritage-viewer").then(
+      (module) => module.FamilyHeritageViewer
+    ),
+  { ssr: false }
+)
 
 type BookPatch = Partial<{
   draftDocument: MemoryBookDraftDocument
@@ -108,8 +118,10 @@ export function MemoryBookCurator({
   const [uploading, setUploading] = useState(false)
   const [publishing, setPublishing] = useState(false)
   const [publishOpen, setPublishOpen] = useState(false)
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [shareOpen, setShareOpen] = useState(false)
+  const [shareSlug, setShareSlug] = useState(initialBook.share_slug)
   const [shareUrl, setShareUrl] = useState(initialShareUrl)
-  const [copied, setCopied] = useState(false)
   const [pin, setPin] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [libraryItems, setLibraryItems] = useState(mediaLibrary)
@@ -349,7 +361,11 @@ export function MemoryBookCurator({
     if (!assignedPreparingKey) return
 
     let cancelled = false
-    void fetch(`/api/memory-books/${book.id}/process`, { method: "POST" })
+    void fetch(`/api/memory-books/${book.id}/process`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ assetIds: assignedPreparingKey.split(":") }),
+    })
 
     const poll = window.setInterval(() => {
       if (!cancelled) void refreshBook()
@@ -702,6 +718,7 @@ export function MemoryBookCurator({
           preservationConsent: true,
           downloadsEnabled: bookRef.current.downloads_enabled,
           musicEnabled: bookRef.current.music_enabled,
+          shareSlug,
           pin,
         }),
       })
@@ -713,6 +730,7 @@ export function MemoryBookCurator({
       if (!response.ok) throw new Error(result.error || "Unable to publish")
 
       setShareUrl(result.shareUrl)
+      setShareSlug(result.shareSlug)
       setPublishOpen(false)
       posthog.capture("memory_book_published", {
         revision_number: result.revisionNumber,
@@ -731,19 +749,14 @@ export function MemoryBookCurator({
     const response = await fetch(`/api/memory-books/${book.id}/unpublish`, {
       method: "POST",
     })
-    if (response.ok) {
-      setShareUrl(null)
-      await refreshBook()
-    }
-  }
-
-  const regenerateLink = async () => {
-    const response = await fetch(`/api/memory-books/${book.id}/share-link`, {
-      method: "POST",
-    })
     const result = await response.json()
-    if (response.ok) setShareUrl(result.shareUrl)
-    else setError(result.error || "Unable to regenerate link")
+    if (!response.ok) {
+      const message = result.error || "Unable to unpublish this keepsake"
+      setError(message)
+      throw new Error(message)
+    }
+    setShareUrl(null)
+    await refreshBook()
   }
 
   const steps = [
@@ -752,7 +765,7 @@ export function MemoryBookCurator({
   ]
 
   return (
-    <main className="min-h-[calc(100svh-4rem)] bg-[#f7f7f5]">
+    <main className="min-h-[calc(100svh-4rem)]">
       <header className="sticky top-0 z-30 border-b border-black/8 bg-white/94 px-4 py-3 backdrop-blur-xl md:px-7">
         <div className="mx-auto flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
@@ -781,18 +794,39 @@ export function MemoryBookCurator({
               </button>
             ))}
           </div>
-          <Button
-            onClick={() => setPublishOpen(true)}
-            title={
-              canPublishDraft
-                ? undefined
-                : "Open to see what is needed before publishing"
-            }
-            className="bg-[#1f2c27] text-white hover:bg-[#304139]"
-          >
-            {book.status === "published" ? "Republish" : "Publish"}
-            <ArrowRight />
-          </Button>
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPreviewOpen(true)}
+              disabled={!previewDocument}
+              title={previewDocument ? "Preview full book" : "Complete every page before previewing the full book"}
+            >
+              <BookOpen />
+              <span className="hidden md:inline">Preview</span>
+            </Button>
+            {book.status === "published" && shareUrl ? (
+              <Button variant="outline" size="sm" onClick={() => setShareOpen(true)}>
+                <Share2 />
+                <span className="hidden md:inline">Share</span>
+              </Button>
+            ) : null}
+            <Button
+              size="sm"
+              onClick={() => setPublishOpen(true)}
+              title={
+                canPublishDraft
+                  ? undefined
+                  : "Open to see what is needed before publishing"
+              }
+              className="bg-[#1f2c27] text-white hover:bg-[#304139]"
+            >
+              <span className="hidden sm:inline">
+                {book.status === "published" ? "Republish" : "Publish"}
+              </span>
+              <ArrowRight />
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -835,8 +869,6 @@ export function MemoryBookCurator({
           document={previewDocument}
           assets={assets}
           assetSources={assetSources}
-          shareUrl={shareUrl}
-          copied={copied}
           reactions={reactions}
           mediaLibrary={libraryItems}
           selectedSourceKeys={selectedSourceKeys}
@@ -851,17 +883,6 @@ export function MemoryBookCurator({
           onAssetUpdate={updateAsset}
           onRetryAsset={retryAsset}
           onMediaError={refreshMediaUrls}
-          onBack={() => setStep("memories")}
-          onCopy={async () => {
-            if (!shareUrl) return
-            await navigator.clipboard.writeText(
-              new URL(shareUrl, window.location.origin).toString()
-            )
-            setCopied(true)
-            setTimeout(() => setCopied(false), 1800)
-          }}
-          onRegenerate={regenerateLink}
-          onUnpublish={unpublishBook}
         />
       ) : null}
       <PublishDialog
@@ -872,10 +893,37 @@ export function MemoryBookCurator({
         canPublishDraft={canPublishDraft}
         publishBlockers={publishBlockers}
         pin={pin}
+        shareSlug={shareSlug}
         publishing={publishing}
         onPinChange={setPin}
+        onShareSlugChange={setShareSlug}
         onPatch={queueBookPatch}
         onPublish={publishBook}
+      />
+      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DialogContent className="h-[94svh] w-[96vw] !max-w-[96vw] overflow-auto border-0 bg-[#f8f5ef] p-0 sm:!max-w-[96vw]">
+          <DialogTitle className="sr-only">Full memory book preview</DialogTitle>
+          <DialogDescription className="sr-only">
+            Preview the complete interactive memory book.
+          </DialogDescription>
+          {previewOpen && previewDocument ? (
+            <FullBookPreview document={previewDocument} assetSources={assetSources} />
+          ) : null}
+        </DialogContent>
+      </Dialog>
+      <MemoryBookShareDialog
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        book={book}
+        shareUrl={shareUrl}
+        onShareUpdated={(update) => {
+          setShareUrl(update.shareUrl)
+          setShareSlug(update.shareSlug)
+          setBook((current) => ({ ...current, share_slug: update.shareSlug }))
+          bookRef.current = { ...bookRef.current, share_slug: update.shareSlug }
+        }}
+        onUnpublished={unpublishBook}
+        onError={setError}
       />
     </main>
   )
@@ -1147,8 +1195,10 @@ function PublishDialog({
   canPublishDraft,
   publishBlockers,
   pin,
+  shareSlug,
   publishing,
   onPinChange,
+  onShareSlugChange,
   onPatch,
   onPublish,
 }: {
@@ -1159,11 +1209,14 @@ function PublishDialog({
   canPublishDraft: boolean
   publishBlockers: string[]
   pin: string
+  shareSlug: string
   publishing: boolean
   onPinChange: (value: string) => void
+  onShareSlugChange: (value: string) => void
   onPatch: (patch: BookPatch) => void
   onPublish: () => void
 }) {
+  const shareSlugResult = memoryBookShareSlugSchema.safeParse(shareSlug)
   const entitlementAvailable =
     Boolean(entitlement) &&
     (!entitlement?.live_book_id || entitlement.live_book_id === book.id)
@@ -1201,6 +1254,37 @@ function PublishDialog({
               All pages and memories are ready.
             </div>
           )}
+          <div>
+            <label className="text-sm font-semibold" htmlFor="publish-share-slug">
+              Family link
+            </label>
+            {book.status === "published" ? (
+              <div className="mt-2 rounded-md bg-[#f5f5f2] px-3 py-2 text-sm text-black/65">
+                /m/{book.share_slug}
+                <p className="mt-1 text-xs text-black/45">Change this later from Share.</p>
+              </div>
+            ) : (
+              <>
+                <div className="mt-2 flex overflow-hidden rounded-md border border-input bg-white">
+                  <span className="flex items-center border-r bg-[#f5f5f2] px-3 text-sm text-black/45">/m/</span>
+                  <Input
+                    id="publish-share-slug"
+                    value={shareSlug}
+                    maxLength={60}
+                    className="border-0 shadow-none focus-visible:ring-0"
+                    onChange={(event) =>
+                      onShareSlugChange(normalizeMemoryBookShareSlug(event.target.value))
+                    }
+                  />
+                </div>
+                <p className={`mt-1 text-xs ${shareSlugResult.success ? "text-black/45" : "text-red-700"}`}>
+                  {shareSlugResult.success
+                    ? "You can change this name before sharing the book."
+                    : shareSlugResult.error.issues[0]?.message}
+                </p>
+              </>
+            )}
+          </div>
           <SettingRow
             icon={<ShieldCheck />}
             title="Preserve selected memories"
@@ -1276,6 +1360,7 @@ function PublishDialog({
             disabled={
               publishing ||
               !canPublishDraft ||
+              !shareSlugResult.success ||
               !book.preservation_consent ||
               (pin.length > 0 && pin.length < 4) ||
               Boolean(entitlement?.live_book_id && entitlement.live_book_id !== book.id)

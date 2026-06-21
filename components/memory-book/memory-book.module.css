@@ -1309,6 +1309,11 @@
   perspective: 1800px;
 }
 
+.mobileNotebookCompact {
+  width: 100%;
+  padding-top: 18px;
+}
+
 .mobileNotebookBase {
   position: absolute;
   inset: 27px 4px -10px;
@@ -1359,6 +1364,11 @@
   transform-style: preserve-3d;
   touch-action: pan-y;
   user-select: none;
+}
+
+.mobileSheetCompact {
+  min-height: 0;
+  aspect-ratio: 10 / 13;
 }
 
 .mobileSheet::before {
@@ -1421,84 +1431,52 @@
 }
 
 .mobileCoverContent {
+  height: auto;
+  border-radius: inherit;
   overflow: hidden;
 }
 
-.mobileCoverWeave {
-  position: absolute;
-  inset: 0;
-  opacity: 0.32;
-  mix-blend-mode: multiply;
-  background-image:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.11) 1px, transparent 1px),
-    linear-gradient(rgba(13, 42, 67, 0.2) 1px, transparent 1px);
-  background-size: 5px 5px;
+.mobileCoverContent .coverGoldFrame {
+  inset: 15px;
+  border-radius: 14px;
 }
 
-.mobileCoverDaisy {
-  position: absolute;
-  right: -62px;
-  bottom: -25px;
-  z-index: 1;
-  width: 250px;
-  opacity: 0.35;
-  filter: saturate(0.74);
-  transform: rotate(12deg);
-}
-
-.mobileCoverTitle {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
+.mobileCoverContent .coverTitle {
+  top: 13%;
   width: 82%;
-  padding: 86px 30px 0;
-  color: rgba(250, 253, 255, 0.95);
-  font-family: var(--font-patrick-hand), cursive !important;
-  font-size: clamp(42px, 13vw, 62px);
-  line-height: 0.83;
-  text-shadow: 0 2px 2px rgba(25, 55, 81, 0.25);
 }
 
-.mobileCoverPeriod {
-  position: absolute;
-  bottom: 52px;
-  left: 28px;
-  z-index: 4;
-  display: flex;
-  flex-direction: column;
-  min-width: 132px;
-  padding: 12px 16px;
-  border: 3px solid rgba(176, 235, 139, 0.78);
-  border-radius: 48%;
-  color: rgba(247, 255, 241, 0.94);
-  font-family: var(--font-patrick-hand), cursive !important;
-  font-size: 20px;
-  line-height: 0.92;
-  transform: rotate(-4deg);
+.mobileCoverContent .coverTitleScript {
+  font-size: clamp(38px, 11vw, 52px);
 }
 
-.mobileCoverPencils {
-  position: absolute;
-  top: 54%;
-  left: 50%;
-  z-index: 4;
-  width: 68px;
-  filter: drop-shadow(8px 12px 10px rgba(28, 21, 14, 0.25));
-  transform: translate(-50%, -50%) rotate(42deg);
+.mobileCoverContent .coverTitleDisplay {
+  max-width: 100%;
+  font-size: clamp(34px, 10vw, 49px);
+  letter-spacing: 0.075em;
+  overflow-wrap: anywhere;
 }
 
-.mobileCoverPencils svg {
-  display: block;
-  width: 100%;
+.mobileCoverContent .coverTitleDivider {
+  width: min(76%, 230px);
+  margin-top: 16px;
 }
 
-.mobileCoverButterfly {
-  position: absolute;
-  right: 24px;
-  bottom: 24px;
-  z-index: 4;
-  width: 80px;
+.mobileCoverContent .coverSubtitle {
+  max-width: 92%;
+  font-size: clamp(13px, 4vw, 17px);
+}
+
+.mobileCoverContent .coverCornerTree {
+  left: -11%;
+  bottom: -5%;
+  width: 76%;
+}
+
+.mobileCoverContent .coverCornerFlower {
+  right: -17%;
+  bottom: -10%;
+  width: 64%;
 }
 
 .mobileStoryContent {
@@ -1574,6 +1552,10 @@
   transform: rotate(var(--mobile-photo-rotate));
 }
 
+.mobilePhoto:disabled {
+  cursor: default;
+}
+
 .mobilePhoto:focus-visible {
   outline: 3px solid rgba(34, 98, 150, 0.78);
   outline-offset: 5px;
@@ -1590,6 +1572,60 @@
   border-radius: 1px;
   object-fit: cover;
   filter: saturate(0.88) contrast(1.02);
+}
+
+.mobilePhotoPlaceholder {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 1.05 / 1;
+  place-items: center;
+  border-radius: 1px;
+  background:
+    linear-gradient(110deg, transparent 34%, rgba(255, 255, 255, 0.5) 45%, transparent 56%),
+    #e9e2d5;
+  color: rgba(61, 82, 76, 0.62);
+  background-size: 220% 100%;
+  animation: memoryPreviewShimmer 1.4s linear infinite;
+}
+
+.mobilePhotoSpinner {
+  animation: mobilePhotoSpin 1s linear infinite;
+}
+
+@keyframes mobilePhotoSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mobileSheetCompact .mobileStoryContent {
+  padding: 56px 20px 24px;
+}
+
+.mobileSheetCompact .mobileStoryCopy {
+  padding-right: 25px;
+}
+
+.mobileSheetCompact .mobileStoryCopy h2 {
+  margin-bottom: 9px;
+  font-size: clamp(27px, 8vw, 35px);
+}
+
+.mobileSheetCompact .mobileStoryCopy p {
+  font-size: clamp(17px, 5vw, 21px);
+}
+
+.mobileSheetCompact .mobilePhotoGrid {
+  gap: 11px;
+  padding: 22px 2px 3px;
+}
+
+.mobileSheetCompact .mobilePhoto {
+  padding: 6px 6px 19px;
+}
+
+.mobileSheetCompact .mobilePhotoCaption {
+  font-size: 11px;
 }
 
 .mobilePhotoTape {
@@ -1916,10 +1952,6 @@
     font-size: 12px;
   }
 
-  .mobileCoverTitle {
-    padding-left: 24px;
-    font-size: 42px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

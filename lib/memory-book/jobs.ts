@@ -19,6 +19,7 @@ type MemoryBookJob = {
   payload: Record<string, unknown>
   attempts: number
   max_attempts: number
+  status: "queued" | "running" | "completed" | "failed" | "dead"
 }
 
 const POLISH_PROMPT_VERSION = "family-heritage-copy-v1"
@@ -48,7 +49,23 @@ async function preserveAsset(job: MemoryBookJob) {
   const hasPreviews =
     typeof existingMetadata.thumbnailSmallKey === "string" &&
     typeof existingMetadata.thumbnailMediumKey === "string"
-  if (asset.status === "ready" && asset.preserved_key && hasPreviews) {
+  if (asset.preserved_key && hasPreviews) {
+    if (asset.status !== "ready") {
+      await supabaseAdmin
+        .from("memory_book_assets")
+        .update({
+          status: "ready",
+          error_message: null,
+          metadata: {
+            ...existingMetadata,
+            preservationStatus: "ready",
+            previewStatus: "ready",
+          },
+        })
+        .eq("id", asset.id)
+        .eq("book_id", job.book_id)
+        .eq("user_id", job.user_id)
+    }
     return {
       preservedKey: asset.preserved_key,
       posterKey: asset.poster_key,
@@ -459,19 +476,10 @@ async function enqueueLifecycleWork() {
   }
 }
 
-export async function processMemoryBookJobs(limit = 10) {
-  await enqueueLifecycleWork()
-  const workerId = `memory-book-${crypto.randomUUID()}`
-  const { data, error } = await supabaseAdmin.rpc("claim_memory_book_jobs", {
-    p_worker_id: workerId,
-    p_limit: Math.max(1, Math.min(limit, 25)),
-  })
-
-  if (error) {
-    throw error
-  }
-
-  const jobs = (data || []) as MemoryBookJob[]
+async function runClaimedMemoryBookJobs(
+  jobs: MemoryBookJob[],
+  workerId: string
+) {
   const results: Array<{ id: string; status: string; error?: string }> = []
 
   for (const job of jobs) {
@@ -485,6 +493,7 @@ export async function processMemoryBookJobs(limit = 10) {
           completed_at: new Date().toISOString(),
           lease_expires_at: null,
           locked_by: null,
+          error_message: null,
         })
         .eq("id", job.id)
         .eq("locked_by", workerId)
@@ -514,6 +523,7 @@ export async function processMemoryBookJobs(limit = 10) {
             error_message: message.slice(0, 500),
           })
           .eq("id", job.asset_id)
+          .eq("user_id", job.user_id)
       }
 
       results.push({ id: job.id, status: exhausted ? "dead" : "failed", error: message })
@@ -521,4 +531,164 @@ export async function processMemoryBookJobs(limit = 10) {
   }
 
   return results
+}
+
+export async function ensureMemoryBookUploadPreviewJobs(input: {
+  userId: string
+  bookId: string
+  assetIds?: string[]
+}) {
+  let query = supabaseAdmin
+    .from("memory_book_assets")
+    .select("id, source_locator, preserved_key, status, metadata, updated_at")
+    .eq("user_id", input.userId)
+    .eq("book_id", input.bookId)
+    .eq("source_type", "upload")
+    .eq("media_type", "image")
+    .eq("is_hidden", false)
+
+  if (input.assetIds?.length) {
+    query = query.in("id", input.assetIds)
+  }
+
+  const { data: assets, error } = await query
+  if (error) throw error
+
+  const previewAssetIds: string[] = []
+  for (const asset of assets || []) {
+    const metadata = (asset.metadata || {}) as Record<string, unknown>
+    const hasPreviews =
+      typeof metadata.thumbnailSmallKey === "string" &&
+      typeof metadata.thumbnailMediumKey === "string"
+    const preservedKey = asset.preserved_key || asset.source_locator
+    if (!preservedKey || hasPreviews) continue
+
+    previewAssetIds.push(asset.id)
+    const processingIsStale =
+      asset.status === "processing" &&
+      new Date(asset.updated_at).getTime() < Date.now() - 2 * 60_000
+    if (asset.status !== "processing" || processingIsStale) {
+      await supabaseAdmin
+        .from("memory_book_assets")
+        .update({
+          preserved_key: preservedKey,
+          status: "pending",
+          error_message: null,
+          metadata: {
+            ...metadata,
+            preservationStatus: "ready",
+            previewStatus: "queued",
+          },
+        })
+        .eq("id", asset.id)
+        .eq("user_id", input.userId)
+        .eq("book_id", input.bookId)
+    }
+
+    const idempotencyKey = `upload-preview-v2:${asset.id}:${preservedKey}`
+    await supabaseAdmin
+      .from("memory_book_jobs")
+      .update({
+        status: "completed",
+        result: { superseded: true },
+        completed_at: new Date().toISOString(),
+        lease_expires_at: null,
+        locked_by: null,
+      })
+      .eq("user_id", input.userId)
+      .eq("book_id", input.bookId)
+      .eq("asset_id", asset.id)
+      .eq("job_type", "preserve_asset")
+      .in("status", ["queued", "failed"])
+      .neq("idempotency_key", idempotencyKey)
+
+    await supabaseAdmin.from("memory_book_jobs").upsert(
+      {
+        user_id: input.userId,
+        book_id: input.bookId,
+        asset_id: asset.id,
+        job_type: "preserve_asset",
+        idempotency_key: idempotencyKey,
+        payload: { previewOnly: true },
+      },
+      { onConflict: "idempotency_key", ignoreDuplicates: true }
+    )
+  }
+
+  return previewAssetIds
+}
+
+export async function processMemoryBookAssetJobs(input: {
+  userId: string
+  bookId: string
+  assetIds: string[]
+  limit?: number
+}) {
+  const assetIds = [...new Set(input.assetIds)].slice(0, 12)
+  if (!assetIds.length) return []
+
+  const now = new Date().toISOString()
+  await supabaseAdmin
+    .from("memory_book_jobs")
+    .update({
+      status: "failed",
+      available_at: now,
+      lease_expires_at: null,
+      locked_by: null,
+      error_message: "Previous preview worker lease expired",
+    })
+    .eq("user_id", input.userId)
+    .eq("book_id", input.bookId)
+    .eq("job_type", "preserve_asset")
+    .eq("status", "running")
+    .in("asset_id", assetIds)
+    .lt("lease_expires_at", now)
+
+  const limit = Math.max(1, Math.min(input.limit || assetIds.length, 12))
+  const { data: candidates, error } = await supabaseAdmin
+    .from("memory_book_jobs")
+    .select("*")
+    .eq("user_id", input.userId)
+    .eq("book_id", input.bookId)
+    .eq("job_type", "preserve_asset")
+    .in("asset_id", assetIds)
+    .in("status", ["queued", "failed"])
+    .lte("available_at", now)
+    .order("created_at", { ascending: true })
+    .limit(limit)
+  if (error) throw error
+
+  const workerId = `memory-book-assets-${crypto.randomUUID()}`
+  const claimed: MemoryBookJob[] = []
+  for (const candidate of (candidates || []) as MemoryBookJob[]) {
+    const { data: job } = await supabaseAdmin
+      .from("memory_book_jobs")
+      .update({
+        status: "running",
+        attempts: candidate.attempts + 1,
+        locked_by: workerId,
+        lease_expires_at: new Date(Date.now() + 2 * 60_000).toISOString(),
+        error_message: null,
+      })
+      .eq("id", candidate.id)
+      .eq("status", candidate.status)
+      .eq("attempts", candidate.attempts)
+      .select("*")
+      .maybeSingle()
+    if (job) claimed.push(job as MemoryBookJob)
+  }
+
+  return runClaimedMemoryBookJobs(claimed, workerId)
+}
+
+export async function processMemoryBookJobs(limit = 10) {
+  await enqueueLifecycleWork()
+  const workerId = `memory-book-${crypto.randomUUID()}`
+  const { data, error } = await supabaseAdmin.rpc("claim_memory_book_jobs", {
+    p_worker_id: workerId,
+    p_limit: Math.max(1, Math.min(limit, 25)),
+  })
+
+  if (error) throw error
+  return runClaimedMemoryBookJobs((data || []) as MemoryBookJob[], workerId)
 }

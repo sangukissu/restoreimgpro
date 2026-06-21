@@ -97,6 +97,7 @@ export interface MemoryBookRecord {
   draft_document: MemoryBookDraftDocument
   preservation_consent: boolean
   share_token: string
+  share_slug: string
   share_version: number
   pin_hash: string | null
   pin_updated_at: string | null

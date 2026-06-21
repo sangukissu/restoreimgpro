@@ -1,5 +1,9 @@
 import { after, NextResponse } from "next/server"
-import { processMemoryBookJobs } from "@/lib/memory-book/jobs"
+import { z } from "zod"
+import {
+  ensureMemoryBookUploadPreviewJobs,
+  processMemoryBookAssetJobs,
+} from "@/lib/memory-book/jobs"
 import {
   getOwnedMemoryBook,
   requireMemoryBookUser,
@@ -7,13 +11,22 @@ import {
 
 export const maxDuration = 60
 
+const processSchema = z.object({
+  assetIds: z.array(z.string().uuid()).max(12).default([]),
+})
+
 export async function POST(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { user } = await requireMemoryBookUser()
   if (!user) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+  }
+
+  const parsed = processSchema.safeParse(await request.json().catch(() => ({})))
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid preview request" }, { status: 400 })
   }
 
   const { id } = await params
@@ -22,11 +35,24 @@ export async function POST(
     return NextResponse.json({ error: "Memory book not found" }, { status: 404 })
   }
 
-  after(async () => {
-    await processMemoryBookJobs(4).catch((error) => {
-      console.error("Unable to process memory-book jobs", error)
-    })
+  const assetIds = await ensureMemoryBookUploadPreviewJobs({
+    userId: user.id,
+    bookId: id,
+    assetIds: parsed.data.assetIds.length ? parsed.data.assetIds : undefined,
   })
 
-  return NextResponse.json({ processing: true })
+  if (assetIds.length) {
+    after(async () => {
+      await processMemoryBookAssetJobs({
+        userId: user.id,
+        bookId: id,
+        assetIds,
+        limit: assetIds.length,
+      }).catch((error) => {
+        console.error("Unable to process memory-book upload previews", error)
+      })
+    })
+  }
+
+  return NextResponse.json({ processing: assetIds.length > 0, assetIds })
 }
