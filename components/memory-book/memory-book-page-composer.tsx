@@ -321,7 +321,7 @@ export function MemoryBookPageComposer({
             Photos, page copy, and captions stay together. Unused memories remain available below.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-between sm:justify-start">
           <Button variant="outline" onClick={onBack}>
             <ArrowLeft /> Memories
           </Button>
@@ -354,11 +354,11 @@ export function MemoryBookPageComposer({
                       onChange={(event) => updateCover({ title: event.target.value })}
                     />
                   </Field>
-                  <Field label="Optional bottom line" hint={`${draft.cover.periodLabel.length}/80`}>
+                  <Field label="Optional cover subtitle" hint={`${draft.cover.periodLabel.length}/80`}>
                     <Input
                       value={draft.cover.periodLabel}
                       maxLength={80}
-                      placeholder="1980–present, A family archive…"
+                      placeholder="Stories, memories, and traditions across generations"
                       onChange={(event) => updateCover({ periodLabel: event.target.value })}
                     />
                   </Field>

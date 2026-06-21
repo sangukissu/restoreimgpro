@@ -304,12 +304,63 @@ export function MemoryBookCurator({
       (asset) => assigned.has(asset.id) && asset.status === "ready" && !asset.is_hidden
     ).length
   }, [assignedAssetIds, assets])
-  const canPublishDraft =
-    assignedAssetIds.length >= 6 &&
-    assignedAssetIds.length <= 12 &&
-    new Set(assignedAssetIds).size === assignedAssetIds.length &&
-    editableDraft.spreads.every((spread) => spread.assetIds.length > 0) &&
-    assignedReadyCount === assignedAssetIds.length
+  const publishBlockers = useMemo(() => {
+    const blockers: string[] = []
+    const assignedCount = assignedAssetIds.length
+    const uniqueCount = new Set(assignedAssetIds).size
+    const emptyPageCount = editableDraft.spreads.filter(
+      (spread) => spread.assetIds.length === 0
+    ).length
+    const preparingCount = Math.max(0, assignedCount - assignedReadyCount)
+
+    if (assignedCount < 6) {
+      blockers.push(`Add ${6 - assignedCount} more ${6 - assignedCount === 1 ? "memory" : "memories"} to the book.`)
+    } else if (assignedCount > 12) {
+      blockers.push(`Remove ${assignedCount - 12} ${assignedCount - 12 === 1 ? "memory" : "memories"}; a book supports up to 12.`)
+    }
+    if (uniqueCount !== assignedCount) {
+      blockers.push("A memory is assigned to more than one page.")
+    }
+    if (emptyPageCount > 0) {
+      blockers.push(`${emptyPageCount} ${emptyPageCount === 1 ? "page is" : "pages are"} empty.`)
+    }
+    if (preparingCount > 0) {
+      blockers.push(`${preparingCount} assigned ${preparingCount === 1 ? "memory is" : "memories are"} still preparing.`)
+    }
+
+    return blockers
+  }, [assignedAssetIds, assignedReadyCount, editableDraft.spreads])
+  const canPublishDraft = publishBlockers.length === 0
+  const assignedPreparingIds = useMemo(() => {
+    const assigned = new Set(assignedAssetIds)
+    return assets
+      .filter(
+        (asset) =>
+          assigned.has(asset.id) &&
+          !asset.is_hidden &&
+          (asset.status === "pending" || asset.status === "processing")
+      )
+      .map((asset) => asset.id)
+      .sort()
+  }, [assignedAssetIds, assets])
+  const assignedPreparingKey = assignedPreparingIds.join(":")
+
+  useEffect(() => {
+    if (!assignedPreparingKey) return
+
+    let cancelled = false
+    void fetch(`/api/memory-books/${book.id}/process`, { method: "POST" })
+
+    const poll = window.setInterval(() => {
+      if (!cancelled) void refreshBook()
+    }, 4000)
+
+    return () => {
+      cancelled = true
+      window.clearInterval(poll)
+    }
+  }, [assignedPreparingKey, book.id, refreshBook])
+
   const previewDocument = useMemo<MemoryBookDocumentV1 | null>(() => {
     try {
       return buildMemoryBookDocument(
@@ -732,7 +783,11 @@ export function MemoryBookCurator({
           </div>
           <Button
             onClick={() => setPublishOpen(true)}
-            disabled={!canPublishDraft}
+            title={
+              canPublishDraft
+                ? undefined
+                : "Open to see what is needed before publishing"
+            }
             className="bg-[#1f2c27] text-white hover:bg-[#304139]"
           >
             {book.status === "published" ? "Republish" : "Publish"}
@@ -814,7 +869,8 @@ export function MemoryBookCurator({
         onOpenChange={setPublishOpen}
         book={book}
         entitlement={entitlement}
-        readyCount={assignedReadyCount}
+        canPublishDraft={canPublishDraft}
+        publishBlockers={publishBlockers}
         pin={pin}
         publishing={publishing}
         onPinChange={setPin}
@@ -872,11 +928,10 @@ function MemorySelectionStep({
     .sort((a, b) => a.position - b.position)
 
   return (
-    <section className="mx-auto max-w-7xl px-5 py-7 md:px-8 md:py-10">
+    <section className="mx-auto px-5 py-6">
       <div className="flex flex-col gap-4 border-b border-black/8 pb-6 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold text-[#47736c]">Choose 6–12 memories</p>
-          <h1 className="mt-1 text-2xl font-bold">Curate what belongs together.</h1>
+          <h2 className="mt-1 text-2xl font-bold">Curate what belongs together.</h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-black/55">
             BringBack will preserve selected media inside this book. Removing the
             original later will not break the keepsake.
@@ -1089,7 +1144,8 @@ function PublishDialog({
   onOpenChange,
   book,
   entitlement,
-  readyCount,
+  canPublishDraft,
+  publishBlockers,
   pin,
   publishing,
   onPinChange,
@@ -1100,7 +1156,8 @@ function PublishDialog({
   onOpenChange: (open: boolean) => void
   book: MemoryBookRecord
   entitlement: { live_book_id: string | null } | null
-  readyCount: number
+  canPublishDraft: boolean
+  publishBlockers: string[]
   pin: string
   publishing: boolean
   onPinChange: (value: string) => void
@@ -1121,6 +1178,29 @@ function PublishDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-5 px-6 py-5">
+          {publishBlockers.length > 0 ? (
+            <div className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              <div className="flex items-start gap-2">
+                <CircleAlert className="mt-0.5 size-4 shrink-0" />
+                <div>
+                  <p className="font-semibold">
+                    {book.status === "published"
+                      ? "This update is not ready to republish yet."
+                      : "This book is not ready to publish yet."}
+                  </p>
+                  <ul className="mt-2 list-disc space-y-1 pl-4 text-amber-800">
+                    {publishBlockers.map((blocker) => (
+                      <li key={blocker}>{blocker}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
+              All pages and memories are ready.
+            </div>
+          )}
           <SettingRow
             icon={<ShieldCheck />}
             title="Preserve selected memories"
@@ -1195,8 +1275,7 @@ function PublishDialog({
             onClick={onPublish}
             disabled={
               publishing ||
-              readyCount < 6 ||
-              readyCount > 12 ||
+              !canPublishDraft ||
               !book.preservation_consent ||
               (pin.length > 0 && pin.length < 4) ||
               Boolean(entitlement?.live_book_id && entitlement.live_book_id !== book.id)
@@ -1204,7 +1283,11 @@ function PublishDialog({
             className="bg-[#1f2c27] text-white"
           >
             {publishing ? <Loader2 className="animate-spin" /> : <ShieldCheck />}
-            {entitlement ? "Publish private link" : "Unlock publishing"}
+            {entitlement
+              ? book.status === "published"
+                ? "Republish private link"
+                : "Publish private link"
+              : "Unlock publishing"}
           </Button>
         </DialogFooter>
       </DialogContent>

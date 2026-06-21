@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server"
+import { after, NextResponse } from "next/server"
 import { z } from "zod"
+import { processMemoryBookJobs } from "@/lib/memory-book/jobs"
 import {
   assignAssetToMemoryBookDraft,
   assignAssetToMemoryBookSpread,
@@ -130,6 +131,12 @@ export async function POST(
     .eq("draft_version", book.draft_version)
     .select("*")
     .maybeSingle()
+
+  after(async () => {
+    await processMemoryBookJobs(4).catch((error) => {
+      console.error("Unable to process uploaded memory", error)
+    })
+  })
 
   const { data: refreshedAsset } = await supabaseAdmin
     .from("memory_book_assets")

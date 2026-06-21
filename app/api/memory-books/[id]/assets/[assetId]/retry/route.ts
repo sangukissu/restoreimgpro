@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server"
+import { after, NextResponse } from "next/server"
+import { processMemoryBookJobs } from "@/lib/memory-book/jobs"
 import {
   enqueueMemoryBookJob,
   getOwnedMemoryBook,
@@ -35,6 +36,11 @@ export async function POST(
     assetId,
     jobType: "preserve_asset",
     idempotencyKey: `retry-preserve-asset:${assetId}:${Date.now()}`,
+  })
+  after(async () => {
+    await processMemoryBookJobs(2).catch((error) => {
+      console.error("Unable to retry memory preparation", error)
+    })
   })
   return NextResponse.json({ queued: true })
 }
