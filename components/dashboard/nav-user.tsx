@@ -53,6 +53,7 @@ export function NavUser({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
+              id="dashboard-sidebar-user-menu"
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
@@ -85,7 +86,7 @@ export function NavUser({
                 </div>
                 <div className="ml-auto flex items-center gap-1 text-xs">
                   <Coins className="h-3 w-3 text-amber-600" />
-                  <span className="font-medium">{loading ? "…" : Number(credits || 0).toLocaleString()}</span>
+                  <span className="font-medium">{loading ? "…" : new Intl.NumberFormat("en-US").format(Number(credits || 0))}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

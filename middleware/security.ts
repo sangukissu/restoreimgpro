@@ -75,6 +75,24 @@ export function detectSuspiciousActivity(request: NextRequest): boolean {
   return false
 }
 
+export function isProtectedMemoryBookCrawler(request: NextRequest): boolean {
+  const userAgent = request.headers.get("user-agent") || ""
+  if (!userAgent) return true
+
+  const protectedCrawlerPatterns = [
+    /googlebot/i, /bingbot/i, /yandexbot/i, /baiduspider/i, /duckduckbot/i,
+    /gptbot/i, /chatgpt-user/i, /oai-searchbot/i, /claudebot/i,
+    /claude-web/i, /anthropic-ai/i, /ccbot/i, /google-extended/i,
+    /bytespider/i, /perplexitybot/i, /perplexity-user/i, /amazonbot/i,
+    /meta-externalagent/i, /facebookexternalhit/i, /applebot-extended/i,
+    /cohere-ai/i, /diffbot/i, /imagesiftbot/i, /headlesschrome/i,
+    /phantomjs/i, /selenium/i, /playwright/i, /crawler/i, /spider/i,
+    /scraper/i, /curl/i, /wget/i,
+  ]
+
+  return protectedCrawlerPatterns.some((pattern) => pattern.test(userAgent))
+}
+
 /**
  * Sanitize file upload paths
  */

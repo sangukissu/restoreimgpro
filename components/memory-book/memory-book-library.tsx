@@ -100,7 +100,7 @@ export function MemoryBookLibrary({
           <StatusFact
             icon={<ShieldCheck />}
             label="Private by default"
-            value="Unlisted link with optional PIN"
+            value="Clean private link with required PIN"
           />
           <StatusFact
             icon={<Clock3 />}
@@ -153,7 +153,13 @@ export function MemoryBookLibrary({
                     <p className="mt-1 text-sm text-black/52">
                       {readyCount} of 6–12 memories prepared
                       <span className="mx-2 text-black/18">•</span>
-                      Updated {new Date(book.last_activity_at).toLocaleDateString()}
+                      Updated{" "}
+                      {new Intl.DateTimeFormat("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        timeZone: "UTC",
+                      }).format(new Date(book.last_activity_at))}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">

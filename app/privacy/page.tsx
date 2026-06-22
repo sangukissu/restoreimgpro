@@ -126,7 +126,7 @@ export default function PrivacyPage() {
                       <li>Correct inaccurate information</li>
                       <li>Opt out of marketing communications</li>
                       <li>Data portability where applicable</li>
-                      <li>Control recipient downloads and optional PIN access for shared keepsakes</li>
+                      <li>Control recipient downloads and required PIN access for shared keepsakes</li>
                     </ul>
                   </div>
                 </section>

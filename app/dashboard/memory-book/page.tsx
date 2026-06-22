@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import { MemoryBookLibrary } from "@/components/memory-book/memory-book-library"
 import { isMemoryBookEnabled } from "@/lib/memory-book/feature"
-import { signMemoryBookShare } from "@/lib/memory-book/security"
 import { buildMemoryBookSharePath } from "@/lib/memory-book/share-slug"
 import type { MemoryBookSummary } from "@/lib/memory-book/types"
 import { createClient } from "@/utils/supabase/server"
@@ -62,10 +61,7 @@ export default async function MemoryBookPage({
     ...book,
     shareUrl:
       book.status === "published"
-        ? buildMemoryBookSharePath(
-            book.share_slug,
-            signMemoryBookShare(book.share_token, book.share_version)
-          )
+        ? buildMemoryBookSharePath(book.share_slug)
         : null,
   }))
 

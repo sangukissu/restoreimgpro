@@ -62,7 +62,7 @@ export function createMemoryBookSlugCandidates(
   return Array.from(new Set(candidates))
 }
 
-export function buildMemoryBookSharePath(slug: string, signature: string) {
-  return `/m/${slug}?s=${encodeURIComponent(signature)}`
+export function buildMemoryBookSharePath(slug: string) {
+  return `/m/${slug}`
 }
 

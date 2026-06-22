@@ -1,18 +1,21 @@
 import { cookies } from "next/headers"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 import {
+  getMemoryBookViewerCookieName,
   verifyMemoryBookShare,
   verifyMemoryBookViewerSession,
 } from "./security"
 import { memoryBookDocumentV1Schema } from "./types"
 
-export const MEMORY_BOOK_VIEWER_COOKIE = "bringback_memory_viewer"
-
 export async function getPublishedMemoryBookShare(
   shareId: string,
-  signature: string,
-  requireUnlocked = true
+  signature = "",
+  _requireUnlocked = true
 ) {
+  const isLegacyToken =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      shareId
+    )
   let query = supabaseAdmin
     .from("memory_books")
     .select(
@@ -20,10 +23,6 @@ export async function getPublishedMemoryBookShare(
     )
     .eq("status", "published")
 
-  const isLegacyToken =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-      shareId
-    )
   query = isLegacyToken
     ? query.eq("share_token", shareId)
     : query.eq("share_slug", shareId)
@@ -31,25 +30,29 @@ export async function getPublishedMemoryBookShare(
 
   if (
     !book ||
-    !verifyMemoryBookShare(book.share_token, book.share_version, signature) ||
-    !book.published_revision_id
+    !book.pin_hash ||
+    !book.published_revision_id ||
+    (isLegacyToken &&
+      !verifyMemoryBookShare(book.share_token, book.share_version, signature))
   ) {
     return null
   }
 
-  let unlocked = !book.pin_hash
-  if (!unlocked) {
-    const cookieStore = await cookies()
-    unlocked = verifyMemoryBookViewerSession(
-      cookieStore.get(MEMORY_BOOK_VIEWER_COOKIE)?.value,
-      book.share_token,
-      book.share_version,
-      book.pin_updated_at
-    )
-  }
+  const cookieStore = await cookies()
+  const unlocked = verifyMemoryBookViewerSession(
+    cookieStore.get(getMemoryBookViewerCookieName(book.share_token))?.value,
+    book.share_token,
+    book.share_version,
+    book.pin_updated_at
+  )
 
-  if (requireUnlocked && !unlocked) {
-    return { book, document: null, unlocked: false }
+  if (!unlocked) {
+    return {
+      book,
+      document: null,
+      unlocked: false,
+      legacy: isLegacyToken,
+    }
   }
 
   const { data: revision } = await supabaseAdmin
@@ -71,6 +74,7 @@ export async function getPublishedMemoryBookShare(
       document: parsed.data,
     },
     document: parsed.data,
-    unlocked,
+    unlocked: true,
+    legacy: isLegacyToken,
   }
 }

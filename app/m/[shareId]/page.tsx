@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { redirect } from "next/navigation"
 import { MemoryBookPinGate } from "@/components/memory-book/memory-book-pin-gate"
 import { PublicMemoryBook } from "@/components/memory-book/public-memory-book"
 import { getPublishedMemoryBookShare } from "@/lib/memory-book/share"
@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "A private Family Heritage keepsake | BringBack",
-  description: "A private family keepsake shared with BringBack.",
+  description: "A private family keepsake protected by a PIN.",
   robots: {
     index: false,
     follow: false,
@@ -18,11 +18,12 @@ export const metadata: Metadata = {
       index: false,
       follow: false,
       noimageindex: true,
+      nosnippet: true,
     },
   },
   openGraph: {
     title: "A private Family Heritage keepsake",
-    description: "Someone shared a private family keepsake with you.",
+    description: "A private keepsake protected by a PIN.",
     type: "website",
     images: ["/og-image.png"],
   },
@@ -37,13 +38,14 @@ export default async function SharedMemoryBookPage({
 }) {
   const [{ shareId }, query] = await Promise.all([params, searchParams])
   const signature = query.s || ""
-  if (!signature) notFound()
-
   const shared = await getPublishedMemoryBookShare(shareId, signature)
-  if (!shared) notFound()
 
-  if (!shared.unlocked || !shared.document) {
-    return <MemoryBookPinGate shareId={shareId} signature={signature} />
+  if (shared?.legacy) {
+    redirect(`/m/${shared.book.share_slug}`)
+  }
+
+  if (!shared?.unlocked || !shared.document) {
+    return <MemoryBookPinGate shareId={shareId} />
   }
 
   const documentAssets = shared.document.spreads.flatMap(
@@ -62,29 +64,28 @@ export default async function SharedMemoryBookPage({
   )
 
   const assetSources = documentAssets.map((asset) => {
-      const base = `/api/memory-books/share/${shareId}/media/${asset.id}?s=${encodeURIComponent(signature)}`
-      const storedAsset = storedAssetMap.get(asset.id)
-      const hasPreview =
-        typeof storedAsset?.metadata?.thumbnailMediumKey === "string"
-      return {
-        id: asset.id,
-        mediaType: asset.mediaType,
-        src: base,
-        poster: hasPreview
-          ? `${base}&preview=1`
-          : asset.mediaType === "video" && storedAsset?.poster_key
-            ? `${base}&poster=1`
-            : null,
-        downloadUrl: shared.book.downloads_enabled ? `${base}&download=1` : null,
-      }
-    })
+    const base = `/api/memory-books/share/${encodeURIComponent(shared.book.share_slug)}/media/${asset.id}`
+    const storedAsset = storedAssetMap.get(asset.id)
+    const canPreview =
+      typeof storedAsset?.metadata?.thumbnailMediumKey === "string" ||
+      Boolean(storedAsset?.poster_key) ||
+      asset.mediaType === "image"
+    return {
+      id: asset.id,
+      mediaType: asset.mediaType,
+      src: base,
+      poster: canPreview ? `${base}?preview=1` : null,
+      downloadUrl: shared.book.downloads_enabled
+        ? `${base}?download=1`
+        : null,
+    }
+  })
 
   return (
     <PublicMemoryBook
       document={shared.document}
       assetSources={assetSources}
-      shareId={shareId}
-      signature={signature}
+      shareId={shared.book.share_slug}
     />
   )
 }

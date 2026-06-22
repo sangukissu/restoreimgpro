@@ -60,6 +60,19 @@ export async function verifyMemoryBookPin(pin: string, storedHash: string) {
   return derived.length === expected.length && timingSafeEqual(derived, expected)
 }
 
+export function getMemoryBookViewerCookieName(shareToken: string) {
+  return `bringback_memory_viewer_${createHmac("sha256", getShareSecret())
+    .update(`cookie.${shareToken}`)
+    .digest("hex")
+    .slice(0, 20)}`
+}
+
+export function hashMemoryBookAccessAddress(address: string) {
+  return createHmac("sha256", getShareSecret())
+    .update(`memory-book-access.${address}`)
+    .digest("hex")
+}
+
 export function createMemoryBookViewerSession(
   shareToken: string,
   shareVersion: number,
@@ -113,7 +126,7 @@ export function verifyMemoryBookViewerSession(
     }
 
     const issuedAt = Number(parsed.issuedAt)
-    if (!Number.isFinite(issuedAt) || Date.now() / 1000 - issuedAt > 60 * 60 * 24 * 7) {
+    if (!Number.isFinite(issuedAt) || Date.now() / 1000 - issuedAt > 60 * 60 * 24 * 30) {
       return false
     }
 

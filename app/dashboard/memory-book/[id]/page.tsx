@@ -6,7 +6,6 @@ import {
   getOwnedMemoryBook,
   getOwnerMemoryBookAssetSources,
 } from "@/lib/memory-book/server"
-import { signMemoryBookShare } from "@/lib/memory-book/security"
 import { buildMemoryBookSharePath } from "@/lib/memory-book/share-slug"
 import { isMemoryBookEnabled } from "@/lib/memory-book/feature"
 import { createClient } from "@/utils/supabase/server"
@@ -57,10 +56,7 @@ export default async function MemoryBookCuratorPage({
       entitlement={entitlement}
       initialShareUrl={
         book.status === "published"
-          ? buildMemoryBookSharePath(
-            book.share_slug,
-            signMemoryBookShare(book.share_token, book.share_version)
-          )
+          ? buildMemoryBookSharePath(book.share_slug)
           : null
       }
     />

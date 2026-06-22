@@ -3,7 +3,6 @@ import {
   getOwnedMemoryBook,
   requireMemoryBookUser,
 } from "@/lib/memory-book/server"
-import { signMemoryBookShare } from "@/lib/memory-book/security"
 import { buildMemoryBookSharePath } from "@/lib/memory-book/share-slug"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
@@ -38,16 +37,12 @@ export async function POST(
     )
   }
 
-  const signature = signMemoryBookShare(
-    updated.share_token,
-    updated.share_version
-  )
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin
 
   return NextResponse.json({
     shareSlug: updated.share_slug,
     displayUrl: `/m/${updated.share_slug}`,
-    shareUrl: `${baseUrl}${buildMemoryBookSharePath(updated.share_slug, signature)}`,
+    shareUrl: `${baseUrl}${buildMemoryBookSharePath(updated.share_slug)}`,
   })
 }

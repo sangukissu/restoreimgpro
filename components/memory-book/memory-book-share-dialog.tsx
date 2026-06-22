@@ -77,6 +77,8 @@ export function MemoryBookShareDialog({
   const [copied, setCopied] = useState(false)
   const [advancedOpen, setAdvancedOpen] = useState(false)
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
+  const [newPin, setNewPin] = useState("")
+  const [confirmPin, setConfirmPin] = useState("")
 
   const changed = slug !== book.share_slug
   const normalizedShareUrl = useMemo(() => {
@@ -87,6 +89,10 @@ export function MemoryBookShareDialog({
   useEffect(() => {
     if (!open) return
     setSlug(book.share_slug)
+    setAdvancedOpen(false)
+    setNewPin("")
+    setConfirmPin("")
+    setCopied(false)
     setAvailability("idle")
     setAvailabilityMessage("")
     void fetch(`/api/memory-books/${book.id}/share-slug`)
@@ -172,6 +178,27 @@ export function MemoryBookShareDialog({
     }
   }
 
+  const changePin = async () => {
+    if (newPin.length !== 6 || newPin !== confirmPin) return
+    setWorking(true)
+    try {
+      const response = await fetch(`/api/memory-books/${book.id}/share-pin`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: newPin, confirmPin }),
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || "Unable to change the PIN")
+      onShareUpdated(result)
+      setNewPin("")
+      setConfirmPin("")
+    } catch (cause) {
+      onError(cause instanceof Error ? cause.message : "Unable to change the PIN")
+    } finally {
+      setWorking(false)
+    }
+  }
+
   const unpublish = async () => {
     setWorking(true)
     try {
@@ -193,30 +220,26 @@ export function MemoryBookShareDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-xl p-0">
-          <DialogHeader className="border-b border-black/8 px-6 py-5">
-            <DialogTitle>Share your family keepsake</DialogTitle>
+        <DialogContent className="flex max-h-[92svh] w-[calc(100vw-1rem)] max-w-lg flex-col gap-0 overflow-hidden p-0 sm:w-full">
+          <DialogHeader className="shrink-0 border-b border-black/8 px-4 py-4 pr-12 sm:px-6">
+            <DialogTitle>Share this keepsake</DialogTitle>
             <DialogDescription>
-              Choose a familiar address, then send the private link to your family.
+              Copy the link and send the six-digit PIN separately.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-5 px-6 py-5">
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-              <div className="flex items-start gap-3">
-                <ShieldCheck className="mt-0.5 size-5 shrink-0" />
-                <div>
-                  <p className="font-semibold">Your keepsake is private and unlisted.</p>
-                  <p className="mt-1 text-emerald-800/80">
-                    The readable name is only part of the link. BringBack also adds a private access key.
-                  </p>
-                </div>
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6">
+            <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm text-emerald-900">
+              <ShieldCheck className="size-5 shrink-0" />
+              <div className="min-w-0">
+                <p className="font-semibold">Protected by your six-digit PIN</p>
+                <p className="text-xs text-emerald-800/75">Only people with the link and PIN can open it.</p>
               </div>
             </div>
 
             <div>
               <label className="text-sm font-semibold" htmlFor="memory-book-share-slug">
-                Family link
+                Private book link
               </label>
               <div className="mt-2 flex overflow-hidden rounded-md border border-input bg-white focus-within:ring-2 focus-within:ring-ring/50">
                 <span className="flex items-center border-r bg-[#f5f5f2] px-3 text-sm text-black/45">
@@ -247,7 +270,7 @@ export function MemoryBookShareDialog({
               </div>
               {suggestions.length ? (
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {suggestions.map((suggestion) => (
+                  {suggestions.slice(0, 2).map((suggestion) => (
                     <button
                       key={suggestion}
                       type="button"
@@ -278,45 +301,74 @@ export function MemoryBookShareDialog({
             <div className="grid gap-2 sm:grid-cols-2">
               <Button onClick={confirmCopy} disabled={!shareUrl} className="bg-[#1f2c27] text-white">
                 {copied ? <Check /> : <Copy />}
-                {copied ? "Copied" : "Copy private link"}
+                {copied ? "Copied" : "Copy link"}
               </Button>
               <Button variant="outline" asChild disabled={!shareUrl}>
                 <a href={shareUrl || "#"} target="_blank" rel="noreferrer">
-                  <ExternalLink /> Open book
+                  <ExternalLink /> Open preview
                 </a>
               </Button>
             </div>
 
             <div className="flex items-center gap-2 rounded-lg bg-[#f5f5f2] px-3 py-2 text-xs text-black/58">
               <LockKeyhole className="size-4 text-[#47736c]" />
-              {book.pin_hash
-                ? "A PIN is also required after opening the private link."
-                : "Anyone with the complete private link can open this book."}
+              Recipients enter the PIN once on each browser.
             </div>
 
             <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
               <CollapsibleTrigger asChild>
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between border-t border-black/8 pt-4 text-sm font-semibold"
+                  className="flex w-full items-center justify-between border-t border-black/8 pt-4 text-sm font-semibold text-black/70"
                 >
-                  Advanced sharing controls
+                  Security & access
                   <ChevronDown
                     className={`size-4 transition-transform ${advancedOpen ? "rotate-180" : ""}`}
                   />
                 </button>
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-3 space-y-3">
-                <div className="flex items-center justify-between gap-4 rounded-lg border border-black/8 p-3">
-                  <div>
-                    <p className="text-sm font-semibold">Reset access link</p>
-                    <p className="text-xs text-black/50">Previously copied links will stop working.</p>
+                <div className="rounded-lg border border-black/8 p-3">
+                  <p className="text-sm font-semibold">Change six-digit PIN</p>
+                  <p className="mt-1 text-xs text-black/50">Changing it signs out every viewer immediately.</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    <Input
+                      value={newPin}
+                      inputMode="numeric"
+                      autoComplete="new-password"
+                      maxLength={6}
+                      placeholder="New PIN"
+                      onChange={(event) => setNewPin(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                    />
+                    <Input
+                      value={confirmPin}
+                      inputMode="numeric"
+                      autoComplete="new-password"
+                      maxLength={6}
+                      placeholder="Confirm PIN"
+                      onChange={(event) => setConfirmPin(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                    />
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => setConfirmAction("reset")}>
-                    <RefreshCw /> Reset
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-3"
+                    disabled={working || newPin.length !== 6 || newPin !== confirmPin}
+                    onClick={() => void changePin()}
+                  >
+                    <LockKeyhole /> Change PIN
                   </Button>
                 </div>
-                <div className="flex items-center justify-between gap-4 rounded-lg border border-red-200 p-3">
+                <div className="flex flex-col gap-3 rounded-lg border border-black/8 p-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm font-semibold">Sign out all viewers</p>
+                    <p className="text-xs text-black/50">The clean link stays the same; every browser must enter the PIN again.</p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => setConfirmAction("reset")}>
+                    <RefreshCw /> Sign out
+                  </Button>
+                </div>
+                <div className="flex flex-col gap-3 rounded-lg border border-red-200 p-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="text-sm font-semibold text-red-800">Unpublish book</p>
                     <p className="text-xs text-red-700/70">Family members will no longer be able to open it.</p>
@@ -338,14 +390,14 @@ export function MemoryBookShareDialog({
               {confirmAction === "rename"
                 ? "Change this family link?"
                 : confirmAction === "reset"
-                  ? "Reset private access?"
+                  ? "Sign out all viewers?"
                   : "Unpublish this keepsake?"}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {confirmAction === "rename"
                 ? "The previous friendly address will stop working immediately."
                 : confirmAction === "reset"
-                  ? "Every previously copied private link will stop working. The friendly name stays the same."
+                  ? "The link stays the same, but every viewer will need to enter the PIN again."
                   : "The book will return to draft status and shared links will no longer open it."}
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -365,7 +417,7 @@ export function MemoryBookShareDialog({
               {confirmAction === "rename"
                 ? "Change address"
                 : confirmAction === "reset"
-                  ? "Reset access"
+                  ? "Sign out viewers"
                   : "Unpublish"}
             </AlertDialogAction>
           </AlertDialogFooter>

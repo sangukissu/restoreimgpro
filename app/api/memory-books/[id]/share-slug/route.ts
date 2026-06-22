@@ -10,7 +10,6 @@ import {
   memoryBookShareSlugSchema,
   normalizeMemoryBookShareSlug,
 } from "@/lib/memory-book/share-slug"
-import { signMemoryBookShare } from "@/lib/memory-book/security"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
 const updateSlugSchema = z.object({
@@ -94,11 +93,10 @@ export async function PATCH(
     return NextResponse.json({ error: "Memory book not found" }, { status: 404 })
   }
   if (book.share_slug === parsed.data.slug) {
-    const signature = signMemoryBookShare(book.share_token, book.share_version)
     return NextResponse.json({
       shareSlug: book.share_slug,
       displayUrl: `/m/${book.share_slug}`,
-      shareUrl: buildMemoryBookSharePath(book.share_slug, signature),
+      shareUrl: buildMemoryBookSharePath(book.share_slug),
     })
   }
 
@@ -106,6 +104,7 @@ export async function PATCH(
     .from("memory_books")
     .update({
       share_slug: parsed.data.slug,
+      share_version: book.share_version + 1,
       last_activity_at: new Date().toISOString(),
     })
     .eq("id", id)
@@ -126,13 +125,9 @@ export async function PATCH(
     )
   }
 
-  const signature = signMemoryBookShare(
-    updated.share_token,
-    updated.share_version
-  )
   return NextResponse.json({
     shareSlug: updated.share_slug,
     displayUrl: `/m/${updated.share_slug}`,
-    shareUrl: buildMemoryBookSharePath(updated.share_slug, signature),
+    shareUrl: buildMemoryBookSharePath(updated.share_slug),
   })
 }

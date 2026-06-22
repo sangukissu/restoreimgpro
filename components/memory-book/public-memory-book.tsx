@@ -23,12 +23,10 @@ export function PublicMemoryBook({
   document,
   assetSources,
   shareId,
-  signature,
 }: {
   document: MemoryBookDocumentV1
   assetSources: MemoryBookAssetSource[]
   shareId: string
-  signature: string
 }) {
   const [reaction, setReaction] = useState<(typeof REACTIONS)[number]["id"]>("love")
   const [displayName, setDisplayName] = useState("")
@@ -50,7 +48,6 @@ export function PublicMemoryBook({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            signature,
             reaction,
             displayName,
             note,

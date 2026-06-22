@@ -6,7 +6,7 @@ import {
   getOwnedMemoryBook,
   requireMemoryBookUser,
 } from "@/lib/memory-book/server"
-import { hashMemoryBookPin, signMemoryBookShare } from "@/lib/memory-book/security"
+import { hashMemoryBookPin } from "@/lib/memory-book/security"
 import { buildMemoryBookSharePath, memoryBookShareSlugSchema } from "@/lib/memory-book/share-slug"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
@@ -15,8 +15,8 @@ const publishSchema = z.object({
   preservationConsent: z.literal(true),
   downloadsEnabled: z.boolean(),
   musicEnabled: z.boolean(),
-  shareSlug: memoryBookShareSlugSchema.optional(),
-  pin: z.string().regex(/^\d{4,8}$/).optional().or(z.literal("")),
+  shareSlug: memoryBookShareSlugSchema,
+  pin: z.string().regex(/^\d{6}$/),
 })
 
 export async function POST(
@@ -57,7 +57,6 @@ export async function POST(
         preservation_consent: true,
         downloads_enabled: parsed.data.downloadsEnabled,
         music_enabled: parsed.data.musicEnabled,
-      share_slug: parsed.data.shareSlug || current.share_slug,
       },
       assets
     )
@@ -72,9 +71,7 @@ export async function POST(
       { status: 409 }
     )
   }
-  const pinHash = parsed.data.pin
-    ? await hashMemoryBookPin(parsed.data.pin)
-    : null
+  const pinHash = await hashMemoryBookPin(parsed.data.pin)
   const nextVersion = current.draft_version + 1
   const { data: preparedBook, error: preparationError } = await supabaseAdmin
     .from("memory_books")
@@ -84,7 +81,7 @@ export async function POST(
       music_enabled: parsed.data.musicEnabled,
       share_slug: parsed.data.shareSlug || current.share_slug,
       pin_hash: pinHash,
-      pin_updated_at: pinHash ? new Date().toISOString() : null,
+      pin_updated_at: new Date().toISOString(),
       draft_version: nextVersion,
     })
     .eq("id", id)
@@ -123,10 +120,6 @@ export async function POST(
   }
 
   const result = Array.isArray(data) ? data[0] : data
-  const signature = signMemoryBookShare(
-    result.share_token,
-    result.share_version
-  )
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin
 
@@ -136,6 +129,6 @@ export async function POST(
     revisionNumber: result.revision_number,
     shareSlug: preparedBook.share_slug,
     displayUrl: `/m/${preparedBook.share_slug}`,
-    shareUrl: `${baseUrl}${buildMemoryBookSharePath(preparedBook.share_slug, signature)}`,
+    shareUrl: `${baseUrl}${buildMemoryBookSharePath(preparedBook.share_slug)}`,
   })
 }

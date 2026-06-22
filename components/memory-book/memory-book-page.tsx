@@ -60,7 +60,10 @@ export function MemoryBookStoryPage({
       <div className={styles.keepsakeGrid}>
         {page.assets.map((asset, index) => {
           const source = sourceMap.get(asset.id)
-          const previewSrc = source?.poster || source?.thumbnail || ""
+          const previewSrc =
+            source?.poster ||
+            source?.thumbnail ||
+            (source?.mediaType === "image" ? source.src : "")
           const photo = {
             src: previewSrc,
             alt: asset.alt,

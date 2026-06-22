@@ -59,7 +59,7 @@ function CreditsCard({ initialCreditBalance, onBuyCredits }: { initialCreditBala
       <CardContent className="gap-1 flex flex-col px-3">
         <div className="text-sm font-medium mb-1">Plan Usage</div>
         <div className="text-xs text-muted-foreground mb-3 flex justify-between">
-          <span className="flex items-center gap-2"><Coins className="h-3 w-3" />Credits</span> <span className="text-amber-600"> {Number(credits || 0).toLocaleString()}</span>
+          <span className="flex items-center gap-2"><Coins className="h-3 w-3" />Credits</span> <span className="text-amber-600"> {new Intl.NumberFormat("en-US").format(Number(credits || 0))}</span>
         </div>
         <Button
           size="sm"

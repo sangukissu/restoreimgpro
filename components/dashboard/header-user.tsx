@@ -47,7 +47,7 @@ export function HeaderUser({ user, initialCreditBalance, onBuyCredits }: HeaderU
         <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/50 rounded-md">
           <Coins className="h-4 w-4 text-amber-600" />
           <span className="text-sm font-medium text-foreground">
-            {Number(credits || 0).toLocaleString()}
+            {new Intl.NumberFormat("en-US").format(Number(credits || 0))}
           </span>
         </div>
         <Button
@@ -68,6 +68,7 @@ export function HeaderUser({ user, initialCreditBalance, onBuyCredits }: HeaderU
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
+            id="dashboard-header-user-menu"
             variant="ghost"
             className="relative h-8 w-8 rounded-full cursor-pointer"
           >

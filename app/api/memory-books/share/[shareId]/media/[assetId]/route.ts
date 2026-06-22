@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server"
 import { getPublishedMemoryBookShare } from "@/lib/memory-book/share"
+import { applyMemoryBookPrivateHeaders } from "@/lib/memory-book/privacy"
 import { readMemoryBookAsset } from "@/lib/memory-book/storage"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
+
+function jsonError(error: string, status: number) {
+  const response = NextResponse.json({ error }, { status })
+  applyMemoryBookPrivateHeaders(response.headers)
+  return response
+}
 
 export async function GET(
   request: Request,
@@ -12,24 +19,23 @@ export async function GET(
 ) {
   const { shareId, assetId } = await params
   const url = new URL(request.url)
-  const signature = url.searchParams.get("s") || ""
   const wantsDownload = url.searchParams.get("download") === "1"
   const wantsPoster = url.searchParams.get("poster") === "1"
   const wantsPreview = url.searchParams.get("preview") === "1"
 
-  const shared = await getPublishedMemoryBookShare(shareId, signature)
+  const shared = await getPublishedMemoryBookShare(shareId)
   if (!shared?.document || !shared.unlocked) {
-    return NextResponse.json({ error: "Memory not found" }, { status: 404 })
+    return jsonError("Memory not found", 404)
   }
   if (wantsDownload && !shared.book.downloads_enabled) {
-    return NextResponse.json({ error: "Downloads are disabled" }, { status: 403 })
+    return jsonError("Downloads are disabled", 403)
   }
 
   const referenced = shared.document.spreads.some((spread) =>
     spread.right.assets.some((asset) => asset.id === assetId)
   )
   if (!referenced) {
-    return NextResponse.json({ error: "Memory not found" }, { status: 404 })
+    return jsonError("Memory not found", 404)
   }
 
   const { data: asset } = await supabaseAdmin
@@ -45,26 +51,28 @@ export async function GET(
       ? asset.metadata.thumbnailMediumKey
       : null
   const key = wantsPreview
-    ? previewKey
+    ? previewKey ||
+      (asset?.media_type === "video" ? asset?.poster_key : asset?.preserved_key)
     : wantsPoster
       ? asset?.poster_key
       : asset?.preserved_key
   if (!asset || !key) {
-    return NextResponse.json({ error: "Memory is unavailable" }, { status: 404 })
+    return jsonError("Memory is unavailable", 404)
   }
 
   try {
     const range = request.headers.get("range")
     const { body, contentType, contentLength, lastModified, contentRange } =
       await readMemoryBookAsset(key, range)
-    const headers = new Headers({
-      "Content-Type": contentType || "application/octet-stream",
-      "Cache-Control": wantsPreview
-        ? "private, max-age=31536000, immutable"
-        : "private, max-age=300",
-      "Accept-Ranges": "bytes",
-      "X-Robots-Tag": "noindex, noarchive",
-    })
+    const headers = applyMemoryBookPrivateHeaders(
+      new Headers({
+        "Content-Type": contentType || "application/octet-stream",
+        "Accept-Ranges": "bytes",
+      }),
+      wantsPreview && !wantsDownload
+        ? "private, max-age=3600, must-revalidate"
+        : "private, no-store"
+    )
 
     if (contentLength) headers.set("Content-Length", String(contentLength))
     if (lastModified) headers.set("Last-Modified", lastModified)
@@ -83,6 +91,6 @@ export async function GET(
       headers,
     })
   } catch {
-    return NextResponse.json({ error: "Memory is unavailable" }, { status: 404 })
+    return jsonError("Memory is unavailable", 404)
   }
 }

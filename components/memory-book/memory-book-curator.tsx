@@ -123,6 +123,7 @@ export function MemoryBookCurator({
   const [shareSlug, setShareSlug] = useState(initialBook.share_slug)
   const [shareUrl, setShareUrl] = useState(initialShareUrl)
   const [pin, setPin] = useState("")
+  const [confirmPin, setConfirmPin] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [libraryItems, setLibraryItems] = useState(mediaLibrary)
   const [mediaCursor, setMediaCursor] = useState(initialMediaCursor)
@@ -503,7 +504,7 @@ export function MemoryBookCurator({
     }
   }
 
-  const removeUploadedAsset = async (asset: MemoryBookAssetRecord) => {
+  const removeBookAsset = async (asset: MemoryBookAssetRecord) => {
     setError(null)
     await flushBookPatch()
     setWorkingId(asset.id)
@@ -514,14 +515,14 @@ export function MemoryBookCurator({
       )
       const result = await response.json()
       if (!response.ok) {
-        throw new Error(result.error || "Unable to remove uploaded photo")
+        throw new Error(result.error || "Unable to remove this memory")
       }
       await refreshBook()
     } catch (cause) {
       setError(
         cause instanceof Error
           ? cause.message
-          : "Unable to remove uploaded photo"
+          : "Unable to remove this memory"
       )
     } finally {
       setWorkingId(null)
@@ -731,6 +732,8 @@ export function MemoryBookCurator({
 
       setShareUrl(result.shareUrl)
       setShareSlug(result.shareSlug)
+      setPin("")
+      setConfirmPin("")
       setPublishOpen(false)
       posthog.capture("memory_book_published", {
         revision_number: result.revisionNumber,
@@ -852,7 +855,7 @@ export function MemoryBookCurator({
           workingId={workingId}
           uploading={uploading}
           onToggle={toggleLibraryAsset}
-          onRemoveUploadedAsset={removeUploadedAsset}
+          onRemoveUploadedAsset={removeBookAsset}
           onRetryPreview={retryLibraryPreview}
           onMediaError={refreshMediaUrls}
           onUpload={uploadPhotos}
@@ -881,6 +884,7 @@ export function MemoryBookCurator({
           onLoadMoreMedia={loadMoreMedia}
           onDraftChange={(draftDocument) => queueBookPatch({ draftDocument })}
           onAssetUpdate={updateAsset}
+          onRemoveAsset={removeBookAsset}
           onRetryAsset={retryAsset}
           onMediaError={refreshMediaUrls}
         />
@@ -893,9 +897,11 @@ export function MemoryBookCurator({
         canPublishDraft={canPublishDraft}
         publishBlockers={publishBlockers}
         pin={pin}
+        confirmPin={confirmPin}
         shareSlug={shareSlug}
         publishing={publishing}
         onPinChange={setPin}
+        onConfirmPinChange={setConfirmPin}
         onShareSlugChange={setShareSlug}
         onPatch={queueBookPatch}
         onPublish={publishBook}
@@ -1105,7 +1111,12 @@ function MemorySelectionStep({
               <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 to-transparent px-3 pb-3 pt-10 text-white">
                 <span className="block truncate text-sm font-semibold">{option.title}</span>
                 <span className="mt-0.5 block text-[11px] text-white/72">
-                  {new Date(option.createdAt).toLocaleDateString()}
+                  {new Intl.DateTimeFormat("en-GB", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    timeZone: "UTC",
+                  }).format(new Date(option.createdAt))}
                 </span>
               </span>
               <span
@@ -1195,9 +1206,11 @@ function PublishDialog({
   canPublishDraft,
   publishBlockers,
   pin,
+  confirmPin,
   shareSlug,
   publishing,
   onPinChange,
+  onConfirmPinChange,
   onShareSlugChange,
   onPatch,
   onPublish,
@@ -1209,9 +1222,11 @@ function PublishDialog({
   canPublishDraft: boolean
   publishBlockers: string[]
   pin: string
+  confirmPin: string
   shareSlug: string
   publishing: boolean
   onPinChange: (value: string) => void
+  onConfirmPinChange: (value: string) => void
   onShareSlugChange: (value: string) => void
   onPatch: (patch: BookPatch) => void
   onPublish: () => void
@@ -1322,19 +1337,36 @@ function PublishDialog({
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold">
               <LockKeyhole className="size-4 text-[#47736c]" />
-              Optional 4–8 digit PIN
+              Required six-digit PIN
             </label>
-            <Input
-              value={pin}
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={8}
-              className="mt-2"
-              placeholder="Leave empty for link-only access"
-              onChange={(event) =>
-                onPinChange(event.target.value.replace(/\D/g, "").slice(0, 8))
-              }
-            />
+            <p className="mt-1 text-xs text-black/50">Family members enter this once per browser. Republish or change it to sign everyone out.</p>
+            <div className="mt-2 grid gap-2 sm:grid-cols-2">
+              <Input
+                value={pin}
+                inputMode="numeric"
+                autoComplete="new-password"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                placeholder="Six-digit PIN"
+                onChange={(event) =>
+                  onPinChange(event.target.value.replace(/\D/g, "").slice(0, 6))
+                }
+              />
+              <Input
+                value={confirmPin}
+                inputMode="numeric"
+                autoComplete="new-password"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                placeholder="Confirm PIN"
+                onChange={(event) =>
+                  onConfirmPinChange(event.target.value.replace(/\D/g, "").slice(0, 6))
+                }
+              />
+            </div>
+            {confirmPin && pin !== confirmPin ? (
+              <p className="mt-1 text-xs text-red-700">PINs do not match.</p>
+            ) : null}
           </div>
           <div
             className={[
@@ -1362,7 +1394,8 @@ function PublishDialog({
               !canPublishDraft ||
               !shareSlugResult.success ||
               !book.preservation_consent ||
-              (pin.length > 0 && pin.length < 4) ||
+              pin.length !== 6 ||
+              pin !== confirmPin ||
               Boolean(entitlement?.live_book_id && entitlement.live_book_id !== book.id)
             }
             className="bg-[#1f2c27] text-white"

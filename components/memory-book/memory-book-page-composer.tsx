@@ -8,7 +8,6 @@ import {
   ImageIcon,
   Loader2,
   Plus,
-  Replace,
   RotateCcw,
   Trash2,
   Upload,
@@ -22,10 +21,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  assignAssetToMemoryBookDraft,
-  createEmptyMemoryBookSpread,
-} from "@/lib/memory-book/draft"
+import { createEmptyMemoryBookSpread } from "@/lib/memory-book/draft"
 import type {
   CuratorMediaOption,
   MemoryBookAssetRecord,
@@ -50,7 +46,6 @@ import {
 } from "./mobile-memory-book-page"
 
 type SelectedPage = "cover" | "closing" | number
-type ReplacementTarget = { pageIndex: number; slotIndex: number } | null
 
 type Reaction = {
   id: string
@@ -77,6 +72,7 @@ export function MemoryBookPageComposer({
   onLoadMoreMedia,
   onDraftChange,
   onAssetUpdate,
+  onRemoveAsset,
   onRetryAsset,
   onMediaError,
 }: {
@@ -105,14 +101,13 @@ export function MemoryBookPageComposer({
     asset: MemoryBookAssetRecord,
     patch: { caption?: string }
   ) => Promise<void>
+  onRemoveAsset: (asset: MemoryBookAssetRecord) => Promise<void>
   onRetryAsset: (asset: MemoryBookAssetRecord) => Promise<void>
   onMediaError: () => void
 }) {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(
     draft.spreads.length ? 0 : "cover"
   )
-  const [replacementTarget, setReplacementTarget] =
-    useState<ReplacementTarget>(null)
   const [pageMediaTarget, setPageMediaTarget] = useState<string | null>(null)
   const sourceMap = useMemo(
     () => new Map(assetSources.map((source) => [source.id, source])),
@@ -122,17 +117,7 @@ export function MemoryBookPageComposer({
     () => new Map(assets.map((asset) => [asset.id, asset])),
     [assets]
   )
-  const assignedIds = useMemo(
-    () => new Set(draft.spreads.flatMap((spread) => spread.assetIds)),
-    [draft.spreads]
-  )
-  const unusedAssets = useMemo(
-    () =>
-      assets
-        .filter((asset) => !asset.is_hidden && !assignedIds.has(asset.id))
-        .sort((a, b) => a.position - b.position),
-    [assets, assignedIds]
-  )
+
   const availableGallery = useMemo(
     () =>
       mediaLibrary.filter(
@@ -181,12 +166,6 @@ export function MemoryBookPageComposer({
     setSelectedPage(spreads.length ? Math.min(index, spreads.length - 1) : "cover")
   }
 
-  const removeFromPage = (pageIndex: number, assetId: string) => {
-    const spread = draft.spreads[pageIndex]
-    updateSpread(pageIndex, {
-      assetIds: spread.assetIds.filter((id) => id !== assetId),
-    })
-  }
 
   const moveAssetToPage = (assetId: string, targetPageIndex: number) => {
     const sourcePageIndex = draft.spreads.findIndex((spread) =>
@@ -227,52 +206,6 @@ export function MemoryBookPageComposer({
       }),
     })
     setSelectedPage(targetPageIndex)
-  }
-
-  const replaceAsset = (assetId: string) => {
-    if (!replacementTarget) return
-    onDraftChange({
-      ...draft,
-      spreads: draft.spreads.map((spread, index) => {
-        const withoutReplacement = spread.assetIds.filter((id) => id !== assetId)
-        if (index !== replacementTarget.pageIndex) {
-          return { ...spread, assetIds: withoutReplacement }
-        }
-        const next = [...withoutReplacement]
-        next[replacementTarget.slotIndex] = assetId
-        return { ...spread, assetIds: next.filter(Boolean).slice(0, 2) }
-      }),
-    })
-    setSelectedPage(replacementTarget.pageIndex)
-    setReplacementTarget(null)
-  }
-
-  const addUnusedAsset = (assetId: string) => {
-    const next = assignAssetToMemoryBookDraft(draft, assetId)
-    onDraftChange(next)
-    const pageIndex = next.spreads.findIndex((spread) =>
-      spread.assetIds.includes(assetId)
-    )
-    if (pageIndex >= 0) setSelectedPage(pageIndex)
-  }
-
-  const addExistingAssetToPage = (assetId: string, spreadId: string) => {
-    const target = draft.spreads.find((spread) => spread.id === spreadId)
-    if (!target || target.assetIds.length >= 2) return
-    onDraftChange({
-      ...draft,
-      spreads: draft.spreads.map((spread) => ({
-        ...spread,
-        assetIds:
-          spread.id === spreadId
-            ? [...spread.assetIds.filter((id) => id !== assetId), assetId]
-            : spread.assetIds.filter((id) => id !== assetId),
-      })),
-    })
-    setSelectedPage(
-      draft.spreads.findIndex((spread) => spread.id === spreadId)
-    )
-    setPageMediaTarget(null)
   }
 
   const pageMediaTargetSpread = pageMediaTarget
@@ -365,7 +298,7 @@ export function MemoryBookPageComposer({
 
                     {spreadAssets.length ? (
                       <div className="grid gap-3 sm:grid-cols-2">
-                        {spreadAssets.map((asset, slotIndex) => (
+                        {spreadAssets.map((asset) => (
                           <article key={asset.id} className="rounded-xl border border-black/8 bg-[#faf9f6] p-3">
                             <MemoryThumbnail
                               asset={asset}
@@ -375,11 +308,16 @@ export function MemoryBookPageComposer({
                             />
                             <div className="mt-3 flex items-center gap-1">
                               <p className="min-w-0 flex-1 truncate text-xs font-semibold text-black/55">{asset.original_label}</p>
-                              <Button type="button" variant="ghost" size="icon" className="size-8" title="Replace memory" onClick={() => setReplacementTarget({ pageIndex: index, slotIndex })}>
-                                <Replace className="size-4" />
-                              </Button>
-                              <Button type="button" variant="ghost" size="icon" className="size-8" title="Move to unused memories" onClick={() => removeFromPage(index, asset.id)}>
-                                <Trash2 className="size-4" />
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="size-8 text-red-600"
+                                title="Remove from this book"
+                                disabled={workingId === asset.id}
+                                onClick={() => void onRemoveAsset(asset)}
+                              >
+                                {workingId === asset.id ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
                               </Button>
                             </div>
                             <label className="mt-2 block text-xs font-semibold text-black/55">
@@ -436,7 +374,7 @@ export function MemoryBookPageComposer({
                       <div className="rounded-xl border border-dashed border-black/15 bg-[#faf9f6] px-5 py-8 text-center">
                         <ImageIcon className="mx-auto size-6 text-black/28" />
                         <p className="mt-2 text-sm font-semibold">This page is empty.</p>
-                        <p className="mt-1 text-xs text-black/45">Add a memory from the unused tray below.</p>
+                        <p className="mt-1 text-xs text-black/45">Choose a photo from your gallery or upload one from this device.</p>
                       </div>
                     )}
 
@@ -506,15 +444,6 @@ export function MemoryBookPageComposer({
             ) : null}
           </ComposerCard>
 
-          <UnusedMemories
-            assets={unusedAssets}
-            sourceMap={sourceMap}
-            canAdd={draft.spreads.some((spread) => spread.assetIds.length < 2) || draft.spreads.length < 6}
-            onAdd={addUnusedAsset}
-            onError={onMediaError}
-          />
-
-
           {reactions.length ? (
             <div className="rounded-xl border border-black/8 bg-white p-4">
               <p className="font-bold">Private reactions</p>
@@ -552,8 +481,7 @@ export function MemoryBookPageComposer({
               : ""}
           </DialogTitle>
           <DialogDescription>
-            Choose from memories already in this book, your BringBack gallery,
-            or upload from this device.
+            Choose from your BringBack gallery or upload from this device.
           </DialogDescription>
 
           <label className="mt-2 flex cursor-pointer items-center justify-center gap-3 rounded-xl border border-dashed border-[#47736c]/40 bg-[#f7faf8] px-5 py-6 text-sm font-semibold text-[#315d55] hover:bg-[#edf5f1]">
@@ -586,35 +514,6 @@ export function MemoryBookPageComposer({
               }}
             />
           </label>
-
-          {unusedAssets.length ? (
-            <section className="mt-5">
-              <h3 className="text-sm font-bold">Unused memories in this book</h3>
-              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-                {unusedAssets.map((asset) => (
-                  <button
-                    key={asset.id}
-                    type="button"
-                    className="overflow-hidden rounded-xl border border-black/8 bg-white text-left hover:border-[#47736c]"
-                    onClick={() =>
-                      pageMediaTarget &&
-                      addExistingAssetToPage(asset.id, pageMediaTarget)
-                    }
-                  >
-                    <MemoryThumbnail
-                      asset={asset}
-                      source={sourceMap.get(asset.id)}
-                      className="aspect-square w-full"
-                      onError={onMediaError}
-                    />
-                    <span className="block truncate p-2 text-xs font-semibold">
-                      {asset.original_label}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </section>
-          ) : null}
 
           <section className="mt-5">
             <h3 className="text-sm font-bold">Your BringBack gallery</h3>
@@ -684,25 +583,6 @@ export function MemoryBookPageComposer({
               </Button>
             ) : null}
           </section>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={Boolean(replacementTarget)} onOpenChange={(open) => !open && setReplacementTarget(null)}>
-        <DialogContent className="max-w-3xl">
-          <DialogTitle>Replace this memory</DialogTitle>
-          <DialogDescription>The current memory returns to the unused tray.</DialogDescription>
-          {unusedAssets.length ? (
-            <div className="grid max-h-[65svh] grid-cols-2 gap-3 overflow-auto sm:grid-cols-3 md:grid-cols-4">
-              {unusedAssets.map((asset) => (
-                <button key={asset.id} type="button" className="overflow-hidden rounded-xl border border-black/8 bg-white text-left" onClick={() => replaceAsset(asset.id)}>
-                  <MemoryThumbnail asset={asset} source={sourceMap.get(asset.id)} className="aspect-square w-full" onError={onMediaError} />
-                  <span className="block truncate p-2 text-xs font-semibold">{asset.original_label}</span>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <p className="rounded-lg bg-[#f5f5f2] p-5 text-sm text-black/55">There are no unused memories. Add another memory first.</p>
-          )}
         </DialogContent>
       </Dialog>
 
@@ -796,33 +676,6 @@ function buildPreviewStoryPage(
         status: assetStatus(asset),
       })),
   }
-}
-
-function UnusedMemories({ assets, sourceMap, canAdd, onAdd, onError }: {
-  assets: MemoryBookAssetRecord[]
-  sourceMap: Map<string, MemoryBookAssetSource>
-  canAdd: boolean
-  onAdd: (assetId: string) => void
-  onError: () => void
-}) {
-  return (
-    <section className="rounded-xl border border-black/8 bg-white p-4">
-      <div><p className="font-bold">Unused memories</p><p className="mt-1 text-xs text-black/45">Removing a photo from a page keeps it here.</p></div>
-      {assets.length ? (
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {assets.map((asset) => (
-            <article key={asset.id} className="overflow-hidden rounded-lg border border-black/8">
-              <MemoryThumbnail asset={asset} source={sourceMap.get(asset.id)} className="aspect-square w-full" onError={onError} />
-              <div className="p-2">
-                <p className="truncate text-xs font-semibold">{asset.original_label}</p>
-                <Button type="button" variant="ghost" size="sm" className="mt-1 w-full" disabled={!canAdd} onClick={() => onAdd(asset.id)}><Plus className="size-4" /> Add to page</Button>
-              </div>
-            </article>
-          ))}
-        </div>
-      ) : <p className="mt-4 rounded-lg bg-[#f5f5f2] p-4 text-sm text-black/45">Every selected memory is currently used.</p>}
-    </section>
-  )
 }
 
 function ComposerCard({ title, subtitle, selected, thumbnailStrip, onSelect, children }: {
