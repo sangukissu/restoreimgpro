@@ -151,7 +151,7 @@ export function MemoryBookLibrary({
                       </span>
                     </div>
                     <p className="mt-1 text-sm text-black/52">
-                      {readyCount} of 6–12 memories prepared
+                      {readyCount} of 6–20 memories prepared
                       <span className="mx-2 text-black/18">•</span>
                       Updated{" "}
                       {new Intl.DateTimeFormat("en-GB", {

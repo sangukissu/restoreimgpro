@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { MEMORY_BOOK_MAX_PAGES } from "./limits"
 
 export const memoryBookThemeSchema = z.literal("family_heritage_v1")
 export const memoryBookMediaTypeSchema = z.enum(["image", "video"])
@@ -17,7 +18,7 @@ export const memoryBookDraftDocumentSchema = z
       title: z.string().max(90),
       periodLabel: z.string().max(80),
     }),
-    spreads: z.array(memoryBookDraftSpreadSchema).max(6),
+    spreads: z.array(memoryBookDraftSpreadSchema).max(MEMORY_BOOK_MAX_PAGES),
     closingMessage: z.string().max(600),
   })
   .superRefine((draft, context) => {
@@ -68,7 +69,7 @@ export const memoryBookDocumentV1Schema = z.object({
     periodLabel: z.string().max(80),
   }),
   dedication: z.string().max(600),
-  spreads: z.array(memoryBookSpreadSchema).min(3).max(6),
+  spreads: z.array(memoryBookSpreadSchema).min(3).max(MEMORY_BOOK_MAX_PAGES),
   music: z.object({
     enabled: z.boolean(),
     trackId: z.literal("family-heritage-moonlight"),

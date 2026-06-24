@@ -269,10 +269,15 @@
   height: 100%;
   border-radius: 1px;
   object-fit: cover;
+  object-position: center center;
   filter: saturate(0.84) contrast(1.03);
   user-select: none;
 }
 
+
+.polaroidSmartCrop .polaroidMedia > img {
+  object-position: center 28%;
+}
 .polaroidPlaceholder {
   display: grid;
   width: 100%;
@@ -1571,6 +1576,7 @@
   aspect-ratio: 1.05 / 1;
   border-radius: 1px;
   object-fit: cover;
+  object-position: center 28%;
   filter: saturate(0.88) contrast(1.02);
 }
 

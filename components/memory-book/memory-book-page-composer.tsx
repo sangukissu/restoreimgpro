@@ -22,6 +22,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { createEmptyMemoryBookSpread } from "@/lib/memory-book/draft"
+import {
+  MEMORY_BOOK_MAX_ASSIGNED_MEMORIES,
+  MEMORY_BOOK_MAX_PAGES,
+} from "@/lib/memory-book/limits"
 import type {
   CuratorMediaOption,
   MemoryBookAssetRecord,
@@ -214,7 +218,7 @@ export function MemoryBookPageComposer({
   const pageMediaSlotsRemaining = pageMediaTargetSpread
     ? 2 - pageMediaTargetSpread.assetIds.length
     : 0
-  const canAddNewAsset = assets.filter((asset) => !asset.is_hidden).length < 12
+  const canAddNewAsset = assets.filter((asset) => !asset.is_hidden).length < MEMORY_BOOK_MAX_ASSIGNED_MEMORIES
 
   const previewProps = {
     selectedPage,
@@ -410,7 +414,7 @@ export function MemoryBookPageComposer({
           <Button
             type="button"
             variant="outline"
-            disabled={draft.spreads.length >= 6}
+            disabled={draft.spreads.length >= MEMORY_BOOK_MAX_PAGES}
             onClick={() => {
               const next = createEmptyMemoryBookSpread(draft)
               const newSpread = next.spreads.at(-1)

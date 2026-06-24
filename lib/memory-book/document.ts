@@ -5,6 +5,10 @@ import {
   type MemoryBookRecord,
 } from "./types"
 import { parseMemoryBookDraft, reconcileMemoryBookDraft } from "./draft"
+import {
+  MEMORY_BOOK_MAX_ASSIGNED_MEMORIES,
+  MEMORY_BOOK_MIN_ASSIGNED_MEMORIES,
+} from "./limits"
 
 export function limitWords(text: string, maxWords: number): string {
   if (!text) return ""
@@ -25,13 +29,13 @@ export function buildMemoryBookDocument(
   )
   const assignedIds = draft.spreads.flatMap((spread) => spread.assetIds)
   if (
-    assignedIds.length < 6 ||
-    assignedIds.length > 12 ||
+    assignedIds.length < MEMORY_BOOK_MIN_ASSIGNED_MEMORIES ||
+    assignedIds.length > MEMORY_BOOK_MAX_ASSIGNED_MEMORIES ||
     draft.spreads.some((spread) => spread.assetIds.length === 0) ||
     new Set(assignedIds).size !== assignedIds.length
   ) {
     throw new Error(
-      "A published book requires 6 to 12 uniquely assigned memories and no empty pages"
+      "A published book requires 6 to 20 uniquely assigned memories and no empty pages"
     )
   }
 

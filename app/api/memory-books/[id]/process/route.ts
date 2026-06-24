@@ -1,5 +1,6 @@
 import { after, NextResponse } from "next/server"
 import { z } from "zod"
+import { MEMORY_BOOK_MAX_ASSIGNED_MEMORIES } from "@/lib/memory-book/limits"
 import {
   ensureMemoryBookUploadPreviewJobs,
   processMemoryBookAssetJobs,
@@ -12,7 +13,7 @@ import {
 export const maxDuration = 60
 
 const processSchema = z.object({
-  assetIds: z.array(z.string().uuid()).max(12).default([]),
+  assetIds: z.array(z.string().uuid()).max(MEMORY_BOOK_MAX_ASSIGNED_MEMORIES).default([]),
 })
 
 export async function POST(

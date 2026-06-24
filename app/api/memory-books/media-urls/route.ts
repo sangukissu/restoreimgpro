@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import { MEMORY_BOOK_MAX_ASSIGNED_MEMORIES } from "@/lib/memory-book/limits"
 import {
   getOwnerCuratorMediaUrls,
   getOwnerMemoryBookAssetSources,
@@ -9,7 +10,7 @@ import type { MemoryBookAssetRecord } from "@/lib/memory-book/types"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
 const requestSchema = z.object({
-  assetIds: z.array(z.string().uuid()).max(12).default([]),
+  assetIds: z.array(z.string().uuid()).max(MEMORY_BOOK_MAX_ASSIGNED_MEMORIES).default([]),
   sources: z.array(z.object({
     sourceType: z.enum(["restoration", "family_portrait", "animation", "nostalgic_hug"]),
     sourceId: z.string().uuid(),

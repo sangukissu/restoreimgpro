@@ -9,6 +9,7 @@ import {
 } from "./storage"
 import { memoryBookDraftDocumentSchema } from "./types"
 import { parseMemoryBookDraft } from "./draft"
+import { MEMORY_BOOK_MAX_ASSIGNED_MEMORIES } from "./limits"
 
 type MemoryBookJob = {
   id: string
@@ -567,7 +568,12 @@ export async function ensureMemoryBookUploadPreviewJobs(input: {
     const processingIsStale =
       asset.status === "processing" &&
       new Date(asset.updated_at).getTime() < Date.now() - 2 * 60_000
-    if (asset.status !== "processing" || processingIsStale) {
+    const needsQueueState =
+      processingIsStale ||
+      asset.status !== "pending" ||
+      metadata.preservationStatus !== "ready" ||
+      metadata.previewStatus !== "queued"
+    if (needsQueueState) {
       await supabaseAdmin
         .from("memory_book_assets")
         .update({
@@ -602,17 +608,37 @@ export async function ensureMemoryBookUploadPreviewJobs(input: {
       .in("status", ["queued", "failed"])
       .neq("idempotency_key", idempotencyKey)
 
-    await supabaseAdmin.from("memory_book_jobs").upsert(
-      {
+    const { data: existingJob } = await supabaseAdmin
+      .from("memory_book_jobs")
+      .select("id, status")
+      .eq("idempotency_key", idempotencyKey)
+      .maybeSingle()
+
+    if (!existingJob) {
+      await supabaseAdmin.from("memory_book_jobs").insert({
         user_id: input.userId,
         book_id: input.bookId,
         asset_id: asset.id,
         job_type: "preserve_asset",
         idempotency_key: idempotencyKey,
         payload: { previewOnly: true },
-      },
-      { onConflict: "idempotency_key", ignoreDuplicates: true }
-    )
+      })
+    } else if (existingJob.status === "completed" || existingJob.status === "dead") {
+      await supabaseAdmin
+        .from("memory_book_jobs")
+        .update({
+          status: "queued",
+          attempts: 0,
+          result: null,
+          error_message: null,
+          available_at: new Date().toISOString(),
+          lease_expires_at: null,
+          locked_by: null,
+          completed_at: null,
+          payload: { previewOnly: true },
+        })
+        .eq("id", existingJob.id)
+    }
   }
 
   return previewAssetIds
@@ -624,7 +650,7 @@ export async function processMemoryBookAssetJobs(input: {
   assetIds: string[]
   limit?: number
 }) {
-  const assetIds = [...new Set(input.assetIds)].slice(0, 12)
+  const assetIds = [...new Set(input.assetIds)].slice(0, MEMORY_BOOK_MAX_ASSIGNED_MEMORIES)
   if (!assetIds.length) return []
 
   const now = new Date().toISOString()
@@ -644,7 +670,7 @@ export async function processMemoryBookAssetJobs(input: {
     .in("asset_id", assetIds)
     .lt("lease_expires_at", now)
 
-  const limit = Math.max(1, Math.min(input.limit || assetIds.length, 12))
+  const limit = Math.max(1, Math.min(input.limit || assetIds.length, MEMORY_BOOK_MAX_ASSIGNED_MEMORIES))
   const { data: candidates, error } = await supabaseAdmin
     .from("memory_book_jobs")
     .select("*")

@@ -13,6 +13,7 @@ import {
   requireMemoryBookUser,
   resolveMemorySource,
 } from "@/lib/memory-book/server"
+import { MEMORY_BOOK_MAX_ASSIGNED_MEMORIES } from "@/lib/memory-book/limits"
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
 const addAssetSchema = z.object({
@@ -47,9 +48,9 @@ export async function POST(
   }
 
   const assets = await getMemoryBookAssets(id, user.id)
-  if (assets.filter((asset) => !asset.is_hidden).length >= 12) {
+  if (assets.filter((asset) => !asset.is_hidden).length >= MEMORY_BOOK_MAX_ASSIGNED_MEMORIES) {
     return NextResponse.json(
-      { error: "A Family Heritage book can contain up to 12 memories" },
+      { error: "A Family Heritage book can contain up to 20 memories" },
       { status: 409 }
     )
   }

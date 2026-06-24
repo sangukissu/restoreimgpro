@@ -12,6 +12,7 @@ interface PolaroidProps {
   mediaType?: "image" | "video"
   status?: "queued" | "processing" | "ready" | "failed"
   onPhotoOpen?: (photo: MemoryPhoto) => void
+  smartCrop?: boolean
 }
 
 export function Polaroid({
@@ -23,6 +24,7 @@ export function Polaroid({
   mediaType = "image",
   status = "ready",
   onPhotoOpen,
+  smartCrop = false,
 }: PolaroidProps) {
   const imageSrc = photo?.src || src || ""
   const imageAlt = photo?.alt || alt || "Memory photo"
@@ -31,6 +33,7 @@ export function Polaroid({
     styles.polaroid,
     compact ? styles.polaroidCompact : "",
     isInteractive ? styles.polaroidInteractive : "",
+    smartCrop ? styles.polaroidSmartCrop : "",
   ].join(" ")
   const style = { "--rotate": `${rotation}deg` } as CSSProperties
   const content = (

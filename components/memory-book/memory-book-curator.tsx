@@ -47,6 +47,10 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { buildMemoryBookDocument } from "@/lib/memory-book/document"
+import {
+  MEMORY_BOOK_MAX_ASSIGNED_MEMORIES,
+  MEMORY_BOOK_MIN_ASSIGNED_MEMORIES,
+} from "@/lib/memory-book/limits"
 import { memoryBookShareSlugSchema, normalizeMemoryBookShareSlug } from "@/lib/memory-book/share-slug"
 import { parseMemoryBookDraft, reconcileMemoryBookDraft } from "@/lib/memory-book/draft"
 import type {
@@ -109,7 +113,7 @@ export function MemoryBookCurator({
   const [assets, setAssets] = useState(initialAssets)
   const [assetSources, setAssetSources] = useState(initialAssetSources)
   const [step, setStep] = useState<"memories" | "story">(
-    initialAssets.filter((asset) => !asset.is_hidden).length >= 6
+    initialAssets.filter((asset) => !asset.is_hidden).length >= MEMORY_BOOK_MIN_ASSIGNED_MEMORIES
       ? "story"
       : "memories"
   )
@@ -326,10 +330,10 @@ export function MemoryBookCurator({
     ).length
     const preparingCount = Math.max(0, assignedCount - assignedReadyCount)
 
-    if (assignedCount < 6) {
-      blockers.push(`Add ${6 - assignedCount} more ${6 - assignedCount === 1 ? "memory" : "memories"} to the book.`)
-    } else if (assignedCount > 12) {
-      blockers.push(`Remove ${assignedCount - 12} ${assignedCount - 12 === 1 ? "memory" : "memories"}; a book supports up to 12.`)
+    if (assignedCount < MEMORY_BOOK_MIN_ASSIGNED_MEMORIES) {
+      blockers.push(`Add ${MEMORY_BOOK_MIN_ASSIGNED_MEMORIES - assignedCount} more ${MEMORY_BOOK_MIN_ASSIGNED_MEMORIES - assignedCount === 1 ? "memory" : "memories"} to the book.`)
+    } else if (assignedCount > MEMORY_BOOK_MAX_ASSIGNED_MEMORIES) {
+      blockers.push(`Remove ${assignedCount - MEMORY_BOOK_MAX_ASSIGNED_MEMORIES} ${assignedCount - MEMORY_BOOK_MAX_ASSIGNED_MEMORIES === 1 ? "memory" : "memories"}; a book supports up to 20.`)
     }
     if (uniqueCount !== assignedCount) {
       blockers.push("A memory is assigned to more than one page.")
@@ -362,19 +366,43 @@ export function MemoryBookCurator({
     if (!assignedPreparingKey) return
 
     let cancelled = false
-    void fetch(`/api/memory-books/${book.id}/process`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ assetIds: assignedPreparingKey.split(":") }),
-    })
+    const assetIds = assignedPreparingKey.split(":")
+    const timers = new Set<number>()
 
-    const poll = window.setInterval(() => {
-      if (!cancelled) void refreshBook()
-    }, 4000)
+    const scheduleRefresh = (delayMs: number) => {
+      const timer = window.setTimeout(() => {
+        timers.delete(timer)
+        if (!cancelled && !Object.keys(pendingPatchRef.current).length) {
+          void refreshBook()
+        }
+      }, delayMs)
+      timers.add(timer)
+    }
+
+    const requestProcessing = async (refreshAfter = false) => {
+      try {
+        await fetch(`/api/memory-books/${book.id}/process`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ assetIds }),
+        })
+      } finally {
+        if (refreshAfter) scheduleRefresh(6000)
+      }
+    }
+
+    void requestProcessing(true)
+    const processTimer = window.setInterval(() => {
+      if (!cancelled && document.visibilityState !== "hidden") {
+        void requestProcessing(true)
+      }
+    }, 30000)
 
     return () => {
       cancelled = true
-      window.clearInterval(poll)
+      window.clearInterval(processTimer)
+      timers.forEach((timer) => window.clearTimeout(timer))
+      timers.clear()
     }
   }, [assignedPreparingKey, book.id, refreshBook])
 
@@ -580,10 +608,10 @@ export function MemoryBookCurator({
     try {
       const remainingSlots = Math.max(
         0,
-        12 - assets.filter((asset) => !asset.is_hidden).length
+        MEMORY_BOOK_MAX_ASSIGNED_MEMORIES - assets.filter((asset) => !asset.is_hidden).length
       )
       if (remainingSlots === 0) {
-        throw new Error("This memory book already contains 12 memories")
+        throw new Error("This memory book already contains 20 memories")
       }
       const selectedFiles = pendingFiles.slice(0, remainingSlots)
 
@@ -997,7 +1025,7 @@ function MemorySelectionStep({
           </span>
           <Button
             onClick={onContinue}
-            disabled={selectedCount < 6 || selectedCount > 12}
+            disabled={selectedCount < MEMORY_BOOK_MIN_ASSIGNED_MEMORIES || selectedCount > MEMORY_BOOK_MAX_ASSIGNED_MEMORIES}
             className="bg-[#1f2c27] text-white"
           >
             Compose pages
@@ -1076,7 +1104,7 @@ function MemorySelectionStep({
                   onToggle(option)
                 }
               }}
-              disabled={workingId === option.id || (!selected && selectedCount >= 12)}
+              disabled={workingId === option.id || (!selected && selectedCount >= MEMORY_BOOK_MAX_ASSIGNED_MEMORIES)}
               className={[
                 "group relative aspect-[4/5] overflow-hidden rounded-md border bg-white text-left shadow-sm outline-none transition",
                 selected
@@ -1150,7 +1178,7 @@ function MemorySelectionStep({
             accept="image/jpeg,image/png,image/webp"
             multiple
             className="sr-only"
-            disabled={uploading || selectedCount >= 12}
+            disabled={uploading || selectedCount >= MEMORY_BOOK_MAX_ASSIGNED_MEMORIES}
             onChange={(event) => {
               void onUpload(event.target.files)
               event.target.value = ""

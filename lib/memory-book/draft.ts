@@ -3,6 +3,10 @@ import {
   type MemoryBookAssetRecord,
   type MemoryBookDraftDocument,
 } from "./types"
+import {
+  MEMORY_BOOK_MAX_ASSIGNED_MEMORIES,
+  MEMORY_BOOK_MAX_PAGES,
+} from "./limits"
 
 export const DEFAULT_SPREAD_HEADINGS = [
   "Where our story begins",
@@ -49,7 +53,7 @@ export function parseMemoryBookDraft(value: unknown): MemoryBookDraftDocument {
       ? (candidate.cover as Record<string, unknown>)
       : {}
   const rawSpreads = Array.isArray(candidate.spreads)
-    ? candidate.spreads.slice(0, 6)
+    ? candidate.spreads.slice(0, MEMORY_BOOK_MAX_PAGES)
     : []
   const seen = new Set<string>()
 
@@ -118,7 +122,7 @@ export function reconcileMemoryBookDraft(
   const availableAssets = assets
     .filter((asset) => !asset.is_hidden)
     .sort((a, b) => a.position - b.position)
-    .slice(0, 12)
+    .slice(0, MEMORY_BOOK_MAX_ASSIGNED_MEMORIES)
   const availableIds = new Set(availableAssets.map((asset) => asset.id))
   const seen = new Set<string>()
 
@@ -176,7 +180,7 @@ export function assignAssetToMemoryBookDraft(
     })
   }
 
-  if (draft.spreads.length >= 6) return draft
+  if (draft.spreads.length >= MEMORY_BOOK_MAX_PAGES) return draft
   return memoryBookDraftDocumentSchema.parse({
     ...draft,
     spreads: [
@@ -213,7 +217,7 @@ export function assignAssetToMemoryBookSpread(
 export function createEmptyMemoryBookSpread(
   draft: MemoryBookDraftDocument
 ): MemoryBookDraftDocument {
-  if (draft.spreads.length >= 6) return draft
+  if (draft.spreads.length >= MEMORY_BOOK_MAX_PAGES) return draft
   return memoryBookDraftDocumentSchema.parse({
     ...draft,
     spreads: [

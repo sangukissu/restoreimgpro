@@ -78,6 +78,7 @@ export function MemoryBookStoryPage({
               compact
               mediaType={asset.mediaType}
               status={asset.status || source?.previewStatus || "ready"}
+              smartCrop
               onPhotoOpen={onAssetOpen ? () => onAssetOpen(asset.id) : undefined}
             />
           )

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import { MEMORY_BOOK_MAX_ASSIGNED_MEMORIES } from "@/lib/memory-book/limits"
 import {
   parseMemoryBookDraft,
   reconcileMemoryBookDraft,
@@ -13,7 +14,7 @@ import { supabaseAdmin } from "@/utils/supabase/admin"
 
 const reorderSchema = z.object({
   expectedVersion: z.number().int().positive(),
-  assetIds: z.array(z.string().uuid()).min(1).max(12),
+  assetIds: z.array(z.string().uuid()).min(1).max(MEMORY_BOOK_MAX_ASSIGNED_MEMORIES),
 })
 
 export async function POST(
