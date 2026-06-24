@@ -28,6 +28,7 @@ begin
   where id = p_book_id and user_id = v_user_id
   for update;
 
+
   if not found then raise exception 'Memory book not found'; end if;
   if v_book.draft_version <> p_expected_version then raise exception 'STALE_VERSION'; end if;
   if not v_book.preservation_consent then raise exception 'Preservation consent is required'; end if;
