@@ -28,7 +28,7 @@ export function Polaroid({
 }: PolaroidProps) {
   const imageSrc = photo?.src || src || ""
   const imageAlt = photo?.alt || alt || "Memory photo"
-  const isInteractive = Boolean(photo && onPhotoOpen && status === "ready")
+  const isInteractive = Boolean(photo && onPhotoOpen && imageSrc)
   const className = [
     styles.polaroid,
     compact ? styles.polaroidCompact : "",
