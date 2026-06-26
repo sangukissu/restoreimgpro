@@ -8,7 +8,7 @@ import {
 import { supabaseAdmin } from "@/utils/supabase/admin"
 
 const retrySchema = z.object({
-  sourceType: z.enum(["restoration", "family_portrait", "add_person", "animation", "nostalgic_hug"]),
+  sourceType: z.enum(["restoration", "family_portrait", "add_person", "remove_person", "animation", "nostalgic_hug"]),
   sourceId: z.string().uuid(),
 })
 

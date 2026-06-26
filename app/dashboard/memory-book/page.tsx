@@ -14,6 +14,7 @@ const SOURCE_TYPES = new Set([
   "restoration",
   "family_portrait",
   "add_person",
+  "remove_person",
   "animation",
   "nostalgic_hug",
 ])
@@ -78,6 +79,7 @@ export default async function MemoryBookPage({
             | "restoration"
             | "family_portrait"
             | "add_person"
+            | "remove_person"
             | "animation"
             | "nostalgic_hug",
         }

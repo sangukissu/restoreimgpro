@@ -35,6 +35,19 @@ export function validateOwnedTempAddPersonKey(key: string, userId: string): bool
   return parts.length >= 4 && parts[0] === "temp" && parts[1] === "add-person" && parts[2] === userId
 }
 
+
+export function validateOwnedTempRemovePersonKey(key: string, userId: string): boolean {
+  if (typeof key !== "string" || key.length === 0 || key.length > 1024) {
+    return false
+  }
+
+  if (key.includes("..") || key.startsWith("http://") || key.startsWith("https://")) {
+    return false
+  }
+
+  const parts = key.split("/")
+  return parts.length >= 4 && parts[0] === "temp" && parts[1] === "remove-person" && parts[2] === userId
+}
 function cleanFilename(filename: string) {
   return filename.replace(/[^a-zA-Z0-9.-]/g, "_").slice(0, 120) || "original-image"
 }

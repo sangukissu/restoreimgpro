@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     // 3. Generate a unique key/path for the file in R2 under the temp/ prefix.
     // Allow callers to scope the temp object to a feature folder; default to
     // family-portraits for backward compatibility.
-    const allowedFolders = ["family-portraits", "restorations", "add-person", "temp"]
+    const allowedFolders = ["family-portraits", "restorations", "add-person", "remove-person", "temp"]
     const safeFolder = typeof folder === "string" && allowedFolders.includes(folder)
       ? folder
       : "family-portraits"

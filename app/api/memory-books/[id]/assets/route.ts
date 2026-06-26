@@ -21,6 +21,7 @@ const addAssetSchema = z.object({
     "restoration",
     "family_portrait",
     "add_person",
+    "remove_person",
     "animation",
     "nostalgic_hug",
   ]),

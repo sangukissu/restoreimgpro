@@ -136,6 +136,7 @@ async function getCuratorMediaCandidates(
   let restorationsQuery = supabaseAdmin.from("image_restorations").select("id, restored_image_url, created_at").eq("user_id", userId).eq("status", "completed").not("restored_image_url", "is", null).order("created_at", { ascending: false }).limit(perSourceLimit)
   let portraitsQuery = supabaseAdmin.from("family_portraits").select("id, composed_image_url, created_at").eq("user_id", userId).eq("status", "completed").order("created_at", { ascending: false }).limit(perSourceLimit)
   let addPersonQuery = supabaseAdmin.from("add_person_generations").select("id, composed_image_url, created_at").eq("user_id", userId).eq("status", "completed").order("created_at", { ascending: false }).limit(perSourceLimit)
+  let removePersonQuery = supabaseAdmin.from("remove_person_generations").select("id, result_image_url, created_at").eq("user_id", userId).eq("status", "completed").order("created_at", { ascending: false }).limit(perSourceLimit)
   let animationsQuery = supabaseAdmin.from("video_generations").select("id, video_url, original_image_url, preset_name, created_at").eq("user_id", userId).eq("status", "completed").not("video_url", "is", null).order("created_at", { ascending: false }).limit(perSourceLimit)
   let hugsQuery = supabaseAdmin.from("nostalgic_hug_generations").select("id, video_url, hug_image_url, created_at").eq("user_id", userId).eq("status", "completed").not("video_url", "is", null).order("created_at", { ascending: false }).limit(perSourceLimit)
 
@@ -143,14 +144,16 @@ async function getCuratorMediaCandidates(
     restorationsQuery = restorationsQuery.lt("created_at", before)
     portraitsQuery = portraitsQuery.lt("created_at", before)
     addPersonQuery = addPersonQuery.lt("created_at", before)
+    removePersonQuery = removePersonQuery.lt("created_at", before)
     animationsQuery = animationsQuery.lt("created_at", before)
     hugsQuery = hugsQuery.lt("created_at", before)
   }
 
-  const [{ data: restorations }, { data: portraits }, { data: addPersonItems }, { data: animations }, { data: hugs }] = await Promise.all([
+  const [{ data: restorations }, { data: portraits }, { data: addPersonItems }, { data: removePersonItems }, { data: animations }, { data: hugs }] = await Promise.all([
     restorationsQuery,
     portraitsQuery,
     addPersonQuery,
+    removePersonQuery,
     animationsQuery,
     hugsQuery,
   ])
@@ -159,6 +162,7 @@ async function getCuratorMediaCandidates(
     ...(restorations || []).map((item) => ({ id: item.id, sourceType: "restoration" as const, mediaType: "image" as const, title: "Restored photograph", createdAt: item.created_at, originalLocator: item.restored_image_url, previewLocator: item.restored_image_url })),
     ...(portraits || []).map((item) => ({ id: item.id, sourceType: "family_portrait" as const, mediaType: "image" as const, title: "Family portrait", createdAt: item.created_at, originalLocator: item.composed_image_url, previewLocator: item.composed_image_url })),
     ...(addPersonItems || []).map((item) => ({ id: item.id, sourceType: "add_person" as const, mediaType: "image" as const, title: "Added person photo", createdAt: item.created_at, originalLocator: item.composed_image_url, previewLocator: item.composed_image_url })),
+    ...(removePersonItems || []).map((item) => ({ id: item.id, sourceType: "remove_person" as const, mediaType: "image" as const, title: "Removed object photo", createdAt: item.created_at, originalLocator: item.result_image_url, previewLocator: item.result_image_url })),
     ...(animations || []).map((item) => ({ id: item.id, sourceType: "animation" as const, mediaType: "video" as const, title: item.preset_name || "Animated memory", createdAt: item.created_at, originalLocator: item.video_url, previewLocator: item.original_image_url || "" })),
     ...(hugs || []).map((item) => ({ id: item.id, sourceType: "nostalgic_hug" as const, mediaType: "video" as const, title: "Nostalgic Hug", createdAt: item.created_at, originalLocator: item.video_url, previewLocator: item.hug_image_url || "" })),
   ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -349,6 +353,23 @@ export async function resolveMemorySource(
           locator: data.composed_image_url as string,
           posterLocator: null,
           label: "Added person photo",
+        }
+      : null
+  }
+  if (sourceType === "remove_person") {
+    const { data } = await supabaseAdmin
+      .from("remove_person_generations")
+      .select("result_image_url")
+      .eq("id", sourceId)
+      .eq("user_id", userId)
+      .eq("status", "completed")
+      .single()
+    return data?.result_image_url
+      ? {
+          mediaType: "image" as const,
+          locator: data.result_image_url as string,
+          posterLocator: null,
+          label: "Removed object photo",
         }
       : null
   }

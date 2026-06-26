@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Image as ImageIcon, Users, Video, ChevronRight, Frame, Sparkles, UserPlus } from "lucide-react"
+import { Image as ImageIcon, Users, Video, ChevronRight, Frame, Sparkles, UserPlus, Eraser } from "lucide-react"
 
 interface MainDashboardClientProps {
   user: {
@@ -180,6 +180,39 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
               </div>
               <p className="text-gray-500 font-medium leading-relaxed text-xs">
                 Seamlessly insert someone into an existing photo.
+              </p>
+            </div>
+          </Link>
+          {/* Remove Person */}
+          <Link href="/dashboard/remove-person" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+            <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
+              <img src="/dashboard-compare.png" alt="Remove person preview" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute left-1/2 top-1/2 h-20 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-[#FF4D00] bg-[#FF4D00]/25" />
+              <div className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#111111] shadow-sm">
+                <Eraser className="h-5 w-5" />
+              </div>
+              <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                <div className="bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#FF4D00] animate-pulse"></div>
+                  2 CREDITS
+                </div>
+                <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-[10px] px-2 py-1 rounded-full font-bold flex items-center gap-1 shadow-lg">
+                  <img src="/icons/pro-icon.svg" alt="Pro" className="w-3 h-3" />
+                  PRO
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-[#111111] leading-tight">Remove Person</h3>
+                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-[#FF4D00] group-hover:border-[#FF4D00] transition-colors">
+                  <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-white" />
+                </div>
+              </div>
+              <p className="text-gray-500 font-medium leading-relaxed text-xs">
+                Brush over distractions and remove them cleanly.
               </p>
             </div>
           </Link>

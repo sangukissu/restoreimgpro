@@ -115,7 +115,7 @@ export interface MemoryBookAssetRecord {
   id: string
   book_id: string
   user_id: string
-  source_type: "restoration" | "family_portrait" | "add_person" | "animation" | "nostalgic_hug" | "upload"
+  source_type: "restoration" | "family_portrait" | "add_person" | "remove_person" | "animation" | "nostalgic_hug" | "upload"
   source_id: string | null
   media_type: "image" | "video"
   source_locator: string | null

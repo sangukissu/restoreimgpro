@@ -8,7 +8,7 @@ export const maxDuration = 60
 
 // Temp staging prefixes that hold one-shot uploads (presigned-upload-url writes
 // under these). They are safe to sweep once older than the retention window.
-const TEMP_PREFIXES = ["temp/family-portraits/", "temp/restorations/", "temp/add-person/"]
+const TEMP_PREFIXES = ["temp/family-portraits/", "temp/restorations/", "temp/add-person/", "temp/remove-person/"]
 
 // Keep temp objects for this long before deleting, so in-flight uploads and
 // retries have a comfortable window. Temp files are consumed within seconds of

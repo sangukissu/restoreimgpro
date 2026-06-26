@@ -14,6 +14,7 @@ import {
   WandSparkles,
   UsersRound,
   UserPlus,
+  Eraser,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -104,6 +105,7 @@ export function AppSidebar({
     { title: "Memory Book", url: "/dashboard/memory-book", icon: BookOpen },
     { title: "Family Portrait", url: "/dashboard/family-portrait", icon: UsersRound },
     { title: "Add Person", url: "/dashboard/add-person", icon: UserPlus },
+    { title: "Remove Person", url: "/dashboard/remove-person", icon: Eraser },
     { title: "Nostalgic Hug", url: "/dashboard/nostalgic-hug", icon: ImageIcon },
     { title: "My Media", url: "/dashboard/my-media", icon: Upload },
     { title: "Referrals", url: "/dashboard/referrals", icon: FolderOpen },

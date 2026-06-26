@@ -28,7 +28,7 @@ export function MemoryBookLibrary({
   entitlement: { live_book_id: string | null; source: string; granted_at: string } | null
   suggestedSource: {
     sourceId: string
-    sourceType: "restoration" | "family_portrait" | "add_person" | "animation" | "nostalgic_hug"
+    sourceType: "restoration" | "family_portrait" | "add_person" | "remove_person" | "animation" | "nostalgic_hug"
   } | null
 }) {
   const router = useRouter()
