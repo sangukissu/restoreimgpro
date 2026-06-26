@@ -107,7 +107,7 @@ export const Services: React.FC = () => {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
               How We Grow <br />
               <span className="text-gray-400">Your Business</span>
             </h2>
@@ -125,7 +125,7 @@ export const Services: React.FC = () => {
         <div className="flex flex-col gap-8">
           {SERVICES.map((service) => (
             /* The Container requested by user: Gray background, Rounded corners, Padding */
-            <div key={service.id} className="bg-brand-surface p-3 rounded-[3rem]">
+            <div key={service.id} className="bg-brand-surface p-2 rounded-[3rem]">
 
               {/* Inner Grid with Gap matching the padding visually */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 min-h-[500px]">

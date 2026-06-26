@@ -133,7 +133,7 @@ export default function ExamplesPage() {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
                Use Cases & Examples <br />
               <span className="text-gray-400">of Bringback AI</span>
             </h2>

@@ -81,7 +81,7 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
               <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
                 <span className="text-brand-orange">//</span> Latest <span className="text-brand-orange">//</span>
               </div>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+              <h1 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
                 Stories & <br />
                 <span className="text-gray-400">Restoration Tips.</span>
               </h1>
@@ -94,7 +94,7 @@ function BlogPageContent({ blogPosts }: { blogPosts: any[] }) {
           </div>
 
           {/* Blog Grid Container */}
-          <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="bg-brand-surface p-2 rounded-[1.8rem]">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {blogPosts.length > 0 ? (
                 blogPosts.map((post) => (

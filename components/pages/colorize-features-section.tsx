@@ -49,7 +49,7 @@ export default function ColorizeFeaturesSection() {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Advanced AI <br />
               <span className="text-gray-400">Colorization.</span>
             </h2>
@@ -64,7 +64,7 @@ export default function ColorizeFeaturesSection() {
         </div>
 
         {/* Grid Container - Gray Background */}
-        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+        <div className="bg-brand-surface p-2 rounded-[1.8rem]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {features.map((feature, index) => (
               <div

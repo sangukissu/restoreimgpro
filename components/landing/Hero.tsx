@@ -141,10 +141,10 @@ export const Hero: React.FC = () => {
 
 
           {/* Heading */}
-          <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-            Professional Photo Restoration <br />
+          <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
+            AI Photo <br /> Restoration & <br />
             <span className="text-gray-400 relative">
-              and Lifelike Animation
+              Photo-to-Video Animation
 
             </span>
           </h1>
@@ -217,7 +217,7 @@ Restore damaged family heirlooms to 4K glory in under 30 seconds. Our precision 
 
         {/* Right Column: Interactive Demo - Decreased to 6 cols */}
         <div className="lg:col-span-6 flex items-center justify-center w-full lg:h-full pt-12 lg:pt-0">
-          <div className="bg-brand-surface p-3 rounded-[2rem] w-full">
+          <div className="bg-brand-surface p-2 rounded-[2rem] w-full">
             <RestorationDemo />
           </div>
         </div>

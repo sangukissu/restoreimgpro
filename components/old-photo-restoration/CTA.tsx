@@ -7,7 +7,7 @@ export const CTA: React.FC = () => {
             <div className="max-w-[1320px] mx-auto">
 
                 {/* Main Surface Wrapper */}
-                <div className="bg-brand-surface p-3 rounded-[2.5rem]">
+                <div className="bg-brand-surface p-2 rounded-[2.5rem]">
 
                     {/* Inner Light Container */}
                     <div className="relative bg-white rounded-[2rem] p-6 sm:p-16 lg:p-20 overflow-hidden group shadow-sm">
@@ -21,7 +21,7 @@ export const CTA: React.FC = () => {
                                     <span className="text-brand-orange">//</span> Premium Quality <span className="text-brand-orange">//</span>
                                 </div>
 
-                                <h2 className="text-5xl sm:text-6xl lg:text-7xl font-[850] text-brand-black tracking-tighter leading-[0.95] mb-8">
+                                <h2 className="text-[3.5rem] sm:text-[4rem] font-[850] text-brand-black tracking-tighter leading-[0.95] mb-8">
                                     Ready to restore<br />
                                     <span className="text-gray-300">your memories?</span>
                                 </h2>

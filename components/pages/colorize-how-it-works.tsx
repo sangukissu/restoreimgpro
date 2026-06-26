@@ -158,7 +158,7 @@ export default function ColorizeHowItWorks() {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+                    <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
                         Add color <br />
                         <span className="text-gray-400/80">in 3 simple steps.</span>
                     </h2>
@@ -173,7 +173,7 @@ export default function ColorizeHowItWorks() {
             </div>
 
             {/* Steps Grid Container - Gray Background */}
-            <div className="bg-brand-surface p-3 rounded-[3rem]">
+            <div className="bg-brand-surface p-2 rounded-[3rem]">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                     {STEPS.map((step) => (
                         <div

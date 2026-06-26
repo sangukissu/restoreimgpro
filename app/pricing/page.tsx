@@ -94,7 +94,7 @@ export default function PricingPage() {
         {/* Brand Assurance: Free re-restoration note */}
         <section className="w-full px-4 sm:px-8">
           <div className="max-w-[1320px] mx-auto">
-            <div className="bg-brand-surface p-3 rounded-[2rem]">
+            <div className="bg-brand-surface p-2 rounded-[2rem]">
               <div className="bg-white rounded-[1.5rem] p-6 sm:p-10 flex items-center gap-4 sm:gap-6">
                 <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg shadow-black/10">
                   <span className="text-brand-orange">//</span> Assurance <span className="text-brand-orange">//</span>

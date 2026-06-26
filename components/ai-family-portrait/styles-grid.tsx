@@ -124,7 +124,7 @@ export const FamilyPortrait: React.FC = () => {
           </div>
 
           {/* Title */}
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+          <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
             Separate photos? <br />
             <span className="text-gray-400/80">One Family Portrait.</span>
           </h2>
@@ -139,7 +139,7 @@ export const FamilyPortrait: React.FC = () => {
       </div>
 
       {/* Main Content: Gray Surface Container */}
-      <div className="bg-brand-surface p-3 rounded-[3rem]">
+      <div className="bg-brand-surface p-2 rounded-[3rem]">
 
         {/* Split: Inputs and Result */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch mb-3">

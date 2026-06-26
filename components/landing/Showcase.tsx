@@ -142,7 +142,7 @@ export const Showcase: React.FC = () => {
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> Showcase <span className="text-brand-orange">//</span>
             </div>
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Restoration <br />
               <span className="text-gray-400">Capabilities</span>
             </h2>
@@ -155,7 +155,7 @@ export const Showcase: React.FC = () => {
         </div>
 
         {/* Main Layout: Gray Surface Container */}
-        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+        <div className="bg-brand-surface p-2 rounded-[1.8rem]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 h-auto lg:h-[600px]">
 
             {/* Left Column: Selection Menu (4 cols on desktop) */}

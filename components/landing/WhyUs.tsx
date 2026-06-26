@@ -47,7 +47,7 @@ export const WhyUs: React.FC = () => {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Keep your family <br />
               <span className="text-gray-400">history alive.</span>
             </h2>
@@ -93,7 +93,7 @@ export const WhyUs: React.FC = () => {
           </div>
 
           {/* Right Column: Stats Grid */}
-          <div className="lg:col-span-7 bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="lg:col-span-7 bg-brand-surface p-2 rounded-[1.8rem]">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 h-full">
               {STATS.map((stat, index) => (
                 <div

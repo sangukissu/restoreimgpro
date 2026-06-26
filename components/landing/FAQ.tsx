@@ -115,7 +115,7 @@ export const FAQ: React.FC<FAQProps> = ({
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
               {title}
             </h2>
 
@@ -127,7 +127,7 @@ export const FAQ: React.FC<FAQProps> = ({
 
           {/* Questions Column - The Frame */}
           <div className="lg:col-span-7">
-            <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+            <div className="bg-brand-surface p-2 rounded-[1.8rem]">
               <div className="flex flex-col gap-3">
                 {items.map((faq, index) => (
                   <AccordionItem

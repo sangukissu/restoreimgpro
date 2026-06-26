@@ -388,7 +388,7 @@ export const Benefits: React.FC = () => {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
               BringBack AI Advanced <br />
               <span className="text-gray-400">Restoration Features.</span>
             </h2>
@@ -403,7 +403,7 @@ export const Benefits: React.FC = () => {
         </div>
 
         {/* Benefits Grid Container - Gray Background */}
-        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+        <div className="bg-brand-surface p-2 rounded-[1.8rem]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {BENEFITS.map((item, index) => (
               <div

@@ -49,7 +49,7 @@ export default function ColorizeQualitySection() {
                 </div>
 
                 {/* Factors Grid */}
-                <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+                <div className="bg-brand-surface p-2 rounded-[1.8rem]">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {factors.map((factor, index) => (
                             <div key={index} className="flex flex-col gap-4 p-6 rounded-[1.5rem] bg-white hover:bg-gray-50 transition-colors">

@@ -222,7 +222,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ slug:
                       <div className="inline-flex items-center gap-1 bg-white/10 text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 border border-white/10">
                         <span className="text-[#FF4D00]">//</span> Professional Quality <span className="text-[#FF4D00]">//</span>
                       </div>
-                      <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
+                      <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-white leading-[1.1]">
                         {page.qualityAnalysis.heading}
                       </h2>
                     </div>
@@ -303,7 +303,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ slug:
                        <div className="inline-flex items-center gap-1 bg-white/10 text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 border border-white/10">
                          <span className="text-[#FF4D00]">//</span> Professional Quality <span className="text-[#FF4D00]">//</span>
                        </div>
-                       <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
+                       <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-white leading-[1.1]">
                          Real Results
                        </h2>
                      </div>
@@ -353,7 +353,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ slug:
                   <div className="inline-flex items-center gap-1 bg-[#111111] text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
                     <span className="text-[#FF4D00]">//</span> Process <span className="text-[#FF4D00]">//</span>
                   </div>
-                  <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#111111] leading-[1.1]">
+                  <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-[#111111] leading-[1.1]">
                     {page.howItWorks.heading}
                   </h2>
                 </div>
@@ -392,7 +392,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ slug:
                   <div className="inline-flex items-center gap-1 bg-[#111111] text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
                     <span className="text-[#FF4D00]">//</span> Why It Matters <span className="text-[#FF4D00]">//</span>
                   </div>
-                  <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#111111] leading-[1.1]">
+                  <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-[#111111] leading-[1.1]">
                     {page.benefits.heading}
                   </h2>
                 </div>
@@ -435,7 +435,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ slug:
                     <div className="inline-flex items-center gap-1 bg-white/10 text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 border border-white/10">
                       <span className="text-[#FF4D00]">//</span> Security <span className="text-[#FF4D00]">//</span>
                     </div>
-                    <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
+                    <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-white leading-[1.1]">
                       Your Privacy is <br />
                       <span className="text-gray-400">Non-Negotiable.</span>
                     </h2>

@@ -1,6 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
+import mime from "mime"
 import { createClient } from "@/utils/supabase/server"
+import { getR2SignedUrl } from "@/lib/r2"
 
 // Configure Fal AI client
 fal.config({
@@ -56,6 +58,43 @@ function getWebhookBaseUrl(request: NextRequest) {
   return configuredBaseUrl || request.nextUrl.origin
 }
 
+/**
+ * Validate that an R2 key belongs to the calling user (under temp/.../<userId>/)
+ * and is well-formed. This stops a user from submitting another user's key.
+ */
+function validateOwnedTempKey(key: string, userId: string): boolean {
+  if (typeof key !== "string" || key.length === 0 || key.length > 1024) {
+    return false
+  }
+  // Block path traversal / protocol-style keys
+  if (key.includes("..") || key.startsWith("http://") || key.startsWith("https://")) {
+    return false
+  }
+  const parts = key.split("/")
+  // Expected shape: temp / <folder> / <userId> / <file>
+  if (parts.length < 4 || parts[0] !== "temp") {
+    return false
+  }
+  return parts[2] === userId
+}
+
+/**
+ * Fetch an image already stored in R2 and re-upload it to Fal storage,
+ * returning a Fal-internal URL usable as image_urls input.
+ */
+async function uploadR2ObjectToFal(key: string): Promise<string> {
+  const signedUrl = await getR2SignedUrl(key)
+  const resp = await fetch(signedUrl)
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch uploaded image: ${resp.status}`)
+  }
+  const arrayBuf = await resp.arrayBuffer()
+  const contentType =
+    resp.headers.get("content-type") || mime.getType(key) || "image/png"
+  const blob = new Blob([arrayBuf], { type: contentType })
+  return fal.storage.upload(blob)
+}
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
@@ -88,32 +127,78 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Fal AI API key not configured" }, { status: 500 })
     }
 
-    // Parse form data
-    const formData = await request.formData()
-    const file = formData.get("image") as File
-    const seed = formData.get("seed") as string
-    const outputFormat = formData.get("output_format") as string
-    const safetyTolerance = formData.get("safety_tolerance") as string
+    const contentTypeHeader = request.headers.get("content-type") || ""
 
-    // Validate required fields
-    if (!file) {
-      return NextResponse.json({ error: "No image file provided" }, { status: 400 })
+    // Resolve the input image to a Fal storage URL. The preferred path is the
+    // browser-direct-to-R2 flow: the client uploads the file to R2 itself via a
+    // presigned PUT URL and sends us only the lightweight R2 key. This keeps the
+    // request body tiny and avoids Vercel's ~4.5MB serverless function payload
+    // limit (FUNCTION_PAYLOAD_TOO_LARGE) on larger images.
+    let uploadedFile: string
+    let outputFormat = "png"
+    let safetyTolerance: string | undefined
+    let seed: string | undefined
+
+    if (contentTypeHeader.includes("application/json")) {
+      // --- New flow: client provides an R2 key ---
+      const body = await request.json().catch(() => ({}))
+      const key = typeof body?.key === "string" ? body.key : undefined
+      const bodyOutputFormat = typeof body?.output_format === "string" ? body.output_format : undefined
+      const bodySafety = typeof body?.safety_tolerance === "string" ? body.safety_tolerance : undefined
+      const bodySeed = typeof body?.seed === "string" ? body.seed : undefined
+
+      if (!key) {
+        return NextResponse.json({ error: "No image key provided" }, { status: 400 })
+      }
+      if (!validateOwnedTempKey(key, user.id)) {
+        return NextResponse.json({ error: "Invalid image key" }, { status: 400 })
+      }
+      if (bodyOutputFormat) {
+        if (!["jpeg", "jpg", "png", "webp"].includes(bodyOutputFormat)) {
+          return NextResponse.json({ error: "Invalid output format" }, { status: 400 })
+        }
+        outputFormat = bodyOutputFormat
+      }
+      if (bodySafety) safetyTolerance = bodySafety
+      if (bodySeed) seed = bodySeed
+
+      try {
+        uploadedFile = await uploadR2ObjectToFal(key)
+      } catch (fetchErr) {
+        return NextResponse.json(
+          { error: fetchErr instanceof Error ? fetchErr.message : "Failed to read uploaded image" },
+          { status: 400 }
+        )
+      }
+    } else if (contentTypeHeader.includes("multipart/form-data")) {
+      // --- Legacy flow: client posts the raw file in the request body ---
+      // Kept for backward compatibility with any in-flight/cached clients.
+      // Large files may hit the platform payload limit; new clients use the key flow.
+      const formData = await request.formData()
+      const file = formData.get("image") as File
+      seed = (formData.get("seed") as string) || undefined
+      outputFormat = (formData.get("output_format") as string) || "png"
+      safetyTolerance = (formData.get("safety_tolerance") as string) || undefined
+
+      if (!file) {
+        return NextResponse.json({ error: "No image file provided" }, { status: 400 })
+      }
+
+      const fileValidation = validateFile(file)
+      if (!fileValidation.valid) {
+        return NextResponse.json({ error: fileValidation.error }, { status: 400 })
+      }
+
+      const bytes = await file.arrayBuffer()
+      const buffer = Buffer.from(bytes)
+      const blob = new Blob([buffer], { type: file.type })
+      uploadedFile = await fal.storage.upload(blob)
+    } else {
+      return NextResponse.json(
+        { error: "Unsupported request format. Send JSON with an image key or multipart/form-data." },
+        { status: 415 }
+      )
     }
-
-    // Validate file
-    const fileValidation = validateFile(file)
-    if (!fileValidation.valid) {
-      return NextResponse.json({ error: fileValidation.error }, { status: 400 })
-    }
-
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
-    // Convert buffer to Blob for Fal AI storage
-    const blob = new Blob([buffer], { type: file.type })
-
-    // Upload file to Fal AI storage
-    const uploadedFile = await fal.storage.upload(blob)
 
     // Prepare input for Fal AI photo restoration API with sanitization
     const input: any = {

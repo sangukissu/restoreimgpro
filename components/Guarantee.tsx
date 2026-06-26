@@ -38,7 +38,7 @@ export default function Guarantees() {
           </div>
           
           {/* Title */}
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+          <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
             Restoration without <br />
             <span className="text-gray-400/80">the risk.</span>
           </h2>
@@ -53,7 +53,7 @@ export default function Guarantees() {
       </div>
 
       {/* Guarantees Grid - Gray Surface */}
-      <div className="max-w-[1320px] mx-auto bg-brand-surface p-3 rounded-[1.8rem]">
+      <div className="max-w-[1320px] mx-auto bg-brand-surface p-2 rounded-[1.8rem]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {GUARANTEES.map((item, index) => (
             <div 

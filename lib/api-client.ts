@@ -12,6 +12,14 @@ function normalizeRestoreError(message?: string) {
     return "Restoration failed. Please try again."
   }
 
+  // Surface the platform payload-limit error clearly instead of the generic
+  // "Failed to restore image" message. This is the Vercel serverless limit that
+  // the direct-to-R2 upload flow is designed to avoid, but it can still appear
+  // on the legacy fallback path for very large images.
+  if (message.includes("FUNCTION_PAYLOAD_TOO_LARGE") || message.includes("Request Entity Too Large")) {
+    return "That image is too large to process. Try a smaller image (under 4.5MB) or compress it."
+  }
+
   if (
     message.includes("Unexpected token") ||
     message.includes("<!DOCTYPE") ||
@@ -23,14 +31,73 @@ function normalizeRestoreError(message?: string) {
   return message
 }
 
+/**
+ * Upload a file directly from the browser to Cloudflare R2 using a presigned
+ * PUT URL, then return the R2 key the backend uses to read it. This bypasses
+ * the Vercel serverless function body (~4.5MB) entirely, so large images no
+ * longer hit FUNCTION_PAYLOAD_TOO_LARGE.
+ */
+async function uploadDirectToR2(imageFile: File): Promise<string> {
+  // 1. Request a presigned upload URL from the backend.
+  const presignedRes = await fetch("/api/r2/presigned-upload-url", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      filename: imageFile.name,
+      contentType: imageFile.type,
+      folder: "restorations",
+    }),
+  })
+
+  if (!presignedRes.ok) {
+    const errData = await presignedRes.json().catch(() => ({}))
+    throw new Error(errData?.error || "Failed to prepare secure storage")
+  }
+
+  const { uploadUrl, key } = await presignedRes.json()
+  if (!uploadUrl || !key) {
+    throw new Error("Failed to prepare secure storage")
+  }
+
+  // 2. PUT the file straight to R2 (never touches Vercel).
+  const uploadRes = await fetch(uploadUrl, {
+    method: "PUT",
+    headers: { "Content-Type": imageFile.type },
+    body: imageFile,
+  })
+
+  if (!uploadRes.ok) {
+    throw new Error("Failed to upload image to storage")
+  }
+
+  return key as string
+}
+
 export async function restoreImage(imageFile: File): Promise<RestoreImageResponse> {
   try {
-    const formData = new FormData()
-    formData.append("image", imageFile)
+    let restoreBody: BodyInit
+    let restoreHeaders: Record<string, string> = {}
+
+    // Preferred flow: upload directly to R2, then send only the lightweight key.
+    // If anything in the direct-upload step fails, fall back to the legacy
+    // multipart path so we never hard-regress (though very large files may still
+    // hit the platform payload limit on the fallback).
+    try {
+      const key = await uploadDirectToR2(imageFile)
+      restoreBody = JSON.stringify({ key })
+      restoreHeaders["Content-Type"] = "application/json"
+    } catch (uploadError) {
+      console.warn("[restoreImage] Direct R2 upload failed, falling back to multipart:", uploadError)
+      const formData = new FormData()
+      formData.append("image", imageFile)
+      restoreBody = formData
+      // Do not set Content-Type; the browser sets the multipart boundary.
+    }
 
     const response = await fetch("/api/restore", {
       method: "POST",
-      body: formData,
+      headers: restoreHeaders,
+      body: restoreBody,
     })
 
     if (!response.ok) {

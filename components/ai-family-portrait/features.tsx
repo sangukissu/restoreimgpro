@@ -44,7 +44,7 @@ export default function FamilyPortraitUseCases() {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
               Create a Portrait <br />
               <span className="text-gray-400">for Every Story.</span>
             </h2>
@@ -59,7 +59,7 @@ export default function FamilyPortraitUseCases() {
         </div>
 
         {/* Use Cases Grid */}
-        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+        <div className="bg-brand-surface p-2 rounded-[1.8rem]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {USE_CASES.map((item, index) => (
               <div

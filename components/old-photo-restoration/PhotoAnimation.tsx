@@ -35,7 +35,7 @@ export const PhotoAnimation: React.FC = () => {
         </div>
 
         {/* Right Column: Content / Upsell */}
-        <div className="lg:col-span-7 bg-brand-surface p-3 rounded-[3rem] flex flex-col">
+        <div className="lg:col-span-7 bg-brand-surface p-2 rounded-[3rem] flex flex-col">
           <div className="bg-white rounded-[2.5rem] p-8 sm:p-12 lg:p-16 h-full flex flex-col justify-center items-start text-left relative overflow-hidden">
 
             {/* Decorative Background Icon */}

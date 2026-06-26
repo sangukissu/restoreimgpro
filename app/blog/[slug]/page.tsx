@@ -188,9 +188,9 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostJsonLd) }}
       />
       <Navbar />
-      <main className="py-12">
+      <main className="py-6">
 
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-8">
+        <div className="max-w-[1320px] mx-auto px-2 sm:px-8">
 
           {/* Back Link */}
           <div className="mb-8">
@@ -201,17 +201,17 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
           </div>
 
           {/* Article Container */}
-          <div className="bg-brand-surface p-3 rounded-[2.5rem]">
+          <div className="bg-brand-surface p-2 rounded-[2.5rem]">
 
             {/* Inner White Paper */}
             <div className="bg-white rounded-[2rem]">
 
               {/* Hero Section */}
-              <div className="relative pt-8 pb-8 px-6 sm:px-12 lg:px-20 border-b border-gray-100">
+              <div className="relative py-4 px-4 sm:px-12 lg:px-20 border-b border-gray-100">
                 <div className="max-w-4xl mx-auto">
 
                   {/* Meta Tags */}
-                  <div className="flex flex-wrap items-center gap-4 text-sm font-bold text-gray-500 mb-8 uppercase tracking-wide">
+                  <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">
                     <span className="bg-brand-orange/10 text-brand-orange px-3 py-1 rounded-full border border-brand-orange/20">{category}</span>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
@@ -224,7 +224,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                   </div>
 
                   {/* Title */}
-                  <h1 className="text-3xl sm:text-5xl lg:text-6xl font-[850] text-brand-black leading-[1.05] tracking-tight mb-4">
+                  <h1 className="text-2xl sm:text-5xl text-brand-black leading-[1.05] tracking-tight mb-4">
                     {post.title}
                   </h1>
 

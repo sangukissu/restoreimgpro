@@ -58,7 +58,7 @@ export default function ColorizeHero() {
 
                 {/* Visual - Professional Container */}
                 <div className="relative w-full max-w-5xl mx-auto">
-                    <div className="relative rounded-[1.8rem] overflow-hidden  bg-brand-surface p-3 aspect-[4/3] md:aspect-[3/2]">
+                    <div className="relative rounded-[1.8rem] overflow-hidden  bg-brand-surface p-2 aspect-[4/3] md:aspect-[3/2]">
                         <HeroVideoDialog
                             animationStyle="from-center"
                             videoSrc="https://youtu.be/YcexFcxi2xY"

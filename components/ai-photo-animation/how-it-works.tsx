@@ -173,7 +173,7 @@ export default function AIAnimationHowItWorks() {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[1.1]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[1.1]">
               How to Animate Old Photos <br />
               <span className="text-gray-400">in 3 Steps.</span>
             </h2>
@@ -188,7 +188,7 @@ export default function AIAnimationHowItWorks() {
         </div>
 
         {/* Steps Grid Container - Gray Background */}
-        <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+        <div className="bg-brand-surface p-2 rounded-[1.8rem]">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
             {STEPS.map((step) => (
               <div

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     // 2. Parse request body
     const body = await req.json()
-    const { filename, contentType } = body
+    const { filename, contentType, folder } = body
 
     if (!filename || !contentType) {
       return NextResponse.json({ error: "filename and contentType are required" }, { status: 400 })
@@ -28,12 +28,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unsupported file type. Only JPG, PNG, and WebP are allowed." }, { status: 400 })
     }
 
-    // 3. Generate a unique key/path for the file in R2 under the temp/ prefix
+    // 3. Generate a unique key/path for the file in R2 under the temp/ prefix.
+    // Allow callers to scope the temp object to a feature folder; default to
+    // family-portraits for backward compatibility.
+    const allowedFolders = ["family-portraits", "restorations", "temp"]
+    const safeFolder = typeof folder === "string" && allowedFolders.includes(folder)
+      ? folder
+      : "family-portraits"
     const timestamp = Date.now()
     const randomId = Math.random().toString(36).substring(2, 10)
     // Clean filename slightly to avoid S3 key issues
     const cleanFilename = filename.replace(/[^a-zA-Z0-9.-]/g, "_")
-    const key = `temp/family-portraits/${user.id}/${timestamp}_${randomId}_${cleanFilename}`
+    const key = `temp/${safeFolder}/${user.id}/${timestamp}_${randomId}_${cleanFilename}`
 
     // 4. Generate the presigned PUT URL
     const uploadUrl = await getR2PresignedUploadUrl(key, contentType)

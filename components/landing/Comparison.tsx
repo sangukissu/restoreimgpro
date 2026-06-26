@@ -75,7 +75,7 @@ export const Comparison: React.FC = () => {
             </div>
 
             {/* Title */}
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
                 Why BringBack is <br />
               <span className="text-gray-400">smartest choice.</span>
             </h2>

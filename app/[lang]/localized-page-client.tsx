@@ -348,7 +348,7 @@ export function LocalizedPageClient({ page }: { page: LocalizedPageData }) {
           </div>
 
           {/* Grid Layout - Brand Surface */}
-          <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="bg-brand-surface p-2 rounded-[1.8rem]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
               {page.showcaseCaptions.map((item, idx) => (
                 <div key={idx} className="bg-white rounded-[1.5rem] p-3 overflow-hidden shadow-sm">
@@ -448,7 +448,7 @@ export function LocalizedPageClient({ page }: { page: LocalizedPageData }) {
             </h2>
           </div>
 
-          <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="bg-brand-surface p-2 rounded-[1.8rem]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {page.howItWorks.map((step) => (
                 <div key={step.step} className="bg-white rounded-[1.5rem] p-8 flex flex-col group min-h-[300px]">
@@ -574,7 +574,7 @@ export function LocalizedPageClient({ page }: { page: LocalizedPageData }) {
               </h2>
           </div>
 
-          <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+          <div className="bg-brand-surface p-2 rounded-[1.8rem]">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {page.testimonials.map((t, i) => (
                   <div key={i} className="bg-white rounded-[1.5rem] p-8 flex flex-col gap-4">
@@ -601,14 +601,14 @@ export function LocalizedPageClient({ page }: { page: LocalizedPageData }) {
               <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
                 <span className="text-brand-orange">//</span> FAQs <span className="text-brand-orange">//</span>
               </div>
-              <h2 className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
+              <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
                 Questions <br />
                 <span className="text-gray-400">& answers.</span>
               </h2>
             </div>
 
             <div className="lg:col-span-7">
-              <div className="bg-brand-surface p-3 rounded-[1.8rem]">
+              <div className="bg-brand-surface p-2 rounded-[1.8rem]">
                 <div className="flex flex-col gap-3">
                   {page.faq.map((item, index) => (
                     <LocalizedFAQItem
@@ -629,7 +629,7 @@ export function LocalizedPageClient({ page }: { page: LocalizedPageData }) {
       {/* --- BOTTOM CTA --- */}
       <section className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
         <div className="max-w-[1320px] mx-auto">
-           <div className="bg-brand-surface p-3 rounded-[2.5rem]">
+           <div className="bg-brand-surface p-2 rounded-[2.5rem]">
               <div className="relative bg-white rounded-[2rem] p-8 sm:p-16 overflow-hidden group shadow-sm text-center">
                   <div className="max-w-3xl mx-auto relative z-10">
                      <h2 className="text-4xl sm:text-5xl lg:text-6xl font-[850] text-brand-black tracking-tighter leading-[0.95] mb-6">
