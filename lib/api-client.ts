@@ -1,6 +1,7 @@
 export interface RestoreImageResponse {
   success: boolean
   restoredImageUrl?: string
+  originalImageUrl?: string
   restorationId?: string
   status?: string
   creditsRemaining?: number
@@ -37,7 +38,7 @@ function normalizeRestoreError(message?: string) {
  * the Vercel serverless function body (~4.5MB) entirely, so large images no
  * longer hit FUNCTION_PAYLOAD_TOO_LARGE.
  */
-async function uploadDirectToR2(imageFile: File): Promise<string> {
+export async function uploadRestoreImageToR2(imageFile: File): Promise<string> {
   // 1. Request a presigned upload URL from the backend.
   const presignedRes = await fetch("/api/r2/presigned-upload-url", {
     method: "POST",
@@ -83,7 +84,7 @@ export async function restoreImage(imageFile: File): Promise<RestoreImageRespons
     // multipart path so we never hard-regress (though very large files may still
     // hit the platform payload limit on the fallback).
     try {
-      const key = await uploadDirectToR2(imageFile)
+      const key = await uploadRestoreImageToR2(imageFile)
       restoreBody = JSON.stringify({ key })
       restoreHeaders["Content-Type"] = "application/json"
     } catch (uploadError) {
@@ -132,6 +133,7 @@ export async function restoreImage(imageFile: File): Promise<RestoreImageRespons
     return {
       success: true,
       restoredImageUrl: data.restoredImageUrl,
+      originalImageUrl: data.originalImageUrl,
       restorationId: data.restorationId,
       status: data.status,
       creditsRemaining: data.creditsRemaining,
@@ -221,5 +223,58 @@ export async function rerestoreImage(imageUrl: string, prompt: string, originalU
     return { success: true, imageUrl: data.restoredImageUrl }
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Unknown error occurred" }
+  }
+}
+
+export interface RestoreBatchSubmitItem {
+  clientId: string
+  key: string
+  filename: string
+}
+
+export interface RestoreBatchResponseItem {
+  clientId: string
+  restorationId: string
+  status: "processing" | "failed"
+  originalImageUrl: string
+  error?: string
+}
+
+export interface RestoreImageBatchResponse {
+  success: boolean
+  batchId?: string
+  creditsRemaining?: number
+  restorations?: RestoreBatchResponseItem[]
+  error?: string
+}
+
+export async function restoreImageBatch(items: RestoreBatchSubmitItem[]): Promise<RestoreImageBatchResponse> {
+  try {
+    const response = await fetch("/api/restore/batch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items }),
+    })
+
+    const data = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: normalizeRestoreError(data?.error || "Failed to start batch restoration"),
+      }
+    }
+
+    return {
+      success: true,
+      batchId: data.batchId,
+      creditsRemaining: data.creditsRemaining,
+      restorations: Array.isArray(data.restorations) ? data.restorations : [],
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: normalizeRestoreError(error instanceof Error ? error.message : "Unknown error occurred"),
+    }
   }
 }

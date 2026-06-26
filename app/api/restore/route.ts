@@ -1,19 +1,22 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
-import mime from "mime"
 import { createClient } from "@/utils/supabase/server"
-import { getR2SignedUrl, deleteR2Object } from "@/lib/r2"
+import {
+  buildRestorationInput,
+  getWebhookBaseUrl,
+  originalProxyUrl,
+  preserveOriginalForComparison,
+  uploadR2ObjectToFal,
+  validateOwnedTempRestoreKey,
+} from "@/lib/restore-helpers"
 
-// Configure Fal AI client
 fal.config({
   credentials: process.env.FAL_KEY,
 })
 
-// Allowed file types and size limits
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"]
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024
 
-// Input sanitization function
 function sanitizeInput(input: any): any {
   if (typeof input === "string") {
     return input.trim().replace(/[<>]/g, "")
@@ -24,9 +27,7 @@ function sanitizeInput(input: any): any {
   return input
 }
 
-// File validation function
 function validateFile(file: File): { valid: boolean; error?: string } {
-  // Check file type
   if (!ALLOWED_TYPES.includes(file.type)) {
     return {
       valid: false,
@@ -34,7 +35,6 @@ function validateFile(file: File): { valid: boolean; error?: string } {
     }
   }
 
-  // Check file size
   if (file.size > MAX_FILE_SIZE) {
     return {
       valid: false,
@@ -42,7 +42,6 @@ function validateFile(file: File): { valid: boolean; error?: string } {
     }
   }
 
-  // Check if file name is reasonable
   if (file.name.length > 255) {
     return {
       valid: false,
@@ -53,57 +52,11 @@ function validateFile(file: File): { valid: boolean; error?: string } {
   return { valid: true }
 }
 
-function getWebhookBaseUrl(request: NextRequest) {
-  const configuredBaseUrl = process.env.NEXT_PUBLIC_APP_URL?.trim()
-  return configuredBaseUrl || request.nextUrl.origin
-}
-
-/**
- * Validate that an R2 key belongs to the calling user (under temp/.../<userId>/)
- * and is well-formed. This stops a user from submitting another user's key.
- */
-function validateOwnedTempKey(key: string, userId: string): boolean {
-  if (typeof key !== "string" || key.length === 0 || key.length > 1024) {
-    return false
-  }
-  // Block path traversal / protocol-style keys
-  if (key.includes("..") || key.startsWith("http://") || key.startsWith("https://")) {
-    return false
-  }
-  const parts = key.split("/")
-  // Expected shape: temp / <folder> / <userId> / <file>
-  if (parts.length < 4 || parts[0] !== "temp") {
-    return false
-  }
-  return parts[2] === userId
-}
-
-/**
- * Fetch an image already stored in R2 and re-upload it to Fal storage,
- * returning a Fal-internal URL usable as image_urls input.
- */
-async function uploadR2ObjectToFal(key: string): Promise<string> {
-  const signedUrl = await getR2SignedUrl(key)
-  const resp = await fetch(signedUrl)
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch uploaded image: ${resp.status}`)
-  }
-  const arrayBuf = await resp.arrayBuffer()
-  const contentType =
-    resp.headers.get("content-type") || mime.getType(key) || "image/png"
-  const blob = new Blob([arrayBuf], { type: contentType })
-  const falUrl = await fal.storage.upload(blob)
-
-  // The temp object is now consumed (bytes live in Fal storage); remove it so
-  // it doesn't accumulate in R2. Best-effort: never let a cleanup failure break
-  // a successful restore — the daily cron sweep will catch any stragglers.
-  try {
-    await deleteR2Object(key)
-  } catch (cleanupErr) {
-    console.warn(`[restore] Failed to delete temp R2 object ${key}:`, cleanupErr)
-  }
-
-  return falUrl
+async function markFailedAndRefund(supabase: Awaited<ReturnType<typeof createClient>>, restorationId: string, message: string) {
+  await supabase.rpc("fail_restoration_and_refund", {
+    p_restoration_id: restorationId,
+    p_error_message: message,
+  })
 }
 
 export async function POST(request: NextRequest) {
@@ -117,51 +70,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Authentication required" }, { status: 401 })
     }
 
-    // Check user credits from user_profiles table
-    const { data: userProfile, error: profileError } = await supabase
-      .from("user_profiles")
-      .select("credits")
-      .eq("user_id", user.id)
-      .single()
-
-    if (profileError) {
-      return NextResponse.json({ error: "Failed to check credits" }, { status: 500 })
-    }
-
-    const availableCredits = userProfile?.credits ?? 0
-    if (!userProfile || availableCredits <= 0) {
-      return NextResponse.json({ error: "Insufficient credits" }, { status: 402 })
-    }
-
-    // Check if Fal AI API key is configured
     if (!process.env.FAL_KEY) {
       return NextResponse.json({ error: "Fal AI API key not configured" }, { status: 500 })
     }
 
     const contentTypeHeader = request.headers.get("content-type") || ""
-
-    // Resolve the input image to a Fal storage URL. The preferred path is the
-    // browser-direct-to-R2 flow: the client uploads the file to R2 itself via a
-    // presigned PUT URL and sends us only the lightweight R2 key. This keeps the
-    // request body tiny and avoids Vercel's ~4.5MB serverless function payload
-    // limit (FUNCTION_PAYLOAD_TOO_LARGE) on larger images.
     let uploadedFile: string
     let outputFormat = "png"
     let safetyTolerance: string | undefined
     let seed: string | undefined
+    let originalImageKey: string | null = null
+    const batchId = crypto.randomUUID()
 
     if (contentTypeHeader.includes("application/json")) {
-      // --- New flow: client provides an R2 key ---
       const body = await request.json().catch(() => ({}))
       const key = typeof body?.key === "string" ? body.key : undefined
       const bodyOutputFormat = typeof body?.output_format === "string" ? body.output_format : undefined
       const bodySafety = typeof body?.safety_tolerance === "string" ? body.safety_tolerance : undefined
       const bodySeed = typeof body?.seed === "string" ? body.seed : undefined
+      const filename = typeof body?.filename === "string" ? body.filename : key?.split("/").pop() || "original"
 
       if (!key) {
         return NextResponse.json({ error: "No image key provided" }, { status: 400 })
       }
-      if (!validateOwnedTempKey(key, user.id)) {
+      if (!validateOwnedTempRestoreKey(key, user.id)) {
         return NextResponse.json({ error: "Invalid image key" }, { status: 400 })
       }
       if (bodyOutputFormat) {
@@ -174,6 +106,7 @@ export async function POST(request: NextRequest) {
       if (bodySeed) seed = bodySeed
 
       try {
+        originalImageKey = await preserveOriginalForComparison(key, user.id, batchId, 0, filename)
         uploadedFile = await uploadR2ObjectToFal(key)
       } catch (fetchErr) {
         return NextResponse.json(
@@ -182,9 +115,6 @@ export async function POST(request: NextRequest) {
         )
       }
     } else if (contentTypeHeader.includes("multipart/form-data")) {
-      // --- Legacy flow: client posts the raw file in the request body ---
-      // Kept for backward compatibility with any in-flight/cached clients.
-      // Large files may hit the platform payload limit; new clients use the key flow.
       const formData = await request.formData()
       const file = formData.get("image") as File
       seed = (formData.get("seed") as string) || undefined
@@ -211,35 +141,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Prepare input for Fal AI photo restoration API with sanitization
-    const input: any = {
-      prompt: "Restore this damaged or aged photograph to its original quality while maintaining complete faithfulness to the original context and historical authenticity. Remove all physical damage including scratches, tears, creases, dust spots, stains, and missing sections. target and eradicate all persistent, shiny fold artifacts, scanner glare, and deep emulsion cracks, fully reconstructing the underlying visual details. Repair fading and discoloration by restoring original colors and tones without over-saturation. Fully colorize the image, converting black-and-white or sepia originals into vibrant, lifelike, and historically accurate full color. Enhance clarity and sharpness by reconstructing blurry details into accurate physical details based on surrounding context. Apply natural lighting correction with proper shadows and highlights. Add authentic surface textures including natural skin pores, fabric properties, and material accuracy where damaged areas need reconstruction. Preserve all original composition, poses, expressions, and historical characteristics. Use proper depth of field and realistic color grading that matches the original time period. Output should appear as a clean, well-preserved version of the original photograph with all damage repaired and quality improved while remaining completely true to the source image at maximum resolution. The identity of person to be kept intact wihtout modifications. 8K resolution, ultra-high definition, UHD, HDR, razor-sharp focus, tack-sharp details, extreme micro-detailing, highly intricate surface textures, hyper-realistic, pristine image quality, flawless photographic execution.",
-      num_images: 1,
-      aspect_ratio: "auto",
-      resolution: "1K",
-      output_format: outputFormat || "png",
-      image_urls: [uploadedFile]
-    }
-
-    // Add optional parameters if provided
-    if (safetyTolerance) {
-      input.safety_tolerance = safetyTolerance
-    }
-
-    if (seed) {
-      const sanitizedSeed = sanitizeInput(Number.parseInt(seed))
-      if (!isNaN(sanitizedSeed)) {
-        input.seed = sanitizedSeed
-      }
-    }
-
-    const webhookBaseUrl = getWebhookBaseUrl(request)
+    const sanitizedSeed = seed ? sanitizeInput(Number.parseInt(seed)) : undefined
+    const input = buildRestorationInput(uploadedFile, {
+      outputFormat,
+      safetyTolerance,
+      seed: typeof sanitizedSeed === "number" && !isNaN(sanitizedSeed) ? sanitizedSeed : undefined,
+    })
 
     const { data: restoration, error: insertError } = await supabase
       .from("image_restorations")
       .insert({
         user_id: user.id,
         status: "processing",
+        original_image_url: originalImageKey,
+        batch_id: batchId,
+        batch_index: 0,
+        credits_charged: 1,
+        credit_refunded: false,
       })
       .select("id")
       .single()
@@ -248,14 +166,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to create restoration record" }, { status: 500 })
     }
 
+    const { data: remainingCredits, error: reserveError } = await supabase.rpc("reserve_restore_credits", {
+      p_user_id: user.id,
+      p_amount: 1,
+    })
+
+    if (reserveError || typeof remainingCredits !== "number") {
+      await supabase
+        .from("image_restorations")
+        .update({
+          status: "failed",
+          error_message: "Insufficient credits",
+          credits_charged: 0,
+          credit_refunded: true,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", restoration.id)
+
+      return NextResponse.json({ error: "Insufficient credits" }, { status: 402 })
+    }
+
     try {
       const queueResult = await fal.queue.submit("fal-ai/nano-banana-2/edit", {
-        input: input,
-        webhookUrl: `${webhookBaseUrl}/api/fal/webhook?generationId=${restoration.id}&type=restoration`
+        input,
+        webhookUrl: `${getWebhookBaseUrl(request)}/api/fal/webhook?generationId=${restoration.id}&type=restoration`,
       })
 
       const requestId = queueResult.request_id
-
       const { error: metadataError } = await supabase
         .from("image_restorations")
         .update({
@@ -268,43 +205,30 @@ export async function POST(request: NextRequest) {
         throw metadataError
       }
 
-      const remainingCredits = Math.max(0, availableCredits - 1)
-
-      await supabase
-        .from("user_profiles")
-        .update({ credits: remainingCredits })
-        .eq("user_id", user.id)
-
       return NextResponse.json({
         success: true,
         restorationId: restoration.id,
         requestId,
         status: "processing",
         creditsRemaining: remainingCredits,
-        message: "Image restoration started."
+        originalImageUrl: originalImageKey ? originalProxyUrl(originalImageKey) : undefined,
+        message: "Image restoration started.",
       })
-
     } catch (falError) {
-      await supabase
-        .from("image_restorations")
-        .update({
-          status: "failed",
-          error_message: falError instanceof Error ? falError.message : "Unknown error",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", restoration.id)
+      const message = falError instanceof Error ? falError.message : "Unknown error"
+      await markFailedAndRefund(supabase, restoration.id, message)
 
       if (falError instanceof Error) {
-        if (falError.message.includes('authentication') || falError.message.includes('401')) {
+        if (falError.message.includes("authentication") || falError.message.includes("401")) {
           return NextResponse.json({ error: "Authentication failed with restoration service. Please check your API key." }, { status: 401 })
         }
-        if (falError.message.includes('rate limit') || falError.message.includes('429')) {
+        if (falError.message.includes("rate limit") || falError.message.includes("429")) {
           return NextResponse.json({ error: "Rate limit exceeded. Please try again later." }, { status: 429 })
         }
-        if (falError.message.includes('timeout') || falError.message.includes('408')) {
+        if (falError.message.includes("timeout") || falError.message.includes("408")) {
           return NextResponse.json({ error: "Request timeout. Please try again." }, { status: 408 })
         }
-        if (falError.message.includes('model not found') || falError.message.includes('404')) {
+        if (falError.message.includes("model not found") || falError.message.includes("404")) {
           return NextResponse.json({ error: "Restoration model not available. Please try again later." }, { status: 503 })
         }
       }
@@ -327,10 +251,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Health check endpoint
 export async function GET() {
   const hasKey = !!process.env.FAL_KEY
-  const keyPreview = hasKey ? `${process.env.FAL_KEY?.substring(0, 8)}...` : 'Not set'
+  const keyPreview = hasKey ? `${process.env.FAL_KEY?.substring(0, 8)}...` : "Not set"
 
   return NextResponse.json({
     status: "healthy",
@@ -338,6 +261,6 @@ export async function GET() {
     timestamp: new Date().toISOString(),
     falConfigured: hasKey,
     keyPreview,
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || "development",
   })
 }

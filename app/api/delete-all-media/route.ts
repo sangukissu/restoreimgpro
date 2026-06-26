@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
-import { deleteVideoFromR2 } from "@/lib/r2";
+import { deleteImageFromR2, deleteVideoFromR2 } from "@/lib/r2";
 
 export async function DELETE() {
   try {
@@ -24,6 +24,7 @@ export async function DELETE() {
       nostalgicHugGenerations: 0,
       storageFiles: 0,
       r2Videos: 0,
+      r2Images: 0,
       storageErrors: [] as string[],
       r2Errors: [] as string[]
     };
@@ -107,7 +108,29 @@ export async function DELETE() {
       deletionResults.storageErrors.push("Unexpected storage deletion error");
     }
 
-    // 3. Delete R2 videos
+    // 3. Delete R2 images
+    // New restoration and family portrait outputs are stored as R2 keys like
+    // "images/{userId}/{timestamp}-{filename}". Legacy Supabase public URLs are
+    // ignored here and are handled by the restored_photos bucket cleanup above.
+
+    const imagesToDelete = [
+      ...(imageRestorations?.map(v => v.restored_image_url) || []),
+      ...(familyPortraits?.map(v => v.composed_image_url) || [])
+    ].filter((key): key is string => typeof key === "string" && key.startsWith("images/"));
+
+    if (imagesToDelete.length > 0) {
+      for (const imageKey of imagesToDelete) {
+        try {
+          await deleteImageFromR2(imageKey);
+          deletionResults.r2Images++;
+        } catch (r2Error) {
+          console.error(`Error deleting image from R2: ${imageKey}`, r2Error);
+          deletionResults.r2Errors.push(`${imageKey}: ${r2Error instanceof Error ? r2Error.message : 'Unknown error'}`);
+        }
+      }
+    }
+
+    // 4. Delete R2 videos
     // This includes video_generations and nostalgic_hug_generations
     // Note: video_url now contains R2 keys like "videos/{userId}/{timestamp}-{filename}"
 
@@ -130,7 +153,7 @@ export async function DELETE() {
       }
     }
 
-    // 4. Delete Database Records
+    // 5. Delete Database Records
 
     // Delete video generations
     const { error: videoDeleteError, count: videoCount } = await supabase
@@ -192,6 +215,7 @@ export async function DELETE() {
           nostalgicHugGenerations: deletionResults.nostalgicHugGenerations,
           storageFiles: deletionResults.storageFiles,
           r2Videos: deletionResults.r2Videos,
+          r2Images: deletionResults.r2Images,
           storageErrors: deletionResults.storageErrors.length > 0 ? deletionResults.storageErrors : undefined,
           r2Errors: deletionResults.r2Errors.length > 0 ? deletionResults.r2Errors : undefined
         }

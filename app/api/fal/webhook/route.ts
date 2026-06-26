@@ -165,20 +165,22 @@ export async function POST(request: NextRequest) {
       }
 
       if (webhook.payloadError) {
-        return NextResponse.json(
-          { error: `FAL payload error: ${webhook.payloadError}` },
-          { status: 400 }
-        );
+        await supabase.rpc("fail_restoration_and_refund", {
+          p_restoration_id: restoration.id,
+          p_error_message: webhook.payloadError,
+        });
+        return NextResponse.json({ success: true, message: "Restoration failed and credits refunded" });
       }
 
       if (webhook.status === "OK") {
         const restoredImageUrl = getRestorationImageUrl(webhook.payload);
 
         if (!restoredImageUrl) {
-          return NextResponse.json(
-            { error: "Restoration payload did not contain an image URL" },
-            { status: 400 }
-          );
+          await supabase.rpc("fail_restoration_and_refund", {
+            p_restoration_id: restoration.id,
+            p_error_message: "Restoration payload did not contain an image URL",
+          });
+          return NextResponse.json({ success: true, message: "Restoration failed and credits refunded" });
         }
 
         const imageBuffer = await downloadImageFromUrl(restoredImageUrl);
@@ -200,15 +202,10 @@ export async function POST(request: NextRequest) {
           .eq("id", restoration.id)
           .eq("fal_request_id", webhook.requestId);
       } else if (webhook.status === "ERROR") {
-        await supabase
-          .from("image_restorations")
-          .update({
-            status: "failed",
-            error_message: webhook.error || "Image restoration failed at FAL",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", generationId)
-          .eq("fal_request_id", webhook.requestId);
+        await supabase.rpc("fail_restoration_and_refund", {
+          p_restoration_id: generationId,
+          p_error_message: webhook.error || "Image restoration failed at FAL",
+        });
       }
     } else if (webhook.status === "OK") {
       if (webhook.payloadError) {

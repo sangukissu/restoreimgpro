@@ -52,7 +52,8 @@ export default function NostalgicHug() {
                         <div className="pb-2">
                            <h3 className="text-lg font-bold text-brand-black mb-2">Bring Them Back</h3>
                            <p className="text-gray-500 text-sm leading-relaxed font-medium">
-                              Upload a photo of your loved one. A simple headshot is all we need to legally reconstruct their body and bring them to life.                           </p>
+                             Upload a picture of a loved one. A simple headshot or portrait photo is all our AI engine needs to accurately map and reconstruct a natural full-body view.
+                              </p>
                         </div>
                      </div>
 
@@ -65,7 +66,8 @@ export default function NostalgicHug() {
                         <div className="pb-2">
                            <h3 className="text-lg font-bold text-brand-black mb-2">Join the Scene</h3>
                            <p className="text-gray-500 text-sm leading-relaxed font-medium">
-                              Add a photo of yourself. We match the lighting and perspective so you fit perfectly into their world.                           </p>
+                              Add a photo of yourself. Our advanced AI instantly matches the lighting, clothing style, and perspective so you blend perfectly into their world.
+                              </p>
                         </div>
                      </div>
 
@@ -77,7 +79,8 @@ export default function NostalgicHug() {
                         <div className="pb-2">
                            <h3 className="text-lg font-bold text-brand-black mb-2">Experience the Hug</h3>
                            <p className="text-gray-500 text-sm leading-relaxed font-medium">
-                              Receive your "Reunion Moment." A heartwarming, lifelike video where the distance of time disappears.                           </p>
+                             Watch the magic happen in seconds. Receive a breathtaking, photorealistic video where you and your loved one share a warm, lifelike embrace.
+                             </p>
                         </div>
                      </div>
                   </div>
@@ -85,7 +88,7 @@ export default function NostalgicHug() {
                   <div className="mt-2">
 
                      <Link href="/dashboard">
-                        <button className="group w-full flex items-center justify-between gap-3 bg-brand-black text-white pl-5 pr-2 py-2 rounded-full hover:scale-105 transition-transform duration-200 shadow-lg">
+                        <button className="group w-auto flex items-center justify-center gap-3 bg-brand-black text-white pl-5 pr-2 py-2 rounded-full hover:scale-105 transition-transform duration-200 shadow-lg">
                            <span className="text-sm font-medium">Create Respectful Hug Video</span>
                            <div className="bg-brand-orange rounded-full p-2 text-white group-hover:bg-white group-hover:text-brand-orange transition-colors">
                               <Sparkles size={14} fill="currentColor" />
@@ -127,7 +130,7 @@ export default function NostalgicHug() {
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
                      <ScanFace size={24} />
                   </div>
-                  <h3 className="text-xl font-[850] text-brand-black">100% Identity Lock</h3>
+                  <h3 className="text-xl font-[850] text-brand-black">100% Photorealistic Faces</h3>
                   <p className="text-gray-500 font-medium text-sm leading-relaxed">
                      Facial features and clothing style are preserved for both individuals throughout the entire 5-second transition, eliminating 'Uncanny Valley' effects                  </p>
                </div>
@@ -147,7 +150,7 @@ export default function NostalgicHug() {
                   <div className="w-12 h-12 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center">
                      <Lock size={24} />
                   </div>
-                  <h3 className="text-xl font-[850] text-brand-black">Complex Interaction</h3>
+                  <h3 className="text-xl font-[850] text-brand-black">Natural & Fluid Embraces</h3>
                   <p className="text-gray-500 font-medium text-sm leading-relaxed">
                      We use state-of-the-art video interpolation to animate the difficult physics of moving, sitting, and embracing, ensuring arms don't melt and expressions are genuinely loving.                  </p>
                </div>

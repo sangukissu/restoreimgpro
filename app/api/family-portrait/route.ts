@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { fal } from '@fal-ai/client'
 import mime from 'mime'
 import { createClient } from '@/utils/supabase/server'
-import { getR2SignedUrl, deleteR2Object } from '@/lib/r2'
+import { getR2SignedUrl, deleteR2Object, uploadImageToR2 } from '@/lib/r2'
 
 // Configure Fal AI client
 fal.config({
@@ -229,37 +229,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid generation response' }, { status: 502 })
     }
 
-    // Download generated image and store in Supabase
+    // Download generated image and store the final output in Cloudflare R2.
+    // The database stores the private R2 key; the client receives a proxied URL.
     let finalImageUrl: string
+    let responseImageUrl: string
     try {
       const imageResp = await fetch(generatedImageUrl)
       if (!imageResp.ok) {
         throw new Error(`Failed to download image: ${imageResp.status}`)
       }
-      const buf = await imageResp.arrayBuffer()
+      const buf = Buffer.from(await imageResp.arrayBuffer())
       const contentType = imageResp.headers.get('content-type') || 'image/png'
-      const imageBlob = new Blob([buf], { type: contentType })
-
-      const timestamp = Date.now()
       const randomId = Math.random().toString(36).substring(2, 10)
-      const fileExtension = (mime.getExtension(contentType) || 'png')
-      const fileName = `${user.id}/${timestamp}_family_portrait_${randomId}.${fileExtension}`
+      const fileExtension = mime.getExtension(contentType) || 'png'
+      const fileName = `family-portrait-${randomId}.${fileExtension}`
 
-      const { error: uploadError } = await supabase.storage
-        .from('restored_photos')
-        .upload(fileName, imageBlob, { contentType, cacheControl: '3600' })
-
-      if (uploadError) {
-        throw new Error(uploadError.message)
-      }
-
-      const { data: publicUrlData } = await supabase.storage
-        .from('restored_photos')
-        .getPublicUrl(fileName)
-      finalImageUrl = publicUrlData.publicUrl
+      finalImageUrl = await uploadImageToR2(buf, fileName, user.id, contentType)
+      responseImageUrl = `/api/image-proxy?key=${encodeURIComponent(finalImageUrl)}`
     } catch (storageError) {
-      // Fallback: return Fal URL directly
+      // Fallback: return Fal URL directly if R2 has a transient issue.
       finalImageUrl = generatedImageUrl
+      responseImageUrl = generatedImageUrl
     }
 
     // Persist a record in the dedicated family_portraits table
@@ -286,7 +276,7 @@ export async function POST(req: NextRequest) {
       .eq('user_id', user.id)
 
     // Return response even if credits update failed (avoid blocking user on non-critical error)
-    return NextResponse.json({ imageUrl: finalImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 2 })
+    return NextResponse.json({ imageUrl: responseImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 2 })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })
