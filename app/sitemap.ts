@@ -3,6 +3,7 @@ import { getAllPostSlugs } from '@/lib/wordpress'
 import { featuresData } from '@/lib/featuresdata'
 import { countryPages } from '@/lib/countrypages'
 import { appData } from '@/lib/appdata'
+import { compareData } from '@/lib/comparedata'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://bringback.pro'
@@ -136,5 +137,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }))
 
-  return [...staticPages, ...blogPages, ...featurePages, ...countryPagesSitemap, ...appPages]
+  // Comparison pages
+  const comparePages: MetadataRoute.Sitemap = Object.values(compareData).map((page) => ({
+    url: `${baseUrl}/compare/${page.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  return [...staticPages, ...blogPages, ...featurePages, ...countryPagesSitemap, ...appPages, ...comparePages]
 }
