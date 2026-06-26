@@ -43,3 +43,6 @@ alter table public.memory_book_media_derivatives drop constraint if exists memor
 alter table public.memory_book_media_derivatives
   add constraint memory_book_media_derivatives_source_type_check
   check (source_type in ('restoration', 'family_portrait', 'add_person', 'remove_person', 'animation', 'nostalgic_hug'));
+
+
+  
