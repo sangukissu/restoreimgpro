@@ -5,153 +5,7 @@ import { Button } from "@/components/ui/button"
 import { SparklesCore } from "@/components/ui/sparkles"
 import { AnimatePresence, motion } from "framer-motion"
 import { IconDotsVertical } from "@tabler/icons-react"
-import { DownloadIcon, ImageOffIcon, ImageUpIcon, Videotape,  } from "lucide-react"
-
-interface ImageComparisonProps {
-  originalUrl: string
-  restoredUrl: string
-  onStartOver: () => void
-  onDownload?: (restoredUrl: string) => void
-  showStartOver?: boolean
-}
-
-export default function ImageComparison({ originalUrl, restoredUrl, onStartOver, onDownload, showStartOver = true }: ImageComparisonProps) {
-  const [sliderPosition, setSliderPosition] = useState(50)
-  const [isDragging, setIsDragging] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  
-  // Performance optimization refs
-  const rafRef = useRef<number | null>(null)
-  const lastUpdateRef = useRef<number>(0)
-
-  // Throttle slider updates to improve performance
-  const updateSliderPosition = useCallback((percentage: number) => {
-    const now = Date.now()
-    if (now - lastUpdateRef.current < 16) return // ~60fps max
-    
-    lastUpdateRef.current = now
-    
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current)
-    }
-    
-    rafRef.current = requestAnimationFrame(() => {
-      setSliderPosition(Math.max(0, Math.min(100, percentage)))
-    })
-  }, [])
-
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }, [])
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false)
-  }, [])
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging || !containerRef.current) return
-
-    const rect = containerRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const percentage = (x / rect.width) * 100
-    updateSliderPosition(percentage)
-  }, [isDragging, updateSliderPosition])
-
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (!isDragging || !containerRef.current) return
-
-    const rect = containerRef.current.getBoundingClientRect()
-    const x = e.touches[0].clientX - rect.left
-    const percentage = (x / rect.width) * 100
-    updateSliderPosition(percentage)
-  }, [isDragging, updateSliderPosition])
-
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }, [])
-
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }, [])
-
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove)
-      document.addEventListener("mouseup", handleMouseUp)
-      document.addEventListener("touchmove", handleTouchMove, { passive: false })
-      document.addEventListener("touchend", handleMouseUp)
-    }
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove)
-      document.removeEventListener("mouseup", handleMouseUp)
-      document.removeEventListener("touchmove", handleTouchMove)
-      document.removeEventListener("touchend", handleMouseUp)
-    }
-  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove])
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current)
-      }
-    }
-  }, [])
-
-  const handleDownload = async () => {
-    if (onDownload) {
-      // Use the parent's download handler (with feedback tracking)
-      onDownload(restoredUrl)
-    } else {
-      // Fallback to default download behavior
-      try {
-        const response = await fetch(restoredUrl)
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement("a")
-        a.href = url
-        a.download = `restored-image-${Date.now()}.png`
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        window.URL.revokeObjectURL(url)
-      } catch (error) {
-        console.error("Error downloading image:", error)
-        alert("Failed to download image")
-      }
-    }
-  }
-
-  const handleGenerateVideo = () => {
-    // Store the restored image URL in sessionStorage to pass to animate dashboard
-    sessionStorage.setItem('preloadedImageUrl', restoredUrl)
-    // Navigate to animate dashboard
-    window.location.href = '/dashboard/animate'
-  }
-
-  // Add navigation to Enhance page with restored image
-  const handleNavigateEnhance = () => {
-    try {
-      const url = new URL('/enhance', window.location.origin)
-      url.searchParams.set('image', restoredUrl)
-      window.location.href = url.toString()
-    } catch (e) {
-      // Fallback if URL construction fails
-      window.location.href = `/enhance?image=${encodeURIComponent(restoredUrl)}`
-    }
-  }
-"use client"
-
-import { useState, useRef, useEffect, useCallback, useMemo } from "react"
-import { Button } from "@/components/ui/button"
-import { SparklesCore } from "@/components/ui/sparkles"
-import { AnimatePresence, motion } from "framer-motion"
-import { IconDotsVertical } from "@tabler/icons-react"
-import { DownloadIcon, ImageOffIcon, ImageUpIcon, Videotape,  } from "lucide-react"
+import { DownloadIcon, ImageOffIcon, ImageUpIcon, Videotape } from "lucide-react"
 
 interface ImageComparisonProps {
   originalUrl: string
@@ -375,8 +229,6 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
             </div>
           </div>
 
-       
-
           {/* Buttons */}
           <div className="flex flex-wrap gap-3 justify-center items-center pt-2">
             <Button
@@ -386,15 +238,6 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
               <DownloadIcon className="w-4 h-4 mr-1" />
               Download
             </Button>
-
-            {/* Free Enhance Button */}
-            {/* <Button
-              onClick={handleNavigateEnhance}
-              className="h-10 px-5 rounded-full bg-black text-sm font-semibold text-white hover:bg-gray-800 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
-            >
-              <ImageUpIcon className="w-4 h-4 mr-1" />
-              Free Enhance
-            </Button> */}
 
             <Button
               onClick={handleGenerateVideo}
