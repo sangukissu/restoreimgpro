@@ -1,5 +1,6 @@
 "use client"
 
+import { ImageIcon, Loader2 } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import ImageUpload, { type SelectedRestoreFile } from "@/components/image-upload"
 import ImageComparison from "@/components/image-comparison"
