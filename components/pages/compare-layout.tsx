@@ -130,7 +130,6 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
               <a href="#which-to-choose" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Which to pick</a>
               <a href="#final-thoughts" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Final thoughts</a>
               <a href="#faq" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">FAQ</a>
-              <a href="#methodology" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Methodology</a>
             </nav>
           </div>
         </div>
@@ -196,7 +195,7 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
                     <h4 className="text-2xl font-bold mb-1">See the difference on your own photos</h4>
                     <p className="font-medium text-white/80">Premium quality • No watermarks • No subscriptions</p>
                  </div>
-                 <Link href={page.ctaLink}>
+                 <Link href={page.ctaLink2}>
                    <button className="bg-white text-[#FF4D00] px-8 py-4 rounded-full font-bold text-lg whitespace-nowrap flex items-center gap-2">
                      Try the Better Alternative <ArrowRight size={20} />
                    </button>
@@ -322,7 +321,7 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
                <p className="text-gray-600 mb-8 font-medium text-lg max-w-2xl mx-auto">
                  Behind every damaged photo is a story waiting to be told again. Stop settling for tools that treat your ancestors like digital selfies. Bring them back with the respect they deserve.
                </p>
-               <Link href={page.ctaLink}>
+               <Link href={page.ctaLink2}>
                  <button className="bg-[#111111] text-white px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform inline-flex items-center gap-2 shadow-xl">
                    Honor Your Memories Today <ArrowRight size={20} />
                  </button>

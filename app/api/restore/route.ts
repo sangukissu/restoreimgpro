@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { fal } from "@fal-ai/client"
 import mime from "mime"
 import { createClient } from "@/utils/supabase/server"
-import { getR2SignedUrl } from "@/lib/r2"
+import { getR2SignedUrl, deleteR2Object } from "@/lib/r2"
 
 // Configure Fal AI client
 fal.config({
@@ -92,7 +92,18 @@ async function uploadR2ObjectToFal(key: string): Promise<string> {
   const contentType =
     resp.headers.get("content-type") || mime.getType(key) || "image/png"
   const blob = new Blob([arrayBuf], { type: contentType })
-  return fal.storage.upload(blob)
+  const falUrl = await fal.storage.upload(blob)
+
+  // The temp object is now consumed (bytes live in Fal storage); remove it so
+  // it doesn't accumulate in R2. Best-effort: never let a cleanup failure break
+  // a successful restore — the daily cron sweep will catch any stragglers.
+  try {
+    await deleteR2Object(key)
+  } catch (cleanupErr) {
+    console.warn(`[restore] Failed to delete temp R2 object ${key}:`, cleanupErr)
+  }
+
+  return falUrl
 }
 
 export async function POST(request: NextRequest) {

@@ -3,6 +3,7 @@ export interface ComparePageData {
   competitor: string;
   niche: 'restoration' | 'animation' | 'merging';
   ctaLink: string;
+  ctaLink2: string;
   meta: {
     title: string;
     description: string;
@@ -99,6 +100,7 @@ export const compareData: Record<string, ComparePageData> = {
     competitor: "Remini",
     niche: "restoration",
     ctaLink: "https://bringback.pro/old-photo-restoration",
+    ctaLink2: "https://bringback.pro/login",
     meta: {
       title: "Best Remini Alternative for Photo Restoration 2026 | BringBack AI",
       description: "Looking for a Remini alternative without weekly subscriptions or plastic-looking faces? BringBack AI is the strictly-private, web-based photo restorer.",
@@ -273,6 +275,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "VanceAI",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best VanceAI Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Searching for a VanceAI alternative with credits that never expire? BringBack AI offers superior historical photo restoration without the cluttered interface.",
@@ -446,6 +449,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "Nero AI",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best Nero AI Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Looking for a Nero AI alternative without confusing credit consumption or heavy PC software? BringBack AI is the dedicated web restorer for historical family photos.",
@@ -619,6 +623,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "JPGHD",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best JPGHD Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Looking for a JPGHD alternative with modern 2026 AI models and superior facial animation? BringBack AI offers premium historical photo restoration with strict data privacy.",
@@ -792,6 +797,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "Phowd",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best Phowd Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Tired of waiting days and paying premium freelance rates on Phowd? BringBack AI restores your old family photos instantly and privately for pennies.",
@@ -965,6 +971,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "EaseUS",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best EaseUS Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Looking for an EaseUS alternative? EaseUS is great for corrupted files, but BringBack AI is the dedicated web tool for restoring and animating vintage family photos.",
@@ -1138,6 +1145,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "Pixelbin",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best Pixelbin Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Pixelbin is built for enterprise developers and e-commerce. BringBack AI is the dedicated, private Pixelbin alternative for family photo restoration and animation.",
@@ -1311,6 +1319,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "Airbrush",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best Airbrush Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Tired of Airbrush applying modern beauty filters to your historical family photos? BringBack AI is the premium alternative for authentic, identity-preserving restoration.",
@@ -1484,6 +1493,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "ImageColorizer",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best ImageColorizer Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Looking for an ImageColorizer alternative? BringBack AI provides superior historically accurate colorization, deep scratch repair, and cinematic animation in one platform.",
@@ -1657,6 +1667,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "PhotoGlory",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best PhotoGlory Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "Looking for a PhotoGlory alternative for Mac or Mobile? BringBack AI is the premium web-based restorer offering 1-click AI restoration and cinematic animation.",
@@ -1830,6 +1841,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "UnblurImage",
     "niche": "restoration",
     "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best UnblurImage Alternative for Photo Restoration 2026 | BringBack AI",
       "description": "UnblurImage is great for shaky smartphone pics, but it over-sharpens historical photos. BringBack AI is the premium alternative for authentic historical restoration.",
@@ -2003,6 +2015,7 @@ export const compareData: Record<string, ComparePageData> = {
     competitor: "MyHeritage",
     niche: "animation",
     ctaLink: "https://bringback.pro/ai-photo-animation",
+    ctaLink2: "https://bringback.pro/login",
     meta: {
       title: "MyHeritage Deep Nostalgia Alternative 2026 | BringBack AI",
       description: "Want to animate old photos without an expensive genealogy subscription? BringBack is the best MyHeritage alternative for animating family photos.",
@@ -2177,6 +2190,7 @@ export const compareData: Record<string, ComparePageData> = {
     competitor: "PixReunion",
     niche: "merging",
     ctaLink: "https://bringback.pro/ai-family-portrait",
+    ctaLink2: "https://bringback.pro/login",
     meta: {
       title: "PixReunion Alternative for AI Family Portraits 2026 | BringBack AI",
       description: "Looking for a PixReunion alternative to create family portraits from individual photos? BringBack merges separate photos into realistic group portraits.",
@@ -2347,6 +2361,7 @@ export const compareData: Record<string, ComparePageData> = {
     "competitor": "Kinpict",
     "niche": "merging",
     "ctaLink": "https://bringback.pro/ai-family-portrait",
+    "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best Kinpict Alternative for AI Family Portraits 2026 | BringBack AI",
       "description": "Looking for a Kinpict alternative to create realistic family portraits? BringBack AI seamlessly harmonizes lighting, perspective, and color to merge individual photos.",

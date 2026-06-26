@@ -236,3 +236,92 @@ export async function copyR2Object(sourceKey: string, destinationKey: string, co
   await client.send(command);
   return destinationKey;
 }
+
+/**
+ * Delete a single object from R2 by key. Generic counterpart to
+ * deleteVideoFromR2 — used to remove consumed temp staging objects.
+ * @param key - The R2 key of the object to delete
+ */
+export async function deleteR2Object(key: string): Promise<void> {
+  const client = getR2Client();
+  const { DeleteObjectCommand } = await import("@aws-sdk/client-s3");
+
+  const command = new DeleteObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: key,
+  });
+
+  await client.send(command);
+}
+
+/**
+ * Bulk-delete all objects under a prefix that are older than `olderThanMs`.
+ * Used by the cleanup cron to sweep stale temp staging objects. Paginates
+ * ListObjectsV2 and batches DeleteObjects calls at 1000 keys.
+ *
+ * @returns a summary of the sweep for observability
+ */
+export async function deleteR2PrefixOlderThan(
+  prefix: string,
+  olderThanMs: number
+): Promise<{ scanned: number; deleted: number; skipped: number; errors: string[] }> {
+  const client = getR2Client();
+  const { ListObjectsV2Command, DeleteObjectsCommand } = await import("@aws-sdk/client-s3");
+
+  const now = Date.now();
+  const cutoff = now - olderThanMs;
+  let scanned = 0;
+  let deleted = 0;
+  let skipped = 0;
+  const errors: string[] = [];
+
+  let continuationToken: string | undefined;
+  do {
+    const listCommand = new ListObjectsV2Command({
+      Bucket: R2_BUCKET_NAME,
+      Prefix: prefix,
+      MaxKeys: 1000,
+      ContinuationToken: continuationToken,
+    });
+    const listResult = await client.send(listCommand);
+    const objects = listResult.Contents ?? [];
+
+    const staleKeys: string[] = [];
+    for (const obj of objects) {
+      scanned++;
+      const lastModified = obj.LastModified ? obj.LastModified.getTime() : 0;
+      if (lastModified <= cutoff && obj.Key) {
+        staleKeys.push(obj.Key);
+      } else {
+        skipped++;
+      }
+    }
+
+    // Delete in batches of up to 1000 keys.
+    for (let i = 0; i < staleKeys.length; i += 1000) {
+      const batch = staleKeys.slice(i, i + 1000);
+      try {
+        await client.send(
+          new DeleteObjectsCommand({
+            Bucket: R2_BUCKET_NAME,
+            Delete: {
+              Objects: batch.map((Key) => ({ Key })),
+              Quiet: true,
+            },
+          })
+        );
+        deleted += batch.length;
+      } catch (err) {
+        errors.push(
+          `Batch delete failed for prefix "${prefix}" (offset ${i}): ${
+            err instanceof Error ? err.message : String(err)
+          }`
+        );
+      }
+    }
+
+    continuationToken = listResult.IsTruncated ? listResult.NextContinuationToken : undefined;
+  } while (continuationToken);
+
+  return { scanned, deleted, skipped, errors };
+}

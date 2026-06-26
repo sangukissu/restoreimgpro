@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { fal } from '@fal-ai/client'
 import mime from 'mime'
 import { createClient } from '@/utils/supabase/server'
-import { getR2SignedUrl } from '@/lib/r2'
+import { getR2SignedUrl, deleteR2Object } from '@/lib/r2'
 
 // Configure Fal AI client
 fal.config({
@@ -138,9 +138,11 @@ export async function POST(req: NextRequest) {
           } else {
             // Check if it is an R2 key or a standard URL
             let fetchUrl = img
+            let tempKey: string | null = null
             if (!img.startsWith('http') && !img.startsWith('data:')) {
               // It's an R2 key, generate a temporary signed GET URL
               fetchUrl = await getR2SignedUrl(img)
+              tempKey = img
             }
 
             // Fetch remote URL and re-upload to Fal storage for reliability
@@ -153,6 +155,18 @@ export async function POST(req: NextRequest) {
             const blob = new Blob([arrayBuf], { type: contentType })
             const url = await fal.storage.upload(blob)
             uploadedUrls.push(url)
+
+            // The temp staging object is now consumed (bytes live in Fal
+            // storage); remove it so it doesn't accumulate in R2. Best-effort:
+            // never let cleanup break a successful upload — the cron sweep
+            // catches any stragglers.
+            if (tempKey) {
+              try {
+                await deleteR2Object(tempKey)
+              } catch (cleanupErr) {
+                console.warn(`[family-portrait] Failed to delete temp R2 object ${tempKey}:`, cleanupErr)
+              }
+            }
           }
         } else {
           // File object from multipart form-data

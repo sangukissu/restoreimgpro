@@ -151,19 +151,19 @@ export const HowItWorks: React.FC = () => {
           <div className="max-w-2xl">
             {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> How It Works <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> How BringBack AI Works <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
-              Restore memories <br />
+              Restore old photos <br />
               <span className="text-gray-400">in 3 simple steps.</span>
             </h2>
           </div>
 
           {/* Subtitle */}
           <div className="max-w-sm">
-            <p className="text-lg text-gray-600 font-medium leading-relaxed">
+            <p className="text-lg text-gray-600 font-medium leading-normal">
               No complex editing skills required. Our AI handles the restoration process completely automatically.
             </p>
           </div>
@@ -190,7 +190,7 @@ export const HowItWorks: React.FC = () => {
                 {/* Content */}
                 <div className="mb-4 relative z-10">
                   <h3 className="text-2xl font-bold text-brand-black mb-3">{step.title}</h3>
-                  <p className="text-gray-600 font-medium leading-relaxed">
+                  <p className="text-gray-600 font-medium leading-normal">
                     {step.description}
                   </p>
                 </div>
