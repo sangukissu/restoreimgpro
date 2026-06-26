@@ -397,7 +397,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
               </div>
             </div>
 
-            <div className="max-w-5xl mx-auto bg-white rounded-3xl sm:rounded-2xl p-6 sm:p-8 border-4 border-gray-200">
+            <div className="max-w-5xl mx-auto bg-white rounded-3xl p-6 sm:p-8 border-4 border-gray-200">
               {/* Responsive Layout: Stack on mobile, side-by-side on desktop */}
               <div className={`${selectedFile ? 'lg:grid lg:grid-cols-2 lg:gap-8' : ''} space-y-6 lg:space-y-0`}>
                 {/* Image Upload Section */}
@@ -433,7 +433,7 @@ export default function AnimateDashboardClient({ user, initialCredits, isPayment
                           <p className="text-sm text-gray-600">Click to change image</p>
                         </div>
                       ) : (
-                        <div className="space-y-4 relative">
+                        <div className="space-y-4 relative cursor-pointer">
                           <div className="relative mx-auto w-12 h-12 sm:w-24 sm:h-24 group">
                             <div className="inset-0 absolute rounded-full bg-gray-100 opacity-50 transition-all duration-300 group-hover:opacity-75 group-hover:scale-105"></div>
                             <div className="relative w-full h-full flex items-center justify-center">

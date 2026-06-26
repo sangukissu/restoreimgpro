@@ -23,10 +23,10 @@ const ANIMATION_PRESETS = {
     name: "Smile + Wave",
     prompt: "The persons in the image smiles warmly and waves their hand in a friendly greeting gesture"
   },
-  "soft-nod": {
-    name: "Soft Nod",
-    prompt: "The persons in the image give a single, slow, gentle nod of acknowledgment with a peaceful expression"
-  },
+"soft-nod": {
+  name: "Soft Nod",
+  prompt: "Natural ambient motion with subtle life. The people exhibit gentle breathing, slight shifts in posture, and a brief, casual micro-nod at slightly staggered times, maintaining a warm and relaxed expression throughout."
+},
   "blink-tilt": {
     name: "Subtle Blink + Head Tilt",
     prompt: "The persons in the image blinks naturally and tilts their head slightly with a gentle expression"
