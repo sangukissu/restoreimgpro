@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { useImageCrop } from "@/hooks/use-image-crop"
 
 interface NostalgicHugClientProps {
     user: {
@@ -25,10 +26,23 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
 
     const [personAFile, setPersonAFile] = useState<File | null>(null)
     const [personBFile, setPersonBFile] = useState<File | null>(null)
+    const [cropTarget, setCropTarget] = useState<"personA" | "personB" | null>(null)
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setFile: (file: File | null) => void) => {
-        if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0])
+    const { startCropping, CropDialog } = useImageCrop({
+        onCropped: (file) => {
+            if (cropTarget === "personA") setPersonAFile(file)
+            if (cropTarget === "personB") setPersonBFile(file)
+        },
+        onCancel: () => setCropTarget(null),
+        onAllProcessed: () => setCropTarget(null),
+    })
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, target: "personA" | "personB") => {
+        const file = e.target.files?.[0]
+        e.target.value = ""
+        if (file) {
+            setCropTarget(target)
+            startCropping([file])
         }
     }
 
@@ -156,6 +170,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
 
     return (
         <div className="min-h-screen relative">
+            <CropDialog />
             {/* Dotted Background Pattern */}
             <div className="absolute inset-0 opacity-30 pointer-events-none">
                 <div
@@ -200,7 +215,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                                                         id="personA"
                                                         type="file"
                                                         accept="image/*"
-                                                        onChange={(e) => handleFileChange(e, setPersonAFile)}
+                                                        onChange={(e) => handleFileChange(e, "personA")}
                                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                                         disabled={loading}
                                                     />
@@ -240,7 +255,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                                                         id="personB"
                                                         type="file"
                                                         accept="image/*"
-                                                        onChange={(e) => handleFileChange(e, setPersonBFile)}
+                                                        onChange={(e) => handleFileChange(e, "personB")}
                                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                                         disabled={loading}
                                                     />
@@ -276,7 +291,7 @@ export default function NostalgicHugClient({ user, initialCredits, isPaymentSucc
                                         <Button
                                             onClick={generateVideo}
                                             disabled={!personAFile || !personBFile || loading || credits < 19}
-                                            className="w-full max-w-md bg-black hover:bg-gray-800 text-white h-14 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center py-2"
+                                            className="w-auto bg-black hover:bg-gray-800 text-white text-lg rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center h-12 px-6"
                                         >
                                             <div className="flex items-center">
                                                 <Video className="mr-2 h-5 w-5" />

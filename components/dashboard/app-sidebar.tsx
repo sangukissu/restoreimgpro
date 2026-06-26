@@ -11,6 +11,9 @@ import {
   Sparkles as SparklesIcon,
   FolderOpen,
   BookOpen,
+  WandSparkles,
+  UsersRound,
+  UserPlus,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -97,9 +100,10 @@ export function AppSidebar({
   const navItems = React.useMemo(() => [
     { title: "Dashboard", url: "/dashboard", icon: SquareTerminal },
     { title: "Restore", url: "/dashboard/restore", icon: SparklesIcon },
-    { title: "Animate", url: "/dashboard/animate", icon: Sparkles },
+    { title: "Animate", url: "/dashboard/animate", icon: WandSparkles },
     { title: "Memory Book", url: "/dashboard/memory-book", icon: BookOpen },
-    { title: "Family Portrait", url: "/dashboard/family-portrait", icon: ImageIcon },
+    { title: "Family Portrait", url: "/dashboard/family-portrait", icon: UsersRound },
+    { title: "Add Person", url: "/dashboard/add-person", icon: UserPlus },
     { title: "Nostalgic Hug", url: "/dashboard/nostalgic-hug", icon: ImageIcon },
     { title: "My Media", url: "/dashboard/my-media", icon: Upload },
     { title: "Referrals", url: "/dashboard/referrals", icon: FolderOpen },

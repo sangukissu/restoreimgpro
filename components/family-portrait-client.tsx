@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import NextImage from "next/image"
 import { Upload, X, Loader2, Coins } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { useImageCrop } from "@/hooks/use-image-crop"
 
 type AspectRatio = "1:1" | "4:3" | "3:4" | "16:9"
 type BackgroundStyle = "black" | "gray" | "beige" | "gradient" | "brown" | "bokeh"
@@ -44,6 +45,26 @@ export default function FamilyPortraitClient({
     }
   }, [])
 
+  const appendFile = useCallback((file: File) => {
+    setFiles((prev) => {
+      if (prev.length >= 4) return prev
+      const existing = new Set(prev.map((f) => `${f.name}:${f.size}:${f.lastModified}`))
+      const key = `${file.name}:${file.size}:${file.lastModified}`
+      if (existing.has(key)) return prev
+
+      const next = [...prev, file].slice(0, 4)
+      if (next.length > 2 && (aspectRatio === "1:1" || aspectRatio === "3:4")) {
+        setAspectRatio("4:3")
+      }
+      return next
+    })
+  }, [aspectRatio])
+
+  const { startCropping, CropDialog } = useImageCrop({
+    onCropped: appendFile,
+    onSkipped: appendFile,
+  })
+
   const addFiles = useCallback((incoming: FileList | File[]) => {
     const arr = Array.from(incoming)
     const validated: File[] = []
@@ -56,24 +77,12 @@ export default function FamilyPortraitClient({
       }
     }
 
-    setFiles((prev) => {
-      if (prev.length >= 4) return prev
-      const existing = new Set(prev.map((f) => `${f.name}:${f.size}:${f.lastModified}`))
-      const toAdd: File[] = []
-      for (const f of validated) {
-        const key = `${f.name}:${f.size}:${f.lastModified}`
-        if (existing.has(key)) continue
-        existing.add(key)
-        toAdd.push(f)
-        if (prev.length + toAdd.length >= 4) break
-      }
-      const next = [...prev, ...toAdd].slice(0, 4)
-      if (next.length > 2 && (aspectRatio === "1:1" || aspectRatio === "3:4")) {
-        setAspectRatio("4:3")
-      }
-      return next
-    })
-  }, [aspectRatio, validateFile])
+    const availableSlots = Math.max(0, 4 - files.length)
+    const toCrop = validated.slice(0, availableSlots)
+    if (toCrop.length > 0) {
+      startCropping(toCrop)
+    }
+  }, [files.length, startCropping, validateFile])
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     addFiles(e.target.files || [])
@@ -232,6 +241,7 @@ export default function FamilyPortraitClient({
 
   return (
     <div className="space-y-8 rounded-xl">
+      <CropDialog />
       <div className="grid lg:grid-cols-2 gap-8 items-start">
         {/* Left Column: Upload & Preview */}
         <div className="space-y-6">

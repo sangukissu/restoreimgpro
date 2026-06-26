@@ -13,6 +13,7 @@ export const metadata = {
 const SOURCE_TYPES = new Set([
   "restoration",
   "family_portrait",
+  "add_person",
   "animation",
   "nostalgic_hug",
 ])
@@ -76,6 +77,7 @@ export default async function MemoryBookPage({
           sourceType: params.sourceType as
             | "restoration"
             | "family_portrait"
+            | "add_person"
             | "animation"
             | "nostalgic_hug",
         }

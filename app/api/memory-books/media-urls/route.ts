@@ -12,7 +12,7 @@ import { supabaseAdmin } from "@/utils/supabase/admin"
 const requestSchema = z.object({
   assetIds: z.array(z.string().uuid()).max(MEMORY_BOOK_MAX_ASSIGNED_MEMORIES).default([]),
   sources: z.array(z.object({
-    sourceType: z.enum(["restoration", "family_portrait", "animation", "nostalgic_hug"]),
+    sourceType: z.enum(["restoration", "family_portrait", "add_person", "animation", "nostalgic_hug"]),
     sourceId: z.string().uuid(),
   })).max(500).default([]),
 })

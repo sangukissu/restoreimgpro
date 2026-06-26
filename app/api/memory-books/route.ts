@@ -9,7 +9,7 @@ import { createMemoryBookSlugCandidates } from "@/lib/memory-book/share-slug"
 const createBookSchema = z.object({
   title: z.string().trim().min(1).max(90).optional(),
   sourceType: z
-    .enum(["restoration", "family_portrait", "animation", "nostalgic_hug"])
+    .enum(["restoration", "family_portrait", "add_person", "animation", "nostalgic_hug"])
     .optional(),
   sourceId: z.string().uuid().optional(),
 })

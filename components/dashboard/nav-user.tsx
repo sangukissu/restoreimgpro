@@ -84,10 +84,7 @@ export function NavUser({
                   <span className="truncate font-medium">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
-                <div className="ml-auto flex items-center gap-1 text-xs">
-                  <Coins className="h-3 w-3 text-amber-600" />
-                  <span className="font-medium">{loading ? "…" : new Intl.NumberFormat("en-US").format(Number(credits || 0))}</span>
-                </div>
+
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

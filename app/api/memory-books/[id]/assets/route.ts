@@ -20,6 +20,7 @@ const addAssetSchema = z.object({
   sourceType: z.enum([
     "restoration",
     "family_portrait",
+    "add_person",
     "animation",
     "nostalgic_hug",
   ]),

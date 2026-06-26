@@ -4,6 +4,7 @@ import type React from "react"
 import { useState, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, Coins, Paperclip, Trash2, UploadCloud } from "lucide-react"
+import { useImageCrop } from "@/hooks/use-image-crop"
 
 export interface SelectedRestoreFile {
   clientId: string
@@ -42,6 +43,10 @@ export default function ImageUpload({
   const fileInputRef = useRef<HTMLInputElement>(null)
   const uploadAttempts = useRef(0)
   const lastUploadTime = useRef(0)
+  const { startCropping, CropDialog } = useImageCrop({
+    onCropped: (file) => onImagesSelect([file]),
+    onSkipped: (file) => onImagesSelect([file]),
+  })
 
   const checkSpamProtection = () => {
     const now = Date.now()
@@ -128,7 +133,7 @@ export default function ImageUpload({
         if (validFiles.length > 0) {
           uploadAttempts.current++
           lastUploadTime.current = Date.now()
-          onImagesSelect(validFiles)
+          startCropping(validFiles)
         }
 
         if (errors.length > 0) {
@@ -141,7 +146,7 @@ export default function ImageUpload({
         if (fileInputRef.current) fileInputRef.current.value = ""
       }
     },
-    [onImagesSelect, selectedItems.length],
+    [selectedItems.length, startCropping],
   )
 
   const handleDrag = useCallback((e: React.DragEvent) => {
@@ -196,7 +201,7 @@ export default function ImageUpload({
       const item = selectedItems[0]
 
       return (
-        <div className="w-full max-w-lg mx-auto px-4">
+        <><CropDialog /><div className="w-full max-w-lg mx-auto px-4">
           <div className="bg-white/60 backdrop-blur-sm border rounded-xl p-6">
             {hiddenInput}
             <div className="space-y-6">
@@ -268,13 +273,12 @@ export default function ImageUpload({
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
+          </div></div></>
       )
     }
 
     return (
-      <div className="w-full max-w-xl mx-auto px-4">
+      <><CropDialog /><div className="w-full max-w-xl mx-auto px-4">
         <div className="bg-white/60 backdrop-blur-sm border rounded-xl p-4 sm:p-5">
           {hiddenInput}
           <div className="mb-4 flex items-center justify-between gap-3">
@@ -353,12 +357,11 @@ export default function ImageUpload({
               Choose different
             </Button>
           </div>
-        </div>
-      </div>
+        </div></div></>
     )
   }
   return (
-    <div className="mx-auto w-full max-w-lg px-4">
+    <><CropDialog /><div className="mx-auto w-full max-w-lg px-4">
       {uploadError && (
         <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4">
           <div className="flex items-start gap-3">
@@ -419,6 +422,6 @@ export default function ImageUpload({
       <p className="mt-4 text-center text-xs leading-tight text-gray-500">
         Our AI model strives to restore your images, but results may vary. The restoration quality depends on the original image condition and AI interpretation. Please review results carefully.
       </p>
-    </div>
+    </div></>
   )
 }
