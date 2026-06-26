@@ -547,30 +547,53 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         )}
 
         {appState === "loading" && (
-          <div className="mx-auto w-full max-w-4xl">
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-              <div className="relative min-h-[360px] bg-[#f7f5f1] sm:min-h-[480px]">
-                {activeItem?.originalUrl || activeItem?.localPreviewUrl ? (
-                  <img
-                    src={activeItem.originalUrl || activeItem.localPreviewUrl}
-                    alt={activeItem.fileName || "Selected photo"}
-                    className="absolute inset-0 h-full w-full object-contain p-3 sm:p-4"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-500">Preparing preview</div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-                <div className="absolute left-3 top-3 rounded-full border border-white/30 bg-white/90 px-3 py-1.5 text-xs font-semibold text-gray-900 shadow-sm sm:left-4 sm:top-4">
-                  {activeItem?.restorationId ? "Restoring" : "Submitting"}
+          <div className="w-full max-w-4xl mx-auto">
+            <div className="bg-white/80 backdrop-blur-sm border border-gray-200/80 rounded-2xl p-4 sm:p-5 shadow-xs">
+              <div className="space-y-4 sm:space-y-5">
+                {/* Header/Info */}
+                <div className="text-center">
+                  <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    Restoring this photo
+                  </p>
                 </div>
-                <div className="absolute right-3 top-3 rounded-full border border-white/30 bg-black/70 px-3 py-1.5 text-xs font-medium text-white shadow-sm sm:right-4 sm:top-4">
-                  {activeItem?.restorationId ? "Safe to leave" : "Keep this page open"}
+
+                {/* Image Display */}
+                <div className="relative w-full h-[260px] xs:h-[300px] sm:h-[400px] lg:h-[480px] rounded-xl overflow-hidden border border-gray-200/50 bg-[#f7f5f1] shadow-inner flex justify-center">
+                  {activeItem?.originalUrl || activeItem?.localPreviewUrl ? (
+                    <img
+                      src={activeItem.originalUrl || activeItem.localPreviewUrl}
+                      alt={activeItem?.fileName || "Selected photo"}
+                      className="absolute inset-0 h-full w-full object-contain p-2 sm:p-3"
+                    />
+                  ) : (
+                    <div className="flex h-full min-h-full w-full items-center justify-center bg-[#f7f5f1] text-gray-400">
+                      <div className="text-center">
+                        <ImageIcon className="h-8 w-8 mx-auto mb-2" />
+                        <p className="text-sm">Preview preparing</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Gradient Overlay & Badge */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+
+                  <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full border border-white/20 bg-white/95 px-2.5 py-1 text-[11px] font-bold text-gray-900 shadow-sm">
+                    <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
+                    Restoring
+                  </div>
+
+                  <div className="absolute right-3 top-3 rounded-full border border-white/10 bg-black/85 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+                    {activeItem?.restorationId ? "Safe to leave" : "Submitting"}
+                  </div>
                 </div>
-                <div className="absolute inset-x-0 bottom-0 p-4 text-white sm:p-6">
-                  <p className="mb-2 truncate text-xs font-medium uppercase text-white/70">{activeItem?.fileName || "Photo restore"}</p>
-                  <h3 className="font-inter text-2xl font-semibold sm:text-3xl">Restoring your photo</h3>
-                  <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/85">
-                    The before and after comparison will open here as soon as the result is ready.
+
+                {/* Info Box */}
+                <div className="rounded-xl bg-gray-50 border border-gray-100 p-3 text-center mx-auto max-w-md">
+                  <p className="truncate text-sm font-semibold text-gray-800">
+                    {activeItem?.fileName || "Photo restore"}
+                  </p>
+                  <p className="mt-1 text-xs text-gray-500">
+                    The finished before and after view will replace this preview automatically.
                   </p>
                 </div>
               </div>
@@ -587,10 +610,10 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
               onDownload={handleDownload}
             />
             {activeItem.restorationId && (
-              <div className="mx-auto mt-4 flex max-w-5xl justify-center">
+              <div className="mx-auto mt-4 flex max-w-4xl justify-center">
                 <a
                   href={`/dashboard/memory-book?sourceType=restoration&sourceId=${activeItem.restorationId}`}
-                  className="inline-flex items-center rounded-md border border-black/10 bg-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-gray-50"
+                  className="inline-flex items-center rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-semibold shadow-xs hover:bg-gray-50 transition-colors"
                 >
                   Add to Family Heritage keepsake
                 </a>

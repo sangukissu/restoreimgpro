@@ -144,6 +144,152 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
       window.location.href = `/enhance?image=${encodeURIComponent(restoredUrl)}`
     }
   }
+"use client"
+
+import { useState, useRef, useEffect, useCallback, useMemo } from "react"
+import { Button } from "@/components/ui/button"
+import { SparklesCore } from "@/components/ui/sparkles"
+import { AnimatePresence, motion } from "framer-motion"
+import { IconDotsVertical } from "@tabler/icons-react"
+import { DownloadIcon, ImageOffIcon, ImageUpIcon, Videotape,  } from "lucide-react"
+
+interface ImageComparisonProps {
+  originalUrl: string
+  restoredUrl: string
+  onStartOver: () => void
+  onDownload?: (restoredUrl: string) => void
+  showStartOver?: boolean
+}
+
+export default function ImageComparison({ originalUrl, restoredUrl, onStartOver, onDownload, showStartOver = true }: ImageComparisonProps) {
+  const [sliderPosition, setSliderPosition] = useState(50)
+  const [isDragging, setIsDragging] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  // Performance optimization refs
+  const rafRef = useRef<number | null>(null)
+  const lastUpdateRef = useRef<number>(0)
+
+  // Throttle slider updates to improve performance
+  const updateSliderPosition = useCallback((percentage: number) => {
+    const now = Date.now()
+    if (now - lastUpdateRef.current < 16) return // ~60fps max
+    
+    lastUpdateRef.current = now
+    
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+    }
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setSliderPosition(Math.max(0, Math.min(100, percentage)))
+    })
+  }, [])
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }, [])
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false)
+  }, [])
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging || !containerRef.current) return
+
+    const rect = containerRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const percentage = (x / rect.width) * 100
+    updateSliderPosition(percentage)
+  }, [isDragging, updateSliderPosition])
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isDragging || !containerRef.current) return
+
+    const rect = containerRef.current.getBoundingClientRect()
+    const x = e.touches[0].clientX - rect.left
+    const percentage = (x / rect.width) * 100
+    updateSliderPosition(percentage)
+  }, [isDragging, updateSliderPosition])
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }, [])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }, [])
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove)
+      document.addEventListener("mouseup", handleMouseUp)
+      document.addEventListener("touchmove", handleTouchMove, { passive: false })
+      document.addEventListener("touchend", handleMouseUp)
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove)
+      document.removeEventListener("mouseup", handleMouseUp)
+      document.removeEventListener("touchmove", handleTouchMove)
+      document.removeEventListener("touchend", handleMouseUp)
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+    }
+  }, [])
+
+  const handleDownload = async () => {
+    if (onDownload) {
+      // Use the parent's download handler (with feedback tracking)
+      onDownload(restoredUrl)
+    } else {
+      // Fallback to default download behavior
+      try {
+        const response = await fetch(restoredUrl)
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `restored-image-${Date.now()}.png`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        window.URL.revokeObjectURL(url)
+      } catch (error) {
+        console.error("Error downloading image:", error)
+        alert("Failed to download image")
+      }
+    }
+  }
+
+  const handleGenerateVideo = () => {
+    // Store the restored image URL in sessionStorage to pass to animate dashboard
+    sessionStorage.setItem('preloadedImageUrl', restoredUrl)
+    // Navigate to animate dashboard
+    window.location.href = '/dashboard/animate'
+  }
+
+  // Add navigation to Enhance page with restored image
+  const handleNavigateEnhance = () => {
+    try {
+      const url = new URL('/enhance', window.location.origin)
+      url.searchParams.set('image', restoredUrl)
+      window.location.href = url.toString()
+    } catch (e) {
+      // Fallback if URL construction fails
+      window.location.href = `/enhance?image=${encodeURIComponent(restoredUrl)}`
+    }
+  }
 
   // Memoize the clip path to prevent unnecessary recalculations
   const clipPathStyle = useMemo(() => ({
@@ -152,18 +298,18 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-white/60 backdrop-blur-sm border rounded-xl p-6">
-        <div className="space-y-8">
+      <div className="bg-white/80 backdrop-blur-sm border border-gray-200/80 rounded-2xl p-4 sm:p-5 shadow-xs">
+        <div className="space-y-4 sm:space-y-5">
           {/* Header */}
           <div className="text-center">
-            <p className="text-gray-500 text-sm">Drag the slider to compare before and after</p>
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Drag the slider to compare before and after</p>
           </div>
 
           {/* Image Comparison Container */}
           <div className="flex justify-center">
             <div
               ref={containerRef}
-              className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] rounded-lg overflow-hidden cursor-col-resize select-none border-4 border-gray-200 shadow-sm"
+              className="relative w-full h-[260px] xs:h-[300px] sm:h-[400px] lg:h-[480px] rounded-xl overflow-hidden cursor-col-resize select-none border border-gray-200/50 bg-[#f7f5f1] shadow-inner"
               onMouseDown={handleMouseDown}
               onTouchStart={handleTouchStart}
               style={{ touchAction: "none" }} // Prevent default touch behaviors
@@ -235,26 +381,26 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
           <div className="flex flex-wrap gap-3 justify-center items-center pt-2">
             <Button
               onClick={handleDownload}
-              className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+              className="h-10 px-5 rounded-full bg-black text-sm font-semibold text-white hover:bg-gray-800 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
             >
-              <DownloadIcon className="w-4 h-4" />
+              <DownloadIcon className="w-4 h-4 mr-1" />
               Download
             </Button>
 
             {/* Free Enhance Button */}
             {/* <Button
               onClick={handleNavigateEnhance}
-              className="bg-black hover:bg-gray-900 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+              className="h-10 px-5 rounded-full bg-black text-sm font-semibold text-white hover:bg-gray-800 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
             >
-              <ImageUpIcon className="w-4 h-4" />
+              <ImageUpIcon className="w-4 h-4 mr-1" />
               Free Enhance
             </Button> */}
 
             <Button
               onClick={handleGenerateVideo}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center"
+              className="h-10 px-5 rounded-full bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
             >
-              <Videotape className="w-4 h-4" />
+              <Videotape className="w-4 h-4 mr-1" />
               Generate Video
             </Button>
 
@@ -262,9 +408,9 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
               <Button
                 onClick={onStartOver}
                 variant="outline"
-                className="border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 hover:text-gray-900 px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex items-center gap-2 min-w-[140px] justify-center bg-transparent"
+                className="h-10 px-5 rounded-full border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 hover:text-gray-900 text-sm font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs bg-white"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
