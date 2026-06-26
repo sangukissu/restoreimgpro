@@ -368,22 +368,28 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
                       <p className="text-sm font-medium text-gray-900">{image.title}</p>
                       <p className="text-xs text-gray-500">{new Date(image.created_at).toLocaleDateString()}</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/dashboard/memory-book?sourceType=${image.type === "family-portrait" ? "family_portrait" : "restoration"}&sourceId=${image.id}`}
-                        className="flex items-center gap-2 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm font-medium hover:bg-gray-100"
-                      >
-                        <BookOpen className="w-4 h-4" />
-                        Keepsake
-                      </Link>
-                      <button
-                        onClick={() => handleDownload(image.url!.startsWith("images/") ? `/api/image-proxy?key=${encodeURIComponent(image.url!)}` : image.url!, `image-${image.id}.jpg`)}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
-                      >
-                        <Download className="w-4 h-4" />
-                        Download
-                      </button>
-                    </div>
+                    {image.url ? (
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/dashboard/memory-book?sourceType=${image.type === "family-portrait" ? "family_portrait" : "restoration"}&sourceId=${image.id}`}
+                          className="flex items-center gap-2 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm font-medium hover:bg-gray-100"
+                        >
+                          <BookOpen className="w-4 h-4" />
+                          Keepsake
+                        </Link>
+                        <button
+                          onClick={() => handleDownload(image.url!.startsWith("images/") ? `/api/image-proxy?key=${encodeURIComponent(image.url!)}` : image.url!, `image-${image.id}.jpg`)}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                        >
+                          <Download className="w-4 h-4" />
+                          Download
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                        {image.status === "failed" ? "Failed" : "Processing"}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}

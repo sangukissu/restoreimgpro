@@ -13,7 +13,6 @@ import {
 } from "@/lib/api-client"
 import { useToast } from "@/hooks/use-toast"
 import { useFeedback } from "@/hooks/use-feedback"
-import { OrbitSepiaDust } from "@/components/ui/orbit-sepia-dust"
 import { DemoVideoModal } from "./demo-video-modal"
 import { createClient as createSupabaseClient } from "@/utils/supabase/client"
 
@@ -340,6 +339,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
 
     isRestoringRef.current = true
     setError(null)
+    setActiveItemId(freshSelectedItems[0]?.clientId || null)
     setAppState(freshSelectedItems.length > 1 ? "batch" : "loading")
     setItems((current) =>
       current.map((item) =>
@@ -547,14 +547,32 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         )}
 
         {appState === "loading" && (
-          <div className="mx-auto w-full max-w-2xl">
-            <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-2xl border border-gray-800 bg-black p-16 text-center">
-              <div className="absolute inset-0 h-full w-full">
-                <OrbitSepiaDust />
-              </div>
-              <div className="relative z-10 space-y-4">
-                <h3 className="font-inter mb-2 text-2xl font-semibold text-white">Giving one more life to your past...</h3>
-                <p className="text-gray-100">Our AI is carefully restoring your image. This can take up to a minute.</p>
+          <div className="mx-auto w-full max-w-4xl">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+              <div className="relative min-h-[360px] bg-[#f7f5f1] sm:min-h-[480px]">
+                {activeItem?.originalUrl || activeItem?.localPreviewUrl ? (
+                  <img
+                    src={activeItem.originalUrl || activeItem.localPreviewUrl}
+                    alt={activeItem.fileName || "Selected photo"}
+                    className="absolute inset-0 h-full w-full object-contain p-3 sm:p-4"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-500">Preparing preview</div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                <div className="absolute left-3 top-3 rounded-full border border-white/30 bg-white/90 px-3 py-1.5 text-xs font-semibold text-gray-900 shadow-sm sm:left-4 sm:top-4">
+                  {activeItem?.restorationId ? "Restoring" : "Submitting"}
+                </div>
+                <div className="absolute right-3 top-3 rounded-full border border-white/30 bg-black/70 px-3 py-1.5 text-xs font-medium text-white shadow-sm sm:right-4 sm:top-4">
+                  {activeItem?.restorationId ? "Safe to leave" : "Keep this page open"}
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-4 text-white sm:p-6">
+                  <p className="mb-2 truncate text-xs font-medium uppercase text-white/70">{activeItem?.fileName || "Photo restore"}</p>
+                  <h3 className="font-inter text-2xl font-semibold sm:text-3xl">Restoring your photo</h3>
+                  <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/85">
+                    The before and after comparison will open here as soon as the result is ready.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
