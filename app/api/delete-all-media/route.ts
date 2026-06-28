@@ -21,6 +21,8 @@ export async function DELETE() {
       videoGenerations: 0,
       imageRestorations: 0,
       familyPortraits: 0,
+      addPersonGenerations: 0,
+      removePersonGenerations: 0,
       nostalgicHugGenerations: 0,
       storageFiles: 0,
       r2Videos: 0,
@@ -49,6 +51,26 @@ export async function DELETE() {
 
     if (fetchPortraitError) {
       console.error("Error fetching family portraits:", fetchPortraitError);
+    }
+
+    // Get add person generations
+    const { data: addPersonGenerations, error: fetchAddPersonError } = await supabase
+      .from("add_person_generations")
+      .select("composed_image_url")
+      .eq("user_id", user.id);
+
+    if (fetchAddPersonError) {
+      console.error("Error fetching add person generations:", fetchAddPersonError);
+    }
+
+    // Get remove person generations
+    const { data: removePersonGenerations, error: fetchRemovePersonError } = await supabase
+      .from("remove_person_generations")
+      .select("result_image_url")
+      .eq("user_id", user.id);
+
+    if (fetchRemovePersonError) {
+      console.error("Error fetching remove person generations:", fetchRemovePersonError);
     }
 
     // Get video generations
@@ -109,13 +131,15 @@ export async function DELETE() {
     }
 
     // 3. Delete R2 images
-    // New restoration and family portrait outputs are stored as R2 keys like
+    // Generated image outputs are stored as R2 keys like
     // "images/{userId}/{timestamp}-{filename}". Legacy Supabase public URLs are
     // ignored here and are handled by the restored_photos bucket cleanup above.
 
     const imagesToDelete = [
       ...(imageRestorations?.map(v => v.restored_image_url) || []),
-      ...(familyPortraits?.map(v => v.composed_image_url) || [])
+      ...(familyPortraits?.map(v => v.composed_image_url) || []),
+      ...(addPersonGenerations?.map(v => v.composed_image_url) || []),
+      ...(removePersonGenerations?.map(v => v.result_image_url) || [])
     ].filter((key): key is string => typeof key === "string" && key.startsWith("images/"));
 
     if (imagesToDelete.length > 0) {
@@ -191,6 +215,30 @@ export async function DELETE() {
       deletionResults.familyPortraits = portraitCount || 0;
     }
 
+    // Delete add person generations
+    const { error: addPersonDeleteError, count: addPersonCount } = await supabase
+      .from("add_person_generations")
+      .delete({ count: 'exact' })
+      .eq("user_id", user.id);
+
+    if (addPersonDeleteError) {
+      console.error("Error deleting add person generations:", addPersonDeleteError);
+    } else {
+      deletionResults.addPersonGenerations = addPersonCount || 0;
+    }
+
+    // Delete remove person generations
+    const { error: removePersonDeleteError, count: removePersonCount } = await supabase
+      .from("remove_person_generations")
+      .delete({ count: 'exact' })
+      .eq("user_id", user.id);
+
+    if (removePersonDeleteError) {
+      console.error("Error deleting remove person generations:", removePersonDeleteError);
+    } else {
+      deletionResults.removePersonGenerations = removePersonCount || 0;
+    }
+
     // Delete nostalgic hug generations
     const { error: hugDeleteError, count: hugCount } = await supabase
       .from("nostalgic_hug_generations")
@@ -207,11 +255,13 @@ export async function DELETE() {
     return NextResponse.json(
       {
         message: "All media deleted successfully",
-        deletedTables: ["video_generations", "image_restorations", "family_portraits", "nostalgic_hug_generations"],
+        deletedTables: ["video_generations", "image_restorations", "family_portraits", "add_person_generations", "remove_person_generations", "nostalgic_hug_generations"],
         deletionResults: {
           videoGenerations: deletionResults.videoGenerations,
           imageRestorations: deletionResults.imageRestorations,
           familyPortraits: deletionResults.familyPortraits,
+          addPersonGenerations: deletionResults.addPersonGenerations,
+          removePersonGenerations: deletionResults.removePersonGenerations,
           nostalgicHugGenerations: deletionResults.nostalgicHugGenerations,
           storageFiles: deletionResults.storageFiles,
           r2Videos: deletionResults.r2Videos,

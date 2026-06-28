@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useToast } from "@/hooks/use-toast"
-import { BookOpen, Download } from "lucide-react"
+import { BookOpen, Download, Loader2, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { createClient as createSupabaseClient } from "@/utils/supabase/client"
 
@@ -31,6 +31,13 @@ interface MyMediaClientProps {
   }[]
 }
 
+function getImageSourceType(type: string) {
+  if (type === "family-portrait") return "family_portrait"
+  if (type === "add-person") return "add_person"
+  if (type === "remove-person") return "remove_person"
+  return "restoration"
+}
+
 export default function MyMediaClient({ user, initialCredits, videos, images = [] }: MyMediaClientProps) {
   const [credits, setCredits] = useState(initialCredits)
   const [mediaVideos, setMediaVideos] = useState(videos)
@@ -38,6 +45,7 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [isDeletingAllMedia, setIsDeletingAllMedia] = useState(false)
+  const [deletingImageKey, setDeletingImageKey] = useState<string | null>(null)
   const { toast } = useToast()
 
   useEffect(() => {
@@ -172,6 +180,96 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
           })
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'family_portraits',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const record = payload.new as {
+            id: string
+            composed_image_url: string | null
+            created_at: string
+            status: string
+          }
+
+          if (!record?.id) {
+            return
+          }
+
+          mergeImage({
+            id: record.id,
+            url: record.composed_image_url,
+            created_at: record.created_at,
+            status: record.status || 'processing',
+            type: 'family-portrait',
+            title: 'Family Portrait',
+          })
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'add_person_generations',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const record = payload.new as {
+            id: string
+            composed_image_url: string | null
+            created_at: string
+            status: string
+          }
+
+          if (!record?.id) {
+            return
+          }
+
+          mergeImage({
+            id: record.id,
+            url: record.composed_image_url,
+            created_at: record.created_at,
+            status: record.status || 'processing',
+            type: 'add-person',
+            title: 'Added Person Photo',
+          })
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'remove_person_generations',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const record = payload.new as {
+            id: string
+            result_image_url: string | null
+            created_at: string
+            status: string
+          }
+
+          if (!record?.id) {
+            return
+          }
+
+          mergeImage({
+            id: record.id,
+            url: record.result_image_url,
+            created_at: record.created_at,
+            status: record.status || 'processing',
+            type: 'remove-person',
+            title: 'Removed Object Photo',
+          })
+        }
+      )
       .subscribe()
 
     return () => {
@@ -208,6 +306,46 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
     } finally {
       setIsDeletingAllMedia(false)
       setShowDeleteConfirmation(false)
+    }
+  }
+
+
+  const handleDeleteImage = async (image: {
+    id: string
+    url: string | null
+    type: string
+    title: string
+  }) => {
+    const confirmed = window.confirm(
+      `Delete this ${image.title.toLowerCase()}? Published Family Heritage keepsakes keep their own preserved copies.`,
+    )
+    if (!confirmed) return
+
+    const itemKey = `${image.type}:${image.id}`
+    setDeletingImageKey(itemKey)
+
+    try {
+      const response = await fetch('/api/delete-media', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: image.id,
+          sourceType: image.type,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Failed to delete image')
+      }
+
+      setMediaImages((current) => current.filter((item) => !(item.id === image.id && item.type === image.type)))
+      toast.success('Image deleted')
+    } catch (error) {
+      console.error('Error deleting image:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to delete image')
+    } finally {
+      setDeletingImageKey(null)
     }
   }
 
@@ -371,7 +509,7 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
                     {image.url ? (
                       <div className="flex items-center gap-2">
                         <Link
-                          href={`/dashboard/memory-book?sourceType=${image.type === "family-portrait" ? "family_portrait" : "restoration"}&sourceId=${image.id}`}
+                          href={`/dashboard/memory-book?sourceType=${getImageSourceType(image.type)}&sourceId=${image.id}`}
                           className="flex items-center gap-2 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm font-medium hover:bg-gray-100"
                         >
                           <BookOpen className="w-4 h-4" />
@@ -384,11 +522,33 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
                           <Download className="w-4 h-4" />
                           Download
                         </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteImage(image)}
+                          disabled={deletingImageKey === `${image.type}:${image.id}`}
+                          title="Delete image"
+                          aria-label="Delete image"
+                          className="flex h-8 w-8 items-center justify-center rounded-md border border-red-200 bg-white text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {deletingImageKey === `${image.type}:${image.id}` ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                        </button>
                       </div>
                     ) : (
-                      <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
-                        {image.status === "failed" ? "Failed" : "Processing"}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                          {image.status === "failed" ? "Failed" : "Processing"}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteImage(image)}
+                          disabled={deletingImageKey === `${image.type}:${image.id}`}
+                          title="Delete image"
+                          aria-label="Delete image"
+                          className="flex h-8 w-8 items-center justify-center rounded-md border border-red-200 bg-white text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {deletingImageKey === `${image.type}:${image.id}` ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>

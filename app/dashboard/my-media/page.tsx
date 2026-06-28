@@ -51,6 +51,20 @@ export default async function MyMediaPage({
     .eq("user_id", data.user.id)
     .order("created_at", { ascending: false });
 
+  // Fetch Add Person generations
+  const { data: addPersonImages } = await supabase
+    .from("add_person_generations")
+    .select("id, composed_image_url, created_at, status")
+    .eq("user_id", data.user.id)
+    .order("created_at", { ascending: false });
+
+  // Fetch Remove Person/Object generations
+  const { data: removePersonImages } = await supabase
+    .from("remove_person_generations")
+    .select("id, result_image_url, created_at, status")
+    .eq("user_id", data.user.id)
+    .order("created_at", { ascending: false });
+
   // Combine and sort videos
   const allVideos = [
     ...(videos || []).map((v: any) => ({ ...v, type: 'animation' })),
@@ -74,6 +88,22 @@ export default async function MyMediaPage({
       status: img.status || 'completed',
       type: 'family-portrait',
       title: 'Family Portrait'
+    })),
+    ...(addPersonImages || []).map((img: any) => ({
+      id: img.id,
+      url: img.composed_image_url,
+      created_at: img.created_at,
+      status: img.status || 'completed',
+      type: 'add-person',
+      title: 'Added Person Photo'
+    })),
+    ...(removePersonImages || []).map((img: any) => ({
+      id: img.id,
+      url: img.result_image_url,
+      created_at: img.created_at,
+      status: img.status || 'completed',
+      type: 'remove-person',
+      title: 'Removed Object Photo'
     }))
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
