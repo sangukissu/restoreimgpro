@@ -11,7 +11,7 @@ type Tool = "brush" | "eraser"
 const acceptTypes = "image/jpeg,image/jpg,image/png,image/webp"
 const maxSizeBytes = 20 * 1024 * 1024
 const overlayColor = "#ff0000"
-const overlayOpacity = 0.20
+const overlayOpacity = 0.25
 const maxUndoSteps = 12
 
 function readFileAsDataUrl(file: File) {
