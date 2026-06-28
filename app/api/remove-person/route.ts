@@ -21,16 +21,13 @@ function buildPrompt(instruction: string) {
 
   return `Edit the input image by using the visible transparent red brush mark as a precise local selection guide for object removal/inpainting.${extra}
 
-The red brush mark is NOT part of the real photo. It is an instruction overlay. Remove only the real-world object, person, or area directly covered by the red mark. Do not infer a nearby person, face, body, or large object as the target unless the red mark clearly covers that subject.
+The red brush mark is NOT part of the real photo. It is an instruction overlay. Remove only the real-world object, person, or area directly covered by the red mark. Do not infer a nearby person, face, body, or large object as the target unless the red mark clearly covers that subject. If the red mark is on a small object next to a person, remove only that small object and preserve the person completely.
 
 Critical preservation rules:
-- Treat the red mark as a precise selection, not a broad scene instruction.
-- If the red mark is on a small object next to a person, remove only that small object and preserve the person completely.
-- If the red mark is on background near a person, preserve the person completely.
 - Keep the original photo's framing, aspect ratio, crop, border, grain, blur, damage, exposure, contrast, color temperature, sepia/black-and-white tone, and overall aged-photo look unchanged.
 - Do not restore, enhance, recolor, colorize, beautify, sharpen, denoise, zoom, crop, reframe, or stylize the image.
 - Copy every unmarked person, face, body, object, background detail, shadow, texture, and edge exactly as much as possible.
-- Only synthesize pixels needed to replace the red-marked target, using nearby background texture, lighting, perspective, and shadows.
+- Only synthesize pixels needed to replace the marked subject/area, using nearby background texture, lighting, perspective, and shadows.
 - Remove all traces of the red brush mark from the final image.
 - Do not leave halos, smears, repeated texture artifacts, ghost silhouettes, cutout edges, or color stains.
 
