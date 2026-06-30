@@ -102,12 +102,12 @@ You came to BringBack for a reason. Whatever that reason was, it didn’t go awa
 So I made you a code. A real one — bigger than the one I sent last time.
 
     Code: WELCOME15
-    15% off the Pro Plan or the Family Plan
+    15% off the Plus Plan or the Family Plan
     Expires in 72 hours
 
 The Family Plan is what unlocks the Memory Book — the thing I keep hearing about from customers who tell me it changed how their family talks about the past. 60 restorations. Every feature. Priority support. ${APP_URL}/dashboard
 
-The Pro Plan is $8.49 with the code applied. The Family Plan is $18.69. Both unlock what brought you here in the first place.
+The Plus Plan is $8.49 with the code applied. The Family Plan is $18.69. Both unlock what brought you here in the first place.
 
 I’m not going to email you again about this. This is it. If the photo matters, this is the moment. If it doesn’t, no hard feelings — I hope the email wasn’t a bother.
 

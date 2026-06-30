@@ -104,7 +104,7 @@ Most of our users tell us it ends up being the most meaningful thing they’ve e
 If you want to try it, the Family Plan is what unlocks it. Right now I’ve made a small discount code just for people who are still on the fence:
 
     Code: COMEBACK10
-    10% off the Family Plan or the Pro Plan
+    10% off the Family Plan or the Plus Plan
     Expires in 48 hours
 
 The Family Plan is $21.99 (about the cost of two coffees) and comes with 60 restorations, the Memory Book, every feature we make, and priority support.
