@@ -232,6 +232,7 @@ serve(async (req: Request) => {
 
         console.log(`Win-back email 1 job complete. Sent: ${sentCount}, Errors: ${errors.length}`)
 
+        
         return new Response(
             JSON.stringify({
                 message: 'Win-back email 1 job complete',
