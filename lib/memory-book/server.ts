@@ -439,7 +439,7 @@ export async function enqueueMemoryBookJob(input: {
       },
       { onConflict: "idempotency_key", ignoreDuplicates: true }
     )
-    .select("*")
+    .select("id")
     .maybeSingle()
 
   if (error) {

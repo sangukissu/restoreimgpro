@@ -111,7 +111,10 @@ export async function POST(
 
   if (error) {
     const status =
-      error.message.includes("purchase") || error.message.includes("one published")
+      error.message.includes("live keepsake") ||
+      error.message.includes("Family Plan") ||
+      error.message.includes("purchase") ||
+      error.message.includes("one published")
         ? 402
         : error.message.includes("STALE_VERSION")
           ? 409

@@ -7,10 +7,7 @@ export async function POST(request: Request) {
   const configuredSecret = process.env.MEMORY_BOOK_WORKER_SECRET
   const authorization = request.headers.get("authorization")
 
-  if (
-    !configuredSecret ||
-    authorization !== `Bearer ${configuredSecret}`
-  ) {
+  if (!configuredSecret || authorization !== `Bearer ${configuredSecret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 

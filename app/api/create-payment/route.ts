@@ -96,6 +96,7 @@ export async function POST(request: NextRequest) {
         credits_purchased: plan.credits,
         status: "pending",
         payment_link: dodoPayment.payment_link,
+        payment_plan_id: plan.id,
       })
       .select()
       .single()

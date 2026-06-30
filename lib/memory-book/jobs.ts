@@ -413,6 +413,16 @@ async function enqueueLifecycleWork() {
   const now = new Date()
   const warningCutoff = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
 
+  // Garbage-collect finished jobs older than 7 days so the table doesn't grow
+  // unbounded. Runs as part of the worker self-heal — no separate cron needed.
+  const finishedCutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+  await supabaseAdmin
+    .from("memory_book_jobs")
+    .delete()
+    .in("status", ["completed", "dead", "failed"])
+    .lt("completed_at", finishedCutoff.toISOString())
+    .lt("updated_at", finishedCutoff.toISOString())
+
   const { data: warningBooks } = await supabaseAdmin
     .from("memory_books")
     .select("id, user_id, expires_at")

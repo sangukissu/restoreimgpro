@@ -134,6 +134,8 @@ async function handlePaymentSucceeded(webhookData: any, webhookId: string) {
       const amountCents = paymentData.metadata?.amount_cents ? Number.parseInt(paymentData.metadata.amount_cents) : 0
       const credits = paymentData.metadata?.credits ? Number.parseInt(paymentData.metadata.credits) : 0
       const userId = paymentData.metadata?.user_id
+      const planIdRaw = paymentData.metadata?.plan_id
+      const planId = typeof planIdRaw === "string" && planIdRaw.trim() ? planIdRaw.trim() : null
 
       if (amountCents === 0 || isNaN(amountCents)) {
         return
@@ -156,6 +158,7 @@ async function handlePaymentSucceeded(webhookData: any, webhookId: string) {
           amount_cents: amountCents,
           credits_purchased: credits,
           status: "completed",
+          payment_plan_id: planId,
         })
         .select()
         .single()

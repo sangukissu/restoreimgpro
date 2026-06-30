@@ -39,10 +39,31 @@ export async function POST(request: Request) {
     .single()
   if (error || !derivative) return NextResponse.json({ error: error?.message || "Unable to retry preview" }, { status: 500 })
 
+  // First, reset any prior job for this derivative back to "queued" so the
+  // worker can pick it up. This avoids creating a new row per click — every
+  // retry shares the same idempotency_key below.
+  const idempotencyKey = `media-derivative:${derivative.id}`
+  await supabaseAdmin
+    .from("memory_book_jobs")
+    .update({
+      status: "queued",
+      attempts: 0,
+      error_message: null,
+      result: null,
+      available_at: new Date().toISOString(),
+      lease_expires_at: null,
+      locked_by: null,
+      completed_at: null,
+    })
+    .eq("user_id", user.id)
+    .eq("job_type", "generate_media_derivatives")
+    .neq("idempotency_key", idempotencyKey)
+    .in("status", ["failed", "dead", "completed"])
+
   await enqueueMemoryBookJob({
     userId: user.id,
     jobType: "generate_media_derivatives",
-    idempotencyKey: `retry-media-derivative:${derivative.id}:${Date.now()}`,
+    idempotencyKey,
     payload: { derivativeId: derivative.id },
   })
   return NextResponse.json({ queued: true })

@@ -15,6 +15,7 @@ import {
 } from "@/lib/memory-book/server"
 import { MEMORY_BOOK_MAX_ASSIGNED_MEMORIES } from "@/lib/memory-book/limits"
 import { supabaseAdmin } from "@/utils/supabase/admin"
+import { processMemoryBookJobs } from "@/lib/memory-book/jobs"
 
 const addAssetSchema = z.object({
   sourceType: z.enum([
@@ -143,6 +144,10 @@ export async function POST(
     .eq("draft_version", book.draft_version)
     .select("*")
     .maybeSingle()
+
+  // Kick the worker so the new asset starts preparing immediately. The
+  // global worker is the safety net if the Supabase pg_cron job is missing.
+  void processMemoryBookJobs(5).catch(() => null)
 
   return NextResponse.json(
     { asset: refreshedAsset || asset, book: versionedBook || book },

@@ -233,7 +233,27 @@ export function MemoryBookCurator({
     const result = await response.json()
     setBook(result.book)
     bookRef.current = result.book
-    setAssets(result.assets)
+    // Preserve identity of asset items that haven't materially changed so that
+    // <img> elements (and their decoded cache) don't reload on every realtime event.
+    setAssets((current) => {
+      const next = result.assets as MemoryBookAssetRecord[]
+      if (!Array.isArray(next) || current.length === 0) return next
+      const byId = new Map(current.map((a) => [a.id, a]))
+      return next.map((incoming) => {
+        const existing = byId.get(incoming.id)
+        if (!existing) return incoming
+        // Identity-stable merge: keep the same object reference if the
+        // serialized representation hasn't changed. This stops the flicker.
+        try {
+          if (JSON.stringify(existing) === JSON.stringify(incoming)) {
+            return existing
+          }
+        } catch {
+          return incoming
+        }
+        return incoming
+      })
+    })
     if (Array.isArray(result.assetSources)) setAssetSources(result.assetSources)
   }, [book.id])
 
@@ -344,29 +364,39 @@ export function MemoryBookCurator({
     if (preparingCount > 0) {
       blockers.push(`${preparingCount} assigned ${preparingCount === 1 ? "memory is" : "memories are"} still preparing.`)
     }
+    if (!entitlement) {
+      blockers.push("Publishing your keepsake is included with the Family Plan.")
+    } else if (
+      entitlement.live_book_id &&
+      entitlement.live_book_id !== book.id
+    ) {
+      blockers.push("Another keepsake is currently live. Unpublish it before publishing this one.")
+    }
 
     return blockers
-  }, [assignedAssetIds, assignedReadyCount, editableDraft.spreads])
+  }, [assignedAssetIds, assignedReadyCount, editableDraft.spreads, entitlement, book.id, book.status])
   const canPublishDraft = publishBlockers.length === 0
-  const assignedPreparingIds = useMemo(() => {
-    const assigned = new Set(assignedAssetIds)
+  // Assets that need processing: any non-ready, non-hidden asset in the book
+  // (not just assigned ones). This fixes the bug where users who selected media
+  // in the Memories tab but hadn't placed it on a page yet would have their
+  // prepare jobs sit in the queue forever.
+  const unprocessedAssetIds = useMemo(() => {
     return assets
       .filter(
         (asset) =>
-          assigned.has(asset.id) &&
           !asset.is_hidden &&
-          (asset.status === "pending" || asset.status === "processing")
+          (asset.status === "pending" || asset.status === "processing" || asset.status === "failed")
       )
       .map((asset) => asset.id)
       .sort()
-  }, [assignedAssetIds, assets])
-  const assignedPreparingKey = assignedPreparingIds.join(":")
+  }, [assets])
+  const unprocessedKey = unprocessedAssetIds.join(":")
 
   useEffect(() => {
-    if (!assignedPreparingKey) return
+    if (!unprocessedKey) return
 
     let cancelled = false
-    const assetIds = assignedPreparingKey.split(":")
+    const assetIds = unprocessedKey.split(":")
     const timers = new Set<number>()
 
     const scheduleRefresh = (delayMs: number) => {
@@ -381,22 +411,32 @@ export function MemoryBookCurator({
 
     const requestProcessing = async (refreshAfter = false) => {
       try {
+        // 1) Local "process route" — claims scoped jobs for these specific assets
         await fetch(`/api/memory-books/${book.id}/process`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ assetIds }),
         })
+        // 2) Also kick the global worker (in case the per-book route doesn't
+        // pick up jobs because the asset is not on a page yet). The global
+        // worker is the safety net for the unassigned case.
+        await fetch("/api/memory-books/worker-tick", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ limit: 5 }),
+        }).catch(() => null)
       } finally {
         if (refreshAfter) scheduleRefresh(6000)
       }
     }
 
+    // Fire immediately, then poll every 15s while assets are pending.
     void requestProcessing(true)
     const processTimer = window.setInterval(() => {
       if (!cancelled && document.visibilityState !== "hidden") {
         void requestProcessing(true)
       }
-    }, 30000)
+    }, 15000)
 
     return () => {
       cancelled = true
@@ -404,7 +444,7 @@ export function MemoryBookCurator({
       timers.forEach((timer) => window.clearTimeout(timer))
       timers.clear()
     }
-  }, [assignedPreparingKey, book.id, refreshBook])
+  }, [unprocessedKey, book.id, refreshBook])
 
   const previewDocument = useMemo<MemoryBookDocumentV1 | null>(() => {
     try {
@@ -1405,10 +1445,10 @@ function PublishDialog({
             ].join(" ")}
           >
             {entitlementAvailable
-              ? "Publishing is included with your BringBack purchase."
+              ? "Publishing is included with your Family Plan."
               : entitlement?.live_book_id
                 ? "Another keepsake is currently live. Unpublish it before publishing this one."
-                : "You can preview the complete book. Any BringBack purchase unlocks publishing."}
+                : "Publishing your keepsake is included with the Family Plan."}
           </div>
         </div>
         <DialogFooter className="border-t border-black/8 px-6 py-4">
@@ -1433,7 +1473,7 @@ function PublishDialog({
               ? book.status === "published"
                 ? "Republish private link"
                 : "Publish private link"
-              : "Unlock publishing"}
+              : "Family Plan required"}
           </Button>
         </DialogFooter>
       </DialogContent>

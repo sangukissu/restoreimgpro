@@ -57,6 +57,40 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid memory book details" }, { status: 400 })
   }
 
+  const [{ data: existingBooks }, { data: existingEntitlement }] = await Promise.all([
+    supabase
+      .from("memory_books")
+      .select("id, status")
+      .eq("user_id", user.id)
+      .order("last_activity_at", { ascending: false })
+      .limit(1),
+    supabase
+      .from("memory_book_entitlements")
+      .select("live_book_id")
+      .eq("user_id", user.id)
+      .maybeSingle(),
+  ])
+
+  const liveBookId = existingEntitlement?.live_book_id ?? null
+  const hasLiveBook =
+    Boolean(liveBookId) ||
+    (existingBooks || []).some((b) => b.status === "published")
+  if (existingBooks && existingBooks.length > 0) {
+    if (hasLiveBook) {
+      return NextResponse.json(
+        { error: "You already have a live keepsake. Unpublish it before composing a new one." },
+        { status: 409 }
+      )
+    }
+    return NextResponse.json(
+      {
+        error: "A draft keepsake already exists. Open it to continue editing instead of starting a new one.",
+        existingBookId: existingBooks[0].id,
+      },
+      { status: 409 }
+    )
+  }
+
   const title = parsed.data.title || "Our Family Heritage"
   const bookId = randomUUID()
   const [preferredSlug] = createMemoryBookSlugCandidates(title)
