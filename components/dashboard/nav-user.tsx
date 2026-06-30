@@ -9,6 +9,7 @@ import {
   Home,
   LogOut,
   Sparkles,
+  UserX,
 } from "lucide-react"
 import Link from "next/link"
 import {
@@ -130,6 +131,16 @@ export function NavUser({
             >
               <LogOut className="mr-2 h-4 w-4 text-red-600" />
               Log out
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link
+                href="/dashboard/account/delete"
+                className="cursor-pointer text-[#1f2421]/55 focus:text-[#a14a2b]"
+              >
+                <UserX className="mr-2 h-4 w-4" />
+                Delete account
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

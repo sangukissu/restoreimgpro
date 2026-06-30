@@ -2,7 +2,7 @@
 
 import {
   BadgeCheck,
-  Bell,
+  UserX,
   Coins,
   Home,
   LogOut,
@@ -114,12 +114,16 @@ export function HeaderUser({ user, initialCreditBalance, onBuyCredits }: HeaderU
               Dashboard
             </Link>
           </DropdownMenuItem>
-          
-          <DropdownMenuItem className="cursor-pointer">
-            <BadgeCheck className="mr-2 h-4 w-4" />
-            <Link href="/account">Account</Link>  
-          </DropdownMenuItem>
-          
+           <DropdownMenuSeparator />
+         <DropdownMenuItem asChild>
+              <Link
+                href="/dashboard/account/delete"
+                className="cursor-pointer text-[#1f2421]/55 focus:text-[#a14a2b]"
+              >
+                <UserX className="mr-2 h-4 w-4" />
+                Delete account
+              </Link>
+            </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
