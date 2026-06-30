@@ -14,10 +14,20 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const WINBACK_FROM = Deno.env.get('WINBACK_FROM') || 'Harvansh <harvansh@updates.bringback.pro>'
 const WINBACK_REPLY_TO = Deno.env.get('WINBACK_REPLY_TO') || 'support@bringback.pro'
 const WINBACK_CRON_SECRET = Deno.env.get('WINBACK_CRON_SECRET')
+const APP_URL = Deno.env.get('NEXT_PUBLIC_APP_URL') || 'https://bringback.pro'
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+function extractFirstName(fullName: string | null | undefined): string | null {
+    if (typeof fullName !== 'string') return null
+    const trimmed = fullName.trim()
+    if (!trimmed) return null
+    const first = trimmed.split(/\s+/)[0]
+    // Cap at 24 chars so a runaway name doesn't break email layout
+    return first.length > 24 ? first.slice(0, 24) : first
+}
 
 async function sendEmailWithRetry(email: string, subject: string, text: string) {
     let lastStatus = 500
@@ -64,20 +74,51 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
 }
 
 // Email template
-const EMAIL_SUBJECT = 'Quick tip for your first restoration'
-const getEmailBody = `Hi,
+//
+// Winback Email 1 — sent 4–24h after signup to non-buyers.
+//
+// Structure (PAS-lite, single CTA, founder voice):
+//   1. Acknowledge without guilt
+//   2. Hook: the new Memory Book feature (emotionally unique)
+//   3. Specific, concrete offer (Family Plan, not a vague % off)
+//   4. Single CTA
+//   5. P.S. with founder name (the most-read part of any email)
+//
+// Personalization: we use the user's first name if we have it. Falling back
+// to "there" reads as cold, so we never do that — we just sign as Harvansh.
 
-Saw you joined BringBack.pro—welcome!
+const EMAIL_SUBJECT = 'One photo you haven’t restored yet'
 
-A lot of users get stuck thinking they need a high-res scan to get good results. I wanted to let you know that a simple phone snap works perfectly.
+const getEmailBody = (firstName: string | null): string => {
+    const greeting = firstName ? `Hi ${firstName},` : 'Hi,'
+    return `${greeting}
 
-Our AI actually fixes the lighting and sharpens the blur automatically.
+I noticed you signed up to BringBack yesterday but haven’t restored a photo yet. I won’t pretend to know why — could be timing, could be you opened the page, looked at the pricing, and closed the tab. Both are fair.
 
-Give it a try with a photo you have lying around. If you don't love the result, reply to this email and let me know.
+I just wanted you to know about something we launched this week that I’m especially proud of: Memory Books.
 
-Cheers,
-Harvansh
-Founder, BringBack.pro`
+It’s a way to take the photos you’ve restored and turn them into a private, paginated keepsake — a real book, with your family’s names and stories woven in. The pages turn. The book gets a private link. The people you love can open it, scroll through, and read the memories you wrote for them.
+
+Most of our users tell us it ends up being the most meaningful thing they’ve ever made online. One customer told me her dad cried. (I’m not making that up.)
+
+If you want to try it, the Family Plan is what unlocks it. Right now I’ve made a small discount code just for people who are still on the fence:
+
+    Code: COMEBACK10
+    10% off the Family Plan or the Pro Plan
+    Expires in 48 hours
+
+The Family Plan is $21.99 (about the cost of two coffees) and comes with 60 restorations, the Memory Book, every feature we make, and priority support.
+
+Open BringBack and try the first photo. It takes 30 seconds:
+${APP_URL}/dashboard
+
+If you try and don’t love the result, reply to this email. I read every one.
+
+P.S. — One photo is all you need to start. You don’t have to know who it’s for yet. That part comes later.
+
+— Harvansh
+Founder, BringBack`
+}
 
 serve(async (req: Request) => {
     try {
@@ -155,7 +196,11 @@ serve(async (req: Request) => {
         // Send emails
         for (const user of usersWithoutPayments) {
             try {
-                const sendResult = await sendEmailWithRetry(user.email, EMAIL_SUBJECT, getEmailBody)
+                const sendResult = await sendEmailWithRetry(
+                    user.email,
+                    EMAIL_SUBJECT,
+                    getEmailBody(extractFirstName(user.name))
+                )
 
                 if (!sendResult.ok) {
                     console.error(`Failed to send email to ${user.email}:`, sendResult.errorText)

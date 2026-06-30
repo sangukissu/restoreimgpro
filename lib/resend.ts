@@ -36,7 +36,8 @@ I'm trying to understand what holds users back. Is it the pricing? The features?
 
 If you've been on the fence, I created a small discount code to make the decision a little easier for you.
 
-Code: WELCOME10 (10% OFF the Pro Plan)
+Code: WELCOME10 (10% OFF the Pro and Family Plans)
+
 
 The Pro Plan unlocks the Reunion Video feature (where you can hug your loved ones) and 20 restorations. I'd love for you to try it.
 

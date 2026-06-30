@@ -95,15 +95,7 @@ export function DeleteAccountClient({ userEmail }: { userEmail: string }) {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-[#cfd6c8] bg-white p-6">
-        <h2 className="text-base font-semibold text-[#1f2421]">What stays</h2>
-        <p className="mt-2 text-sm text-[#1f2421]/70">
-          We are required to keep certain financial records. Your payment
-          history is anonymized — your name and email are removed — but the
-          amount, plan, and date of each transaction is retained for tax
-          compliance.
-        </p>
-      </section>
+
 
       <section className="rounded-2xl border border-[#e0d6c2] bg-white p-6">
         <label htmlFor="confirm-email" className="block text-sm font-semibold text-[#1f2421]">

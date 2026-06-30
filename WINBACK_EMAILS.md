@@ -1,103 +1,46 @@
-# Win-back Email System - Setup Guide
+# Winback Email System
 
-## Overview
-This system sends automated founder-style emails to users who sign up but don't purchase.
+Two-email sequence for signups who haven't purchased within 24h. Both are
+delivered from Harvansh's personal address via Resend. The first email is
+strong, founder-voiced, and leads with the Memory Book hook. The second is
+emotionally heavier, loss-averse, and offers a bigger discount.
 
-| Email | Trigger | Purpose |
-|-------|---------|---------|
-| Email 1 | 4 hours after signup | "Quick tip" inspiration email |
-| Email 2 | 7 days after signup | 10% discount code (WELCOME10) |
+## Email 1 — `send-winback-email-1`
 
----
+- **When**: 4–24 hours after signup
+- **Who**: User has no `payments` row of any status
+- **Subject**: `One photo you haven't restored yet`
+- **Offer**: `COMEBACK10` — 10% off Plus or Family Plan
+- **Expiry**: 48 hours
+- **Hook**: Memory Book launch (the emotionally unique differentiator)
+- **Voice**: Founder, personal, "I read every email"
 
-## Files Created
+## Email 2 — `send-winback-email-2`
 
-```
-scripts/18_winback_email_tracking.sql   # Database migration
-lib/resend.ts                            # Email templates (for reference)
-supabase/functions/
-  ├── send-winback-email-1/index.ts     # 4h email function
-  └── send-winback-email-2/index.ts     # 7d email function
-```
+- **When**: 7 days after Email 1 was sent
+- **Who**: User received Email 1, has not bought Plus or Family
+  (Starter buyers are excluded — they already converted at the entry tier)
+- **Subject**: `Your photos are still waiting`
+- **Offer**: `KEEPTHEIR15` — 15% off Plus or Family Plan
+- **Expiry**: 72 hours
+- **Hook**: Future-regret + Memory Book
+- **Voice**: Founder, loss-averse, "I'm not going to email you again"
+- **This is the last touchpoint.** After this, we don't email non-buyers.
 
----
+## Why this is structured this way
 
-## Setup Steps
+| Decision | Why |
+|---|---|
+| Founder voice (not brand) | Personal emails convert 2-3x better than company emails |
+| Lead with the new feature | Memory Book is the unique value — without it, we're just another restoration app |
+| Specific, concrete numbers | "$18.69" beats "15% off" because the brain anchors on absolute price |
+| Time-box the discount (48h, 72h) | Open-ended discounts feel like marketing. Bounded ones feel real. |
+| Skip email 2 for Starter buyers | They've converted. Pushing them again irritates without lifting LTV much. |
+| "I'm not emailing again" | Removes the implicit threat of an infinite drip. Makes THIS email feel like the moment. |
+| P.S. with Memory Book | The P.S. is the most-read part. Repeat the killer hook there. |
 
-### 1. Run Database Migration
-Run this SQL in your Supabase SQL Editor:
-```sql
--- From scripts/18_winback_email_tracking.sql
-ALTER TABLE public.user_profiles 
-  ADD COLUMN IF NOT EXISTS winback_email_1_sent_at timestamptz,
-  ADD COLUMN IF NOT EXISTS winback_email_2_sent_at timestamptz;
+## Files
 
-CREATE INDEX IF NOT EXISTS idx_user_profiles_winback 
-  ON public.user_profiles(winback_email_1_sent_at, winback_email_2_sent_at);
-
-GRANT UPDATE (winback_email_1_sent_at, winback_email_2_sent_at) ON public.user_profiles TO service_role;
-```
-
-### 2. Get Resend API Key
-1. Go to [resend.com](https://resend.com) and sign up
-2. Verify your domain `bringback.pro`
-3. Create an API key
-4. Copy the key (starts with `re_`)
-
-### 3. Set Supabase Secrets
-```bash
-# In your terminal
-cd /Users/kishanchaudhary/Pictures/restoreimgpro
-
-supabase secrets set RESEND_API_KEY=re_your_api_key_here
-supabase secrets set NEXT_PUBLIC_APP_URL=https://bringback.pro
-```
-
-### 4. Deploy Edge Functions
-```bash
-supabase functions deploy send-winback-email-1
-supabase functions deploy send-winback-email-2
-```
-
-### 5. Configure Cron Schedules
-In Supabase Dashboard → Edge Functions → Schedules:
-
-| Function | Schedule | Example |
-|----------|----------|---------|
-| send-winback-email-1 | Every hour | `0 * * * *` |
-| send-winback-email-2 | Daily 10am UTC | `0 10 * * *` |
-
----
-
-## Testing
-
-### Manual Test Email 1
-```bash
-# Create a test user first, then:
-supabase functions invoke send-winback-email-1 --no-verify-jwt
-```
-
-### Manual Test Email 2
-```bash
-supabase functions invoke send-winback-email-2 --no-verify-jwt
-```
-
----
-
-## How It Works
-
-### Eligibility for Email 1
-- User signed up 4-24 hours ago
-- `winback_email_1_sent_at` is NULL
-- NO entry in `payments` table with `status = 'succeeded'`
-
-### Eligibility for Email 2
-- User signed up 7-14 days ago
-- `winback_email_1_sent_at` is NOT NULL (received email 1)
-- `winback_email_2_sent_at` is NULL
-- NO entry in `payments` table with `status = 'succeeded'`
-
----
-
-## DodoPayments Discount Code
-Make sure `WELCOME10` is created in your DodoPayments dashboard as a 10% discount code.
+- `supabase/functions/send-winback-email-1/index.ts`
+- `supabase/functions/send-winback-email-2/index.ts`
+- This file (`WINBACK_EMAILS.md`) — internal reference only
