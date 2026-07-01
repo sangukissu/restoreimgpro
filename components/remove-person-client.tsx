@@ -1,8 +1,9 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Brush, Coins, Download, Eraser, Loader2, RotateCcw, Sparkles, Trash2, Upload, Wand2, X } from "lucide-react"
+import { Brush, Coins, Eraser, Loader2, Sparkles, Trash2, Upload, Wand2, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import ImageComparison from "@/components/image-comparison"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 
@@ -444,28 +445,26 @@ export default function RemovePersonClient({
   return (
     <div className="space-y-8">
       {resultUrl ? (
-        <div className="mx-auto max-w-3xl space-y-4 text-center">
-          <div className="overflow-hidden rounded-xl border bg-white">
-            <img src={resultUrl} alt="Remove person result" className="h-auto w-full" />
-          </div>
-          <div className="flex flex-col justify-center gap-2 sm:flex-row">
-            <Button onClick={handleDownload} className="bg-black text-white hover:bg-gray-800">
-              <Download className="mr-2 h-4 w-4" />
-              Download
-            </Button>
-            {generationId ? (
-              <a
-                href={`/dashboard/memory-book?sourceType=remove_person&sourceId=${generationId}`}
-                className="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 px-4 text-sm font-medium hover:bg-gray-50"
-              >
-                Add to keepsake
-              </a>
-            ) : null}
-            <Button type="button" variant="outline" onClick={() => { resetEditor(); setResultUrl(null); setGenerationId(null); setError(null) }}>
-              <RotateCcw className="mr-2 h-4 w-4" />
-              Create Another
-            </Button>
-          </div>
+        <div className="mx-auto max-w-4xl space-y-4 text-center">
+          <ImageComparison
+            originalUrl={imageSrc}
+            restoredUrl={resultUrl}
+            onStartOver={() => { resetEditor(); setResultUrl(null); setGenerationId(null); setError(null) }}
+            onDownload={handleDownload}
+            showGenerateVideo={false}
+            beforeLabel="Original"
+            afterLabel="Removed"
+            compareHint="Drag the slider to compare before and after removal"
+            startOverLabel="Create Another"
+          />
+          {generationId ? (
+            <a
+              href={`/dashboard/memory-book?sourceType=remove_person&sourceId=${generationId}`}
+              className="inline-flex h-10 items-center justify-center rounded-full border border-gray-200 bg-white px-5 text-sm font-semibold text-gray-700 shadow-xs transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900"
+            >
+              Add to keepsake
+            </a>
+          ) : null}
         </div>
       ) : (
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
@@ -590,7 +589,7 @@ export default function RemovePersonClient({
             <Button
               onClick={credits < 2 ? () => window.dispatchEvent(new Event("open-payment-modal")) : handleGenerate}
               disabled={isLoading || !file || !hasMask}
-              className={`h-12 w-full text-base font-semibold ${credits < 2 ? "bg-[#FF4D00] hover:bg-[#e64500]" : "bg-black hover:bg-gray-800"}`}
+              className={`h-12 w-full text-sm font-semibold ${credits < 2 ? "bg-[#FF4D00] hover:bg-[#e64500]" : "bg-black hover:bg-gray-800"}`}
             >
               {isLoading ? (
                 <>

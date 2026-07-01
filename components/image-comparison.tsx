@@ -13,9 +13,25 @@ interface ImageComparisonProps {
   onStartOver: () => void
   onDownload?: (restoredUrl: string) => void
   showStartOver?: boolean
+  showGenerateVideo?: boolean
+  beforeLabel?: string
+  afterLabel?: string
+  compareHint?: string
+  startOverLabel?: string
 }
 
-export default function ImageComparison({ originalUrl, restoredUrl, onStartOver, onDownload, showStartOver = true }: ImageComparisonProps) {
+export default function ImageComparison({
+  originalUrl,
+  restoredUrl,
+  onStartOver,
+  onDownload,
+  showStartOver = true,
+  showGenerateVideo = true,
+  beforeLabel = "Original",
+  afterLabel = "Restored",
+  compareHint = "Drag the slider to compare before and after",
+  startOverLabel = "Restore Another",
+}: ImageComparisonProps) {
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -156,7 +172,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
         <div className="space-y-4 sm:space-y-5">
           {/* Header */}
           <div className="text-center">
-            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Drag the slider to compare before and after</p>
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">{compareHint}</p>
           </div>
 
           {/* Image Comparison Container */}
@@ -171,7 +187,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
               {/* Restored Image (Background) */}
               <img
                 src={restoredUrl || "/placeholder.svg"}
-                alt="Restored image"
+                alt={`${afterLabel} image`}
                 className="w-full h-full object-contain"
                 draggable={false}
                 loading="lazy"
@@ -184,7 +200,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
               >
                 <img
                   src={originalUrl || "/placeholder.svg"}
-                  alt="Original image"
+                  alt={`${beforeLabel} image`}
                   className="w-full h-full object-contain"
                   draggable={false}
                   loading="lazy"
@@ -221,10 +237,10 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
 
               {/* Labels */}
               <div className="absolute top-3 left-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
-                Original
+                {beforeLabel}
               </div>
               <div className="absolute top-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium">
-                Restored
+                {afterLabel}
               </div>
             </div>
           </div>
@@ -239,13 +255,15 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
               Download
             </Button>
 
-            <Button
-              onClick={handleGenerateVideo}
-              className="h-10 px-5 rounded-full bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
-            >
-              <Videotape className="w-4 h-4 mr-1" />
-              Generate Video
-            </Button>
+            {showGenerateVideo && (
+              <Button
+                onClick={handleGenerateVideo}
+                className="h-10 px-5 rounded-full bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+              >
+                <Videotape className="w-4 h-4 mr-1" />
+                Generate Video
+              </Button>
+            )}
 
             {showStartOver && (
               <Button
@@ -261,7 +279,7 @@ export default function ImageComparison({ originalUrl, restoredUrl, onStartOver,
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                   />
                 </svg>
-                Restore Another
+                {startOverLabel}
               </Button>
             )}
           </div>

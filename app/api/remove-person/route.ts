@@ -17,21 +17,28 @@ function cleanInstruction(value: unknown) {
 }
 
 function buildPrompt(instruction: string) {
-  const extra = instruction ? `\nUser note: ${instruction}` : ""
-
-  return `Edit the input image by using the visible transparent red brush mark as a precise local selection guide for object removal/inpainting.${extra}
-
-The red brush mark is NOT part of the real photo. It is an instruction overlay. Remove only the real-world object, person, or area directly covered by the red mark. Do not infer a nearby person, face, body, or large object as the target unless the red mark clearly covers that subject. If the red mark is on a small object next to a person, remove only that small object and preserve the person completely.
+  const intro =
+    "Edit the input image by using the visible transparent red brush mark as a precise local selection guide for object removal/inpainting."
+  const userNote = instruction ? `User note: ${instruction}` : null
+  const rules = `The red brush mark is NOT part of the real photo. It is an instruction overlay. Remove only the real-world object, person, or area directly covered by the red mark. Do not infer a nearby person, face, body, or large object as the target unless the red mark clearly covers that subject. If the red mark is on a small object next to a person, remove only that small object and preserve the person completely.
 
 Critical preservation rules:
 - Keep the original photo's framing, aspect ratio, crop, border, grain, blur, damage, exposure, contrast, color temperature, sepia/black-and-white tone, and overall aged-photo look unchanged.
 - Do not restore, enhance, recolor, colorize, beautify, sharpen, denoise, zoom, crop, reframe, or stylize the image.
-- Copy every unmarked person, face, body, object, background detail, shadow, texture, and edge exactly as much as possible.
-- Only synthesize pixels needed to replace the marked subject/area, using nearby background texture, lighting, perspective, and shadows.
+- Copy every unmarked person, face, body, object, background detail, shadow, texture, and edge exactly as much as possible, except for tiny contact/occlusion areas that must be completed after the marked target is removed.
+- Only synthesize pixels needed to replace the marked subject/area and the small newly exposed contact area, using nearby body, clothing, background texture, lighting, perspective, and shadows.
+
+Contact/occlusion repair rules:
+- If the removed target was touching, covering, held by, or overlapping an unmarked person or object, reconstruct the newly exposed part of that unmarked person or object only where the target was removed.
+- Complete interrupted hands, fingers, arms, sleeves, clothing folds, shadows, and nearby background surfaces so they look continuous, anatomically plausible, and natural after the marked target is gone.
+- Keep this repair conservative: do not change an unmarked person's identity, face, expression, pose, body shape, clothing style, or unrelated areas.
+
 - Remove all traces of the red brush mark from the final image.
 - Do not leave halos, smears, repeated texture artifacts, ghost silhouettes, cutout edges, or color stains.
 
 Output one photorealistic image with only the red-marked target removed and everything else preserved.`
+
+  return [intro, userNote, rules].filter(Boolean).join("\n\n")
 }
 export async function POST(req: NextRequest) {
   try {
@@ -86,7 +93,7 @@ export async function POST(req: NextRequest) {
 
     let falOutput: any
     try {
-      const result = await fal.subscribe("fal-ai/nano-banana-2/edit", {
+      const result = await fal.subscribe("google/nano-banana-lite/edit", {
         input: {
           prompt: buildPrompt(instruction),
           image_urls: [falUrl],
