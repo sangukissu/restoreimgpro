@@ -37,7 +37,14 @@ function buildPrompt(placement: Placement, context: string) {
 
   return `You are an expert photo compositor and retoucher.
 Task: Seamlessly insert the person from the SECOND input image into the scene of the FIRST input image. The first image is the base scene - preserve its environment, composition, lighting, perspective, background, and all existing people exactly as they are. The second image contains the person to add.
-Placement: Add the person ${placementDirective(placement)}. ${contextDirective} The person should appear as if they were originally part of the photograph - naturally fitting the scene's depth, perspective, and spatial arrangement. Match the shape and size of the person from second photo to be suitable with the persons' shape and size in first photo.
+Placement: Add the person ${placementDirective(placement)}. ${contextDirective} The person should appear as if they were originally part of the photograph - naturally fitting the scene's depth, perspective, and spatial arrangement. If the requested area has too little usable room, choose the nearest natural open space that still respects the user's placement intent.
+Composition Planning (Critical):
+- First inspect the base scene for empty background, visible floor/ground plane, depth, eye line, and existing subjects' silhouettes before deciding where the new person belongs.
+- Treat the SECOND image as the identity, face, and clothing reference, not as a literal cutout to paste. Decide the inserted person's visible body crop from the FIRST image's framing and available space: if the base scene is full-body and has room, create a full-body insertion at matching scale; if the base scene is waist-up, bust, or tight, use the same crop style. When the SECOND image lacks lower-body details, infer only the minimum natural body and clothing needed to match the FIRST image, without changing identity or inventing distracting details.
+- Match the inserted person's scale to nearby faces, shoulders, and camera distance in the FIRST image.
+- Follow the requested placement and any user-provided context first; then choose the cleanest nearby position that keeps the inserted person physically plausible in the FIRST image.
+- If the placement or user context requires overlap, place the person only where the occlusion can be physically natural and clean. Do not force the person behind, through, or on top of foreground subjects when that would create an impossible composition.
+- Do not add stray hands, partial arms, extra limbs, duplicate people, or unrelated body parts at the frame edges while satisfying the placement and context.
 Integration Requirements (Critical):
 - Match the base photo's lighting, color temperature, shadows, and contrast on the inserted person.
 - Preserve the identity, likeness, facial features, and clothing of the person being added.
