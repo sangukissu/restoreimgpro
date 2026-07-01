@@ -11,6 +11,8 @@ fal.config({
 
 const placements = ["left", "center-left", "center", "center-right", "right"] as const
 const aspectRatios = ["1:1", "4:3", "3:4", "16:9", "auto"] as const
+const publicFigureError =
+  "We can't edit photos that include recognizable public figures or restricted content. Please use personal photos where you have permission to create this edit."
 
 type Placement = (typeof placements)[number]
 
@@ -31,17 +33,30 @@ function cleanContext(context: unknown) {
 }
 
 function buildPrompt(placement: Placement, context: string) {
-  const contextDirective = context ? `Additional context: ${context}` : ""
+  const contextDirective = context ? `"Additional context by user: ${context}"` : ""
 
   return `You are an expert photo compositor and retoucher.
 Task: Seamlessly insert the person from the SECOND input image into the scene of the FIRST input image. The first image is the base scene - preserve its environment, composition, lighting, perspective, background, and all existing people exactly as they are. The second image contains the person to add.
-Placement: Add the person ${placementDirective(placement)}. ${contextDirective} The person should appear as if they were originally part of the photograph - naturally fitting the scene's depth, perspective, and spatial arrangement.
+Placement: Add the person ${placementDirective(placement)}. ${contextDirective} The person should appear as if they were originally part of the photograph - naturally fitting the scene's depth, perspective, and spatial arrangement. Match the shape and size of the person from second photo to be suitable with the persons' shape and size in first photo.
 Integration Requirements (Critical):
 - Match the base photo's lighting, color temperature, shadows, and contrast on the inserted person.
 - Preserve the identity, likeness, facial features, and clothing of the person being added.
 - Ensure correct scale and perspective relative to existing subjects.
 - Apply natural edge blending so the insertion is invisible - no halo, no cutout edges, no mismatched tones.
+- If either input image contains a recognizable public figure, celebrity, politician, or other prominent real person, deny the photo editing and do not generate an edited image.
 Output: A single photorealistic photograph, indistinguishable from an unmodified original.`
+}
+
+function getFalErrorDetails(error: any) {
+  const status = Number(error?.status || error?.statusCode || error?.body?.status || error?.response?.status)
+  const message = typeof error?.message === "string" ? error.message : ""
+  const body = error?.body || error?.response?.body || error?.data || null
+  const bodyText = body ? JSON.stringify(body) : ""
+
+  return {
+    status,
+    text: `${message} ${bodyText}`.toLowerCase(),
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -117,6 +132,18 @@ export async function POST(req: NextRequest) {
       falOutput = result.data
     } catch (falError: any) {
       const message = falError?.message || "Fal generation failed"
+      const falDetails = getFalErrorDetails(falError)
+      if (
+        falDetails.status === 422 ||
+        falDetails.text.includes("no_media_generated") ||
+        falDetails.text.includes("unsafe content") ||
+        falDetails.text.includes("validationerror")
+      ) {
+        return NextResponse.json(
+          { error: publicFigureError, code: "PUBLIC_FIGURE_OR_RESTRICTED_CONTENT" },
+          { status: 422 },
+        )
+      }
       if (message.includes("authentication") || message.includes("401")) {
         return NextResponse.json({ error: "Authentication failed with generation service." }, { status: 401 })
       }
