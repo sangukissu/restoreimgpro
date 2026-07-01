@@ -12,7 +12,6 @@ import FamilyPortraitFAQ from "@/components/ai-family-portrait/faq"
 import AITechnologySection from "@/components/ai-family-portrait/AITechnologySection"
 import { Pricing } from "@/components/landing/Pricing"
 
-
 export const metadata: Metadata = {
   title: "AI Family Portrait Generator | Separate Photos into One Family Photo",
   description:
@@ -26,20 +25,28 @@ export const metadata: Metadata = {
       "Create a family photo from individual photos. BringBack AI turns separate portraits into one realistic, studio-quality family portrait.",
     type: "website",
     url: "https://bringback.pro/ai-family-portrait",
+    images: [
+      {
+        url: "https://bringback.pro/family-portrait.png",
+        width: 1200,
+        height: 800,
+        alt: "AI family portrait created from separate photos",
+      },
+    ],
   },
 }
 
-// WebApplication schema for the family portrait feature
 const familyPortraitWebAppJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/#ai-family-portrait-webapp',
-  name: 'BringBack – AI Family Portrait',
+  name: 'BringBack AI Family Portrait Generator',
   description:
-    'Combine up to 4 individual photos into one harmonious, high‑resolution family portrait. Works beautifully across time, distance, and styles.',
+    'Create a studio-quality AI family portrait from separate individual photos. Combine up to 4 people, choose canvas ratios and studio backdrops, and preserve recognizable facial likeness.',
   url: 'https://bringback.pro/ai-family-portrait',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
+  image: 'https://bringback.pro/family-portrait.png',
   offers: {
     '@type': 'Offer',
     name: 'BringBack Family Portrait',
@@ -52,37 +59,71 @@ const familyPortraitWebAppJsonLd = {
     },
   },
   featureList: [
-    'Combine up to 4 photos into one portrait',
-    'Respects original likeness and expression',
-    'Harmonizes lighting, colors, and style',
-    'High‑resolution download',
-    'Privacy‑first handling with auto‑deletion',
+    'Separate photos into one family photo',
+    'Combine up to 4 individual portraits',
+    'Preserve original facial likeness and expression',
+    'Choose 1:1, 3:4, 4:3, or 16:9 canvas ratios',
+    'Choose matte black, neutral gray, warm beige, gradient, dark brown, or bokeh studio backdrops',
+    'High-resolution download',
+    'Private account media library',
   ],
   screenshot: 'https://bringback.pro/family-portrait.png',
 }
 
-// ImageObject schema for the hero visual
 const familyPortraitImageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ImageObject',
   name: 'AI Family Portrait Example',
   description:
-    'Example of a professional family portrait generated from separate photos.',
+    'Example of a professional AI family portrait generated from separate individual photos.',
   contentUrl: 'https://bringback.pro/family-portrait.png',
   url: 'https://bringback.pro/ai-family-portrait#hero',
 }
 
-// FAQ schema for common questions (aligned to ai-family-portrait FAQ component)
+const familyPortraitHowToJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to create a family photo from individual photos',
+  description:
+    'Upload separate portraits, choose a canvas and studio background, then generate one cohesive AI family portrait.',
+  totalTime: 'PT2M',
+  step: [
+    {
+      '@type': 'HowToStep',
+      name: 'Upload individual portraits',
+      text: 'Add 2 to 4 clear JPG, PNG, or WebP photos with visible faces. Restore damaged or blurry old photos first for best results.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Choose canvas and backdrop',
+      text: 'Pick a square, portrait, classic, or wide aspect ratio, then choose a studio background such as matte black, gray, beige, brown, gradient, or bokeh.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Generate and download',
+      text: 'BringBack composes the people into one studio-quality family portrait with harmonized lighting, color, scale, and perspective.',
+    },
+  ],
+}
+
 const familyPortraitFAQJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'Will the final photo look fake or like a bad photoshop?',
+      name: 'Can I create a family photo from individual photos?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "No. Our AI's greatest strength is its ability to create consistent lighting, color, and texture across all individuals, blending them into a cohesive and natural‑looking portrait.",
+        text: 'Yes. Upload separate portraits of 2 to 4 people and BringBack composes them into one realistic studio-quality family photo.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Will the final photo look fake or like a collage?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'BringBack is designed to avoid the cut-and-paste look. It creates a new studio portrait with consistent lighting, color, scale, and texture across the people you upload.',
       },
     },
     {
@@ -90,63 +131,23 @@ const familyPortraitFAQJsonLd = {
       name: 'Does the AI change what my family members look like?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely not. The feature is designed to preserve the exact likeness and identity of each person. We do not perform any facial swapping or alteration.',
+        text: 'The family portrait generator is built to preserve recognizable facial likeness, age, and expression from the uploaded references. Results can vary by input quality, so clear face photos work best.',
       },
     },
     {
       '@type': 'Question',
-      name: 'What are the best photos to upload for this feature?',
+      name: 'What are the best photos to upload?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'For the best results, use clear, well‑lit, front‑facing portraits where the face is not obscured. While our AI is versatile, higher quality input photos will yield a more stunning final portrait.',
+        text: 'Use JPG, PNG, or WebP images under 20MB each. Clear, well-lit, front-facing portraits with visible faces produce the most natural family photo.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Can I combine black‑and‑white photos with color photos?',
+      name: 'Can I combine black-and-white photos with color photos?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. This is one of the most powerful uses of the feature. The AI will intelligently interpret the black‑and‑white photos and render them in a style that harmonizes beautifully with the color photos in the final portrait.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'How do you combine photos into one picture without it looking fake?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "This is the core of our technology. Our AI goes beyond simple 'cut and paste.' It acts like a digital artist by re‑rendering the entire scene. It analyzes each person and creates a new, unified lighting and color scheme, so everyone looks like they were in the same room. It harmonizes textures and shadows to ensure a natural, cohesive final portrait, not a cheap‑looking photoshop.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can the AI fix old, faded, or damaged photos before combining them?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'While this tool is focused on composition, we highly recommend using our Old Photo Restoration feature first for any damaged or faded images. Restoring a photo before adding it to your family portrait will yield dramatically better and more lifelike results. A clear input creates a masterpiece output.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I add a deceased person to a family photo?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. This is one of the most meaningful uses of our tool. You can create a beautiful memorial portrait by combining a photo of a loved one who has passed with a current family picture. The AI will blend them together respectfully, creating a treasured keepsake that honors their memory and keeps them part of the family portrait.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Is it possible to create a generational photo with ancestors?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Yes. You can unite generations that never met. Combine a photo of a grandparent in their youth with a photo of a grandchild. Our AI can even harmonize black‑and‑white photos with color ones, creating a powerful image that visualizes your family's legacy through time.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What are the best photos to use for an AI family portrait?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Clear, front‑facing portraits work best. Ensure the face is well‑lit and not covered by shadows or objects. Similar head sizes across the photos can help the AI create a more balanced composition. Simple backgrounds are preferred, as they allow the AI to focus on the people.',
+        text: 'Yes. You can combine black-and-white photos with color photos. If the older photo is damaged, faded, or blurry, restore it first for the best likeness.',
       },
     },
     {
@@ -154,31 +155,23 @@ const familyPortraitFAQJsonLd = {
       name: 'How many people can I combine into one group photo?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Currently, you can combine up to 4 individual photos into a single family portrait. For groups of 3–4 people, we recommend using a wider aspect ratio (like 4:3 or 16:9) to give the AI enough space for a beautiful composition.',
+        text: 'You can combine up to 4 individual photos into a single family portrait. For 3 to 4 people, wider ratios such as 4:3 or 16:9 usually create a more balanced composition.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Can I change the clothes or background in the photos?',
+      name: 'Can I add a deceased person to a family photo?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'This feature is focused on composing the subjects into a new portrait. It does not perform clothing changes. The AI generates a new, simple studio‑style background to ensure the final image is cohesive and focuses entirely on your family members.',
+        text: 'Yes. Many families use BringBack to create respectful memorial portraits by combining a loved one who has passed with current family members.',
       },
     },
     {
       '@type': 'Question',
-      name: 'How is this different from using Photoshop or hiring an artist?',
+      name: 'Can I choose the background or aspect ratio?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The primary differences are speed, cost, and accessibility. A manual edit in Photoshop can take a professional artist hours or days and cost $50–$200+. Our AI delivers a comparable, high‑quality result in under a minute for a fraction of the cost.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Is this better than free apps that merge photos?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes, in two critical ways: quality and privacy. Free tools often produce low‑quality images with inconsistent lighting that look obviously fake. More importantly, they may use your private family photos for data collection. Our service provides a professional‑grade, artistic result while guaranteeing the absolute privacy of your cherished memories.',
+        text: 'Yes. BringBack supports 1:1, 3:4, 4:3, and 16:9 canvases plus studio backdrops including matte black, neutral gray, warm beige, subtle gradient, dark brown vignette, and gentle bokeh.',
       },
     },
   ],
@@ -189,6 +182,7 @@ export default function Page() {
     <div className="min-h-screen bg-brand-bg">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitWebAppJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitImageJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitHowToJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitFAQJsonLd) }} />
       <Navbar />
       <AIAnimationHero />
