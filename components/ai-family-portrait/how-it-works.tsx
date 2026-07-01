@@ -6,7 +6,7 @@ const STEPS = [
   {
     id: 1,
     title: "Upload Photos",
-    description: "Select 1 to 4 clear, front-facing photos of your family members. Our AI works with modern, old, and even black-and-white pictures.",
+    description: "Select 2 to 4 clear, front-facing photos of your family members. BringBack works with modern portraits, restored old photos, and black-and-white references.",
     icon: <UploadCloud size={24} className="text-brand-black" />,
   },
   {
@@ -18,7 +18,7 @@ const STEPS = [
   {
     id: 3,
     title: "Generate & Cherish",
-    description: "In seconds, our AI composes a single, harmonious group photo. Download your high-resolution image, ready for printing.",
+    description: "In about 1 to 2 minutes, BringBack composes a single, harmonious group photo. Download your high-resolution image, ready for sharing or printing.",
     icon: <Download size={24} className="text-brand-black" />,
   }
 ];
@@ -38,7 +38,7 @@ export default function AIAnimationHowItWorks() {
 
             {/* Title */}
             <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[1.1]">
-              Your Dream Portrait <br />
+              Your Family Portrait <br />
               <span className="text-gray-400">in 3 Simple Steps.</span>
             </h2>
           </div>
@@ -46,7 +46,7 @@ export default function AIAnimationHowItWorks() {
           {/* Subtitle */}
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Select 1 to 4 clear, front-facing photos. Choose your canvas. In seconds, our AI composes a single, harmonious group photo.
+              Select 2 to 4 clear, front-facing photos. Choose your canvas and studio background. BringBack composes a single, harmonious group photo.
             </p>
           </div>
         </div>

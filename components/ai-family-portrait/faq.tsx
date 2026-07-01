@@ -10,61 +10,57 @@ interface FAQItem {
 
 const FAQS: FAQItem[] = [
   {
-    question: "Will the final photo look fake or like a bad photoshop?",
-    answer: "No. Our AI's greatest strength is its ability to create consistent lighting, color, and texture across all individuals, blending them into a cohesive and natural-looking portrait."
+    question: "Can I create a family photo from individual photos?",
+    answer: "Yes. Upload separate portraits of 2 to 4 people and BringBack composes them into one realistic studio-quality family photo. It is useful when relatives live far apart, when generations never met, or when you only have one good photo of each person."
+  },
+  {
+    question: "Will the final photo look fake or like a collage?",
+    answer: "BringBack is designed to avoid the cut-and-paste look. The AI creates a new studio portrait with consistent lighting, color, scale, texture, and perspective across the people you upload."
   },
   {
     question: "Does the AI change what my family members look like?",
-    answer: "Absolutely not. The feature is designed to preserve the exact likeness and identity of each person. We do not perform any facial swapping or alteration."
+    answer: "The family portrait generator is built to preserve recognizable facial likeness, age, expression, and key details from the uploaded references. Results still depend on photo quality, so clear face photos produce the strongest likeness."
   },
   {
-    question: "What are the best photos to upload for this feature?",
-    answer: "For the best results, use clear, well-lit, front-facing portraits where the face is not obscured. While our AI is versatile, higher quality input photos will yield a more stunning final portrait."
-  },
-  {
-    question: "Can I combine black-and-white photos with color photos?",
-    answer: "Yes. This is one of the most powerful uses of the feature. The AI will intelligently interpret the black-and-white photos and render them in a style that harmonizes beautifully with the color photos in the final portrait."
-  },
-  {
-    question: "How do you combine photos into one picture without it looking fake?",
-    answer: "This is the core of our technology. Our AI goes beyond simple 'cut and paste.' It acts like a digital artist by re-rendering the entire scene. It analyzes each person and creates a new, unified lighting and color scheme, so everyone looks like they were in the same room."
-  },
-  {
-    question: "Can the AI fix old, faded, or damaged photos before combining them?",
-    answer: "While this tool is focused on composition, we highly recommend using our Old Photo Restoration feature first for any damaged or faded images. Restoring a photo before adding it to your family portrait will yield dramatically better and more lifelike results."
-  },
-  {
-    question: "Can I add a deceased person to a family photo?",
-    answer: "Yes. This is one of the most meaningful uses of our tool. You can create a beautiful memorial portrait by combining a photo of a loved one who has passed with a current family picture. The AI will blend them together respectfully."
-  },
-  {
-    question: "Is it possible to create a generational photo with ancestors?",
-    answer: "Yes. You can unite generations that never met. Combine a photo of a grandparent in their youth with a photo of a grandchild. Our AI can even harmonize black-and-white photos with color ones."
-  },
-  {
-    question: "What are the best photos to use for an AI family portrait?",
+    question: "What are the best photos to upload?",
     answer: [
-      "Clear, front-facing portraits work best.",
-      "Ensure the face is well-lit and not covered by shadows or objects.",
-      "Similar head sizes across the photos can help the AI create a more balanced composition.",
-      "Simple backgrounds are preferred, as they allow the AI to focus on the people."
+      "Use JPG, PNG, or WebP images under 20MB each.",
+      "Choose clear, well-lit face photos where the person is looking toward the camera.",
+      "Avoid heavy shadows, sunglasses, covered faces, or very tiny faces in a large group photo.",
+      "For old, torn, faded, or blurry images, run Old Photo Restoration first and upload the restored version."
     ]
   },
   {
     question: "How many people can I combine into one group photo?",
-    answer: "Currently, you can combine up to 4 individual photos into a single family portrait. For groups of 3–4 people, we recommend using a wider aspect ratio (like 4:3 or 16:9) to give the AI enough space for a beautiful composition."
+    answer: "You can combine up to 4 individual photos into one family portrait. For 3 to 4 people, wider ratios such as 4:3 or 16:9 usually give the AI more space for a natural arrangement."
   },
   {
-    question: "Can I change the clothes or background in the photos?",
-    answer: "This feature is focused on composing the subjects into a new portrait. It does not perform clothing changes. The AI generates a new, simple studio-style background to ensure the final image is cohesive and focuses entirely on your family members."
+    question: "Can I combine black-and-white photos with color photos?",
+    answer: "Yes. You can combine black-and-white and color photos in one portrait. If the older photo is damaged, faded, scratched, or blurry, restoring it first gives the generator a much better likeness reference."
   },
   {
-    question: "How is this different from using Photoshop or hiring an artist?",
-    answer: "The primary differences are speed, cost, and accessibility. A manual edit in Photoshop can take a professional artist hours or days and cost $50–$200+. Our AI delivers a comparable, high-quality result in under a minute for a fraction of the cost."
+    question: "Can I add a deceased person to a family photo?",
+    answer: "Yes. Many families use BringBack to create respectful memorial portraits by combining a loved one who has passed with current family members. The goal is a warm keepsake, not a novelty edit."
+  },
+  {
+    question: "Can I create a generational portrait with ancestors?",
+    answer: "Yes. You can combine a grandparent or ancestor from an old portrait with children or grandchildren from modern photos. This is one of the most meaningful uses of the tool because it creates a family image that was never physically possible."
+  },
+  {
+    question: "Can I choose the background or aspect ratio?",
+    answer: "Yes. BringBack supports 1:1, 3:4, 4:3, and 16:9 canvases, plus studio backdrops such as matte black, neutral gray, warm beige, subtle gradient, dark brown vignette, and gentle bokeh."
+  },
+  {
+    question: "Does this replace Old Photo Restoration?",
+    answer: "No. Family Portrait is for composing people into one new image. Old Photo Restoration is for repairing scratches, tears, fading, blur, and damage. If your source image is old or low quality, restore it first, then use it here."
+  },
+  {
+    question: "How is this different from Photoshop or a manual artist?",
+    answer: "Manual compositing can take hours or days because the editor has to cut out people, balance lighting, repaint shadows, and match perspective. BringBack automates that workflow and creates a studio-style result in minutes for 2 credits."
   },
   {
     question: "Is this better than free apps that merge photos?",
-    answer: "Yes, in two critical ways: quality and privacy. Free tools often produce low-quality images with inconsistent lighting that look obviously fake. More importantly, they may use your private family photos for data collection. Our service provides a professional-grade, artistic result while guaranteeing the absolute privacy of your cherished memories."
+    answer: "Free merge apps often create flat collages or obvious pasted composites. BringBack is built for family keepsakes, with likeness preservation, studio composition, canvas choices, and a private account workflow."
   }
 ];
 
@@ -83,14 +79,12 @@ const AccordionItem: React.FC<{
           {item.question}
         </h3>
 
-        {/* Toggle Button */}
         <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 cursor-pointer ${isOpen ? 'bg-brand-orange text-white' : 'bg-gray-100 text-brand-black group-hover:bg-gray-200'
           }`}>
           {isOpen ? <Minus size={20} strokeWidth={2.5} /> : <Plus size={20} strokeWidth={2.5} />}
         </div>
       </div>
 
-      {/* Content */}
       <div
         className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
           }`}
@@ -126,26 +120,21 @@ export default function FamilyPortraitFAQ() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
 
-          {/* Header Column */}
           <div className="lg:col-span-5 lg:sticky lg:top-32">
-            {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
               <span className="text-brand-orange">//</span> FAQs <span className="text-brand-orange">//</span>
             </div>
 
-            {/* Title */}
             <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95] mb-8">
               Questions <br />
               <span className="text-gray-400">& answers.</span>
             </h2>
 
-            {/* Subtitle */}
             <p className="text-lg text-gray-600 font-medium leading-relaxed max-w-md">
-              Everything you need to know about creating a natural, unified portrait from separate photos.
+              Practical answers for creating a natural AI family portrait from separate photos.
             </p>
           </div>
 
-          {/* Questions Column - The Frame */}
           <div className="lg:col-span-7">
             <div className="bg-brand-surface p-2 rounded-[1.8rem]">
               <div className="flex flex-col gap-3">
