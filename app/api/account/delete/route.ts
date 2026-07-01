@@ -58,7 +58,7 @@ async function collectR2Keys(userId: string): Promise<string[]> {
     if (error) continue
     for (const row of data || []) {
       for (const col of columns) {
-        const value = (row as Record<string, unknown>)[col]
+        const value = (row as unknown as Record<string, unknown>)[col]
         if (typeof value === "string" && value.length > 0) {
           keys.push(value)
         }
