@@ -113,6 +113,7 @@ export async function POST(request: Request) {
       theme: "family_heritage_v1",
       share_slug: shareSlug,
       draft_document: draftDocument,
+      preservation_consent: true,
     })
     .select("*")
     .single()
@@ -128,6 +129,7 @@ export async function POST(request: Request) {
         theme: "family_heritage_v1",
         share_slug: fallbackSlug,
         draft_document: draftDocument,
+        preservation_consent: true,
       })
       .select("*")
       .single()

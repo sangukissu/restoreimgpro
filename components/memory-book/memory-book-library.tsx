@@ -42,6 +42,11 @@ export function MemoryBookLibrary({
   const liveBook = hasLiveBook
     ? books.find((book) => book.id === liveBookId) ?? null
     : null
+  // A user can only ever own ONE memory book (either draft or live). The
+  // "Compose another" CTA is only valid when the library is empty — once any
+  // book exists we route the user back into that book instead.
+  const hasAnyBook = books.length > 0
+  const draftBook = hasAnyBook && !hasLiveBook ? books[0] : null
 
   const createBook = async () => {
     if (hasLiveBook) return
@@ -199,19 +204,14 @@ export function MemoryBookLibrary({
                     <ArrowUpRight className="ml-1.5 size-4" />
                   </Button>
                 ) : null}
-                {!hasLiveBook ? (
+                {draftBook ? (
                   <Button
-                    onClick={createBook}
-                    disabled={creating}
+                    onClick={() => router.push(`/dashboard/memory-book/${draftBook.id}`)}
                     size="lg"
                     className="h-11 rounded-full bg-[#FF4D00] px-6 text-sm font-semibold text-white shadow-[0_8px_24px_-12px_rgba(255,77,0,0.55)] hover:bg-[#e64500]"
                   >
-                    {creating ? (
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                    ) : (
-                      <Plus className="mr-2 size-4" />
-                    )}
-                    Compose another keepsake
+                    Continue your draft
+                    <ArrowUpRight className="ml-1.5 size-4" />
                   </Button>
                 ) : null}
               </div>
