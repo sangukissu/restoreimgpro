@@ -26,7 +26,7 @@ export default function AIAnimationHero() {
 
         {/* Subheading - Exact Typography */}
         <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mb-12 font-medium leading-relaxed">
-Unite generations in one frame without a photoshoot. We transform separate images into a realistic, high-definition family photo. A premium service for moments that matter.
+Create a family photo from individual photos without scheduling a photoshoot. Upload separate portraits, choose a studio canvas, and get one realistic family portrait that preserves each person's likeness.
         </p>
 
         {/* CTA Buttons - Exact Match */}
@@ -35,7 +35,7 @@ Unite generations in one frame without a photoshoot. We transform separate image
           {/* Primary Button */}
           <Link href="/dashboard/family-portrait">
             <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_20px_40px_-12px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
-              <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Create Portrait</span>
+              <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Create Family Photo</span>
               <div className="w-8 h-8 sm:w-11 sm:h-11 bg-[#111111] rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
                 <ArrowRight className="text-[#FF4D00] w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
               </div>
@@ -66,7 +66,7 @@ Unite generations in one frame without a photoshoot. We transform separate image
             {/* Professional Badge Overlay */}
             <div className="absolute bottom-6 right-6 bg-black/40 backdrop-blur-md border border-white/10 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-              Generated from 4 photos
+              Created from 4 separate photos
             </div>
           </div>
         </div>
@@ -78,7 +78,7 @@ Unite generations in one frame without a photoshoot. We transform separate image
               <Star key={star} size={16} className="fill-[#FF4D00] text-[#FF4D00]" />
             ))}
           </div>
-          <span className="text-sm font-bold text-gray-600 uppercase tracking-wide">Trusted by 1.4K+ Families</span>
+          <span className="text-sm font-bold text-gray-600 uppercase tracking-wide">Trusted by families preserving memories</span>
         </div>
 
       </div>

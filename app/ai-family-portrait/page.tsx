@@ -4,6 +4,7 @@ import type { Metadata } from "next"
 
 import AIAnimationHero from "@/components/ai-family-portrait/hero"
 import { FamilyPortrait } from "@/components/ai-family-portrait/styles-grid"
+import FamilyPortraitConversionGuide from "@/components/ai-family-portrait/conversion-guide"
 import AIAnimationHowItWorks from "@/components/ai-family-portrait/how-it-works"
 import FamilyPortraitUseCases from "@/components/ai-family-portrait/features"
 import { CTA } from '@/components/landing/CTA';
@@ -13,16 +14,16 @@ import { Pricing } from "@/components/landing/Pricing"
 
 
 export const metadata: Metadata = {
-  title: "Turn Separate Photos into One Studio-Quality Family Portrait | BringBack AI",
+  title: "AI Family Portrait Generator | Separate Photos into One Family Photo",
   description:
-    "Don't settle for cheap collages. Our AI generates realistic, high-resolution studio portraits from individual photos. Perfect for framing and printing.",
+    "Create a family photo from individual photos. BringBack AI turns separate portraits into one realistic, studio-quality family portrait for framing, gifts, and memorial keepsakes.",
   alternates: {
     canonical: "/ai-family-portrait",
   },
   openGraph: {
-    title: "Turn Separate Photos into One Studio-Quality Family Portrait | BringBack AI",
+    title: "AI Family Portrait Generator | Separate Photos into One Family Photo",
     description:
-      "Don't settle for cheap collages. Our AI generates realistic, high-resolution studio quality family photos from individual photos. Perfect for framing and printing.",
+      "Create a family photo from individual photos. BringBack AI turns separate portraits into one realistic, studio-quality family portrait.",
     type: "website",
     url: "https://bringback.pro/ai-family-portrait",
   },
@@ -192,6 +193,7 @@ export default function Page() {
       <Navbar />
       <AIAnimationHero />
       <FamilyPortrait />
+      <FamilyPortraitConversionGuide />
       <AIAnimationHowItWorks />
       <Pricing />
       <FamilyPortraitUseCases />
