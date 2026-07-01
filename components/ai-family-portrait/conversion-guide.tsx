@@ -70,6 +70,24 @@ const BACKDROPS = [
   "Gentle bokeh",
 ];
 
+const QUICK_ANSWERS = [
+  {
+    question: "How do I make a family photo with separate photos?",
+    answer:
+      "Upload 2 to 4 individual portraits, choose a 4:3 or 16:9 canvas for groups, select a studio background, and generate. BringBack re-composes the people into one new family portrait instead of placing photo cutouts side by side.",
+  },
+  {
+    question: "Can I create a group photo from individual photos?",
+    answer:
+      "Yes. The family portrait generator is built for long-distance families, memorial portraits, ancestor photos, and modern group images where everyone was photographed separately.",
+  },
+  {
+    question: "Is this a free family portrait creator?",
+    answer:
+      "BringBack is a premium AI family photo generator. It costs 2 credits because the workflow prioritizes realistic likeness, studio composition, high-resolution output, and private account storage.",
+  },
+];
+
 export default function FamilyPortraitConversionGuide() {
   return (
     <section id="create-family-photo-from-individual-photos" className="w-full px-4 sm:px-8 py-24 bg-white">
@@ -155,6 +173,23 @@ export default function FamilyPortraitConversionGuide() {
                 </span>
               ))}
             </div>
+          </div>
+        </div>
+
+        <div className="mt-3 rounded-[1.5rem] border border-gray-100 bg-[#F7F6F2] p-8">
+          <div className="mb-8 max-w-3xl">
+            <h3 className="text-2xl font-bold text-brand-black">Quick answers for family photo creation</h3>
+            <p className="mt-2 text-sm font-medium leading-relaxed text-gray-600">
+              These are the questions people usually ask before choosing an AI family portrait generator.
+            </p>
+          </div>
+          <div className="grid gap-3 lg:grid-cols-3">
+            {QUICK_ANSWERS.map((item) => (
+              <article key={item.question} className="rounded-2xl bg-white p-6 shadow-sm">
+                <h4 className="mb-3 text-lg font-bold leading-tight text-brand-black">{item.question}</h4>
+                <p className="text-sm font-medium leading-relaxed text-gray-600">{item.answer}</p>
+              </article>
+            ))}
           </div>
         </div>
       </div>

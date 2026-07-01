@@ -120,6 +120,14 @@ const familyPortraitFAQJsonLd = {
     },
     {
       '@type': 'Question',
+      name: 'How do I make a family photo with separate photos?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Upload 2 to 4 individual portraits, choose a 4:3 or 16:9 canvas for groups, select a studio background, and generate. BringBack re-composes the people into one new family portrait instead of placing photo cutouts side by side.',
+      },
+    },
+    {
+      '@type': 'Question',
       name: 'Will the final photo look fake or like a collage?',
       acceptedAnswer: {
         '@type': 'Answer',
@@ -172,6 +180,14 @@ const familyPortraitFAQJsonLd = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Yes. BringBack supports 1:1, 3:4, 4:3, and 16:9 canvases plus studio backdrops including matte black, neutral gray, warm beige, subtle gradient, dark brown vignette, and gentle bokeh.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is BringBack a free family portrait creator?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'BringBack is a premium AI family photo generator. It costs 2 credits because it focuses on realistic likeness, studio composition, high-resolution output, and private account storage rather than quick collage-style merging.',
       },
     },
   ],

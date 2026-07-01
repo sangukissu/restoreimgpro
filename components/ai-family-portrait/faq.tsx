@@ -55,6 +55,10 @@ const FAQS: FAQItem[] = [
     answer: "No. Family Portrait is for composing people into one new image. Old Photo Restoration is for repairing scratches, tears, fading, blur, and damage. If your source image is old or low quality, restore it first, then use it here."
   },
   {
+    question: "Is BringBack a free family portrait creator?",
+    answer: "BringBack is a premium AI family photo generator. It costs 2 credits because it focuses on realistic likeness, studio composition, high-resolution output, and private account storage rather than quick collage-style merging."
+  },
+  {
     question: "How is this different from Photoshop or a manual artist?",
     answer: "Manual compositing can take hours or days because the editor has to cut out people, balance lighting, repaint shadows, and match perspective. BringBack automates that workflow and creates a studio-style result in minutes for 2 credits."
   },
