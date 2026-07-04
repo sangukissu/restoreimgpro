@@ -69,6 +69,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   const [selectedPlanId, setSelectedPlanId] = useState<string>("")
   const [referralCode, setReferralCode] = useState<string>("")
   const [isApplyingReferral, setIsApplyingReferral] = useState(false)
+  const lastTrackedPlanIdRef = useRef<string>("")
   const [referralApplied, setReferralApplied] = useState(false)
 
 
@@ -91,6 +92,35 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     }
     fetchPlans()
   }, [onError])
+
+  useEffect(() => {
+    if (!selectedPlanId || !plans.length) return
+    const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
+    if (!selectedPlan || lastTrackedPlanIdRef.current === selectedPlanId) return
+
+    const planAnalytics = getPlanAnalytics(selectedPlan);
+
+    try {
+      if (typeof window !== "undefined" && (window as any).gtag) {
+        (window as any).gtag("event", "view_item", {
+          currency: "USD",
+          value: planAnalytics.amount,
+          items: [
+            {
+              item_id: selectedPlan.id,
+              item_name: selectedPlan.name,
+              price: planAnalytics.amount,
+              quantity: 1,
+              credits: selectedPlan.credits,
+            }
+          ]
+        })
+      }
+    } catch (e) {
+      // Ignore analytics errors
+    }
+    lastTrackedPlanIdRef.current = selectedPlanId
+  }, [plans, selectedPlanId])
 
 
 
@@ -209,11 +239,36 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     }
   }
 
+  const handleClose = () => {
+    try {
+      const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
+      if (selectedPlan && typeof window !== "undefined" && (window as any).gtag) {
+        const planAnalytics = getPlanAnalytics(selectedPlan);
+        (window as any).gtag("event", "checkout_abandoned", {
+          currency: "USD",
+          value: planAnalytics.amount,
+          items: [
+            {
+              item_id: selectedPlan.id,
+              item_name: selectedPlan.name,
+              price: planAnalytics.amount,
+              quantity: 1,
+              credits: selectedPlan.credits,
+            }
+          ]
+        })
+      }
+    } catch (e) {
+      // Ignore analytics errors
+    }
+    if (onClose) onClose()
+  }
+
   return (
     <div className="relative bg-white rounded-2xl border border-gray-200 p-4 sm:p-8 shadow-xs hover:shadow-sm transition-shadow duration-200">
       {onClose && (
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
           aria-label="Close"
         >

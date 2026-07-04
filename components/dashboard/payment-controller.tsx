@@ -61,6 +61,36 @@ export default function PaymentController({ user, initialCreditBalance, children
   useEffect(() => {
     const paymentStatus = searchParams.get("payment")
     if (paymentStatus === "success") {
+      const marker = readCheckoutMarker()
+      if (marker) {
+        const completedKey = marker.sessionId || marker.startedAt || "payment-success"
+        const dedupeKey = `ga_payment_completed:${completedKey}`
+
+        try {
+          if (!sessionStorage.getItem(dedupeKey)) {
+            if (typeof window !== "undefined" && (window as any).gtag) {
+              (window as any).gtag("event", "purchase", {
+                transaction_id: marker.sessionId || completedKey,
+                value: marker.amount,
+                currency: marker.currency || "USD",
+                items: [
+                  {
+                    item_id: marker.planId,
+                    item_name: marker.planName,
+                    price: marker.amount,
+                    quantity: 1,
+                    credits: marker.credits,
+                  }
+                ]
+              })
+            }
+            sessionStorage.setItem(dedupeKey, "1")
+          }
+        } catch (e) {
+          // Ignore analytics/storage errors
+        }
+      }
+
       clearCheckoutMarker()
       setShowPaymentSuccess(true)
       const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
