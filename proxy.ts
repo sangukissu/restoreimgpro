@@ -4,12 +4,11 @@ import { securityMiddleware, validateOrigin, detectSuspiciousActivity, isProtect
 
 export async function proxy(request: NextRequest) {
   if (request.nextUrl.pathname === '/restore' || request.nextUrl.pathname.startsWith('/restore/')) {
-    return new Response('Gone', {
-      status: 410,
-      headers: {
-        'X-Robots-Tag': 'noindex',
-      },
-    })
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/old-photo-restoration'
+    redirectUrl.search = ''
+
+    return Response.redirect(redirectUrl, 301)
   }
 
   const isProtectedMemoryBookRoute =

@@ -82,6 +82,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
   const { toast } = useToast()
   const isRestoringRef = useRef(false)
   const trackedCompletionIds = useRef(new Set<string>())
+  const lastReconcileAt = useRef(0)
 
   const {
     isModalOpen: isFeedbackModalOpen,
@@ -257,6 +258,28 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     channel.subscribe()
 
     const syncRestorationStatus = async () => {
+      if (Date.now() - lastReconcileAt.current > 15000) {
+        lastReconcileAt.current = Date.now()
+        try {
+          const response = await fetch("/api/restore/reconcile", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ids: trackedRestorationIds }),
+          })
+
+          if (response.ok) {
+            const payload = await response.json().catch(() => ({}))
+            if (Array.isArray(payload.restorations)) {
+              for (const restoration of payload.restorations) {
+                await applyRestorationRecord(restoration)
+              }
+            }
+          }
+        } catch (error) {
+          console.warn("[restore] Unable to reconcile Fal status", error)
+        }
+      }
+
       const { data } = await supabase
         .from("image_restorations")
         .select("id, status, restored_image_url, original_image_url, error_message")
