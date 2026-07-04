@@ -18,6 +18,7 @@ type BatchRestoreItem = {
   clientId: string
   key: string
   filename: string
+  preserveOriginalColors?: boolean
 }
 
 function isValidItem(value: unknown): value is BatchRestoreItem {
@@ -31,7 +32,8 @@ function isValidItem(value: unknown): value is BatchRestoreItem {
     item.key.length > 0 &&
     typeof item.filename === "string" &&
     item.filename.length > 0 &&
-    item.filename.length <= 255
+    item.filename.length <= 255 &&
+    (typeof item.preserveOriginalColors === "undefined" || typeof item.preserveOriginalColors === "boolean")
   )
 }
 
@@ -138,7 +140,9 @@ export async function POST(request: NextRequest) {
         try {
           const originalKey = await preserveOriginalForComparison(item.key, user.id, batchId, index, item.filename)
           const uploadedFile = await uploadR2ObjectToFal(item.key)
-          const input = buildRestorationInput(uploadedFile)
+          const input = buildRestorationInput(uploadedFile, {
+            preserveOriginalColors: item.preserveOriginalColors === true,
+          })
 
           const queueResult = await fal.queue.submit("fal-ai/nano-banana-2/edit", {
             input,

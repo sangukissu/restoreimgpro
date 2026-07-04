@@ -24,6 +24,7 @@ interface RestoreItem extends BatchComparisonItem {
   file?: File
   size?: number
   initialRestoredUrl?: string
+  preserveOriginalColors?: boolean
 }
 
 interface StoredRestoreSession {
@@ -102,6 +103,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
           clientId: item.clientId,
           file: item.file,
           localPreviewUrl: item.localPreviewUrl!,
+          preserveOriginalColors: item.preserveOriginalColors,
           error: item.error,
         })),
     [items],
@@ -283,6 +285,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       fileName: file.name,
       size: file.size,
       localPreviewUrl: URL.createObjectURL(file),
+      preserveOriginalColors: false,
       status: "selected" as RestoreStatus,
     }))
 
@@ -296,6 +299,16 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       revokeLocalPreview(target?.localPreviewUrl)
       return current.filter((item) => item.clientId !== clientId)
     })
+  }
+
+  const handlePreserveOriginalColorsChange = (clientId: string, preserve: boolean) => {
+    setItems((current) =>
+      current.map((item) => (item.clientId === clientId ? { ...item, preserveOriginalColors: preserve } : item)),
+    )
+  }
+
+  const handleApplyPreserveOriginalColorsToAll = (preserve: boolean) => {
+    setItems((current) => current.map((item) => (item.status === "selected" ? { ...item, preserveOriginalColors: preserve } : item)))
   }
 
   const handleClearImages = () => {
@@ -353,7 +366,9 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     try {
       if (freshSelectedItems.length === 1) {
         const item = freshSelectedItems[0]
-        const response: RestoreImageResponse = await restoreImage(item.file!)
+        const response: RestoreImageResponse = await restoreImage(item.file!, {
+          preserveOriginalColors: item.preserveOriginalColors === true,
+        })
 
         if (response.success && response.restorationId) {
           const newCredits = response.creditsRemaining ?? Math.max(0, userCredits - 1)
@@ -416,6 +431,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
           clientId: item.clientId,
           key,
           filename: item.fileName,
+          preserveOriginalColors: item.preserveOriginalColors === true,
         })),
       )
 
@@ -542,6 +558,8 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
             onRemoveImage={handleRemoveImage}
             onClearImages={handleClearImages}
             onRestore={handleRestore}
+            onPreserveOriginalColorsChange={handlePreserveOriginalColorsChange}
+            onApplyPreserveOriginalColorsToAll={handleApplyPreserveOriginalColorsToAll}
             selectedItems={selectedUploadItems}
             userCredits={userCredits}
           />

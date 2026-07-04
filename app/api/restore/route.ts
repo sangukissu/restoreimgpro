@@ -79,6 +79,7 @@ export async function POST(request: NextRequest) {
     let outputFormat = "png"
     let safetyTolerance: string | undefined
     let seed: string | undefined
+    let preserveOriginalColors = false
     let originalImageKey: string | null = null
     const batchId = crypto.randomUUID()
 
@@ -88,6 +89,7 @@ export async function POST(request: NextRequest) {
       const bodyOutputFormat = typeof body?.output_format === "string" ? body.output_format : undefined
       const bodySafety = typeof body?.safety_tolerance === "string" ? body.safety_tolerance : undefined
       const bodySeed = typeof body?.seed === "string" ? body.seed : undefined
+      const bodyPreserveOriginalColors = body?.preserveOriginalColors === true || body?.preserve_original_colors === true
       const filename = typeof body?.filename === "string" ? body.filename : key?.split("/").pop() || "original"
 
       if (!key) {
@@ -104,6 +106,7 @@ export async function POST(request: NextRequest) {
       }
       if (bodySafety) safetyTolerance = bodySafety
       if (bodySeed) seed = bodySeed
+      preserveOriginalColors = bodyPreserveOriginalColors
 
       try {
         originalImageKey = await preserveOriginalForComparison(key, user.id, batchId, 0, filename)
@@ -120,6 +123,7 @@ export async function POST(request: NextRequest) {
       seed = (formData.get("seed") as string) || undefined
       outputFormat = (formData.get("output_format") as string) || "png"
       safetyTolerance = (formData.get("safety_tolerance") as string) || undefined
+      preserveOriginalColors = formData.get("preserve_original_colors") === "true"
 
       if (!file) {
         return NextResponse.json({ error: "No image file provided" }, { status: 400 })
@@ -146,6 +150,7 @@ export async function POST(request: NextRequest) {
       outputFormat,
       safetyTolerance,
       seed: typeof sanitizedSeed === "number" && !isNaN(sanitizedSeed) ? sanitizedSeed : undefined,
+      preserveOriginalColors,
     })
 
     const { data: restoration, error: insertError } = await supabase

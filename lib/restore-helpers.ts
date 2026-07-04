@@ -5,6 +5,12 @@ import { copyR2Object, deleteR2Object, getR2SignedUrl } from "@/lib/r2"
 export const RESTORATION_PROMPT =
   "Restore this damaged or aged photograph to its original quality while maintaining complete faithfulness to the original context and historical authenticity. Remove all physical damage including scratches, tears, creases, dust spots, stains, and missing sections. target and eradicate all persistent, shiny fold artifacts, scanner glare, and deep emulsion cracks, fully reconstructing the underlying visual details. Repair fading and discoloration by restoring original colors and tones without over-saturation. Fully colorize the image, converting black-and-white or sepia originals into vibrant, lifelike, and historically accurate full color. Enhance clarity and sharpness by reconstructing blurry details into accurate physical details based on surrounding context. Apply natural lighting correction with proper shadows and highlights. Add authentic surface textures including natural skin pores, fabric properties, and material accuracy where damaged areas need reconstruction. Preserve all original composition, poses, expressions, and historical characteristics. Use proper depth of field and realistic color grading that matches the original time period. Output should appear as a clean, well-preserved version of the original photograph with all damage repaired and quality improved while remaining completely true to the source image at maximum resolution. The identity of person to be kept intact wihtout modifications. 8K resolution, ultra-high definition, UHD, HDR, razor-sharp focus, tack-sharp details, extreme micro-detailing, highly intricate surface textures, hyper-realistic, pristine image quality, flawless photographic execution."
 
+const PRESERVE_ORIGINAL_COLORS_RESTORATION_PROMPT =
+  RESTORATION_PROMPT.replace(
+    "Repair fading and discoloration by restoring original colors and tones without over-saturation. Fully colorize the image, converting black-and-white or sepia originals into vibrant, lifelike, and historically accurate full color.",
+    "Repair fading and discoloration while preserving the source photograph's existing color treatment and tonal palette without over-saturation. Do not colorize black-and-white, sepia, monochrome, or faded originals; keep their nostalgic color character while restoring damage, contrast, clarity, and natural detail.",
+  )
+
 export function getWebhookBaseUrl(request: Request) {
   const configuredBaseUrl = process.env.NEXT_PUBLIC_APP_URL?.trim()
   return configuredBaseUrl || new URL(request.url).origin
@@ -95,9 +101,10 @@ export function buildRestorationInput(uploadedFile: string, options?: {
   outputFormat?: string
   safetyTolerance?: string
   seed?: number
+  preserveOriginalColors?: boolean
 }) {
   const input: any = {
-    prompt: RESTORATION_PROMPT,
+    prompt: options?.preserveOriginalColors ? PRESERVE_ORIGINAL_COLORS_RESTORATION_PROMPT : RESTORATION_PROMPT,
     num_images: 1,
     aspect_ratio: "auto",
     resolution: "1K",

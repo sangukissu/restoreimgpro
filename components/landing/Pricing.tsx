@@ -84,11 +84,11 @@ const PricingCard: React.FC<{
         </div>
         
         {/* Diminished Credits Metric */}
-        <div className={`text-[11px] font-extrabold uppercase tracking-wider mb-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+        <div className={`text-[11px] font-extrabold uppercase tracking-wider mt-2 mb-3 ${isDark ? 'text-orange-400' : 'text-orange-500'}`}>
           Includes {creditsText}
         </div>
 
-        <p className={`font-medium leading-relaxed text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+        <p className={`font-medium leading-relaxed text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
           {description}
         </p>
 
@@ -118,7 +118,7 @@ const PricingCard: React.FC<{
               </div>
               <span className={`font-bold text-sm leading-tight ${
                 isPerk
-                  ? (isDark ? 'text-gray-400 font-medium' : 'text-gray-500 font-medium')
+                  ? (isDark ? 'text-gray-300 font-medium' : 'text-gray-700 font-medium')
                   : (isDark ? 'text-gray-200' : 'text-brand-black/80')
               }`}>
                 {f.text}

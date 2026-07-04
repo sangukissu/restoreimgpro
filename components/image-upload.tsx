@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { AlertTriangle, Coins, Paperclip, Trash2, UploadCloud } from "lucide-react"
 import { useImageCrop } from "@/hooks/use-image-crop"
 
@@ -10,6 +11,7 @@ export interface SelectedRestoreFile {
   clientId: string
   file: File
   localPreviewUrl: string
+  preserveOriginalColors?: boolean
   error?: string
 }
 
@@ -18,6 +20,8 @@ interface ImageUploadProps {
   onRemoveImage: (clientId: string) => void
   onClearImages: () => void
   onRestore: () => void
+  onPreserveOriginalColorsChange: (clientId: string, preserve: boolean) => void
+  onApplyPreserveOriginalColorsToAll: (preserve: boolean) => void
   selectedItems: SelectedRestoreFile[]
   userCredits: number
 }
@@ -28,11 +32,49 @@ const MAX_DIMENSIONS = 7680
 const MIN_DIMENSIONS = 100
 const MAX_BATCH_SIZE = 5
 
+function PreserveColorsOption({
+  id,
+  checked,
+  onCheckedChange,
+  compact = false,
+}: {
+  id: string
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
+  compact?: boolean
+}) {
+  return (
+    <label
+      htmlFor={id}
+      className={`flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 bg-white/70 p-3 transition hover:bg-white ${
+        compact ? "text-left" : ""
+      }`}
+    >
+      <Checkbox
+        id={id}
+        checked={checked}
+        onCheckedChange={(value) => onCheckedChange(value === true)}
+        className="mt-0.5 data-[state=checked]:border-black data-[state=checked]:bg-black"
+      />
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-semibold leading-tight text-gray-900">Keep original colors</span>
+        {!compact && (
+          <span className="mt-1 block text-xs leading-snug text-gray-500">
+            Best for B/W, sepia, or already colored photos you do not want colorized.
+          </span>
+        )}
+      </span>
+    </label>
+  )
+}
+
 export default function ImageUpload({
   onImagesSelect,
   onRemoveImage,
   onClearImages,
   onRestore,
+  onPreserveOriginalColorsChange,
+  onApplyPreserveOriginalColorsToAll,
   selectedItems,
   userCredits,
 }: ImageUploadProps) {
@@ -185,6 +227,13 @@ export default function ImageUpload({
     const requiredCredits = selectedItems.length
     const hasEnoughCredits = userCredits >= requiredCredits
     const restoreLabel = `Restore ${requiredCredits} photo${requiredCredits === 1 ? "" : "s"} - ${requiredCredits} credit${requiredCredits === 1 ? "" : "s"}`
+    const allPreserveOriginalColors = selectedItems.every((item) => item.preserveOriginalColors)
+    const somePreserveOriginalColors = selectedItems.some((item) => item.preserveOriginalColors)
+    const batchPreserveOriginalColorsState = allPreserveOriginalColors
+      ? true
+      : somePreserveOriginalColors
+        ? "indeterminate"
+        : false
     const hiddenInput = (
       <input
         ref={fileInputRef}
@@ -240,6 +289,12 @@ export default function ImageUpload({
                 </button>
               </div>
 
+              <PreserveColorsOption
+                id={`preserve-colors-${item.clientId}`}
+                checked={item.preserveOriginalColors === true}
+                onCheckedChange={(checked) => onPreserveOriginalColorsChange(item.clientId, checked)}
+              />
+
               {uploadError && (
                 <div className="whitespace-pre-line rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                   {uploadError}
@@ -286,29 +341,51 @@ export default function ImageUpload({
               <h3 className="text-lg font-semibold text-gray-900">{selectedItems.length} photos selected</h3>
               <p className="text-sm text-gray-500">Small thumbnails, one batch.</p>
             </div>
-            <p className="shrink-0 text-xs font-medium text-gray-500">Max 5</p>
+            <div className="shrink-0 space-y-2 text-right">
+              <p className="text-xs font-medium text-gray-500">Max 5</p>
+              <label
+                htmlFor="preserve-all-colors"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-1.5 text-xs font-semibold text-gray-800 hover:bg-white"
+              >
+                <Checkbox
+                  id="preserve-all-colors"
+                  checked={batchPreserveOriginalColorsState}
+                  onCheckedChange={(value) => onApplyPreserveOriginalColorsToAll(value === true)}
+                  className="data-[state=checked]:border-black data-[state=checked]:bg-black"
+                />
+                Original colors for all
+              </label>
+            </div>
           </div>
 
           <div className="rounded-xl border border-dashed border-gray-200 bg-white/70 p-3">
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
               {selectedItems.map((item) => (
-                <div key={item.clientId} className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
-                  <img
-                    src={item.localPreviewUrl}
-                    alt={item.file.name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                    draggable={false}
+                <div key={item.clientId} className="min-w-0 space-y-2">
+                  <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+                    <img
+                      src={item.localPreviewUrl}
+                      alt={item.file.name}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      draggable={false}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => onRemoveImage(item.clientId)}
+                      className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-gray-700 shadow-sm ring-1 ring-black/10 hover:text-red-600"
+                      aria-label={`Remove ${item.file.name}`}
+                    >
+                      <span className="text-base leading-none">x</span>
+                    </button>
+                  </div>
+                  <PreserveColorsOption
+                    id={`preserve-colors-${item.clientId}`}
+                    checked={item.preserveOriginalColors === true}
+                    compact
+                    onCheckedChange={(checked) => onPreserveOriginalColorsChange(item.clientId, checked)}
                   />
-                  <button
-                    type="button"
-                    onClick={() => onRemoveImage(item.clientId)}
-                    className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-gray-700 shadow-sm ring-1 ring-black/10 hover:text-red-600"
-                    aria-label={`Remove ${item.file.name}`}
-                  >
-                    <span className="text-base leading-none">x</span>
-                  </button>
                 </div>
               ))}
 

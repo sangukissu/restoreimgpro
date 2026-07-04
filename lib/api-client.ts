@@ -74,7 +74,7 @@ export async function uploadRestoreImageToR2(imageFile: File): Promise<string> {
   return key as string
 }
 
-export async function restoreImage(imageFile: File): Promise<RestoreImageResponse> {
+export async function restoreImage(imageFile: File, options?: { preserveOriginalColors?: boolean }): Promise<RestoreImageResponse> {
   try {
     let restoreBody: BodyInit
     let restoreHeaders: Record<string, string> = {}
@@ -85,12 +85,19 @@ export async function restoreImage(imageFile: File): Promise<RestoreImageRespons
     // hit the platform payload limit on the fallback).
     try {
       const key = await uploadRestoreImageToR2(imageFile)
-      restoreBody = JSON.stringify({ key })
+      restoreBody = JSON.stringify({
+        key,
+        filename: imageFile.name,
+        preserveOriginalColors: options?.preserveOriginalColors === true,
+      })
       restoreHeaders["Content-Type"] = "application/json"
     } catch (uploadError) {
       console.warn("[restoreImage] Direct R2 upload failed, falling back to multipart:", uploadError)
       const formData = new FormData()
       formData.append("image", imageFile)
+      if (options?.preserveOriginalColors) {
+        formData.append("preserve_original_colors", "true")
+      }
       restoreBody = formData
       // Do not set Content-Type; the browser sets the multipart boundary.
     }
@@ -230,6 +237,7 @@ export interface RestoreBatchSubmitItem {
   clientId: string
   key: string
   filename: string
+  preserveOriginalColors?: boolean
 }
 
 export interface RestoreBatchResponseItem {
