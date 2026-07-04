@@ -44,11 +44,11 @@ function PreserveColorsToggle({
       type="button"
       aria-pressed={checked}
       onClick={() => onChange(!checked)}
-      className={`group flex w-full items-center justify-center gap-2 rounded-full border transition ${
+      className={`group flex w-full items-center justify-center gap-2 rounded-lg border transition ${
         checked
           ? "border-black bg-black text-white shadow-sm"
           : "border-gray-200 bg-white/90 text-gray-700 hover:border-gray-300 hover:bg-white"
-      } ${compact ? "h-9 px-2 text-[11px] font-bold" : "h-12 px-4 text-sm font-bold"}`}
+      } ${compact ? "h-6 px-1 text-sm font-bold" : "h-12 px-1 text-xs font-bold"}`}
     >
       <span
         className={`flex shrink-0 items-center justify-center rounded-full border transition ${
@@ -57,7 +57,7 @@ function PreserveColorsToggle({
       >
         <Check className={compact ? "size-3" : "size-3.5"} />
       </span>
-      <span>{compact ? "Preserve colors" : "Preserve original colors"}</span>
+      <span className={compact ? "text-[10px]" : "text-xs"}>{compact ? "Preserve colors" : "Preserve original colors"}</span>
     </button>
   )
 }
@@ -273,6 +273,18 @@ export default function ImageUpload({
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
+
+              {selectedItems.length < MAX_BATCH_SIZE && (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isProcessing}
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white/80 text-sm font-semibold text-gray-700 transition hover:border-gray-300 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <UploadCloud className="h-4 w-4" />
+                  Add another photo
+                </button>
+              )}
 
               <PreserveColorsToggle
                 checked={item.preserveOriginalColors === true}
