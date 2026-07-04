@@ -6,6 +6,7 @@ import Link from 'next/link';
 interface PricingFeature {
   icon: React.ReactNode;
   text: string;
+  isPerk?: boolean;
 }
 
 // Pricing Card Component - Equal Height & Aligned
@@ -13,6 +14,7 @@ const PricingCard: React.FC<{
   theme: 'light' | 'dark';
   title: string;
   price: string;
+  creditsText: string;
   originalPrice?: string;
   description: string;
   badge: string;
@@ -24,7 +26,7 @@ const PricingCard: React.FC<{
   isPromo?: boolean;
   promoEndDate?: string;
   discountBadge?: string;
-}> = ({ theme, title, price, originalPrice, description, badge, features, icon, buttonText, buttonLink, buttonIcon, isPromo, promoEndDate, discountBadge }) => {
+}> = ({ theme, title, price, creditsText, originalPrice, description, badge, features, icon, buttonText, buttonLink, buttonIcon, isPromo, promoEndDate, discountBadge }) => {
   const isDark = theme === 'dark';
 
   // Countdown Timer Logic
@@ -74,11 +76,16 @@ const PricingCard: React.FC<{
             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isPromo ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-brand-black text-white'}`}>{discountBadge}</span>
           )}
         </div>
-        <div className="mb-2 flex items-baseline gap-3">
+        <div className="mb-1 flex items-baseline gap-3">
           <span className={`text-4xl font-[900] tracking-tighter ${isPromo ? 'text-red-600' : ''}`}>{price}</span>
           {originalPrice && (
             <span className="text-lg text-gray-400 font-bold line-through decoration-2 decoration-gray-300">{originalPrice}</span>
           )}
+        </div>
+        
+        {/* Diminished Credits Metric */}
+        <div className={`text-[11px] font-extrabold uppercase tracking-wider mb-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+          Includes {creditsText}
         </div>
 
         <p className={`font-medium leading-relaxed text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -98,16 +105,27 @@ const PricingCard: React.FC<{
 
       {/* Features List - Flexible Grow to push button down */}
       <div className="px-4 space-y-3 mb-6 flex-grow">
-        {features.map((f, i) => (
-          <div key={i} className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isDark ? 'bg-brand-orange/20 text-brand-orange' : 'bg-brand-orange/10 text-brand-orange'}`}>
-              {f.icon}
+        {features.map((f, i) => {
+          const isPerk = f.isPerk;
+          return (
+            <div key={i} className="flex items-center gap-3">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                isPerk 
+                  ? (isDark ? 'bg-gray-800 text-gray-400' : 'bg-gray-100/85 text-gray-500') 
+                  : (isDark ? 'bg-brand-orange/25 text-brand-orange' : 'bg-brand-orange/10 text-brand-orange')
+              }`}>
+                {f.icon}
+              </div>
+              <span className={`font-bold text-sm leading-tight ${
+                isPerk
+                  ? (isDark ? 'text-gray-400 font-medium' : 'text-gray-500 font-medium')
+                  : (isDark ? 'text-gray-200' : 'text-brand-black/80')
+              }`}>
+                {f.text}
+              </span>
             </div>
-            <span className={`font-bold text-sm leading-tight ${isDark ? 'text-gray-200' : 'text-brand-black/80'}`}>
-              {f.text}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Hero Style Button - Compact */}
@@ -126,38 +144,34 @@ const PricingCard: React.FC<{
 };
 
 export const Pricing: React.FC = () => {
-  const starterFeatures = [
-    { icon: <Zap size={16} />, text: "5 Credits Included" },
-    { icon: <ImageIcon size={16} />, text: "Restore 5 Photos" },
-    { icon: <Maximize2 size={16} />, text: "High-Resolution Output" },
-    { icon: <Infinity size={16} />, text: "Credits Never Expire" },
-    // { icon: <ArrowUpCircle size={16} />, text: "UPto 5 Free Photo Upscale" },
-    { icon: <Frame size={16} />, text: "Free Digital Frames" },
-    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
+  const starterFeatures: PricingFeature[] = [
+    { icon: <ImageIcon size={16} />, text: "Up to 10 High-Res Photo Restorations" },
+    { icon: <Film size={16} />, text: "OR up to 1 Photo to Video Animation" },
+    { icon: <Sparkles size={16} />, text: "OR up to 5 Studio Family Portraits" },
+    { icon: <Maximize2 size={16} />, text: "Studio-Grade 1080p Print Quality" },
+    { icon: <Infinity size={16} />, text: "Credits Never Expire", isPerk: true },
+    { icon: <Frame size={16} />, text: "Commercial Usage Rights Included", isPerk: true },
+    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee", isPerk: true }
   ];
 
-  const proFeatures = [
-    { icon: <Zap size={16} />, text: "20 Flexible Credits" },
-    { icon: <ImageIcon size={16} />, text: "Restore up to 20 Photos" },
-    { icon: <Film size={16} />, text: "OR Create 2 Video Animations" },
-    { icon: <MagnetIcon size={16} />, text: "Mix & Match Usage" },
-    { icon: <Maximize2 size={16} />, text: "High-Resolution 1080P Output" },
-    { icon: <Infinity size={16} />, text: "Credits Never Expire" },
-    // { icon: <ArrowUpCircle size={16} />, text: "Upto 20 Free Photo Upscale" },
-    { icon: <Frame size={16} />, text: "Free Digital Frames" },
-    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
+  const proFeatures: PricingFeature[] = [
+    { icon: <ImageIcon size={16} />, text: "Up to 30 High-Res Photo Restorations" },
+    { icon: <Film size={16} />, text: "OR up to 3 Photo to Video Animations" },
+    { icon: <Sparkles size={16} />, text: "OR up to 15 Studio Family Portraits" },
+    { icon: <Maximize2 size={16} />, text: "Studio-Grade 1080p Print Quality" },
+    { icon: <Infinity size={16} />, text: "Credits Never Expire", isPerk: true },
+    { icon: <Frame size={16} />, text: "Commercial Usage Rights Included", isPerk: true },
+    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee", isPerk: true }
   ];
 
-  const familyFeatures = [
-    { icon: <Zap size={16} />, text: "60 Flexible Credits" },
-    { icon: <ImageIcon size={16} />, text: "Restore up to 60 Photos" },
-    { icon: <Film size={16} />, text: "OR Create 6 Video Animations" },
-    { icon: <Sparkles size={16} />, text: "Mix & Match Usage" },
-    { icon: <Maximize2 size={16} />, text: "High-Resolution 1080P Output" },
-    { icon: <Infinity size={16} />, text: "Credits Never Expire" },
-    // { icon: <ArrowUpCircle size={16} />, text: "Upto 60 Free Photo Upscale" },
-    { icon: <Frame size={16} />, text: "Free Digital Frames" },
-    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee" }
+  const familyFeatures: PricingFeature[] = [
+    { icon: <ImageIcon size={16} />, text: "Up to 60 High-Res Photo Restorations" },
+    { icon: <Film size={16} />, text: "OR up to 6 Photo to Video Animations" },
+    { icon: <Sparkles size={16} />, text: "OR up to 30 Studio Family Portraits" },
+    { icon: <Maximize2 size={16} />, text: "Studio-Grade 1080p Print Quality" },
+    { icon: <Infinity size={16} />, text: "Credits Never Expire", isPerk: true },
+    { icon: <Frame size={16} />, text: "Commercial Usage Rights Included", isPerk: true },
+    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee", isPerk: true }
   ];
 
   return (
@@ -184,48 +198,50 @@ export const Pricing: React.FC = () => {
           </div>
         </div>
  
-        {/* Pricing Grid: 3 Equal Columns - Removing items-start allows stretch by default */}
+        {/* Pricing Grid: 3 Equal Columns */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-
-
-          {/* Column 2: Starter Plan (White) */}
+          {/* Column 1: Starter Pack (White) */}
           <PricingCard
             theme="light"
-            title="Starter"
-            price="$4.99"
-            description="Perfect for high-quality photo restoration."
+            title="Starter Pack"
+            price="$5.99"
+            creditsText="10 Generation Credits"
+            description="Perfect for testing out restorations, animations, and prints."
             badge="One-time payment"
             features={starterFeatures}
             icon={<Sparkles size={24} />}
-            buttonText="Start Restoring Photos"
+            buttonText="Start Restoring My Photos"
             buttonLink="/login"
             buttonIcon={<ArrowRight size={20} />}
           />
 
-          {/* Column 3: Pro Plan (Black) */}
+          {/* Column 2: Value Pack (Black) */}
           <PricingCard
             theme="dark"
-            title="Pro"
-            price="$9.99"
-            description="Everything in Starter, plus bring photos to life."
-            badge="One-time payment"
+            title="Value Pack"
+            price="$12.99"
+            creditsText="30 Generation Credits"
+            description="Perfect for creating cinematic video reunions and studio-quality prints."
+            badge="Most Popular"
             features={proFeatures}
             icon={<Film size={24} />}
-            buttonText="Get Pro Access"
+            buttonText="Bring My Memories To Life"
             buttonLink="/dashboard"
             buttonIcon={<Play size={20} fill="currentColor" />}
           />
-          {/* Column 2: Family Plan */}
+
+          {/* Column 3: Legacy Pack (White) */}
           <PricingCard
             theme="light"
-            title="Family"
+            title="Legacy Pack"
             price="$21.99"
-            description="Perfect for photo animation for your family."
-            badge="One-time payment"
+            creditsText="60 Generation Credits"
+            description="Perfect for digitizing entire family albums and creating keepsakes."
+            badge="Best Value"
             features={familyFeatures}
             icon={<Sparkles size={24} />}
-            buttonText="Get Family Plan"
+            buttonText="Preserve My Family History"
             buttonLink="/login"
             buttonIcon={<ArrowRight size={20} />}
           />

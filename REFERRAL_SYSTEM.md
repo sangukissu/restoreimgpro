@@ -1,7 +1,7 @@
 # Customer Referral System
 
 ## Overview
-The customer referral system allows existing users to refer friends and earn credits when their referrals make their first purchase. This system is designed for low-ticket products ($2.49 and $4.99) and focuses on customer-to-customer referrals rather than affiliate marketing.
+The customer referral system allows existing users to refer friends and earn credits when their referrals make their first purchase. This system is designed for low-ticket products ($5.99 and up) and focuses on customer-to-customer referrals rather than affiliate marketing.
 
 ## Features
 

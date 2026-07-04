@@ -25,33 +25,14 @@ export default function PaymentModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-auto">
-        <div className="p-4">
-
-
-          {/* Payment Plan */}
-          <div className="mb-2">
-            <PaymentPlan
-              onSuccess={onSuccess}
-              onError={onError}
-              isProcessing={isProcessing}
-              setIsProcessing={setIsProcessing}
-              onClose={onClose}
-            />
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-center">
-
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 font-medium transition-colors duration-200 underline"
-              disabled={isProcessing}
-            >
-              Maybe Later
-            </button>
-          </div>
-        </div>
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-auto overflow-hidden">
+        <PaymentPlan
+          onSuccess={onSuccess}
+          onError={onError}
+          isProcessing={isProcessing}
+          setIsProcessing={setIsProcessing}
+          onClose={onClose}
+        />
       </div>
     </div>
   )

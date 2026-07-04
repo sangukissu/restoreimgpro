@@ -1,0 +1,15 @@
+{
+  "mcp": {
+    "servers": {
+      "supabase": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "mcp-remote",
+          "https://mcp.supabase.com/mcp?project_ref=ddbpucrrposyyfpwpigq"
+        ]
+      }
+    }
+  }
+}

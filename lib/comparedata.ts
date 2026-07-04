@@ -129,7 +129,7 @@ export const compareData: Record<string, ComparePageData> = {
     matrix: {
       description: "When comparing BringBack AI to Remini for historical photo restoration, the biggest differences lie in the underlying AI models and the financial commitment. Here is a direct feature-by-feature breakdown.",
       rows: [
-        { feature: "Pricing model", competitor: "Starts at $6.99/week or $25/month", bringBack: "One-time credit packs from $4.99", winner: "bringBack" },
+        { feature: "Pricing model", competitor: "Starts at $6.99/week or $25/month", bringBack: "One-time credit packs from $5.99", winner: "bringBack" },
         { feature: "Annual Cost", competitor: "Up to $299/year", bringBack: "$0 (Pay only when you need it)", winner: "bringBack" },
         { feature: "AI Model Focus", competitor: "Modern selfies & face smoothing", bringBack: "Historical textures & damage repair", winner: "bringBack" },
         { feature: "Platform", competitor: "Mobile app first, web limited", bringBack: "Web (works flawlessly on desktop & mobile)", winner: "tie" },
@@ -166,7 +166,7 @@ export const compareData: Record<string, ComparePageData> = {
       points: [
         {
           title: "The $299/Year Subscription Trap",
-          description: "Remini charges $6.99 per week, which scales to over $299 annually. If you only have 10 family photos to restore, you are paying for an ongoing service you don't use. BringBack lets you buy an affordable one-time credit pack for $4.99, restore your photos, and walk away with no hidden fees."
+          description: "Remini charges $6.99 per week, which scales to over $299 annually. If you only have 10 family photos to restore, you are paying for an ongoing service you don't use. BringBack lets you buy an affordable one-time credit pack for $5.99, restore your photos, and walk away with no hidden fees."
         },
         {
           title: "Preserving Historical Identity",
@@ -480,7 +480,7 @@ export const compareData: Record<string, ComparePageData> = {
       "rows":[
         { "feature": "Core AI Focus", "competitor": "E-commerce, Anime & Game Art", "bringBack": "Genealogy & Historical portraits", "winner": "bringBack" },
         { "feature": "Workflow & Platform", "competitor": "Pushes heavy Windows desktop apps", "bringBack": "Lightweight, zero-install Web App", "winner": "bringBack" },
-        { "feature": "Pricing Model", "competitor": "Subscriptions ($9.95/mo) or $50+ Desktop SKUs", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
+        { "feature": "Pricing Model", "competitor": "Subscriptions ($9.95/mo) or $50+ Desktop SKUs", "bringBack": "One-time credit packs from $5.99", "winner": "bringBack" },
         { "feature": "Facial Accuracy", "competitor": "Generic upscaling (can look 'plastic')", "bringBack": "Identity-preserving diffusion models", "winner": "bringBack" },
         { "feature": "Animation Integration", "competitor": "No native photo animation", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
         { "feature": "Credit Consumption", "competitor": "Variable (1 to 2 credits per action)", "bringBack": "Simple, transparent 1-credit system", "winner": "bringBack" },
@@ -523,7 +523,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "Transparent, Affordable Pricing",
-          "description": "Nero's web pricing traps you in $9.95/month subscriptions, and different tools consume different amounts of credits (e.g., upscaling is 2 credits, sharpening is 2 credits). BringBack uses a simple, pay-as-you-go model. You buy a $4.99 pack, and one credit equals one complete restoration."
+          "description": "Nero's web pricing traps you in $9.95/month subscriptions, and different tools consume different amounts of credits (e.g., upscaling is 2 credits, sharpening is 2 credits). BringBack uses a simple, pay-as-you-go model. You buy a $5.99 pack, and one credit equals one complete restoration."
         },
         {
           "title": "Seamless Animation",
@@ -1005,7 +1005,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "AI Model Training", "competitor": "General digital enhancement", "bringBack": "Identity-preserving diffusion models", "winner": "bringBack" },
         { "feature": "Animation Integration", "competitor": "No native photo animation", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
         { "feature": "Physical Damage Repair", "competitor": "Basic upscaling add-ons", "bringBack": "Deep generative repair for tears/creases", "winner": "bringBack" },
-        { "feature": "Pricing Model", "competitor": "Expensive software licenses/subscriptions", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
+        { "feature": "Pricing Model", "competitor": "Expensive software licenses/subscriptions", "bringBack": "One-time credit packs from $5.99", "winner": "bringBack" },
         { "feature": "Data Privacy", "competitor": "Standard corporate retention", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
         { "feature": "Corrupted SD Cards", "competitor": "Industry leading", "bringBack": "Not supported (requires valid image file)", "winner": "competitor" }
       ]
@@ -1526,7 +1526,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Colorization Engine", "competitor": "Basic uniform hue mapping", "bringBack": "Semantic, historically accurate diffusion", "winner": "bringBack" },
         { "feature": "Animation Integration", "competitor": "No native face animation", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
         { "feature": "Deep Damage Repair", "competitor": "Struggles with severe tears", "bringBack": "Generative structural reconstruction", "winner": "bringBack" },
-        { "feature": "Pricing Model", "competitor": "Monthly subscriptions & expiring credits", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
+        { "feature": "Pricing Model", "competitor": "Monthly subscriptions & expiring credits", "bringBack": "One-time credit packs from $5.99", "winner": "bringBack" },
         { "feature": "Credit Expiration", "competitor": "Yes (on subscription plans)", "bringBack": "Never expire", "winner": "bringBack" },
         { "feature": "Data Privacy", "competitor": "Standard 24-hour retention", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
         { "feature": "Basic Tinting Speed", "competitor": "Very fast for simple tasks", "bringBack": "Optimized for high-fidelity output", "winner": "tie" }
@@ -1571,7 +1571,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "No Expiring Credits or Subscriptions",
-          "description": "ImageColorizer pushes users toward monthly subscription plans where unused credits can expire. BringBack uses a strictly transparent pay-as-you-go model. Buy a $4.99 pack, and your credits are yours forever, ready whenever you find your next box of photos."
+          "description": "ImageColorizer pushes users toward monthly subscription plans where unused credits can expire. BringBack uses a strictly transparent pay-as-you-go model. Buy a $5.99 pack, and your credits are yours forever, ready whenever you find your next box of photos."
         }
       ]
     },
@@ -1700,7 +1700,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Workflow Experience", "competitor": "Heavy manual editing & sliders", "bringBack": "Instant, automated 1-click AI", "winner": "bringBack" },
         { "feature": "Software Installation", "competitor": "Requires heavy local download", "bringBack": "Zero installation required", "winner": "bringBack" },
         { "feature": "Animation Integration", "competitor": "None (Static images only)", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
-        { "feature": "Pricing Model", "competitor": "Expensive software licenses ($40-$80+)", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
+        { "feature": "Pricing Model", "competitor": "Expensive software licenses ($40-$80+)", "bringBack": "One-time credit packs from $5.99", "winner": "bringBack" },
         { "feature": "Offline Capabilities", "competitor": "Works without internet", "bringBack": "Requires internet connection", "winner": "competitor" },
         { "feature": "Upgrades & Updates", "competitor": "Paid upgrades for new versions", "bringBack": "Always using the latest 2026 AI", "winner": "bringBack" },
         { "feature": "Data Privacy", "competitor": "Local on your hard drive", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "tie" }
@@ -1828,7 +1828,7 @@ export const compareData: Record<string, ComparePageData> = {
       { "q": "Do I need to manually brush out scratches on BringBack like I do in PhotoGlory?", "a": "No. BringBack uses advanced 2026 generative AI to automatically detect and repair deep scratches and tears, eliminating the need for tedious manual clone-stamping." },
       { "q": "Can PhotoGlory animate my old photos?", "a": "No, PhotoGlory is a static photo editing software. BringBack AI includes a built-in cinematic animation engine to bring your restored portraits to life as moving videos." },
       { "q": "Do I need to download heavy software to use BringBack?", "a": "No. BringBack is an entirely cloud-based web application. There is no software to install or update, saving you hard drive space and processing power." },
-      { "q": "How does the pricing compare?", "a": "PhotoGlory requires a large upfront software license fee (typically $40 to $80+). BringBack uses a pay-as-you-go credit system starting at $4.99, so you only pay for exactly what you need to restore." },
+      { "q": "How does the pricing compare?", "a": "PhotoGlory requires a large upfront software license fee (typically $40 to $80+). BringBack uses a pay-as-you-go credit system starting at $5.99, so you only pay for exactly what you need to restore." },
       { "q": "Does BringBack keep my photos on their servers?", "a": "No. We prioritize your privacy with a strict zero-retention policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
       { "q": "Is BringBack's colorization better than desktop software?", "a": "Because BringBack uses massive cloud computing power, our AI colorization models are far more sophisticated and semantically aware than what can typically be run locally on an average home PC." },
       { "q": "Can BringBack fix photos that are physically torn?", "a": "Yes, our generative AI is specifically trained to analyze surrounding textures and structurally bridge gaps caused by physical tears in the original paper." },
@@ -1875,7 +1875,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Film Grain Handling", "competitor": "Often over-sharpens grain ('crunchy')", "bringBack": "Preserves authentic vintage emulsion", "winner": "bringBack" },
         { "feature": "Animation Features", "competitor": "None (Static image only)", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
         { "feature": "Data Privacy", "competitor": "Standard cloud retention", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
-        { "feature": "Pricing Model", "competitor": "Varies (often subscription-heavy)", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
+        { "feature": "Pricing Model", "competitor": "Varies (often subscription-heavy)", "bringBack": "One-time credit packs from $5.99", "winner": "bringBack" },
         { "feature": "Modern Photo Clarity", "competitor": "Excellent for digital camera blur", "bringBack": "Optimized for vintage print scanning", "winner": "competitor" },
         { "feature": "Workflow Experience", "competitor": "Single-click sharpening utility", "bringBack": "Restore, colorize, and animate unified", "winner": "bringBack" }
       ]
@@ -2043,7 +2043,7 @@ export const compareData: Record<string, ComparePageData> = {
     matrix: {
       description: "MyHeritage is an excellent platform for genealogy, but if your only goal is to animate and restore old photos, you don't need a massive family tree database. Here is how BringBack's specialized photo tools compare to MyHeritage's ecosystem.",
       rows: [
-        { feature: "Pricing model", competitor: "Expensive Annual Subscriptions", bringBack: "One-time credit packs from $4.99", winner: "bringBack" },
+        { feature: "Pricing model", competitor: "Expensive Annual Subscriptions", bringBack: "One-time credit packs from $5.99", winner: "bringBack" },
         { feature: "Account required to test", competitor: "Yes", bringBack: "No", winner: "bringBack" },
         { feature: "Primary focus", competitor: "DNA & Family Trees", bringBack: "Photo Restoration & Animation", winner: "tie" },
         { feature: "Animation Quality", competitor: "Basic 2021 Deep Nostalgia tech", bringBack: "Next-Gen 2026 Diffusion Models", winner: "bringBack" },

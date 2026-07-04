@@ -3,6 +3,7 @@ import Script from "next/script"
 import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
 import { Pricing } from '@/components/landing/Pricing';
+import { FeatureDirectory } from '@/components/landing/FeatureDirectory';
 import { Comparison } from '@/components/landing/Comparison'
 import { FAQ } from '@/components/landing/FAQ'
 import { CTA } from '@/components/landing/CTA'
@@ -13,7 +14,7 @@ import Guarantees from '@/components/Guarantee'
 export const metadata: Metadata = {
   title: "Pricing - BringBack AI | AI Photo Restoration & Animation",
   description:
-    "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $21.99 plans, no subscriptions.",
+    "Simple, transparent pricing for AI photo restoration. Starter $5.99, Pro $12.99, Family $21.99 plans, no subscriptions.",
   robots: { index: true, follow: true },
   alternates: {
     canonical: "/pricing",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pricing - BringBack AI | AI Photo Restoration & Animation",
     description:
-      "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $21.99 plans, no subscriptions.",
+      "Simple, transparent pricing for AI photo restoration. Starter $5.99, Pro $12.99, Family $21.99 plans, no subscriptions.",
     type: "website",
     url: "https://bringback.pro/pricing",
     siteName: "BringBack AI",
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pricing - BringBack AI | AI Photo Restoration & Animation",
     description:
-      "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $21.99 plans, no subscriptions.",
+      "Simple, transparent pricing for AI photo restoration. Starter $5.99, Pro $12.99, Family $21.99 plans, no subscriptions.",
     images: ["/og-image.png"],
   },
 }
@@ -61,13 +62,13 @@ export default function PricingPage() {
               itemListElement: [
                 {
                   "@type": "Offer",
-                  price: "4.99",
+                  price: "5.99",
                   priceCurrency: "USD",
                   itemOffered: { "@type": "Service", name: "Starter - AI Photo Restoration" },
                 },
                 {
                   "@type": "Offer",
-                  price: "9.99",
+                  price: "12.99",
                   priceCurrency: "USD",
                   itemOffered: {
                     "@type": "Service",
@@ -91,22 +92,8 @@ export default function PricingPage() {
         {/* Shared Pricing section */}
         <Pricing />
 
-        {/* Brand Assurance: Free re-restoration note */}
-        <section className="w-full px-4 sm:px-8">
-          <div className="max-w-[1320px] mx-auto">
-            <div className="bg-brand-surface p-2 rounded-[2rem]">
-              <div className="bg-white rounded-[1.5rem] p-6 sm:p-10 flex items-center gap-4 sm:gap-6">
-                <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg shadow-black/10">
-                  <span className="text-brand-orange">//</span> Assurance <span className="text-brand-orange">//</span>
-                </div>
-                <p className="text-brand-black/80 font-bold text-sm sm:text-base">
-                  Even after restoration, if we detect damage still present, 
-                  <span className="text-brand-orange"> we automatically offer one free re‑restoration.</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Feature Directory Section */}
+        <FeatureDirectory />
 
 <Guarantees />
         {/* Brand-styled Comparison */}

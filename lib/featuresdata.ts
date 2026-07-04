@@ -190,7 +190,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       },
       {
         question: "Can I use an ai family portrait from individual photos online free?",
-        answer: "We offer free basic upscaling, but generating a complex composite portrait requires advanced processing. We offer highly affordable one-time credit packages starting at $4.99.",
+        answer: "We offer free basic upscaling, but generating a complex composite portrait requires advanced processing. We offer highly affordable one-time credit packages starting at $5.99.",
       },
       {
         question: "Are any of these free?",
