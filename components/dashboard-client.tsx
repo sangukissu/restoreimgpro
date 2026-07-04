@@ -163,20 +163,27 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       original_image_url?: string | null
       error_message?: string | null
     }) => {
-      let completedClientId: string | null = null
-      let failedMessage: string | null = null
+      const matchedItem = items.find((item) => item.restorationId === record.id)
+      const completedClientId =
+        matchedItem && record.status === "completed" && record.restored_image_url
+          ? matchedItem.clientId
+          : null
+      const failedMessage =
+        matchedItem && record.status === "failed"
+          ? record.error_message || "Failed to restore image"
+          : null
 
-      setItems((current) => {
-        const next = current.map((item) => {
+      if (completedClientId && matchedItem?.file) {
+        try {
+          sessionStorage.setItem(restoreSignatureKey(matchedItem.file), "completed")
+        } catch {}
+      }
+
+      setItems((current) =>
+        current.map((item) => {
           if (item.restorationId !== record.id) return item
 
           if (record.status === "completed" && record.restored_image_url) {
-            completedClientId = item.clientId
-            if (item.file) {
-              try {
-                sessionStorage.setItem(restoreSignatureKey(item.file), "completed")
-              } catch {}
-            }
             const restoredUrl = proxiedImageUrl(record.restored_image_url)
             const originalUrl = proxiedImageUrl(record.original_image_url) || item.originalUrl || item.localPreviewUrl
             return {
@@ -190,19 +197,16 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
           }
 
           if (record.status === "failed") {
-            failedMessage = record.error_message || "Failed to restore image"
             return {
               ...item,
               status: "failed" as RestoreStatus,
-              error: failedMessage,
+              error: record.error_message || "Failed to restore image",
             }
           }
 
           return item
-        })
-
-        return next
-      })
+        }),
+      )
 
       if (completedClientId) {
         setActiveItemId((currentActive) => {
