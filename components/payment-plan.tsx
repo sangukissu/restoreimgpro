@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { X, Check } from "lucide-react"
-import posthog from "posthog-js"
 
 interface PaymentPlanProps {
   onSuccess: (newCredits: number) => void
@@ -71,7 +70,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   const [referralCode, setReferralCode] = useState<string>("")
   const [isApplyingReferral, setIsApplyingReferral] = useState(false)
   const [referralApplied, setReferralApplied] = useState(false)
-  const hasTrackedCartViewRef = useRef(false)
+
 
 
   // Fetch available plans
@@ -93,19 +92,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     fetchPlans()
   }, [onError])
 
-  useEffect(() => {
-    const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
-    if (!selectedPlan || hasTrackedCartViewRef.current) {
-      return
-    }
 
-    // Step 1: the user can now see the selected checkout cart in the payment modal.
-    posthog.capture("cart_viewed", {
-      ...getPlanAnalytics(selectedPlan),
-      checkout_entrypoint: "buy_credits_modal",
-    })
-    hasTrackedCartViewRef.current = true
-  }, [plans, selectedPlanId])
 
   const handleApplyReferral = async () => {
     if (!referralCode.trim()) {
@@ -162,7 +149,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         startedAt: new Date().toISOString(),
       })
 
-      posthog.capture("checkout_started", planAnalytics)
+
 
       if ((window as any).gtag) {
         (window as any).gtag("event", "begin_checkout", {
@@ -193,10 +180,6 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
       })
 
       if (!response.ok) {
-        posthog.capture("checkout_session_failed", {
-          ...planAnalytics,
-          status_code: response.status,
-        })
         throw new Error("Failed to create checkout session")
       }
 
@@ -213,20 +196,11 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         sessionId: session_id,
       })
 
-      // Step 3: we hand the user off to Dodo's hosted payment page.
-      posthog.capture("payment_info_entered", {
-        ...planAnalytics,
-        checkout_session_id: session_id,
-        payment_step_source: "hosted_checkout_redirect",
-      })
+
 
       toast.dismiss(loadingToastId)
       window.location.href = url
     } catch (error) {
-      posthog.capture("checkout_failed", {
-        ...planAnalytics,
-        error_message: error instanceof Error ? error.message : "unknown_error",
-      })
       toast.dismiss(loadingToastId)
       const errorMessage = error instanceof Error ? error.message : "Failed to create checkout session. Please try again."
       onError(errorMessage)

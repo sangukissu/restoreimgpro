@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Check, Heart } from "lucide-react"
-import posthog from "posthog-js"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -57,7 +56,6 @@ export function PublicMemoryBook({
       const result = await response.json()
       if (!response.ok) throw new Error(result.error || "Unable to send reaction")
       setSent(true)
-      posthog.capture("memory_book_reaction_sent", { reaction })
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to send reaction")
     } finally {
@@ -77,10 +75,7 @@ export function PublicMemoryBook({
           className="publicViewer"
           document={document}
           assetSources={assetSources}
-          onCompleted={() => {
-            posthog.capture("memory_book_recipient_completed")
-            setHasReachedEnd(true)
-          }}
+          onCompleted={() => setHasReachedEnd(true)}
           onPageChange={(index, max) => {
             if (index === max) {
               setHasReachedEnd(true)

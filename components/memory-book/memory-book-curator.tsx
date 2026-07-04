@@ -32,7 +32,6 @@ import {
   Upload,
   WifiOff,
 } from "lucide-react"
-import posthog from "posthog-js"
 import { createClient as createSupabaseClient } from "@/utils/supabase/client"
 import { Button } from "@/components/ui/button"
 import {
@@ -560,11 +559,6 @@ export function MemoryBookCurator({
       const result = await response.json()
       if (!response.ok) throw new Error(result.error || "Unable to update memories")
       await refreshBook()
-      posthog.capture("memory_book_asset_selection_changed", {
-        action: existing ? "removed" : "added",
-        source_type: option.sourceType,
-        media_type: option.mediaType,
-      })
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to update memories")
     } finally {
@@ -619,11 +613,6 @@ export function MemoryBookCurator({
         throw new Error(result.error || "Unable to add this memory")
       }
       await refreshBook()
-      posthog.capture("memory_book_asset_selection_changed", {
-        action: "added_from_composer",
-        source_type: option.sourceType,
-        media_type: option.mediaType,
-      })
       return true
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to add this memory")
@@ -803,12 +792,7 @@ export function MemoryBookCurator({
       setPin("")
       setConfirmPin("")
       setPublishOpen(false)
-      posthog.capture("memory_book_published", {
-        revision_number: result.revisionNumber,
-        asset_count: assignedAssetIds.length,
-        pin_enabled: Boolean(pin),
-      })
-      await refreshBook()
+       await refreshBook()
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to publish")
     } finally {

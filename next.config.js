@@ -5,22 +5,6 @@ const nextConfig = {
       bodySizeLimit: "10mb",
     },
   },
-  async rewrites() {
-    return [
-      {
-        source: "/ingest/static/:path*",
-        destination: "https://us-assets.i.posthog.com/static/:path*",
-      },
-      {
-        source: "/ingest/:path*",
-        destination: "https://us.i.posthog.com/:path*",
-      },
-      {
-        source: "/ingest/decide",
-        destination: "https://us.i.posthog.com/decide",
-      },
-    ];
-  },
   async headers() {
     const isProduction = process.env.NODE_ENV === 'production'
 
@@ -50,14 +34,14 @@ const nextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://settings.crisp.chat https://us-assets.i.posthog.com https://us.i.posthog.com https://us.posthog.com",
-          "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://settings.crisp.chat https://us-assets.i.posthog.com https://us.i.posthog.com https://us.posthog.com",
+          "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://settings.crisp.chat",
+          "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://settings.crisp.chat",
           "style-src 'self' 'unsafe-inline' https://client.crisp.chat",
           "img-src 'self' data: https: blob: https://www.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://*.crisp.chat",
           "font-src 'self' data: https://client.crisp.chat",
-          "connect-src 'self' https://api.supabase.co https://*.supabase.co wss://*.supabase.co https://fal.ai https://*.fal.ai https://*.fal.media wss://*.fal.ai https://dodopayments.com https://*.dodopayments.com https://*.r2.cloudflarestorage.com https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://storage.crisp.chat wss://client.relay.crisp.chat wss://stream.relay.crisp.chat https://us-assets.i.posthog.com https://us.i.posthog.com https://us.posthog.com",
+          "connect-src 'self' https://api.supabase.co https://*.supabase.co wss://*.supabase.co https://fal.ai https://*.fal.ai https://*.fal.media wss://*.fal.ai https://dodopayments.com https://*.dodopayments.com https://*.r2.cloudflarestorage.com https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.clarity.ms https://*.clarity.ms https://client.crisp.chat https://storage.crisp.chat wss://client.relay.crisp.chat wss://stream.relay.crisp.chat",
           "media-src 'self' blob: https://*.public.blob.vercel-storage.com https://*.fal.media https://blog.bringback.pro https://*.wordpress.com",
-          "frame-src 'self' https://www.youtube.com https://youtube.com https://challenges.cloudflare.com https://*.cloudflare.com https://*.crisp.chat https://us.posthog.com",
+          "frame-src 'self' https://www.youtube.com https://youtube.com https://challenges.cloudflare.com https://*.cloudflare.com https://*.crisp.chat",
           "object-src 'none'",
           "base-uri 'self'",
           "form-action 'self'",

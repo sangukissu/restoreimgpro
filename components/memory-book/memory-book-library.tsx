@@ -12,7 +12,6 @@ import {
   Plus,
   Sparkles,
 } from "lucide-react"
-import posthog from "posthog-js"
 import { Button } from "@/components/ui/button"
 import type { MemoryBookSummary } from "@/lib/memory-book/types"
 
@@ -59,11 +58,6 @@ export function MemoryBookLibrary({
       })
       const result = await response.json()
       if (!response.ok) throw new Error(result.error || "Unable to create keepsake")
-
-      posthog.capture("memory_book_draft_created", {
-        theme: "family_heritage_v1",
-        has_suggested_source: Boolean(suggestedSource),
-      })
 
       if (suggestedSource) {
         await fetch(`/api/memory-books/${result.book.id}/assets`, {

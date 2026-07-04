@@ -37,7 +37,7 @@ const greatVibes = Great_Vibes({
 export const metadata: Metadata = {
   title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
   description: "BringBack AI restores old, damaged photos and even animates them with AI. Repair faded colors, fix damage, and bring portraits to life in seconds.",
-  keywords: "photo restoration, AI photo repair, photo to video, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, bring photos to life, image enhancement, digital photo restoration",
+  keywords: "photo restoration, AI photo repair, photo to video, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, bring photos to life, image enhancement, ai family photo maker",
   authors: [{ name: "BringBack Team" }],
   creator: "BringBack",
   publisher: "BringBack",
