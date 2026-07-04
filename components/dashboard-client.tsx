@@ -307,9 +307,6 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     )
   }
 
-  const handleApplyPreserveOriginalColorsToAll = (preserve: boolean) => {
-    setItems((current) => current.map((item) => (item.status === "selected" ? { ...item, preserveOriginalColors: preserve } : item)))
-  }
 
   const handleClearImages = () => {
     items.forEach((item) => revokeLocalPreview(item.localPreviewUrl))
@@ -559,7 +556,6 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
             onClearImages={handleClearImages}
             onRestore={handleRestore}
             onPreserveOriginalColorsChange={handlePreserveOriginalColorsChange}
-            onApplyPreserveOriginalColorsToAll={handleApplyPreserveOriginalColorsToAll}
             selectedItems={selectedUploadItems}
             userCredits={userCredits}
           />
