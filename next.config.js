@@ -102,9 +102,45 @@ const nextConfig = {
     ]
   },
 
-  // Force HTTPS in production
+  // 301 redirects for deleted blog posts → relevant live pages
   async redirects() {
     return [
+      // Deleted low-quality blog posts → most relevant feature/page
+      {
+        source: '/blog/can-ai-truly-restore-original-colors-to-old-photos',
+        destination: '/colorize-photos',
+        permanent: true,
+      },
+      {
+        source: '/blog/are-ai-upscalers-making-up-details',
+        destination: '/old-photo-restoration',
+        permanent: true,
+      },
+      {
+        source: '/blog/photoshop-generative-fill-vs-purpose-built-ai',
+        destination: '/old-photo-restoration',
+        permanent: true,
+      },
+      {
+        source: '/blog/what-is-ai-photo-restoration',
+        destination: '/old-photo-restoration',
+        permanent: true,
+      },
+      {
+        source: '/blog/why-bringback-ai-is-the-ultimate-choice-for-precious-family-photo-restoration-animation',
+        destination: '/old-photo-restoration',
+        permanent: true,
+      },
+      {
+        source: '/blog/upscale-old-photos-for-prints-the-2026-guide-to-perfect-canvas-with-ai',
+        destination: '/old-photo-restoration',
+        permanent: true,
+      },
+      {
+        source: '/blog/how-to-restore-great-grandparents-wedding-photos-with-ai',
+        destination: '/features/add-deceased-loved-one-to-photo',
+        permanent: true,
+      },
       // Redirect HTTP to HTTPS in production
       process.env.NODE_ENV === 'production' ? {
         source: '/(.*)',
