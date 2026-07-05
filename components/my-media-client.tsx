@@ -170,11 +170,17 @@ export default function MyMediaClient({ user, initialCredits, videos, images = [
             return
           }
 
+          // Only surface completed restorations with a real output URL. Failed
+          // rows are auto-refunded server-side and must never appear here.
+          if (record.status !== 'completed' || !record.restored_image_url) {
+            return
+          }
+
           mergeImage({
             id: record.id,
             url: record.restored_image_url,
             created_at: record.created_at,
-            status: record.status || 'processing',
+            status: record.status,
             type: 'restoration',
             title: 'Restored Photo',
           })

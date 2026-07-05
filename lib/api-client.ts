@@ -110,11 +110,15 @@ export async function restoreImage(imageFile: File, options?: { preserveOriginal
 
     if (!response.ok) {
       let errorMessage = "Failed to restore image"
+      let refundedCredits: number | undefined
 
       const contentType = response.headers.get("content-type") || ""
       if (contentType.includes("application/json")) {
         const errorData = await response.json()
         errorMessage = errorData.error || errorMessage
+        if (typeof errorData.creditsRemaining === "number") {
+          refundedCredits = errorData.creditsRemaining
+        }
       } else {
         const errorText = await response.text()
         if (errorText) {
@@ -125,6 +129,7 @@ export async function restoreImage(imageFile: File, options?: { preserveOriginal
       return {
         success: false,
         error: normalizeRestoreError(errorMessage),
+        creditsRemaining: refundedCredits,
       }
     }
 

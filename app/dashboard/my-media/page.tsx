@@ -37,11 +37,14 @@ export default async function MyMediaPage({
     .eq("user_id", data.user.id)
     .order("created_at", { ascending: false });
 
-  // Fetch Image Restorations
+  // Fetch Image Restorations — only completed rows with a real output URL.
+  // Failed jobs are auto-refunded server-side and must never appear in /my-media.
   const { data: restoredImages } = await supabase
     .from("image_restorations")
     .select("id, restored_image_url, created_at, status")
     .eq("user_id", data.user.id)
+    .eq("status", "completed")
+    .not("restored_image_url", "is", null)
     .order("created_at", { ascending: false });
 
   // Fetch Family Portraits

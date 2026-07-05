@@ -31,7 +31,7 @@ function validateFile(file: File): { valid: boolean; error?: string } {
   if (!ALLOWED_TYPES.includes(file.type)) {
     return {
       valid: false,
-      error: "Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed.",
+      error: "Invalid file type. Only JPEG, PNG, and WebP images are allowed.",
     }
   }
 
@@ -52,11 +52,23 @@ function validateFile(file: File): { valid: boolean; error?: string } {
   return { valid: true }
 }
 
-async function markFailedAndRefund(supabase: Awaited<ReturnType<typeof createClient>>, restorationId: string, message: string) {
-  await supabase.rpc("fail_restoration_and_refund", {
+async function markFailedAndRefund(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  restorationId: string,
+  message: string,
+): Promise<number | null> {
+  // The RPC refunds the credit (if it was reserved) and returns the user's
+  // updated balance. We return it so the client can resync without a second
+  // round-trip.
+  const { data, error } = await supabase.rpc("fail_restoration_and_refund", {
     p_restoration_id: restorationId,
     p_error_message: message,
   })
+  if (error) {
+    console.error("[restore] fail_restoration_and_refund failed", error)
+    return null
+  }
+  return typeof data === "number" ? data : null
 }
 
 export async function POST(request: NextRequest) {
@@ -220,24 +232,63 @@ export async function POST(request: NextRequest) {
         message: "Image restoration started.",
       })
     } catch (falError) {
-      const message = falError instanceof Error ? falError.message : "Unknown error"
-      await markFailedAndRefund(supabase, restoration.id, message)
+      const rawMessage = falError instanceof Error ? falError.message : "Unknown error"
+      // Refund the credit (best-effort) and capture the user's updated balance
+      // so we can hand it back to the client in one round-trip.
+      const refundedBalance = await markFailedAndRefund(supabase, restoration.id, rawMessage)
 
       if (falError instanceof Error) {
-        if (falError.message.includes("authentication") || falError.message.includes("401")) {
-          return NextResponse.json({ error: "Authentication failed with restoration service. Please check your API key." }, { status: 401 })
+        if (rawMessage.includes("authentication") || rawMessage.includes("401")) {
+          return NextResponse.json(
+            { error: "Authentication failed with restoration service. Please contact support.", creditsRemaining: refundedBalance ?? undefined },
+            { status: 401 }
+          )
         }
-        if (falError.message.includes("rate limit") || falError.message.includes("429")) {
-          return NextResponse.json({ error: "Rate limit exceeded. Please try again later." }, { status: 429 })
+        if (rawMessage.includes("rate limit") || rawMessage.includes("429")) {
+          return NextResponse.json(
+            { error: "You're going a bit fast. Please wait a moment and try again.", creditsRemaining: refundedBalance ?? undefined },
+            { status: 429 }
+          )
         }
-        if (falError.message.includes("timeout") || falError.message.includes("408")) {
-          return NextResponse.json({ error: "Request timeout. Please try again." }, { status: 408 })
+        if (rawMessage.includes("timeout") || rawMessage.includes("408")) {
+          return NextResponse.json(
+            { error: "The request took too long. Please try again with a smaller image.", creditsRemaining: refundedBalance ?? undefined },
+            { status: 408 }
+          )
         }
-        if (falError.message.includes("model not found") || falError.message.includes("404")) {
-          return NextResponse.json({ error: "Restoration model not available. Please try again later." }, { status: 503 })
+        if (rawMessage.includes("model not found") || rawMessage.includes("404")) {
+          return NextResponse.json(
+            { error: "The restoration model is temporarily unavailable. Please try again in a few minutes.", creditsRemaining: refundedBalance ?? undefined },
+            { status: 503 }
+          )
+        }
+        if (rawMessage.includes("422") || rawMessage.includes("Unprocessable") || rawMessage.includes("invalid_input")) {
+          return NextResponse.json(
+            {
+              error:
+                "We couldn't process this photo. It may be in an unsupported format, too large, or contain content our AI can't restore. Please try a JPG or PNG under 10MB.",
+              creditsRemaining: refundedBalance ?? undefined,
+            },
+            { status: 422 }
+          )
+        }
+        if (rawMessage.includes("content_policy") || rawMessage.includes("safety") || rawMessage.includes("moderation")) {
+          return NextResponse.json(
+            {
+              error: "This photo was flagged by our safety system. Please try a different photo.",
+              creditsRemaining: refundedBalance ?? undefined,
+            },
+            { status: 422 }
+          )
         }
       }
-      return NextResponse.json({ error: "Restoration service temporarily unavailable. Please try again." }, { status: 503 })
+      return NextResponse.json(
+        {
+          error: "Restoration service is temporarily unavailable. Please try again in a moment.",
+          creditsRemaining: refundedBalance ?? undefined,
+        },
+        { status: 503 }
+      )
     }
   } catch (error) {
     if (error instanceof Error) {

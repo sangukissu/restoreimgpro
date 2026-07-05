@@ -129,20 +129,45 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       if (!stored) return
 
       const parsed = JSON.parse(stored) as StoredRestoreSession
-      if (!parsed?.items?.length) return
+      if (!parsed?.items?.length) {
+        sessionStorage.removeItem(RESTORE_SESSION_KEY)
+        return
+      }
+
+      // Only restore items that are still mid-flight ("processing" / "uploading").
+      // Anything that was already "failed" or "completed" is dropped from the
+      // session — failed jobs are auto-refunded server-side, completed jobs live
+      // in /my-media. The user should never re-land on a stuck or stale screen.
+      const recoverable = parsed.items.filter(
+        (item) => item.status === "processing" || item.status === "uploading",
+      )
+
+      if (recoverable.length === 0) {
+        sessionStorage.removeItem(RESTORE_SESSION_KEY)
+        return
+      }
 
       setBatchId(parsed.batchId || null)
-      setItems(parsed.items)
-      setActiveItemId(parsed.activeItemId || parsed.items.find((item) => item.status === "completed")?.clientId || parsed.items[0]?.clientId || null)
-      setAppState(parsed.items.length > 1 ? "batch" : parsed.items[0]?.status === "completed" ? "comparison" : "loading")
+      setItems(recoverable)
+      setActiveItemId(parsed.activeItemId || recoverable[0]?.clientId || null)
+      setAppState("loading")
     } catch {
-      sessionStorage.removeItem(RESTORE_SESSION_KEY)
+      try {
+        sessionStorage.removeItem(RESTORE_SESSION_KEY)
+      } catch {}
     }
   }, [])
 
   useEffect(() => {
     const submittedItems = items.filter((item) => item.restorationId)
-    if (submittedItems.length === 0) return
+    if (submittedItems.length === 0) {
+      // Nothing to persist — make sure no stale payload from a prior job is
+      // left sitting in sessionStorage.
+      try {
+        sessionStorage.removeItem(RESTORE_SESSION_KEY)
+      } catch {}
+      return
+    }
 
     const payload: StoredRestoreSession = {
       batchId,
@@ -154,6 +179,56 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       sessionStorage.setItem(RESTORE_SESSION_KEY, JSON.stringify(payload))
     } catch {}
   }, [activeItemId, batchId, items])
+
+  // Re-fetch the user's credit balance from the server. Used after a failure
+  // to make sure the client reflects the auto-refund without the user having
+  // to refresh the page.
+  const resyncCredits = useCallback(async () => {
+    try {
+      const supabase = createSupabaseClient()
+      const {
+        data: { user: authedUser },
+      } = await supabase.auth.getUser()
+      if (!authedUser) return
+      const { data } = await supabase
+        .from("user_profiles")
+        .select("credits")
+        .eq("user_id", authedUser.id)
+        .single()
+      if (data && typeof data.credits === "number") {
+        setUserCredits(data.credits)
+      }
+    } catch {}
+  }, [])
+
+  // Auto-recover from a single-item failure: silently drop the failed item from
+  // local state, clear the session payload, and return the user to the upload
+  // screen. A toast explains what happened and confirms the credit was refunded
+  // — the user never has to interact with a "failed" item.
+  const recoverFromSingleItemFailure = useCallback(
+    (failedClientId: string, message: string) => {
+      const failedItem = items.find((item) => item.clientId === failedClientId)
+      if (failedItem?.localPreviewUrl) revokeLocalPreview(failedItem.localPreviewUrl)
+
+      setItems((current) => current.filter((item) => item.clientId !== failedClientId))
+      setActiveItemId(null)
+      setError(null)
+      setAppState("upload")
+      isRestoringRef.current = false
+
+      try {
+        sessionStorage.removeItem(RESTORE_SESSION_KEY)
+      } catch {}
+
+      void resyncCredits()
+
+      toast.error(
+        `${message} Your credit has not been charged — you can try again with a new photo.`,
+        { duration: 7000 },
+      )
+    },
+    [items, toast, resyncCredits],
+  )
 
   const applyRestorationRecord = useCallback(
     async (record: {
@@ -168,6 +243,8 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         matchedItem && record.status === "completed" && record.restored_image_url
           ? matchedItem.clientId
           : null
+      const failedClientId =
+        matchedItem && record.status === "failed" ? matchedItem.clientId : null
       const failedMessage =
         matchedItem && record.status === "failed"
           ? record.error_message || "Failed to restore image"
@@ -177,6 +254,29 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         try {
           sessionStorage.setItem(restoreSignatureKey(matchedItem.file), "completed")
         } catch {}
+      }
+
+      if (failedClientId) {
+        // Failed job: drop it from local state, never show it to the user.
+        // For a single-item failure we return to the upload screen so the user
+        // can immediately try again with a new file.
+        if (items.length <= 1) {
+          recoverFromSingleItemFailure(
+            failedClientId,
+            failedMessage || "We couldn’t process this photo.",
+          )
+          return
+        }
+
+        // In a batch, just remove the failed item from local state and let the
+        // other items keep going. The toast below tells the user what happened.
+        setItems((current) => current.filter((item) => item.clientId !== failedClientId))
+        void resyncCredits()
+        toast.error(
+          `${failedMessage || "One photo in this batch couldn’t be restored."} Your credit for that photo has been refunded.`,
+          { duration: 7000 },
+        )
+        return
       }
 
       setItems((current) =>
@@ -193,14 +293,6 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
               initialRestoredUrl: restoredUrl,
               originalUrl,
               error: undefined,
-            }
-          }
-
-          if (record.status === "failed") {
-            return {
-              ...item,
-              status: "failed" as RestoreStatus,
-              error: record.error_message || "Failed to restore image",
             }
           }
 
@@ -221,14 +313,8 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
           toast.success("Image restored successfully")
         }
       }
-
-      if (failedMessage && items.length <= 1) {
-        setError(failedMessage)
-        setAppState("error")
-        toast.error(failedMessage)
-      }
     },
-    [items, toast, trackRestoration],
+    [items, toast, trackRestoration, recoverFromSingleItemFailure, resyncCredits],
   )
 
   useEffect(() => {
@@ -293,6 +379,37 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         for (const restoration of data) {
           await applyRestorationRecord(restoration)
         }
+
+        // If a tracked DB row is missing (e.g. user deleted it manually or the
+        // job was cleared by another process), we don't want to keep the user
+        // staring at the spinner. The matching item gets dropped from local
+        // state immediately, the same way a real "failed" record is handled.
+        const foundIds = new Set(data.map((row) => row.id))
+        const missingIds = trackedRestorationIds.filter((id) => !foundIds.has(id))
+        if (missingIds.length > 0) {
+          setItems((current) => {
+            const stillThere = current.filter(
+              (item) => !(item.restorationId && missingIds.includes(item.restorationId)),
+            )
+
+            // If this empties out the dashboard, send the user back to upload.
+            if (stillThere.length === 0) {
+              setActiveItemId(null)
+              setAppState("upload")
+              try {
+                sessionStorage.removeItem(RESTORE_SESSION_KEY)
+              } catch {}
+            }
+            return stillThere
+          })
+
+          void resyncCredits()
+
+          toast.error(
+            "This restoration was lost and could not be recovered. Your credit has not been charged — please try again with a new photo.",
+            { duration: 7000 },
+          )
+        }
       }
     }
 
@@ -303,7 +420,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       window.clearInterval(intervalId)
       supabase.removeChannel(channel)
     }
-  }, [applyRestorationRecord, batchId, trackedRestorationIds])
+  }, [applyRestorationRecord, batchId, trackedRestorationIds, resyncCredits])
 
   const handleImagesSelect = (files: File[]) => {
     const newItems = files.map((file) => ({
@@ -387,6 +504,10 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       ),
     )
 
+    // Captured across single + batch paths so the catch block can resync
+    // the user's credit balance with whatever the server says after a refund.
+    let lastResponseCredits: number | undefined
+
     try {
       if (freshSelectedItems.length === 1) {
         const item = freshSelectedItems[0]
@@ -396,6 +517,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
 
         if (response.success && response.restorationId) {
           const newCredits = response.creditsRemaining ?? Math.max(0, userCredits - 1)
+          lastResponseCredits = newCredits
           setUserCredits(newCredits)
           setItems((current) =>
             current.map((currentItem) =>
@@ -412,6 +534,10 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
           setActiveItemId(item.clientId)
           toast.success(`Restoration started. 1 credit deducted. ${newCredits} credits remaining.`)
         } else {
+          // Capture the refunded balance before throwing so the catch block
+          // can resync the user's credit count in one place.
+          lastResponseCredits =
+            typeof response.creditsRemaining === "number" ? response.creditsRemaining : undefined
           throw new Error(response.error || "Failed to restore image")
         }
 
@@ -460,11 +586,14 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       )
 
       if (!response.success || !response.restorations) {
+        lastResponseCredits =
+          typeof response.creditsRemaining === "number" ? response.creditsRemaining : undefined
         throw new Error(response.error || "Failed to start batch restoration")
       }
 
       if (typeof response.creditsRemaining === "number") {
         setUserCredits(response.creditsRemaining)
+        lastResponseCredits = response.creditsRemaining
       }
       if (response.batchId) {
         setBatchId(response.batchId)
@@ -487,17 +616,44 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
 
       toast.success(`Restoration started. ${readyToSubmit.length} credits deducted.`)
     } catch (restoreError) {
-      const message = restoreError instanceof Error ? restoreError.message : "An unexpected error occurred. Please try again."
-      setError(message)
-      setAppState(freshSelectedItems.length > 1 ? "batch" : "error")
-      setItems((current) =>
-        current.map((item) =>
-          freshSelectedItems.some((selected) => selected.clientId === item.clientId) && item.status !== "failed"
-            ? { ...item, status: "failed" as RestoreStatus, error: message }
-            : item,
-        ),
+      const message =
+        restoreError instanceof Error
+          ? restoreError.message
+          : "An unexpected error occurred. Please try again."
+      const failedClientIds = new Set(freshSelectedItems.map((item) => item.clientId))
+
+      // Resync the user's credit balance with whatever the server says it is
+      // (the credit was reserved on entry and refunded on failure).
+      if (typeof lastResponseCredits === "number" && lastResponseCredits >= 0) {
+        setUserCredits(lastResponseCredits)
+      }
+
+      // Drop the failed item(s) from local state so the user never sees a
+      // "failed" badge in the UI. For a single item we return to the upload
+      // screen; for a batch the surviving items keep going.
+      setItems((current) => current.filter((item) => !failedClientIds.has(item.clientId)))
+
+      const survivingItems = items.filter((item) => !failedClientIds.has(item.clientId))
+      const isSingleFailure = freshSelectedItems.length <= 1 && survivingItems.length === 0
+
+      if (isSingleFailure) {
+        setActiveItemId(null)
+        setError(null)
+        setAppState("upload")
+        isRestoringRef.current = false
+        try {
+          sessionStorage.removeItem(RESTORE_SESSION_KEY)
+        } catch {}
+      }
+
+      // Best-effort resync of the credit balance so the header counter is
+      // honest after a refund (no page refresh required).
+      void resyncCredits()
+
+      toast.error(
+        `${message} Your credit has not been charged — you can try again with a new photo.`,
+        { duration: 7000 },
       )
-      toast.error(message)
     } finally {
       isRestoringRef.current = false
     }
@@ -672,34 +828,6 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
             onStartOver={handleClearImages}
             onDownload={handleDownload}
           />
-        )}
-
-        {appState === "error" && (
-          <div className="mx-auto w-full max-w-2xl">
-            <div className="rounded-2xl border border-red-200 bg-red-50/60 p-6 text-center backdrop-blur-sm">
-              <div className="space-y-6">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-                  <svg className="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-
-                <div>
-                  <h3 className="font-inter mb-2 text-xl font-semibold text-red-900">Restoration Failed</h3>
-                  <p className="mb-6 text-red-700">{error}</p>
-
-                  <div className="flex justify-center gap-3">
-                    <button
-                      onClick={handleClearImages}
-                      className="rounded bg-gray-600 px-6 py-2 font-medium text-white transition-colors hover:bg-gray-700"
-                    >
-                      Start Over
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         )}
       </main>
 
