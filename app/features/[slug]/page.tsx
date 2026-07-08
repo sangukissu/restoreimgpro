@@ -194,7 +194,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ slug:
                   </div>
                 ))}
                 <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-[10px] font-bold border-[3px] border-[#F2F2F0] shadow-sm z-40">
-                  1.4K+
+                  2.8K+
                 </div>
               </div>
 
@@ -204,7 +204,7 @@ export default async function FeaturesPage({ params }: { params: Promise<{ slug:
                     <Star key={star} size={16} className="fill-[#FF4D00] text-[#FF4D00]" />
                   ))}
                 </div>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Trusted by 1.4K+ Families</span>
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Trusted by 2.8K+ Families</span>
               </div>
             </div>
           </section>

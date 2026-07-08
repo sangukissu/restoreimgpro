@@ -174,7 +174,7 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
               <div className="p-4 md:p-8 border-b border-gray-100">
                 <div className="flex items-center gap-2 mb-6">
                    <div className="flex text-[#FF4D00]"><Star fill="currentColor" size={18}/><Star fill="currentColor" size={18}/><Star fill="currentColor" size={18}/><Star fill="currentColor" size={18}/><Star fill="currentColor" size={18}/></div>
-                   <span className="font-bold text-gray-900 ml-2">Loved by 1.4K+ people</span>
+                   <span className="font-bold text-gray-900 ml-2">Loved by 2.8K+ people</span>
                 </div>
                 <div className="grid md:grid-cols-3 gap-6">
                    {page.testimonials.map((test, i) => (

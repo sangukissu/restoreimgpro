@@ -67,7 +67,11 @@ export async function proxy(request: NextRequest) {
   }
 
   // Apply Supabase session middleware for protected routes
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
+  if (
+    request.nextUrl.pathname.startsWith('/dashboard') ||
+    request.nextUrl.pathname.startsWith('/admin') ||
+    request.nextUrl.pathname.startsWith('/api/admin')
+  ) {
     return await updateSession(request)
   }
 
