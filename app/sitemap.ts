@@ -102,12 +102,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   
   try {
     const slugs = await getAllPostSlugs()
-    blogPages = slugs.map((slug) => ({
-      url: `${baseUrl}/blog/${slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
-    }))
+    // Exclude slugs containing fragments/queries to avoid emitting indexable
+    // fragment-style URLs that bloat the index and dilute sitewide authority.
+    blogPages = slugs
+      .filter((slug) => !slug.includes('#') && !slug.includes('?') && slug.trim() === slug)
+      .map((slug) => ({
+        url: `${baseUrl}/blog/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+      }))
   } catch (error) {
     console.error('Error generating blog sitemap:', error)
     // Continue without blog pages if WordPress is unavailable

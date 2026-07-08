@@ -1,4 +1,5 @@
 import type React from "react"
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import { Suspense } from "react"
@@ -6,7 +7,13 @@ import { DashboardSkeleton } from "@/components/ui/skeleton"
 import PaymentController from "@/components/dashboard/payment-controller"
 import { ExitIntentPopup, TrustpilotReviewPrompt } from "@/components/exit-intent-popup"
 
-
+// Dashboard hosts interactive tool flows, chat/dialogue states and user sessions.
+// Keep these out of the index to prevent crawl leak / session indexing.
+export const metadata: Metadata = {
+  title: "Dashboard | BringBack AI",
+  description: "Your BringBack AI workspace.",
+  robots: { index: false, follow: false },
+}
 
 export default async function DashboardLayout({
   children,

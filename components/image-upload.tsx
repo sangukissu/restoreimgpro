@@ -218,7 +218,7 @@ export default function ImageUpload({
   if (selectedItems.length > 0) {
     const requiredCredits = selectedItems.length
     const hasEnoughCredits = userCredits >= requiredCredits
-    const restoreLabel = `Restore ${requiredCredits} photo${requiredCredits === 1 ? "" : "s"} - ${requiredCredits} credit${requiredCredits === 1 ? "" : "s"}`
+    const restoreLabel = `Restore ${requiredCredits} photo${requiredCredits === 1 ? "" : "s"}`
     const hiddenInput = (
       <input
         ref={fileInputRef}

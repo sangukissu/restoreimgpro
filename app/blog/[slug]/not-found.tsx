@@ -3,6 +3,13 @@ import { Footer } from '@/components/landing/Footer';
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, FileX } from "lucide-react"
+import type { Metadata } from "next"
+
+// Never index missing/non-existent blog slugs (prevents index bloat from
+// stray or fragment-style URLs resolving to this page).
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
 
 export default function BlogPostNotFound() {
   return (

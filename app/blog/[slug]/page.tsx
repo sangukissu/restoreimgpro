@@ -58,13 +58,15 @@ function buildToc(content: string) {
   })
   return { toc, content: withIds }
 }
-// Generate static paths for all blog posts
+// Generate static paths for all blog posts.
+// Filter out any slug that contains a fragment (#) or query (?) so we never
+// pre-render or emit indexable fragment-style URLs (prevents index bloat).
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
     const slugs = await getAllPostSlugs()
-    return slugs.map((slug) => ({
-      slug,
-    }))
+    return slugs
+      .filter((slug) => !slug.includes('#') && !slug.includes('?') && slug.trim() === slug)
+      .map((slug) => ({ slug }))
   } catch (error) {
     console.error('Error generating static params:', error)
     return []
@@ -80,6 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       return {
         title: "Post Not Found - BringBack Blog",
         description: "The requested blog post could not be found.",
+        robots: { index: false, follow: false },
       }
     }
 
@@ -120,6 +123,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
       title: "Blog Post - BringBack",
       description: "Read the latest articles about photo restoration and preservation.",
+      robots: { index: false, follow: false },
     }
   }
 }
@@ -207,7 +211,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
             <div className="bg-white rounded-[2rem]">
 
               {/* Hero Section */}
-              <div className="relative py-4 px-4 sm:px-12 lg:px-20 border-b border-gray-100">
+              <div className="relative py-4 sm:py-8 px-4 sm:px-12 lg:px-20 border-b border-gray-100">
                 <div className="max-w-4xl mx-auto">
 
                   {/* Meta Tags */}
