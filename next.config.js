@@ -82,7 +82,25 @@ const nextConfig = {
         // Apply security headers to all routes
         source: '/(.*)',
         headers: securityHeaders
-      }
+      },
+      // Defense in depth for the admin surface: even if a crawler ignores
+      // robots.txt, the response itself declares itself non-indexable and is
+      // not stored in shared caches.
+      {
+        source: '/admin/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate' },
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      },
+      {
+        source: '/api/admin/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive, nosnippet' },
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+        ],
+      },
     ]
   },
 
