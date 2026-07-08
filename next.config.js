@@ -85,7 +85,6 @@ const nextConfig = {
       },
       // Defense in depth for the admin surface: even if a crawler ignores
       // robots.txt, the response itself declares itself non-indexable and is
-      // not stored in shared caches.
       {
         source: '/admin/:path*',
         headers: [
