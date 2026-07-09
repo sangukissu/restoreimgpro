@@ -40,6 +40,9 @@ export default function AddPersonDashboardClient({ user, initialCredits, isPayme
               <h3 className="text-lg font-semibold text-black">Tips for Best Results</h3>
               <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-gray-700">
                 <li>Use a base photo with enough empty space near your chosen placement.</li>
+                <li>
+                  The "person to add" photo must contain exactly one person, captured alone — this feature is for adding a single missing person, not a group.
+                </li>
                 <li>Pick a clear person photo with the full face and body visible when possible.</li>
                 <li>Match camera angle and lighting direction for more natural composition.</li>
                 <li>Restore damaged or blurry images first for stronger identity preservation.</li>

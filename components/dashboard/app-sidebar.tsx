@@ -104,7 +104,6 @@ export function AppSidebar({
     { title: "Animate", url: "/dashboard/animate", icon: WandSparkles },
     { title: "Memory Book", url: "/dashboard/memory-book", icon: BookOpen },
     { title: "Family Portrait", url: "/dashboard/family-portrait", icon: UsersRound },
-    { title: "Add Person", url: "/dashboard/add-person", icon: UserPlus },
     { title: "Remove Person", url: "/dashboard/remove-person", icon: Eraser },
     { title: "Nostalgic Hug", url: "/dashboard/nostalgic-hug", icon: ImageIcon },
     { title: "My Media", url: "/dashboard/my-media", icon: Upload },

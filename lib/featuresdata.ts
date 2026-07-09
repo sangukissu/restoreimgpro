@@ -1122,12 +1122,12 @@ export const featuresData: Record<string, FeaturePageData> = {
         {
           step: 1,
           title: "Select Your Photos",
-          description: "Upload the group photo and a separate photo of the person you want to add.",
+          description: "Upload the group photo and a solo photo of the single person you want to add. The person photo must show exactly one person, captured alone.",
         },
         {
           step: 2,
           title: "Natural Integration",
-          description: "Our AI matches the lighting, perspective, and scale to blend the new person seamlessly into the group.",
+          description: "Our AI matches the lighting, perspective, scale, ground plane, and eye-line to blend the new person seamlessly into the group.",
         },
         {
           step: 3,

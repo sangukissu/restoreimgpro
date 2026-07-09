@@ -144,7 +144,19 @@ export default function AddPersonClient({
 
       const payload = await response.json().catch(() => ({}))
       if (!response.ok) {
-        const message = payload?.error || "Failed to add person to photo"
+        // Surface specific, friendlier messages for each known pre-check code.
+        const code = payload?.code
+        const details = payload?.details
+        let message = payload?.error || "Failed to add person to photo"
+        if (code === "MULTIPLE_PEOPLE_IN_SECOND_IMAGE" && details?.count) {
+          message = `We detected ${details.count} people in the "person to add" photo. ${message}`
+        } else if (code === "NO_PERSON_IN_SECOND_IMAGE") {
+          message = `We couldn't find a person in the "person to add" photo. ${message}`
+        } else if (code === "PUBLIC_FIGURE_OR_RESTRICTED_CONTENT") {
+          message = `For privacy and safety, we can't edit photos that include recognizable public figures. ${message}`
+        } else if (code === "PRECHECK_UNAVAILABLE") {
+          message = `Our safety check is temporarily unavailable. Please try again in a moment. ${message}`
+        }
         toast.error(message)
         throw new Error(message)
       }
@@ -311,7 +323,7 @@ export default function AddPersonClient({
             <UploadZone
               slot="person"
               title="Person to Add"
-              description="The individual to insert"
+              description="One person, alone in the photo"
               file={personFile}
               inputRef={personInputRef}
               icon={<UserPlus className="h-5 w-5" />}
