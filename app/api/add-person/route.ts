@@ -367,7 +367,17 @@ export async function POST(req: NextRequest) {
     // network error, vision service output), we refuse the request and
     // return a 503 instead of falling through to Fal. Sending to Fal
     // without this gate produces degenerate outputs and wastes credits.
-    const [baseUrl, personUrl] = uploadedUrls
+    // uploadedUrls is ordered to match the upload calls: index 0 = first
+    // image (base / group photo), index 1 = second image (person to add).
+    // The first image has NO restriction applied to it — it flows straight
+    // through to fal. Only the second image is run through the Gemini
+    // pre-check (people count + public-figure safety).
+    const baseUrl = uploadedUrls[0]
+    const personUrl = uploadedUrls[1]
+    console.info("[add-person] precheck: target = second image (person to add)", {
+      firstImageBaseUrl: baseUrl,
+      secondImagePersonUrl: personUrl,
+    })
     const verdict = await precheckSecondImage(personUrl)
     console.info(
       "[add-person] precheck verdict",
