@@ -42,73 +42,30 @@ function cleanContext(context: unknown) {
 }
 
 function buildPrompt(placement: Placement, context: string) {
-  const contextDirective = context ? `"Additional context by user: ${context}"` : ""
+  const contextDirective = context ? `Additional context by user: ${context}` : ""
 
-  return `You are an expert photo compositor, retoucher, and 3D-aware scene synthesizer.
+  return `[TASK: TIGHT PROXIMITY IMAGE COMPOSITION & CONTEXTUAL INSERTION]
 
-Task: Insert a single person into an existing group photo. The FIRST image is the existing photo (the moat) and defines the scene, environment, composition, lighting, and the group of people already in the photo. The SECOND image contains the person to add — and ONLY that one person, captured alone.
+INPUT_A (Base Scene Group Photo): {{BASE_IMAGE}}
+INPUT_B (Individual to Insert): {{INSERT_SUBJECT_IMAGE}}
+Placement: ${placementDirective(placement)}. ${contextDirective}
 
-═══════════════════════════════════════════
-PRODUCT CONTRACT (hard rules — failing to follow these is a failure)
-═══════════════════════════════════════════
-P1. The second image has been pre-validated to contain exactly one person. Use only that one person. Do not invent additional people from the second image.
+[1. COMPACT LAYOUT & SPATIAL ARCHITECTURE]
+- ANTI-GAP CONSTRAINT: Do not create wide-angle panoramas, auxiliary open spaces, or empty background voids on the flanks of the image. Avoid zooming out the lens perspective.
+- MINIMAL WIDTH ADAPTATION: Adjust the overall canvas width strictly by the exact physical shoulder-width volume required to accommodate the profile from INPUT_B. The resulting framing must remain a tight, focused group portrait.
+- CONTIGUOUS POSITIONING: Seamlessly insert the individual from INPUT_B into immediate shoulder-to-shoulder or arm's-length proximity with the subjects in INPUT_A. They must blend directly into the existing human cluster as a natural, interconnected family member, minimizing any spatial gap between bodies.
 
-P2. The first image is the moat. Its background, furniture, floor, walls, sky, and all non-person elements are pixel-locked and must not change. Only the existing people may shift position slightly (see P3).
+[2. DYNAMIC ENVIRONMENT HARMONIZATION]
+- CONTEXTUAL SURFACE CONTINUATION: Analyze the immediate background, flooring, and environmental vectors directly surrounding the insertion point in INPUT_A. Extend those structural lines, patterns, and textures natively behind and beneath the newly inserted subject without altering the original background layout of the rest of the scene.
+- PERSPECTIVE ALIGNMENT: Maintain the exact camera focal height, lens compression, and vanishing points of INPUT_A. The inserted individual must share the identical horizon line and depth plane as the adjacent subjects.
 
-P3. People already in the first image may shift by a small percentage of frame width (roughly 1–5% of the frame's narrower side) so the new person fits without impossible overlaps. They MUST keep their original pose, face, body, and clothing. Do not change anyone's expression, gesture, or outfit.
+[3. PHOTOREALISTIC INTEGRATION & SCALE]
+- RELATIVE DIMENSIONALITY: Programmatically calculate the scale metrics of nearby adult subjects in INPUT_A. Match the height, head-to-shoulder proportions, and physical volume of the subject from INPUT_B to the existing subjects to maintain flawless human perspective.
+- MATRIX LIGHTING MATCH: Extract the precise light vectors (angle, direction, diffusion/hardness, color temperature, and color cast) from INPUT_A and apply them directly to the subject from INPUT_B.
+- MICRO-SHADOWING: Generate tight, realistic contact and occlusion shadows where the inserted subject interacts with the floor plane and where their profile sits adjacent to the original subjects.
 
-P4. The new person must fit the scene's existing ground plane, eye-line, lens, and lighting. They must look like they were standing there when the photo was taken.
-
-P5. The aspect ratio is "auto" — the canvas may grow slightly in either direction to fit the new person. Use this freedom to create room for the new person instead of forcing an impossible composition.
-
-═══════════════════════════════════════════
-SPATIAL REALISM CONTRACT (treat as one moment in 3D)
-═══════════════════════════════════════════
-Before drawing, internally establish a single shared 3D scene with these constraints:
-
-1. ONE shared ground plane. The base image's floor (or implied ground) is the only ground. The new person's feet must touch this ground at the angle the floor's perspective dictates, with a soft contact shadow on the ground under them. If the second image does not show feet, infer only the minimum natural footwear/legs/lower clothing required to land them on the ground plane — do not invent distracting wardrobe details.
-
-2. ONE shared camera and lens. Treat both inputs as if they were taken from the same camera position, with the same lens (focal length) and the same height. If the second image's person was shot from a different angle or lens, re-project them to match the FIRST image's camera — same vertical eye-level, same horizontal perspective, same lens compression. Do not paste a waist-level straight-on subject into a higher-angle scene.
-
-3. ONE shared Z-depth ordering. Walk the scene front-to-back:
-   - Existing people in front (closer to camera, larger, lower in frame) come first.
-   - Existing people in back (smaller, higher in frame, partly occluded by front people) come after.
-   - The new person occupies a single Z-layer (front, mid, or back) and stays entirely on that layer. Nothing of the new person can pass through a body on a different layer.
-
-4. ONE shared eye-line. Pick a single horizon at the height of the base image's standing adults' eyes. Every visible face in the final image — including the new person's — must sit on or very near this line. The new person must not be a "hobbit" with their head below the adults' eyes, nor float with their head above everyone. If the new person is a child, place their head at child-eye-level on the shared eye-line, not adult-head height.
-
-5. ONE shared scale system. Use the base image's standing adult as the size unit. The new person is sized by the head-to-toe silhouette of that adult at the new person's Z-depth, not by the pixel height of the second image. A new person in the back must be smaller than the same person would be in the front.
-
-6. ONE shared lighting and color temperature. Light the new person with the base image's key/fill direction; cast shadows the same way as existing shadows in the scene. Match white balance, contrast, and saturation to the base image so skin tones, hair tones, and clothing tones all sit on the base image's palette.
-
-7. ONE shared focus. The new person's sharpness must match the base image's focus at their Z-depth. A new person placed in the back of the scene is slightly softer; a new person in front is slightly sharper.
-
-═══════════════════════════════════════════
-COMPOSITION (placement, framing, overlap)
-═══════════════════════════════════════════
-- Place the new person ${placementDirective(placement)}. ${contextDirective}
-- If the requested placement is physically impossible in the base scene (would force the new person to overlap a body on a different Z-layer, would put their feet off the ground plane, or would split them at a frame edge), pick the nearest physically valid open space that still respects the user's intent. The aspect ratio is "auto" — let the canvas grow slightly in the needed direction so the new person has room.
-- Match the base image's body crop style for the new person. If the base image is a full-body group shot, the new person is full-body. If the base is waist-up or tighter, the new person uses the same crop. Do not invent extra limbs, partial arms, or duplicate torsos at the frame edge.
-- Z-order rule: a closer existing subject's body must cleanly occlude the new person where they overlap, and the new person must be partly occluded (not floating on top of) by a closer existing subject. Overlap edges must blend with the same softness as the existing scene's overlapping bodies. No floating babies, no interlocking-arm glitches, no sticker-pasted-on feet.
-- If the new person joins from the back, the back-row existing people should be in front of the new person, and the front-row existing people should be in front of those — preserve this order, do not reshuffle.
-- Existing people can shift by a few percent of frame width to make room (see P3). They must keep their original pose, face, body, and clothing.
-
-═══════════════════════════════════════════
-IDENTITY & INTEGRATION
-═══════════════════════════════════════════
-- Preserve the identity, face, and clothing of the new person from the second image exactly.
-- Apply a soft edge falloff so the new person has no visible halo, no cutout outline, and no mismatched sharpness.
-- The new person must not look like a sticker pasted on. Match the grain/noise profile of the base image so the new person does not look "cleaner" or "dirtier" than the rest of the scene.
-
-═══════════════════════════════════════════
-INPUT VALIDATION (already done for you)
-═══════════════════════════════════════════
-A pre-flight check has already confirmed: the second image contains exactly one person, and neither image contains a recognizable public figure. You do not need to refuse, re-check counts, or gate on public-figure rules. Focus entirely on the spatial / identity / composition task below.
-
-═══════════════════════════════════════════
-OUTPUT
-═══════════════════════════════════════════
-A single photorealistic photograph, indistinguishable from a real re-shot moment. Anyone viewing the result should believe all the people were standing together when the photo was taken.`
+[4. IDENTITY & STRUCTURE GUARDRAILS]
+- FIXED SUBJECT METRICS: Lock all facial features, bone structure, expressions, and clothing textures of every individual across both input images. Prevent any pixel morphing, feature softening, or AI hallucinations.`
 }
 
 function getFalErrorDetails(error: any) {
