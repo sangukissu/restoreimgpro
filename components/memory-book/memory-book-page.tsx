@@ -1,6 +1,8 @@
 "use client"
 
+import type { ReactNode } from "react"
 import type { MemoryBookAssetSource } from "./family-heritage-viewer"
+import { inkHex, lightenInk, rotationForId, type MarginaliaNote } from "./marginalia"
 import { BookCover } from "./book-cover"
 import { PaperTexture } from "./paper-texture"
 import { Polaroid } from "./polaroid"
@@ -138,13 +140,151 @@ export function MemoryBookStaticPage({
   children,
   className = "",
 }: {
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }) {
   return (
     <div className={[styles.composerExactPreview, className].filter(Boolean).join(" ")}>
       <div className={styles.composerExactPage}>{children}</div>
     </div>
+  )
+}
+
+/**
+ * Render a single handwritten note. The name is a lighter tint of the same ink,
+ * the message is full ink, and the date is barely visible. Nothing is bold.
+ */
+function NoteEntry({ note }: { note: MarginaliaNote }) {
+  const ink = inkHex(note.ink_color_key)
+  const rotation = rotationForId(note.id)
+  const nameColor = lightenInk(ink, 0.35)
+  const name = note.display_name.trim() || "A loved one"
+  const date = new Date(note.created_at).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  })
+
+  return (
+    <div
+      style={{
+        transform: `rotate(${rotation}deg)`,
+        transformOrigin: "top left",
+      }}
+    >
+      <p
+        style={{
+          margin: 0,
+          fontFamily: "var(--font-patrick-hand), cursive",
+          fontStyle: "italic",
+          fontSize: "clamp(14px, 1.1vw, 17px)",
+          fontWeight: 400,
+          color: nameColor,
+          textShadow: "0 1px 0 rgba(253,250,243,0.6)",
+          lineHeight: 1.05,
+        }}
+      >
+        {name}
+      </p>
+      {note.note ? (
+        <p
+          style={{
+            margin: "3px 0 0",
+            fontFamily: "var(--font-patrick-hand), cursive",
+            fontSize: "clamp(15px, 1.4vw, 21px)",
+            fontWeight: 400,
+            color: ink,
+            lineHeight: 1.15,
+            textShadow: "0 1px 0 rgba(253,250,243,0.7)",
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+          }}
+        >
+          {note.note}
+        </p>
+      ) : (
+        <p
+          style={{
+            margin: "3px 0 0",
+            fontFamily: "var(--font-patrick-hand), cursive",
+            fontStyle: "italic",
+            fontSize: "clamp(15px, 1.4vw, 21px)",
+            fontWeight: 400,
+            color: nameColor,
+            lineHeight: 1.15,
+          }}
+        >
+          Thinking of you.
+        </p>
+      )}
+      <p
+        style={{
+          margin: "5px 0 0",
+          fontFamily: "var(--font-manrope), sans-serif",
+          fontSize: "8px",
+          letterSpacing: "0.16em",
+          textTransform: "uppercase",
+          fontWeight: 400,
+          color: "rgba(43,40,38,0.22)",
+        }}
+      >
+        {date}
+      </p>
+    </div>
+  )
+}
+
+/**
+ * A page that holds multiple handwritten notes from family members.
+ *
+ * Notes flow as full-width entries down the page, like real marginalia or
+ * guestbook entries in a paper book. Each entry is slightly rotated and
+ * spaced with generous whitespace. We pack as many whole entries as the
+ * page height allows; overflow starts a new page. No cards, no borders,
+ * no bold.
+ */
+export function MemoryBookNotePage({
+  notes,
+  textureId,
+}: {
+  notes: MarginaliaNote[]
+  textureId: string
+}) {
+  const isSingle = notes.length === 1
+
+  return (
+    <article
+      className={[styles.innerPage, styles.scrapbookPage, styles.keepsakePage].join(" ")}
+    >
+      <PaperTexture textureId={textureId} />
+      <img className={styles.pageFlowerGhost} src="/icons/rose.webp" alt="" draggable={false} />
+
+      <div
+        className={styles.keepsakeCopy}
+        style={{
+          width: "78%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: isSingle ? "center" : "stretch",
+          justifyContent: isSingle ? "center" : "flex-start",
+          gap: "26px",
+          height: "100%",
+        }}
+      >
+        {notes.map((note) => (
+          <div
+            key={note.id}
+            style={{
+              width: "100%",
+              transform: `rotate(${rotationForId(note.id)}deg)`,
+              transformOrigin: "top left",
+            }}
+          >
+            <NoteEntry note={note} />
+          </div>
+        ))}
+      </div>
+    </article>
   )
 }
 

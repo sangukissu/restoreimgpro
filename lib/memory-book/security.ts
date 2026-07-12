@@ -151,3 +151,27 @@ export function hashReactionAddress(address: string) {
     .update(`${dateBucket}.${address}`)
     .digest("hex")
 }
+
+/**
+ * Deterministically maps a reader's identity to one of five ink colours so
+ * their marginalia stays visually consistent across every page they annotate.
+ * Falls back to a caller-provided value when it is a valid 1–5 (e.g. for
+ * potential future client-side persistence in localStorage).
+ */
+export function hashInkColorKey(readerSeed: string, fallback?: unknown) {
+  if (
+    typeof fallback === "number" &&
+    Number.isFinite(fallback) &&
+    fallback >= 1 &&
+    fallback <= 5
+  ) {
+    return Math.floor(fallback)
+  }
+
+  const digest = createHmac("sha256", getShareSecret())
+    .update(`ink.${readerSeed}`)
+    .digest()
+
+  // Read the first byte as a number 0–4, then shift to 1–5.
+  return (digest[0] % 5) + 1
+}

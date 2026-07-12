@@ -83,6 +83,9 @@ type Reaction = {
   reaction: string
   display_name: string
   note: string
+  page_index: number | null
+  ink_color_key: number
+  hidden: boolean
   created_at: string
 }
 

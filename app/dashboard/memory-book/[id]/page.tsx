@@ -33,7 +33,9 @@ export default async function MemoryBookCuratorPage({
       getCuratorMediaLibrary(user.id),
       supabaseAdmin
         .from("memory_book_reactions")
-        .select("id, reaction, display_name, note, created_at")
+        .select(
+          "id, reaction, display_name, note, page_index, ink_color_key, hidden, created_at"
+        )
         .eq("book_id", id)
         .order("created_at", { ascending: false }),
       supabaseAdmin

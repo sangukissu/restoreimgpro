@@ -20,9 +20,11 @@ import {
   MemoryBookBackCoverPage,
   MemoryBookCoverPage,
   MemoryBookStoryPage,
+  MemoryBookNotePage,
   splitCoverTitle,
 } from "./memory-book-page"
 import { MobileSpiralJournal } from "./mobile-spiral-journal"
+import type { MarginaliaNote } from "./marginalia"
 import styles from "./memory-book.module.css"
 
 export interface MemoryBookAssetSource {
@@ -42,9 +44,62 @@ interface FamilyHeritageViewerProps {
   className?: string
   onCompleted?: () => void
   onPageChange?: (index: number, max: number) => void
+  /** Notes from family members, rendered as pages before the back cover. */
+  notes?: MarginaliaNote[]
 }
 
 type HeritageSpread = MemoryBookDocumentV1["spreads"][number]
+
+/**
+ * Estimate how many wrapped lines a note will occupy on a note page.
+ * Notes render full-width (78% of the page). We estimate char-per-line at
+ * ~34 for the message and 42 for the name, then compute total vertical
+ * height including gaps.
+ */
+function estimateNoteHeight(note: MarginaliaNote): number {
+  const name = (note.display_name || "").trim() || "A loved one"
+  const message = note.note || "Thinking of you."
+  const nameLines = Math.max(1, Math.ceil(name.length / 42))
+  const messageLines = Math.max(1, Math.ceil(message.length / 34))
+  // name line-height 1.05, message line-height 1.15, date ~12px, gap after note 26px
+  const nameHeight = nameLines * 14 * 1.05
+  const messageHeight = messageLines * 16 * 1.15
+  const dateHeight = 12
+  const gap = 26
+  return nameHeight + messageHeight + dateHeight + gap
+}
+
+/**
+ * Pack notes into pages using a single-column fill strategy.
+ * Each page has a total available height budget. We fill the page top-to-
+ * bottom with full-width notes. If the next whole note won't fit, we start
+ * a new page. Notes never split across pages.
+ */
+function packNotesIntoPages(notes: MarginaliaNote[]): MarginaliaNote[][] {
+  if (notes.length === 0) return []
+
+  // Available vertical space inside the .keepsakeCopy area.
+  const PAGE_HEIGHT = 420
+  const pages: MarginaliaNote[][] = []
+  let currentPage: MarginaliaNote[] = []
+  let currentHeight = 0
+
+  for (const note of notes) {
+    const h = estimateNoteHeight(note)
+
+    if (currentHeight + h > PAGE_HEIGHT && currentPage.length > 0) {
+      pages.push(currentPage)
+      currentPage = []
+      currentHeight = 0
+    }
+
+    currentPage.push(note)
+    currentHeight += h
+  }
+
+  if (currentPage.length > 0) pages.push(currentPage)
+  return pages
+}
 
 export function FamilyHeritageViewer({
   document,
@@ -52,6 +107,7 @@ export function FamilyHeritageViewer({
   className,
   onCompleted,
   onPageChange,
+  notes = [],
 }: FamilyHeritageViewerProps) {
   const completedRef = useRef(false)
   const turnTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -78,6 +134,8 @@ export function FamilyHeritageViewer({
   )
 
   const sheets = useMemo<MemoryBookSheet[]>(() => {
+    const notePages = packNotesIntoPages(notes)
+
     const storySheets = document.spreads.map((spread, index) => ({
       id: spread.id,
       front: (
@@ -89,7 +147,23 @@ export function FamilyHeritageViewer({
         />
       ),
       back:
-        index === document.spreads.length - 1 ? (
+        notePages.length === 0 && index === document.spreads.length - 1 ? (
+          <MemoryBookBackCoverPage message={document.dedication} />
+        ) : (
+          <InnerPage variant="botanical" />
+        ),
+    }))
+
+    const noteSheets: MemoryBookSheet[] = notePages.map((page, pageIndex) => ({
+      id: `notes-page-${pageIndex}`,
+      front: (
+        <MemoryBookNotePage
+          notes={page}
+          textureId={`desktop-${document.bookId}-notes-${pageIndex + 1}`}
+        />
+      ),
+      back:
+        pageIndex === notePages.length - 1 ? (
           <MemoryBookBackCoverPage message={document.dedication} />
         ) : (
           <InnerPage variant="botanical" />
@@ -108,6 +182,7 @@ export function FamilyHeritageViewer({
         back: <InnerPage variant="botanical" />,
       },
       ...storySheets,
+      ...noteSheets,
     ]
   }, [
     coverPeriodLines,
@@ -116,6 +191,7 @@ export function FamilyHeritageViewer({
     document.dedication,
     document.spreads,
     sourceMap,
+    notes,
   ])
 
   const maxIndex = sheets.length

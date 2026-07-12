@@ -5,6 +5,7 @@ import {
   ArrowDown,
   ArrowUp,
   CircleAlert,
+  EyeOff,
   ImageIcon,
   Loader2,
   Plus,
@@ -33,6 +34,7 @@ import type {
   MemoryBookDraftDocument,
 } from "@/lib/memory-book/types"
 import type { MemoryBookAssetSource } from "./family-heritage-viewer"
+import { inkHex } from "./marginalia"
 import {
   MemoryBookBackCoverPage,
   MemoryBookCoverPage,
@@ -56,7 +58,107 @@ type Reaction = {
   reaction: string
   display_name: string
   note: string
+  page_index: number | null
+  ink_color_key: number
+  hidden: boolean
   created_at: string
+}
+
+function OwnerMarginaliaPanel({
+  reactions,
+  bookId,
+}: {
+  reactions: Reaction[]
+  bookId?: string
+}) {
+  const [hiddenMap, setHiddenMap] = useState<Record<string, boolean>>({})
+  const [pending, setPending] = useState<string | null>(null)
+
+  const visible = reactions.filter(
+    (r) => (hiddenMap[r.id] ?? r.hidden) === false
+  )
+  const hiddenCount = reactions.length - visible.length
+
+  const toggleHidden = async (reaction: Reaction) => {
+    const next = !(hiddenMap[reaction.id] ?? reaction.hidden)
+    setHiddenMap((prev) => ({ ...prev, [reaction.id]: next }))
+    setPending(reaction.id)
+    try {
+      const response = await fetch(
+        `/api/memory-books/${bookId}/reactions/${reaction.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ hidden: next }),
+        }
+      )
+      if (!response.ok) {
+        setHiddenMap((prev) => ({ ...prev, [reaction.id]: !next }))
+      }
+    } catch {
+      setHiddenMap((prev) => ({ ...prev, [reaction.id]: !next }))
+    } finally {
+      setPending(null)
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-black/8 bg-white p-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="font-manrope text-[11px] tracking-[0.16em] uppercase text-black/40">
+          Marginalia · {reactions.length}
+        </p>
+        {hiddenCount > 0 ? (
+          <p className="text-[11px] text-black/35">{hiddenCount} hidden</p>
+        ) : null}
+      </div>
+      <div className="mt-3 divide-y divide-black/8">
+        {visible.slice(0, 8).map((reaction) => {
+          const ink = inkHex(reaction.ink_color_key)
+          const name = reaction.display_name.trim() || "A reader"
+          const pageLabel =
+            reaction.page_index === null || reaction.page_index === undefined
+              ? "closing"
+              : `page ${reaction.page_index}`
+          const isHidden = hiddenMap[reaction.id] ?? reaction.hidden
+          return (
+            <div
+              key={reaction.id}
+              className="py-2.5 text-sm"
+              style={{ opacity: isHidden ? 0.4 : 1 }}
+            >
+              <div className="flex items-center gap-2">
+                <span
+                  className="inline-block h-1.5 w-1.5 rounded-full"
+                  style={{ backgroundColor: ink }}
+                />
+                <span className="font-semibold" style={{ color: ink }}>
+                  {name}
+                </span>
+                <span className="text-[11px] tracking-wide uppercase text-black/30">
+                  {reaction.reaction.replace("_", " ")} · {pageLabel}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => toggleHidden(reaction)}
+                  disabled={pending === reaction.id}
+                  className="ml-auto text-black/30 hover:text-black/70 transition-colors disabled:opacity-50 cursor-pointer"
+                  title={isHidden ? "Show note" : "Hide note from readers"}
+                >
+                  <EyeOff className="size-3.5" />
+                </button>
+              </div>
+              {reaction.note ? (
+                <p className="mt-1 font-serif italic text-[14px] text-black/65 whitespace-pre-wrap">
+                  {reaction.note}
+                </p>
+              ) : null}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 export function MemoryBookPageComposer({
@@ -449,17 +551,10 @@ export function MemoryBookPageComposer({
           </ComposerCard>
 
           {reactions.length ? (
-            <div className="rounded-xl border border-black/8 bg-white p-4">
-              <p className="font-bold">Private reactions</p>
-              <div className="mt-3 space-y-2">
-                {reactions.slice(0, 6).map((reaction) => (
-                  <div key={reaction.id} className="rounded-lg bg-[#f5f5f2] px-3 py-2 text-sm">
-                    <p className="font-semibold">{reaction.display_name || "Someone you shared it with"} · {reaction.reaction.replace("_", " ")}</p>
-                    {reaction.note ? <p className="mt-1 text-black/58">{reaction.note}</p> : null}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <OwnerMarginaliaPanel
+              reactions={reactions}
+              bookId={document?.bookId}
+            />
           ) : null}
         </div>
 

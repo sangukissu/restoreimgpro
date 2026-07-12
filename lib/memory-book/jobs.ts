@@ -296,7 +296,7 @@ async function sendReactionEmail(job: MemoryBookJob) {
 
   const { data: reactions } = await supabaseAdmin
     .from("memory_book_reactions")
-    .select("id, reaction, display_name, note, created_at")
+    .select("id, reaction, display_name, note, page_index, created_at")
     .eq("book_id", job.book_id)
     .in("notification_status", ["pending", "queued"])
     .order("created_at", { ascending: true })
@@ -309,7 +309,11 @@ async function sendReactionEmail(job: MemoryBookJob) {
   const reactionLines = reactions.map((reaction) => {
     const sender = reaction.display_name || "Someone you shared it with"
     const note = reaction.note ? `: “${reaction.note}”` : ""
-    return `- ${sender} reacted ${reaction.reaction.replace("_", " ")}${note}`
+    const where =
+      reaction.page_index === null || reaction.page_index === undefined
+        ? "a closing note"
+        : `page ${reaction.page_index}`
+    return `- ${sender} reacted ${reaction.reaction.replace("_", " ")} on ${where}${note}`
   })
 
   const result = await resend.emails.send({
@@ -320,7 +324,7 @@ async function sendReactionEmail(job: MemoryBookJob) {
     text: [
       `Hi ${profile.name || "there"},`,
       "",
-      "Your Family Heritage keepsake received a new private reaction.",
+      "Your Family Heritage keepsake received a new margin note from your family.",
       "",
       ...reactionLines,
       "",
