@@ -34,7 +34,7 @@ import type {
   MemoryBookDraftDocument,
 } from "@/lib/memory-book/types"
 import type { MemoryBookAssetSource } from "./family-heritage-viewer"
-import { inkHex } from "./marginalia"
+import { nameHex, nameColorKeyForName } from "./marginalia"
 import {
   MemoryBookBackCoverPage,
   MemoryBookCoverPage,
@@ -114,8 +114,8 @@ function OwnerMarginaliaPanel({
       </div>
       <div className="mt-3 divide-y divide-black/8">
         {visible.slice(0, 8).map((reaction) => {
-          const ink = inkHex(reaction.ink_color_key)
           const name = reaction.display_name.trim() || "A reader"
+          const ink = nameHex(nameColorKeyForName(name))
           const pageLabel =
             reaction.page_index === null || reaction.page_index === undefined
               ? "closing"

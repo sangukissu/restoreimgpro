@@ -2,7 +2,12 @@
 
 import type { ReactNode } from "react"
 import type { MemoryBookAssetSource } from "./family-heritage-viewer"
-import { inkHex, lightenInk, rotationForId, type MarginaliaNote } from "./marginalia"
+import {
+  nameHex,
+  nameColorKeyForName,
+  rotationForId,
+  type MarginaliaNote,
+} from "./marginalia"
 import { BookCover } from "./book-cover"
 import { PaperTexture } from "./paper-texture"
 import { Polaroid } from "./polaroid"
@@ -151,14 +156,22 @@ export function MemoryBookStaticPage({
 }
 
 /**
- * Render a single handwritten note. The name is a lighter tint of the same ink,
- * the message is full ink, and the date is barely visible. Nothing is bold.
+ * Render a single handwritten note.
+ * - The contributor's name uses Patrick Hand in a bright, distinct colour
+ *   chosen from a 10-colour palette based on the name. Same contributor =
+ *   same colour across every page.
+ * - The message uses Caveat, a clean handwritten font, in dark charcoal so
+ *   it is clearly readable and visually separate from the colourful name.
+ * - The date is barely visible.
+ * Nothing is bold.
  */
 function NoteEntry({ note }: { note: MarginaliaNote }) {
-  const ink = inkHex(note.ink_color_key)
-  const rotation = rotationForId(note.id)
-  const nameColor = lightenInk(ink, 0.35)
   const name = note.display_name.trim() || "A loved one"
+  // Name colour comes from the display name, not the stored ink_color_key,
+  // so the same contributor always appears in the same colour even if they
+  // submit from different devices.
+  const nameColor = nameHex(nameColorKeyForName(name))
+  const rotation = rotationForId(note.id)
   const date = new Date(note.created_at).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
@@ -177,7 +190,7 @@ function NoteEntry({ note }: { note: MarginaliaNote }) {
           margin: 0,
           fontFamily: "var(--font-patrick-hand), cursive",
           fontStyle: "italic",
-          fontSize: "clamp(14px, 1.1vw, 17px)",
+          fontSize: "clamp(13px, 1vw, 16px)",
           fontWeight: 400,
           color: nameColor,
           textShadow: "0 1px 0 rgba(253,250,243,0.6)",
@@ -189,12 +202,12 @@ function NoteEntry({ note }: { note: MarginaliaNote }) {
       {note.note ? (
         <p
           style={{
-            margin: "3px 0 0",
-            fontFamily: "var(--font-patrick-hand), cursive",
-            fontSize: "clamp(15px, 1.4vw, 21px)",
+            margin: "4px 0 0",
+            fontFamily: "var(--font-caveat), cursive",
+            fontSize: "clamp(18px, 1.7vw, 25px)",
             fontWeight: 400,
-            color: ink,
-            lineHeight: 1.15,
+            color: "#2b2826",
+            lineHeight: 1.05,
             textShadow: "0 1px 0 rgba(253,250,243,0.7)",
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
@@ -205,13 +218,12 @@ function NoteEntry({ note }: { note: MarginaliaNote }) {
       ) : (
         <p
           style={{
-            margin: "3px 0 0",
-            fontFamily: "var(--font-patrick-hand), cursive",
-            fontStyle: "italic",
-            fontSize: "clamp(15px, 1.4vw, 21px)",
+            margin: "4px 0 0",
+            fontFamily: "var(--font-caveat), cursive",
+            fontSize: "clamp(18px, 1.7vw, 25px)",
             fontWeight: 400,
-            color: nameColor,
-            lineHeight: 1.15,
+            color: "#2b2826",
+            lineHeight: 1.05,
           }}
         >
           Thinking of you.
@@ -219,7 +231,7 @@ function NoteEntry({ note }: { note: MarginaliaNote }) {
       )}
       <p
         style={{
-          margin: "5px 0 0",
+          margin: "6px 0 0",
           fontFamily: "var(--font-manrope), sans-serif",
           fontSize: "8px",
           letterSpacing: "0.16em",

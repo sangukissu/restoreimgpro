@@ -22,14 +22,14 @@ If no notes exist: last story sheet's back = backCover (original behavior).
 No separate back-cover sheet — the back cover lives on the back of the last note sheet (or last story sheet if no notes). This eliminates the extra flower page.
 
 ## Note Page Layout
-Notes use the **full page width** via two asymmetric columns (real scrapbook margins), not a single narrow column. Layout is packed greedily: short notes fill both columns; a long note may span a full column or even a full page. Notes never split across pages.
+Notes use the **full page width** stacked vertically down the page, like real marginalia in a book. Layout is packed greedily: short notes fill the page; a long note may get a page of its own. Notes never split across pages.
 
-- **Two-column layout**: notes are packed into pages in reading order: left column fills top-to-bottom, then right column. The page renders them as two columns with an 8% gutter.
-- **Packing algorithm**: estimate each note's wrapped height (name line + message lines at 1.15 line-height + date line + 22px gap). Fill the left column until the next note won't fit; then fill the right column; then start a new page. The render split is at the natural midpoint of the packed array.
+- **Single-column layout**: notes stack full-width down the page, like real marginalia in a book.
+- **Packing algorithm**: estimate each note's wrapped height (name line + message lines at 1.15 line-height + date line + 26px gap). Fill the page top-to-bottom; if the next whole note won't fit, start a new page.
 - **Single note on a page**: centred gently in the available space, slightly rotated, like a letter on an otherwise blank page.
-- **Many short notes**: distributed across both columns, 4–6 per page.
-- **Name**: smaller, lighter tint of the same ink (35% lightened), italic, not bold — like a faint signature.
-- **Message**: full ink colour, larger patrick-hand, not bold — the main handwriting.
+- **Many short notes**: stacked full-width down the page, 3–4 per page.
+- **Name**: smaller, bright distinct colour from a 10-colour palette based on the contributor's name (crimson, royal blue, green, purple, orange, teal, pink, navy, grey, brown).
+- **Message**: Caveat clean handwriting font in dark charcoal (#2b2826) — clearly readable and visually separate from the colourful name.
 - **Date**: tiny Manrope uppercase, barely visible (22% opacity).
 - No cards, no borders, no dividers — just handwritten text on the page.
 
@@ -39,7 +39,7 @@ Notes use the **full page width** via two asymmetric columns (real scrapbook mar
 - Removed PageMarginalia, MarginMarker, MarginDrawer, NoteComposer, NoteSent
 - Removed getPageMarginalia from FamilyHeritageViewer
 - Removed marginalia prop from MemoryBookStoryPage
-- marginalia.tsx stripped to: MarginaliaNote type, inkHex, rotationForId, lightenInk
+- marginalia.tsx stripped to: MarginaliaNote type, rotationForId, nameHex, nameColorKeyForName
 
 ### Phase 2: Build NotePage component — DONE
 - MemoryBookNotePage accepts an array of notes (not a single note)

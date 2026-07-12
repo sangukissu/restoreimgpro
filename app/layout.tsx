@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Great_Vibes, Manrope, Inter, Patrick_Hand } from "next/font/google"
+import { Caveat, Great_Vibes, Manrope, Inter, Patrick_Hand } from "next/font/google"
 import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
 import ClarityProvider from "@/components/clarity-provider"
@@ -33,6 +33,13 @@ const greatVibes = Great_Vibes({
   display: "swap",
   variable: "--font-great-vibes",
   weight: ["400"],
+})
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-caveat",
+  weight: ["400", "500", "600", "700"],
 })
 export const metadata: Metadata = {
   title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
@@ -147,7 +154,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${inter.variable} ${patrickHand.variable} ${greatVibes.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${inter.variable} ${patrickHand.variable} ${greatVibes.variable} ${caveat.variable}`}>
       <head>
         <script
           type="application/ld+json"

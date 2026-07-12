@@ -1293,14 +1293,14 @@ function PublishDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl p-0">
-        <DialogHeader className="border-b border-black/8 px-6 py-5">
+      <DialogContent className="flex max-h-[92dvh] max-w-xl flex-col p-0 overflow-hidden">
+        <DialogHeader className="shrink-0 border-b border-black/8 px-6 py-5">
           <DialogTitle>Publish this private keepsake</DialogTitle>
           <DialogDescription>
             Review how this book is preserved and shared before creating the link.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-5 px-6 py-5">
+        <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
           {publishBlockers.length > 0 ? (
             <div className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
               <div className="flex items-start gap-2">
@@ -1438,7 +1438,7 @@ function PublishDialog({
                 : "Publishing your keepsake is included with the Family Plan."}
           </div>
         </div>
-        <DialogFooter className="border-t border-black/8 px-6 py-4">
+        <DialogFooter className="shrink-0 border-t border-black/8 px-6 py-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Keep editing
           </Button>
