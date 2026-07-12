@@ -68,6 +68,7 @@ export function MemoryBookLibrary({
   }
 
   const isEmpty = books.length === 0
+  const isSingle = books.length === 1
 
   return (
     <div className="relative min-h-screen">
@@ -142,9 +143,25 @@ export function MemoryBookLibrary({
               </div>
             </div>
           </div>
+        ) : isSingle ? (
+          /* SINGLE BOOK — full-width hero card, side-by-side like Restore Photo */
+          <SingleBookHero
+            book={books[0]}
+            isLive={books[0].id === liveBookId}
+            copied={copiedId === books[0].id}
+            onCopy={async () => {
+              if (!books[0].shareUrl) return
+              await navigator.clipboard.writeText(
+                new URL(books[0].shareUrl!, window.location.origin).toString()
+              )
+              setCopiedId(books[0].id)
+              setTimeout(() => setCopiedId(null), 1800)
+            }}
+            onOpen={() => router.push(`/dashboard/memory-book/${books[0].id}`)}
+          />
         ) : (
           <>
-            {/* Actions row — clean pills */}
+            {/* Actions row */}
             <div className="mb-6 flex flex-wrap items-center justify-end gap-3">
               {hasLiveBook && liveBook ? (
                 <Button
@@ -205,6 +222,141 @@ export function MemoryBookLibrary({
   )
 }
 
+/* ---------- Single book hero — full-width side-by-side, like Restore Photo card ---------- */
+function SingleBookHero({
+  book,
+  isLive,
+  copied,
+  onCopy,
+  onOpen,
+}: {
+  book: LibraryBook
+  isLive: boolean
+  copied: boolean
+  onCopy: () => void
+  onOpen: () => void
+}) {
+  const readyCount = book.memory_book_assets.filter(
+    (asset) => asset.status === "ready" && !asset.is_hidden
+  ).length
+
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group flex w-full flex-col gap-6 rounded-[1.5rem] bg-white p-5 text-left transition-transform duration-300 hover:scale-[1.01] focus:outline-none sm:flex-row sm:items-center"
+    >
+      {/* Left — details */}
+      <div className="flex flex-1 flex-col gap-4 py-2">
+        <div>
+          <div className="mb-3 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E6E6E6]">
+              <BookHeart className="size-5 text-[#111111]" />
+            </div>
+            <h2 className="text-2xl font-bold text-[#111111] sm:text-3xl">
+              {book.title}
+            </h2>
+          </div>
+          <p className="text-sm text-gray-500 sm:text-base">
+            {readyCount} prepared memories · Updated{" "}
+            {new Intl.DateTimeFormat("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              timeZone: "UTC",
+            }).format(new Date(book.last_activity_at))}
+          </p>
+        </div>
+
+        {/* Status + actions */}
+        <div className="flex flex-wrap items-center gap-3">
+          {isLive ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FF4D00] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+              <span className="relative flex size-1.5">
+                <span className="absolute inset-0 animate-ping rounded-full bg-white/70" />
+                <span className="relative size-1.5 rounded-full bg-white" />
+              </span>
+              Live
+            </span>
+          ) : book.status === "published" ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+              Published
+            </span>
+          ) : book.status === "needs_attention" ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+              Needs attention
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+              Draft
+            </span>
+          )}
+
+          <div className="flex items-center gap-1.5">
+            {book.shareUrl ? (
+              <>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onCopy()
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.stopPropagation()
+                      onCopy()
+                    }
+                  }}
+                  title="Copy private link"
+                  className="grid size-9 cursor-pointer place-items-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:border-[#111111] hover:text-[#111111]"
+                >
+                  {copied ? <Check className="size-4 text-green-600" /> : <Copy className="size-4" />}
+                </span>
+                <a
+                  href={book.shareUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  title="Open published keepsake"
+                  className="grid size-9 place-items-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:border-[#111111] hover:text-[#111111]"
+                >
+                  <ExternalLink className="size-4" />
+                </a>
+              </>
+            ) : null}
+          </div>
+
+          <span className="flex items-center gap-1 font-bold text-[#FF4D00] group-hover:translate-x-1 transition-transform">
+        Edit keepsake <ArrowUpRight className="size-4" />
+          </span>
+        </div>
+      </div>
+
+      {/* Right — cover preview */}
+      <div className="w-full sm:w-[45%] shrink-0">
+        <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[1.2rem] border border-gray-100 shadow-inner bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+              <BookHeart className="size-6 text-gray-400" />
+            </div>
+            <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+              Family Heritage
+            </p>
+            <p className="mt-2 line-clamp-3 text-xl font-bold text-[#111111]">
+              {book.title}
+            </p>
+            <div className="mt-3 h-px w-10 bg-gray-200" />
+            <p className="mt-3 text-[11px] font-medium uppercase tracking-wider text-gray-400">
+              {readyCount} of 6–20 memories
+            </p>
+          </div>
+        </div>
+      </div>
+    </button>
+  )
+}
+
 /* ---------- Book card — white card on gray tray, standard bento pattern ---------- */
 function BookCard({
   book,
@@ -231,7 +383,7 @@ function BookCard({
     >
       {/* Visual area — a "cover preview" inside a shadow-inner well */}
       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[1.2rem] border border-gray-100 shadow-inner bg-gradient-to-br from-gray-50 to-gray-100">
-        {/* Status pill — matching the standard dashboard pill style */}
+        {/* Status pill */}
         <div className="absolute right-3 top-3 z-10">
           {isLive ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FF4D00] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
@@ -256,7 +408,7 @@ function BookCard({
           )}
         </div>
 
-        {/* Cover content — standard Manrope, no decorative script font */}
+        {/* Cover content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
             <BookHeart className="size-6 text-gray-400" />
@@ -287,7 +439,7 @@ function BookCard({
         </div>
       </div>
 
-      {/* Meta row — standard info card style */}
+      {/* Meta row */}
       <div className="mt-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-base font-bold text-[#111111]">
