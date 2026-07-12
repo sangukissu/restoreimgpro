@@ -17,9 +17,6 @@ import type { MemoryBookSummary } from "@/lib/memory-book/types"
 
 type LibraryBook = MemoryBookSummary & { shareUrl: string | null }
 
-const HERITAGE_SCRIPT_CLASS = "font-[var(--font-great-vibes)]"
-const HERITAGE_HAND_CLASS = "font-[var(--font-patrick-hand)]"
-
 export function MemoryBookLibrary({
   books,
   entitlement,
@@ -41,9 +38,6 @@ export function MemoryBookLibrary({
   const liveBook = hasLiveBook
     ? books.find((book) => book.id === liveBookId) ?? null
     : null
-  // A user can only ever own ONE memory book (either draft or live). The
-  // "Compose another" CTA is only valid when the library is empty — once any
-  // book exists we route the user back into that book instead.
   const hasAnyBook = books.length > 0
   const draftBook = hasAnyBook && !hasLiveBook ? books[0] : null
 
@@ -76,69 +70,66 @@ export function MemoryBookLibrary({
   const isEmpty = books.length === 0
 
   return (
-    <main className="bg-[#FAFAF7]">
-      {/* HERO — full-viewport when empty, compact intro when not */}
-      <section
-        className={[
-          "relative overflow-hidden border-b border-black/[0.06]",
-          "bg-gradient-to-b from-[#FAF6EE] via-[#F6F0E2] to-[#FAFAF7]",
-        ].join(" ")}
-      >
-        {/* Warm atmospheric glow */}
+    <div className="relative min-h-screen">
+      {/* Dotted background — standard dashboard sub-page pattern */}
+      <div className="absolute inset-0 opacity-30">
         <div
-          aria-hidden
-          className="pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full"
-          style={{ background: "radial-gradient(closest-side, rgba(255,140,80,0.18), transparent 70%)" }}
+          className="h-full w-full"
+          style={{
+            backgroundImage: `radial-gradient(circle, #000 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+            backgroundPosition: "0 0, 12px 12px",
+          }}
         />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-32 left-[-8%] h-[420px] w-[420px] rounded-full"
-          style={{ background: "radial-gradient(closest-side, rgba(120,90,60,0.10), transparent 70%)" }}
-        />
+      </div>
 
-        {/* EMPTY STATE LAYOUT — one full viewport, hero IS the empty state */}
+      <main className="relative z-10 mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:px-8">
+        {/* Intro — centered, standard sub-page pattern */}
+        <div className="mx-auto mb-8 max-w-2xl text-center">
+          <h1 className="text-3xl font-bold tracking-tight text-[#111111] md:text-4xl">
+            {isEmpty ? "Family Heritage" : "Your Keepsakes"}
+          </h1>
+          <p className="mb-4 mt-1 text-lg leading-tight text-gray-600">
+            {isEmpty
+              ? "A private book for the people who made you. Choose the memories you love and the book assembles itself."
+              : `${books.length} ${books.length === 1 ? "keepsake" : "keepsakes"}${hasLiveBook ? " · 1 live" : ""}`}
+          </p>
+        </div>
+
         {isEmpty ? (
-          <div className="relative mx-auto grid min-h-[calc(100vh-72px)] max-w-6xl gap-12 px-5 py-12 md:px-8 md:py-20 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-            <div className="relative">
-              <div className="mb-5 flex items-center gap-2">
-                <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[#1f2421]/10 bg-white/70 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1f2421] backdrop-blur-sm">
-                  <BookHeart className="size-3.5" />
-                  Family Heritage
-                </span>
+          /* EMPTY STATE — a clean tool card inviting the user to create */
+          <div className="mx-auto max-w-2xl">
+            <div className="rounded-[1.5rem] border-4 border-gray-200 bg-white p-8 sm:p-12">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#E6E6E6]">
+                  <BookHeart className="size-7 text-[#111111]" />
+                </div>
+                <h2 className="text-xl font-bold text-[#111111] sm:text-2xl">
+                  Compose your first book
+                </h2>
+                <p className="mt-2 max-w-md text-sm text-gray-500">
+                  You will never face an empty canvas. Pick your favourite restored
+                  memories and the book builds itself — pages, animations, and a
+                  private link to share with the people who matter.
+                </p>
+
                 {entitlement ? (
-                  <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-emerald-600/10 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
-                    <span className="relative flex size-1.5">
-                      <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
-                      <span className="relative size-1.5 rounded-full bg-emerald-600" />
-                    </span>
+                  <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-green-600">
+                    <span className="size-1.5 rounded-full bg-green-500" />
                     Family Plan active
                   </span>
                 ) : (
-                  <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-50 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-800">
+                  <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-amber-700">
                     <Sparkles className="size-3" />
                     Family Plan to publish
                   </span>
                 )}
-              </div>
 
-              <h1 className="text-[40px] font-extrabold leading-[1.05] tracking-[-0.02em] text-[#1f2421] md:text-[64px] md:leading-[1.02]">
-                A private book <br className="hidden md:block" />
-                for the people <br className="hidden md:block" />
-                <span className="text-[#8a7a64]">who made you.</span>
-              </h1>
-
-              <p className="mt-5 max-w-lg text-base leading-relaxed text-[#1f2421]/60 md:text-lg">
-                You will never face an empty canvas. Choose the memories you love
-                and the book assembles itself — pages, animations, and a private
-                link to share with the people who matter.
-              </p>
-
-              <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Button
                   onClick={createBook}
                   disabled={creating}
                   size="lg"
-                  className="h-12 rounded-full bg-[#FF4D00] px-7 text-[15px] font-semibold text-white shadow-[0_8px_24px_-12px_rgba(255,77,0,0.55)] hover:bg-[#e64500]"
+                  className="mt-6 h-12 rounded-full bg-[#FF4D00] px-7 text-[15px] font-semibold text-white hover:bg-[#e64500]"
                 >
                   {creating ? (
                     <Loader2 className="mr-2 size-4 animate-spin" />
@@ -147,187 +138,74 @@ export function MemoryBookLibrary({
                   )}
                   Compose your first book
                 </Button>
-                <span className="text-sm text-[#1f2421]/55">Drafts are free</span>
+                <p className="mt-3 text-sm text-gray-500">Drafts are free</p>
               </div>
             </div>
-
-            <HeroComposition />
           </div>
         ) : (
-          // LIBRARY HERO — compact, the books themselves are the focal point
-          <div className="relative mx-auto max-w-6xl px-5 py-10 md:px-8 md:py-14">
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <div>
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[#1f2421]/10 bg-white/70 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1f2421] backdrop-blur-sm">
-                    <BookHeart className="size-3.5" />
-                    Family Heritage
-                  </span>
-                  {entitlement ? (
-                    <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-emerald-600/10 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
-                      <span className="relative flex size-1.5">
-                        <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500/60" />
-                        <span className="relative size-1.5 rounded-full bg-emerald-600" />
-                      </span>
-                      Family Plan active
-                    </span>
-                  ) : (
-                    <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-50 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-800">
-                      <Sparkles className="size-3" />
-                      Family Plan to publish
-                    </span>
-                  )}
-                </div>
-                <h1 className="text-3xl font-extrabold leading-[1.05] tracking-[-0.02em] text-[#1f2421] md:text-5xl">
-                  {hasLiveBook ? "Your keepsakes" : "Your library"}
-                </h1>
-                <p className="mt-2 text-sm text-[#1f2421]/55 md:text-base">
-                  {books.length} {books.length === 1 ? "keepsake" : "keepsakes"}
-                  {hasLiveBook ? " · 1 live" : ""}
-                  {hasLiveBook ? " · Unpublish to compose a new one" : ""}
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                {hasLiveBook && liveBook ? (
-                  <Button
-                    onClick={() => router.push(`/dashboard/memory-book/${liveBook.id}`)}
-                    size="lg"
-                    className="h-11 rounded-full bg-[#1f2421] px-6 text-sm font-semibold text-white hover:bg-[#2d352f]"
-                  >
-                    Open your live keepsake
-                    <ArrowUpRight className="ml-1.5 size-4" />
-                  </Button>
-                ) : null}
-                {draftBook ? (
-                  <Button
-                    onClick={() => router.push(`/dashboard/memory-book/${draftBook.id}`)}
-                    size="lg"
-                    className="h-11 rounded-full bg-[#FF4D00] px-6 text-sm font-semibold text-white shadow-[0_8px_24px_-12px_rgba(255,77,0,0.55)] hover:bg-[#e64500]"
-                  >
-                    Continue your draft
-                    <ArrowUpRight className="ml-1.5 size-4" />
-                  </Button>
-                ) : null}
-              </div>
+          <>
+            {/* Actions row — clean pills */}
+            <div className="mb-6 flex flex-wrap items-center justify-end gap-3">
+              {hasLiveBook && liveBook ? (
+                <Button
+                  onClick={() => router.push(`/dashboard/memory-book/${liveBook.id}`)}
+                  size="lg"
+                  className="h-11 rounded-full bg-[#111111] px-6 text-sm font-semibold text-white hover:bg-gray-800"
+                >
+                  Open your live keepsake
+                  <ArrowUpRight className="ml-1.5 size-4" />
+                </Button>
+              ) : null}
+              {draftBook ? (
+                <Button
+                  onClick={() => router.push(`/dashboard/memory-book/${draftBook.id}`)}
+                  size="lg"
+                  className="h-11 rounded-full bg-[#FF4D00] px-6 text-sm font-semibold text-white hover:bg-[#e64500]"
+                >
+                  Continue your draft
+                  <ArrowUpRight className="ml-1.5 size-4" />
+                </Button>
+              ) : null}
             </div>
-          </div>
+
+            {/* LIBRARY — bento tray (standard dashboard pattern) */}
+            <section className="bg-[#E6E6E6] p-4 rounded-[2rem]">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {books.map((book) => {
+                  const readyCount = book.memory_book_assets.filter(
+                    (asset) => asset.status === "ready" && !asset.is_hidden
+                  ).length
+                  const isLive = book.id === liveBookId
+                  return (
+                    <BookCard
+                      key={book.id}
+                      book={book}
+                      readyCount={readyCount}
+                      isLive={isLive}
+                      hasLiveBook={hasLiveBook}
+                      copied={copiedId === book.id}
+                      onCopy={async () => {
+                        if (!book.shareUrl) return
+                        await navigator.clipboard.writeText(
+                          new URL(book.shareUrl, window.location.origin).toString()
+                        )
+                        setCopiedId(book.id)
+                        setTimeout(() => setCopiedId(null), 1800)
+                      }}
+                      onOpen={() => router.push(`/dashboard/memory-book/${book.id}`)}
+                    />
+                  )
+                })}
+              </div>
+            </section>
+          </>
         )}
-      </section>
-
-      {/* LIBRARY — editorial grid (only when not empty) */}
-      {!isEmpty ? (
-        <section className="mx-auto max-w-6xl px-5 pb-16 pt-2 md:px-8 md:pb-20">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {books.map((book) => {
-              const readyCount = book.memory_book_assets.filter(
-                (asset) => asset.status === "ready" && !asset.is_hidden
-              ).length
-              const isLive = book.id === liveBookId
-              return (
-                <BookCard
-                  key={book.id}
-                  book={book}
-                  readyCount={readyCount}
-                  isLive={isLive}
-                  hasLiveBook={hasLiveBook}
-                  copied={copiedId === book.id}
-                  onCopy={async () => {
-                    if (!book.shareUrl) return
-                    await navigator.clipboard.writeText(
-                      new URL(book.shareUrl, window.location.origin).toString()
-                    )
-                    setCopiedId(book.id)
-                    setTimeout(() => setCopiedId(null), 1800)
-                  }}
-                  onOpen={() => router.push(`/dashboard/memory-book/${book.id}`)}
-                />
-              )
-            })}
-          </div>
-        </section>
-      ) : null}
-
-   
-    </main>
-  )
-}
-
-/* ---------- Hero composition: stacked tilted photo frames ---------- */
-function HeroComposition() {
-  return (
-    <div className="relative mx-auto h-[340px] w-full max-w-[460px] md:h-[420px]">
-      {/* Soft warm stage */}
-      <div
-        aria-hidden
-        className="absolute inset-0 rounded-[2rem]"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 60%, rgba(255,200,140,0.35), transparent 60%)",
-        }}
-      />
-
-      {/* Back card — large portrait frame, tilted left */}
-      <div
-        className="absolute left-[2%] top-[8%] h-[78%] w-[58%] rounded-[1.1rem] border border-white/40 bg-gradient-to-br from-[#f3e6d2] to-[#d9c5a4] shadow-[0_30px_60px_-30px_rgba(60,40,20,0.35)] ring-1 ring-black/5"
-        style={{ transform: "rotate(-5deg)" }}
-      >
-        <div className="absolute inset-3 rounded-[0.7rem] bg-gradient-to-br from-[#c9b48c] via-[#a98e6a] to-[#7d6346]" />
-        <div className="absolute inset-3 rounded-[0.7rem] ring-1 ring-white/20" />
-        {/* fake photo silhouette */}
-        <div className="absolute inset-6 grid place-items-center">
-          <div className="space-y-2 opacity-90">
-            <div className="h-3 w-20 rounded-sm bg-white/40" />
-            <div className="h-2 w-28 rounded-sm bg-white/25" />
-            <div className="h-2 w-24 rounded-sm bg-white/25" />
-          </div>
-        </div>
-        <div className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
-          Chapter 02
-        </div>
-      </div>
-
-      {/* Middle card — slightly tilted right */}
-      <div
-        className="absolute right-[2%] top-[18%] h-[68%] w-[52%] rounded-[1.1rem] border border-white/40 bg-gradient-to-br from-[#fbf3e6] to-[#e9d8b6] shadow-[0_30px_60px_-25px_rgba(60,40,20,0.4)] ring-1 ring-black/5"
-        style={{ transform: "rotate(4deg)" }}
-      >
-        <div className="absolute inset-3 rounded-[0.7rem] bg-gradient-to-br from-[#3b2f24] via-[#5a4632] to-[#2a2218]" />
-        <div className="absolute inset-3 rounded-[0.7rem] ring-1 ring-white/10" />
-        <div className="absolute inset-6 grid place-items-center">
-          <BookHeart className="size-12 text-white/30" />
-        </div>
-        <div className="absolute bottom-3 right-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
-          1958
-        </div>
-      </div>
-
-      {/* Front small card — title chip */}
-      <div
-        className="absolute bottom-[2%] left-[20%] w-[58%] rounded-[0.9rem] border border-white/60 bg-white/85 px-4 py-3 shadow-[0_20px_40px_-20px_rgba(60,40,20,0.4)] backdrop-blur"
-        style={{ transform: "rotate(-2deg)" }}
-      >
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#8a7a64]">
-          Our Family
-        </p>
-        <p className={`mt-1 text-base text-[#1f2421] ${HERITAGE_SCRIPT_CLASS} text-[20px] leading-tight`}>
-          Heritage, vol. 01
-        </p>
-      </div>
-
-      {/* Sparkle accents */}
-      <Sparkles
-        className="absolute right-[6%] top-[2%] size-5 text-[#FF4D00]/70"
-        strokeWidth={1.5}
-      />
-      <Sparkles
-        className="absolute left-[4%] bottom-[6%] size-4 text-[#8a7a64]/70"
-        strokeWidth={1.5}
-      />
+      </main>
     </div>
   )
 }
 
-/* ---------- Book card: rich cover + meta + quiet actions ---------- */
+/* ---------- Book card — white card on gray tray, standard bento pattern ---------- */
 function BookCard({
   book,
   readyCount,
@@ -346,93 +224,76 @@ function BookCard({
   onOpen: () => void
 }) {
   return (
-    <article className="group relative flex flex-col">
-      <button
-        type="button"
-        onClick={onOpen}
-        className="block w-full text-left focus:outline-none focus:ring-2 focus:ring-[#FF4D00]/40 focus:ring-offset-2 focus:ring-offset-[#FAFAF7] rounded-2xl"
-      >
-        {/* Cover */}
-        <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-black/[0.06] shadow-[0_24px_48px_-24px_rgba(60,40,20,0.35)] transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_36px_64px_-28px_rgba(60,40,20,0.45)]">
-          {/* Cream cover base */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#f5ebd7] via-[#ead8b6] to-[#c8a87a]" />
-
-          {/* Subtle paper texture via noise gradient */}
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-40 mix-blend-multiply"
-            style={{
-              background:
-                "radial-gradient(circle at 20% 30%, rgba(120,80,40,0.15), transparent 50%), radial-gradient(circle at 80% 70%, rgba(60,40,20,0.12), transparent 55%)",
-            }}
-          />
-
-          {/* Spine accent */}
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-gradient-to-b from-[#8a6a44]/40 via-[#5a4226]/30 to-[#8a6a44]/40" />
-
-          {/* Top status pill */}
-          <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
-            {isLive ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FF4D00] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white shadow-[0_4px_12px_-4px_rgba(255,77,0,0.6)]">
-                <span className="relative flex size-1.5">
-                  <span className="absolute inset-0 animate-ping rounded-full bg-white/70" />
-                  <span className="relative size-1.5 rounded-full bg-white" />
-                </span>
-                Live
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group block w-full rounded-[1.5rem] bg-white p-5 text-left transition-transform duration-300 hover:scale-[1.01] focus:outline-none"
+    >
+      {/* Visual area — a "cover preview" inside a shadow-inner well */}
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[1.2rem] border border-gray-100 shadow-inner bg-gradient-to-br from-gray-50 to-gray-100">
+        {/* Status pill — matching the standard dashboard pill style */}
+        <div className="absolute right-3 top-3 z-10">
+          {isLive ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FF4D00] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+              <span className="relative flex size-1.5">
+                <span className="absolute inset-0 animate-ping rounded-full bg-white/70" />
+                <span className="relative size-1.5 rounded-full bg-white" />
               </span>
-            ) : book.status === "published" ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1f2421]/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
-                Published
-              </span>
-            ) : book.status === "needs_attention" ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
-                Needs attention
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1f2421]/75 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
-                Draft
-              </span>
-            )}
-          </div>
-
-          {/* Center title — serif */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#5a4226]/70">
-              Family Heritage
-            </p>
-            <p
-              className={`mt-3 line-clamp-3 text-3xl font-normal leading-[1.1] text-[#3b2a18] md:text-4xl ${HERITAGE_SCRIPT_CLASS}`}
-            >
-              {book.title}
-            </p>
-            <div className="mt-4 h-px w-10 bg-[#5a4226]/30" />
-            <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.18em] text-[#5a4226]/55">
-              {readyCount} of 6–20 memories
-            </p>
-          </div>
-
-          {/* Bottom date */}
-          <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between text-[10px] font-semibold uppercase tracking-[0.2em] text-[#5a4226]/60">
-            <span>Heritage v1</span>
-            <span>
-              {new Intl.DateTimeFormat("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-                timeZone: "UTC",
-              }).format(new Date(book.last_activity_at))}
+              Live
             </span>
-          </div>
+          ) : book.status === "published" ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+              Published
+            </span>
+          ) : book.status === "needs_attention" ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+              Needs attention
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+              Draft
+            </span>
+          )}
         </div>
-      </button>
 
-      {/* Meta + actions */}
-      <div className="mt-4 flex items-start justify-between gap-3 px-1">
+        {/* Cover content — standard Manrope, no decorative script font */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+            <BookHeart className="size-6 text-gray-400" />
+          </div>
+          <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+            Family Heritage
+          </p>
+          <p className="mt-2 line-clamp-3 text-xl font-bold text-[#111111]">
+            {book.title}
+          </p>
+          <div className="mt-3 h-px w-10 bg-gray-200" />
+          <p className="mt-3 text-[11px] font-medium uppercase tracking-wider text-gray-400">
+            {readyCount} of 6–20 memories
+          </p>
+        </div>
+
+        {/* Bottom date footer */}
+        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between text-[10px] font-bold uppercase tracking-wider text-gray-400">
+          <span>Heritage v1</span>
+          <span>
+            {new Intl.DateTimeFormat("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              timeZone: "UTC",
+            }).format(new Date(book.last_activity_at))}
+          </span>
+        </div>
+      </div>
+
+      {/* Meta row — standard info card style */}
+      <div className="mt-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="truncate text-[15px] font-semibold text-[#1f2421]">
+          <h3 className="truncate text-base font-bold text-[#111111]">
             {book.title}
           </h3>
-          <p className="mt-0.5 text-xs text-[#1f2421]/50">
+          <p className="mt-0.5 text-xs text-gray-500">
             {readyCount} prepared · Updated{" "}
             {new Intl.DateTimeFormat("en-GB", {
               day: "2-digit",
@@ -447,38 +308,47 @@ function BookCard({
             </p>
           ) : null}
         </div>
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="flex shrink-0 items-center gap-1.5">
           {book.shareUrl ? (
             <>
-              <button
-                type="button"
-                onClick={onCopy}
+              <span
+                role="button"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onCopy()
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.stopPropagation()
+                    onCopy()
+                  }
+                }}
                 title="Copy private link"
-                className="grid size-9 place-items-center rounded-full border border-black/[0.08] bg-white text-[#1f2421]/60 transition-colors hover:border-[#1f2421] hover:text-[#1f2421]"
+                className="grid size-9 cursor-pointer place-items-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:border-[#111111] hover:text-[#111111]"
               >
-                {copied ? <Check className="size-4 text-emerald-600" /> : <Copy className="size-4" />}
-              </button>
+                {copied ? <Check className="size-4 text-green-600" /> : <Copy className="size-4" />}
+              </span>
               <a
                 href={book.shareUrl}
                 target="_blank"
                 rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 title="Open published keepsake"
-                className="grid size-9 place-items-center rounded-full border border-black/[0.08] bg-white text-[#1f2421]/60 transition-colors hover:border-[#1f2421] hover:text-[#1f2421]"
+                className="grid size-9 place-items-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:border-[#111111] hover:text-[#111111]"
               >
                 <ExternalLink className="size-4" />
               </a>
             </>
           ) : null}
-          <button
-            type="button"
-            onClick={onOpen}
-            className="ml-1 grid size-9 place-items-center rounded-full bg-[#1f2421] text-white transition-colors hover:bg-[#2d352f]"
+          <span
+            className="grid size-9 place-items-center rounded-full bg-[#111111] text-white"
             title="Open keepsake"
           >
             <ArrowUpRight className="size-4" />
-          </button>
+          </span>
         </div>
       </div>
-    </article>
+    </button>
   )
 }
