@@ -124,7 +124,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
           <Link href="/dashboard/family-portrait" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             {/* Visual Area - 4:3 Aspect Ratio */}
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
-              <img src="/family-portrait.png" alt="Family portrait" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <img src="/family.webp" alt="Family portrait" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute top-3 right-3 flex items-center gap-1.5">
                 <div className="bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
@@ -154,7 +154,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
   {/* Add Person */}
           <Link href="/dashboard/add-person" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
-              <img src="/family-portrait.png" alt="Add person preview" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <img src="/add-person.webp" alt="Add person preview" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20" />
               <div className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#111111] shadow-sm">
                 <UserPlus className="h-5 w-5" />
@@ -186,7 +186,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
           {/* Remove Person */}
           <Link href="/dashboard/remove-person" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
-              <img src="/dashboard-compare.png" alt="Remove person preview" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <img src="/remove-person.webp" alt="Remove person preview" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute inset-0 bg-black/20" />
               <div className="absolute left-1/2 top-1/2 h-20 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-[#FF4D00] bg-[#FF4D00]/25" />
               <div className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#111111] shadow-sm">
@@ -216,27 +216,27 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
               </p>
             </div>
           </Link>
-          {/* Digital Frame */}
-          <Link href="/dashboard/editor" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+          {/* Family Heritage Book */}
+          <Link href="/dashboard/memory-book" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             {/* Visual Area - 4:3 Aspect Ratio */}
-            <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
-              <img src="/digital-frame.webp" alt="Digital frame" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-              <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
-                FREE
+            <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gradient-to-br from-[#f5ebd7] to-[#e6d5b8]">
+              <img src="/family-heritage-book.webp" alt="Family Heritage book" className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-[10px] px-2 py-1 rounded-full font-bold flex items-center gap-1 shadow-lg">
+                <img src="/icons/pro-icon.svg" alt="Pro" className="w-3 h-3" />
+                FAMILY PLAN
               </div>
             </div>
 
             {/* Content */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-[#111111] leading-tight">Digital Frame</h3>
+                <h3 className="text-lg font-bold text-[#111111] leading-tight">Family Heritage</h3>
                 <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-[#FF4D00] group-hover:border-[#FF4D00] transition-colors">
                   <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-white" />
                 </div>
               </div>
               <p className="text-gray-500 font-medium leading-relaxed text-xs">
-                Add elegant frames and borders to your photos.
+                A private keepsake book for your family. Requires a Family Plan — free to host once unlocked.
               </p>
             </div>
           </Link>
@@ -273,6 +273,30 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
               </div>
               <p className="text-gray-500 font-medium leading-relaxed text-xs">
                 Create a heartwarming video hug across time.
+              </p>
+            </div>
+          </Link>
+                    {/* Digital Frame */}
+          <Link href="/dashboard/editor" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+            {/* Visual Area - 4:3 Aspect Ratio */}
+            <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
+              <img src="/digital-frame.webp" alt="Digital frame" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/10 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                FREE
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-[#111111] leading-tight">Digital Frame</h3>
+                <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-[#FF4D00] group-hover:border-[#FF4D00] transition-colors">
+                  <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-white" />
+                </div>
+              </div>
+              <p className="text-gray-500 font-medium leading-relaxed text-xs">
+                Add elegant frames and borders to your photos.
               </p>
             </div>
           </Link>
