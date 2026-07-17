@@ -52,7 +52,7 @@ const familyPortraitWebAppJsonLd = {
     name: 'BringBack Family Portrait',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
-    price: '2',
+    price: '4.99',
     eligibleRegion: {
       '@type': 'Place',
       name: 'Worldwide',

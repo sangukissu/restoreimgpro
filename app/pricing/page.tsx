@@ -14,7 +14,7 @@ import Guarantees from '@/components/Guarantee'
 export const metadata: Metadata = {
   title: "Pricing - BringBack AI | AI Photo Restoration & Animation",
   description:
-    "Simple, transparent pricing for AI photo restoration. Starter $5.99, Pro $12.99, Family $21.99 plans, no subscriptions.",
+    "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $21.99 plans, no subscriptions.",
   robots: { index: true, follow: true },
   alternates: {
     canonical: "/pricing",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pricing - BringBack AI | AI Photo Restoration & Animation",
     description:
-      "Simple, transparent pricing for AI photo restoration. Starter $5.99, Pro $12.99, Family $21.99 plans, no subscriptions.",
+      "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $21.99 plans, no subscriptions.",
     type: "website",
     url: "https://bringback.pro/pricing",
     siteName: "BringBack AI",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pricing - BringBack AI | AI Photo Restoration & Animation",
     description:
-      "Simple, transparent pricing for AI photo restoration. Starter $5.99, Pro $12.99, Family $21.99 plans, no subscriptions.",
+      "Simple, transparent pricing for AI photo restoration. Starter $4.99, Pro $9.99, Family $21.99 plans, no subscriptions.",
     images: ["/og-image.png"],
   },
 }
@@ -62,13 +62,13 @@ export default function PricingPage() {
               itemListElement: [
                 {
                   "@type": "Offer",
-                  price: "5.99",
+                  price: "4.99",
                   priceCurrency: "USD",
                   itemOffered: { "@type": "Service", name: "Starter - AI Photo Restoration" },
                 },
                 {
                   "@type": "Offer",
-                  price: "12.99",
+                  price: "9.99",
                   priceCurrency: "USD",
                   itemOffered: {
                     "@type": "Service",

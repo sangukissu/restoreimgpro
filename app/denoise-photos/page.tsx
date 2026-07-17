@@ -63,7 +63,7 @@ const denoisePageJsonLd = {
     "name": "BringBack Denoise Plans",
     "url": "https://bringback.pro/pricing",
     "priceCurrency": "USD",
-    "price": "2",
+    "price": "4.99",
     "eligibleRegion": {
       "@type": "Place",
       "name": "Worldwide"
@@ -106,7 +106,7 @@ const denoiseFAQPageJsonLd = {
       "name": "How much does photo denoising cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "We offer 5 high-quality photo denoising cleanups for just $2.49 - no subscription required. This one-time payment gives you professional-grade noise removal in seconds, compared to traditional photo editing services that charge $30-100+ per photo."
+        "text": "We offer 4 high-quality photo denoising cleanups for just $4.99 - no subscription required. This one-time payment gives you professional-grade noise removal in seconds, compared to traditional photo editing services that charge $30-100+ per photo."
       }
     },
     {

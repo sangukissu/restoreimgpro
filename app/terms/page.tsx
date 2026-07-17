@@ -93,7 +93,7 @@ export default function TermsPage() {
                       <span>💳</span> Simple Pricing
                     </h3>
                     <p className="text-green-800">
-                      $5.99 for 10 generation credits (Starter pack). Pro plan available at $12.99 for additional credits and for best value $21.99 Family plan. One-time payments, no subscriptions, no hidden fees.
+                      $4.99 for 4 generation credits (Starter pack). Pro plan available at $9.99 for additional credits and for best value $21.99 Family plan. One-time payments, no subscriptions, no hidden fees.
                     </p>
                   </div>
                   <div className="text-gray-600 space-y-4">

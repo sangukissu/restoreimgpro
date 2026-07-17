@@ -37,7 +37,7 @@ const homePageJsonLd = {
         name: 'BringBack Restoration, Animation & Family Photo Plans',
         url: 'https://bringback.pro/pricing',
         priceCurrency: 'USD',
-        price: '5.99',
+        price: '4.99',
         eligibleRegion: {
             '@type': 'Place',
             name: 'Worldwide'

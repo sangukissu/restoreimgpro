@@ -62,7 +62,7 @@ const colorizePageJsonLd = {
     "name": "BringBack Colorization Plans",
     "url": "https://bringback.pro/pricing",
     "priceCurrency": "USD",
-    "price": "2",
+    "price": "4.99",
     "eligibleRegion": {
       "@type": "Place",
       "name": "Worldwide"
@@ -105,7 +105,7 @@ const colorizeFAQPageJsonLd = {
       "name": "How much does photo colorization cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "We offer 5 high-quality photo colorizations for just $2 - no subscription required. This one-time payment gives you professional-grade colorization in seconds, compared to traditional photo colorization services that charge $50-200+ per photo."
+        "text": "We offer 4 high-quality photo colorizations for just $4.99 - no subscription required. This one-time payment gives you professional-grade colorization in seconds, compared to traditional photo colorization services that charge $50-200+ per photo."
       }
     },
     {

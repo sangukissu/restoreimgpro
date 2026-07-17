@@ -41,7 +41,7 @@ export default function DenoiseBenefitsSection() {
             <div className="border-l-2 border-gray-200 pl-8">
               <h3 className="text-2xl font-bold text-black mb-3">Fair & Simple Pricing</h3>
               <p className="text-gray-600 leading-relaxed mb-4">
-                One-time payment, not another subscription trap. Just $2.49 for 5 high-quality photo cleanups.
+                 One-time payment, not another subscription trap. Just $4.99 for 4 high-quality photo cleanups.
               </p>
               <div className="text-sm text-gray-500">💰 No monthly fees, no hidden costs</div>
             </div>
@@ -51,14 +51,14 @@ export default function DenoiseBenefitsSection() {
           <div className="flex justify-center">
             <div className="bg-gray-50 rounded-3xl p-12 border border-gray-200 text-center max-w-sm w-full">
               <div className="mb-8">
-                <div className="text-6xl font-bold text-black mb-2">$2.49</div>
+                <div className="text-6xl font-bold text-black mb-2">$4.99</div>
                 <div className="text-gray-600 text-lg">One-time payment</div>
               </div>
 
               <div className="space-y-4 mb-8">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Photo cleanups</span>
-                  <span className="font-semibold text-black">5 images</span>
+                  <span className="font-semibold text-black">4 images</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Processing time</span>
@@ -71,11 +71,11 @@ export default function DenoiseBenefitsSection() {
               </div>
 
               <button className="w-full bg-black text-white py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200">
-                Clean 5 Photos for $2.49
+                 Clean 4 Photos for $4.99
               </button>
 
               <p className="text-xs text-gray-500 mt-2">
-                Only $1 per photo
+                 Only $1.25 per photo
               </p>
 
               <p className="text-xs text-gray-500 mt-3">No subscription • No hidden fees</p>
