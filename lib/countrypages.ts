@@ -197,11 +197,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
       plans:[
         {
           name: "Starter",
-          price: "$5.99",
+          price: "$4.99",
           description: "Perfecto para probar la restauración de fotos en alta calidad.",
           badge: "Pago único",
           details:[
-            "10 créditos de restauración",
+            "4 créditos de restauración",
             "Resultados en alta resolución",
             "Mejora y escalado de foto gratis",
             "Los créditos nunca caducan",
@@ -210,11 +210,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
         },
         {
           name: "Pro",
-          price: "$12.99",
+          price: "$9.99",
           description: "El mejor valor para arreglar fotos y darles vida con movimiento.",
           badge: "Mejor Valor",
           details:[
-            "30 créditos flexibles",
+            "20 créditos flexibles",
             "Úsalos para restaurar fotos",
             "O para crear animaciones de video",
             "Salida en alta resolución 1080p",
@@ -396,11 +396,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
       plans:[
         {
           name: "Starter",
-          price: "$5.99",
+          price: "$4.99",
           description: "Perfeito para testar e recuperar fotos antigas com alta qualidade.",
           badge: "Pagamento único",
           details:[
-            "10 créditos de recuperação",
+            "4 créditos de recuperação",
             "Saída em alta resolução",
             "Melhoria/Upscale de imagem grátis",
             "Os créditos nunca expiram",
@@ -409,11 +409,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
         },
         {
           name: "Pro",
-          price: "$12.99",
+          price: "$9.99",
           description: "O melhor custo-benefício para restaurar e dar vida às suas fotos.",
           badge: "Mais Popular",
           details:[
-            "30 créditos flexíveis",
+            "20 créditos flexíveis",
             "Use para restaurar fotos",
             "OU crie animações em vídeo",
             "Saída em alta resolução 1080p",
@@ -595,11 +595,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
       plans:[
         {
           name: "Starter",
-          price: "$5.99",
+          price: "$4.99",
           description: "Pilihan tepat untuk mencoba kualitas restorasi tingkat tinggi.",
           badge: "Sekali Bayar",
           details:[
-            "10 Kredit restorasi",
+            "4 Kredit restorasi",
             "Hasil resolusi tinggi",
             "Gratis fitur perjelas (Upscale)",
             "Kredit tidak pernah kedaluwarsa",
@@ -608,11 +608,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
         },
         {
           name: "Pro",
-          price: "$12.99",
+          price: "$9.99",
           description: "Nilai terbaik untuk memperbaiki foto dan membuatnya bergerak.",
           badge: "Paling Populer",
           details:[
-            "30 Kredit fleksibel",
+            "20 Kredit fleksibel",
             "Gunakan untuk restorasi foto",
             "ATAU buat animasi video",
             "Output resolusi tinggi 1080p",
@@ -794,11 +794,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
       plans:[
         {
           name: "Starter",
-          price: "$5.99",
+          price: "$4.99",
           description: "Perfekt, um unsere hochwertige Fotorestauration zu testen.",
           badge: "Einmalzahlung",
           details:[
-            "10 Restaurations-Credits",
+            "4 Restaurations-Credits",
             "Hochauflösendes Ergebnis",
             "Kostenlose Bildverbesserung (Upscaling)",
             "Credits verfallen nie",
@@ -807,11 +807,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
         },
         {
           name: "Pro",
-          price: "$12.99",
+          price: "$9.99",
           description: "Das beste Preis-Leistungs-Verhältnis für Restauration und Animation.",
           badge: "Bester Wert",
           details:[
-            "30 flexible Credits",
+            "20 flexible Credits",
             "Nutzen für Fotorestauration",
             "ODER für Video-Animationen",
             "Hochauflösendes Ergebnis (1080p)",
@@ -993,11 +993,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
       plans:[
         {
           name: "Starter",
-          price: "$5.99",
+          price: "$4.99",
           description: "Идеально для качественной реставрации первых фотографий.",
           badge: "Разовый платеж",
           details:[
-            "10 кредитов на реставрацию",
+            "4 кредитов на реставрацию",
             "Высокое разрешение на выходе",
             "Бесплатное улучшение (Upscale)",
             "Кредиты не сгорают",
@@ -1006,11 +1006,11 @@ export const countryPages: Record<SupportedLang, LocalizedPageData> = {
         },
         {
           name: "Pro",
-          price: "$12.99",
+          price: "$9.99",
           description: "Лучший выбор, чтобы восстановить снимки и оживить фото видео-анимацией.",
           badge: "Популярный выбор",
           details:[
-            "30 гибких кредитов",
+            "20 гибких кредитов",
             "Используйте для реставрации",
             "ИЛИ для видео-анимации лиц",
             "Высокое разрешение 1080p",

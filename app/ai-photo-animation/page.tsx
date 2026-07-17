@@ -45,7 +45,7 @@ const animationWebAppJsonLd = {
     name: 'BringBack Restoration & Animation Plans',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
-    price: '2',
+    price: '4.99',
     eligibleRegion: {
       '@type': 'Place',
       name: 'Worldwide',
