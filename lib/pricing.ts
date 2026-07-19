@@ -75,8 +75,9 @@ export const PUBLIC_PLANS: PublicPlan[] = [
       "Low-risk way to restore a few important photos. Not enough credits for animation or hug video.",
     equivalents: [
       "Up to 4 photo restorations",
-      "OR up to 2 studio family portraits / add-person edits",
-      "Does not include animation (10 credits) or hug video (19 credits)",
+      "OR up to 2 studio family portraits ",
+      "OR up to 2 add/remove person edits",
+      "Does not include animation or hug video",
     ],
     includesAnimation: false,
     includesHug: false,
@@ -96,7 +97,8 @@ export const PUBLIC_PLANS: PublicPlan[] = [
     equivalents: [
       "Up to 20 photo restorations",
       "OR up to 2 photo animations",
-      "OR up to 10 studio family portraits / add-person edits",
+      "OR up to 10 studio family portraits",
+      "OR up to 10 add/remove person edits",
     ],
     includesAnimation: true,
     includesHug: true, // 20 credits covers one 19-credit hug run
@@ -116,7 +118,8 @@ export const PUBLIC_PLANS: PublicPlan[] = [
     equivalents: [
       "Up to 60 photo restorations",
       "OR up to 6 photo animations",
-      "OR up to 30 studio family portraits / add-person edits",
+      "OR up to 30 studio family portraits",
+      "OR up to 30 add/remove person edits",
       "Unlocks Family Memory Book editing",
     ],
     includesAnimation: true,
