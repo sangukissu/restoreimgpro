@@ -98,9 +98,8 @@ const PricingCard: React.FC<{
 
 export const Pricing: React.FC = () => {
   const starterFeatures: PricingFeature[] = [
-    { icon: <ImageIcon size={16} />, text: "Up to 10 High-Res Photo Restorations" },
-    { icon: <Film size={16} />, text: "OR up to 1 Photo to Video Animation" },
-    { icon: <Sparkles size={16} />, text: "OR up to 5 Studio Family Portraits" },
+    { icon: <ImageIcon size={16} />, text: "Up to 4 High-Res Photo Restorations" },
+    { icon: <Sparkles size={16} />, text: "OR up to 2 Studio Family Portraits" },
     { icon: <Maximize2 size={16} />, text: "Studio-Grade 1080p Print Quality" },
     { icon: <Infinity size={16} />, text: "Credits Never Expire", isPerk: true },
     { icon: <Frame size={16} />, text: "Free Digital Frames", isPerk: true },
@@ -108,9 +107,9 @@ export const Pricing: React.FC = () => {
   ];
 
   const proFeatures: PricingFeature[] = [
-    { icon: <ImageIcon size={16} />, text: "Up to 30 High-Res Photo Restorations" },
-    { icon: <Film size={16} />, text: "OR up to 3 Photo to Video Animations" },
-    { icon: <Sparkles size={16} />, text: "OR up to 15 Studio Family Portraits" },
+    { icon: <ImageIcon size={16} />, text: "Up to 20 High-Res Photo Restorations" },
+    { icon: <Film size={16} />, text: "OR up to 2 Photo to Video Animations" },
+    { icon: <Sparkles size={16} />, text: "OR up to 10 Studio Family Portraits" },
     { icon: <Maximize2 size={16} />, text: "Studio-Grade 1080p Print Quality" },
     { icon: <Infinity size={16} />, text: "Credits Never Expire", isPerk: true },
     { icon: <Frame size={16} />, text: "Commercial Usage Rights Included", isPerk: true },
@@ -158,9 +157,9 @@ export const Pricing: React.FC = () => {
           <PricingCard
             theme="light"
             title="Starter Pack"
-            price="$5.99"
-            creditsText="10 Generation Credits"
-            description="Perfect for testing out restorations, animations, and prints."
+            price="$4.99"
+            creditsText="4 Generation Credits"
+            description="Perfect for testing out restorations and prints."
             badge="One-time payment"
             features={starterFeatures}
             icon={<Sparkles size={24} />}
@@ -173,8 +172,8 @@ export const Pricing: React.FC = () => {
           <PricingCard
             theme="dark"
             title="Value Pack"
-            price="$12.99"
-            creditsText="30 Generation Credits"
+            price="$9.99"
+            creditsText="20 Generation Credits"
             description="Perfect for creating cinematic video reunions and studio-quality prints."
             badge="Most Popular"
             features={proFeatures}

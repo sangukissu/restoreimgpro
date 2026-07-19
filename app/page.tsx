@@ -40,7 +40,7 @@ const homePageJsonLd = {
     name: 'BringBack Restoration, Animation & Framing Plans',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
-    price: '2',
+    price: '4.99',
     eligibleRegion: {
       '@type': 'Place',
       name: 'Worldwide'
@@ -105,7 +105,7 @@ const homeFAQPageJsonLd = {
       name: 'How much do photo restoration and animation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Photo restoration: We offer 5 high-quality photo restorations for just $2.49 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.'
+        text: 'Photo restoration: We offer 4 high-quality photo restorations for just $4.99 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.'
       }
     },
     {

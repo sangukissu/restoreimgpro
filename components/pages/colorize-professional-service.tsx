@@ -33,7 +33,7 @@ export default function ColorizeProfessionalService() {
                 </div>
                 <div>
                   <h3 className="font-bold text-xl text-brand-black mb-1">Affordable Pricing</h3>
-                  <p className="text-gray-600 text-sm font-medium">Skip the $100 hourly rates. Our AI photo colorization service price is just $2 for 5 high-resolution colorized photos.</p>
+                  <p className="text-gray-600 text-sm font-medium">Skip the $100 hourly rates. Our AI photo colorization service price is just $4.99 for 4 high-resolution colorized photos.</p>
                 </div>
               </div>
 
@@ -82,7 +82,7 @@ export default function ColorizeProfessionalService() {
                 <span className="font-bold text-brand-black">Price per Photo</span>
                 <div className="flex gap-8 text-center">
                   <span className="font-bold text-gray-500 w-24">$50 - $150</span>
-                  <span className="font-bold text-brand-black w-24">$0.40</span>
+                  <span className="font-bold text-brand-black w-24">$1.25</span>
                 </div>
               </div>
 

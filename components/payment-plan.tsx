@@ -34,8 +34,8 @@ type CheckoutMarker = {
 function getPlanTier(plan: PaymentPlanOption) {
   const name = plan.name.toLowerCase()
 
-  if (name.includes("starter") || plan.credits === 10) return "starter"
-  if (name.includes("pro") || name.includes("plus") || plan.credits === 30) return "pro"
+  if (name.includes("starter") || plan.credits === 4) return "starter"
+  if (name.includes("pro") || name.includes("plus") || plan.credits === 20) return "pro"
   if (name.includes("family") || plan.credits === 60) return "family"
 
   return "custom"
@@ -82,8 +82,8 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         const data = await res.json()
         setPlans(data || [])
         if (data && data.length > 0) {
-          // Prefer selecting the 10-credit Starter plan by default if present
-          const starter = data.find((p: any) => p.credits === 10)
+          // Prefer selecting the 4-credit Starter plan by default if present
+          const starter = data.find((p: any) => p.credits === 4)
           setSelectedPlanId((starter?.id as string) || data[0].id)
         }
       } catch (e) {
@@ -291,23 +291,22 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
           <div className="grid grid-cols-1 gap-4">
             {plans.map((plan) => {
               // Determine badge and perks based on plan
-              const isStarter = plan.credits === 10
-              const isPlus = plan.credits === 30
+              const isStarter = plan.credits === 4
+              const isPlus = plan.credits === 20
               const isFamily = plan.credits === 60
 
               let perks: Array<{ text: string; available: boolean; highlight?: boolean }> = []
 
               if (isStarter) {
                 perks = [
-                  { text: "Restore 10 Photos", available: true, highlight: true },
-                  { text: "OR Create 1 Photo to  Video Animation", available: true, highlight: true },
-                  { text: "OR Generate 5 Studio Family Portraits", available: true, highlight: true },
+                  { text: "Restore 4 Photos", available: true, highlight: true },
+                  { text: "OR Generate 2 Studio Family Portraits", available: true, highlight: true },
                 ]
               } else if (isPlus) {
                 perks = [
-                  { text: "Restore 30 Photos", available: true },
-                  { text: "OR Create 3 Photo to  Video Animation", available: true, highlight: true },
-                  { text: "OR Generate 15 Studio Family Portraits", available: true, highlight: true },
+                  { text: "Restore 20 Photos", available: true },
+                  { text: "OR Create 2 Photo to Video Animations", available: true, highlight: true },
+                  { text: "OR Generate 10 Studio Family Portraits", available: true, highlight: true },
                 ]
               } else if (isFamily) {
                 perks = [

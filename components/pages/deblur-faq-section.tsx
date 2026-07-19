@@ -101,7 +101,7 @@ export default function DeblurFAQSection() {
     {
       question: "How much does photo deblurring cost?",
       answer:
-        "We offer 5 high-quality photo deblurring enhancements for just $2 - no subscription required. This one-time payment gives you professional-grade results in seconds, compared to traditional photo editing services that charge $50-200+ per photo.",
+        "We offer 4 high-quality photo deblurring enhancements for just $4.99 - no subscription required. This one-time payment gives you professional-grade results in seconds, compared to traditional photo editing services that charge $50-200+ per photo.",
     },
     {
       question: "Can you fix severely blurry photos?",
