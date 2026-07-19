@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
-import { Sparkles, ArrowRight, Play, Star, Search, Brain, Filter, Sparkle } from "lucide-react"
+import { Sparkles, ArrowRight, Play, Search, Brain, Filter, Sparkle } from "lucide-react"
 import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
 import Link from "next/link"
@@ -82,7 +82,7 @@ const denoiseFAQPageJsonLd = {
       "name": "How does AI photo denoising actually work?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Our AI analyzes the patterns of noise in your photo and distinguishes between unwanted grain and important image details. It uses advanced algorithms trained on millions of images to selectively remove noise while preserving textures, edges, and fine details that matter to your photo's quality."
+        "text": "Our AI analyzes the patterns of noise in your photo and distinguishes between unwanted grain and important image details."
       }
     },
     {
@@ -130,7 +130,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Is my data safe during processing?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is auotmatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you."
+        "text": "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
       }
     },
     {
@@ -178,7 +178,7 @@ const denoiseFAQPageJsonLd = {
       "name": "Is my uploaded photo secure?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely, photos are processed securely in the cloud and can be deleted from our servers after download to ensure privacy."
+        "text": "Photos are processed securely. You can delete generated media anytime from My Media. See our Privacy Policy for processors and retention."
       }
     },
     {
@@ -267,7 +267,7 @@ export default function DenoisePage() {
             </div>
 
             {/* Heading */}
-            <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
+            <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
               Clean up <br />
               <span className="text-gray-400 relative">
                 Grainy Photos.
@@ -302,38 +302,11 @@ export default function DenoisePage() {
               </Link>
             </div>
 
-            {/* Social Proof */}
-            <div className="flex items-center gap-6 pl-2">
-              <div className="flex items-center relative h-12 w-[140px]">
-                {[1, 2, 3].map((i, index) => (
-                  <div
-                    key={i}
-                    className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
-                      ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
-                      ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
-                      ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
-                    `}
-                  >
-                    <img
-                      src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
-                      alt="User"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-                <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-                  2.8K+
-                </div>
-              </div>
-
-              <div className="flex flex-col justify-center">
-                <div className="flex gap-0.5 mb-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
-                  ))}
-                </div>
-                <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 2.8K+ Families</span>
-              </div>
+            <div className="flex flex-col gap-2 pl-1 max-w-md">
+              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">1 credit · compare before download</span>
+              <p className="text-sm text-gray-500 font-medium">
+                Generated media stays in your account until you delete it. We do not use family photos to train general-purpose AI models.
+              </p>
             </div>
           </div>
 

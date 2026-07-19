@@ -299,20 +299,22 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
 
               if (isStarter) {
                 perks = [
-                  { text: "Restore 4 Photos", available: true, highlight: true },
-                  { text: "OR Generate 2 Studio Family Portraits", available: true, highlight: true },
+                  { text: "Restoration Starter: restore up to 4 photos", available: true, highlight: true },
+                  { text: "OR up to 2 family portraits / add-person (2 credits each)", available: true, highlight: true },
+                  { text: "Not enough credits for animation (needs 10)", available: false },
                 ]
               } else if (isPlus) {
                 perks = [
-                  { text: "Restore 20 Photos", available: true },
-                  { text: "OR Create 2 Photo to Video Animations", available: true, highlight: true },
-                  { text: "OR Generate 10 Studio Family Portraits", available: true, highlight: true },
+                  { text: "Restore up to 20 photos", available: true },
+                  { text: "OR up to 2 photo animations (10 credits each)", available: true, highlight: true },
+                  { text: "OR up to 10 family portraits / add-person", available: true, highlight: true },
                 ]
               } else if (isFamily) {
                 perks = [
-                  { text: "Restore 60 Photos", available: true },
-                  { text: "OR Create 6 Photo to  Video Animation", available: true, highlight: true },
-                  { text: "OR Generate 30 Studio Family Portraits", available: true, highlight: true },
+                  { text: "Restore up to 60 photos", available: true },
+                  { text: "OR up to 6 photo animations", available: true, highlight: true },
+                  { text: "OR up to 30 family portraits / add-person", available: true, highlight: true },
+                  { text: "Unlocks Family Memory Book", available: true, highlight: true },
                 ]
               } else {
                 perks = [{ text: `${plan.credits} Credits`, available: true }]

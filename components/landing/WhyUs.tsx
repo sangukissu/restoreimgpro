@@ -4,29 +4,29 @@ import { Heart, ShieldCheck, Sparkles, Users } from 'lucide-react';
 
 const STATS = [
   {
-    value: '2.8K+',
-    label: 'Families have trusted us to restore their memories.',
-    dots: [true, true, true, false], // Visual progress
+    value: 'Original-first',
+    label: 'Restore without forcing colorization. Keep black-and-white or sepia when that is the memory.',
+    dots: [true, true, true, false],
     bullet: false,
     icon: <Users size={20} />
   },
   {
-    value: 'Simple Process',
-    label: 'No tech skills needed. Just upload and click one button.',
+    value: 'One workspace',
+    label: 'Restore, reunite people, add subtle motion, then preserve the story in a private keepsake.',
     dots: [true, true, false, false],
     bullet: true,
     icon: <Sparkles size={20} />
   },
   {
-    value: '100%',
-    label: 'Private & Secure. We never store or share your photos.',
+    value: 'You control media',
+    label: 'Generated files stay in your account until you delete them. Memory Book only when you save it.',
     dots: [true, false, false, false],
     bullet: false,
     icon: <ShieldCheck size={20} />
   },
   {
-    value: 'Real',
-    label: 'Authentic results that look like your loved ones, not cartoons.',
+    value: 'Honest limits',
+    label: 'When faces are missing detail, AI may reconstruct — we surface comparison so you can decide.',
     dots: [true, true, true, true],
     bullet: false,
     icon: <Heart size={20} />
@@ -86,7 +86,7 @@ export const WhyUs: React.FC = () => {
                   <span className="text-white font-bold text-lg">Preserve the Moment</span>
                 </div>
                 <p className="text-gray-200 text-sm font-medium leading-relaxed">
-                  "I finally saw my grandfather's smile clearly for the first time. It felt like he was right there with us again."
+                  The goal is not a viral filter — it is a careful repair you can compare to the original before you print or share.
                 </p>
               </div>
             </div>
@@ -102,7 +102,7 @@ export const WhyUs: React.FC = () => {
                 >
                   {/* Top Row */}
                   <div className="flex justify-between items-start relative z-10">
-                    <span className={`font-[800] text-brand-black tracking-tight ${stat.value.length > 4 ? 'text-3xl' : 'text-5xl'}`}>{stat.value}</span>
+                    <span className={`font-[800] text-brand-black tracking-tight ${stat.value.length > 6 ? 'text-2xl sm:text-3xl' : 'text-4xl sm:text-5xl'}`}>{stat.value}</span>
 
                     {/* Dots Indicator */}
                     <div className="flex gap-1.5 pt-2">

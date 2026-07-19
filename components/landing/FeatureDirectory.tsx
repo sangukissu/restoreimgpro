@@ -46,10 +46,10 @@ export const FeatureDirectory: React.FC = () => {
     },
     {
       name: "AI Nostalgic Hug Generator",
-      cost: "10 Credits",
-      description: "Generate a moving cinematic video of two family members hugging using just one static photo.",
+      cost: "19 Credits",
+      description: "Experimental reunion/hug video from two photos. Review quality carefully; not available on the 4-credit Starter pack.",
       icon: <Heart size={20} />,
-      unlockedOn: "All Tiers"
+      unlockedOn: "Value & Family packs"
     },
     {
       name: "Add Person to Photo",
@@ -75,15 +75,8 @@ export const FeatureDirectory: React.FC = () => {
     {
       name: "Private Media Library",
       cost: "Free Access",
-      description: "Securely store, organize, download, and manage all your restorations and animations in one dashboard.",
+      description: "Store, organize, download, and manage restorations and animations in one dashboard until you delete them.",
       icon: <FolderOpen size={20} />,
-      unlockedOn: "All Tiers"
-    },
-    {
-      name: "Referrals & Rewards",
-      cost: "Earn Credits",
-      description: "Share your unique link with family and friends to earn free credits when they make their first purchase.",
-      icon: <Send size={20} />,
       unlockedOn: "All Tiers"
     }
   ];
@@ -100,14 +93,14 @@ export const FeatureDirectory: React.FC = () => {
             </div>
 
             <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[1.05]">
-              One pack. <br />
-              <span className="text-gray-400">Infinite capabilities.</span>
+              Exact credit costs. <br />
+              <span className="text-gray-400">No surprises.</span>
             </h2>
           </div>
 
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Every credit pack unlocks full access to our entire suite of AI tools. See exactly how credits map to each feature.
+              Starter can restore and reunite, but not animate. Value and Family packs cover higher-cost tools. Credits never expire.
             </p>
           </div>
         </div>

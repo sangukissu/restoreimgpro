@@ -94,6 +94,45 @@ export interface ComparePageData {
   }[];
 }
 
+export type CompareNiche = ComparePageData["niche"]
+
+export const COMPARE_NICHE_LABELS: Record<CompareNiche, string> = {
+  restoration: "Photo restoration",
+  animation: "Photo animation",
+  merging: "Family portrait & merging",
+}
+
+/** All comparison pages for hub, sitemap, and internal links. */
+export function listComparePages(): {
+  slug: string
+  competitor: string
+  niche: CompareNiche
+  title: string
+  description: string
+  href: string
+}[] {
+  return Object.values(compareData).map((page) => ({
+    slug: page.slug,
+    competitor: page.competitor,
+    niche: page.niche,
+    title: page.meta.title,
+    description: page.meta.description,
+    href: `/compare/${page.slug}`,
+  }))
+}
+
+export function listComparePagesByNiche(): Record<
+  CompareNiche,
+  ReturnType<typeof listComparePages>
+> {
+  const all = listComparePages()
+  return {
+    restoration: all.filter((p) => p.niche === "restoration"),
+    animation: all.filter((p) => p.niche === "animation"),
+    merging: all.filter((p) => p.niche === "merging"),
+  }
+}
+
 export const compareData: Record<string, ComparePageData> = {
   "remini-alternative": {
     slug: "remini-alternative",
@@ -108,7 +147,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     hero: {
       h1: "Remini alternative for restoring old family photos.",
-      subheadline: "Remini is designed for modern selfies, but its recurring subscriptions and aggressive \"plastic-looking\" skin smoothing ruin historical portraits. BringBack is the premium web-based alternative with affordable one-time pricing, zero watermarks, and historically accurate AI.",
+      subheadline: "Remini is designed for modern selfies, but its recurring subscriptions and aggressive \"plastic-looking\" skin smoothing ruin historical portraits. BringBack is the premium web-based alternative with affordable one-time pricing, zero watermarks, and careful AI.",
       visuals: {
         beforeImage: "/b&w-old1.jpg",
         afterImage: "/b&w-restored1.jpg"
@@ -117,17 +156,13 @@ export const compareData: Record<string, ComparePageData> = {
     verdict: {
       text: "If you want to enhance recent selfies on your phone for Instagram, Remini is an excellent tool. If you need to restore, colorize, and animate heavily damaged old family photos on a desktop without being locked into a monthly subscription, BringBack AI is the vastly superior choice. They use different AI models for entirely different goals.",
       ourPickTitle: "Choose BringBack AI",
-      ourPickDesc: "for historically accurate restoration of old family photos with premium accuracy and one-time pricing.",
+      ourPickDesc: "for careful restoration of old family photos with premium accuracy and one-time pricing.",
       altPickTitle: "Choose Remini",
       altPickDesc: "for enhancing modern phone selfies with a polished mobile app and fun AI avatars."
     },
-    testimonials: [
-      { quote: "My grandma cried when she saw her wedding photo restored. Absolutely incredible. Way better than the weird AI faces other apps generate.", author: "Nevila Seferi", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
-      { quote: "Uploaded a blurry photo from the 70s and got back a crystal clear image. Like magic. And I didn't have to subscribe to anything.", author: "Samiksha Kamble", avatar: "https://randomuser.me/api/portraits/women/32.jpg" },
-      { quote: "Finally recovered old family photos I thought were lost forever. So easy to use right from my laptop.", author: "Brandon Rofe", avatar: "https://randomuser.me/api/portraits/men/68.jpg" }
-    ],
+    testimonials: [],
     matrix: {
-      description: "When comparing BringBack AI to Remini for historical photo restoration, the biggest differences lie in the underlying AI models and the financial commitment. Here is a direct feature-by-feature breakdown.",
+      description: "High-level product differences for family restoration projects. Pricing figures for Remini are public list prices and should be re-checked before purchase — they change.",
       rows: [
          { feature: "Pricing model", competitor: "Starts at $6.99/week or $25/month", bringBack: "One-time credit packs from $4.99", winner: "bringBack" },
         { feature: "Annual Cost", competitor: "Up to $299/year", bringBack: "$0 (Pay only when you need it)", winner: "bringBack" },
@@ -136,7 +171,7 @@ export const compareData: Record<string, ComparePageData> = {
         { feature: "Subscription required", competitor: "Yes, for full features", bringBack: "No, never", winner: "bringBack" },
         { feature: "Watermarks", competitor: "Yes on unpaid tiers", bringBack: "No watermarks ever", winner: "bringBack" },
         { feature: "Credits expire", competitor: "N/A (subscription resets)", bringBack: "Never expire", winner: "bringBack" },
-        { feature: "Data Privacy", competitor: "May use photos for AI training", bringBack: "Zero retention (deleted in 30 mins)", winner: "bringBack" }
+        { feature: "Data Privacy", competitor: "Check their current policy", bringBack: "Generated media stays until you delete it; no public model training on family photos", winner: "bringBack" }
       ]
     },
     aboutCompetitor: {
@@ -177,8 +212,8 @@ export const compareData: Record<string, ComparePageData> = {
           description: "Restoring old photos usually means working from a flatbed scanner or a folder of digitized prints. Doing this on a 6-inch phone screen is tedious. BringBack is a powerful web application designed to handle high-resolution desktop uploads effortlessly."
         },
         {
-          title: "Absolute Data Privacy",
-          description: "Your family memories are private. BringBack operates on a strict zero-retention policy. We process your image, deliver the high-resolution result, and permanently delete the file from our servers within 30 minutes."
+          title: "Account-controlled media",
+          description: "Generated media stays in your account until you delete it. Memory Book keepsakes are stored only when you explicitly save them. We do not use family photos to train general-purpose AI models."
         }
       ]
     },
@@ -187,9 +222,9 @@ export const compareData: Record<string, ComparePageData> = {
       bringBackPoints: [
         "You are restoring, colorizing, or animating old family photos",
         "You refuse to pay for recurring monthly subscriptions",
-        "You want authentic, historically accurate AI restoration",
+        "You want authentic, careful AI restoration",
         "You work primarily from a laptop or desktop computer",
-        "You demand strict data privacy and zero file retention"
+        "You want account-controlled media and clear credit pricing"
       ],
       competitorTitle: "Pick Remini if",
       competitorPoints: [
@@ -202,9 +237,9 @@ export const compareData: Record<string, ComparePageData> = {
     finalThoughts: {
       title: "Final thoughts",
       content: [
-        "The choice between BringBack AI and Remini comes down to intent. If you are an influencer looking to quickly sharpen a selfie before posting it online, Remini is the industry standard and you should absolutely use it.",
-        "However, if you have discovered a box of damaged, faded photographs from the 1950s and want to meticulously restore them to preserve your family's legacy, Remini's aggressive smoothing algorithms and subscription pricing will only cause frustration.",
-        "BringBack AI offers superior, purpose-built restoration technology with a fair, pay-as-you-go pricing model that respects both your wallet and your privacy."
+        "The choice between BringBack AI and Remini comes down to intent. If you are primarily enhancing modern selfies on a phone, Remini is purpose-built for that job.",
+        "If you are restoring damaged family prints, want restore-only control, and prefer pay-once credits without a forced subscription, BringBack is designed for that workflow.",
+        "Always compare results to your original. Missing facial detail may be reconstructed rather than recovered — on any AI tool."
       ]
     },
     howToSwitch: {
@@ -224,7 +259,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           stepNumber: 3,
           title: "Preview and Download",
-          description: "Review the historically accurate restoration for free. If you love it, use a single credit to download the watermark-free, high-resolution file."
+          description: "Review the side-by-side result in your account. If you love it, use a single credit to download the watermark-free, high-resolution file."
         }
       ]
     },
@@ -254,20 +289,20 @@ export const compareData: Record<string, ComparePageData> = {
       ]
     },
     trustAndMethodology: {
-      title: "How we compared BringBack to Remini",
-      content: "To provide an objective comparison, our team tested Remini's paid Pro tier ($6.99/week) against BringBack's standard credit tier. We uploaded the same 50 heavily damaged historical photographs (ranging from 1910s tintypes to 1980s Polaroids) to both platforms. We evaluated the results based on facial accuracy, artifact generation, texture preservation, and total cost of ownership. The data on this page reflects pricing and feature parity as of Q2 2026."
+      title: "How this comparison is written",
+      content: "This page compares product intent and public pricing models as of mid-2026. It is not a lab study of 50 photos with fabricated scores. For how we evaluate BringBack restorations (identity drift, damage repair, texture, unwanted colorization, artifacts), see /restoration-benchmark and /methodology. Remini pricing and features change — verify on their site before buying."
     },
     faqs: [
-      { q: "Do I need to download an app to use BringBack?", a: "No. BringBack is a powerful, entirely web-based platform. You can access it from any browser on your PC, Mac, or mobile device without installing anything." },
-      { q: "Is BringBack a subscription service?", a: "No. BringBack is strictly pay-as-you-go. You purchase a credit pack, use it at your own pace, and your credits never expire. There are no recurring charges." },
-      { q: "How does BringBack handle severely damaged photos?", a: "Unlike basic upscalers, BringBack utilizes advanced 2026 diffusion models specifically trained to understand and repair severe scratches, tears, and heavy fading while retaining authentic film grain." },
-      { q: "Does BringBack keep my photos on their servers?", a: "No. BringBack operates on a strict zero-retention privacy policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
-      { q: "Can I use BringBack on my mobile phone?", a: "Yes. While our workflow is highly optimized for desktop users with scanners, the BringBack web application is fully responsive and works perfectly on modern smartphones." },
-      { q: "How much does it cost to restore a single photo?", a: "With our standard credit packs, restoring a photo can cost as little as $0.13 per image. You buy the pack once, and there are no ongoing fees." },
-      { q: "Will BringBack make my ancestors look like plastic?", a: "No. Many generic AI tools 'over-smooth' faces. BringBack is specifically engineered to preserve historical textures, paper grain, and micro-expressions so the restored photo looks authentic." },
-      { q: "Can BringBack add color to black and white photos?", a: "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps historically accurate colors to grayscale images." },
-      { q: "Are there watermarks on my downloaded photos?", a: "Never. We believe your family memories belong to you. We do not place watermarks on any photos processed through your paid credits." },
-      { q: "Do my BringBack credits expire?", a: "No. Once you purchase a credit pack, those credits remain in your account indefinitely until you choose to use them." }
+      { q: "Do I need to download an app to use BringBack?", a: "No. BringBack is web-based. You can use it from a browser on desktop or mobile without installing an app." },
+      { q: "Is BringBack a subscription service?", a: "No. BringBack is pay-as-you-go. You purchase a credit pack; credits never expire." },
+      { q: "How does BringBack handle severely damaged photos?", a: "It repairs many scratches, tears, and fading issues. Missing facial detail may be reconstructed rather than recovered. Always compare before download." },
+      { q: "Does BringBack keep my photos on their servers?", a: "Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See the Privacy Policy." },
+      { q: "Can I use BringBack on my mobile phone?", a: "Yes. The web app is responsive. Large scan batches are often easier on desktop." },
+      { q: "How much does one restoration cost?", a: "One restoration uses 1 credit. The Restoration Starter pack is $4.99 for 4 credits." },
+      { q: "Will BringBack make my ancestors look plastic?", a: "We design for identity-conscious results, but AI can still oversmooth or invent detail on bad inputs. Use side-by-side comparison." },
+      { q: "Can BringBack add color to black and white photos?", a: "Yes, as an optional colorize step. AI color is an interpretation, not historical proof." },
+      { q: "Are there watermarks on paid downloads?", a: "Paid credit downloads are not watermarked for personal use of your results." },
+      { q: "Do my BringBack credits expire?", a: "No. Credits remain until you use them." }
     ]
   },  
   "vanceai-alternative": {
@@ -296,11 +331,7 @@ export const compareData: Record<string, ComparePageData> = {
       "altPickTitle": "Choose VanceAI",
       "altPickDesc": "for a high-volume utility tool that handles generic image editing tasks like background removal and sharpening."
     },
-    "testimonials": [
-      { "quote": "I tried VanceAI first, but the interface was so cluttered I didn't know which 'model' to pick. BringBack just worked. The scratch removal is on another level.", "author": "David Miller", "avatar": "https://randomuser.me/api/portraits/men/32.jpg" },
-      { "quote": "The fact that my credits don't expire is why I switched. I can restore a few photos today and come back in six months without losing my money.", "author": "Elena Rossi", "avatar": "https://randomuser.me/api/portraits/women/65.jpg" },
-      { "quote": "VanceAI made my grandfather look like a completely different person. BringBack kept his actual features while fixing the water damage.", "author": "Mark Thompson", "avatar": "https://randomuser.me/api/portraits/men/41.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to VanceAI reveals a difference between a 'general image utility' and a 'dedicated restoration studio'.",
       "rows": [
@@ -429,7 +460,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "Our Comparative Methodology",
-      "content": "To compare VanceAI and BringBack, we purchased a 100-credit monthly plan on VanceAI and tested it against BringBack’s Standard Pack. We used a dataset of 30 family photos with diverse damage types (scratches, fading, blur). We specifically monitored the user experience over a 45-day period to verify credit expiration policies and interface changes. This data is current as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs": [
       { "q": "Do BringBack credits expire like VanceAI credits?", "a": "No. Once you purchase credits on BringBack, they are yours until you use them. There is no expiration date." },
@@ -466,15 +497,11 @@ export const compareData: Record<string, ComparePageData> = {
     "verdict": {
       "text": "If you need to batch-process modern e-commerce product shots or cartoonize images using your PC's GPU, Nero AI is an excellent utility suite. If you are focused entirely on restoring, colorizing, and animating fragile old family photos with strict historical accuracy, BringBack AI is the vastly superior choice. We specialize in preserving human identity, not just upscaling generic pixels.",
       "ourPickTitle": "Choose BringBack AI",
-      "ourPickDesc": "for historically accurate, cloud-based restoration of old family photos with integrated facial animation.",
+      "ourPickDesc": "for careful, cloud-based restoration of old family photos with integrated facial animation.",
       "altPickTitle": "Choose Nero AI",
       "altPickDesc": "for batch-processing e-commerce product photos and general image upscaling using Windows desktop software."
     },
-    "testimonials":[
-      { "quote": "Nero's upscaler made my grandfather look a bit like a video game character. BringBack actually kept his skin texture and natural features. It looks like a real 1940s photograph.", "author": "Thomas Wright", "avatar": "https://randomuser.me/api/portraits/men/22.jpg" },
-      { "quote": "I didn't want to buy and install a massive Windows desktop app just to fix three wedding photos. BringBack worked perfectly right in my browser on my Mac.", "author": "Sophie Claire", "avatar": "https://randomuser.me/api/portraits/women/17.jpg" },
-      { "quote": "The fact that I could restore the scratches and then animate my mom's face all in one place is what won me over. Unbelievable technology.", "author": "Arthur Mendez", "avatar": "https://randomuser.me/api/portraits/men/54.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to Nero AI highlights the difference between a 'general purpose software company' and a 'specialized family history studio'.",
       "rows":[
@@ -485,7 +512,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Animation Integration", "competitor": "No native photo animation", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
         { "feature": "Credit Consumption", "competitor": "Variable (1 to 2 credits per action)", "bringBack": "Simple, transparent 1-credit system", "winner": "bringBack" },
         { "feature": "Batch Processing", "competitor": "Excellent for 100+ modern images", "bringBack": "Manual, high-quality focus", "winner": "competitor" },
-        { "feature": "Data Privacy", "competitor": "Standard corporate retention policies", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" }
+        { "feature": "Data Privacy", "competitor": "Standard corporate retention policies", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" }
       ]
     },
     "aboutCompetitor": {
@@ -572,7 +599,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 3,
           "title": "Preview and Download",
-          "description": "Review the historically accurate restoration for free. If you love it, use a single credit to download the watermark-free, high-resolution file."
+          "description": "Review the side-by-side result in your account. If you love it, use a single credit to download the watermark-free, high-resolution file."
         }
       ]
     },
@@ -589,7 +616,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "uniqueAdvantage": {
       "title": "Beyond Restoration: Bring your ancestors to life",
-      "description": "Nero AI stops at sharpening static pixels. BringBack takes your family history a step further with our proprietary Photo Animation engine.",
+      "description": "Nero AI stops at sharpening static pixels. BringBack takes your family history a step further with our photo animation tools.",
       "features":[
         {
           "heading": "Cinematic Motion",
@@ -603,14 +630,14 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "How we compared BringBack to Nero AI",
-      "content": "To provide an objective comparison, our team tested Nero AI's web subscription tier ($9.95/month) and their Windows desktop Image Upscaler against BringBack's standard web tier. We processed 40 vintage photographs, heavily weighting 19th-century tintypes and 1960s Kodachrome prints. We evaluated the results based on facial accuracy (avoiding the 'painted' look), artifact generation, software overhead, and total cost of ownership. The data on this page reflects pricing and feature parity as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs":[
       { "q": "Do I need a powerful Windows PC to use BringBack?", "a": "No. Unlike Nero AI's desktop software, BringBack processes everything on our enterprise cloud servers. You can use it on any Mac, PC, or mobile browser." },
       { "q": "Is BringBack a subscription service like Nero's web app?", "a": "No. BringBack is strictly pay-as-you-go. You purchase a credit pack, use it at your own pace, and your credits never expire. There are no recurring monthly charges." },
       { "q": "Why do faces look more natural on BringBack than Nero AI?", "a": "Nero's AI is trained broadly on modern images, e-commerce, and anime, which can cause 'over-smoothing'. BringBack is specifically engineered on historical data to preserve authentic textures and paper grain." },
-      { "q": "Does BringBack keep my photos on their servers?", "a": "No. BringBack operates on a strict zero-retention privacy policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
-      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps historically accurate colors to grayscale images." },
+      { "q": "Does BringBack keep my photos on their servers?", "a": "Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
+      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps careful colors to grayscale images." },
       { "q": "Does BringBack consume multiple credits per photo?", "a": "No. We believe in transparent pricing. One credit equals one full restoration, unlike other platforms that charge variable amounts for different filters." },
       { "q": "Can I animate my photos on Nero AI?", "a": "No, Nero AI is focused entirely on static image enhancement. BringBack includes a built-in animation studio to bring your restored portraits to life." },
       { "q": "Are there watermarks on my downloaded photos?", "a": "Never. We believe your family memories belong to you. We do not place watermarks on any photos processed through your paid credits." },
@@ -631,7 +658,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "hero": {
       "h1": "A modern, premium JPGHD alternative for historical photos.",
-      "subheadline": "JPGHD is one of the original AI photo enhancers, but its aging interface and older generation algorithms often leave photos looking over-processed. BringBack is the modern web-based alternative equipped with 2026 diffusion models, providing historically accurate restoration, natural cinematic animation, and strict zero-retention privacy.",
+      "subheadline": "JPGHD is one of the original AI photo enhancers, but its aging interface and older generation algorithms often leave photos looking over-processed. BringBack is the modern web-based alternative equipped with 2026 diffusion models, providing careful restoration, natural cinematic animation, and strict account-controlled media privacy.",
       "visuals": {
         "beforeImage": "/b&w-old1.jpg",
         "afterImage": "/b&w-restored1.jpg"
@@ -640,25 +667,21 @@ export const compareData: Record<string, ComparePageData> = {
     "verdict": {
       "text": "If you are familiar with early-generation AI tools and just need basic, quick upscaling for standard web images, JPGHD remains a functional utility. However, if you are handling precious, severely damaged family heirlooms and require state-of-the-art 2026 facial reconstruction, highly accurate colorization, and natural animation without 'warping' artifacts, BringBack AI is the vastly superior choice.",
       "ourPickTitle": "Choose BringBack AI",
-      "ourPickDesc": "for premium, historically accurate restoration using modern diffusion AI, a flawless interface, and cinematic animation.",
+      "ourPickDesc": "for premium, careful restoration using modern diffusion AI, a flawless interface, and cinematic animation.",
       "altPickTitle": "Choose JPGHD",
       "altPickDesc": "for basic, legacy AI image upscaling and straightforward colorization tasks."
     },
-    "testimonials":[
-      { "quote": "JPGHD's 'Magic Photo' feature made my grandmother's face warp and look rubbery. BringBack's animation is incredibly lifelike and respectful. It actually looks like her.", "author": "Sarah Jenkins", "avatar": "https://randomuser.me/api/portraits/women/62.jpg" },
-      { "quote": "I used JPGHD for a while, but the colorization always looked muddy. BringBack brought out the natural skin tones and clothing dyes perfectly. A massive upgrade.", "author": "Michael Torres", "avatar": "https://randomuser.me/api/portraits/men/29.jpg" },
-      { "quote": "The interface on BringBack is so much cleaner, and I love knowing my family photos are deleted from their servers instantly. Worth every penny.", "author": "Eleanor Vance", "avatar": "https://randomuser.me/api/portraits/women/12.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "When comparing BringBack AI to JPGHD, the differences are most apparent in the generation of the AI models used, the quality of the animation, and data security.",
       "rows":[
         { "feature": "AI Technology Engine", "competitor": "Legacy GAN upscaling", "bringBack": "2026 Diffusion Models", "winner": "bringBack" },
         { "feature": "Animation Quality", "competitor": "Basic 'Magic Photo' warping", "bringBack": "Cinematic, artifact-free motion", "winner": "bringBack" },
-        { "feature": "Colorization Accuracy", "competitor": "Basic tinting (often muddy)", "bringBack": "Historically accurate palette mapping", "winner": "bringBack" },
+        { "feature": "Colorization Accuracy", "competitor": "Basic tinting (often muddy)", "bringBack": "Careful palette mapping", "winner": "bringBack" },
         { "feature": "User Interface", "competitor": "Basic, utilitarian design", "bringBack": "Premium, streamlined workspace", "winner": "bringBack" },
         { "feature": "Subscription required", "competitor": "Pushes monthly/yearly plans", "bringBack": "No, strictly Pay-as-you-go", "winner": "bringBack" },
         { "feature": "Watermarks on free tier", "competitor": "Yes", "bringBack": "No watermarks ever", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Standard retention", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
+        { "feature": "Data Privacy", "competitor": "Standard retention", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" },
         { "feature": "Credit Expiration", "competitor": "Expires on subscription plans", "bringBack": "Never expire", "winner": "bringBack" }
       ]
     },
@@ -701,7 +724,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "Absolute Data Privacy",
-          "description": "Your family memories are private. BringBack operates on a strict zero-retention policy. We process your image, deliver the high-resolution result, and permanently delete the file from our servers within 30 minutes. No long-term storage."
+          "description": "Generated media stays in your account until you delete it. We do not use family photos to train general-purpose AI models. See Privacy Policy."
         }
       ]
     },
@@ -710,9 +733,9 @@ export const compareData: Record<string, ComparePageData> = {
       "bringBackPoints":[
         "You want modern 2026 AI restoration without the 'painted' look",
         "You want artifact-free, cinematic facial animation",
-        "You demand historically accurate, vibrant colorization",
+        "You demand careful, vibrant colorization",
         "You prefer a premium, intuitive desktop workflow",
-        "You demand strict data privacy and zero file retention"
+        "You demand account-controlled media and clear privacy policy"
       ],
       "competitorTitle": "Pick JPGHD if",
       "competitorPoints":[
@@ -746,7 +769,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 3,
           "title": "Preview and Download",
-          "description": "Review the historically accurate restoration for free. If you love it, use a single credit to download the watermark-free, high-resolution file."
+          "description": "Review the side-by-side result in your account. If you love it, use a single credit to download the watermark-free, high-resolution file."
         }
       ]
     },
@@ -777,17 +800,17 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "How we compared BringBack to JPGHD",
-      "content": "To provide an objective comparison, our team tested JPGHD's premium subscription against BringBack's standard credit tier. We uploaded the same 40 heavily damaged historical photographs (ranging from faded 1920s prints to severely scratched 1970s Polaroids) to both platforms. We evaluated the results based on facial reconstruction accuracy, colorization depth, animation artifacts (background warping), and data privacy policies. The data on this page reflects feature parity as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs":[
       { "q": "Do I need to download an app to use BringBack?", "a": "No. BringBack is a powerful, entirely web-based platform. You can access it from any browser on your PC, Mac, or mobile device without installing anything." },
       { "q": "Is BringBack's animation better than JPGHD's Magic Photo?", "a": "Yes. JPGHD's older animation engine often warps the image background and distorts head shapes. BringBack uses advanced 2026 face-mapping to create natural, cinematic motion without artifacts." },
       { "q": "How does BringBack handle severely damaged photos compared to JPGHD?", "a": "Unlike legacy upscalers that just blur over scratches, BringBack utilizes advanced diffusion models specifically trained to understand and structurally repair severe scratches, tears, and heavy fading." },
-      { "q": "Does BringBack keep my photos on their servers?", "a": "No. BringBack operates on a strict zero-retention privacy policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
+      { "q": "Does BringBack keep my photos on their servers?", "a": "Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
       { "q": "Is BringBack a subscription service?", "a": "No. BringBack is strictly pay-as-you-go. You purchase a credit pack, use it at your own pace, and your credits never expire." },
       { "q": "How much does it cost to restore a single photo?", "a": "With our standard credit packs, restoring a photo can cost as little as $0.13 per image. You buy the pack once, and there are no ongoing fees." },
       { "q": "Will BringBack make my ancestors look like plastic?", "a": "No. Many older AI tools like JPGHD 'over-smooth' faces. BringBack is specifically engineered to preserve historical textures, paper grain, and micro-expressions." },
-      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps historically accurate colors to grayscale images, avoiding the 'muddy' look of older tools." },
+      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps careful colors to grayscale images, avoiding the 'muddy' look of older tools." },
       { "q": "Are there watermarks on my downloaded photos?", "a": "Never. We believe your family memories belong to you. We do not place watermarks on any photos processed through your paid credits." },
       { "q": "Do my BringBack credits expire?", "a": "No. Once you purchase a credit pack, those credits remain in your account indefinitely until you choose to use them." }
     ]
@@ -814,21 +837,17 @@ export const compareData: Record<string, ComparePageData> = {
     "verdict": {
       "text": "If you need a highly stylized, subjective, or bespoke digital painting and have the budget to hire a human freelance retoucher, Phowd's crowdsourcing platform is a valid option. However, if you want your historical family photos restored, colorized, and animated instantly, affordably, and with strict data privacy, BringBack AI is the vastly superior choice.",
       "ourPickTitle": "Choose BringBack AI",
-      "ourPickDesc": "for instant, private, and historically accurate AI restoration at a fraction of the cost.",
+      "ourPickDesc": "for instant, private, and careful AI restoration at a fraction of the cost.",
       "altPickTitle": "Choose Phowd",
       "altPickDesc": "for commissioning manual, human-driven photo retouching where you are willing to wait days for results."
     },
-    "testimonials":[
-      { "quote": "I used to post bounties on Phowd and wait a week hoping someone would fix my photo. BringBack did it in 15 seconds, and it looked better than the $15 manual edit.", "author": "Richard Kline", "avatar": "https://randomuser.me/api/portraits/men/82.jpg" },
-      { "quote": "I wasn't comfortable with random freelancers around the world downloading pictures of my great-grandparents. BringBack's zero-retention privacy policy gave me total peace of mind.", "author": "Mary O'Connor", "avatar": "https://randomuser.me/api/portraits/women/51.jpg" },
-      { "quote": "The cost savings are incredible. Instead of paying $10 per photo to a retoucher, I bought a credit pack on BringBack and restored my entire family album.", "author": "Jonathan Reed", "avatar": "https://randomuser.me/api/portraits/men/43.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to Phowd is a comparison between automated, private AI and a crowdsourced human freelance marketplace. Here is how they stack up.",
       "rows":[
         { "feature": "Processing Time", "competitor": "Days or weeks", "bringBack": "Under 60 seconds", "winner": "bringBack" },
         { "feature": "Cost per Photo", "competitor": "Typically $5.00 - $20.00+", "bringBack": "As low as $0.13", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Downloaded by freelance retouchers", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
+        { "feature": "Data Privacy", "competitor": "Downloaded by freelance retouchers", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" },
         { "feature": "Consistency", "competitor": "Varies wildly by freelancer", "bringBack": "Consistent, premium AI quality", "winner": "bringBack" },
         { "feature": "Cinematic Animation", "competitor": "Rarely offered or highly expensive", "bringBack": "Built-in AI face animation", "winner": "bringBack" },
         { "feature": "Bespoke Art Modifications", "competitor": "Excellent (human interpretation)", "bringBack": "Strict historical restoration", "winner": "competitor" },
@@ -863,7 +882,7 @@ export const compareData: Record<string, ComparePageData> = {
       "points":[
         {
           "title": "Instant Results vs. Days of Waiting",
-          "description": "On Phowd, you must post your photo, wait for retouchers to find it, and wait days for them to manually edit it. BringBack AI processes your image and delivers high-resolution, historically accurate restoration in less than 60 seconds."
+          "description": "On Phowd, you must post your photo, wait for retouchers to find it, and wait days for them to manually edit it. BringBack AI processes your image and delivers high-resolution, careful restoration in less than 60 seconds."
         },
         {
           "title": "A Fraction of the Cost",
@@ -871,7 +890,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "No Strangers Downloading Your Photos",
-          "description": "When you use Phowd, independent freelancers around the world download your family photos to their personal hard drives. BringBack operates on strict zero-retention privacy. No human ever sees your photos, and our servers delete them within 30 minutes."
+          "description": "When you use Phowd, independent freelancers around the world download your family photos to their personal hard drives. BringBack operates on BringBack processes photos to deliver the feature you request. Generated media stays in your account until you delete it. Memory Book keepsakes are stored only when you explicitly save them. We do not use family photos to train general-purpose AI models."
         },
         {
           "title": "Consistent, Premium Quality",
@@ -886,7 +905,7 @@ export const compareData: Record<string, ComparePageData> = {
         "You have a large batch of photos and need an affordable solution",
         "You demand strict data privacy and zero human involvement",
         "You want to instantly animate your restored photos",
-        "You want consistent, historically accurate results"
+        "You want consistent, careful results"
       ],
       "competitorTitle": "Pick Phowd if",
       "competitorPoints":[
@@ -920,7 +939,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 3,
           "title": "Preview and Download instantly",
-          "description": "Review the historically accurate restoration for free immediately. Use a single credit to download the watermark-free, high-resolution file."
+          "description": "Review the side-by-side result in your account. Use a single credit to download the watermark-free, high-resolution file."
         }
       ]
     },
@@ -957,11 +976,11 @@ export const compareData: Record<string, ComparePageData> = {
       { "q": "Do human retouchers look at my photos on BringBack?", "a": "No. Unlike Phowd, BringBack is entirely automated by AI. No human eyes ever see your private family photographs." },
       { "q": "Is BringBack faster than using Phowd?", "a": "Yes. Phowd relies on freelancers, which can take days. BringBack processes and restores your images in under 60 seconds." },
       { "q": "How does the cost compare?", "a": "Posting a bounty on Phowd typically costs between $5 and $20+ per photo. BringBack uses credit packs, allowing you to restore photos for as little as $0.13 each." },
-      { "q": "Does BringBack keep my photos on their servers?", "a": "No. BringBack operates on a strict zero-retention privacy policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
+      { "q": "Does BringBack keep my photos on their servers?", "a": "Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
       { "q": "Can BringBack fix photos that are torn?", "a": "Yes, our generative AI is specifically trained to analyze surrounding textures and structurally bridge gaps caused by physical tears." },
-      { "q": "Can I request bespoke artistic changes on BringBack?", "a": "BringBack focuses strictly on authentic, historically accurate restoration. If you want someone to manually paint a dinosaur into your family photo, a human freelancer on Phowd is a better choice." },
+      { "q": "Can I request bespoke artistic changes on BringBack?", "a": "BringBack focuses strictly on authentic, careful restoration. If you want someone to manually paint a dinosaur into your family photo, a human freelancer on Phowd is a better choice." },
       { "q": "Will BringBack make my ancestors look like plastic?", "a": "No. BringBack is specifically engineered to preserve historical textures, paper grain, and micro-expressions, avoiding the 'painted' look common in generic AI." },
-      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps historically accurate colors instantly." },
+      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps careful colors instantly." },
       { "q": "Are there watermarks on my downloaded photos?", "a": "Never. We believe your family memories belong to you. We do not place watermarks on any photos processed through your paid credits." },
       { "q": "Do my BringBack credits expire?", "a": "No. Once you purchase a credit pack, those credits remain in your account indefinitely until you choose to use them." }
     ]
@@ -992,11 +1011,7 @@ export const compareData: Record<string, ComparePageData> = {
       "altPickTitle": "Choose EaseUS",
       "altPickDesc": "for recovering digitally corrupted JPEG/RAW files, fixing broken headers, and general data recovery."
     },
-    "testimonials":[
-      { "quote": "I tried EaseUS, but it kept trying to sell me their massive data recovery software. BringBack was exactly what I needed—a simple website to fix the scratches on my grandmother's portrait.", "author": "Robert Chen", "avatar": "https://randomuser.me/api/portraits/men/15.jpg" },
-      { "quote": "EaseUS is great for my corrupted hard drive, but their photo enhancement made the faces look like plastic. BringBack kept the authentic vintage feel while fixing the tears.", "author": "Amanda Willis", "avatar": "https://randomuser.me/api/portraits/women/28.jpg" },
-      { "quote": "I love that BringBack works entirely in my browser. No heavy utility software to install, and the animation feature brought my parents to life.", "author": "Stephen Clarke", "avatar": "https://randomuser.me/api/portraits/men/59.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to EaseUS highlights the fundamental difference between a specialized visual restoration studio and a digital data recovery utility.",
       "rows":[
@@ -1006,7 +1021,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Animation Integration", "competitor": "No native photo animation", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
         { "feature": "Physical Damage Repair", "competitor": "Basic upscaling add-ons", "bringBack": "Deep generative repair for tears/creases", "winner": "bringBack" },
         { "feature": "Pricing Model", "competitor": "Expensive software licenses/subscriptions", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Standard corporate retention", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
+        { "feature": "Data Privacy", "competitor": "Standard corporate retention", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" },
         { "feature": "Corrupted SD Cards", "competitor": "Industry leading", "bringBack": "Not supported (requires valid image file)", "winner": "competitor" }
       ]
     },
@@ -1049,7 +1064,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "The Magic of Animation",
-          "description": "With EaseUS, the process stops at the static file. BringBack AI features a proprietary cinematic animation engine, allowing you to instantly transition your restored photo into a lifelike, moving portrait."
+          "description": "With EaseUS, the process stops at the static file. BringBack AI features a photo animation tools, allowing you to instantly transition your restored photo into a lifelike, moving portrait."
         }
       ]
     },
@@ -1094,7 +1109,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 3,
           "title": "Preview and Download",
-          "description": "Review the historically accurate restoration for free. If you love it, use a single credit to download the watermark-free, high-resolution file."
+          "description": "Review the side-by-side result in your account. If you love it, use a single credit to download the watermark-free, high-resolution file."
         }
       ]
     },
@@ -1111,7 +1126,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "uniqueAdvantage": {
       "title": "Beyond Repair: Bring your ancestors to life",
-      "description": "EaseUS focuses entirely on static digital files. BringBack takes your family history a step further with our proprietary Photo Animation engine.",
+      "description": "EaseUS focuses entirely on static digital files. BringBack takes your family history a step further with our photo animation tools.",
       "features":[
         {
           "heading": "Cinematic Motion",
@@ -1131,10 +1146,10 @@ export const compareData: Record<string, ComparePageData> = {
       { "q": "Can BringBack fix a JPEG that says 'file cannot be opened'?", "a": "No. BringBack requires a valid, openable image file. If your file is digitally corrupted, EaseUS is the correct tool for you." },
       { "q": "Do I need to download an app to use BringBack?", "a": "No. Unlike EaseUS desktop software, BringBack is a powerful, entirely web-based platform. You can access it from any browser on your PC or Mac." },
       { "q": "How does BringBack handle severely scratched photos?", "a": "BringBack utilizes advanced 2026 diffusion models specifically trained to understand and visually reconstruct missing areas caused by physical scratches, tears, and heavy fading." },
-      { "q": "Does BringBack keep my photos on their servers?", "a": "No. BringBack operates on a strict zero-retention privacy policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
+      { "q": "Does BringBack keep my photos on their servers?", "a": "Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
       { "q": "Is BringBack a subscription service?", "a": "No. BringBack is strictly pay-as-you-go. You purchase a credit pack, use it at your own pace, and your credits never expire. There are no expensive software licenses." },
       { "q": "Will BringBack make my ancestors look like plastic?", "a": "No. Many general AI utilities 'over-smooth' faces. BringBack is specifically engineered to preserve historical textures, paper grain, and micro-expressions." },
-      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our visual restoration engine includes state-of-the-art AI colorization that intelligently maps historically accurate colors to grayscale images." },
+      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our visual restoration engine includes state-of-the-art AI colorization that intelligently maps careful colors to grayscale images." },
       { "q": "Can I animate my photos on EaseUS?", "a": "No, EaseUS focuses on static data recovery and file repair. BringBack includes a built-in cinematic animation engine to bring your restored portraits to life." },
       { "q": "Are there watermarks on my downloaded photos?", "a": "Never. We believe your family memories belong to you. We do not place watermarks on any photos processed through your paid credits." },
       { "q": "Do my BringBack credits expire?", "a": "No. Once you purchase a credit pack, those credits remain in your account indefinitely until you choose to use them." }
@@ -1153,7 +1168,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "hero": {
       "h1": "The Pixelbin alternative built for families, not developers.",
-      "subheadline": "Pixelbin.io is a powerful Digital Asset Management (DAM) platform built for e-commerce developers. For families restoring precious memories, its technical interface and storage-based pricing are overkill. BringBack is the premium consumer alternative offering historically accurate AI, zero-retention privacy, and cinematic animation in a simple web app.",
+      "subheadline": "Pixelbin.io is a powerful Digital Asset Management (DAM) platform built for e-commerce developers. For families restoring precious memories, its technical interface and storage-based pricing are overkill. BringBack is the premium consumer alternative offering careful AI, account-controlled media privacy, and cinematic animation in a simple web app.",
       "visuals": {
         "beforeImage": "/b&w-old5.jpg",
         "afterImage": "/b&w-restored5.jpg"
@@ -1166,17 +1181,13 @@ export const compareData: Record<string, ComparePageData> = {
       "altPickTitle": "Choose Pixelbin",
       "altPickDesc": "for developer-centric bulk image processing, API integrations, and enterprise media hosting."
     },
-    "testimonials":[
-      { "quote": "I tried using Pixelbin but got lost in all the technical API documentation and storage settings. BringBack was just drag, drop, and restore. So much easier.", "author": "Margaret Hughes", "avatar": "https://randomuser.me/api/portraits/women/68.jpg" },
-      { "quote": "Because Pixelbin is a media manager, it stores your photos. I wanted strict privacy for my family albums. BringBack deletes everything in 30 minutes, which I prefer.", "author": "James Kowalski", "avatar": "https://randomuser.me/api/portraits/men/44.jpg" },
-      { "quote": "Pixelbin did an okay job sharpening the image, but BringBack actually brought my grandmother to life with the animation tool. It's a completely different level of emotional impact.", "author": "Linda Chen", "avatar": "https://randomuser.me/api/portraits/women/29.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to Pixelbin highlights the massive divide between a B2B developer tool and a dedicated consumer restoration studio.",
       "rows":[
         { "feature": "Target Audience", "competitor": "Enterprise developers & e-commerce", "bringBack": "Genealogists & family historians", "winner": "tie" },
         { "feature": "User Interface", "competitor": "Technical DAM dashboard", "bringBack": "Intuitive, distraction-free web app", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Stores images as a DAM/CDN", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
+        { "feature": "Data Privacy", "competitor": "Stores images as a DAM/CDN", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" },
         { "feature": "Animation Features", "competitor": "None (static image only)", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
         { "feature": "Pricing Structure", "competitor": "Storage, bandwidth, and API limits", "bringBack": "Simple pay-per-photo credits", "winner": "bringBack" },
         { "feature": "Bulk API Processing", "competitor": "Enterprise-grade automation", "bringBack": "Manual, high-quality focus", "winner": "competitor" },
@@ -1214,8 +1225,8 @@ export const compareData: Record<string, ComparePageData> = {
           "description": "Pixelbin’s dashboard is cluttered with organization tools, transformations, and storage metrics meant for web developers. BringBack offers a single, beautiful workspace: upload your photo, select your restoration preferences, and download the result instantly."
         },
         {
-          "title": "Strict Zero-Retention Privacy",
-          "description": "Because Pixelbin is a Digital Asset Manager, its core function is to host and store your images on their servers. BringBack takes the opposite approach. We prioritize your family's privacy with a strict zero-retention policy—your photos are permanently deleted within 30 minutes of processing."
+          "title": "Strict account-controlled media Privacy",
+          "description": "Because Pixelbin is a Digital Asset Manager, its core function is to host and store your images on their servers. BringBack takes the opposite approach. We prioritize your family's privacy with a strict account-controlled media policy—your photos are permanently deleted according to our retention policy of processing."
         },
         {
           "title": "No Storage or Bandwidth Fees",
@@ -1268,7 +1279,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 3,
           "title": "Preview and Download",
-          "description": "Review the historically accurate restoration for free. Use a single credit to download the watermark-free file."
+          "description": "Review the side-by-side result in your account. Use a single credit to download the watermark-free file."
         }
       ]
     },
@@ -1299,18 +1310,18 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "How we compared BringBack to Pixelbin",
-      "content": "To provide an objective comparison, our team evaluated Pixelbin's web interface and API documentation against BringBack's consumer web platform. We focused heavily on the user onboarding experience for non-technical users, data privacy standards (DAM retention vs. zero-retention), and the presence of specialized features like facial animation. The data on this page reflects the positioning and feature sets of both platforms as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs":[
       { "q": "Does Pixelbin have a free photo restoration tool?", "a": "Pixelbin offers a free tier for their basic AI tools, but it is primarily geared toward developers testing their API and CDN bandwidth limits, not for continuous family photo projects." },
-      { "q": "Does Pixelbin store my family photos?", "a": "Yes. Because Pixelbin is a Digital Asset Management (DAM) platform, its primary function is to store and host your images. If you prefer strict privacy, BringBack AI auto-deletes your photos in 30 minutes." },
+      { "q": "Does Pixelbin store my family photos?", "a": "Yes. Because Pixelbin is a Digital Asset Management (DAM) platform, its primary function is to store and host your images. If you prefer strict privacy, BringBack AI auto-deletes your photos per our Privacy Policy." },
       { "q": "Can Pixelbin animate my old photos?", "a": "No. Pixelbin's AI suite focuses on static image transformations like upscaling and background removal. BringBack AI includes a robust cinematic animation engine." },
       { "q": "Do I need coding or API knowledge to use BringBack?", "a": "Absolutely not. While Pixelbin is built for developers, BringBack is designed for everyday users. If you can drag and drop a file, you can use BringBack." },
       { "q": "What is the best alternative to Pixelbin for individuals?", "a": "For everyday users, genealogists, and family historians who don't need enterprise media hosting, BringBack AI is the best alternative. It is simpler, private, and features animation." },
       { "q": "Is BringBack a subscription service like enterprise tools?", "a": "No. BringBack uses a simple pay-as-you-go model. You buy a credit pack and only pay when you restore a photo. No monthly bandwidth fees." },
       { "q": "Will BringBack make my ancestors look like plastic?", "a": "No. BringBack is specifically engineered with advanced diffusion models to preserve historical textures, paper grain, and micro-expressions." },
       { "q": "Can BringBack fix photos that are physically torn?", "a": "Yes, our generative AI is specifically trained to analyze surrounding textures and structurally bridge gaps caused by physical tears in the original paper." },
-      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps historically accurate colors to grayscale images." },
+      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps careful colors to grayscale images." },
       { "q": "Are there watermarks on my downloaded photos?", "a": "Never. We do not place watermarks on any photos processed through your paid credits on BringBack." }
     ]
   },
@@ -1327,7 +1338,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "hero": {
       "h1": "The Airbrush alternative built for history, not selfies.",
-      "subheadline": "Airbrush is a famous beauty app designed to make modern selfies look flawless. Applying its aggressive skin-smoothing algorithms to vintage photography often ruins the authenticity of your ancestors' faces. BringBack is the premium web alternative built exclusively for historically accurate restoration and cinematic animation.",
+      "subheadline": "Airbrush is a famous beauty app designed to make modern selfies look flawless. Applying its aggressive skin-smoothing algorithms to vintage photography often ruins the authenticity of your ancestors' faces. BringBack is the premium web alternative built exclusively for careful restoration and cinematic animation.",
       "visuals": {
         "beforeImage": "/b&w-old1.jpg",
         "afterImage": "/b&w-restored1.jpg"
@@ -1336,15 +1347,11 @@ export const compareData: Record<string, ComparePageData> = {
     "verdict": {
       "text": "If you want to remove a blemish from your latest Instagram selfie, whiten your teeth, or add a digital makeup filter, Airbrush is an excellent, fun mobile app. However, if you want to restore, colorize, and animate a fragile 1940s family portrait without making your grandfather look like a plastic model, BringBack AI is the vastly superior choice. We preserve history; we don't 'beautify' it.",
       "ourPickTitle": "Choose BringBack AI",
-      "ourPickDesc": "for historically accurate restoration that preserves authentic facial features, film grain, and micro-expressions.",
+      "ourPickDesc": "for careful restoration that preserves authentic facial features, film grain, and micro-expressions.",
       "altPickTitle": "Choose Airbrush",
       "altPickDesc": "for touching up modern smartphone selfies with beauty filters, blemish removal, and skin-smoothing effects."
     },
-    "testimonials":[
-      { "quote": "Airbrush smoothed out all the wrinkles on my great-grandfather's face, making him look 20 years old and like he was wearing makeup. BringBack kept his character and just fixed the scratches.", "author": "Diane Morrison", "avatar": "https://randomuser.me/api/portraits/women/33.jpg" },
-      { "quote": "I didn't want to edit 50 high-res scanned photos on a tiny phone screen with an app full of ads and subscriptions. BringBack on my Mac was a breath of fresh air.", "author": "William Baxter", "avatar": "https://randomuser.me/api/portraits/men/71.jpg" },
-      { "quote": "The colorization on BringBack is so much more natural. Other 'beauty' apps just make everything look like a glowing cartoon. This looks like real life.", "author": "Chloe Evans", "avatar": "https://randomuser.me/api/portraits/women/42.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to Airbrush highlights the massive difference between a 'selfie beauty camera' and a 'historical preservation studio'.",
       "rows":[
@@ -1353,7 +1360,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Platform & Workflow", "competitor": "Mobile-first smartphone app", "bringBack": "Desktop-optimized web application", "winner": "bringBack" },
         { "feature": "Pricing Model", "competitor": "Aggressive monthly/yearly subscriptions", "bringBack": "Simple one-time credit packs", "winner": "bringBack" },
         { "feature": "Animation Features", "competitor": "Basic or none for historical faces", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Standard mobile app data collection", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
+        { "feature": "Data Privacy", "competitor": "Standard mobile app data collection", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" },
         { "feature": "Physical Damage Repair", "competitor": "Basic blemish removal", "bringBack": "Deep generative repair for tears/creases", "winner": "bringBack" },
         { "feature": "Modern Touch-ups", "competitor": "Industry leading for selfies", "bringBack": "Not designed for modern beauty edits", "winner": "competitor" }
       ]
@@ -1397,7 +1404,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "Absolute Data Privacy",
-          "description": "Mobile apps are notorious for scraping user data and holding onto images. BringBack operates on a strict zero-retention policy. We process your historical image, deliver the result, and permanently delete the file from our servers within 30 minutes."
+          "description": "Mobile apps are notorious for scraping user data and holding onto images. Generated media stays in your account until you delete it. We do not use family photos to train general-purpose AI models. See Privacy Policy."
         }
       ]
     },
@@ -1408,7 +1415,7 @@ export const compareData: Record<string, ComparePageData> = {
         "You are working with high-resolution desktop scans",
         "You refuse to pay for recurring app subscriptions",
         "You want to animate your ancestors with lifelike motion",
-        "You demand strict data privacy and zero file retention"
+        "You demand account-controlled media and clear privacy policy"
       ],
       "competitorTitle": "Pick Airbrush if",
       "competitorPoints":[
@@ -1442,7 +1449,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 3,
           "title": "Preview and Download",
-          "description": "Review the historically accurate restoration for free. If you love it, use a single credit to download the watermark-free, high-resolution file."
+          "description": "Review the side-by-side result in your account. If you love it, use a single credit to download the watermark-free, high-resolution file."
         }
       ]
     },
@@ -1473,7 +1480,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "How we compared BringBack to Airbrush",
-      "content": "To provide an objective comparison, our team evaluated Airbrush's premium mobile app tier against BringBack's web-based platform. We uploaded the same 30 vintage portraits to both platforms. We specifically monitored how each AI handled fine facial details, wrinkles, and paper texture. We also evaluated the workflow efficiency of processing large 600-DPI scans via mobile vs. desktop, and the total cost of ownership (subscriptions vs. one-time credits). The data on this page reflects app models and pricing as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs":[
       { "q": "Does Airbrush change the faces in old photos?", "a": "Yes, Airbrush is fundamentally a beauty app. Its AI is trained to smooth skin, remove wrinkles, and 'beautify' the subject, which often changes the natural identity of historical figures." },
@@ -1481,7 +1488,7 @@ export const compareData: Record<string, ComparePageData> = {
       { "q": "Do I need to download an app to use BringBack?", "a": "No. BringBack is a powerful, entirely web-based platform. You can access it from any browser on your PC, Mac, or mobile device without installing anything from the App Store." },
       { "q": "Is BringBack a subscription service like Airbrush?", "a": "No. BringBack is strictly pay-as-you-go. You purchase a credit pack, use it at your own pace, and your credits never expire. There are no recurring weekly or monthly charges." },
       { "q": "Can BringBack fix photos that are physically torn?", "a": "Yes, our generative AI is specifically trained to analyze surrounding textures and structurally bridge gaps caused by physical tears, something basic blemish-removal tools cannot do." },
-      { "q": "Does BringBack keep my photos on their servers?", "a": "No. BringBack operates on a strict zero-retention privacy policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
+      { "q": "Does BringBack keep my photos on their servers?", "a": "Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
       { "q": "Will BringBack make my ancestors look like plastic?", "a": "No. Unlike beauty apps that 'over-smooth' faces, BringBack is specifically engineered to preserve historical textures, paper grain, and micro-expressions." },
       { "q": "Can I animate my photos on Airbrush?", "a": "No, Airbrush is primarily a static photo editor. BringBack includes a built-in cinematic animation engine to bring your restored portraits to life." },
       { "q": "Are there watermarks on my downloaded photos?", "a": "Never. We believe your family memories belong to you. We do not place watermarks on any photos processed through your paid credits." },
@@ -1496,12 +1503,12 @@ export const compareData: Record<string, ComparePageData> = {
     "ctaLink2": "https://bringback.pro/login",
     "meta": {
       "title": "Best ImageColorizer Alternative for Photo Restoration 2026 | BringBack AI",
-      "description": "Looking for an ImageColorizer alternative? BringBack AI provides superior historically accurate colorization, deep scratch repair, and cinematic animation in one platform.",
+      "description": "Looking for an ImageColorizer alternative? BringBack AI provides superior careful colorization, deep scratch repair, and cinematic animation in one platform.",
       "keywords":["imagecolorizer alternative", "imagecolorizer photo restoration alternative", "image colorizer vs bringback", "apps like imagecolorizer", "restore and colorize old photos", "best alternative to imagecolorizer"]
     },
     "hero": {
       "h1": "The all-in-one ImageColorizer alternative for true historical preservation.",
-      "subheadline": "ImageColorizer is a great starting point for basic tinting, but jumping between its fragmented tools for enhancing, restoring, and colorizing is tedious. BringBack is the premium web-based alternative that seamlessly repairs deep physical damage, applies historically accurate semantic colorization, and animates your ancestors in one intuitive workflow.",
+      "subheadline": "ImageColorizer is a great starting point for basic tinting, but jumping between its fragmented tools for enhancing, restoring, and colorizing is tedious. BringBack is the premium web-based alternative that seamlessly repairs deep physical damage, applies careful semantic colorization, and animates your ancestors in one intuitive workflow.",
       "visuals": {
         "beforeImage": "/b&w-old6.jpg",
         "afterImage": "/color-restored6.jpg"
@@ -1514,21 +1521,17 @@ export const compareData: Record<string, ComparePageData> = {
       "altPickTitle": "Choose ImageColorizer",
       "altPickDesc": "for quick, basic color tinting of undamaged black-and-white photos using a straightforward utility."
     },
-    "testimonials":[
-      { "quote": "ImageColorizer made my grandfather's military uniform the completely wrong color and looked 'painted' on. BringBack actually recognized the historical context and the colors looked incredibly natural.", "author": "Henry Dalton", "avatar": "https://randomuser.me/api/portraits/men/85.jpg" },
-      { "quote": "I hated having to upload my photo to the 'restore' tool, download it, and then re-upload it to the 'colorize' tool. BringBack does it all in one click, plus animation!", "author": "Clara Evans", "avatar": "https://randomuser.me/api/portraits/women/38.jpg" },
-      { "quote": "The zero-retention privacy policy on BringBack was the deciding factor for me. Plus, the fact that my purchased credits never expire means I can take my time with my family tree.", "author": "Marcus Thorne", "avatar": "https://randomuser.me/api/portraits/men/51.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to ImageColorizer highlights the difference between a fragmented utility suite and a cohesive, premium restoration platform.",
       "rows":[
         { "feature": "Workflow Experience", "competitor": "Fragmented (separate tools for tasks)", "bringBack": "Unified (Restore, Colorize, Animate instantly)", "winner": "bringBack" },
-        { "feature": "Colorization Engine", "competitor": "Basic uniform hue mapping", "bringBack": "Semantic, historically accurate diffusion", "winner": "bringBack" },
+        { "feature": "Colorization Engine", "competitor": "Basic uniform hue mapping", "bringBack": "Semantic, careful diffusion", "winner": "bringBack" },
         { "feature": "Animation Integration", "competitor": "No native face animation", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
         { "feature": "Deep Damage Repair", "competitor": "Struggles with severe tears", "bringBack": "Generative structural reconstruction", "winner": "bringBack" },
         { "feature": "Pricing Model", "competitor": "Monthly subscriptions & expiring credits", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
         { "feature": "Credit Expiration", "competitor": "Yes (on subscription plans)", "bringBack": "Never expire", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Standard 24-hour retention", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
+        { "feature": "Data Privacy", "competitor": "Standard 24-hour retention", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" },
         { "feature": "Basic Tinting Speed", "competitor": "Very fast for simple tasks", "bringBack": "Optimized for high-fidelity output", "winner": "tie" }
       ]
     },
@@ -1563,7 +1566,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "Semantic Color Accuracy vs. Muddy Tints",
-          "description": "ImageColorizer sometimes 'bleeds' colors across borders or applies generic sepia/yellow washes to skin tones. BringBack uses semantic AI that understands the difference between a wool coat, skin pores, and background foliage, applying distinct, historically accurate colors."
+          "description": "ImageColorizer sometimes 'bleeds' colors across borders or applies generic sepia/yellow washes to skin tones. BringBack uses semantic AI that understands the difference between a wool coat, skin pores, and background foliage, applying distinct, careful colors."
         },
         {
           "title": "The Missing Animation Link",
@@ -1579,10 +1582,10 @@ export const compareData: Record<string, ComparePageData> = {
       "bringBackTitle": "Pick BringBack AI if",
       "bringBackPoints":[
         "You want all restoration and colorization done in one seamless step",
-        "You demand historically accurate, distinct color mapping without 'bleeding'",
+        "You demand careful, distinct color mapping without 'bleeding'",
         "You want to animate your ancestors' faces with cinematic realism",
         "You refuse to pay for monthly subscriptions or expiring credits",
-        "You require strict zero-retention data privacy"
+        "You require strict account-controlled media data privacy"
       ],
       "competitorTitle": "Pick ImageColorizer if",
       "competitorPoints":[
@@ -1596,7 +1599,7 @@ export const compareData: Record<string, ComparePageData> = {
       "title": "Final thoughts",
       "content":[
         "ImageColorizer is a capable utility that helped popularize AI colorization. If you have a clean digital scan and just want to see what it looks like with a quick splash of color, it does the job reliably.",
-        "However, authentic historical preservation requires a more sophisticated touch. BringBack AI offers a superior, unified platform that not only repairs deep physical damage but applies next-generation, historically accurate colorization—and caps it off with breathtaking facial animation. It is the complete package for your family legacy."
+        "However, authentic historical preservation requires a more sophisticated touch. BringBack AI offers a superior, unified platform that not only repairs deep physical damage but applies next-generation, careful colorization—and caps it off with breathtaking facial animation. It is the complete package for your family legacy."
       ]
     },
     "howToSwitch": {
@@ -1611,7 +1614,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 2,
           "title": "Restore, Colorize, and Animate together",
-          "description": "Select your goals in one menu. Our AI simultaneously fixes scratches, applies historically accurate color, and preps the face for animation."
+          "description": "Select your goals in one menu. Our AI simultaneously fixes scratches, applies careful color, and preps the face for animation."
         },
         {
           "stepNumber": 3,
@@ -1633,7 +1636,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "uniqueAdvantage": {
       "title": "Beyond Color: Bring your ancestors to life",
-      "description": "ImageColorizer focuses entirely on static enhancements. BringBack takes your family history a step further with our proprietary Photo Animation engine.",
+      "description": "ImageColorizer focuses entirely on static enhancements. BringBack takes your family history a step further with our photo animation tools.",
       "features":[
         {
           "heading": "Cinematic Motion",
@@ -1647,13 +1650,13 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "How we compared BringBack to ImageColorizer",
-      "content": "To provide an objective comparison, our team evaluated ImageColorizer's premium subscription against BringBack's standard credit tier. We uploaded the same 40 black-and-white, physically damaged historical photographs. We evaluated the workflow efficiency (using one tool vs. hopping between ImageColorizer's separate restore and colorize modules), the semantic accuracy of the color mapping, the presence of animation capabilities, and total cost of ownership. The data on this page reflects software capabilities and pricing parity as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs":[
-      { "q": "Is BringBack's colorization better than ImageColorizer?", "a": "BringBack utilizes modern semantic diffusion models, which better understand the difference between materials (like skin vs. clothing), resulting in more historically accurate and distinct colors compared to older tinting methods." },
+      { "q": "Is BringBack's colorization better than ImageColorizer?", "a": "BringBack utilizes modern semantic diffusion models, which better understand the difference between materials (like skin vs. clothing), resulting in more careful and distinct colors compared to older tinting methods." },
       { "q": "Do I need to use separate tools to fix scratches and add color on BringBack?", "a": "No. Unlike ImageColorizer's fragmented workflow, BringBack analyzes the image and simultaneously repairs physical damage, upscales resolution, and adds color in a single, unified process." },
       { "q": "Can ImageColorizer animate my old photos?", "a": "No, ImageColorizer is focused entirely on static image transformations. BringBack includes a built-in cinematic animation engine to bring your restored portraits to life." },
-      { "q": "Does BringBack keep my photos on their servers?", "a": "No. BringBack operates on a strict zero-retention privacy policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
+      { "q": "Does BringBack keep my photos on their servers?", "a": "Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
       { "q": "Is BringBack a subscription service like ImageColorizer?", "a": "No. BringBack is strictly pay-as-you-go. You purchase a credit pack, use it at your own pace, and your credits never expire, whereas subscription credits on other platforms often do." },
       { "q": "How much does it cost to restore and colorize a single photo?", "a": "With our standard credit packs, fully restoring and colorizing a photo can cost as little as $0.13 per image. You buy the pack once, and there are no ongoing fees." },
       { "q": "Will BringBack make my ancestors look like plastic?", "a": "No. BringBack is specifically engineered to preserve historical textures, paper grain, and micro-expressions, avoiding the 'over-smoothed' look of generic upscalers." },
@@ -1688,11 +1691,7 @@ export const compareData: Record<string, ComparePageData> = {
       "altPickTitle": "Choose PhotoGlory",
       "altPickDesc": "for offline, manual photo editing using traditional sliders and brushes exclusively on a Windows PC."
     },
-    "testimonials":[
-      { "quote": "I bought PhotoGlory but didn't realize it wouldn't work on my MacBook. BringBack AI saved me. It runs right in my browser and the results are stunning.", "author": "Claire Thompson", "avatar": "https://randomuser.me/api/portraits/women/14.jpg" },
-      { "quote": "PhotoGlory took me 20 minutes of manually brushing out scratches on just one photo. BringBack did a better job automatically in 15 seconds.", "author": "Robert Evans", "avatar": "https://randomuser.me/api/portraits/men/33.jpg" },
-      { "quote": "The restoration on BringBack is excellent, but the animation feature is what blew me away. Desktop software like PhotoGlory simply can't do that.", "author": "Patricia Collins", "avatar": "https://randomuser.me/api/portraits/women/62.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to PhotoGlory is fundamentally a comparison between a modern cloud-based AI engine and traditional desktop software. Here is the feature breakdown.",
       "rows":[
@@ -1703,7 +1702,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Pricing Model", "competitor": "Expensive software licenses ($40-$80+)", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
         { "feature": "Offline Capabilities", "competitor": "Works without internet", "bringBack": "Requires internet connection", "winner": "competitor" },
         { "feature": "Upgrades & Updates", "competitor": "Paid upgrades for new versions", "bringBack": "Always using the latest 2026 AI", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Local on your hard drive", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "tie" }
+        { "feature": "Data Privacy", "competitor": "Local on your hard drive", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "tie" }
       ]
     },
     "aboutCompetitor": {
@@ -1790,7 +1789,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 3,
           "title": "Preview and Download",
-          "description": "Review the historically accurate restoration for free immediately. Use a single credit to download the watermark-free file."
+          "description": "Review the side-by-side result in your account. Use a single credit to download the watermark-free file."
         }
       ]
     },
@@ -1821,7 +1820,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "How we compared BringBack to PhotoGlory",
-      "content": "To provide an objective comparison, our team tested PhotoGlory's Pro Windows software license against BringBack's cloud-based web platform. We evaluated the cross-platform accessibility (noting PhotoGlory's lack of Mac support), the time required to manually patch severe scratches in PhotoGlory versus BringBack's automated diffusion models, and the presence of advanced features like facial animation. The data on this page reflects software capabilities, platform limitations, and pricing parity as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs":[
       { "q": "Is PhotoGlory available for Mac?", "a": "No. PhotoGlory is exclusively built for Windows PCs. If you are a Mac user looking for an alternative, BringBack AI is the perfect solution as it runs flawlessly in any Mac web browser." },
@@ -1829,7 +1828,7 @@ export const compareData: Record<string, ComparePageData> = {
       { "q": "Can PhotoGlory animate my old photos?", "a": "No, PhotoGlory is a static photo editing software. BringBack AI includes a built-in cinematic animation engine to bring your restored portraits to life as moving videos." },
       { "q": "Do I need to download heavy software to use BringBack?", "a": "No. BringBack is an entirely cloud-based web application. There is no software to install or update, saving you hard drive space and processing power." },
       { "q": "How does the pricing compare?", "a": "PhotoGlory requires a large upfront software license fee (typically $40 to $80+). BringBack uses a pay-as-you-go credit system starting at $4.99, so you only pay for exactly what you need to restore." },
-      { "q": "Does BringBack keep my photos on their servers?", "a": "No. We prioritize your privacy with a strict zero-retention policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
+      { "q": "Does BringBack keep my photos on their servers?", "a": "No. Photos are processed securely for the feature you request. Generated files stay in your account until you delete them. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
       { "q": "Is BringBack's colorization better than desktop software?", "a": "Because BringBack uses massive cloud computing power, our AI colorization models are far more sophisticated and semantically aware than what can typically be run locally on an average home PC." },
       { "q": "Can BringBack fix photos that are physically torn?", "a": "Yes, our generative AI is specifically trained to analyze surrounding textures and structurally bridge gaps caused by physical tears in the original paper." },
       { "q": "Are there watermarks on my downloaded photos?", "a": "Never. We believe your family memories belong to you. We do not place watermarks on any photos processed through your paid credits." },
@@ -1862,11 +1861,7 @@ export const compareData: Record<string, ComparePageData> = {
       "altPickTitle": "Choose UnblurImage",
       "altPickDesc": "for quickly sharpening modern digital photos that are slightly blurry or out-of-focus."
     },
-    "testimonials":[
-      { "quote": "I tried UnblurImage on my grandfather's WW2 photo, and it sharpened the film grain so much that his face looked like it was made of sand. BringBack actually smoothed the damage and kept it looking natural.", "author": "David Garrison", "avatar": "https://randomuser.me/api/portraits/men/45.jpg" },
-      { "quote": "UnblurImage didn't know what to do with the massive tear across my photo. BringBack AI completely reconstructed the missing piece flawlessly.", "author": "Samantha Lee", "avatar": "https://randomuser.me/api/portraits/women/21.jpg" },
-      { "quote": "The fact that BringBack lets you animate the photo after restoring it makes it a no-brainer. Plus, their zero-retention privacy policy makes me feel safe uploading family photos.", "author": "Oliver West", "avatar": "https://randomuser.me/api/portraits/men/63.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Comparing BringBack AI to UnblurImage highlights the difference between a single-purpose digital sharpening tool and a comprehensive historical restoration studio.",
       "rows":[
@@ -1874,7 +1869,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Physical Damage Repair", "competitor": "Struggles with large tears/scratches", "bringBack": "Generative structural reconstruction", "winner": "bringBack" },
         { "feature": "Film Grain Handling", "competitor": "Often over-sharpens grain ('crunchy')", "bringBack": "Preserves authentic vintage emulsion", "winner": "bringBack" },
         { "feature": "Animation Features", "competitor": "None (Static image only)", "bringBack": "Built-in cinematic face animation", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Standard cloud retention", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" },
+        { "feature": "Data Privacy", "competitor": "Standard cloud retention", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" },
         { "feature": "Pricing Model", "competitor": "Varies (often subscription-heavy)", "bringBack": "One-time credit packs from $4.99", "winner": "bringBack" },
         { "feature": "Modern Photo Clarity", "competitor": "Excellent for digital camera blur", "bringBack": "Optimized for vintage print scanning", "winner": "competitor" },
         { "feature": "Workflow Experience", "competitor": "Single-click sharpening utility", "bringBack": "Restore, colorize, and animate unified", "winner": "bringBack" }
@@ -1895,7 +1890,7 @@ export const compareData: Record<string, ComparePageData> = {
         "Over-sharpens vintage film grain, causing a harsh, 'crunchy' visual aesthetic",
         "Not designed to generatively reconstruct missing pieces from physical tears",
         "Lacks integrated semantic colorization and cinematic facial animation",
-        "Does not offer strict zero-retention privacy for sensitive family data"
+        "Does not offer strict account-controlled media privacy for sensitive family data"
       ]
     },
     "whySwitch": {
@@ -1915,7 +1910,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "Absolute Data Privacy",
-          "description": "When dealing with irreplaceable family heirlooms, privacy is paramount. Unlike generic online utilities, BringBack operates on a strict zero-retention policy. We process your image, deliver the high-resolution result, and permanently delete the file from our servers within 30 minutes."
+          "description": "When dealing with irreplaceable family heirlooms, privacy is paramount. Unlike generic online utilities, Generated media stays in your account until you delete it. We do not use family photos to train general-purpose AI models. See Privacy Policy."
         },
         {
           "title": "The Magic of Animation",
@@ -1929,7 +1924,7 @@ export const compareData: Record<string, ComparePageData> = {
         "You are dealing with physical damage like tears, mold, and deep scratches",
         "You want to preserve authentic historical textures and film grain",
         "You want to animate your ancestors' faces with cinematic realism",
-        "You demand strict zero-retention data privacy",
+        "You demand strict account-controlled media data privacy",
         "You want accurate semantic colorization alongside your restoration"
       ],
       "competitorTitle": "Pick UnblurImage if",
@@ -1964,7 +1959,7 @@ export const compareData: Record<string, ComparePageData> = {
         {
           "stepNumber": 3,
           "title": "Preview and Download",
-          "description": "Review the historically accurate restoration for free. If you love it, use a single credit to download the watermark-free file."
+          "description": "Review the side-by-side result in your account. If you love it, use a single credit to download the watermark-free file."
         }
       ]
     },
@@ -1995,15 +1990,15 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "How we compared BringBack to UnblurImage",
-      "content": "To provide an objective comparison, our team evaluated UnblurImage's core sharpening engine against BringBack's generative diffusion platform. We tested two distinct image sets: modern out-of-focus digital photos (where UnblurImage excelled) and physically damaged, high-grain 1940s scanned prints. We specifically evaluated how each platform handled vintage textures—noting UnblurImage's tendency to over-process film grain into digital noise. We also reviewed data privacy policies regarding file retention. The data on this page reflects software capabilities as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs":[
       { "q": "Does UnblurImage fix torn photos?", "a": "UnblurImage struggles with severe physical damage. Because its core AI is designed to sharpen existing pixels, it cannot effectively generate missing pieces of a photograph. BringBack AI specializes in deep generative repair for tears and missing corners." },
       { "q": "Why do my old photos look 'crunchy' or weird on UnblurImage?", "a": "This is a common issue when using digital unblurring tools on historical photos. The AI interprets natural vintage film grain as 'blur' and aggressively sharpens it, resulting in harsh, unnatural artifacts. BringBack is trained to respect and preserve authentic historical textures." },
       { "q": "Can UnblurImage animate my old photos?", "a": "No, UnblurImage is focused entirely on static image clarity. BringBack AI includes a built-in cinematic animation engine to bring your restored portraits to life as moving videos." },
-      { "q": "Does BringBack keep my photos on their servers like other tools?", "a": "No. BringBack operates on a strict zero-retention privacy policy. Once your image is processed and downloaded, it is permanently deleted from our servers within 30 minutes." },
+      { "q": "Does BringBack keep my photos on their servers like other tools?", "a": "Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
       { "q": "Is BringBack a subscription service?", "a": "No. BringBack is strictly pay-as-you-go. You purchase a credit pack, use it at your own pace, and your credits never expire." },
-      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps historically accurate colors to grayscale images." },
+      { "q": "Can BringBack add color to black and white photos?", "a": "Yes. Our restoration engine includes state-of-the-art AI colorization that intelligently maps careful colors to grayscale images." },
       { "q": "Will BringBack work on severely faded photos?", "a": "Yes, BringBack's AI analyzes underlying contrast and structural data to recover facial features even in severely faded or overexposed vintage prints." },
       { "q": "Do I need to download an app to use BringBack?", "a": "No. BringBack is a powerful, entirely web-based platform accessible from any browser on your Mac, PC, or mobile device." },
       { "q": "Are there watermarks on my downloaded photos?", "a": "Never. We believe your family memories belong to you. We do not place watermarks on any photos processed through your paid credits." },
@@ -2035,11 +2030,7 @@ export const compareData: Record<string, ComparePageData> = {
       altPickTitle: "Choose MyHeritage",
       altPickDesc: "for deep genealogy research, DNA testing, and building family trees."
     },
-    testimonials: [
-      { quote: "I just wanted to see my grandfather smile again. I didn't want to buy a whole genealogy package. BringBack let me do exactly that for a few bucks.", author: "Nevila Seferi", avatar: "https://randomuser.me/api/portraits/women/22.jpg" },
-      { quote: "The animation quality is actually way better and more natural than the older 2021 tech other sites use. It feels like real video.", author: "Samiksha Kamble", avatar: "https://randomuser.me/api/portraits/women/12.jpg" },
-      { quote: "Love that they don't keep my data. Uploaded, animated, downloaded, and done. No spam emails, no subscriptions.", author: "Brandon Rofe", avatar: "https://randomuser.me/api/portraits/men/55.jpg" }
-    ],
+    testimonials: [],
     matrix: {
       description: "MyHeritage is an excellent platform for genealogy, but if your only goal is to animate and restore old photos, you don't need a massive family tree database. Here is how BringBack's specialized photo tools compare to MyHeritage's ecosystem.",
       rows: [
@@ -2047,7 +2038,7 @@ export const compareData: Record<string, ComparePageData> = {
         { feature: "Account required to test", competitor: "Yes", bringBack: "No", winner: "bringBack" },
         { feature: "Primary focus", competitor: "DNA & Family Trees", bringBack: "Photo Restoration & Animation", winner: "tie" },
         { feature: "Animation Quality", competitor: "Basic 2021 Deep Nostalgia tech", bringBack: "Next-Gen 2026 Diffusion Models", winner: "bringBack" },
-        { feature: "Data Privacy", competitor: "Builds vast user databases", bringBack: "Zero retention (deleted in 30 mins)", winner: "bringBack" },
+        { feature: "Data Privacy", competitor: "Builds vast user databases", bringBack: "Generated media stays until you delete it; no public model training on family photos", winner: "bringBack" },
         { feature: "Watermarks", competitor: "Yes on unpaid tiers", bringBack: "No watermarks ever", winner: "bringBack" }
       ]
     },
@@ -2091,8 +2082,8 @@ export const compareData: Record<string, ComparePageData> = {
           description: "Deep Nostalgia was revolutionary in 2021, but AI moves fast. BringBack utilizes next-generation 2026 diffusion models that eliminate the 'uncanny valley' warping effects and generate ultra-realistic micro-expressions."
         },
         {
-          title: "Strict Privacy & Zero Retention",
-          description: "Genealogy sites build vast databases of user data. BringBack operates on a strict zero-retention policy. Your photos are deleted permanently within 30 minutes. We don't want your data, we just want to fix your photos."
+          title: "Strict Privacy & account-controlled media",
+          description: "Genealogy sites build vast databases of user data. Generated media stays in your account until you delete it. We do not use family photos to train general-purpose AI models. See Privacy Policy."
         }
       ]
     },
@@ -2101,7 +2092,7 @@ export const compareData: Record<string, ComparePageData> = {
       bringBackPoints: [
         "You just want to animate and restore old photos",
         "You prefer one-time payments over expensive annual subscriptions",
-        "You value strict data privacy and zero retention",
+        "You value account-controlled media and clear privacy policy",
         "You want the latest 2026 AI generation models, not 2021 tech",
         "You don't want to be forced into creating a family tree account"
       ],
@@ -2151,7 +2142,7 @@ export const compareData: Record<string, ComparePageData> = {
         "Subtle head tilts and warm gazes",
         "High-definition MP4 output formatting",
         "Fast processing (typically under 60 seconds)",
-        "Strict zero-retention privacy protocols"
+        "Strict account-controlled media privacy protocols"
       ]
     },
     uniqueAdvantage: {
@@ -2163,18 +2154,18 @@ export const compareData: Record<string, ComparePageData> = {
           text: "Choose from specific emotional presets like 'Gentle Smile', 'Subtle Blink + Tilt', or 'Warm Gaze' to match the personality of your ancestor."
         },
         {
-          heading: "Absolute Privacy & Zero Retention",
-          text: "Unlike free apps that use your family photos to train their AI models, we operate on a strict zero-retention policy. Photos are permanently deleted."
+          heading: "Absolute Privacy & account-controlled media",
+          text: "Unlike free apps that use your family photos to train their AI models, we operate on a BringBack processes photos to deliver the feature you request. Generated media stays in your account until you delete it. Memory Book keepsakes are stored only when you explicitly save them. We do not use family photos to train general-purpose AI models."
         }
       ]
     },
     trustAndMethodology: {
       title: "How we compared BringBack to MyHeritage",
-      content: "To provide an objective comparison, our team tested MyHeritage's Complete tier ($299/year) against BringBack's standard credit tier. We uploaded the same 50 historical photographs to both platforms. We evaluated the results based on animation realism, background distortion, privacy policies, and total cost of ownership. The data on this page reflects pricing and feature parity as of Q2 2026."
+      content: "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     faqs: [
       { q: "Is BringBack a subscription service?", a: "No. BringBack operates entirely on a pay-as-you-go credit system. You only pay for the specific photos you want to animate or restore." },
-      { q: "Does BringBack keep my photos or data?", a: "No. Unlike large database companies, we operate on a strict zero-retention policy. Photos are deleted in 30 minutes. We don't build family trees or store your personal history." },
+      { q: "Does BringBack keep my photos or data?", a: "No. Unlike large database companies, we operate on a BringBack processes photos to deliver the feature you request. Generated media stays in your account until you delete it. Memory Book keepsakes are stored only when you explicitly save them. We do not use family photos to train general-purpose AI models." },
       { q: "Can I animate multiple faces in one photo?", a: "Our AI is designed to focus on and animate one primary face in a photograph to ensure the highest quality and most natural result. We recommend cropping the photo to focus on the individual you'd like to animate." },
       { q: "Do I need to build a family tree to animate a photo?", a: "Not at all. You can simply upload a single photo from your desktop, animate it, and download the video file instantly without providing extensive genealogical data." },
       { q: "How realistic is the BringBack animation?", a: "Our AI generates highly realistic micro-expressions, blinks, and subtle head tilts. We focus on gentle, respectful motion to avoid the 'uncanny valley' effect." },
@@ -2211,11 +2202,7 @@ export const compareData: Record<string, ComparePageData> = {
       altPickTitle: "Choose PixReunion",
       altPickDesc: "Best for basic collages and simple photo arrangements without deep relighting."
     },
-    testimonials: [
-      { quote: "I tried a few other sites and everyone looked like floating heads. BringBack somehow matched the lighting so we all look like we were in the same studio.", author: "Nevila Seferi", avatar: "https://randomuser.me/api/portraits/women/24.jpg" },
-      { quote: "Merged photos of my parents who live 3000 miles apart. It brought tears to my mom's eyes. Unbelievable quality.", author: "Samiksha Kamble", avatar: "https://randomuser.me/api/portraits/women/42.jpg" },
-      { quote: "The contact shadows and depth scaling make all the difference. This doesn't look like Photoshop, it looks like a real photograph.", author: "Brandon Rofe", avatar: "https://randomuser.me/api/portraits/men/51.jpg" }
-    ],
+    testimonials: [],
     matrix: {
       description: "Merging separate photos into a realistic group portrait requires advanced AI relighting, not just simple background removal. Here is how BringBack's advanced diffusion models compare to basic collage tools like PixReunion.",
       rows: [
@@ -2223,7 +2210,7 @@ export const compareData: Record<string, ComparePageData> = {
         { feature: "Depth & Scale Correction", competitor: "Manual adjustments needed", bringBack: "Automatic Perspective AI", winner: "bringBack" },
         { feature: "Contact Shadows", competitor: "No (floating effect)", bringBack: "Yes (anchors subjects naturally)", winner: "bringBack" },
         { feature: "Max People per Photo", competitor: "Limited", bringBack: "Scalable layout engine", winner: "bringBack" },
-        { feature: "Data Privacy", competitor: "Standard terms", bringBack: "Zero retention (deleted in 30 mins)", winner: "bringBack" }
+        { feature: "Data Privacy", competitor: "Standard terms", bringBack: "Generated media stays until you delete it; no public model training on family photos", winner: "bringBack" }
       ]
     },
     aboutCompetitor: {
@@ -2341,7 +2328,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     trustAndMethodology: {
       title: "How we compared BringBack to PixReunion",
-      content: "To provide an objective comparison, our team tested PixReunion's premium output against BringBack's standard credit tier. We uploaded the same 20 sets of disparate family photos (mixing indoor, outdoor, vintage, and modern shots) to both platforms. We evaluated the results based on lighting consistency, shadow generation, proportional scaling, and print readiness. The data on this page reflects feature parity as of Q2 2026."
+      content: "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     faqs: [
       { q: "How do you make the lighting match from different photos?", a: "BringBack uses an AI relighting model. It strips the original lighting from your uploaded photos and applies a new, unified light source and directional shadows to everyone in the final group shot." },
@@ -2350,7 +2337,7 @@ export const compareData: Record<string, ComparePageData> = {
       { q: "Does BringBack fix blurry photos before merging them?", a: "Yes. Before the subjects are merged into the group portrait, our AI automatically runs a restoration and sharpening pass on each individual face." },
       { q: "How do you handle shadows and perspective?", a: "Unlike simple cut-and-paste collage makers, BringBack generates 'contact shadows' where subjects overlap, and automatically scales people based on their virtual depth in the scene." },
       { q: "Is BringBack a subscription?", a: "No. BringBack operates on a pay-as-you-go credit system. You buy a small credit pack, create your family portrait, and download it with no ongoing fees." },
-      { q: "Do you retain my family photos on your servers?", a: "No. We have a strict zero-retention privacy policy. After your portrait is generated, all input and output files are deleted within 30 minutes." },
+      { q: "Do you retain my family photos on your servers?", a: "No. We have a Photos are processed securely for the feature you request. Generated files stay in your account until you delete them. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for details." },
       { q: "Can I print the final family portrait?", a: "Absolutely. BringBack generates high-resolution, print-ready files that look great in physical frames or canvas prints." },
       { q: "Do I need to know how to use Photoshop?", a: "Not at all. BringBack is entirely automated. You simply upload the individual photos, and the AI handles the complex background removal, relighting, and merging." },
       { q: "Can I use BringBack on my phone?", a: "Yes, our web application works on both desktop and mobile browsers, allowing you to upload photos directly from your phone's camera roll." }
@@ -2382,11 +2369,7 @@ export const compareData: Record<string, ComparePageData> = {
       "altPickTitle": "Choose Kinpict",
       "altPickDesc": "Best for basic, casual family photo generation when perfect realism and advanced relighting aren't the primary goal."
     },
-    "testimonials":[
-      { "quote": "I tried to make a family portrait in Kinpict, but my dad looked like a cartoon. BringBack kept his real facial features and just blended him into the group perfectly.", "author": "Maria Gonzales", "avatar": "https://randomuser.me/api/portraits/women/33.jpg" },
-      { "quote": "The lighting difference is night and day. BringBack actually added realistic shadows so it didn't look like we were just photoshopped together on a fake background.", "author": "David Chen", "avatar": "https://randomuser.me/api/portraits/men/41.jpg" },
-      { "quote": "I wanted to add my late grandmother to my wedding photo. BringBack colorized her 1960s photo and matched it to the modern lighting seamlessly. Truly emotional.", "author": "Jessica Taylor", "avatar": "https://randomuser.me/api/portraits/women/62.jpg" }
-    ],
+    "testimonials": [],
     "matrix": {
       "description": "Merging separate faces into a realistic group portrait requires advanced AI relighting, not just basic face-swapping. Here is how BringBack's advanced diffusion models compare to Kinpict.",
       "rows":[
@@ -2394,7 +2377,7 @@ export const compareData: Record<string, ComparePageData> = {
         { "feature": "Skin Tone Normalization", "competitor": "Inconsistent across subjects", "bringBack": "Unified white balance and color grading", "winner": "bringBack" },
         { "feature": "Contact Shadows", "competitor": "Minimal (floating effect)", "bringBack": "Yes (anchors subjects naturally)", "winner": "bringBack" },
         { "feature": "Facial Realism", "competitor": "Can look 'plastic' or AI-generated", "bringBack": "Preserves authentic micro-expressions", "winner": "bringBack" },
-        { "feature": "Data Privacy", "competitor": "Standard cloud retention", "bringBack": "Zero retention (deleted in 30 mins)", "winner": "bringBack" }
+        { "feature": "Data Privacy", "competitor": "Standard cloud retention", "bringBack": "Generated media stays until you delete it; no public model training on family photos", "winner": "bringBack" }
       ]
     },
     "aboutCompetitor": {
@@ -2436,7 +2419,7 @@ export const compareData: Record<string, ComparePageData> = {
         },
         {
           "title": "Absolute Data Privacy",
-          "description": "Uploading photos of your children and family members requires trust. BringBack operates on a strict zero-retention policy. Once your portrait is generated and downloaded, all input and output files are permanently deleted within 30 minutes."
+          "description": "Uploading photos of your children and family members requires trust. Generated media stays in your account until you delete it. We do not use family photos to train general-purpose AI models. See Privacy Policy."
         }
       ]
     },
@@ -2513,7 +2496,7 @@ export const compareData: Record<string, ComparePageData> = {
     },
     "trustAndMethodology": {
       "title": "How we compared BringBack to Kinpict",
-      "content": "To provide an objective comparison, our team tested Kinpict's web platform against BringBack's AI Family Portrait generator. We uploaded the same 20 distinct sets of family photos, heavily focusing on 'difficult' scenarios: mixing harsh outdoor lighting with dim indoor lighting, and combining 1970s faded prints with 2024 smartphone selfies. We evaluated the results based on lighting harmonization, preservation of facial identity (avoiding the 'painted' AI look), and background integration. The data on this page reflects software capabilities as of Q2 2026."
+      "content": "This page compares product intent and publicly described pricing/features. It is not a fabricated multi-tool lab study with invented sample sizes. For how we evaluate BringBack restorations, see /restoration-benchmark and /methodology. Competitor pricing changes — verify on their site before buying."
     },
     "faqs":[
       { "q": "How to make a family portrait in Kinpict vs BringBack?", "a": "Both tools require you to upload individual photos. However, BringBack utilizes a more advanced global relighting engine, meaning it automatically strips the original mismatched lighting from your photos and applies a unified studio light so the final portrait looks real." },
@@ -2521,7 +2504,7 @@ export const compareData: Record<string, ComparePageData> = {
       { "q": "Why do faces sometimes look fake or 'plastic' in AI portraits?", "a": "Many basic AI tools redraw the face from scratch, losing the person's unique identity. BringBack prioritizes 'identity preservation,' ensuring micro-expressions and real facial geometry are maintained." },
       { "q": "How do you handle shadows and perspective?", "a": "Unlike simple collage makers, BringBack generates 'contact shadows' where subjects overlap, and automatically scales people based on their virtual depth in the scene so nobody has a disproportionately large head." },
       { "q": "Is BringBack a subscription service?", "a": "No. BringBack operates on a pay-as-you-go credit system. You buy a small credit pack, create your family portrait, and download it with no ongoing monthly fees." },
-      { "q": "Do you retain my family photos on your servers?", "a": "No. We have a strict zero-retention privacy policy. After your portrait is generated, all input and output files are permanently deleted within 30 minutes." },
+      { "q": "Do you retain my family photos on your servers?", "a": "No. We have a strict account-controlled media privacy policy. After your portrait is generated, all input and output files are permanently deleted according to our retention policy." },
       { "q": "Can I print the final family portrait?", "a": "Absolutely. BringBack generates high-resolution, print-ready files that look fantastic in physical frames or on canvas prints." },
       { "q": "Do I need to know how to use Photoshop?", "a": "Not at all. BringBack is entirely automated. You simply upload the individual photos, and the AI handles the complex background removal, relighting, and merging." },
       { "q": "Does BringBack fix blurry photos before merging them?", "a": "Yes. Before the subjects are merged into the group portrait, our AI automatically runs a restoration and sharpening pass on each individual face to ensure uniform quality." },

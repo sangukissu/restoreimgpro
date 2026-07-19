@@ -7,11 +7,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const NAV_LINKS: NavLink[] = [
-  { label: 'Features', href: '#benefits' },
-  { label: 'How it Works', href: '#how-it-works' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Showcase', href: '#showcase' },
-  { label: 'FAQ', href: '#faqs' },
+  { label: 'Features', href: '/features' },
+  { label: 'Restore', href: '/old-photo-restoration' },
+  { label: 'Compare', href: '/compare' },
+  { label: 'Examples', href: '/examples' },
+  { label: 'Pricing', href: '/pricing' },
 ];
 
 export const Navbar: React.FC = () => {
@@ -38,19 +38,19 @@ export const Navbar: React.FC = () => {
           {/* Desktop Navigation - Pill Shape */}
           <div className="hidden lg:flex items-center bg-brand-gray/50 backdrop-blur-sm px-2 py-2 rounded-full border border-black/6 shadow-xs relative z-20">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 className="px-5 py-2 text-sm font-medium text-gray-700 hover:text-black hover:bg-white rounded-full transition-all duration-200"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex">
-            <Link href="/dashboard">
+            <Link href="/dashboard/restore">
               <button className="group flex items-center gap-3 bg-brand-black text-white pl-5 pr-2 py-2 rounded-full hover:scale-105 transition-transform duration-200 shadow-lg">
                 <span className="text-sm font-medium">Restore Photo</span>
                 <div className="bg-brand-orange rounded-full p-2 text-white group-hover:bg-white group-hover:text-brand-orange transition-colors">
@@ -77,16 +77,16 @@ export const Navbar: React.FC = () => {
         {isMenuOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 mx-4 bg-brand-surface rounded-3xl shadow-2xl border border-gray-100 p-6 flex flex-col gap-4 lg:hidden origin-top animate-in fade-in slide-in-from-top-5 duration-200">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 className="text-lg font-medium text-gray-800 py-2 border-b border-gray-100 last:border-0"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
-            <Link href="/dashboard">
+            <Link href="/dashboard/restore">
               <button className="w-full flex items-center justify-center gap-2 bg-brand-orange text-white py-4 rounded-full font-bold mt-2">
                 Restore Photo <Sparkles size={18} />
               </button>

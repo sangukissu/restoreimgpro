@@ -18,9 +18,11 @@ import { CTA } from '@/components/landing/CTA';
 
 
 export const metadata: Metadata = {
-  title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
-  description: "BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.",
-  keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration, digital photo frames, photo framing, custom photo frames",
+  title: "Restore, reunite, and preserve your family photos | BringBack",
+  description:
+    "Repair old photos, reunite family members in one picture, add subtle motion, and keep stories in a private keepsake. Pay once — no subscription.",
+  keywords:
+    "family photo restoration, restore old photos, AI family portrait, add person to photo, family memory book, photo animation",
   alternates: {
     canonical: "https://bringback.pro/",
   },
@@ -30,35 +32,32 @@ const homePageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/#webapp',
-  name: 'Restore, Colorize & Animate Old damaged Photos Online | BringBack AI',
-  description: 'BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.',
+  name: 'BringBack — Family Photo Preservation',
+  description:
+    'Restore damaged family photos, reunite people into one portrait, add subtle motion, and preserve stories in a private Memory Book.',
   url: 'https://bringback.pro/',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
   offers: {
     '@type': 'Offer',
-    name: 'BringBack Restoration, Animation & Framing Plans',
+    name: 'BringBack Restoration Starter',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
     price: '4.99',
+    description: '4 credits for restorations and reunions. Animation requires 10 credits.',
     eligibleRegion: {
       '@type': 'Place',
       name: 'Worldwide'
     }
   },
   featureList: [
-    'AI-powered photo restoration',
-    'Repair damaged or torn photos',
-    'Enhance old and faded images',
-    'Automatic color restoration',
-    'Side-by-side before/after preview',
-    'Bring photos to life with AI animations',
-    'Animate photos with smiling and waving gestures',
-    'Create beautiful digital photo frames',
-    'Customizable frame styles and colors',
-    'Add personalized captions to framed photos',
-    'Fast processing – results under 30 seconds',
-    'High-quality output for download and sharing'
+    'Original-first photo restoration (restore-only or restore + colorize)',
+    'AI family portrait from separate photos',
+    'Add or remove a person in a family photo',
+    'Subtle photo animation',
+    'Private Family Memory Book',
+    'Side-by-side comparison before download',
+    'Pay-once credit packs — no subscription'
   ],
   screenshot: 'https://bringback.pro/screenshot.png'
 }
@@ -105,7 +104,7 @@ const homeFAQPageJsonLd = {
       name: 'How much do photo restoration and animation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Photo restoration: We offer 4 high-quality photo restorations for just $4.99 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete.'
+        text: 'Restoration Starter is $4.99 for 4 credits (up to 4 restorations). Value Pack is $9.99 for 20 credits. Family Pack is $21.99 for 60 credits and Memory Book. Animation and hug video cost 10 credits each — the Starter pack cannot fund an animation. Credits never expire.'
       }
     },
     {
@@ -113,7 +112,7 @@ const homeFAQPageJsonLd = {
       name: 'Is my personal data and photos safe?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is auotmatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you.'
+        text: 'Photos are processed securely for the feature you request. Generated files stay in your account until you delete them. Memory Book keepsakes are stored only when you explicitly save them. We do not use your family photos to train general-purpose AI models. See the Privacy Policy for processors and retention.'
       }
     },
     {
@@ -185,7 +184,7 @@ const homeFAQPageJsonLd = {
       name: 'Are my uploaded photos kept private?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Photos are processed securely, and uploaded photos are automatically deleted from our servers within 30 minutes and generated media is deleted after 7 days for privacy. We never use your personal photos for training or any other purpose.'
+        text: 'Yes. Processing is for the feature you request. Generated media remains available in My Media until you delete it. We do not use your family photos to train general-purpose AI models. Full details are in our Privacy Policy.'
       }
     },
     {

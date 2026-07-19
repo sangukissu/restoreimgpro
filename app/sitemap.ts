@@ -1,153 +1,82 @@
-import { MetadataRoute } from 'next'
-import { getAllPostSlugs } from '@/lib/wordpress'
-import { featuresData } from '@/lib/featuresdata'
-import { countryPages } from '@/lib/countrypages'
-import { appData } from '@/lib/appdata'
-import { compareData } from '@/lib/comparedata'
+import { MetadataRoute } from "next"
+import { getAllPostSlugs } from "@/lib/wordpress"
+import { listComparePages } from "@/lib/comparedata"
 
+const BASE = "https://bringback.pro"
+
+/** Stable lastModified so every crawl does not look like a full-site rewrite. */
+const SITE_LAST_MODIFIED = new Date("2026-07-19T00:00:00.000Z")
+
+function entry(
+  path: string,
+  priority: number,
+  changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"] = "weekly"
+): MetadataRoute.Sitemap[0] {
+  return {
+    url: path === "/" ? BASE : `${BASE}${path}`,
+    lastModified: SITE_LAST_MODIFIED,
+    changeFrequency,
+    priority,
+  }
+}
+
+/**
+ * Indexable product, guide, and comparison pages.
+ * Login, referral, and orphaned feature/app keyword URLs stay out.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://bringback.pro'
-  
-  // Static pages
-  const staticPages = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/pricing`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/login`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/terms`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/refunds`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/denoise-photos`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/colorize-photos`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/examples`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/ai-photo-animation`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/ai-family-portrait`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
+  const comparePages = listComparePages()
 
-    {
-      url: `${baseUrl}/old-photo-restoration`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/referral`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
+  const staticPages: MetadataRoute.Sitemap = [
+    entry("/", 1, "daily"),
+    entry("/old-photo-restoration", 0.95),
+    entry("/ai-photo-animation", 0.9),
+    entry("/ai-family-portrait", 0.9),
+    entry("/add-person-to-photo", 0.85),
+    entry("/remove-person-from-photo", 0.85),
+    entry("/family-memory-book", 0.85),
+    entry("/colorize-photos", 0.75),
+    entry("/denoise-photos", 0.7),
+    entry("/pricing", 0.85),
+    entry("/features", 0.8),
+    entry("/examples", 0.8),
+    entry("/compare", 0.8),
+    entry("/guides", 0.75),
+    entry("/guides/scan-family-photos-safely", 0.65),
+    entry("/guides/restore-only-vs-colorize", 0.65),
+    entry("/guides/why-ai-changes-faces", 0.65),
+    entry("/guides/choose-source-photos-for-likeness", 0.6),
+    entry("/guides/subtle-vs-exaggerated-animation", 0.6),
+    entry("/guides/family-photo-metadata-checklist", 0.6),
+    entry("/restoration-benchmark", 0.7),
+    entry("/methodology", 0.55, "monthly"),
+    entry("/about", 0.5, "monthly"),
+    entry("/editorial-policy", 0.4, "monthly"),
+    entry("/blog", 0.7, "daily"),
+    entry("/privacy", 0.3, "monthly"),
+    entry("/terms", 0.3, "monthly"),
+    entry("/refunds", 0.3, "monthly"),
+    // All comparison tools (hub + every alternative page)
+    ...comparePages.map((p) => entry(p.href, 0.6, "monthly")),
   ]
 
-  // Dynamic blog pages
   let blogPages: MetadataRoute.Sitemap = []
-  
+
   try {
     const slugs = await getAllPostSlugs()
-    // Exclude slugs containing fragments/queries to avoid emitting indexable
-    // fragment-style URLs that bloat the index and dilute sitewide authority.
     blogPages = slugs
-      .filter((slug) => !slug.includes('#') && !slug.includes('?') && slug.trim() === slug)
+      .filter((slug) => !slug.includes("#") && !slug.includes("?") && slug.trim() === slug)
+      // Exclude known empty/deleted WP stubs if they reappear in the API
+      .filter((slug) => slug.length > 2)
       .map((slug) => ({
-        url: `${baseUrl}/blog/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.6,
+        url: `${BASE}/blog/${slug}`,
+        lastModified: SITE_LAST_MODIFIED,
+        changeFrequency: "weekly" as const,
+        priority: 0.55,
       }))
   } catch (error) {
-    console.error('Error generating blog sitemap:', error)
-    // Continue without blog pages if WordPress is unavailable
+    console.error("Error generating blog sitemap:", error)
   }
 
-  // Feature pages
-  const featurePages: MetadataRoute.Sitemap = Object.values(featuresData).map((page) => ({
-    url: `${baseUrl}${page.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
-
-  // Country specific pages
-  const countryPagesSitemap: MetadataRoute.Sitemap = Object.values(countryPages).map((page) => ({
-    url: `${baseUrl}${page.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
-
-  // App specific pages
-  const appPages: MetadataRoute.Sitemap = Object.values(appData).map((page) => ({
-    url: `${baseUrl}${page.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
-  }))
-
-  // Comparison pages
-  const comparePages: MetadataRoute.Sitemap = Object.values(compareData).map((page) => ({
-    url: `${baseUrl}/compare/${page.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.7,
-  }))
-
-  return [...staticPages, ...blogPages, ...featurePages, ...countryPagesSitemap, ...appPages, ...comparePages]
+  return [...staticPages, ...blogPages]
 }

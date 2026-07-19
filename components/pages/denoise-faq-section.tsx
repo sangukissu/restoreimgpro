@@ -11,7 +11,7 @@ interface FAQItem {
 const FAQS: FAQItem[] = [
   {
     question: "How does AI photo denoising actually work?",
-    answer: "Our AI analyzes the patterns of noise in your photo and distinguishes between unwanted grain and important image details. It uses advanced algorithms trained on millions of images to selectively remove noise while preserving textures, edges, and fine details that matter to your photo's quality."
+    answer: "Our AI analyzes the patterns of noise in your photo and distinguishes between unwanted grain and important image details."
   },
   {
     question: "What types of noise can BringBack remove?",
@@ -35,7 +35,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is my data safe during processing?",
-    answer: "Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is auotmatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you."
+    answer: "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
   },
   {
     question: "What if the results aren't what I expected?",
@@ -59,7 +59,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is my uploaded photo secure?",
-    answer: "Absolutely—photos are processed securely in the cloud and can be deleted from our servers after download to ensure privacy."
+    answer: "Photos are processed securely. Generated media stays in your account until you delete it from My Media. See our Privacy Policy."
   },
   {
     question: "Does BringBack preserve fine details when denoising?",

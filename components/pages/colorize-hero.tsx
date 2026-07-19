@@ -77,35 +77,11 @@ export default function ColorizeHero() {
 
                 {/* Social Proof - Avatar Stack */}
                 <div className="mt-16 flex flex-col items-center gap-4">
-                    <div className="flex items-center relative h-12 w-[140px]">
-                        {[1, 2, 3].map((i, index) => (
-                            <div
-                                key={i}
-                                className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
-                    ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
-                    ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
-                    ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
-                  `}
-                            >
-                                <img
-                                    src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
-                                    alt="User"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                        ))}
-                        <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-                            2.8K+
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col items-center">
-                        <div className="flex gap-1 mb-1">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
-                            ))}
-                        </div>
-                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Trusted by 2.8K+ Families</span>
+                    <div className="flex flex-col items-center gap-2 max-w-md text-center">
+                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Optional colorize · not forced on restore</span>
+                        <p className="text-sm text-gray-500 font-medium">
+                            AI color is an interpretation, not historical proof. Prefer restore-only when black-and-white is the memory.
+                        </p>
                     </div>
                 </div>
 

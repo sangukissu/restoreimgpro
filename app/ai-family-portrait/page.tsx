@@ -11,18 +11,19 @@ import { CTA } from '@/components/landing/CTA';
 import FamilyPortraitFAQ from "@/components/ai-family-portrait/faq"
 import AITechnologySection from "@/components/ai-family-portrait/AITechnologySection"
 import { Pricing } from "@/components/landing/Pricing"
+import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 
 export const metadata: Metadata = {
-  title: "AI Family Portrait Generator | Separate Photos into One Family Photo",
+  title: "AI Family Portrait — Bring separate photos into one portrait | BringBack",
   description:
-    "Create a family photo from individual photos. BringBack AI turns separate portraits into one realistic, studio-quality family portrait for framing, gifts, and memorial keepsakes.",
+    "Bring separate family photos into one natural portrait. 2 credits. Clear front-facing references work best. Always compare likeness before download.",
   alternates: {
     canonical: "/ai-family-portrait",
   },
   openGraph: {
-    title: "AI Family Portrait Generator | Separate Photos into One Family Photo",
+    title: "AI Family Portrait | BringBack",
     description:
-      "Create a family photo from individual photos. BringBack AI turns separate portraits into one realistic, studio-quality family portrait.",
+      "Bring separate family photos into one natural portrait. 2 credits per generation.",
     type: "website",
     url: "https://bringback.pro/ai-family-portrait",
     images: [
@@ -39,10 +40,10 @@ export const metadata: Metadata = {
 const familyPortraitWebAppJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  '@id': 'https://bringback.pro/#ai-family-portrait-webapp',
-  name: 'BringBack AI Family Portrait Generator',
+  '@id': 'https://bringback.pro/ai-family-portrait#webapp',
+  name: 'BringBack AI Family Portrait',
   description:
-    'Create a studio-quality AI family portrait from separate individual photos. Combine up to 4 people, choose canvas ratios and studio backdrops, and preserve recognizable facial likeness.',
+    'Bring separate family photos into one natural portrait. 2 credits. Clear front-facing references work best; always compare likeness.',
   url: 'https://bringback.pro/ai-family-portrait',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
@@ -187,7 +188,7 @@ const familyPortraitFAQJsonLd = {
       name: 'Is BringBack a free family portrait creator?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'BringBack is a premium AI family photo generator. It costs 2 credits because it focuses on realistic likeness, studio composition, high-resolution output, and private account storage rather than quick collage-style merging.',
+        text: 'BringBack is pay-once, not free unlimited. Family portrait costs 2 credits. The $4.99 Starter pack has 4 credits (up to two portraits). Credits never expire.',
       },
     },
   ],
@@ -209,6 +210,7 @@ export default function Page() {
       <FamilyPortraitUseCases />
       <AITechnologySection />
       <FamilyPortraitFAQ />
+      <ProductCrossSell excludeHref="/ai-family-portrait" />
       <CTA />
       <Footer />
     </div>

@@ -14,48 +14,74 @@ import { Comparison } from '@/components/landing/Comparison';
 import { FAQ } from '@/components/old-photo-restoration/FAQ';
 import { Footer } from '@/components/landing/Footer';
 import { CTA } from '@/components/old-photo-restoration/CTA';
+import { RestorationGuide } from '@/components/old-photo-restoration/RestorationGuide';
+import { ProductCrossSell } from '@/components/seo/product-cross-sell';
 
 
 export const metadata: Metadata = {
-    title: "Old Photo Restoration | Restore old, faded, and damaged photos online",
-    description: "BringBack AI restores old, faded, and damaged photos to perfection.",
-    keywords: "photo restoration, AI photo repair, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, animate photos, bring photos to life, digital photo restoration, digital photo frames, photo framing, custom photo frames",
-
+    title: "Old Photo Restoration | Repair damage while keeping original character",
+    description:
+        "Restore scratched, torn, faded, and water-damaged family photos. Choose restore-only or restore and colorize. 1 credit per restoration. Compare results before you download.",
+    keywords:
+        "old photo restoration, restore damaged photos, repair scratched photos, restore faded photos, AI photo restoration, keep black and white photo",
+    alternates: {
+        canonical: "/old-photo-restoration",
+    },
+    openGraph: {
+        title: "Old Photo Restoration | BringBack",
+        description:
+            "Repair old family photos while keeping their original character. Restore-only or restore and colorize.",
+        url: "https://bringback.pro/old-photo-restoration",
+        siteName: "BringBack",
+        type: "website",
+        images: [
+            {
+                url: "/og-image.png",
+                width: 1200,
+                height: 630,
+                alt: "Before and after old photo restoration with BringBack",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Old Photo Restoration | BringBack",
+        description:
+            "Repair old family photos while keeping their original character.",
+        images: ["/og-image.png"],
+    },
+    robots: { index: true, follow: true },
 }
 
 const homePageJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    '@id': 'https://bringback.pro/#webapp',
-    name: 'Restore old, faded, and damaged photos online | BringBack AI',
-    description: 'BringBack AI restores old, faded, and damaged photos to perfection. Our tools repair color, fix scratches and tears, and bring your portraits to life with realistic animation.',
-    url: 'https://bringback.pro/',
+    '@id': 'https://bringback.pro/old-photo-restoration#webapp',
+    name: 'BringBack Old Photo Restoration',
+    description:
+        'Repair scratched, torn, faded, and water-damaged family photos. Choose restore-only to keep black-and-white or sepia character, or restore and colorize.',
+    url: 'https://bringback.pro/old-photo-restoration',
     applicationCategory: 'PhotoEditingApplication',
     operatingSystem: 'Web',
     offers: {
         '@type': 'Offer',
-        name: 'BringBack Restoration, Animation & Family Photo Plans',
+        name: 'BringBack Restoration Starter',
         url: 'https://bringback.pro/pricing',
         priceCurrency: 'USD',
         price: '4.99',
+        description: '4 credits — up to 4 restorations. One credit per restoration.',
         eligibleRegion: {
             '@type': 'Place',
             name: 'Worldwide'
         }
     },
     featureList: [
-        'AI-powered photo restoration',
-        'Repair damaged or torn photos',
-        'Enhance old and faded images',
-        'Automatic color restoration',
-        'Side-by-side before/after preview',
-        'Bring photos to life with AI animations',
-        'Animate photos with smiling and waving gestures',
-        'Create beautiful digital photo frames',
-        'Customizable frame styles and colors',
-        'Add personalized captions to framed photos',
-        'Fast processing – results under 30 seconds',
-        'High-quality output for download and sharing'
+        'Restore-only mode to keep original black-and-white or sepia look',
+        'Optional restore and colorize',
+        'Scratch, tear, fade, and water-damage repair',
+        'Side-by-side before/after comparison',
+        '1 credit per restoration',
+        'Pay once — no subscription required'
     ],
     screenshot: 'https://bringback.pro/screenshot.png'
 }
@@ -102,7 +128,23 @@ const homeFAQPageJsonLd = {
             name: 'Is it safe to upload my private family photos?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Your privacy is our priority. We use advanced encryption for all uploads. Furthermore, BringBack automatically deletes your images from our servers after a short period (usually 24 hours) to ensure your personal memories remain private and are not used for anything else.'
+                text: 'Photos are processed securely for restoration. Generated files stay in your account until you delete them from My Media. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for processors and retention details.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Will AI change the face of someone I remember?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'When facial detail is missing, damaged, or very low resolution, AI may reconstruct plausible features rather than recover the exact original face. Always use the side-by-side comparison before you download or print.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Can I restore without colorizing?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes. Use restore-only to keep the original black-and-white, sepia, or color character. Colorize only when you explicitly want color — AI color is an interpretation, not historical proof.'
             }
         },
         {
@@ -193,6 +235,7 @@ export default function Page() {
             <main>
                 <Hero />
                 <HowItWorks />
+                <RestorationGuide />
                 <Showcase />
                 <PhotoAnimation />
                 <Benefits />
@@ -200,6 +243,7 @@ export default function Page() {
                 <Comparison />
                 <Clients />
                 <FAQ />
+                <ProductCrossSell excludeHref="/old-photo-restoration" />
                 <CTA />
             </main>
 

@@ -11,11 +11,15 @@ export const metadata: Metadata = {
   description:
     "Learn about BringBack's 30-day money-back guarantee and refund process for photo restoration services.",
   robots: { index: true, follow: true },
+  alternates: {
+    canonical: "/refunds",
+  },
   openGraph: {
     title: "Refund Policy - BringBack | AI Photo Restoration",
     description:
       "Learn about BringBack's 30-day money-back guarantee and refund process for photo restoration services.",
     type: "website",
+    url: "https://bringback.pro/refunds",
     siteName: "BringBack",
     images: [
       {
@@ -117,6 +121,30 @@ export default function RefundsPage() {
                       At BringBack, we believe in the quality of our AI photo restoration service. Every photo restoration
                       is backed by our 30-day money-back guarantee.
                     </p>
+                  </div>
+                </section>
+
+                <section>
+                  <h2 className="text-2xl font-bold text-brand-black mb-4">Failed generations (credits)</h2>
+                  <div className="text-gray-600 space-y-4">
+                    <p>
+                      When a generation fails in a way the system can detect (for example restoration pipeline failure
+                      or a failed nostalgic hug video job after credits were reserved), we refund the feature credits
+                      to your account automatically so you can try again.
+                    </p>
+                    <p>
+                      If a job shows as failed but credits were not returned, email{" "}
+                      <a href="mailto:support@bringback.pro" className="underline font-semibold text-brand-black">
+                        support@bringback.pro
+                      </a>{" "}
+                      with the approximate time and feature used.
+                    </p>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li>Photo restoration: 1 credit (auto-refund path on detected failure)</li>
+                      <li>Photo animation: 10 credits</li>
+                      <li>Family portrait / add / remove person: 2 credits</li>
+                      <li>Nostalgic hug video: 19 credits (refunded on provider ERROR after start)</li>
+                    </ul>
                   </div>
                 </section>
 

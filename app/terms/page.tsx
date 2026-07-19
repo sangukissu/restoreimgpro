@@ -32,11 +32,7 @@ export default function TermsPage() {
               Please read these terms carefully before using BringBack's photo restoration service.
             </p>
             <div className="mt-4 text-sm text-gray-500">
-              Last updated: {new Date().toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+              Last updated: July 19, 2026
             </div>
           </div>
 
@@ -93,7 +89,7 @@ export default function TermsPage() {
                       <span>💳</span> Simple Pricing
                     </h3>
                     <p className="text-green-800">
-                      $4.99 for 4 generation credits (Starter pack). Pro plan available at $9.99 for additional credits and for best value $21.99 Family plan. One-time payments, no subscriptions, no hidden fees.
+                      Restoration Starter: $4.99 for 4 credits. Value Pack: $9.99 for 20 credits. Family Pack: $21.99 for 60 credits (includes Memory Book access). One-time payments, no subscriptions. Feature costs: restore 1 credit; family portrait / add / remove person 2 credits; animation and hug video 10 credits each.
                     </p>
                   </div>
                   <div className="text-gray-600 space-y-4">

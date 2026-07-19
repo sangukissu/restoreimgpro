@@ -88,13 +88,13 @@ export const appData: Record<string, AppPageData> = {
         primary: "Bring Your Loved Ones",
         secondary: "Back to Life Instantly"
       },
-      subheadline: "Instantly animate faces, restore faded colors, and bring your loved ones back to life. App downloads are a thing of the past—use our powerful AI directly from your mobile browser.",
+      subheadline: "Instantly animate faces, restore faded colors, and bring your loved ones back to life. App downloads are a thing of the pastâ€”use our powerful AI directly from your mobile browser.",
       ctaText: "Animate Your First Photo",
-      trustBadge: "Used by 100k+ Users",
+      trustBadge: "Pay once — no subscription",
     },
     appStoreFriction: {
       heading: "Why search the app store for a \"BacktoLife app\"?",
-      body: "You want to see your grandparents smile again, not wait for a 200MB download to finish. Our tool is engineered as a Progressive Web App (PWA). This means you get the full power of a dedicated mobile application right in your Safari or Chrome browser. No storage space wasted, no hidden subscription traps from app stores—just pure, instant photo restoration."
+      body: "You want to see your grandparents smile again, not wait for a 200MB download to finish. Our tool is engineered as a Progressive Web App (PWA). This means you get the full power of a dedicated mobile application right in your Safari or Chrome browser. No storage space wasted, no hidden subscription traps from app storesâ€”just pure, instant photo restoration."
     },
     qualityAnalysis: {
       heading: "How the Magic Happens",
@@ -197,7 +197,7 @@ export const appData: Record<string, AppPageData> = {
       },
       {
         question: "Does it work on iPhone and Android?",
-        answer: "Absolutely. Because it's a web app, it works perfectly on any device with a browser—iPhone, iPad, Android phones, tablets, and desktop computers."
+        answer: "Absolutely. Because it's a web app, it works perfectly on any device with a browserâ€”iPhone, iPad, Android phones, tablets, and desktop computers."
       }
     ]
   },
@@ -222,9 +222,9 @@ export const appData: Record<string, AppPageData> = {
         primary: "Make Your Pictures",
         secondary: "Move and Smile"
       },
-      subheadline: "Turn static portraits into heartwarming animations. Our AI adds natural smiles, blinks, and head movements to any photo in seconds—no download required.",
+      subheadline: "Turn static portraits into heartwarming animations. Our AI adds natural smiles, blinks, and head movements to any photo in secondsâ€”no download required.",
       ctaText: "Make a Photo Smile",
-      trustBadge: "Viral on TikTok",
+      trustBadge: "Pay once — no subscription",
     },
     appStoreFriction: {
       heading: "Why install another heavy app?",

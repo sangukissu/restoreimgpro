@@ -218,7 +218,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       },
       {
         question: "Is it safe to upload photos of my family?",
-        answer: "Yes. Your photos remain yours. Uploaded files are automatically and permanently deleted from our servers within 30 minutes of generating your portrait.",
+        answer: "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy.",
       },
     ]
   },
@@ -354,7 +354,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       },
       {
         question: "Are my memorial photos kept private?",
-        answer: "Absolutely. We treat all uploads with strict privacy. Your photos are automatically and permanently deleted from our servers within 30 minutes.",
+        answer: "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy.",
       },
     ]
   },
@@ -516,7 +516,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       },
       {
         question: "Is this safe?",
-        answer: "Yes. Your privacy is our priority. All uploaded and generated images are deleted permanently within 30 minutes.",
+        answer: "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy.",
       },
     ]
   },
@@ -652,7 +652,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       },
       {
         question: "Is my data private?",
-        answer: "Yes, photos are deleted automatically after 30 minutes. We respect your family's privacy.",
+        answer: "Yes, photos are deleted automatically when you delete them or per our retention policy. We respect your family's privacy.",
       },
     ]
   },
@@ -914,7 +914,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       },
       {
         question: "What is the maximum output resolution?",
-        answer: "We support up to 8K resolution export, perfect for large posters or digital displays.",
+        answer: "We support up to high-resolution export, perfect for large posters or digital displays.",
       },
       {
         question: "Can I save my layout for later?",
@@ -1049,7 +1049,7 @@ export const featuresData: Record<string, FeaturePageData> = {
       },
       {
         question: "Is my data safe?",
-        answer: "Yes, all images are deleted after 30 minutes.",
+        answer: "Yes, all images are deleted when you delete them or per our retention policy.",
       },
     ]
   },

@@ -32,7 +32,7 @@ export default function ColorizeFeaturesSection() {
     },
     {
       title: "Privacy Protection",
-      description: "Uploaded Photos processed securely and deleted in 30 minutes. Your family memories stay private.",
+      description: "Generated media stays in your account until you delete it. We do not use family photos to train general-purpose AI models.",
       icon: <Lock className="h-6 w-6" />,
     },
   ]

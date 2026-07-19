@@ -2,17 +2,29 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Check, X, ArrowRight, Zap, PlayCircle, UploadCloud, Download, CheckCircle, Star, Users, ChevronDown, ChevronUp } from 'lucide-react';
-import { ComparePageData } from '@/lib/comparedata';
+import { Check, X, ArrowRight, Zap, PlayCircle, UploadCloud, Download, CheckCircle, Users, ChevronDown, ChevronUp } from 'lucide-react';
+import { ComparePageData, listComparePages } from '@/lib/comparedata';
 import { Compare } from "@/components/ui/compare";
 import { useState } from 'react';
+import { SiteBreadcrumb } from '@/components/seo/site-breadcrumb';
 
 export default function CompareLayout({ page }: { page: ComparePageData }) {
   
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const related = listComparePages()
+    .filter((p) => p.slug !== page.slug)
+    .sort((a, b) => a.competitor.localeCompare(b.competitor));
 
   return (
     <div className="w-full">
+      <div className="max-w-[1320px] mx-auto px-4 pt-4">
+        <SiteBreadcrumb
+          items={[
+            { name: "Compare", href: "/compare" },
+            { name: `vs ${page.competitor}` },
+          ]}
+        />
+      </div>
       {/* FULL-WIDTH DYNAMIC HERO SECTION */}
       <section className="border-b border-gray-300 overflow-hidden relative py-12">
         <div className="max-w-[1320px] mx-auto px-4 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
@@ -170,23 +182,39 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
                 </div>
               </div>
 
-              {/* Testimonials */}
+              {/* Trust notes — no invented testimonials or ratings */}
               <div className="p-4 md:p-8 border-b border-gray-100">
-                <div className="flex items-center gap-2 mb-6">
-                   <div className="flex text-[#FF4D00]"><Star fill="currentColor" size={18}/><Star fill="currentColor" size={18}/><Star fill="currentColor" size={18}/><Star fill="currentColor" size={18}/><Star fill="currentColor" size={18}/></div>
-                   <span className="font-bold text-gray-900 ml-2">Loved by 2.8K+ people</span>
-                </div>
+                <h3 className="font-bold text-gray-900 mb-4">How we compare honestly</h3>
                 <div className="grid md:grid-cols-3 gap-6">
-                   {page.testimonials.map((test, i) => (
-                      <div key={i} className="flex flex-col gap-4">
-                         <p className="text-gray-600 font-medium text-sm italic">"{test.quote}"</p>
-                         <div className="flex items-center gap-3">
-                            <img src={test.avatar} alt={test.author} className="w-10 h-10 rounded-full bg-gray-200" />
-                            <span className="font-bold text-sm text-gray-900">{test.author}</span>
-                         </div>
-                      </div>
-                   ))}
+                   <div className="flex flex-col gap-2">
+                      <p className="text-gray-700 font-semibold text-sm">Pay once</p>
+                      <p className="text-gray-600 font-medium text-sm">Credit packs without a forced subscription. Credits never expire.</p>
+                   </div>
+                   <div className="flex flex-col gap-2">
+                      <p className="text-gray-700 font-semibold text-sm">Compare before download</p>
+                      <p className="text-gray-600 font-medium text-sm">Side-by-side view keeps the original and edit clearly distinguished.</p>
+                   </div>
+                   <div className="flex flex-col gap-2">
+                      <p className="text-gray-700 font-semibold text-sm">Method, not invented stars</p>
+                      <p className="text-gray-600 font-medium text-sm">
+                        No fabricated ratings here. See{" "}
+                        <a href="/restoration-benchmark" className="underline font-semibold text-gray-900">
+                          restoration benchmark
+                        </a>{" "}
+                        and Trustpilot for third-party reviews.
+                      </p>
+                   </div>
                 </div>
+                {page.testimonials?.length > 0 && (
+                  <div className="grid md:grid-cols-3 gap-6 mt-8 pt-6 border-t border-gray-100">
+                    {page.testimonials.map((test, i) => (
+                      <div key={i} className="flex flex-col gap-3">
+                        <p className="text-gray-600 font-medium text-sm italic">&ldquo;{test.quote}&rdquo;</p>
+                        <span className="font-bold text-sm text-gray-900">{test.author}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* CTA Bar */}
@@ -452,7 +480,39 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
             </div>
           </section>
 
-    
+          {/* More comparisons hub links */}
+          <section id="more-comparisons" className="mt-16 scroll-mt-28 border-t border-gray-200 pt-12">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+              <div>
+                <h2 className="text-3xl font-extrabold text-[#111111]">More comparisons</h2>
+                <p className="mt-2 text-gray-600 font-medium">
+                  Explore every BringBack alternative page.
+                </p>
+              </div>
+              <Link
+                href="/compare"
+                className="inline-flex items-center gap-2 font-bold text-[#FF4D00] hover:underline"
+              >
+                Full comparison hub <ArrowRight size={16} />
+              </Link>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {related.map((p) => (
+                <Link
+                  key={p.slug}
+                  href={p.href}
+                  className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-bold text-gray-800 hover:border-[#FF4D00]/40 hover:text-[#FF4D00] transition-colors"
+                >
+                  vs {p.competitor}
+                </Link>
+              ))}
+            </div>
+            {related.length === 0 && (
+              <Link href="/compare" className="text-sm font-bold text-[#FF4D00]">
+                View all comparisons
+              </Link>
+            )}
+          </section>
 
         </div>
       </div>

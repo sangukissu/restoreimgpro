@@ -19,7 +19,7 @@ export function AIAnimationPrivacy() {
                 Your Memories Stay Private
                 </h2>
                 <h3 className="text-xl text-gray-300 leading-relaxed mb-8">
-                    We do not store your photos. Unlike other apps that use your data for training, BringBack operates with strict privacy standards.
+                    Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models.
                 </h3>
             </div>
 
@@ -29,8 +29,8 @@ export function AIAnimationPrivacy() {
                         <EyeOff className="w-6 h-6" />
                     </div>
                     <div>
-                        <h4 className="text-lg font-bold text-white mb-1">Auto-Deletion</h4>
-                        <p className="text-gray-400 text-sm">All uploaded photos and generated animations are permanently deleted from our servers after 24 hours.</p>
+                        <h4 className="text-lg font-bold text-white mb-1">You control media</h4>
+                        <p className="text-gray-400 text-sm">Animations remain in My Media so you can re-download. Delete anytime from your dashboard.</p>
                     </div>
                 </div>
 
@@ -39,8 +39,8 @@ export function AIAnimationPrivacy() {
                         <Lock className="w-6 h-6" />
                     </div>
                     <div>
-                        <h4 className="text-lg font-bold text-white mb-1">No Training</h4>
-                        <p className="text-gray-400 text-sm">We do not use your personal family photos to train our public AI models.</p>
+                        <h4 className="text-lg font-bold text-white mb-1">No public model training</h4>
+                        <p className="text-gray-400 text-sm">We do not use your personal family photos to train general-purpose AI models for public release.</p>
                     </div>
                 </div>
 
@@ -49,8 +49,8 @@ export function AIAnimationPrivacy() {
                         <UserCheck className="w-6 h-6" />
                     </div>
                     <div>
-                        <h4 className="text-lg font-bold text-white mb-1">You Own It</h4>
-                        <p className="text-gray-400 text-sm">You retain 100% commercial rights to your generated videos.</p>
+                        <h4 className="text-lg font-bold text-white mb-1">Clear credit cost</h4>
+                        <p className="text-gray-400 text-sm">Animation costs 10 credits. The 4-credit Restoration Starter cannot fund an animation alone.</p>
                     </div>
                 </div>
             </div>

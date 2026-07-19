@@ -81,7 +81,7 @@ const colorizeFAQPageJsonLd = {
       "name": "How does AI photo colorization actually work?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Our AI analyzes the grayscale patterns, textures, and context in your black and white photo to intelligently predict realistic colors. It uses deep learning models trained on millions of historical and colorized images to understand how objects, skin tones, clothing, and environments should naturally appear in color."
+        "text": "Our AI analyzes the grayscale patterns, textures, and context in your black and white photo to intelligently predict realistic colors. "
       }
     },
     {
@@ -129,7 +129,7 @@ const colorizeFAQPageJsonLd = {
       "name": "Is my data safe during colorization?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is auotmatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you."
+        "text": "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
       }
     },
     {

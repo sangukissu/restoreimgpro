@@ -28,11 +28,15 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "How much do photo restoration and animation cost?",
-    answer: "Photo restoration: We offer 4 generation credits for just $4.99 - no subscription required. Photo animation: Each animation costs 10 credits (available through our pricing plans: Pro $9.99). Both services deliver professional-grade results in seconds, compared to traditional services that charge $50-200 per photo and take weeks to complete."
+    answer: "Restoration Starter is $4.99 for 4 credits (up to 4 restorations). Value Pack is $9.99 for 20 credits. Family Pack is $21.99 for 60 credits and Memory Book access. Restore costs 1 credit; family portrait / add / remove person cost 2; animation and hug video cost 10 each. The Starter pack cannot fund an animation. Credits never expire."
   },
   {
     question: "Is my personal data and photos safe?",
-    answer: "Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is automatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you."
+    answer: "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. Memory Book keepsakes are stored only when you explicitly save them. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for processors and retention."
+  },
+  {
+    question: "Will AI change the face of someone I remember?",
+    answer: "When facial detail is missing, damaged, or very low resolution, AI may reconstruct plausible features rather than recover the exact original. Always use side-by-side comparison before you download or print."
   },
   {
     question: "How long does the restoration and animation process take?",

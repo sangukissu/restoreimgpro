@@ -27,7 +27,7 @@ const faqs = [
   {
     question: "What happens to my photos after I upload them? Is my data used for AI training?",
     answer:
-      "Absolutely not. Your privacy is our top priority. Uploaded photos are processed securely and automatically deleted within 30 minutes, and generated animations are deleted after 24 hours. We never use your personal photos for AI training or any other purpose.",
+      "Absolutely not. Your privacy is our top priority. Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy.",
   },
   {
     question: "Can I animate low-quality, blurry, or very old photos?",
@@ -45,9 +45,14 @@ const faqs = [
       "Yes. Once you download the animated video, it is yours to use however you wish. This includes personal sharing, social media, and even commercial projects. You retain full ownership of your memories.",
   },
   {
+    question: "How many credits does animation cost?",
+    answer:
+      "Each animation uses 10 credits. The Restoration Starter pack ($4.99 / 4 credits) is not enough for animation. Use the Value Pack ($9.99 / 20 credits) or Family Pack ($21.99 / 60 credits).",
+  },
+  {
     question: "What's the difference between your service and free animation apps?",
     answer:
-      "The difference lies in quality, privacy, and respect for the subject. Free tools often produce lower-quality, unnatural animations and may use your photos to train their AI models. Our service provides subtle, high-definition animations while guaranteeing the complete privacy and security of your cherished photos.",
+      "We focus on subtle, respectful motion for family portraits and clear credit pricing without a forced subscription. Generated media stays in your account until you delete it. Free tools often push exaggerated motion or unclear data practices.",
   },
   {
     question: "Will the animation add sound to my photo?",

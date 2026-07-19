@@ -18,15 +18,15 @@ export default function AIAnimationHero() {
 
         {/* Heading - Exact Typography */}
         <h1 className="max-w-5xl text-[3.5rem] sm:text-[3rem] md:text-[3rem] xl:text-[4rem] tracking-tighter leading-[1.1] text-[#111111] mb-8">
-         Turn Separate Photos into One  <br />
+         Bring separate family photos<br />
           <span className="text-gray-400">
-            Studio-Quality Family Photo
+            into one natural portrait.
           </span>
         </h1>
 
         {/* Subheading - Exact Typography */}
         <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mb-12 font-medium leading-relaxed">
-Create a family photo from individual photos without scheduling a photoshoot. Upload separate portraits, choose a studio canvas, and get one realistic family portrait that preserves each person's likeness.
+          Upload clear portraits of 2–4 people, choose a canvas, and generate one group image. 2 credits per run. Always compare likeness to your sources — lighting, pose, and scale may change to fit the scene.
         </p>
 
         {/* CTA Buttons - Exact Match */}
@@ -71,14 +71,11 @@ Create a family photo from individual photos without scheduling a photoshoot. Up
           </div>
         </div>
 
-        {/* Social Proof - Centered below visual */}
-        <div className="mt-12 flex flex-col items-center gap-3">
-          <div className="flex gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} size={16} className="fill-[#FF4D00] text-[#FF4D00]" />
-            ))}
-          </div>
-          <span className="text-sm font-bold text-gray-600 uppercase tracking-wide">Trusted by families preserving memories</span>
+        <div className="mt-12 flex flex-col items-center gap-2 text-center max-w-lg mx-auto">
+          <span className="text-sm font-bold text-gray-600 uppercase tracking-wide">2 credits · clear face references work best</span>
+          <p className="text-sm text-gray-500 font-medium">
+            Always compare likeness to your source photos. AI may adjust pose, lighting, and scale to form one portrait.
+          </p>
         </div>
 
       </div>

@@ -76,15 +76,15 @@ export default function AIAnimationHero() {
 
         {/* Heading */}
         <h1 className="max-w-5xl text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-brand-black mb-8">
-          Bring Your Photos to Life<br />
+          Add a subtle smile<br />
           <span className="text-gray-400">
-            with AI Photo Animation
+            or movement to an old photo.
           </span>
         </h1>
 
         {/* Subheading */}
         <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mb-12 font-medium leading-relaxed">
-          Watch your loved ones smile, blink, and look around. Turn any still portrait into a beautiful, living memory with respectful AI animation.
+          Prefer gentle motion over exaggerated effects. Works best with clear faces — restore damaged photos first when scratches or blur hide landmarks. 10 credits per animation; the 4-credit Starter pack is not enough alone.
         </p>
 
         {/* CTA Buttons */}
@@ -127,38 +127,11 @@ export default function AIAnimationHero() {
           </div>
         </div>
 
-        {/* Social Proof - Avatar Stack */}
-        <div className="mt-16 flex flex-col items-center gap-4">
-          <div className="flex items-center relative h-12 w-[140px]">
-            {[1, 2, 3].map((i, index) => (
-              <div
-                key={i}
-                className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
-                    ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
-                    ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
-                    ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
-                  `}
-              >
-                <img
-                  src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
-                  alt="User"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-            <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-              2.8K+
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <div className="flex gap-1 mb-1">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
-              ))}
-            </div>
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Trusted by 2.8K+ Families</span>
-          </div>
+        <div className="mt-16 flex flex-col items-center gap-2 text-center max-w-md mx-auto">
+          <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">10 credits · subtle motion</span>
+          <p className="text-sm text-gray-500 font-medium">
+            Works best with clear faces. Review the animation carefully — exaggerated motion can look unnatural.
+          </p>
         </div>
 
 

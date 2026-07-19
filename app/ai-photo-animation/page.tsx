@@ -11,41 +11,43 @@ import { Pricing } from "@/components/landing/Pricing"
 import { AIAnimationCrossSell } from "@/components/ai-photo-animation/cross-sell"
 import { AIAnimationUseCases } from "@/components/ai-photo-animation/use-cases"
 import { AIAnimationPrivacy } from "@/components/ai-photo-animation/privacy-shield"
+import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 
 
 export const metadata: Metadata = {
-  title: "AI Photo Animation - Make Old Photos Move Instantly | BringBack AI",
+  title: "AI Photo Animation — Add a subtle smile or movement | BringBack",
   description:
-    "Transform still photos into captivating animated memories with BringBack AI's advanced AI photo animation tool. Easy to use, incredible results. Animate your past today!",
+    "Add a subtle smile or gentle movement to an old portrait. 10 credits per animation. Restore damaged photos first when faces are unclear. Pay once — no subscription.",
   alternates: {
-    canonical: "https://bringback.pro/ai-photo-animation",
+    canonical: "/ai-photo-animation",
   },
   openGraph: {
-    title: "AI Photo Animation - Make Old Photos Move Instantly | BringBack AI",
+    title: "AI Photo Animation | BringBack",
     description:
-      "Transform still photos into captivating animated memories with BringBack AI's advanced AI photo animation tool. Easy to use, incredible results. Animate your past today!",
+      "Add a subtle smile or gentle movement to an old portrait. 10 credits per animation.",
     type: "website",
     url: "https://bringback.pro/ai-photo-animation",
   },
 }
 
-// WebApplication schema for the animation page (mirrors homepage pattern)
+// WebApplication schema for the animation page (self-canonical URL + @id)
 const animationWebAppJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  '@id': 'https://bringback.pro/#ai-photo-animation-webapp',
+  '@id': 'https://bringback.pro/ai-photo-animation#webapp',
   name: 'BringBack – AI Photo Animation',
   description:
-    'BringBack turns still portraits into subtle, lifelike animations like gentle smiles, blinks, and head tilts in seconds.',
+    'Add a subtle smile or gentle movement to an old portrait. Best with clear faces; restore first when needed. 10 credits per animation.',
   url: 'https://bringback.pro/ai-photo-animation',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
   offers: {
     '@type': 'Offer',
-    name: 'BringBack Restoration & Animation Plans',
+    name: 'BringBack Value Pack (animation-capable)',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
-    price: '4.99',
+    price: '9.99',
+    description: '20 credits — enough for up to 2 animations. Animation costs 10 credits; Starter 4-credit pack is not enough alone.',
     eligibleRegion: {
       '@type': 'Place',
       name: 'Worldwide',
@@ -145,7 +147,7 @@ const animationFAQPageJsonLd = {
       "name": "What happens to my photos after I upload them? Is my data used for AI training?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely not. Your privacy is our top priority. Uploaded photos are processed securely and automatically deleted within 30 minutes, and generated animations are deleted after 24 hours. We never use your personal photos for AI training or any other purpose."
+        "text": "Photos are processed securely for animation. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
       }
     },
     {
@@ -208,10 +210,8 @@ export default function Page() {
       <AIAnimationFeatures />
       <AIAnimationPrivacy />
       <AIAnimationFAQ />
+      <ProductCrossSell excludeHref="/ai-photo-animation" />
       <CTA />
-
-
-
       <Footer />
     </div>
   )

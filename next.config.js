@@ -103,9 +103,74 @@ const nextConfig = {
     ]
   },
 
-  // 301 redirects for deleted blog posts → relevant live pages
+  // 301 redirects: consolidate thin SEO clusters + deleted blog posts
   async redirects() {
     return [
+      // --- Feature keyword cluster → real product pages ---
+      {
+        source: '/features/individual-photos-into-group',
+        destination: '/ai-family-portrait',
+        permanent: true,
+      },
+      {
+        source: '/features/add-deceased-loved-one-to-photo',
+        destination: '/add-person-to-photo',
+        permanent: true,
+      },
+      {
+        source: '/features/black-and-white-composite',
+        destination: '/ai-family-portrait',
+        permanent: true,
+      },
+      {
+        source: '/features/father-and-child-portrait',
+        destination: '/ai-family-portrait',
+        permanent: true,
+      },
+      {
+        source: '/features/merge-images',
+        destination: '/ai-family-portrait',
+        permanent: true,
+      },
+      {
+        source: '/features/ai-image-combiner',
+        destination: '/ai-family-portrait',
+        permanent: true,
+      },
+      {
+        source: '/features/add-person-to-photo',
+        destination: '/add-person-to-photo',
+        permanent: true,
+      },
+      // photo-joiner is not a real collage/panorama product — send to features hub
+      {
+        source: '/features/photo-joiner',
+        destination: '/features',
+        permanent: true,
+      },
+
+      // --- App keyword cluster → animation (or restoration) ---
+      {
+        source: '/app/back-to-life-photo-app',
+        destination: '/ai-photo-animation',
+        permanent: true,
+      },
+      {
+        source: '/app/make-pictures-smile',
+        destination: '/ai-photo-animation',
+        permanent: true,
+      },
+      {
+        source: '/app/animate-old-photos',
+        destination: '/ai-photo-animation',
+        permanent: true,
+      },
+      {
+        source: '/app/sharpen-wedding-photos',
+        destination: '/old-photo-restoration',
+        permanent: true,
+      },
+
       // Deleted low-quality blog posts → most relevant feature/page
       {
         source: '/blog/can-ai-truly-restore-original-colors-to-old-photos',
@@ -139,7 +204,7 @@ const nextConfig = {
       },
       {
         source: '/blog/how-to-restore-great-grandparents-wedding-photos-with-ai',
-        destination: '/features/add-deceased-loved-one-to-photo',
+        destination: '/add-person-to-photo',
         permanent: true,
       },
       // Redirect HTTP to HTTPS in production

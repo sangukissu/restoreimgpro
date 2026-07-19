@@ -4,29 +4,29 @@ import { Heart, ShieldCheck, Sparkles, Users } from 'lucide-react';
 
 const STATS = [
   {
-    value: '2.8K+',
-    label: 'Families have trusted us to restore their albums.',
-    dots: [true, true, true, false], // Visual progress
+    value: 'Original-first',
+    label: 'Restore without forcing colorization. Keep black-and-white or sepia when that is the memory.',
+    dots: [true, true, true, false],
     bullet: false,
     icon: <Users size={20} />
   },
   {
     value: 'Simple',
-    label: 'No tech skills needed. Just upload and click one button.',
+    label: 'No tech skills needed. Upload, choose a mode, and compare before you download.',
     dots: [true, true, false, false],
     bullet: true,
     icon: <Sparkles size={20} />
   },
   {
-    value: '100%',
-    label: 'Private & Secure. We never store or share your photos.',
+    value: 'You control',
+    label: 'Generated files stay in your account until you delete them. See our Privacy Policy.',
     dots: [true, false, false, false],
     bullet: false,
     icon: <ShieldCheck size={20} />
   },
   {
-    value: 'Real',
-    label: 'Authentic results that look like your loved ones, not cartoons.',
+    value: 'Honest limits',
+    label: 'When faces are missing detail, AI may reconstruct — comparison makes that visible.',
     dots: [true, true, true, true],
     bullet: false,
     icon: <Heart size={20} />
@@ -102,7 +102,7 @@ export const WhyUs: React.FC = () => {
                 >
                   {/* Top Row */}
                   <div className="flex justify-between items-start relative z-10">
-                    <span className={`font-[800] text-brand-black tracking-tight ${stat.value.length > 4 ? 'text-3xl' : 'text-5xl'}`}>{stat.value}</span>
+                    <span className={`font-[800] text-brand-black tracking-tight ${stat.value.length > 6 ? 'text-2xl sm:text-3xl' : 'text-4xl sm:text-5xl'}`}>{stat.value}</span>
 
                     {/* Dots Indicator */}
                     <div className="flex gap-1.5 pt-2">

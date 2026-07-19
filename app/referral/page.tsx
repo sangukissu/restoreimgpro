@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import ReferralPublicPage from '@/components/referral-public-page'
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: 'Professional Photo Restoration & Animation | Restore Old Photos with AI | BringBack AI',
   description: 'Restore damaged, faded, torn, and water-damaged old photos with advanced AI technology. Bring your loved ones to life with natural animation. Professional photo restoration starting at $4.99.',
   keywords: [

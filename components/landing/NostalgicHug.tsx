@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
-import { ArrowRight, Film, Lock, ScanFace, Sparkles, Play } from 'lucide-react';
+import React from 'react';
+import { Film, Lock, ScanFace, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { ShineBorder } from "@/components/ui/shine-border"
+import { YouTubeEmbed } from "@/components/consent/youtube-embed"
 
 export default function NostalgicHug() {
-   const [isPlaying, setIsPlaying] = useState(false);
-
    return (
       <section id="nostalgic-hug" className="w-full max-w-[1320px] mx-auto py-24 bg-brand-bg px-4">
 
@@ -30,7 +29,7 @@ export default function NostalgicHug() {
             {/* Subtitle */}
             <div className="max-w-sm">
                <p className="text-lg text-gray-600 font-medium leading-relaxed">
-                  We all have moments we wish we could revisit. The Reunion Moment is the world’s first AI that bridges the gap of time.
+                  We all have moments we wish we could revisit. The Reunion Moment is the first AI that bridges the gap of time between the past and the present.
                </p>
             </div>
          </div>
@@ -87,7 +86,7 @@ export default function NostalgicHug() {
 
                   <div className="mt-2">
 
-                     <Link href="/dashboard">
+                     <Link href="/dashboard/nostalgic-hug">
                         <button className="group w-auto flex items-center justify-center gap-3 bg-brand-black text-white pl-5 pr-2 py-2 rounded-full hover:scale-105 transition-transform duration-200 shadow-lg">
                            <span className="text-sm font-medium">Create Respectful Hug Video</span>
                            <div className="bg-brand-orange rounded-full p-2 text-white group-hover:bg-white group-hover:text-brand-orange transition-colors">
@@ -99,30 +98,13 @@ export default function NostalgicHug() {
 
                </div>
 
-               {/* 2. Video Card (Top Right - Spans 2 cols) */}
-               <div className="lg:col-span-2 bg-black rounded-[1.5rem] overflow-hidden relative aspect-video lg:aspect-auto lg:min-h-[500px] order-1 lg:order-2 shadow-sm h-full group cursor-pointer" onClick={() => !isPlaying && setIsPlaying(true)}>
-                  {!isPlaying ? (
-                     <>
-                        <img
-                           src="https://img.youtube.com/vi/Y0rdFdDdd10/hqdefault.jpg"
-                           alt="Video Thumbnail"
-                           className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300"
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                           <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 transition-all duration-300 group-hover:scale-110 shadow-2xl">
-                              <Play size={32} className="fill-white text-white ml-1" />
-                           </div>
-                        </div>
-                     </>
-                  ) : (
-                     <iframe
-                        className="absolute inset-0 w-full h-full"
-                        src="https://www.youtube.com/embed/Y0rdFdDdd10?rel=0&loop=1&playlist=Y0rdFdDdd10&modestbranding=1&controls=1&autoplay=1"
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                     ></iframe>
-                  )}
+               {/* 2. Video Card — loads only after media consent */}
+               <div className="lg:col-span-2 rounded-[1.5rem] overflow-hidden relative order-1 lg:order-2 shadow-sm h-full min-h-[280px] lg:min-h-[500px] flex items-center">
+                  <YouTubeEmbed
+                     videoId="Y0rdFdDdd10"
+                     title="Nostalgic hug demo"
+                     className="w-full h-full min-h-[280px] lg:min-h-[500px] rounded-[1.5rem]"
+                  />
                </div>
 
                {/* 3. Feature Card 1 */}
@@ -130,9 +112,10 @@ export default function NostalgicHug() {
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
                      <ScanFace size={24} />
                   </div>
-                  <h3 className="text-xl font-[850] text-brand-black">100% Photorealistic Faces</h3>
+                  <h3 className="text-xl font-[850] text-brand-black">Review identity carefully</h3>
                   <p className="text-gray-500 font-medium text-sm leading-relaxed">
-                     Facial features and clothing style are preserved for both individuals throughout the entire 5-second transition, eliminating 'Uncanny Valley' effects                  </p>
+                     Results vary with input quality. Facial detail may be reconstructed when the source is incomplete — always compare before sharing.
+                  </p>
                </div>
 
                {/* 4. Feature Card 2 */}

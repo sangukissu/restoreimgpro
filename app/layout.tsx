@@ -3,9 +3,10 @@ import type { Metadata } from "next"
 import { Caveat, Great_Vibes, Manrope, Inter, Patrick_Hand } from "next/font/google"
 import { Toaster } from "@/components/ui/toast"
 import NetworkStatus from "@/components/network-status"
-import ClarityProvider from "@/components/clarity-provider"
-import { CrispChat } from "@/components/crisp-chat"
-import Script from "next/script"
+import { ConsentBanner } from "@/components/consent/consent-banner"
+import { AnalyticsLoader } from "@/components/consent/analytics-loader"
+import { CrispLoader } from "@/components/consent/crisp-loader"
+import { POSITIONING } from "@/lib/site-copy"
 import "./globals.css"
 
 const manrope = Manrope({
@@ -41,10 +42,15 @@ const caveat = Caveat({
   variable: "--font-caveat",
   weight: ["400", "500", "600", "700"],
 })
+
 export const metadata: Metadata = {
-  title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
-  description: "BringBack AI restores old, damaged photos and even animates them with AI. Repair faded colors, fix damage, and bring portraits to life in seconds.",
-  keywords: "photo restoration, AI photo repair, photo to video, old photo restoration, photo animation, revive old photos, damaged photo fix, vintage photo restoration, bring photos to life, image enhancement, ai family photo maker",
+  title: {
+    default: "Restore, reunite, and preserve your family photos | BringBack",
+    template: "%s | BringBack",
+  },
+  description: POSITIONING.supportingPromise,
+  keywords:
+    "family photo restoration, restore old photos, AI family portrait, add person to photo, photo animation, family memory book, preserve family photos",
   authors: [{ name: "BringBack Team" }],
   creator: "BringBack",
   publisher: "BringBack",
@@ -53,31 +59,31 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://bringback.pro'),
+  metadataBase: new URL("https://bringback.pro"),
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   openGraph: {
-    title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
-    description: "BringBack AI restores old, damaged photos and animates them with AI. Preserve your history and relive memories in motion.",
-    url: 'https://bringback.pro',
-    siteName: 'BringBack AI',
+    title: "Restore, reunite, and preserve your family photos | BringBack",
+    description: POSITIONING.supportingPromise,
+    url: "https://bringback.pro",
+    siteName: "BringBack",
     images: [
       {
-        url: '/og-image.png',
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: 'BringBack Photo Restoration and Animation demo',
+        alt: "BringBack family photo preservation",
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "en_US",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: "Restore, Colorize & Animate Old damaged Photos Online | BringBack AI",
-    description: "Transform old photos with AI. Restore damage, enhance quality, and even animate your loved ones in seconds.",
-    images: ['/og-image.png'],
+    card: "summary_large_image",
+    title: "Restore, reunite, and preserve your family photos | BringBack",
+    description: POSITIONING.supportingPromise,
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -85,67 +91,47 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
 }
 
 const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      '@type': 'WebSite',
-      '@id': 'https://bringback.pro/#website',
-      url: 'https://bringback.pro/',
-      name: 'BringBack',
-      description: 'AI-powered premium photo restoration and animation service.',
+      "@type": "WebSite",
+      "@id": "https://bringback.pro/#website",
+      url: "https://bringback.pro/",
+      name: "BringBack",
+      description: POSITIONING.category,
       publisher: {
-        '@id': 'https://bringback.pro/#organization'
+        "@id": "https://bringback.pro/#organization",
       },
     },
     {
-      '@type': 'Organization',
-      '@id': 'https://bringback.pro/#organization',
-      name: 'BringBack',
-      url: 'https://bringback.pro/',
+      "@type": "Organization",
+      "@id": "https://bringback.pro/#organization",
+      name: "BringBack",
+      url: "https://bringback.pro/",
       logo: {
-        '@type': 'ImageObject',
-        url: 'https://bringback.pro/bringback-logo.webp',
+        "@type": "ImageObject",
+        url: "https://bringback.pro/bringback-logo.webp",
         width: 512,
-        height: 512
+        height: 512,
       },
-      description: 'AI-powered premium photo restoration and animation service helping people preserve and relive memories.',
-      foundingDate: '2025',
-      serviceArea: {
-        '@type': 'Place',
-        name: 'Worldwide'
+      description: POSITIONING.supportingPromise,
+      foundingDate: "2025",
+      sameAs: ["https://x.com/AINotSoSmart", "https://www.trustpilot.com/review/bringback.pro"],
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: "support@bringback.pro",
+        contactType: "customer support",
       },
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: 'AI Photo Services',
-        itemListElement: [
-          {
-            '@type': 'Offer',
-            itemOffered: {
-              '@type': 'Service',
-              name: 'AI Photo Restoration',
-              description: 'Restore old, damaged, or faded photos using advanced AI technology.'
-            }
-          },
-          {
-            '@type': 'Offer',
-            itemOffered: {
-              '@type': 'Service',
-              name: 'AI Photo Animation',
-              description: 'Revive still photos by animating faces — subtle smiles, waves, and lifelike gestures with AI.'
-            }
-          }
-        ]
-      }
-    }
-  ]
+    },
+  ],
 }
 
 export default function RootLayout({
@@ -154,7 +140,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${inter.variable} ${patrickHand.variable} ${greatVibes.variable} ${caveat.variable}`}>
+    <html
+      lang="en"
+      className={`${manrope.variable} ${inter.variable} ${patrickHand.variable} ${greatVibes.variable} ${caveat.variable}`}
+    >
       <head>
         <script
           type="application/ld+json"
@@ -162,7 +151,6 @@ export default function RootLayout({
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://www.youtube.com" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="color-scheme" content="light" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -171,26 +159,13 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={`antialiased`}>
-          {children}
+        {children}
 
-        <ClarityProvider />
-        <CrispChat />
+        <AnalyticsLoader />
+        <CrispLoader />
+        <ConsentBanner />
         <NetworkStatus />
         <Toaster />
-
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-184H988WCE"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);} 
-            gtag('js', new Date());
-            gtag('config', 'G-184H988WCE', { debug_mode: true });
-          `}
-        </Script>
       </body>
     </html>
   )

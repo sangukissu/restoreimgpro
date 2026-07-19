@@ -31,21 +31,21 @@ export function AIAnimationUseCases() {
     }
   ];
 
-  const testimonials = [
+  const guidance = [
     {
-      quote: "I animated my late grandfather's portrait and used it in our family reunion slideshow. Everyone went silent, then started smiling.",
-      author: "Nina J.",
-      context: "Family Reunion Project"
+      quote: "Prefer subtle motion over exaggerated expressions — a soft smile or blink usually feels more respectful than a big reaction.",
+      author: "Best practice",
+      context: "Input quality"
     },
     {
-      quote: "The Smile + Wave style made our anniversary tribute video feel alive without looking fake. It was exactly the tone we wanted.",
-      author: "Marco T.",
-      context: "Memorial Tribute"
+      quote: "Restore damaged photos first when faces are scratched or blurry. Clear facial landmarks produce more natural animation.",
+      author: "Workflow tip",
+      context: "Restore → animate"
     },
     {
-      quote: "We used animated ancestor photos in our genealogy presentation and it instantly held the room's attention.",
-      author: "Alina R.",
-      context: "Genealogy Workshop"
+      quote: "Always review the clip before sharing. If identity feels off, keep the still photo or try a different source crop.",
+      author: "Honest limits",
+      context: "Identity check"
     }
   ];
 
@@ -74,10 +74,10 @@ export function AIAnimationUseCases() {
 
         <div className="mt-16">
           <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-brand-black mb-8 text-center">
-            What Families Say About Animation Results
+            How to get respectful animation results
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((item, index) => (
+            {guidance.map((item, index) => (
               <div key={index} className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
                 <p className="text-gray-700 leading-relaxed text-lg mb-6">
                   "{item.quote}"

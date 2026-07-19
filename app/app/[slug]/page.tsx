@@ -192,38 +192,10 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </Link>
             </div>
 
-            {/* Social Proof */}
-            <div className="flex items-center justify-center gap-6 pl-4">
-              <div className="flex items-center relative h-12 w-[140px]">
-                {[1, 2, 3].map((i, index) => (
-                  <div
-                    key={i}
-                    className={`absolute top-0 w-12 h-12 rounded-2xl border-[3px] border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
-                      ${index === 0 ? 'left-0 z-30' : ''}
-                      ${index === 1 ? 'left-8 z-20' : ''}
-                      ${index === 2 ? 'left-16 z-10' : ''}
-                    `}
-                  >
-                    <img
-                      src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
-                      alt="User"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-                <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-[10px] font-bold border-[3px] border-[#F2F2F0] shadow-sm z-40">
-                  2.8K+
-                </div>
-              </div>
-
-              <div className="flex flex-col justify-center text-left gap-0.5">
-                <div className="flex gap-0.5">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} size={16} className="fill-[#FF4D00] text-[#FF4D00]" />
-                  ))}
-                </div>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Trusted by 2.8K+ Families</span>
-              </div>
+            <div className="flex items-center justify-center">
+              <p className="text-sm font-semibold text-gray-600 max-w-md text-center">
+                Always compare the result to your original. AI may reconstruct missing detail rather than recover it.
+              </p>
             </div>
           </section>
 
@@ -560,7 +532,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   </div>
                   <div className="max-w-sm">
                     <p className="text-lg text-gray-400 font-medium leading-relaxed">
-                      We operate with a zero-retention policy. Your photos are processed securely and permanently destroyed after your session.
+                      BringBack processes photos to deliver the feature you request. Generated media stays in your account until you delete it. Memory Book keepsakes are stored only when you save them. We do not use family photos to train general-purpose AI models.
                     </p>
                   </div>
                 </div>
@@ -571,9 +543,9 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                       <div className="w-14 h-14 bg-[#FF4D00]/20 rounded-2xl flex items-center justify-center mb-8 text-[#FF4D00]">
                          <Clock size={28} />
                       </div>
-                      <h3 className="text-2xl font-bold mb-4">Auto-Deletion Protocol</h3>
+                      <h3 className="text-2xl font-bold mb-4">You control media</h3>
                       <p className="text-gray-400 leading-relaxed font-medium">
-                         Every uploaded and generated image is automatically scrubbed from our servers within 30 minutes. No backups, no hidden archives.
+                         Generated media stays in your account until you delete it from My Media.
                       </p>
                    </div>
 
@@ -582,9 +554,9 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                       <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-8 text-blue-400">
                          <Shield size={28} />
                       </div>
-                      <h3 className="text-2xl font-bold mb-4">End-to-End Encryption</h3>
+                      <h3 className="text-2xl font-bold mb-4">Secure processing</h3>
                       <p className="text-gray-400 leading-relaxed font-medium">
-                         Your data is encrypted in transit (TLS 1.3) and at rest (AES-256). We utilize isolated processing containers that prevent any cross-user data leakage.
+                         Uploads are transmitted over HTTPS and processed only to deliver the feature you request. See our Privacy Policy for processors.
                       </p>
                    </div>
 

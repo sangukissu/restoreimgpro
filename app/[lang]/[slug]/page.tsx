@@ -40,17 +40,15 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     return {}
   }
 
+  // Incomplete hreflang cluster (missing en/x-default/de/ru reciprocity).
+  // Keep pages available but noindex until a fluent review + full reciprocal set exists.
   return {
     title: page.meta.title,
     description: page.meta.description,
     keywords: page.meta.keywords.join(", "),
+    robots: { index: false, follow: false },
     alternates: {
       canonical: page.slug,
-      languages: {
-        es: countryPages.es.slug,
-        "pt-BR": countryPages["pt-br"].slug,
-        id: countryPages.id.slug,
-      },
     },
     openGraph: {
       title: page.meta.title,

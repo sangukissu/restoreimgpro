@@ -127,10 +127,10 @@ export const Hero: React.FC = () => {
 
           {/* Available Badge */}
           {/* Available Badge */}
-          <Link href="/dashboard">
+          <Link href="/dashboard/restore">
             <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-4 py-2 rounded-full mb-8 shadow-lg shadow-black/5 hover:scale-105 transition-transform cursor-pointer border border-white/10">
               <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
-              <span className="text-sm font-semibold tracking-wide">BringBack Your Memories</span>
+              <span className="text-sm font-semibold tracking-wide">Family photo preservation</span>
             </div>
           </Link>
 
@@ -138,23 +138,23 @@ export const Hero: React.FC = () => {
 
           {/* Heading */}
           <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-            AI Photo <br /> Restoration & <br />
+            Restore, reunite, <br />
+            and preserve <br />
             <span className="text-gray-400 relative">
-              Photo-to-Video Animation
-
+              your family photos.
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-lg sm:text-xl text-gray-600 max-w-xl mb-10 font-medium leading-relaxed">
-            Bring your damaged family photos back to life in 4K clarity. Instantly fix deep scratches, tears, and faded colors with advanced AI restoration, or transform static pictures into stunning, lifelike cinematic videos.
+            Repair damage while keeping original character, bring family members into one picture, add subtle motion when you want it, and keep the story in a private keepsake. Pay once — no subscription.
           </p>
 
           {/* CTA Buttons - Matches Formix Design */}
           <div className="flex flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-12 w-full max-w-full overflow-visible">
 
             {/* Primary: Orange Button with Black Circle Arrow */}
-            <Link href="/dashboard">
+            <Link href="/dashboard/restore">
 
               <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_0px_1px_rgba(255,255,255,0.3),0_20px_30px_-8px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
                 <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Restore Photos</span>
@@ -165,10 +165,10 @@ export const Hero: React.FC = () => {
             </Link>
 
             {/* Secondary: Black Button with Orange Circle Play */}
-            <Link href="/ai-photo-animation">
+            <Link href="/ai-family-portrait">
 
               <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
-                <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Animate Photos</span>
+                <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Reunite Family</span>
                 <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
                   <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
@@ -177,38 +177,11 @@ export const Hero: React.FC = () => {
 
           </div>
 
-          {/* Social Proof - Avatar Stack (Rotated Squircles) */}
-          <div className="flex items-center gap-6 pl-2">
-            <div className="flex items-center relative h-12 w-[140px]">
-              {[1, 2, 3].map((i, index) => (
-                <div
-                  key={i}
-                  className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
-                    ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
-                    ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
-                    ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
-                  `}
-                >
-                  <img
-                    src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
-                    alt="User"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-              <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-                2.8K+
-              </div>
-            </div>
-
-            <div className="flex flex-col justify-center">
-              <div className="flex gap-0.5 mb-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
-                ))}
-              </div>
-              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 2.8K+ Families</span>
-            </div>
+          <div className="flex flex-col gap-2 pl-1 max-w-md">
+            <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Original-first · Pay once · No subscription</span>
+            <p className="text-sm text-gray-500 font-medium">
+              Side-by-side comparison before download. Missing facial detail may be reconstructed — not recovered.
+            </p>
           </div>
         </div>
 

@@ -28,27 +28,31 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is it safe to upload my private family photos?",
-    answer: "Your privacy is our priority. We use advanced encryption for all uploads. Furthermore, BringBack automatically deletes your images from our servers after a short period (usually 24 hours) to ensure your personal memories remain private and are not used for anything else."
+    answer: "Photos are processed securely for restoration. Generated files stay in your account until you delete them from My Media. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for processors and retention."
   },
   {
-    question: "What is the best resolution to scan old photos for restoration?",
-    answer: "For the best AI results, we recommend scanning your photos at 300 DPI to 600 DPI (dots per inch). This ensures the AI has enough pixel data to accurately sharpen details and remove grain. If you don't have a scanner, you can use a high-quality scanning app on your smartphone in a well-lit room."
+    question: "Can I restore without colorizing?",
+    answer: "Yes. Use restore-only to keep the original black-and-white, sepia, or color character. Colorize only when you explicitly want color — AI color is an interpretation, not historical proof of original dyes."
+  },
+  {
+    question: "Will AI change the face of someone I remember?",
+    answer: "When facial detail is missing, damaged, or very low resolution, AI may reconstruct plausible features rather than recover the exact original face. Always compare side-by-side before you download or print."
+  },
+  {
+    question: "How much does one restoration cost?",
+    answer: "One restoration uses 1 credit. The Restoration Starter pack is $4.99 for 4 credits. Credits never expire. Failed generations that the system can detect may be refunded automatically."
+  },
+  {
+    question: "What is the best way to scan old photos?",
+    answer: "A flat scan or a well-lit phone scan on a dark surface works well. Avoid glare from glass frames when you can. Higher detail helps, but we do not require a specific DPI claim — upload the clearest file you have."
   },
   {
     question: "Will the restored photo be good enough to print?",
-    answer: "Yes. Our restoration process includes AI Upscaling. This increases the resolution of your small wallet-sized photos or old snapshots, allowing you to print them as 4x6, 5x7, or even 8x10 portraits without pixelation or blur."
-  },
-  {
-    question: "Is there a free way to restore old photos online?",
-    answer: "You can go for free tools on internet, there are multiples but we recommend BringBack AI or any other tool that offers high-quality results and fast processing time."
-  },
-  {
-    question: "How long does the AI restoration process take?",
-    answer: "Unlike manual restoration services which can take days or weeks, BringBack restores photos in 5 to 10 seconds. It is an automated, instant process, allowing you to restore entire albums in minutes."
+    answer: "Many restorations print well at common sizes (for example 4×6 or 5×7). Output quality depends on the input resolution and damage. Check the downloaded pixel dimensions before ordering large prints."
   },
   {
     question: "Can I animate my photo after restoring it?",
-    answer: "Yes! We highly recommend restoring your photo first to remove scratches and sharpen the face. Once the photo is clean, you can use our Live Portrait feature to make your ancestors smile, blink, and move realistically."
+    answer: "Yes. Restoring first usually improves faces for animation. Animation costs 10 credits (not covered by the 4-credit Starter pack alone)."
   }
 ];
 

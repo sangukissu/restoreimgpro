@@ -132,30 +132,30 @@ export const Hero: React.FC = () => {
           {/* Available Badge */}
           <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-4 py-2 rounded-full mb-8 shadow-lg shadow-black/5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#FF4D00] animate-pulse"></div>
-            <span className="text-sm font-semibold tracking-wide">Premium Photo Restoration</span>
+            <span className="text-sm font-semibold tracking-wide">1 credit · restore-only or restore + colorize</span>
           </div>
 
 
 
           {/* Heading */}
-          <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-            Restore Old, <br />
-            Damaged & Faded <br />
+          <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
+            Repair old photos <br />
+            while keeping their <br />
             <span className="text-gray-400 relative">
-              photos with precision.
+              original character.
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-lg sm:text-xl text-gray-600 max-w-xl mb-10 font-medium leading-relaxed">
-            Don't let your memories fade away. Automatically remove scratches, fix water damage, sharpen blurry faces, and colorize black & white photos online.
+            Fix scratches, tears, fading, water marks, and blur. Choose restore-only to keep black-and-white or sepia, or restore and colorize when you want color. Missing facial detail may be reconstructed — always compare before you download.
           </p>
 
           {/* CTA Buttons - Matches Formix Design */}
           <div className="flex flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-12 w-full max-w-full overflow-visible">
 
             {/* Primary: Orange Button with Black Circle Arrow */}
-            <Link href="/dashboard">
+            <Link href="/dashboard/restore">
 
               <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-transform duration-200 hover:scale-105 active:scale-95 shadow-[0_20px_40px_-15px_rgba(255,77,0,0.4)] shrink-0">
                 <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Restore Photos</span>
@@ -179,37 +179,11 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Social Proof - Avatar Stack (Rotated Squircles) */}
-          <div className="flex items-center gap-6 pl-2">
-            <div className="flex items-center relative h-12 w-[140px]">
-              {[1, 2, 3].map((i, index) => (
-                <div
-                  key={i}
-                  className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
-                    ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
-                    ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
-                    ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
-                  `}
-                >
-                  <img
-                    src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
-                    alt="User"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-              <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-                2.8K+
-              </div>
-            </div>
-
-            <div className="flex flex-col justify-center">
-              <div className="flex gap-0.5 mb-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
-                ))}
-              </div>
-              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 2.8K+ Families</span>
-            </div>
+          <div className="flex flex-col gap-2 pl-1 max-w-md">
+            <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">1 credit · compare before download</span>
+            <p className="text-sm text-gray-500 font-medium">
+              Missing facial detail may be reconstructed, not recovered. Keep black-and-white when that is the memory.
+            </p>
           </div>
         </div>
 

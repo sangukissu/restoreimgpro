@@ -23,7 +23,7 @@ const FAQS: FAQItem[] = [
     },
     {
         question: "Is this private? Will my photos be shared?",
-        answer: "Your privacy is our top priority. The photos you upload and the videos we generate are completely private. We do not use your personal family photos to train our AI models, and all media is automatically deleted from our servers shortly after processing."
+        answer: "Photos are processed securely for the hug video feature. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy. The full flow costs 19 credits; if the provider reports a failed job after start, credits are refunded automatically when the system can detect the failure."
     },
     {
         question: "How long does it take to create a video?",

@@ -33,7 +33,7 @@ export default function DeblurFeaturesSection() {
     },
     {
       title: "Privacy Protection",
-      description: "Photos processed securely and deleted in 30 minutes. Your moments stay private.",
+      description: "Generated media stays in your account until you delete it. See our Privacy Policy for retention details.",
       icon: <Lock className="h-6 w-6" />,
     },
   ]

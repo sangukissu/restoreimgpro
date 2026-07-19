@@ -56,7 +56,15 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is BringBack a free family portrait creator?",
-    answer: "BringBack is a premium AI family photo generator. It costs 2 credits because it focuses on realistic likeness, studio composition, high-resolution output, and private account storage rather than quick collage-style merging."
+    answer: "BringBack is a pay-once credit product, not a free unlimited generator. Family portrait costs 2 credits. The $4.99 Restoration Starter includes 4 credits (enough for up to two portraits). Credits never expire."
+  },
+  {
+    question: "What happens to my photos?",
+    answer: "Photos are processed securely for the portrait. Generated media stays in your account until you delete it from My Media. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
+  },
+  {
+    question: "When should I not use this tool?",
+    answer: "Skip it for legal or forensic identification, when you only have tiny or heavily damaged face crops, or when a simple side-by-side collage is enough. For inserting someone into an existing scene (not a new studio portrait), use Add Person instead."
   },
   {
     question: "How is this different from Photoshop or a manual artist?",

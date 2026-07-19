@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Film, Zap, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowUpCircle, Frame, CheckCircle2, ArrowRight, Play, Star, MagnetIcon, Timer } from 'lucide-react';
+import { Sparkles, Film, ShieldCheck, Image as ImageIcon, Maximize2, Infinity, ArrowRight, Play, Timer } from 'lucide-react';
 import Link from 'next/link';
+import { PUBLIC_PLANS, FEATURE_CREDIT_COSTS } from "@/lib/pricing";
 
 interface PricingFeature {
   icon: React.ReactNode;
@@ -143,35 +144,31 @@ const PricingCard: React.FC<{
   );
 };
 
+function planFeatures(tier: "starter" | "pro" | "family"): PricingFeature[] {
+  const plan = PUBLIC_PLANS.find((p) => p.tier === tier)!;
+  const base: PricingFeature[] = plan.equivalents.map((text, i) => ({
+    icon:
+      i === 0 ? (
+        <ImageIcon size={16} />
+      ) : text.toLowerCase().includes("animation") || text.toLowerCase().includes("hug") ? (
+        <Film size={16} />
+      ) : (
+        <Sparkles size={16} />
+      ),
+    text,
+  }));
+  base.push(
+    { icon: <Maximize2 size={16} />, text: "Download high-resolution results" },
+    { icon: <Infinity size={16} />, text: "Credits never expire", isPerk: true },
+    { icon: <ShieldCheck size={16} />, text: "30-day money-back guarantee", isPerk: true }
+  );
+  return base;
+}
+
 export const Pricing: React.FC = () => {
-  const starterFeatures: PricingFeature[] = [
-    { icon: <ImageIcon size={16} />, text: "Up to 4 High-Res Photo Restorations" },
-    { icon: <Sparkles size={16} />, text: "OR up to 2 Studio Family Portraits" },
-    { icon: <Maximize2 size={16} />, text: "Studio-Grade 1080p Print Quality" },
-    { icon: <Infinity size={16} />, text: "Credits Never Expire", isPerk: true },
-    { icon: <Frame size={16} />, text: "Commercial Usage Rights Included", isPerk: true },
-    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee", isPerk: true }
-  ];
-
-  const proFeatures: PricingFeature[] = [
-    { icon: <ImageIcon size={16} />, text: "Up to 20 High-Res Photo Restorations" },
-    { icon: <Film size={16} />, text: "OR up to 2 Photo to Video Animations" },
-    { icon: <Sparkles size={16} />, text: "OR up to 10 Studio Family Portraits" },
-    { icon: <Maximize2 size={16} />, text: "Studio-Grade 1080p Print Quality" },
-    { icon: <Infinity size={16} />, text: "Credits Never Expire", isPerk: true },
-    { icon: <Frame size={16} />, text: "Commercial Usage Rights Included", isPerk: true },
-    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee", isPerk: true }
-  ];
-
-  const familyFeatures: PricingFeature[] = [
-    { icon: <ImageIcon size={16} />, text: "Up to 60 High-Res Photo Restorations" },
-    { icon: <Film size={16} />, text: "OR up to 6 Photo to Video Animations" },
-    { icon: <Sparkles size={16} />, text: "OR up to 30 Studio Family Portraits" },
-    { icon: <Maximize2 size={16} />, text: "Studio-Grade 1080p Print Quality" },
-    { icon: <Infinity size={16} />, text: "Credits Never Expire", isPerk: true },
-    { icon: <Frame size={16} />, text: "Commercial Usage Rights Included", isPerk: true },
-    { icon: <ShieldCheck size={16} />, text: "30-Day Money-Back Guarantee", isPerk: true }
-  ];
+  const starter = PUBLIC_PLANS[0];
+  const pro = PUBLIC_PLANS[1];
+  const family = PUBLIC_PLANS[2];
 
   return (
     <section id="pricing" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
@@ -185,14 +182,16 @@ export const Pricing: React.FC = () => {
             </div>
 
             <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[1.1]">
-              Simple pricing. <br />
-              <span className="text-gray-400">Professional results.</span>
+              Pay once. <br />
+              <span className="text-gray-400">No subscription.</span>
             </h2>
           </div>
 
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              No subscriptions. No hidden fees. Just pay for what you restore.
+              Exact credit costs: restore {FEATURE_CREDIT_COSTS.restore.credits}, family portrait / add person{" "}
+              {FEATURE_CREDIT_COSTS.familyPortrait.credits}, animation {FEATURE_CREDIT_COSTS.animate.credits},
+              hug video {FEATURE_CREDIT_COSTS.nostalgicHug.credits}. Starter cannot fund animation or hug.
             </p>
           </div>
         </div>
@@ -200,47 +199,44 @@ export const Pricing: React.FC = () => {
         {/* Pricing Grid: 3 Equal Columns */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* Column 1: Starter Pack (White) */}
           <PricingCard
             theme="light"
-            title="Starter Pack"
-            price="$4.99"
-            creditsText="4 Generation Credits"
-            description="Perfect for testing out restorations and prints."
-            badge="One-time payment"
-            features={starterFeatures}
+            title={starter.name}
+            price={starter.priceDisplay}
+            creditsText={`${starter.credits} Credits`}
+            description={starter.description}
+            badge={starter.badge}
+            features={planFeatures("starter")}
             icon={<Sparkles size={24} />}
-            buttonText="Start Restoring My Photos"
+            buttonText={starter.ctaLabel}
             buttonLink="/login"
             buttonIcon={<ArrowRight size={20} />}
           />
 
-          {/* Column 2: Value Pack (Black) */}
           <PricingCard
             theme="dark"
-            title="Value Pack"
-            price="$9.99"
-            creditsText="20 Generation Credits"
-            description="Perfect for creating cinematic video reunions and studio-quality prints."
-            badge="Most Popular"
-            features={proFeatures}
+            title={pro.name}
+            price={pro.priceDisplay}
+            creditsText={`${pro.credits} Credits`}
+            description={pro.description}
+            badge={pro.badge}
+            features={planFeatures("pro")}
             icon={<Film size={24} />}
-            buttonText="Bring My Memories To Life"
-            buttonLink="/dashboard"
+            buttonText={pro.ctaLabel}
+            buttonLink="/login"
             buttonIcon={<Play size={20} fill="currentColor" />}
           />
 
-          {/* Column 3: Legacy Pack (White) */}
           <PricingCard
             theme="light"
-            title="Legacy Pack"
-            price="$21.99"
-            creditsText="60 Generation Credits"
-            description="Perfect for digitizing entire family albums and creating keepsakes."
-            badge="Best Value"
-            features={familyFeatures}
+            title={family.name}
+            price={family.priceDisplay}
+            creditsText={`${family.credits} Credits`}
+            description={family.description}
+            badge={family.badge}
+            features={planFeatures("family")}
             icon={<Sparkles size={24} />}
-            buttonText="Preserve My Family History"
+            buttonText={family.ctaLabel}
             buttonLink="/login"
             buttonIcon={<ArrowRight size={20} />}
           />

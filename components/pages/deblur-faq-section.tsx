@@ -116,7 +116,7 @@ export default function DeblurFAQSection() {
     {
       question: "Is my data safe during processing?",
       answer:
-        "Absolutely. Your photos are processed securely and automatically deleted from our servers within 30 minutes. We never store, share, or use your personal photos for any purpose other than deblurring. Your memories remain completely private.",
+        "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy.",
     },
     {
       question: "What if the results aren't perfect?",

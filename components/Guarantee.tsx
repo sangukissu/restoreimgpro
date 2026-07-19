@@ -15,7 +15,7 @@ const GUARANTEES = [
   },
   {
     title: "100% Secure",
-    description: "Your photos are encrypted and uploaded media automatically deleted from our servers within 30 minutes. Complete privacy guaranteed.",
+    description: "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy.",
     icon: <Lock size={24} strokeWidth={2.5} />
   },
   {

@@ -364,7 +364,7 @@ const BENEFITS = [
   {
     icon: <Lock size={24} />,
     title: 'Complete Privacy',
-    description: 'Uploaded Photos processed securely and deleted in 30 minutes. Your precious memories stay completely private.',
+    description: 'Generated media stays in your account until you delete it. See our Privacy Policy for processors and retention.',
     visual: <VisualPrivacy />
   },
   {

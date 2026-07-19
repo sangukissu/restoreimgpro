@@ -12,7 +12,7 @@ export default function ColorizeHowItWorksDeepDive() {
     },
     {
       title: "Historical Data Matching",
-      description: "Our neural network is trained on millions of color and black-and-white image pairs. It compares your vintage photo against this massive dataset to recognize objects—like distinguishing a 1920s dress from a modern suit.",
+      description: "Our Ai is smart enough to compare your vintage photo against this massive dataset to recognize objects—like distinguishing a 1920s dress from a modern suit.",
       icon: <History className="h-6 w-6" />,
     },
     {

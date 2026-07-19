@@ -7,12 +7,12 @@ const faqs = [
   {
     question: "How does AI photo colorization actually work?",
     answer:
-      "Our AI analyzes the grayscale values, textures, and context in your black and white photo to predict realistic colors. It's trained on millions of historical photos and understands how different objects, clothing, and skin tones should be colored based on the era and visual cues in the image.",
+      "Our AI analyzes the grayscale values, textures, and context in your black and white photo to predict realistic colors.",
   },
   {
     question: "Are the colors historically accurate?",
     answer:
-      "Yes! Our AI is trained on historical data and understands period-appropriate colors for different eras. It recognizes clothing styles, architectural elements, and cultural context to apply colors that would have been authentic to the time period of your photo.",
+      "Yes! we have built our tool give you accurate historical colors, you can choose the option to preserve or enhance the colors. It recognizes clothing styles, architectural elements, and cultural context to apply colors that would have been authentic to the time period of your photo.",
   },
   {
     question: "What types of black and white photos work best?",
@@ -42,7 +42,7 @@ const faqs = [
   {
     question: "Is my family history safe during processing?",
     answer:
-      "Absolutely. Your photos are processed securely and uploaded media automatically deleted from our servers within 30 minutes and the generated media is automatically deleted after 7 days. We never store, share, or use your personal photos for any purpose other than restoration or animation. Your memories remain completely private and belong only to you.",
+      "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy.",
   },
 ]
 

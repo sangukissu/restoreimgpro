@@ -492,8 +492,8 @@ export function LocalizedPageClient({ page }: { page: LocalizedPageData }) {
               <div className="relative h-64 sm:h-80 bg-white/5 rounded-[2rem] border border-white/10 flex items-center justify-center overflow-hidden">
                 <div className="text-center">
                   <Timer className="w-16 h-16 text-brand-orange mx-auto mb-4 animate-pulse" />
-                  <div className="text-2xl font-bold">Auto-Deletion</div>
-                  <div className="text-gray-500 font-mono mt-1">in 30 minutes</div>
+                  <div className="text-2xl font-bold">You control media</div>
+                  <div className="text-gray-500 font-mono mt-1">Delete anytime in My Media</div>
                 </div>
                 {/* Scan line effect */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-brand-orange/50 shadow-[0_0_15px_rgba(255,77,0,0.5)] animate-[scan-line_3s_linear_infinite]"></div>
