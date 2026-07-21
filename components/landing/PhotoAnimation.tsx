@@ -75,11 +75,18 @@ export const PhotoAnimation: React.FC = () => {
             </h2>
           </div>
 
-          {/* Subtitle */}
-          <div className="max-w-sm">
+          {/* Subtitle & Feature Link */}
+          <div className="max-w-sm flex flex-col gap-4">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
               Transform still old photos into realistic videos. Choose from a variety of emotional expressions and gestures.
             </p>
+            <a
+              href="/ai-photo-animation"
+              className="inline-flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-brand-black transition-colors"
+            >
+              <span>Explore AI Photo Animation Guide</span>
+              <Sparkles size={16} />
+            </a>
           </div>
         </div>
 

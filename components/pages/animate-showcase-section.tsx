@@ -9,14 +9,14 @@ export default function AnimateShowcaseSection() {
       id: 1,
       title: "Vintage Family Portrait",
       description: "Watch as this 1950s family photo comes to life with gentle movements",
-      beforeImage: "/vintage-family-photo.png",
+      beforeImage: "/vintage-family-portraits.webp",
       afterVideo: "/placeholder.svg", // This would be a video in real implementation
     },
     {
       id: 2,
       title: "Old Wedding Photo",
       description: "Bring back the magic of this classic wedding moment",
-      beforeImage: "/scratched-childhood-photo.png",
+      beforeImage: "/scratched.webp",
       afterVideo: "/placeholder.svg",
     },
     {

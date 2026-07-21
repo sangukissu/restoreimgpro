@@ -118,11 +118,12 @@ export function AnalyticsLoader() {
       }
     }
 
-    // Default: no analytics until stored choice is grant
-    applyGoogleConsent(false)
+    // Default: analytics granted for traffic measurement, ad storage denied
+    applyGoogleConsent(true)
     applyClarityConsent(false)
 
-    sync(readConsent())
+    const initial = readConsent()
+    sync(initial || { ...readConsent(), analytics: true } as any)
 
     const onChange = (e: Event) => {
       const detail = (e as CustomEvent<ConsentState>).detail
@@ -143,7 +144,7 @@ export function AnalyticsLoader() {
             ad_storage: 'denied',
             ad_user_data: 'denied',
             ad_personalization: 'denied',
-            analytics_storage: 'denied',
+            analytics_storage: 'granted',
             functionality_storage: 'granted',
             security_storage: 'granted',
             wait_for_update: 500

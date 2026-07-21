@@ -41,7 +41,7 @@ export function NavActions() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" aria-label="Open user menu" className="rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src="/diverse-profile-avatars.png" alt="User avatar" />
+              <AvatarImage src="/avatar1.webp" alt="User avatar" />
               <AvatarFallback className="text-xs">UA</AvatarFallback>
             </Avatar>
           </Button>

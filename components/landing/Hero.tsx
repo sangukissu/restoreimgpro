@@ -137,17 +137,17 @@ export const Hero: React.FC = () => {
 
 
           {/* Heading */}
-          <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-            Restore, reunite, <br />
-            and preserve <br />
+          <h1 className="relative z-10 text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-[#111111] mb-6">
+            Restore Damaged Photos, <br className="hidden sm:block" />
+            Combine Relatives <br className="hidden sm:block" />
             <span className="text-gray-400 relative">
-              your family photos.
+              &amp; Animate Faces.
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-lg sm:text-xl text-gray-600 max-w-xl mb-10 font-medium leading-relaxed">
-            Repair damage while keeping original character, bring family members into one picture, add subtle motion when you want it, and keep the story in a private keepsake. Pay once — no subscription.
+            Repair scratches, tears, fading, and water stains with AI. Combine separate photos into unified family portraits, bring ancestral faces to life with subtle motion, and preserve stories in a private digital keepsake. Pay once — no subscription.
           </p>
 
           {/* CTA Buttons - Matches Formix Design */}

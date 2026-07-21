@@ -1,85 +1,117 @@
-import {
-  ProductFeaturePage,
-  productMetadata,
-  type ProductFeaturePageProps,
-} from "@/components/pages/product-feature-page"
-import { DASHBOARD_CTA, PAGE_H1, PRIVACY_COPY } from "@/lib/site-copy"
-import { FEATURE_CREDIT_COSTS } from "@/lib/pricing"
+import type { Metadata } from "next"
+import { Navbar } from "@/components/landing/Navbar"
+import { AddPersonHero } from "@/components/add-person/hero"
+import { AddPersonHowItWorks } from "@/components/add-person/how-it-works"
+import { AddPersonGuide } from "@/components/add-person/guide"
+import { AddPersonUseCases } from "@/components/add-person/use-cases"
+import { AddPersonHarmonizationGuide } from "@/components/add-person/harmonization-guide"
+import { AddPersonComparison } from "@/components/add-person/comparison"
+import { AddPersonFAQ } from "@/components/add-person/faq"
+import { ADD_PERSON_FAQS } from "@/lib/feature-faqs"
+import { Pricing } from "@/components/landing/Pricing"
+import { ProductCrossSell } from "@/components/seo/product-cross-sell"
+import { CTA } from "@/components/old-photo-restoration/CTA"
+import { Footer } from "@/components/landing/Footer"
 
-const page: ProductFeaturePageProps = {
-  slug: "/add-person-to-photo",
-  title: "Add a Person to a Family Photo | BringBack",
+export const metadata: Metadata = {
+  title: "Add a Person to a Family Photo | AI Photo Compositing | BringBack",
   description:
-    "Add a loved one or missing family member into a specific photo. Uses 2 credits. Compare the result to the original and review identity carefully.",
-  h1: PAGE_H1.addPerson,
-  subhead:
-    "Place someone into a family photo when you have a clear face reference and a suitable target scene. Always review likeness before you download or share.",
-  ctaLabel: "Open Add Person tool",
-  ctaHref: DASHBOARD_CTA.addPerson,
-  creditKey: "addPerson",
-  starterCanRun: true,
-  beforeSrc: "/add-person.webp",
-  afterSrc: "/family-portrait.png",
-  beforeLabel: "Example workflow",
-  afterLabel: "Composited result (illustrative)",
-  timeEstimate: "Usually under a minute",
-  inputs: [
-    "A target family photo with space for another person",
-    "A clear, front-facing reference photo of the person to add",
-    "Similar lighting and era when possible (helps identity)",
-    "JPG or PNG uploads from a scan or phone photo",
-  ],
-  outputs: [
-    "A single still image with the person composited into the scene",
-    "Side-by-side comparison in the dashboard",
-    "Downloadable result stored in My Media until you delete it",
-  ],
-  failureCases: [
-    "Very small, blurry, or side-profile reference faces",
-    "Heavy occlusion (hats, hands, dense groups)",
-    "Strong style mismatch between modern and historical photos",
-    "Scenes with no natural place for a person to stand",
-  ],
-  whatAiMayChange: [
-    "Clothing fit, body scale, and pose to match the scene",
-    "Lighting and color on the inserted person",
-    "Facial detail when the reference is low quality (reconstruction, not recovery)",
-    "Background edges near the insertion area",
-  ],
-  whenNotToUse: [
-    "When you need a forensically accurate historical record",
-    "When you only have a tiny or heavily damaged face crop",
-    "When surviving relatives would find a composite distressing without consent",
-    "For legal, identification, or evidentiary use",
-  ],
-  nextSteps: [
-    { label: "Restore damaged photos first", href: "/old-photo-restoration" },
-    { label: "Full family portrait from separate photos", href: "/ai-family-portrait" },
-    { label: "Save stories in Memory Book", href: "/family-memory-book" },
-    { label: "Pricing & credits", href: "/pricing" },
-  ],
-  faqs: [
-    {
-      q: "How many credits does add person use?",
-      a: `Add person costs ${FEATURE_CREDIT_COSTS.addPerson.credits} credits. The Restoration Starter pack has 4 credits, so it can cover up to two add-person runs (or four single-credit restorations).`,
-    },
-    {
-      q: "Will the person look exactly like my loved one?",
-      a: "Likeness depends on reference quality. Clear, well-lit faces work best. Missing detail may be reconstructed. Always compare to the original photos; if identity feels wrong, do not force a download.",
-    },
-    {
-      q: "Is this the same as AI family portrait?",
-      a: "Related but different. Family portrait builds a new group scene from separate photos. Add person inserts someone into an existing photo you choose.",
-    },
-    {
-      q: "What happens to my uploads?",
-      a: PRIVACY_COPY.faq,
-    },
-  ],
+    "Add missing relatives or loved ones into a family photo naturally with AI. Harmonizes lighting, color temperature, and film grain. 2 credits per run.",
+  alternates: {
+    canonical: "https://bringback.pro/add-person-to-photo",
+  },
+  openGraph: {
+    title: "Add a Person to a Family Photo | BringBack AI",
+    description:
+      "Combine separate photos of relatives into a single cohesive group portrait with natural AI lighting harmonization.",
+    url: "https://bringback.pro/add-person-to-photo",
+    siteName: "BringBack",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Add person to family photo before and after composite",
+      },
+    ],
+  },
+  robots: { index: true, follow: true },
 }
 
-export const metadata = productMetadata(page)
+const webAppJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://bringback.pro/add-person-to-photo#webapp",
+  name: "BringBack Add Person to Photo",
+  description:
+    "Combine separate photos of relatives into a single cohesive group portrait with natural AI lighting harmonization.",
+  url: "https://bringback.pro/add-person-to-photo",
+  applicationCategory: "PhotoEditingApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    name: "Add Person Credit Pack",
+    url: "https://bringback.pro/pricing",
+    priceCurrency: "USD",
+    price: "4.99",
+    description: "4 credits — covers 2 Add Person compositing runs.",
+  },
+}
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: ADD_PERSON_FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+}
 
 export default function AddPersonToPhotoPage() {
-  return <ProductFeaturePage {...page} />
+  return (
+    <div className="min-h-screen bg-brand-bg text-brand-black font-sans selection:bg-brand-orange selection:text-white relative overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
+      <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
+        <Navbar />
+      </header>
+
+      <main>
+        {/* 1. Hero (Static framed feature card) */}
+        <AddPersonHero />
+        {/* 2. 4-Step How It Works Workflow */}
+        <AddPersonHowItWorks />
+        {/* 3. Deep 200+ Line Technical Guide */}
+        <AddPersonGuide />
+        {/* 4. Real-World Use Cases */}
+        <AddPersonUseCases />
+        {/* 5. 4 Pillars of Harmonization */}
+        <AddPersonHarmonizationGuide />
+        {/* 6. Competitor Comparison Matrix */}
+        <AddPersonComparison />
+        {/* 7. Pricing */}
+        <Pricing />
+        {/* 8. FAQ */}
+        <AddPersonFAQ />
+        {/* 9. Product Cross Sell */}
+        <ProductCrossSell excludeHref="/add-person-to-photo" />
+        {/* 10. CTA Banner */}
+        <CTA />
+      </main>
+
+      <Footer />
+    </div>
+  )
 }

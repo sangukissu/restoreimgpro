@@ -1,78 +1,99 @@
-import {
-  ProductFeaturePage,
-  productMetadata,
-  type ProductFeaturePageProps,
-} from "@/components/pages/product-feature-page"
-import { DASHBOARD_CTA, PAGE_H1, PRIVACY_COPY } from "@/lib/site-copy"
+import type { Metadata } from "next"
+import { Navbar } from "@/components/landing/Navbar"
+import { MemoryBookHero } from "@/components/memory-book-page/hero"
+import { MemoryBookArchivalPillars } from "@/components/memory-book-page/archival-pillars"
+import { MemoryBookFAQ } from "@/components/memory-book-page/faq"
+import { MEMORY_BOOK_FAQS } from "@/lib/feature-faqs"
+import { Pricing } from "@/components/landing/Pricing"
+import { ProductCrossSell } from "@/components/seo/product-cross-sell"
+import { CTA } from "@/components/old-photo-restoration/CTA"
+import { Footer } from "@/components/landing/Footer"
 
-const page: ProductFeaturePageProps = {
-  slug: "/family-memory-book",
-  title: "Family Memory Book — Private Photo Keepsake | BringBack",
+export const metadata: Metadata = {
+  title: "Digital Family Memory Book — Private Keepsake | BringBack",
   description:
-    "Turn restored family photos, names, dates, and stories into a private shareable keepsake. Included with the Family pack. Originals stay distinct from restored versions.",
-  h1: PAGE_H1.memoryBook,
-  subhead:
-    "A private place to keep restored photos with captions, people, and stories—so the album is not just pixels, but context the next generation can understand.",
-  ctaLabel: "Open Memory Book",
-  ctaHref: DASHBOARD_CTA.memoryBook,
-  creditKey: "memoryBook",
-  starterCanRun: false,
-  beforeSrc: "/family-history.png",
-  afterSrc: "/family-photo1.png",
-  beforeLabel: "Your restored photos",
-  afterLabel: "Stories + names together",
-  timeEstimate: "Edit at your own pace",
-  inputs: [
-    "Restored or original photos from your BringBack library",
-    "Names, dates, places, and short captions you type",
-    "Optional uncertainty notes (e.g. “approx. 1952”)",
-  ],
-  outputs: [
-    "A private digital keepsake you control",
-    "Pages that keep originals and restored versions distinguishable",
-    "Share options you can revoke (when you choose to share)",
-  ],
-  failureCases: [
-    "Empty drafts abandoned without photos",
-    "Missing captions that leave future relatives guessing",
-    "Overwriting family stories with AI-generated text you have not verified",
-  ],
-  whatAiMayChange: [
-    "Memory Book itself is primarily your content—AI does not invent family facts",
-    "Any linked restorations still carry the usual AI reconstruction limits",
-  ],
-  whenNotToUse: [
-    "If you only need a one-off download (use My Media instead)",
-    "If you want a public social feed—this is a private keepsake, not a social network",
-  ],
-  nextSteps: [
-    { label: "Restore photos", href: "/old-photo-restoration" },
-    { label: "Family portrait", href: "/ai-family-portrait" },
-    { label: "Add person", href: "/add-person-to-photo" },
-    { label: "Family pack pricing", href: "/pricing" },
-  ],
-  faqs: [
-    {
-      q: "Does Memory Book cost credits?",
-      a: "Editing the Memory Book does not spend generation credits. Access is included with the Family pack. Restoring or animating photos used inside the book still uses the normal feature credit costs.",
-    },
-    {
-      q: "Is it private?",
-      a: "Yes. Keepsakes are private by default. Share links are optional and can be revoked. This is intentional long-term storage you control—not a 30-minute auto-delete workspace.",
-    },
-    {
-      q: "How is this different from My Media?",
-      a: "My Media stores individual results. Memory Book organizes photos into a story with names, captions, and structure for the family archive.",
-    },
-    {
-      q: "How is media retained?",
-      a: PRIVACY_COPY.faq,
-    },
-  ],
+    "Organize restored family photos with names, dates, locations, and oral stories into a private digital keepsake. Included with the Family plan.",
+  alternates: {
+    canonical: "https://bringback.pro/family-memory-book",
+  },
+  openGraph: {
+    title: "Digital Family Memory Book | BringBack AI",
+    description:
+      "A private place to organize restored photos with names, dates, and family stories so context is preserved for future generations.",
+    url: "https://bringback.pro/family-memory-book",
+    siteName: "BringBack",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Digital family memory book keepsake preview",
+      },
+    ],
+  },
+  robots: { index: true, follow: true },
 }
 
-export const metadata = productMetadata(page)
+const webAppJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://bringback.pro/family-memory-book#webapp",
+  name: "BringBack Digital Family Memory Book",
+  description:
+    "Organize restored family photos with names, dates, and stories into a private digital keepsake.",
+  url: "https://bringback.pro/family-memory-book",
+  applicationCategory: "PhotoEditingApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    name: "Family Pack Access",
+    url: "https://bringback.pro/pricing",
+    priceCurrency: "USD",
+    price: "19.99",
+    description: "Includes Memory Book access and restoration credits.",
+  },
+}
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: MEMORY_BOOK_FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+}
 
 export default function FamilyMemoryBookPage() {
-  return <ProductFeaturePage {...page} />
+  return (
+    <div className="min-h-screen bg-brand-bg text-brand-black font-sans selection:bg-brand-orange selection:text-white relative overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
+      <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
+        <Navbar />
+      </header>
+
+      <main>
+        <MemoryBookHero />
+        <MemoryBookArchivalPillars />
+        <Pricing />
+        <MemoryBookFAQ />
+        <ProductCrossSell excludeHref="/family-memory-book" />
+        <CTA />
+      </main>
+
+      <Footer />
+    </div>
+  )
 }

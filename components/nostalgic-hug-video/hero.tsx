@@ -116,7 +116,7 @@ export default function NostalgicHugHero() {
                     <div className="relative rounded-[2rem] overflow-hidden border-[6px] border-white bg-gray-100 shadow-2xl aspect-video">
                         <HeroVideo
                             src="/hug/final-video.mp4"
-                            poster="/hug/second-frame-image-for-video.png"
+                            poster="/video-thumbnail.webp"
                             className="w-full h-full object-cover"
                         />
                         {/* Professional Badge Overlay */}

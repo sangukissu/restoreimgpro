@@ -16,15 +16,16 @@ interface CaseStudy {
   tags: string[];
 }
 
-const CASE_STUDIES: CaseStudy[] = [
+const CASE_STUDIES: (CaseStudy & { link: string })[] = [
   {
     id: 'scratches',
     title: 'Scratches & Dust',
-    description: 'Remove thousands of micro-scratches, dust particles, and cracks while preserving the original texture.',
+    description: 'Remove thousands of micro-scratches, dust particles, and cracks while preserving original texture.',
     icon: <Eraser size={24} />,
     beforeImage: '/scratched.webp',
     afterImage: '/scratched-restored.webp',
-    tags: ['De-noise', 'Texture Fill']
+    tags: ['De-noise', 'Texture Fill'],
+    link: '/old-photo-restoration',
   },
   {
     id: 'tears',
@@ -33,7 +34,8 @@ const CASE_STUDIES: CaseStudy[] = [
     icon: <Scissors size={24} />,
     beforeImage: '/torn.webp',
     afterImage: '/torn-restored.webp',
-    tags: ['Generative Fill', 'Structure Fix']
+    tags: ['Generative Fill', 'Structure Fix'],
+    link: '/old-photo-restoration',
   },
   {
     id: 'fading',
@@ -42,7 +44,8 @@ const CASE_STUDIES: CaseStudy[] = [
     icon: <Droplets size={24} />,
     beforeImage: '/childhood-memories-black-and-white.webp',
     afterImage: '/childhood-memories-colorized.webp',
-    tags: ['Colorize', 'Tone Mapping']
+    tags: ['Colorize', 'Tone Mapping'],
+    link: '/colorize-photos',
   },
   {
     id: 'blur',
@@ -51,7 +54,8 @@ const CASE_STUDIES: CaseStudy[] = [
     icon: <ScanLine size={24} />,
     beforeImage: '/blurred-lady.webp',
     afterImage: '/unblurred-lady.webp',
-    tags: ['Super Resolution', 'Sharpening']
+    tags: ['Super Resolution', 'Sharpening'],
+    link: '/denoise-photos',
   }
 ];
 
@@ -147,10 +151,17 @@ export const Showcase: React.FC = () => {
               <span className="text-gray-400">Capabilities</span>
             </h2>
           </div>
-          <div className="max-w-sm">
+          <div className="max-w-sm flex flex-col gap-4">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
               From faded family portraits to water-damaged keepsakes, see how our AI handles the toughest challenges.
             </p>
+            <a
+              href="/old-photo-restoration"
+              className="inline-flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-brand-black transition-colors"
+            >
+              <span>Explore Old Photo Restoration Guide</span>
+              <Sparkles size={16} />
+            </a>
           </div>
         </div>
 

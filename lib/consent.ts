@@ -21,7 +21,7 @@ export const DEFAULT_CONSENT: ConsentState = {
   version: CONSENT_POLICY_VERSION,
   updatedAt: "",
   necessary: true,
-  analytics: false,
+  analytics: true,
   support: false,
   media: false,
 }

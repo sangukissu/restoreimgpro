@@ -329,49 +329,65 @@ const BENEFITS = [
     icon: <Sparkles size={24} />,
     title: 'Restore & Animate',
     description: 'First restores your photos to perfect quality, then brings people to life with natural movement and expressions.',
-    visual: <VisualRestore />
+    visual: <VisualRestore />,
+    link: '/old-photo-restoration',
+    linkText: 'Explore Restoration Guide →',
   },
   {
     icon: <Frame size={24} />,
-    title: 'Digital Photo Frames',
-    description: 'Create stunning digital frames with customizable styles, colors, and captions to showcase your restored memories.',
-    visual: <VisualFrames />
+    title: 'Digital Family Keepsake',
+    description: 'Organize your restored family photos into a private Memory Book with dates, locations, and oral stories.',
+    visual: <VisualFrames />,
+    link: '/family-memory-book',
+    linkText: 'Explore Memory Book →',
   },
   {
     icon: <Wrench size={24} />,
     title: 'Handles Any Damage',
     description: 'Scratches, tears, water damage, fading - our AI tackles every type of photo damage before animation.',
-    visual: <VisualDamage />
+    visual: <VisualDamage />,
+    link: '/old-photo-restoration',
+    linkText: 'View Damage Types →',
   },
   {
     icon: <Smile size={24} />,
     title: 'Natural Face Animation',
     description: "Creates realistic facial movements while preserving the person's authentic likeness and character.",
-    visual: <VisualFaceMesh />
+    visual: <VisualFaceMesh />,
+    link: '/ai-photo-animation',
+    linkText: 'Explore Animation Guide →',
   },
   {
     icon: <Palette size={24} />,
     title: 'Smart Color Revival',
     description: 'Brings back original colors in photos, then adds lifelike animation that feels natural and authentic.',
-    visual: <VisualColor />
+    visual: <VisualColor />,
+    link: '/colorize-photos',
+    linkText: 'Explore Colorization →',
   },
   {
     icon: <Heart size={24} />,
-    title: 'Emotion Recognition',
-    description: 'AI detects facial expressions and creates appropriate animations - gentle smiles, warm eyes, natural movements.',
-    visual: <VisualEmotion />
+    title: 'Multi-Person Compositing',
+    description: 'Combine separate photos of relatives or add missing loved ones into a single unified family portrait.',
+    visual: <VisualEmotion />,
+    link: '/add-person-to-photo',
+    linkText: 'Explore Add Person →',
   },
   {
     icon: <Lock size={24} />,
     title: 'Complete Privacy',
     description: 'Generated media stays in your account until you delete it. See our Privacy Policy for processors and retention.',
-    visual: <VisualPrivacy />
+    visual: <VisualPrivacy />,
+    link: '/privacy',
+    linkText: 'Read Privacy Policy →',
   },
   {
     icon: <ScanLine size={24} />,
-    title: 'Smart Damage Check',
-    description: "If we detect heavy damage (tears, stains, scratches), we automatically offer a free second pass. Minor noise/blur doesn't qualify.",
-    visual: <VisualDamageCheck />
+    title: 'Object & Figure Eraser',
+    description: 'Erase photobombers, strangers, or distracting background objects while AI seamlessly rebuilds the scene.',
+    visual: <VisualDamageCheck />,
+    link: '/remove-person-from-photo',
+    linkText: 'Explore Remove Person →',
   }
 ];
 
@@ -428,6 +444,15 @@ export const Benefits: React.FC = () => {
                   <p className="text-gray-500 font-medium leading-relaxed text-sm">
                     {item.description}
                   </p>
+
+                  {item.link && (
+                    <a
+                      href={item.link}
+                      className="mt-2 text-xs font-bold text-brand-orange hover:text-brand-black transition-colors self-start"
+                    >
+                      {item.linkText}
+                    </a>
+                  )}
                 </div>
 
               </div>

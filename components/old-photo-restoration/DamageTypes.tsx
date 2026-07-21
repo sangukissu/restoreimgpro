@@ -131,41 +131,42 @@ const ComparisonSlider: React.FC<{ before: string; after: string; imgAlt: string
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[400px] sm:h-[500px] overflow-hidden rounded-[2rem] cursor-ew-resize select-none group border-4 border-white shadow-2xl"
+      className="relative w-full aspect-[3/2] min-h-[300px] overflow-hidden rounded-[2rem] cursor-ew-resize select-none group border-4 border-white shadow-2xl bg-gray-100"
       onMouseMove={handleMove}
       onTouchMove={handleMove}
     >
       {/* AFTER Image (Background) */}
-      <img src={after} alt={`Restored - ${imgAlt}`} className="absolute inset-0 w-full h-full object-cover" />
+      <img
+        src={after}
+        alt={`Restored - ${imgAlt}`}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
 
-      {/* BEFORE Image (Foreground - Clipped) */}
+      {/* BEFORE Image (Foreground clipped with clip-path to prevent squishing) */}
+      <img
+        src={before}
+        alt={`Damaged - ${imgAlt}`}
+        className="absolute inset-0 w-full h-full object-cover grayscale sepia-[0.3] contrast-125 brightness-90 blur-[1px] z-10"
+        style={{
+          clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
+        }}
+      />
+
+      {/* Slider Handle Divider Line */}
       <div
-        className="absolute inset-0 w-full h-full overflow-hidden border-r-[3px] border-white bg-gray-900"
-        style={{ width: `${sliderPosition}%` }}
-      >
-        <img
-          src={before}
-          alt={`Damaged - ${imgAlt}`}
-          className="absolute inset-0 w-full h-full object-cover max-w-none grayscale sepia-[0.3] contrast-125 brightness-90 blur-[1px]"
-          style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }}
-        />
-        {/* Simulated Damage Overlay */}
-        <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/scratches.png')] pointer-events-none"></div>
-
-        <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold tracking-widest uppercase">Before</div>
-      </div>
-
-      {/* Slider Handle */}
-      <div
-        className="absolute top-0 bottom-0 w-1 bg-transparent z-20"
+        className="absolute top-0 bottom-0 w-0.5 bg-white z-20 shadow-[0_0_10px_rgba(0,0,0,0.5)] pointer-events-none"
         style={{ left: `${sliderPosition}%` }}
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center text-brand-orange transform group-hover:scale-110 transition-transform">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center text-brand-orange transform group-hover:scale-110 transition-transform pointer-events-auto">
           <ScanLine size={18} strokeWidth={2.5} />
         </div>
       </div>
 
-      <div className="absolute bottom-4 right-4 bg-brand-orange/90 backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold tracking-widest uppercase z-10 flex items-center gap-2">
+      <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold tracking-widest uppercase z-20">
+        Before
+      </div>
+
+      <div className="absolute bottom-4 right-4 bg-brand-orange/90 backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold tracking-widest uppercase z-20 flex items-center gap-2">
         <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
         After
       </div>
@@ -228,7 +229,7 @@ export const DamageTypes: React.FC = () => {
                 </div>
 
                 {/* Visual Side: Premium Interactive Slider */}
-                <div className="flex-1 w-full max-w-xl">
+                <div className="flex-1 w-full">
                   <ComparisonSlider 
                     before={type.beforeImg}
                     after={type.afterImg}

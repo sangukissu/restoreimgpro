@@ -17,11 +17,11 @@ import { CTA } from '@/components/landing/CTA';
 
 
 export const metadata: Metadata = {
-  title: "Restore, reunite, and preserve your family photos | BringBack",
+  title: "AI Old Photo Restoration, Family Portraits & Photo Animation | BringBack",
   description:
-    "Repair old photos, reunite family members in one picture, add subtle motion, and keep stories in a private keepsake. Pay once — no subscription.",
+    "Restore torn and faded family photos, combine separate relatives into group portraits, and animate old faces with realistic motion. Preserve ancestral memories in a private keepsake. Pay once — no subscription.",
   keywords:
-    "family photo restoration, restore old photos, AI family portrait, add person to photo, family memory book, photo animation",
+    "family photo restoration, restore old photos, AI family portrait, add person to photo, photo animation, animate old faces, family memory book",
   alternates: {
     canonical: "https://bringback.pro/",
   },
@@ -31,9 +31,9 @@ const homePageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/#webapp',
-  name: 'BringBack — Family Photo Preservation',
+  name: 'BringBack — Family Photo Preservation & AI Animation',
   description:
-    'Restore damaged family photos, reunite people into one portrait, add subtle motion, and preserve stories in a private Memory Book.',
+    'Restore damaged family photos, combine relatives into group portraits, animate old faces with realistic motion, and preserve stories in a private Memory Book.',
   url: 'https://bringback.pro/',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',

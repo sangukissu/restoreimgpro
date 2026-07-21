@@ -149,8 +149,8 @@ export const compareData: Record<string, ComparePageData> = {
       h1: "Remini alternative for restoring old family photos.",
       subheadline: "Remini is designed for modern selfies, but its recurring subscriptions and aggressive \"plastic-looking\" skin smoothing ruin historical portraits. BringBack is the premium web-based alternative with affordable one-time pricing, zero watermarks, and careful AI.",
       visuals: {
-        beforeImage: "/b&w-old1.jpg",
-        afterImage: "/b&w-restored1.jpg"
+        beforeImage: "/scratched.webp",
+        afterImage: "/scratched-restored.webp"
       }
     },
     verdict: {
@@ -320,8 +320,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "A cleaner, permanent VanceAI alternative for family history.",
       "subheadline": "VanceAI offers a wide suite of tools, but their confusing credit system and expiring points make one-time projects stressful. BringBack provides a focused, premium restoration experience where your credits never expire and your ancestors' faces are never distorted by generic AI filters.",
       "visuals": {
-        "beforeImage": "/b&w-old-vance.jpg",
-        "afterImage": "/b&w-restored-vance.jpg"
+        "beforeImage": "/torn.webp",
+        "afterImage": "/torn-restored.webp"
       }
     },
     "verdict": {
@@ -490,8 +490,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "A dedicated Nero AI alternative for family history.",
       "subheadline": "Nero AI is a massive toolkit designed for e-commerce upscaling and anime generation, but its general-purpose models lack the delicate touch needed for historical faces. BringBack is the premium web-based alternative built specifically to restore, colorize, and animate your ancestors—without forcing you to download heavy PC software.",
       "visuals": {
-        "beforeImage": "/b&w-old2.jpg",
-        "afterImage": "/b&w-restored2.jpg"
+        "beforeImage": "/yellowandfaded.webp",
+        "afterImage": "/yellowandfaded-restored.webp"
       }
     },
     "verdict": {
@@ -660,8 +660,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "A modern, premium JPGHD alternative for historical photos.",
       "subheadline": "JPGHD is one of the original AI photo enhancers, but its aging interface and older generation algorithms often leave photos looking over-processed. BringBack is the modern web-based alternative equipped with 2026 diffusion models, providing careful restoration, natural cinematic animation, and strict account-controlled media privacy.",
       "visuals": {
-        "beforeImage": "/b&w-old1.jpg",
-        "afterImage": "/b&w-restored1.jpg"
+        "beforeImage": "/faded.webp",
+        "afterImage": "/fade-restored.webp"
       }
     },
     "verdict": {
@@ -830,8 +830,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "The instant, private Phowd alternative for old photos.",
       "subheadline": "Phowd relies on crowdsourced human freelancers, meaning you wait days and pay premium rates while strangers download your family photos. BringBack is the modern AI alternative: secure, instantaneous, and highly accurate photo restoration at a fraction of the cost.",
       "visuals": {
-        "beforeImage": "/b&w-old3.jpg",
-        "afterImage": "/b&w-restored3.jpg"
+        "beforeImage": "/ripped.webp",
+        "afterImage": "/ripped-restored.webp"
       }
     },
     "verdict": {
@@ -1000,8 +1000,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "The EaseUS alternative built for family history, not file recovery.",
       "subheadline": "EaseUS is a massive utility company specializing in corrupted digital files and data recovery. BringBack is the premium web-based alternative built specifically for the visual restoration, colorization, and animation of physically damaged historical family photos.",
       "visuals": {
-        "beforeImage": "/b&w-old4.jpg",
-        "afterImage": "/b&w-restored4.jpg"
+        "beforeImage": "/water-damaged.webp",
+        "afterImage": "/water-damage-restored.webp"
       }
     },
     "verdict": {
@@ -1170,8 +1170,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "The Pixelbin alternative built for families, not developers.",
       "subheadline": "Pixelbin.io is a powerful Digital Asset Management (DAM) platform built for e-commerce developers. For families restoring precious memories, its technical interface and storage-based pricing are overkill. BringBack is the premium consumer alternative offering careful AI, account-controlled media privacy, and cinematic animation in a simple web app.",
       "visuals": {
-        "beforeImage": "/b&w-old5.jpg",
-        "afterImage": "/b&w-restored5.jpg"
+        "beforeImage": "/under-exposed.webp",
+        "afterImage": "/under-exposed-restored.webp"
       }
     },
     "verdict": {
@@ -1340,8 +1340,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "The Airbrush alternative built for history, not selfies.",
       "subheadline": "Airbrush is a famous beauty app designed to make modern selfies look flawless. Applying its aggressive skin-smoothing algorithms to vintage photography often ruins the authenticity of your ancestors' faces. BringBack is the premium web alternative built exclusively for careful restoration and cinematic animation.",
       "visuals": {
-        "beforeImage": "/b&w-old1.jpg",
-        "afterImage": "/b&w-restored1.jpg"
+        "beforeImage": "/grainy-photo.webp",
+        "afterImage": "/grainy-photo-restored.webp"
       }
     },
     "verdict": {
@@ -1510,8 +1510,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "The all-in-one ImageColorizer alternative for true historical preservation.",
       "subheadline": "ImageColorizer is a great starting point for basic tinting, but jumping between its fragmented tools for enhancing, restoring, and colorizing is tedious. BringBack is the premium web-based alternative that seamlessly repairs deep physical damage, applies careful semantic colorization, and animates your ancestors in one intuitive workflow.",
       "visuals": {
-        "beforeImage": "/b&w-old6.jpg",
-        "afterImage": "/color-restored6.jpg"
+        "beforeImage": "/bw-to-colorize.webp",
+        "afterImage": "/old-image3-restored-colorized.webp"
       }
     },
     "verdict": {
@@ -1680,8 +1680,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "The modern, cross-platform PhotoGlory alternative.",
       "subheadline": "PhotoGlory is a capable Windows-only desktop program that relies heavily on manual editing sliders and brushes. BringBack is the premium web-based alternative—requiring no heavy software downloads, working flawlessly on Mac and PC, and utilizing 2026 AI diffusion models to restore and animate photos in a single click.",
       "visuals": {
-        "beforeImage": "/b&w-old7.jpg",
-        "afterImage": "/b&w-restored7.jpg"
+        "beforeImage": "/scratched.webp",
+        "afterImage": "/scratched-restored.webp"
       }
     },
     "verdict": {
@@ -1850,8 +1850,8 @@ export const compareData: Record<string, ComparePageData> = {
       "h1": "The UnblurImage alternative for authentic historical preservation.",
       "subheadline": "UnblurImage.ai is a utility designed to sharpen out-of-focus digital photos. However, applying aggressive sharpening algorithms to vintage prints often results in 'crunchy', over-processed images that destroy authentic film grain. BringBack is the premium alternative that uses 2026 diffusion models to delicately repair physical damage and restore true identity without over-sharpening.",
       "visuals": {
-        "beforeImage": "/b&w-old8.jpg",
-        "afterImage": "/b&w-restored8.jpg"
+        "beforeImage": "/torn.webp",
+        "afterImage": "/torn-restored.webp"
       }
     },
     "verdict": {

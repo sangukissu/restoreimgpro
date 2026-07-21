@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
 import { SiteBreadcrumb, type Crumb } from "@/components/seo/site-breadcrumb"
+import { SiteBreadcrumbsSchema } from "@/components/seo/site-breadcrumbs-schema"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 import type { ReactNode } from "react"
 
@@ -20,6 +21,7 @@ export function GuideLayout({
 }) {
   return (
     <div className="min-h-screen bg-brand-bg">
+      <SiteBreadcrumbsSchema items={[{ name: "Guides", href: "/guides" }, ...crumbs]} />
       <Navbar />
       <main className="pt-28 pb-10">
         <article className="max-w-[760px] mx-auto px-4 sm:px-8">

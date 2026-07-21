@@ -90,37 +90,37 @@ const FRAME_SHOWCASE_ITEMS = [
   {
     title: "Classic Wood Frame",
     description: "Elegant wooden frame with natural grain",
-    image: "/frame-classic-wood.webp",
+    image: "/digital-frame.webp",
     alt: "Classic wooden frame showcasing restored family photo"
   },
   {
     title: "Modern Black Frame",
     description: "Sleek black frame for contemporary display",
-    image: "/frame-modern-black.webp", 
+    image: "/family-portrait.png", 
     alt: "Modern black frame with restored portrait"
   },
   {
     title: "Vintage Gold Frame",
     description: "Ornate gold frame for timeless elegance",
-    image: "/frame-vintage-gold.webp",
+    image: "/vintage-family-portraits.webp",
     alt: "Vintage gold frame displaying restored wedding photo"
   },
   {
     title: "Minimalist White Frame",
     description: "Clean white frame for modern homes",
-    image: "/frame-minimalist-white.webp",
+    image: "/family-photo2.jpg",
     alt: "Minimalist white frame with restored family portrait"
   },
   {
     title: "Rustic Barnwood Frame",
     description: "Weathered wood frame with character",
-    image: "/frame-rustic-barnwood.webp",
+    image: "/old-image3-restored-colorized.webp",
     alt: "Rustic barnwood frame showcasing restored vintage photo"
   },
   {
     title: "Silver Metal Frame",
     description: "Polished silver frame for sophisticated display",
-    image: "/frame-silver-metal.webp",
+    image: "/childhood-memories-colorized.webp",
     alt: "Silver metal frame with restored black and white photo"
   }
 ]

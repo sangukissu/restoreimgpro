@@ -11,13 +11,13 @@ export default function AnimateMemoriesSection() {
       icon: Users,
       title: "Family Portraits",
       description: "Bring your family history to life with animated vintage portraits",
-      image: "/vintage-family-photo.png"
+      image: "/vintage-family-portraits.webp"
     },
     {
       icon: Heart,
       title: "Wedding Photos",
       description: "Relive precious wedding moments with gentle, romantic animations",
-      image: "/scratched-childhood-photo.png"
+      image: "/scratched.webp"
     },
     {
       icon: Camera,
