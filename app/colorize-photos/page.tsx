@@ -10,6 +10,7 @@ import ColorizeHowItWorksDeepDive from "@/components/pages/colorize-how-it-works
 import ColorizeFAQSection from "@/components/pages/colorize-faq-section"
 import { CTA } from '@/components/landing/CTA';
 import ColorizeHero from "@/components/pages/colorize-hero"
+import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 
 
 
@@ -243,6 +244,7 @@ export default function ColorizePage() {
       <ColorizeQualitySection />
       <ColorizeProfessionalService />
       <ColorizeFAQSection />
+      <ProductCrossSell excludeHref="/colorize-photos" />
       <CTA />
       <Footer />
     </div>

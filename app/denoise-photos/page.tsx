@@ -8,11 +8,11 @@ import DenoiseHowItWorksSection from "@/components/pages/denoise-how-it-works-se
 import DenoiseShowcaseSection from "@/components/pages/denoise-showcase-section"
 import DenoiseFeaturesSection from "@/components/pages/denoise-features-section"
 import DenoiseFAQSection from "@/components/pages/denoise-faq-section"
-import { CTA } from '@/components/landing/CTA';
-import { Clients } from '@/components/landing/Clients';
 import DenoiseTechnologySection from "@/components/pages/denoise-technology-section"
 import { Compare } from "@/components/ui/compare"
 import { Pricing } from '@/components/landing/Pricing';
+import { ProductCrossSell } from "@/components/seo/product-cross-sell"
+import { CTA } from '@/components/landing/CTA';
 
 
 
@@ -339,9 +339,9 @@ export default function DenoisePage() {
       <Pricing />
       <DenoiseShowcaseSection />
       <DenoiseFeaturesSection />
-      <Clients />
       <DenoiseTechnologySection />
       <DenoiseFAQSection />
+      <ProductCrossSell excludeHref="/denoise-photos" />
       <CTA />
       <Footer />
     </div>

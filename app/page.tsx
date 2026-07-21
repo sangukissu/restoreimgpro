@@ -11,7 +11,6 @@ import { PhotoAnimation } from '@/components/landing/PhotoAnimation';
 import { WhyUs } from '@/components/landing/WhyUs';
 import { Benefits } from '@/components/landing/Benefits';
 import { Pricing } from '@/components/landing/Pricing';
-import { Clients } from '@/components/landing/Clients';
 import { FAQ } from '@/components/landing/FAQ';
 import { Footer } from '@/components/landing/Footer';
 import { CTA } from '@/components/landing/CTA';
@@ -390,7 +389,6 @@ export default function Page() {
         <WhyUs />
         <Benefits />
         <Pricing />
-        <Clients />
         <FAQ />
         <CTA />
       </main>

@@ -6,7 +6,6 @@ import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
 import { Pricing } from '@/components/landing/Pricing';
 import { FAQ } from '@/components/landing/FAQ';
-import { Clients } from '@/components/landing/Clients';
 import Link from 'next/link';
 import { Upload, Star, Clock, Shield, ArrowRight, Zap, CheckCircle2, Heart, Palette, Image as ImageIcon, Camera, Layers, History, Gift, Printer, Cloud, Globe, Sun, Wallet, Minimize, Grid, Mouse, Maximize, Layout, Users, Smartphone, Download } from 'lucide-react';
 import React from 'react';
@@ -576,9 +575,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
           {/* --- PRICING --- */}
           <Pricing />
-
-          {/* --- CLIENTS --- */}
-          <Clients />
 
           {/* --- FAQ --- */}
           <FAQ 
