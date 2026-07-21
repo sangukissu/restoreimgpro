@@ -166,10 +166,10 @@ export const Hero: React.FC = () => {
             </Link>
 
             {/* Secondary: Black Button with Orange Circle Play */}
-            <Link href="#showcase">
+            <Link href="#damage-types">
 
               <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black border border-gray-200 pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-transform duration-200 hover:scale-105 active:scale-95 shadow-sm shrink-0 hover:border-gray-300">
-                <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">See Demo</span>
+                <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">See Repair Demos</span>
                 <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
                   <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
