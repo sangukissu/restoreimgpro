@@ -15,16 +15,16 @@ import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 
 
 export const metadata: Metadata = {
-  title: "AI Photo Animation — Add a subtle smile or movement | BringBack",
+  title: "AI Photo Animation Generator | Bring Old Photos to Life | BringBack",
   description:
-    "Add a subtle smile or gentle movement to an old portrait. 10 credits per animation. Restore damaged photos first when faces are unclear. Pay once — no subscription.",
+    "Animate old family photos with natural facial movement, gentle smiles, and realistic blinks. Upload any portrait to bring ancestors to life in under 60 seconds.",
   alternates: {
     canonical: "/ai-photo-animation",
   },
   openGraph: {
-    title: "AI Photo Animation | BringBack",
+    title: "AI Photo Animation Generator | BringBack",
     description:
-      "Add a subtle smile or gentle movement to an old portrait. 10 credits per animation.",
+      "Animate old family photos with natural facial movement, gentle smiles, and realistic blinks. Bring ancestors to life in high definition.",
     type: "website",
     url: "https://bringback.pro/ai-photo-animation",
   },

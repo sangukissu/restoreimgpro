@@ -10,23 +10,20 @@ export default function AIAnimationHero() {
 
       <div className="flex flex-col items-center text-center z-10 relative">
 
-        {/* Badge - Exact match to Landing Page */}
-        <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-4 py-2 rounded-full mb-8 shadow-lg shadow-black/5">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#FF4D00] animate-pulse"></div>
-          <span className="text-sm font-semibold tracking-wide">AI Family Portrait Generator</span>
+        {/* Badge */}
+        <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-8 shadow-lg shadow-black/10">
+          <span className="text-brand-orange">//</span> AI Family Portrait Generator <span className="text-brand-orange">//</span>
         </div>
 
-        {/* Heading - Exact Typography */}
-        <h1 className="max-w-5xl text-[3.5rem] sm:text-[3rem] md:text-[3rem] xl:text-[4rem] tracking-tighter leading-[1.1] text-[#111111] mb-8">
-         Bring separate family photos<br />
-          <span className="text-gray-400">
-            into one natural portrait.
-          </span>
+        {/* Heading */}
+        <h1 className="max-w-5xl text-[3.2rem] sm:text-[4rem] xl:text-[4.5rem] font-extrabold tracking-tight leading-[0.95] text-brand-black mb-8">
+          AI Family Portrait Generator <br />
+          <span className="text-gray-400">Combine Separate Photos into One.</span>
         </h1>
 
-        {/* Subheading - Exact Typography */}
-        <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mb-12 font-medium leading-relaxed">
-          Upload clear portraits of 2–4 people, choose a canvas, and generate one group image. 2 credits per run. Always compare likeness to your sources — lighting, pose, and scale may change to fit the scene.
+        {/* Subheading */}
+        <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mb-12 font-medium leading-relaxed">
+          Combine separate photos of living or deceased family members into one studio group portrait. Upload 2–4 portraits, select a studio backdrop, and generate a seamless memory with harmonized lighting and realistic scale.
         </p>
 
         {/* CTA Buttons - Exact Match */}

@@ -139,10 +139,10 @@ export const Hero: React.FC = () => {
 
           {/* Heading */}
           <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-            Repair old photos <br />
-            while keeping their <br />
+            AI Old Photo Restoration <br />
+            for your family's <br />
             <span className="text-gray-400 relative">
-              original character.
+              cherished memories.
             </span>
           </h1>
 

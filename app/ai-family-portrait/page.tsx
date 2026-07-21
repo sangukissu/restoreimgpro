@@ -14,16 +14,16 @@ import { Pricing } from "@/components/landing/Pricing"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 
 export const metadata: Metadata = {
-  title: "AI Family Portrait — Bring separate photos into one portrait | BringBack",
+  title: "AI Family Portrait Generator | Combine Separate Photos into One | BringBack",
   description:
-    "Bring separate family photos into one natural portrait. 2 credits. Clear front-facing references work best. Always compare likeness before download.",
+    "Combine separate family photos into one natural group portrait with AI. Merge individual photos, add deceased relatives, and compose studio portraits. 2 credits.",
   alternates: {
     canonical: "/ai-family-portrait",
   },
   openGraph: {
-    title: "AI Family Portrait | BringBack",
+    title: "AI Family Portrait Generator | BringBack",
     description:
-      "Bring separate family photos into one natural portrait. 2 credits per generation.",
+      "Combine separate family photos into one natural group portrait with AI. Merge individual photos, add deceased relatives, and compose studio portraits.",
     type: "website",
     url: "https://bringback.pro/ai-family-portrait",
     images: [

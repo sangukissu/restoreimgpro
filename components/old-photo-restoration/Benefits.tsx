@@ -174,7 +174,7 @@ const VisualFaceMesh = () => (
     {/* UI Layer: Play Button (Visible initially, then hides) */}
     <div className="absolute inset-0 flex items-center justify-center bg-black/20 animate-[ui-fade-out_8s_infinite]">
       <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 shadow-lg">
-        <Play size={20} className="text-white ml-1 fill-white" />
+        <Sparkles size={20} className="text-white fill-white" />
       </div>
     </div>
 
@@ -182,9 +182,9 @@ const VisualFaceMesh = () => (
     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 animate-[ui-fade-in_8s_infinite]">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">
-          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+          <div className="w-2 h-2 bg-brand-orange rounded-full animate-pulse"></div>
         </div>
-        <span className="text-[10px] font-medium text-white/80">Generating Motion...</span>
+        <span className="text-[10px] font-medium text-white/80">Enhancing Details...</span>
       </div>
       {/* Progress Bar */}
       <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
@@ -194,10 +194,9 @@ const VisualFaceMesh = () => (
 
     <style>{`
       @keyframes video-motion {
-        0%, 25% { transform: scale(1); filter: grayscale(100%); } /* Static B&W */
-        30% { transform: scale(1); filter: grayscale(0%); } /* Colorize */
-        30%, 90% { transform: scale(1.2) translateY(-5%); filter: grayscale(0%); } /* Move */
-        100% { transform: scale(1); filter: grayscale(100%); } /* Reset */
+        0%, 25% { transform: scale(1); filter: grayscale(100%) blur(4px); } /* Blurry B&W */
+        30%, 90% { transform: scale(1.05); filter: grayscale(0%) blur(0px); } /* Sharp Color */
+        100% { transform: scale(1); filter: grayscale(100%) blur(4px); } /* Reset */
       }
       @keyframes ui-fade-out {
         0%, 20% { opacity: 1; }
@@ -261,10 +260,12 @@ const VisualEmotion = () => (
     />
     {/* Floating Tag */}
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-lg border border-brand-orange/20 flex items-center gap-2 animate-bounce-slow">
-      <span className="text-lg">😊</span>
+      <div className="w-5 h-5 bg-brand-orange/10 rounded-full flex items-center justify-center">
+        <CheckCircle2 size={14} className="text-brand-orange" />
+      </div>
       <div className="flex flex-col leading-none">
-        <span className="text-[10px] font-bold text-gray-400 uppercase">Happiness</span>
-        <span className="text-sm font-bold text-brand-black">98% Match</span>
+        <span className="text-[10px] font-bold text-gray-400 uppercase">Facial Likeness</span>
+        <span className="text-sm font-bold text-brand-black">100% Preserved</span>
       </div>
     </div>
     <style>{`
@@ -327,50 +328,50 @@ const VisualDamageCheck = () => (
 const BENEFITS = [
   {
     icon: <Sparkles size={24} />,
-    title: 'Restore & Animate',
-    description: 'First restores your photos to perfect quality, then brings people to life with natural movement and expressions.',
+    title: 'AI Photo Restorer Online',
+    description: 'Instantly repair old photos online, then optionally bring faces to life with our natural motion AI.',
     visual: <VisualRestore />
   },
   {
     icon: <Frame size={24} />,
-    title: 'Digital Photo Frames',
-    description: 'Create stunning digital frames with customizable styles, colors, and captions to showcase your restored memories.',
+    title: 'Vintage Photo Restoration',
+    description: 'Showcase your restored vintage memories in stunning customizable digital frames before downloading.',
     visual: <VisualFrames />
   },
   {
     icon: <Wrench size={24} />,
-    title: 'Handles Any Damage',
-    description: 'Scratches, tears, water damage, fading - our AI tackles every type of photo damage before animation.',
+    title: 'Restore Damaged Photos AI',
+    description: 'Scratches, tears, fading, or water damage—our AI old photo restoration model tackles it all.',
     visual: <VisualDamage />
   },
   {
     icon: <Smile size={24} />,
-    title: 'Natural Face Animation',
-    description: "Creates realistic facial movements while preserving the person's authentic likeness and character.",
+    title: 'Facial Detail Enhancement',
+    description: "Advanced algorithms sharpen blurry facial features while preserving the true likeness of your ancestors.",
     visual: <VisualFaceMesh />
   },
   {
     icon: <Palette size={24} />,
-    title: 'Smart Color Revival',
-    description: 'Brings back original colors in photos, then adds lifelike animation that feels natural and authentic.',
+    title: 'AI Colorization Engine',
+    description: 'Automatically breathe vibrant, realistic color into your restored black-and-white family portraits.',
     visual: <VisualColor />
   },
   {
     icon: <Heart size={24} />,
-    title: 'Emotion Recognition',
-    description: 'AI detects facial expressions and creates appropriate animations - gentle smiles, warm eyes, natural movements.',
+    title: 'Authentic Reconstructions',
+    description: 'Our AI prioritizes authentic facial expressions, ensuring repaired areas match the original emotional tone.',
     visual: <VisualEmotion />
   },
   {
     icon: <Lock size={24} />,
-    title: 'Complete Privacy',
-    description: 'Generated media stays in your account until you delete it. See our Privacy Policy for processors and retention.',
+    title: 'Secure Online Restoration',
+    description: 'Your family memories remain private. Generated media stays securely in your account until deleted.',
     visual: <VisualPrivacy />
   },
   {
     icon: <ScanLine size={24} />,
-    title: 'Smart Damage Check',
-    description: "If we detect heavy damage (tears, stains, scratches), we automatically offer a free second pass. Minor noise/blur doesn't qualify.",
+    title: 'Deep Damage Repair Pass',
+    description: "If we detect heavy degradation, our AI automatically runs a free second pass for the highest quality repair.",
     visual: <VisualDamageCheck />
   }
 ];
@@ -397,7 +398,7 @@ export const Benefits: React.FC = () => {
           {/* Subtitle */}
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Our state-of-the-art technology transforms damaged old photos into moving memories with privacy and precision.
+              Our state-of-the-art AI technology transforms damaged old photos into pristine digital memories with complete privacy and precision.
             </p>
           </div>
         </div>

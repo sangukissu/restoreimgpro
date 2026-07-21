@@ -76,15 +76,15 @@ export default function AIAnimationHero() {
 
         {/* Heading */}
         <h1 className="max-w-5xl text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-brand-black mb-8">
-          Add a subtle smile<br />
+          AI Photo Animation Generator <br />
           <span className="text-gray-400">
-            or movement to an old photo.
+            Bring Old Photos to Life.
           </span>
         </h1>
 
         {/* Subheading */}
-        <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mb-12 font-medium leading-relaxed">
-          Prefer gentle motion over exaggerated effects. Works best with clear faces — restore damaged photos first when scratches or blur hide landmarks. 10 credits per animation; the 4-credit Starter pack is not enough alone.
+        <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mb-12 font-medium leading-relaxed">
+          Animate vintage family portraits with natural facial movements, gentle blinks, and warm smiles. Uses Live Portrait AI to preserve authentic likeness without weird distortions.
         </p>
 
         {/* CTA Buttons */}

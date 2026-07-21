@@ -7,14 +7,7 @@ import { NextRequest, NextResponse } from "next/server"
  */
 export async function POST(req: NextRequest) {
   const secret = process.env.INDEXNOW_SUBMIT_SECRET
-  const key = process.env.INDEXNOW_KEY
-
-  if (!key) {
-    return NextResponse.json(
-      { error: "INDEXNOW_KEY is not configured" },
-      { status: 503 }
-    )
-  }
+  const key = process.env.INDEXNOW_KEY || "c98a37f2081d43eb8b52479e0a12e8b9"
 
   // Optional shared secret so the endpoint is not an open proxy
   if (secret) {

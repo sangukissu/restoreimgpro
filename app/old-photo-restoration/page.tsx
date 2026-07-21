@@ -5,32 +5,31 @@ import React from 'react';
 import { Navbar } from '@/components/landing/Navbar';
 import { Hero } from '@/components/old-photo-restoration/Hero';
 import { HowItWorks } from '@/components/old-photo-restoration/HowItWorks';
-import { Showcase } from '@/components/old-photo-restoration/Showcase';
 import { PhotoAnimation } from '@/components/old-photo-restoration/PhotoAnimation';
 import { Benefits } from '@/components/old-photo-restoration/Benefits';
 import { Pricing } from '@/components/landing/Pricing';
-import { Clients } from '@/components/landing/Clients';
 import { Comparison } from '@/components/landing/Comparison';
 import { FAQ } from '@/components/old-photo-restoration/FAQ';
 import { Footer } from '@/components/landing/Footer';
 import { CTA } from '@/components/old-photo-restoration/CTA';
 import { RestorationGuide } from '@/components/old-photo-restoration/RestorationGuide';
+import { DamageTypes } from '@/components/old-photo-restoration/DamageTypes';
 import { ProductCrossSell } from '@/components/seo/product-cross-sell';
 
 
 export const metadata: Metadata = {
-    title: "Old Photo Restoration | Repair damage while keeping original character",
+    title: "AI Old Photo Restoration Online | Repair Damaged Family Photos | BringBack",
     description:
-        "Restore scratched, torn, faded, and water-damaged family photos. Choose restore-only or restore and colorize. 1 credit per restoration. Compare results before you download.",
+        "Restore scratched, torn, faded, and water-damaged family photos online with AI. Choose restore-only or restore and colorize. 1 credit per restoration.",
     keywords:
         "old photo restoration, restore damaged photos, repair scratched photos, restore faded photos, AI photo restoration, keep black and white photo",
     alternates: {
         canonical: "/old-photo-restoration",
     },
     openGraph: {
-        title: "Old Photo Restoration | BringBack",
+        title: "AI Old Photo Restoration Online | BringBack",
         description:
-            "Repair old family photos while keeping their original character. Restore-only or restore and colorize.",
+            "Repair old family photos online with AI while keeping their original character. Restore-only or restore and colorize.",
         url: "https://bringback.pro/old-photo-restoration",
         siteName: "BringBack",
         type: "website",
@@ -45,9 +44,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Old Photo Restoration | BringBack",
+        title: "AI Old Photo Restoration Online | BringBack",
         description:
-            "Repair old family photos while keeping their original character.",
+            "Repair old family photos online with AI while keeping their original character.",
         images: ["/og-image.png"],
     },
     robots: { index: true, follow: true },
@@ -236,12 +235,11 @@ export default function Page() {
                 <Hero />
                 <HowItWorks />
                 <RestorationGuide />
-                <Showcase />
-                <PhotoAnimation />
+                <DamageTypes />
                 <Benefits />
+                <PhotoAnimation />
                 <Pricing />
                 <Comparison />
-                <Clients />
                 <FAQ />
                 <ProductCrossSell excludeHref="/old-photo-restoration" />
                 <CTA />

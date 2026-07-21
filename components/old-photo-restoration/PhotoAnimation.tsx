@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowRight, PlayCircle, Sparkles, Smile } from 'lucide-react';
 
@@ -36,7 +35,7 @@ export const PhotoAnimation: React.FC = () => {
 
         {/* Right Column: Content / Upsell */}
         <div className="lg:col-span-7 bg-brand-surface p-2 rounded-[3rem] flex flex-col">
-          <div className="bg-white rounded-[2.5rem] p-8 sm:p-12 lg:p-16 h-full flex flex-col justify-center items-start text-left relative overflow-hidden">
+          <div className="bg-white rounded-[2.5rem] p-8 sm:p-12 lg:p-14 h-full flex flex-col justify-center items-start text-left relative overflow-hidden">
 
             {/* Decorative Background Icon */}
             <div className="absolute -right-10 -top-10 text-gray-50 opacity-50 transform rotate-12 pointer-events-none">
@@ -44,17 +43,18 @@ export const PhotoAnimation: React.FC = () => {
             </div>
 
             <div className="relative z-10">
-              <div className="w-14 h-14 bg-brand-orange/10 rounded-2xl flex items-center justify-center text-brand-orange mb-8">
-                <PlayCircle size={32} />
+              {/* Bridge Badge */}
+              <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+                <span className="text-brand-orange">//</span> Optional Next Step <span className="text-brand-orange">//</span>
               </div>
 
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-[850] text-brand-black tracking-tight leading-[0.95] mb-6">
-                First Restore, <br />
-                <span className="text-gray-400">Then Relive.</span>
+              <h2 className="text-3xl sm:text-5xl font-[850] text-brand-black tracking-tight leading-[0.98] mb-6">
+                After Restoration: <br />
+                <span className="text-gray-400">Bring Faces to Life.</span>
               </h2>
 
-              <p className="text-lg sm:text-xl text-gray-600 font-medium leading-relaxed mb-10 max-w-xl">
-                Restoration is just the beginning. Once you have cleaned up your old photos using our restoration tool, use our Animation AI to see your ancestors smile, blink, and move.
+              <p className="text-base sm:text-lg text-gray-600 font-medium leading-relaxed mb-8 max-w-xl">
+                Restoration repairs the past — animation lets you relive it. Once your photos are restored to pristine clarity, take an optional second step to see your ancestors smile, blink, and move naturally.
               </p>
 
               <a
@@ -63,7 +63,7 @@ export const PhotoAnimation: React.FC = () => {
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-4 bg-brand-black text-white pl-8 pr-2 py-3 rounded-full hover:scale-105 transition-transform duration-300 shadow-xl"
               >
-                <span className="font-bold text-lg">Learn About Photo Animation</span>
+                <span className="font-bold text-base sm:text-lg">Explore Photo Animation</span>
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-brand-black group-hover:bg-brand-orange group-hover:text-white transition-colors">
                   <ArrowRight size={20} strokeWidth={2.5} />
                 </div>
