@@ -8,81 +8,76 @@ const REAL_EXAMPLES = [
   {
     id: "wedding",
     category: "Wedding Memorial",
-    badgeKeyword: "Add Deceased Loved One to Wedding Photo AI",
+    badgeKeyword: "Wedding Photo Memorial",
     icon: <Heart className="w-5 h-5 text-rose-500" />,
-    title: "Add a Deceased Parent or Grandparent to a Wedding Photo with AI",
+    title: "Add a Passed Parent or Grandparent to Your Wedding Album",
     story:
-      "When a parent or grandparent passed away before your wedding day, our AI seamlessly adds them beside the bride or groom in their formal wedding portrait. We automatically match outdoor sunlight, shadows, and formal attire so the memorial keepsake looks completely authentic.",
-    promptHint: 'Example request: "Add late father standing next to the bride in warm outdoor lighting."',
+      "When a parent or grandparent passes away before your wedding day, BringBack places them beside the bride or groom in their formal attire. We match outdoor sunlight, shadows, and camera angles so the memory feels complete.",
     beforeImg: "/wedding-before-exact.jpg",
     afterImg: "/wedding-composite.jpg",
     personToAddImg: "/avatar-wedding-father.jpg",
     personToAddLabel: "Late Father's Photo",
-    ctaText: "Add Deceased Loved One to Wedding Photo",
-    href: "/dashboard/add-person",
-  },
-  {
-    id: "memorial",
-    category: "Family & Baby Memorial",
-    badgeKeyword: "Add Passed Family Member to Baby Photo",
-    icon: <Users className="w-5 h-5 text-indigo-500" />,
-    title: "Add Deceased Grandparents to Baby & Family Sofa Portraits",
-    story:
-      "Reunite generations into a single warm family picture. Place a deceased grandparent on the living room sofa holding new great-grandchildren, matching soft indoor lamp lighting, skin tones, and natural seated postures.",
-    promptHint: 'Example request: "Add deceased grandmother seated next to the grandchildren on the couch."',
-    beforeImg: "/memorial-before-exact.jpg",
-    afterImg: "/memorial-composite.jpg",
-    personToAddImg: "/avatar-memorial-grandmother.jpg",
-    personToAddLabel: "Grandmother's Portrait",
-    ctaText: "Create Memorial Family Portrait",
-    href: "/dashboard/add-person",
-  },
-  {
-    id: "christmas",
-    category: "Christmas & Holiday",
-    badgeKeyword: "Add Deceased Loved One to Christmas Photo",
-    icon: <Gift className="w-5 h-5 text-emerald-500" />,
-    title: "Add Deceased Loved One to Christmas & Holiday Family Photos",
-    story:
-      "Holidays are when missing family members are felt the most. BringBack seamlessly places late parents or grandparents into Christmas tree family snapshots with warm glowing ambient tree lights.",
-    promptHint: 'Example request: "Add late grandfather sitting by the Christmas tree with family."',
-    beforeImg: "/christmas-before-exact.jpg",
-    afterImg: "/christmas-composite.jpg",
-    personToAddImg: "/avatar-christmas-grandfather.jpg",
-    personToAddLabel: "Grandfather's Photo",
-    ctaText: "Add Loved One to Christmas Photo",
+    ctaText: "Add Loved One to Wedding Photo",
     href: "/dashboard/add-person",
   },
   {
     id: "reunion",
     category: "Family Reunion",
-    badgeKeyword: "Add Missing Person to Picture Online",
+    badgeKeyword: "Absent Relative Addition",
     icon: <Calendar className="w-5 h-5 text-amber-500" />,
-    title: "Add Relatives Who Couldn't Attend the Family Reunion",
+    title: "Add Relatives Who Couldn't Attend the Family Gathering",
     story:
-      "Illness, overseas travel, or work often prevent loved ones from attending family reunions. Simply upload their individual portrait and your porch snapshot—BringBack blends them into the gathering with matching outdoor light and perspective.",
-    promptHint: 'Example request: "Add missing sibling standing on the right side of the porch gathering."',
+      "Work, travel, or distance shouldn't leave family members out of reunion group pictures. Upload their individual portrait and your porch snapshot—our AI integrates them seamlessly into the group shot.",
     beforeImg: "/reunion-before-exact.jpg",
     afterImg: "/reunion-after-exact.jpg",
     personToAddImg: "/avatar-reunion-sibling.jpg",
     personToAddLabel: "Absent Sibling Photo",
-    ctaText: "Add Missing Person to Reunion Photo",
+    ctaText: "Add Relative to Reunion Photo",
+    href: "/dashboard/add-person",
+  },
+  {
+    id: "memorial",
+    category: "Generational Keepsake",
+    badgeKeyword: "Multi-Generation Family Sofa",
+    icon: <Users className="w-5 h-5 text-indigo-500" />,
+    title: "Place Grandparents on the Living Room Sofa with Great-Grandchildren",
+    story:
+      "Reunite multi-generational families in a warm indoor setting. Place a late grandparent on the sofa alongside new family members, matching soft lamp lighting, skin tones, and natural seated postures.",
+    beforeImg: "/memorial-before-exact.jpg",
+    afterImg: "/memorial-composite.jpg",
+    personToAddImg: "/avatar-memorial-grandmother.jpg",
+    personToAddLabel: "Grandmother's Portrait",
+    ctaText: "Create Family Sofa Portrait",
+    href: "/dashboard/add-person",
+  },
+  {
+    id: "christmas",
+    category: "Holiday Snapshot",
+    badgeKeyword: "Christmas Tree Family Merge",
+    icon: <Gift className="w-5 h-5 text-emerald-500" />,
+    title: "Merge Loved Ones into Christmas & Holiday Family Snapshots",
+    story:
+      "Holidays are when missing family members are remembered most. BringBack seamlessly places loved ones into Christmas tree snapshots, harmonizing warm ambient holiday lighting.",
+    beforeImg: "/christmas-before-exact.jpg",
+    afterImg: "/christmas-composite.jpg",
+    personToAddImg: "/avatar-christmas-grandfather.jpg",
+    personToAddLabel: "Grandfather's Photo",
+    ctaText: "Add Loved One to Holiday Photo",
     href: "/dashboard/add-person",
   },
   {
     id: "milestone",
-    category: "Milestone & Graduation",
-    badgeKeyword: "Combine Separate Photos of Deceased Relatives",
+    category: "Graduation & Milestone",
+    badgeKeyword: "Milestone Celebration",
     icon: <Award className="w-5 h-5 text-blue-500" />,
-    title: "Combine Separate Photos of Deceased Relatives into One Milestone Portrait",
+    title: "Complete Graduation & Milestone Photos with Both Parents Present",
     story:
-      "Complete major milestone photos so your graduate or child has a lasting memory with both parents present. Our AI matches skin tones, clothing exposure, and shoulder angles automatically.",
-    promptHint: 'Example request: "Add deployed father standing beside the graduate in cap and gown."',
+      "Ensure major milestones like graduations feature both parents together. Our AI balances skin tones, clothing exposure, and shoulder angles automatically.",
     beforeImg: "/graduation-before-exact.jpg",
     afterImg: "/graduation-after-exact.jpg",
     personToAddImg: "/avatar-graduation-father.jpg",
     personToAddLabel: "Parent's Photo",
-    ctaText: "Combine Photos into Milestone Portrait",
+    ctaText: "Combine Photos for Graduation",
     href: "/dashboard/add-person",
   },
 ]
@@ -187,8 +182,8 @@ export function AddPersonRealExamples() {
               <span className="text-brand-orange">//</span> Interactive Comparison Sliders <span className="text-brand-orange">//</span>
             </div>
             <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              Add Deceased Loved One to Photo with AI. <br />
-              <span className="text-gray-400">Drag to See Loved Ones Reunited.</span>
+              Add a Person to Family <br />
+              <span className="text-gray-400">Photos with AI</span>
             </h2>
           </div>
           <div className="max-w-sm">
@@ -245,10 +240,6 @@ export function AddPersonRealExamples() {
                         <p className="text-gray-600 font-medium leading-relaxed text-sm sm:text-base mb-4">
                           {ex.story}
                         </p>
-
-                        <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-100 text-xs font-medium text-gray-500 mb-6">
-                          {ex.promptHint}
-                        </div>
                       </div>
 
                       <Link href={ex.href}>

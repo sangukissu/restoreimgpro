@@ -38,7 +38,7 @@ const DEFAULT_LINKS: CrossSellLink[] = [
 
 export function ProductCrossSell({
   excludeHref,
-  title = "Continue Your Family Preservation Project",
+  title = "More Tools to Preserve Your Family Memories",
   links = DEFAULT_LINKS,
 }: {
   excludeHref?: string

@@ -150,9 +150,9 @@ export default function AnimationStylesGrid() {
               <span className="text-brand-orange">//</span> Styles <span className="text-brand-orange">//</span>
             </div>
 
-            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              Choose Your Animation Style: <br />
-              <span className="text-gray-400">Smile, Blink, & Tilt.</span>
+            <h2 className="mx-auto max-w-5xl text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
+              Choose Your Respectful <br />
+              <span className="text-gray-400">Animation Style </span>
             </h2>
           </div>
 

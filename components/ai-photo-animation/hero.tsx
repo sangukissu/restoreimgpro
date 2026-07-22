@@ -75,10 +75,10 @@ export default function AIAnimationHero() {
         </div>
 
         {/* Heading */}
-        <h1 className="max-w-5xl text-[3.5rem] sm:text-[4rem] md:text-[4.5rem] xl:text-[5.5rem] font-[850] tracking-tighter leading-[0.95] text-brand-black mb-8">
-          AI Photo Animation Generator <br />
+        <h1 className="max-w-5xl text-[3rem] sm:text-[3.5rem] md:text-[4rem] xl:text-[4.5rem] font-[850] tracking-tighter leading-[0.95] text-brand-black mb-8">
+          AI Old Photo Animation <br />
           <span className="text-gray-400">
-            Bring Old Photos to Life.
+            To Make Your Memories Come Alive
           </span>
         </h1>
 

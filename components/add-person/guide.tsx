@@ -18,8 +18,8 @@ export function AddPersonGuide() {
             </div>
 
             <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              Two Easy Ways to Combine Photos. <br />
-              <span className="text-gray-400">One Lasting Family Memory.</span>
+              Two Easy Ways to Combine <br />
+              <span className="text-gray-400">Family Photo with AI</span>
             </h2>
           </div>
 

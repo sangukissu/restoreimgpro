@@ -47,7 +47,9 @@ export function AddPersonHowItWorks() {
             
             {/* Direct H2 Heading formatted specifically to win Google's Featured Snippet */}
             <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              How to Add a Person to a Family Photo
+              How to Add a Person to a 
+              <br />
+              <span className="text-gray-400">Family Photo with AI</span>
             </h2>
           </div>
 

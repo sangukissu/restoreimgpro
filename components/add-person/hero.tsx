@@ -2,7 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import { Sparkles, ArrowRight, ShieldCheck, UserPlus, Layers } from "lucide-react"
+import { Sparkles, ArrowRight, ShieldCheck, UserPlus, Layers, Play } from "lucide-react"
 import { DASHBOARD_CTA } from "@/lib/site-copy"
 
 export function AddPersonHero() {
@@ -36,11 +36,14 @@ export function AddPersonHero() {
                   </div>
                 </button>
               </Link>
-              <Link href="/pricing">
-                <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm ring-1 ring-black/5 shrink-0">
-                  <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">2 Credits Per Run</span>
-                </button>
-              </Link>
+              <Link href="#how-it-works">
+            <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
+              <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">See How It Works</span>
+              <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
+                <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+            </button>
+          </Link>
             </div>
 
             {/* Trust Tokens */}
