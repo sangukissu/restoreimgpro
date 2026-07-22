@@ -1,148 +1,530 @@
 import type { Metadata } from "next"
 import { GuideLayout } from "@/components/guides/guide-layout"
 import Link from "next/link"
-import { Layers, ScanLine, AlertCircle, CheckCircle2, Palette, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Restore-Only vs AI Colorization: Which Workflow Should You Choose? | BringBack",
   description:
-    "Compare Restore-Only vs Restore + Colorize workflows for old photos. Learn when keeping black-and-white or sepia tonality is superior for historical preservation.",
+    "Should you keep your old photo in black-and-white or colorize it? Compare AI restoration vs colorization accuracy, limitations, and when each workflow is the right choice.",
   alternates: { canonical: "/guides/restore-only-vs-colorize" },
 }
+
+const TOC_ITEMS = [
+  { id: "why-it-matters", title: "Why This Choice Matters" },
+  { id: "what-restoration-does", title: "What Restoration Actually Does" },
+  { id: "what-colorization-does", title: "What AI Colorization Actually Does" },
+  { id: "accuracy-table", title: "AI Colorization Accuracy by Element" },
+  { id: "decision-framework", title: "The Decision Framework" },
+  { id: "both-workflow", title: 'The "Both" Workflow' },
+  { id: "failure-patterns", title: "When Colorization Goes Wrong" },
+  { id: "labeling-ethics", title: "Archival Ethics: The Labeling Rule" },
+]
 
 export default function RestoreVsColorizePage() {
   return (
     <GuideLayout
       title="Restore-Only vs Colorize: How to Choose the Right Workflow"
-      description="Color is never forced in BringBack. Understand the technical and historical differences between preserving monochrome chemical tonality and adding AI-synthesized color."
-      updated="July 21, 2026"
+      description="Should you keep your old photo in black-and-white, or add AI color? This guide explains the technical differences, accuracy limitations, and gives you a concrete framework to decide."
+      updated="July 22, 2026"
       crumbs={[{ name: "Restore-only vs colorize" }]}
+      toc={TOC_ITEMS}
     >
-      <div className="space-y-10">
+      <div className="space-y-12 text-brand-black">
 
-        {/* Overview Box */}
-        <div className="bg-brand-surface p-6 sm:p-8 rounded-3xl border border-gray-100">
-          <h2 className="text-2xl font-extrabold text-brand-black mb-3">The Fundamental Rule: Color is an Interpretation</h2>
-          <p className="text-gray-600 font-medium leading-relaxed">
-            Black-and-white photographic silver prints do not contain hidden color signals in their emulsion. When AI colorizes an old photo, it is <strong>estimating likely colors</strong> based on luminance patterns and deep learning datasets—not recovering lost historical dyes.
+        {/* 1. Why This Choice Matters */}
+        <section id="why-it-matters" className="scroll-mt-36 space-y-5">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            Why This Choice Matters More Than You Think
+          </h2>
+          <p className="text-gray-700 font-medium text-base sm:text-lg leading-relaxed">
+            When you hand an old family photo to an AI tool, you are making a choice that will shape how
+            future generations remember that person. Restoration and colorization are two fundamentally
+            different operations, and understanding what each one does — and does <em>not</em> do — is
+            the difference between preserving a memory and inventing one.
           </p>
-        </div>
-
-        {/* Comparison Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Mode 1: Restore-Only */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-between space-y-6">
-            <div>
-              <div className="w-12 h-12 rounded-2xl bg-brand-surface text-brand-black flex items-center justify-center mb-6">
-                <ScanLine size={24} />
-              </div>
-              <span className="bg-gray-100 text-brand-black text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                Mode 1: Historical Preservation
-              </span>
-              <h3 className="text-2xl font-extrabold text-brand-black mt-3 mb-3">Restore Only (Monochrome)</h3>
-              <p className="text-gray-600 text-sm font-medium leading-relaxed mb-4">
-                Fixes scratches, tears, fading, water stains, and soft blur while leaving the underlying black-and-white, silver gelatin, or sepia chemical tint untouched.
-              </p>
-              
-              <div className="space-y-2 pt-2 border-t border-gray-100">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Best Used When:</h4>
-                <ul className="space-y-2 text-sm text-gray-700 font-medium">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                    Preserving authentic historical feel and chemical character is paramount.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                    You plan to archive or frame a faithful version alongside the physical print.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                    Family members disagree on eye, hair, or clothing colors.
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <Link
-              href="/old-photo-restoration"
-              className="inline-flex items-center justify-between w-full bg-brand-surface hover:bg-gray-100 px-5 py-3 rounded-2xl text-sm font-bold text-brand-black transition-colors"
-            >
-              <span>Use Restore-Only Tool</span>
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-
-          {/* Mode 2: Restore & Colorize */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-between space-y-6">
-            <div>
-              <div className="w-12 h-12 rounded-2xl bg-brand-orange/10 text-brand-orange flex items-center justify-center mb-6">
-                <Palette size={24} />
-              </div>
-              <span className="bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                Mode 2: Modern Interpretation
-              </span>
-              <h3 className="text-2xl font-extrabold text-brand-black mt-3 mb-3">Restore & Colorize</h3>
-              <p className="text-gray-600 text-sm font-medium leading-relaxed mb-4">
-                Repairs physical damage and then applies realistic AI color spectrum synthesis over grayscale tones to transform vintage photos into vibrant modern images.
-              </p>
-              
-              <div className="space-y-2 pt-2 border-t border-gray-100">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Best Used When:</h4>
-                <ul className="space-y-2 text-sm text-gray-700 font-medium">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                    Creating a vivid gift, digital frame display, or social memory book.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                    Helping younger family members connect emotionally with ancestors.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                    You explicitly label the final print as an AI-assisted colorization.
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <Link
-              href="/colorize-photos"
-              className="inline-flex items-center justify-between w-full bg-brand-surface hover:bg-gray-100 px-5 py-3 rounded-2xl text-sm font-bold text-brand-black transition-colors"
-            >
-              <span>Use Colorize Tool</span>
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-
-        {/* Section: What AI Color May Invent */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
-          <h2 className="text-2xl font-extrabold text-brand-black">What AI Colorization May Estimate</h2>
-          <p className="text-gray-600 font-medium leading-relaxed">
-            AI colorizers infer colors from brightness values. For example, dark gray in a 1940s suit could be navy blue, dark brown, or charcoal gray. The AI selects the statistically most common color present in its training dataset.
+          <p className="text-gray-700 font-medium leading-relaxed">
+            <strong>Restoration</strong> repairs physical damage: scratches, tears, fading, water stains.
+            It leaves the photo&apos;s original tonality — black-and-white, sepia, cyanotype — untouched.
           </p>
-          <div className="grid sm:grid-cols-2 gap-4 pt-2">
-            <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100 text-sm font-medium">
-              <span className="block font-bold text-brand-black mb-1">Eye & Hair Color:</span>
-              Dark brown vs hazel eyes may map to generic brown shades. Verify with family members when color accuracy matters.
-            </div>
-            <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100 text-sm font-medium">
-              <span className="block font-bold text-brand-black mb-1">Military & Formal Uniforms:</span>
-              Historical military uniforms have strict regulated colors that generic AI datasets may misidentify.
-            </div>
-          </div>
-        </div>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            <strong>Colorization</strong> is an entirely separate step. It takes the brightness values in a
+            grayscale image and <em>estimates</em> what colors those brightness values might have
+            represented. The key word is <strong>estimates</strong>. A black-and-white silver gelatin
+            print contains zero color data. There are no hidden reds, blues, or greens waiting to be
+            &ldquo;unlocked.&rdquo; Every color you see in a colorized photo was generated by a neural
+            network&apos;s statistical guess.
+          </p>
+          <p className="text-gray-600 font-medium leading-relaxed text-sm">
+            Neither choice is wrong. But one is a repair, and the other is an interpretation. This guide
+            helps you decide which workflow matches your specific situation.
+          </p>
+        </section>
 
-        {/* Ethical Tip */}
-        <div className="bg-amber-50 p-6 rounded-3xl border border-amber-200 flex items-start gap-4 text-amber-950">
-          <AlertCircle size={24} className="text-amber-600 shrink-0 mt-1" />
-          <div className="text-sm font-medium space-y-1">
-            <h4 className="font-extrabold text-amber-900">Archival Ethics Tip</h4>
-            <p>
-              Always archive the un-colorized original scan (or a Restore-Only version) alongside any colorized output. This preserves the genuine physical record for future generations.
+        {/* 2. What Restoration Actually Does */}
+        <section id="what-restoration-does" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            What Restoration Actually Does
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            AI photo restoration targets the physical damage that accumulates over decades of storage.
+            The model identifies damaged pixels and reconstructs them based on the surrounding intact
+            image data. Here is what it repairs:
+          </p>
+
+          <div className="space-y-3 pl-1">
+            <p className="text-gray-700 font-medium leading-relaxed">
+              <strong>Surface damage</strong> — scratches, creases, fold lines, tape residue marks, and
+              pen or ink marks written on the front of the print.
+            </p>
+            <p className="text-gray-700 font-medium leading-relaxed">
+              <strong>Chemical degradation</strong> — yellowing from acid migration, foxing spots (the
+              brown speckles caused by fungal growth on paper fibers), silver mirroring on gelatin
+              prints, and overall fading from UV exposure.
+            </p>
+            <p className="text-gray-700 font-medium leading-relaxed">
+              <strong>Physical tears</strong> — ripped edges, missing corners, holes, and water damage
+              that warped or dissolved parts of the emulsion layer.
+            </p>
+            <p className="text-gray-700 font-medium leading-relaxed">
+              <strong>Soft blur</strong> — slight loss of sharpness from low-quality scans or prints that
+              were stored in humid conditions.
             </p>
           </div>
-        </div>
+
+          <div className="border-l-2 border-brand-orange pl-4 py-2 mt-4">
+            <p className="text-gray-700 font-medium leading-relaxed text-sm">
+              <strong>What restoration preserves:</strong> the original chemical tonality of the print. A
+              silver gelatin B&amp;W photo stays B&amp;W. A sepia-toned sulfide print keeps its warm brown
+              cast. A cyanotype keeps its blue tint. The AI repairs damage without altering the
+              photographic character.
+            </p>
+          </div>
+
+          <Link
+            href="/old-photo-restoration"
+            className="inline-flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-brand-black transition-colors mt-2"
+          >
+            Try the restoration tool <ArrowRight size={14} />
+          </Link>
+        </section>
+
+        {/* 3. What AI Colorization Actually Does */}
+        <section id="what-colorization-does" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            What AI Colorization Actually Does
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            Neural colorization models work by analyzing the luminance (brightness) value of every pixel
+            in a grayscale image and mapping it to a statistically probable color. The model was trained
+            on millions of color photographs that were converted to grayscale — so it learned patterns
+            like &ldquo;this brightness pattern usually corresponds to green grass&rdquo; or &ldquo;this
+            facial luminance range usually corresponds to a particular skin tone.&rdquo;
+          </p>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            This means the AI is making an <strong>educated guess</strong> for every single pixel. Some
+            guesses are highly reliable (sky, grass, tree bark), and some are essentially coin flips
+            (the exact shade of someone&apos;s eyes, the color of a patterned dress).
+          </p>
+
+          <h3 className="text-xl font-extrabold text-brand-black pt-4">
+            The Core Limitation: Ambiguous Luminance
+          </h3>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            The fundamental problem is that many different colors share the same brightness value. A
+            medium gray pixel in a 1940s photograph could represent:
+          </p>
+          <ul className="list-disc list-outside ml-5 space-y-1.5 text-gray-700 font-medium leading-relaxed">
+            <li>Navy blue wool (a military dress uniform)</li>
+            <li>Dark forest green (a cotton work shirt)</li>
+            <li>Burgundy red (a silk evening dress)</li>
+            <li>Charcoal gray (a business suit)</li>
+          </ul>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            All four fabrics produce nearly identical gray tones in a B&amp;W photo. The AI picks
+            whichever color appeared most frequently in its training data for that luminance value in
+            that context — which is a statistical average, not a historical fact.
+          </p>
+
+          <Link
+            href="/colorize-photos"
+            className="inline-flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-brand-black transition-colors mt-2"
+          >
+            Try the colorization tool <ArrowRight size={14} />
+          </Link>
+        </section>
+
+        {/* 4. Accuracy Table */}
+        <section id="accuracy-table" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            AI Colorization Accuracy by Element
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            Not all parts of a photo are equally easy to colorize. Here is a practical breakdown of
+            where AI colorization is reliable and where it is guessing:
+          </p>
+
+          <div className="overflow-x-auto -mx-2 px-2">
+            <table className="w-full text-sm font-medium border-collapse mt-2">
+              <thead>
+                <tr className="border-b-2 border-brand-black">
+                  <th className="text-left py-3 pr-4 font-extrabold text-brand-black">Photo Element</th>
+                  <th className="text-left py-3 pr-4 font-extrabold text-brand-black">Reliability</th>
+                  <th className="text-left py-3 font-extrabold text-brand-black">Why</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700">
+                <tr className="border-b border-gray-100">
+                  <td className="py-3 pr-4 font-bold">Sky</td>
+                  <td className="py-3 pr-4">
+                    <span className="inline-block bg-green-50 text-green-700 px-2 py-0.5 rounded text-xs font-bold">High</span>
+                  </td>
+                  <td className="py-3">Narrow color range (blue to gray). Strong luminance signal.</td>
+                </tr>
+                <tr className="border-b border-gray-100">
+                  <td className="py-3 pr-4 font-bold">Grass &amp; foliage</td>
+                  <td className="py-3 pr-4">
+                    <span className="inline-block bg-green-50 text-green-700 px-2 py-0.5 rounded text-xs font-bold">High</span>
+                  </td>
+                  <td className="py-3">Consistent green hue with seasonal variation the model handles well.</td>
+                </tr>
+                <tr className="border-b border-gray-100">
+                  <td className="py-3 pr-4 font-bold">Skin tones</td>
+                  <td className="py-3 pr-4">
+                    <span className="inline-block bg-yellow-50 text-yellow-700 px-2 py-0.5 rounded text-xs font-bold">Moderate</span>
+                  </td>
+                  <td className="py-3">Training data skews toward lighter complexions. Darker skin tones may appear unnaturally warm or orange.</td>
+                </tr>
+                <tr className="border-b border-gray-100">
+                  <td className="py-3 pr-4 font-bold">Eye color</td>
+                  <td className="py-3 pr-4">
+                    <span className="inline-block bg-red-50 text-red-700 px-2 py-0.5 rounded text-xs font-bold">Low</span>
+                  </td>
+                  <td className="py-3">Dark gray iris maps equally to brown, dark blue, and hazel. AI defaults to brown (statistical mode).</td>
+                </tr>
+                <tr className="border-b border-gray-100">
+                  <td className="py-3 pr-4 font-bold">Hair color</td>
+                  <td className="py-3 pr-4">
+                    <span className="inline-block bg-red-50 text-red-700 px-2 py-0.5 rounded text-xs font-bold">Low</span>
+                  </td>
+                  <td className="py-3">Auburn, dark blonde, and medium brown produce near-identical luminance. Red hair is almost never predicted.</td>
+                </tr>
+                <tr className="border-b border-gray-100">
+                  <td className="py-3 pr-4 font-bold">Military uniforms</td>
+                  <td className="py-3 pr-4">
+                    <span className="inline-block bg-red-50 text-red-700 px-2 py-0.5 rounded text-xs font-bold">Low</span>
+                  </td>
+                  <td className="py-3">Requires era + country + branch knowledge. US Army OD green vs. Wehrmacht field gray vs. RAF blue-gray — all look similar in B&amp;W.</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-bold">Fabric patterns</td>
+                  <td className="py-3 pr-4">
+                    <span className="inline-block bg-red-50 text-red-700 px-2 py-0.5 rounded text-xs font-bold">Very low</span>
+                  </td>
+                  <td className="py-3">Stripes, plaids, and florals are invisible in B&amp;W luminance. AI renders them as solid color.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p className="text-gray-600 font-medium text-sm leading-relaxed pt-2">
+            Sources: AI skin tone bias documented by NIH research on training data representation;
+            uniform color ambiguity analyzed in historical colorization studies on arxiv.org.
+          </p>
+        </section>
+
+        {/* 5. Decision Framework */}
+        <section id="decision-framework" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            The Decision Framework
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            Instead of vague advice, here is a concrete decision tree. Start at the top and follow the
+            path that matches your situation:
+          </p>
+
+          <div className="space-y-4 pl-1 pt-2">
+            <div>
+              <p className="text-gray-800 font-bold leading-relaxed">
+                → Is historical accuracy critical?
+              </p>
+              <p className="text-gray-600 font-medium text-sm ml-5 leading-relaxed">
+                Genealogy archive, museum donation, legal or immigration records, family history book
+                where facts matter.
+              </p>
+              <p className="text-brand-orange font-extrabold text-sm ml-5 mt-1">
+                YES → Use Restore-Only. Stop here.
+              </p>
+            </div>
+
+            <div>
+              <p className="text-gray-800 font-bold leading-relaxed">
+                → Is this for a gift, digital frame, or social media sharing?
+              </p>
+              <p className="text-gray-600 font-medium text-sm ml-5 leading-relaxed">
+                Birthday gift print, digital photo frame slideshow, family group chat,
+                memorial slideshow, or a{" "}
+                <Link href="/family-memory-book" className="text-brand-orange underline font-bold hover:text-brand-black transition-colors">
+                  memory book
+                </Link>.
+              </p>
+
+              <div className="ml-5 mt-2 space-y-3">
+                <div>
+                  <p className="text-gray-800 font-bold text-sm leading-relaxed">
+                    → Do you (or a family member) know the real eye, hair, and clothing colors?
+                  </p>
+                  <p className="text-brand-orange font-extrabold text-sm ml-5 mt-1">
+                    YES → Colorize, then verify the output against real memory before printing.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-800 font-bold text-sm leading-relaxed">
+                    → Nobody alive remembers the exact colors?
+                  </p>
+                  <p className="text-brand-orange font-extrabold text-sm ml-5 mt-1">
+                    → Restore-Only is the safer choice. Avoids presenting a guess as fact.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-gray-800 font-bold leading-relaxed">
+                → Not sure?
+              </p>
+              <p className="text-brand-orange font-extrabold text-sm ml-5 mt-1">
+                → Create both versions. Keep reading.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 6. The "Both" Workflow */}
+        <section id="both-workflow" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            The &ldquo;Both&rdquo; Workflow: Best of Both Worlds
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            You do not have to choose permanently. The professional recommendation — and what archivists
+            and conservators universally advise — is to <strong>create both versions</strong> and keep
+            them as separate files:
+          </p>
+
+          <div className="space-y-6 pt-2">
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 h-8 rounded-full bg-brand-black text-white flex items-center justify-center text-sm font-extrabold">1</span>
+              <div>
+                <p className="font-bold text-brand-black">Scan at 600+ DPI in 24-bit RGB color</p>
+                <p className="text-gray-600 text-sm font-medium leading-relaxed mt-1">
+                  Even for B&amp;W prints. RGB mode preserves paper aging signals and subtle tonal
+                  variations. See our{" "}
+                  <Link href="/guides/scan-family-photos-safely" className="text-brand-orange underline font-bold hover:text-brand-black transition-colors">
+                    scanning guide
+                  </Link>{" "}
+                  for exact DPI recommendations by print size.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 h-8 rounded-full bg-brand-black text-white flex items-center justify-center text-sm font-extrabold">2</span>
+              <div>
+                <p className="font-bold text-brand-black">Run Restore-Only first</p>
+                <p className="text-gray-600 text-sm font-medium leading-relaxed mt-1">
+                  Upload your scan to the{" "}
+                  <Link href="/old-photo-restoration" className="text-brand-orange underline font-bold hover:text-brand-black transition-colors">
+                    restoration tool
+                  </Link>.
+                  Download the result. This is your <strong>archival master</strong> — the faithful
+                  digital copy of the original photo with damage repaired.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 h-8 rounded-full bg-brand-black text-white flex items-center justify-center text-sm font-extrabold">3</span>
+              <div>
+                <p className="font-bold text-brand-black">Run Colorize on the restored version</p>
+                <p className="text-gray-600 text-sm font-medium leading-relaxed mt-1">
+                  Upload the already-restored image to the{" "}
+                  <Link href="/colorize-photos" className="text-brand-orange underline font-bold hover:text-brand-black transition-colors">
+                    colorization tool
+                  </Link>.
+                  Download and save this as a <strong>separate file</strong>. Restoration before
+                  colorization produces better results because the model isn&apos;t trying to
+                  color-map damaged pixels.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 h-8 rounded-full bg-brand-black text-white flex items-center justify-center text-sm font-extrabold">4</span>
+              <div>
+                <p className="font-bold text-brand-black">Label the colorized version</p>
+                <p className="text-gray-600 text-sm font-medium leading-relaxed mt-1">
+                  Write &ldquo;AI-colorized interpretation&rdquo; on the back of any print, or include
+                  it in the digital filename (e.g., <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded">grandma-1952-colorized.jpg</code>).
+                  This prevents future family members from assuming the colors are historically accurate.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-l-2 border-brand-orange pl-4 py-2 mt-4">
+            <p className="text-gray-700 font-medium leading-relaxed text-sm">
+              <strong>Result:</strong> You now have two files — (a) a faithful B&amp;W archival master
+              and (b) a vivid color version for gifts, frames, and sharing. Both are useful. Neither
+              replaces the other.
+            </p>
+          </div>
+        </section>
+
+        {/* 7. When Colorization Goes Wrong */}
+        <section id="failure-patterns" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            When Colorization Goes Wrong: 5 Patterns to Watch For
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            AI colorization fails in predictable ways. Knowing these patterns helps you spot problems
+            before you print or share:
+          </p>
+
+          <div className="space-y-5 pt-2">
+            <div>
+              <h3 className="text-lg font-extrabold text-brand-black">
+                1. Eyes turning generic brown
+              </h3>
+              <p className="text-gray-700 font-medium leading-relaxed text-sm mt-1">
+                Brown is the most common eye color globally, so AI defaults to it. If your grandmother
+                had striking blue or green eyes, the colorized version may erase that defining feature.
+                Always verify eye color with a family member who remembers.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-extrabold text-brand-black">
+                2. Military uniforms in the wrong shade
+              </h3>
+              <p className="text-gray-700 font-medium leading-relaxed text-sm mt-1">
+                A US Army WWII uniform should be olive drab (OD) #3, not khaki. A Royal Air Force
+                uniform should be blue-gray, not navy. A Wehrmacht uniform should be field gray
+                (<em>feldgrau</em>), not olive green. These look nearly identical in B&amp;W, and AI
+                models frequently confuse them because they lack historical context about which country
+                and era the uniform belongs to.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-extrabold text-brand-black">
+                3. Wedding dresses tinted cream or yellow
+              </h3>
+              <p className="text-gray-700 font-medium leading-relaxed text-sm mt-1">
+                Pure white fabrics often appear as very bright values in B&amp;W photos, and the AI may
+                interpret the slight warmth of aged paper as an intentional cream or ivory color in the
+                fabric itself. If the dress was white, the colorized version may show it as off-white.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-extrabold text-brand-black">
+                4. Skin appearing orange or pink
+              </h3>
+              <p className="text-gray-700 font-medium leading-relaxed text-sm mt-1">
+                This is a documented limitation of AI colorization models. Training datasets
+                disproportionately represent lighter skin tones, which causes the model to over-correct
+                warmth on faces. Darker complexions may appear unnaturally warm or glossy. This is an
+                active area of research in AI fairness and has been documented by NIH and university
+                researchers.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-extrabold text-brand-black">
+                5. Color bleeding across edges
+              </h3>
+              <p className="text-gray-700 font-medium leading-relaxed text-sm mt-1">
+                Sometimes the AI fails to respect object boundaries — the green of a tree bleeds
+                into a person&apos;s white shirt collar, or a red jacket color spills into the
+                background wall. This is more common on low-resolution scans where object edges are
+                soft. Scanning at 600+ DPI reduces this problem significantly.
+              </p>
+            </div>
+          </div>
+
+          <div className="border-l-2 border-brand-orange pl-4 py-2 mt-4">
+            <p className="text-gray-700 font-medium leading-relaxed text-sm">
+              <strong>Quick check:</strong> After colorizing, show the result to a family member who
+              knew the person and ask: &ldquo;Does this look right?&rdquo; Their memory is more
+              reliable than any AI model for personal details like eye color, hair shade, and the color
+              of a favorite dress.
+            </p>
+          </div>
+        </section>
+
+        {/* 8. Archival Ethics */}
+        <section id="labeling-ethics" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            Archival Ethics: The Labeling Rule
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            There is one rule that every archival institution, conservator, and family historian agrees
+            on: <strong>always label a colorized photo as an interpretation</strong>.
+          </p>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            This matters because future generations — your grandchildren, great-grandchildren — may
+            find the colorized version and assume it represents what the person actually looked like.
+            If the AI guessed Grandma&apos;s eyes as brown when they were blue, that error becomes
+            &ldquo;family fact&rdquo; within a generation.
+          </p>
+
+          <h3 className="text-xl font-extrabold text-brand-black pt-4">
+            How to label properly
+          </h3>
+          <div className="space-y-3 pl-1">
+            <p className="text-gray-700 font-medium leading-relaxed">
+              <strong>Digital files:</strong> Include &ldquo;colorized&rdquo; in the filename.
+              Example: <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded">dad-wedding-1968-colorized.jpg</code> alongside <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded">dad-wedding-1968-restored.jpg</code>.
+            </p>
+            <p className="text-gray-700 font-medium leading-relaxed">
+              <strong>Printed versions:</strong> Write on the back: &ldquo;AI-colorized interpretation —
+              original was black-and-white.&rdquo;
+            </p>
+            <p className="text-gray-700 font-medium leading-relaxed">
+              <strong>Memory books &amp; slideshows:</strong> Add a caption or footnote:
+              &ldquo;Colors estimated by AI. Original photo was B&amp;W.&rdquo;
+            </p>
+          </div>
+
+          <div className="border-l-2 border-brand-orange pl-4 py-2 mt-4">
+            <p className="text-gray-700 font-medium leading-relaxed text-sm">
+              <strong>The underlying principle:</strong> Always keep the un-colorized original (or a
+              Restore-Only version) alongside any colorized output. The US National Archives and FADGI
+              guidelines recommend preserving unmodified digital masters for all derivative works.
+              Your Restore-Only file is that master.
+            </p>
+          </div>
+        </section>
+
+        {/* CTA Row */}
+        <section className="border-t border-gray-100 pt-10">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Link
+              href="/old-photo-restoration"
+              className="inline-flex items-center justify-between w-full bg-gray-50 hover:bg-brand-black hover:text-white px-5 py-3.5 rounded-xl text-sm font-bold text-brand-black transition-colors border border-gray-200"
+            >
+              <span>Restore-Only Tool</span>
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/colorize-photos"
+              className="inline-flex items-center justify-between w-full bg-gray-50 hover:bg-brand-black hover:text-white px-5 py-3.5 rounded-xl text-sm font-bold text-brand-black transition-colors border border-gray-200"
+            >
+              <span>Colorization Tool</span>
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </section>
 
       </div>
     </GuideLayout>

@@ -106,7 +106,7 @@ const nextConfig = {
   // 301 redirects: consolidate thin SEO clusters + deleted blog posts
   async redirects() {
     return [
-      // --- Feature keyword cluster → real product pages ---
+      // --- Feature keyword cluster → real money pages ---
       {
         source: '/features/individual-photos-into-group',
         destination: '/ai-family-portrait',
@@ -119,12 +119,12 @@ const nextConfig = {
       },
       {
         source: '/features/black-and-white-composite',
-        destination: '/ai-family-portrait',
+        destination: '/colorize-photos',
         permanent: true,
       },
       {
         source: '/features/father-and-child-portrait',
-        destination: '/ai-family-portrait',
+        destination: '/add-person-to-photo',
         permanent: true,
       },
       {
@@ -142,10 +142,9 @@ const nextConfig = {
         destination: '/add-person-to-photo',
         permanent: true,
       },
-      // photo-joiner is not a real collage/panorama product — send to features hub
       {
         source: '/features/photo-joiner',
-        destination: '/features',
+        destination: '/ai-family-portrait',
         permanent: true,
       },
 

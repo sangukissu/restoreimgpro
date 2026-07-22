@@ -1,6 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import { ArrowRight, ScanLine, Users, Sparkles, BookOpen } from "lucide-react"
+import { ArrowRight, ScanLine, Users, Sparkles, BookOpen, Palette, Volume2, UserPlus, UserMinus } from "lucide-react"
 
 export type CrossSellLink = {
   href: string
@@ -23,10 +23,34 @@ const DEFAULT_LINKS: CrossSellLink[] = [
     icon: <Users size={22} />,
   },
   {
+    href: "/add-person-to-photo",
+    title: "Add Person to Photo",
+    description: "Seamlessly insert a missing relative or passed loved one into an existing family snapshot.",
+    icon: <UserPlus size={22} />,
+  },
+  {
+    href: "/colorize-photos",
+    title: "Colorize Black & White",
+    description: "Bring historical black & white photographs to life with historically accurate realistic colors.",
+    icon: <Palette size={22} />,
+  },
+  {
+    href: "/denoise-photos",
+    title: "Denoise & Grain Cleanup",
+    description: "Remove digital noise, high-ISO grain, and compression artifacts while keeping sharp textures.",
+    icon: <Volume2 size={22} />,
+  },
+  {
     href: "/ai-photo-animation",
     title: "Add Subtle Motion",
     description: "Bring faces to life with natural facial movements, gentle blinks, and authentic smiles.",
     icon: <Sparkles size={22} />,
+  },
+  {
+    href: "/remove-person-from-photo",
+    title: "Remove Person or Object",
+    description: "Cleanly erase unwanted figures or background clutter with AI context-aware background fill.",
+    icon: <UserMinus size={22} />,
   },
   {
     href: "/family-memory-book",
@@ -48,7 +72,7 @@ export function ProductCrossSell({
   const items = links.filter((l) => l.href !== excludeHref).slice(0, 4)
   if (items.length === 0) return null
 
-  // Determine grid columns dynamically so 3 items stretch 100% without orphan gaps!
+  // Determine grid columns dynamically so 3 or 4 items stretch 100% without orphan gaps!
   const gridColsClass = items.length === 3 
     ? "grid-cols-1 md:grid-cols-3" 
     : items.length === 2 
