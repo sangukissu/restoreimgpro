@@ -138,7 +138,7 @@ export const Hero: React.FC = () => {
 
 
           {/* Heading */}
-          <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
+          <h1 className="relative z-10 text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-[#111111] mb-6">
             AI Old Photo Restoration <br />
             for your family's <br />
             <span className="text-gray-400 relative">

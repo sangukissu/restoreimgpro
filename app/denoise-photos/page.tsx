@@ -1,348 +1,159 @@
 import type { Metadata } from "next"
-import { Button } from "@/components/ui/button"
-import { Sparkles, ArrowRight, Play, Search, Brain, Filter, Sparkle } from "lucide-react"
-import { Navbar } from '@/components/landing/Navbar';
-import { Footer } from '@/components/landing/Footer';
-import Link from "next/link"
-import DenoiseHowItWorksSection from "@/components/pages/denoise-how-it-works-section"
-import DenoiseShowcaseSection from "@/components/pages/denoise-showcase-section"
-import DenoiseFeaturesSection from "@/components/pages/denoise-features-section"
-import DenoiseFAQSection from "@/components/pages/denoise-faq-section"
-import DenoiseTechnologySection from "@/components/pages/denoise-technology-section"
-import { Compare } from "@/components/ui/compare"
-import { Pricing } from '@/components/landing/Pricing';
+import { Navbar } from "@/components/landing/Navbar"
+import { DenoiseHero } from "@/components/pages/denoise-hero"
+import { DenoiseShowcaseSection } from "@/components/pages/denoise-showcase-section"
+import { DenoiseHowItWorksSection } from "@/components/pages/denoise-how-it-works-section"
+import { DenoiseFeaturesSection } from "@/components/pages/denoise-features-section"
+import { DenoiseTechnologySection } from "@/components/pages/denoise-technology-section"
+import { DenoiseFAQSection } from "@/components/pages/denoise-faq-section"
+import { DENOISE_FAQS } from "@/lib/feature-faqs"
+import { Pricing } from "@/components/landing/Pricing"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
-import { CTA } from '@/components/landing/CTA';
-
-
+import { CTA } from "@/components/old-photo-restoration/CTA"
+import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "AI Photo Denoise - Remove Grain & Noise Instantly | BringBack",
+  title: "Unblur & Sharpen Old Photos AI | Face Enhancer | BringBack",
   description:
-    "Clean up grainy, noisy photos with AI. Remove digital noise, grain, and artifacts from low-light shots in seconds.",
-  keywords: "denoise photo, remove grain, fix grainy photos, AI noise reduction, clean up photos",
-  robots: "index, follow",
+    "Unblur out-of-focus faces, sharpen soft vintage prints, and remove heavy film noise with AI. Compare before downloading.",
+  keywords: [
+    "unblur old photo ai",
+    "how to unblur and sharpen old photos",
+    "sharpen blurry family picture",
+    "ai face enhancer online",
+    "remove film noise from vintage photo",
+  ],
   alternates: {
-    canonical: "/denoise-photos",
+    canonical: "https://bringback.pro/denoise-photos",
   },
   openGraph: {
-    title: "AI Photo Denoise - Remove Grain & Noise Instantly | BringBack",
-    description:
-      "Clean up grainy, noisy photos with AI. Remove digital noise, grain, and artifacts from low-light shots in seconds.",
-    type: "website",
+    title: "Unblur & Sharpen Old Photos AI | BringBack",
+    description: "Reconstruct HD facial clarity from blurry or noisy vintage prints.",
     url: "https://bringback.pro/denoise-photos",
+    siteName: "BringBack",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Unblur old photo face enhancer before and after",
+      },
+    ],
   },
+  robots: { index: true, follow: true },
 }
 
-const denoisePageJsonLd = {
+const webAppJsonLd = {
   "@context": "https://schema.org",
-  "@type": ["WebPage", "WebApplication"],
-  "@id": "https://bringback.pro/#denoise-webapp",
-  "name": "BringBack – AI Photo Denoise Web App",
-  "url": "https://bringback.pro/denoise-photos",
-  "applicationCategory": "PhotoEditingApplication",
-  "operatingSystem": "Web",
-  "browserRequirements": "Requires JavaScript and modern web browser.",
-  "description": "BringBack is an AI-powered web app that allows users to upload noisy or low-light photos and instantly receive de-noised, high-quality images with detail preservation.",
-  "provider": {
-    "@type": "Organization",
-    "@id": "https://bringback.pro/#organization",
-    "name": "BringBack",
-    "url": "https://bringback.pro/",
-    "description": "AI-powered web application for photo denoising and enhancement.",
-    "foundingDate": "2025",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://bringback.pro/bringback-logo.webp",
-      "width": 512,
-      "height": 512
-    }
-  },
-  "offers": {
+  "@type": "WebApplication",
+  "@id": "https://bringback.pro/denoise-photos#webapp",
+  name: "BringBack Unblur & Sharpen Old Photos AI",
+  description: "Reconstruct HD facial clarity from blurry or noisy vintage prints.",
+  url: "https://bringback.pro/denoise-photos",
+  applicationCategory: "PhotoEditingApplication",
+  operatingSystem: "Web",
+  offers: {
     "@type": "Offer",
-    "name": "BringBack Denoise Plans",
-    "url": "https://bringback.pro/pricing",
-    "priceCurrency": "USD",
-    "price": "4.99",
-    "eligibleRegion": {
-      "@type": "Place",
-      "name": "Worldwide"
-    }
+    name: "Enhancement Credit Pack",
+    url: "https://bringback.pro/pricing",
+    priceCurrency: "USD",
+    price: "4.99",
+    description: "4 credits — covers 4 photo sharpening runs.",
   },
-  "screenshot": "https://bringback.pro/denoise-screenshot.png",
-  "softwareVersion": "1.0.0"
 }
 
-const denoiseFAQPageJsonLd = {
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Unblur and Sharpen Old Photos",
+  description: "Learn how to unblur soft faces and remove heavy film noise from old photos in 4 simple steps.",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Upload Blurry or Noisy Photo",
+      text: "Upload out-of-focus portraits, low-res scans, or noisy film prints.",
+      url: "https://bringback.pro/denoise-photos#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "AI Detects Facial Landmarks",
+      text: "Our facial enhancement engine maps eyes, nose, mouth, and skin texture.",
+      url: "https://bringback.pro/denoise-photos#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "HD Details Reconstructed",
+      text: "BringBack sharpens fuzzy facial details and removes heavy film grain.",
+      url: "https://bringback.pro/denoise-photos#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Compare & Download HD",
+      text: "Review your unblurred photo side-by-side with the original before downloading.",
+      url: "https://bringback.pro/denoise-photos#how-it-works",
+    },
+  ],
+}
+
+const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How does AI photo denoising actually work?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our AI analyzes the patterns of noise in your photo and distinguishes between unwanted grain and important image details."
-      }
+  mainEntity: DENOISE_FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
     },
-    {
-      "@type": "Question",
-      "name": "What types of noise can BringBack remove?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "We can remove virtually any type of digital noise: high-ISO grain, color noise, luminance noise, digital artifacts from old cameras, compression artifacts, and low-light noise. Our AI handles both uniform noise patterns and complex, irregular noise with equal effectiveness."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Will denoising make my photos look plastic or fake?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No! Our AI is specifically designed to maintain natural texture and detail while removing noise. Unlike basic noise reduction tools that can make photos look over-smoothed or artificial, our system preserves skin texture, fabric details, and other important elements."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How much does photo denoising cost?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "We offer 4 high-quality photo denoising cleanups for just $4.99 - no subscription required. This one-time payment gives you professional-grade noise removal in seconds, compared to traditional photo editing services that charge $30-100+ per photo."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can you clean very grainy or noisy photos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes! Our AI excels at removing even heavy noise from challenging photos like high-ISO night shots or old digital camera images. While results depend on the original photo, we can often make severely noisy images look clean and professional."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How long does the denoising process take?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Most photos are processed and cleaned in under 30 seconds. Simply upload your noisy photo and watch the grain disappear in real-time. No waiting hours or days like traditional photo editing services."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is my data safe during processing?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What if the results aren't what I expected?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "We offer a 30-day money-back guarantee. If you're not satisfied with the denoising results, we'll refund your purchase - no questions asked. We're confident in our AI's ability to clean your photos, but we stand behind every enhancement."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What does denoising a photo mean?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Denoising removes unwanted grain or noise from photos—especially from low-light or high-ISO images—while preserving fine details."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How does AI denoising work on BringBack?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "BringBack's AI denoising uses advanced deep learning models to differentiate noise from real detail, delivering clean, sharp images quickly via our cloud-based engine."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Do I need to denoise before editing?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, denoising first is recommended. Applying noise reduction before adding contrast or sharpening helps avoid amplifying noise."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How long does denoising take?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Most images are denoised in under a minute, depending on size and resolution. Larger RAW files may take slightly longer."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is my uploaded photo secure?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Photos are processed securely. You can delete generated media anytime from My Media. See our Privacy Policy for processors and retention."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does BringBack preserve fine details when denoising?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Our AI is trained to remove noise while intelligently retaining key details like textures and edges, avoiding oversmoothing."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I batch denoise multiple photos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, with a paid plan, you can upload and denoise multiple photos in a single batch for faster workflow."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What image formats are supported?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "BringBack supports JPEG, PNG, and RAW formats for denoising to accommodate various user needs."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Will denoising affect image quality?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No, instead of degrading quality, denoising enhances clarity and usability, especially for noisy, underexposed, or high ISO shots."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is the web app mobile-friendly?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, you can upload and denoise photos directly from your phone using our responsive web interface."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I use BringBack for commercial photos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, denoised photos can be used for editorial, commercial, or personal projects, with full usage rights included."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Do I lose color or dynamic range during denoising?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No, our AI preserves color fidelity and dynamic range while effectively reducing noise."
-      }
-    }
-  ]
+  })),
 }
 
-
-export default function DenoisePage() {
+export default function DenoisePhotosPage() {
   return (
-    <div className="min-h-screen bg-brand-bg">
+    <div className="min-h-screen bg-brand-bg text-brand-black font-sans selection:bg-brand-orange selection:text-white relative overflow-x-hidden">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(denoisePageJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(denoiseFAQPageJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
-      <Navbar />
-      {/* Hero Section */}
-      <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 overflow-visible h-auto lg:min-h-screen pt-32 pb-24 lg:pb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center h-full">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
 
-          {/* Left Column: Content */}
-          <div className="lg:col-span-6 flex flex-col items-start z-10 justify-center h-full relative">
+      <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
+        <Navbar />
+      </header>
 
-            {/* Available Badge */}
-            <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-4 py-2 rounded-full mb-8 shadow-lg shadow-black/5">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#FF4D00] animate-pulse"></div>
-              <span className="text-sm font-semibold tracking-wide">AI Powered Denoising</span>
-            </div>
+      <main>
+        {/* 1. Hero */}
+        <DenoiseHero />
+        {/* 2. Showcase */}
+        <DenoiseShowcaseSection />
+        {/* 3. 4-Step How It Works (Snippet-Winning Architecture) */}
+        <DenoiseHowItWorksSection />
+        {/* 4. Features */}
+        <DenoiseFeaturesSection />
+        {/* 5. Technology */}
+        <DenoiseTechnologySection />
+        {/* 6. Pricing */}
+        <Pricing />
+        {/* 7. FAQ */}
+        <DenoiseFAQSection />
+        {/* 8. Product Cross Sell */}
+        <ProductCrossSell excludeHref="/denoise-photos" />
+        {/* 9. CTA */}
+        <CTA />
+      </main>
 
-            {/* Heading */}
-            <h1 className="relative z-10 text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-[#111111] mb-6">
-              Clean up <br />
-              <span className="text-gray-400 relative">
-                Grainy Photos.
-              </span>
-            </h1>
-
-            {/* Subheading */}
-            <p className="text-lg sm:text-xl text-gray-600 max-w-xl mb-10 font-medium leading-relaxed">
-              Remove distracting grain and digital noise from your photos to reveal the smooth, clean image underneath. Rescue low-light shots in seconds.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-12 w-full max-w-full overflow-visible">
-              {/* Primary: Orange Button */}
-              <Link href="/login">
-                <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_20px_40px_-12px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
-                  <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Denoise Photo</span>
-                  <div className="w-8 h-8 sm:w-11 sm:h-11 bg-[#111111] rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
-                    <ArrowRight className="text-[#FF4D00] w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-                  </div>
-                </button>
-              </Link>
-
-              {/* Secondary: White Button */}
-              <Link href="#showcase">
-                <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
-                  <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">See Examples</span>
-                  <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
-                    <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                </button>
-              </Link>
-            </div>
-
-            <div className="flex flex-col gap-2 pl-1 max-w-md">
-              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">1 credit · compare before download</span>
-              <p className="text-sm text-gray-500 font-medium">
-                Generated media stays in your account until you delete it. We do not use family photos to train general-purpose AI models.
-              </p>
-            </div>
-          </div>
-
-          {/* Right Column: Interactive Demo */}
-          <div className="lg:col-span-6 flex items-center justify-center w-full lg:h-full pt-12 lg:pt-0">
-            <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-[2rem] overflow-hidden shadow-2xl select-none group border-[6px] border-white">
-              <Compare
-                firstImage="/noise-removed.webp"
-                secondImage="/after-noise-removal.webp"
-                firstImageClassName="object-cover w-full h-full"
-                secondImageClassname="object-cover w-full h-full"
-                className="w-full h-full"
-                slideMode="hover"
-                firstImageAlt="Before: grainy photo"
-                secondImageAlt="After: Denoised photo"
-                showHandlebar={true}
-              />
-              {/* Overlay Badge */}
-              <div className="absolute top-6 left-6 z-30 bg-black/40 backdrop-blur-md border border-white/10 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 pointer-events-none">
-                <Sparkles size={16} className="text-brand-orange animate-pulse" />
-                AI Denoise
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <DenoiseHowItWorksSection />
-      <Pricing />
-      <DenoiseShowcaseSection />
-      <DenoiseFeaturesSection />
-      <DenoiseTechnologySection />
-      <DenoiseFAQSection />
-      <ProductCrossSell excludeHref="/denoise-photos" />
-      <CTA />
       <Footer />
     </div>
   )

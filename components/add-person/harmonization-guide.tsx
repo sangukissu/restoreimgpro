@@ -3,30 +3,30 @@
 import React from "react"
 import { Sun, Palette, Film, Smile } from "lucide-react"
 
-const PILLARS = [
+const HARMONIZATION_PILLARS = [
   {
     icon: <Sun className="w-6 h-6 text-amber-500" />,
-    title: "Directional Shadow & Lighting Vector Alignment",
+    title: "Matching Natural Light & Shadows",
     description:
-      "Basic cutout tools paste a flat figure into a photo, creating an obvious disconnect when key light comes from the left but the inserted person is illuminated from the right. BringBack analyzes the primary light source of the target scene, synthesizing matching highlights and ground shadow vectors so the subject sits naturally within the environment.",
+      "Simple cutout apps paste a flat figure into a photo, creating an obvious disconnect when key light comes from the left but the added person is lit from the right. BringBack checks where the sun or lamp light comes from in your photo, adding matching highlights and realistic ground shadows.",
   },
   {
-    icon: <Palette className="w-6 h-6 text-brand-orange" />,
-    title: "Color Temperature & Exposure Equalization",
+    icon: <Palette className="w-6 h-6 text-indigo-500" />,
+    title: "Matching Skin Tones & Colors",
     description:
-      "Combining a warm vintage kodachrome portrait with a modern smartphone photo often yields mismatched skin tones. Our harmonization engine recalibrates the white balance, luminance curve, and color spectrum of the added subject to align seamlessly with the ambient room light.",
+      "Combining a warm vintage Kodachrome portrait with a modern smartphone photo often results in mismatched skin colors. Our engine color-matches skin tones, clothing brightness, and ambient room lighting so everyone looks like they were in the same room.",
   },
   {
-    icon: <Film className="w-6 h-6 text-indigo-500" />,
-    title: "Film Grain Structure & ISO Noise Harmonization",
+    icon: <Film className="w-6 h-6 text-rose-500" />,
+    title: "Matching Vintage Film Texture",
     description:
-      "Old analog photographs contain organic silver halide film grain, while modern digital photos are smooth and sharp. BringBack measures the grain density of the target photo and applies proportional noise synthesis to the added figure so texture remains uniform across the entire frame.",
+      "Old analog photographs contain natural silver halide film grain, while modern digital photos are smooth and sharp. BringBack measures the grain density of your target photo and adds matching vintage film texture to the new person so they don't look like a smooth modern sticker.",
   },
   {
     icon: <Smile className="w-6 h-6 text-emerald-500" />,
-    title: "Facial Landmark & Perspective Preservation",
+    title: "Preserving Genuine Facial Features",
     description:
-      "Rather than distorting facial features to fit a template, BringBack preserves the authentic identity geometry of your loved one while adjusting body tilt and camera angle perspective to match the surrounding family members.",
+      "We never distort facial features or use generic face-swaps. Your loved one's real smile, eyes, and expressions are preserved exactly as they are while adjusting body posture and height perspective to match surrounding family members naturally.",
   },
 ]
 
@@ -38,36 +38,38 @@ export function AddPersonHarmonizationGuide() {
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 mb-16">
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Technical Architecture <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> Seamless Photo Blending <span className="text-brand-orange">//</span>
             </div>
-            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
               Why Cutouts Look Fake. <br />
-              <span className="text-gray-400">How AI Harmonization Fixes It.</span>
+              <span className="text-gray-400">How BringBack Makes It Natural.</span>
             </h2>
           </div>
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              When combining photos, the challenge isn't cutting out a face—it's matching lighting, shadows, and resolution.
+              When combining family photos, the secret isn't just cutting out a face—it's matching lighting, shadows, skin tones, and film texture.
             </p>
           </div>
         </div>
 
         <div className="bg-brand-surface p-3 sm:p-4 rounded-[2.2rem]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {PILLARS.map((pillar, idx) => (
+            {HARMONIZATION_PILLARS.map((pillar, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-[1.8rem] p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-[1.8rem] p-8 border border-gray-100 shadow-sm flex flex-col justify-between"
               >
-                <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-6">
-                  {pillar.icon}
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-6">
+                    {pillar.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-brand-black mb-3 leading-snug">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-gray-600 font-medium leading-relaxed text-sm sm:text-base">
+                    {pillar.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-brand-black mb-3 leading-snug">
-                  {pillar.title}
-                </h3>
-                <p className="text-gray-600 font-medium leading-relaxed text-sm sm:text-base">
-                  {pillar.description}
-                </p>
               </div>
             ))}
           </div>

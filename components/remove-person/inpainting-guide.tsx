@@ -6,27 +6,27 @@ import { Scissors, Grid, Layers, Eye } from "lucide-react"
 const INPAINTING_PILLARS = [
   {
     icon: <Scissors className="w-6 h-6 text-brand-orange" />,
-    title: "Edge & Silhouette Segmentation",
+    title: "Clean Edge & Figure Detection",
     description:
-      "Traditional eraser tools blur the edges of the removed person, leaving ghost outlines or halo artifacts. BringBack uses deep segmentation masks to isolate the exact silhouette of the person without clipping adjacent subjects or objects.",
+      "Unlike basic lasso tools that cut jagged lines, BringBack automatically detects the outline of hair, clothes, and body contours so the figure is erased cleanly without leaving ghost silhouettes.",
   },
   {
     icon: <Grid className="w-6 h-6 text-indigo-500" />,
-    title: "Generative Pattern & Texture Extrapolation",
+    title: "Rebuilding Hidden Background Patterns",
     description:
-      "When a person is erased, the AI must synthesize what was hidden behind them—whether it's a brick wall, wood paneling, wallpaper, or natural foliage. Our inpainting model analyzes surrounding geometric patterns and reconstructs authentic background textures.",
+      "When a person is erased, the AI doesn't just smudge neighboring pixels—it analyzes surrounding wallpaper, brickwork, wood paneling, or foliage to reconstruct authentic background textures in place of the removed subject.",
   },
   {
     icon: <Layers className="w-6 h-6 text-amber-500" />,
-    title: "Film Noise & Micro-Grain Harmonization",
+    title: "Matching Vintage Film Texture",
     description:
-      "Modern AI inpainting can sometimes produce unnaturally smooth patches that stand out against vintage film stock. BringBack measures the surrounding ISO noise and reintroduces matching film grain into the inpainted region.",
+      "Basic eraser tools produce unnaturally smooth patches that stand out against old photos. BringBack measures the surrounding photo grain and reintroduces matching vintage film texture into the cleaned area.",
   },
   {
     icon: <Eye className="w-6 h-6 text-emerald-500" />,
-    title: "Lighting & Exposure Consistency",
+    title: "Matching Exposure & Shadow Direction",
     description:
-      "The newly generated background patch inherits the exact shadow gradient, color cast, and exposure level of the surrounding ambient light, ensuring zero visible seams or patch boundaries.",
+      "Removing a figure also means recalculating lighting cast. Our AI adjusts background brightness and shadow gradients so the remaining subjects sit naturally within their environment.",
   },
 ]
 
@@ -38,16 +38,16 @@ export function RemovePersonInpaintingGuide() {
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 mb-16">
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Inpainting Pillars <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> Clean Object Removal <span className="text-brand-orange">//</span>
             </div>
-            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
-              How Generative Inpainting <br />
-              <span className="text-gray-400">Rebuilds Erased Backgrounds.</span>
+            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
+              How AI Rebuilds <br />
+              <span className="text-gray-400">Erased Backgrounds Without Smudges.</span>
             </h2>
           </div>
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              When a figure is erased, AI analyzes surrounding geometry to synthesize realistic background textures.
+              When a figure or object is erased, AI analyzes surrounding geometry to synthesize authentic background patterns.
             </p>
           </div>
         </div>
@@ -57,17 +57,19 @@ export function RemovePersonInpaintingGuide() {
             {INPAINTING_PILLARS.map((pillar, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-[1.8rem] p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-[1.8rem] p-8 border border-gray-100 shadow-sm flex flex-col justify-between"
               >
-                <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-6">
-                  {pillar.icon}
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-6">
+                    {pillar.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-brand-black mb-3 leading-snug">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-gray-600 font-medium leading-relaxed text-sm sm:text-base">
+                    {pillar.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-brand-black mb-3 leading-snug">
-                  {pillar.title}
-                </h3>
-                <p className="text-gray-600 font-medium leading-relaxed text-sm sm:text-base">
-                  {pillar.description}
-                </p>
               </div>
             ))}
           </div>

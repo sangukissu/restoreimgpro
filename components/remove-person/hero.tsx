@@ -17,7 +17,7 @@ export function RemovePersonHero() {
               <span>Generative Object Removal</span>
             </div>
 
-            <h1 className="text-[3.5rem] sm:text-[4rem] font-[850] tracking-tighter leading-[0.95] text-brand-black mb-6">
+            <h1 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black mb-6">
               Remove Unwanted Persons <br />
               from Family Photos <br />
               <span className="text-gray-400 font-extrabold">with Generative Inpainting</span>

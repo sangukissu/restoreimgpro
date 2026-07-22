@@ -1,251 +1,159 @@
 import type { Metadata } from "next"
-import { Navbar } from '@/components/landing/Navbar';
-import { Footer } from '@/components/landing/Footer';
-import ColorizeHowItWorks from "@/components/pages/colorize-how-it-works"
-import ColorizeShowcaseSection from "@/components/pages/colorize-showcase-section"
-import ColorizeFeaturesSection from "@/components/pages/colorize-features-section"
-import ColorizeQualitySection from "@/components/pages/colorize-quality-section"
-import ColorizeProfessionalService from "@/components/pages/colorize-professional-service"
-import ColorizeHowItWorksDeepDive from "@/components/pages/colorize-how-it-works-deep-dive"
-import ColorizeFAQSection from "@/components/pages/colorize-faq-section"
-import { CTA } from '@/components/landing/CTA';
-import ColorizeHero from "@/components/pages/colorize-hero"
+import { Navbar } from "@/components/landing/Navbar"
+import { ColorizeHero } from "@/components/pages/colorize-hero"
+import { ColorizeShowcaseSection } from "@/components/pages/colorize-showcase-section"
+import { ColorizeHowItWorks } from "@/components/pages/colorize-how-it-works"
+import { ColorizeFeaturesSection } from "@/components/pages/colorize-features-section"
+import { ColorizeQualitySection } from "@/components/pages/colorize-quality-section"
+import { ColorizeFAQSection } from "@/components/pages/colorize-faq-section"
+import { COLORIZE_FAQS } from "@/lib/feature-faqs"
+import { Pricing } from "@/components/landing/Pricing"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
-
-
-
+import { CTA } from "@/components/old-photo-restoration/CTA"
+import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Professional AI Photo Colorization Service | Colorize Photos Online",
+  title: "Colorize Black and White Photos AI | BringBack",
   description:
-    "How does AI photo colorization work? BringBack uses advanced AI to colorize black and white photos instantly. Professional quality photo colorization service at a fraction of the price.",
-  keywords:
-    "photo colorization service, colorize black and white photos, how does ai photo colorization work, professional photo colorization service price, colorized photos, vintage photo colorization services, how much does it cost to colorize a photo, bring back color",
-  robots: "index, follow",
+    "Colorize black and white photos online with AI. Era-accurate color tones, skin color precision, and high resolution. Try free preview.",
+  keywords: [
+    "colorize black and white photos",
+    "how to colorize black and white photos",
+    "ai photo colorizer online",
+    "add color to old picture",
+    "colorization of vintage family photos",
+  ],
   alternates: {
-    canonical: "/colorize-photos",
+    canonical: "https://bringback.pro/colorize-photos",
   },
   openGraph: {
-    title: "Professional AI Photo Colorization Service | Colorize Photos Online",
-    description:
-      "BringBack uses advanced AI to colorize black and white photos instantly. Professional quality photo colorization service at a fraction of the price.",
-    type: "website",
+    title: "Colorize Black and White Photos AI | BringBack",
+    description: "Transform monochromatic vintage photos into rich color portraits.",
     url: "https://bringback.pro/colorize-photos",
+    siteName: "BringBack",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Colorize black and white photo before and after",
+      },
+    ],
   },
+  robots: { index: true, follow: true },
 }
 
-const colorizePageJsonLd = {
+const webAppJsonLd = {
   "@context": "https://schema.org",
-  "@type": ["WebPage", "WebApplication"],
-  "@id": "https://bringback.pro/#colorize-webapp",
-  "name": "BringBack – Professional AI Photo Colorization Service",
-  "url": "https://bringback.pro/colorize-photos",
-  "applicationCategory": "PhotoEditingApplication",
-  "operatingSystem": "Web",
-  "browserRequirements": "Requires JavaScript and modern web browser.",
-  "description": "BringBack is a professional AI photo colorization service that allows users to upload black and white photos and instantly receive realistic colorized images. It answers the question of how does ai photo colorization work by showing real-time vintage photo colorization.",
-  "provider": {
-    "@type": "Organization",
-    "@id": "https://bringback.pro/#organization",
-    "name": "BringBack",
-    "url": "https://bringback.pro/",
-    "description": "AI-powered web application for photo colorization and enhancement.",
-    "foundingDate": "2025",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://bringback.pro/bringback-logo.webp",
-      "width": 512,
-      "height": 512
-    }
-  },
-  "offers": {
+  "@type": "WebApplication",
+  "@id": "https://bringback.pro/colorize-photos#webapp",
+  name: "BringBack Colorize Black and White Photos AI",
+  description: "Colorize black and white photos with era-accurate color spectrum mapping.",
+  url: "https://bringback.pro/colorize-photos",
+  applicationCategory: "PhotoEditingApplication",
+  operatingSystem: "Web",
+  offers: {
     "@type": "Offer",
-    "name": "BringBack Colorization Plans",
-    "url": "https://bringback.pro/pricing",
-    "priceCurrency": "USD",
-    "price": "4.99",
-    "eligibleRegion": {
-      "@type": "Place",
-      "name": "Worldwide"
-    }
+    name: "Colorization Credit Pack",
+    url: "https://bringback.pro/pricing",
+    priceCurrency: "USD",
+    price: "4.99",
+    description: "4 credits — covers 4 photo colorization runs.",
   },
-  "screenshot": "https://bringback.pro/colorize-screenshot.png",
-  "softwareVersion": "1.0.0"
 }
 
-const colorizeFAQPageJsonLd = {
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Colorize Black and White Photos",
+  description: "Learn how to bring vibrant color to vintage black-and-white family photos in 4 simple steps.",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Upload Black & White Photo",
+      text: "Upload any black-and-white, sepia, or monochromatic vintage print.",
+      url: "https://bringback.pro/colorize-photos#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "AI Analyzes Historical Context",
+      text: "Our neural network detects skin tones, clothing fabrics, foliage, and sky.",
+      url: "https://bringback.pro/colorize-photos#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Color Generated Instantly",
+      text: "BringBack applies lifelike colors while retaining original contrast & shading.",
+      url: "https://bringback.pro/colorize-photos#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Compare & Download HD",
+      text: "Review your colorized photo side-by-side with the original before downloading.",
+      url: "https://bringback.pro/colorize-photos#how-it-works",
+    },
+  ],
+}
+
+const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How does AI photo colorization actually work?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our AI analyzes the grayscale patterns, textures, and context in your black and white photo to intelligently predict realistic colors. "
-      }
+  mainEntity: COLORIZE_FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
     },
-    {
-      "@type": "Question",
-      "name": "How accurate are the colors in AI colorization?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our AI achieves highly realistic colorization by understanding context clues like skin tones, common object colors, and historical color palettes. While we can't know the exact original colors, our system produces natural, believable results that bring photos to life authentically."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I colorize very old or damaged black and white photos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes! Our AI works well with vintage photos from any era, including damaged or faded images. The system can handle scratches, stains, and age-related deterioration while adding realistic colors. For best results, ensure the main subjects are clearly visible."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How much does photo colorization cost?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "We offer 4 high-quality photo colorizations for just $4.99 - no subscription required. This one-time payment gives you professional-grade colorization in seconds, compared to traditional photo colorization services that charge $50-200+ per photo."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Will colorization work on portraits and people?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Absolutely! Our AI excels at colorizing portraits, understanding skin tones, hair colors, and clothing. It can handle individual portraits, family photos, and group pictures with natural-looking results for each person."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How long does the colorization process take?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Most photos are colorized in under 60 seconds. Simply upload your black and white photo and watch it transform into a vibrant color image in real-time. No waiting days or weeks like traditional colorization services."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is my data safe during colorization?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What if I'm not satisfied with the colorization results?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "We offer a 30-day money-back guarantee. If you're not satisfied with the colorization results, we'll refund your purchase - no questions asked. We're confident in our AI's ability to bring your photos to life, but we stand behind every colorization."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What does colorizing a photo mean?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Colorizing a photo means adding realistic colors to black and white or grayscale images, transforming them into vibrant, lifelike pictures that appear as if they were originally taken in color."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I colorize historical or vintage family photos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes! Our AI specializes in vintage and historical photo colorization, understanding period-appropriate colors, clothing styles, and historical context to create authentic-looking results."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does colorization work on landscape and nature photos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Absolutely. Our AI excels at colorizing landscapes, understanding natural colors like sky blues, grass greens, and seasonal variations to create stunning, realistic outdoor scenes."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What image formats are supported for colorization?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "BringBack supports JPEG, PNG, and TIFF formats for colorization. We recommend high-resolution images for the best colorization results."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I adjust or customize the colors after AI colorization?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The AI provides realistic, automatic colorization. For specific color preferences or adjustments, you can use the colorized result as a base and make further edits in your preferred photo editing software."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Will colorization work on group photos or wedding pictures?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes! Our AI handles complex scenes with multiple people, understanding different skin tones, clothing colors, and background elements to create natural-looking group colorizations."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is the colorization mobile-friendly?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, you can upload and colorize black and white photos directly from your phone using our responsive web interface, perfect for colorizing photos on the go."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I use colorized photos commercially?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, colorized photos can be used for editorial, commercial, or personal projects, with full usage rights included in your purchase."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does colorization preserve the original photo quality?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, our AI maintains the original resolution and detail while adding colors, ensuring your colorized photos retain all the sharpness and quality of the original black and white image."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How realistic do the colorized photos look?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our AI produces highly realistic colorizations that often look like the photos were originally taken in color. The system understands natural color relationships and historical context for authentic results."
-      }
-    }
-  ]
+  })),
 }
 
-export default function ColorizePage() {
+export default function ColorizePhotosPage() {
   return (
-    <div className="min-h-screen bg-brand-bg">
+    <div className="min-h-screen bg-brand-bg text-brand-black font-sans selection:bg-brand-orange selection:text-white relative overflow-x-hidden">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(colorizePageJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(colorizeFAQPageJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
-      <Navbar />
-      <ColorizeHero />
-      <ColorizeHowItWorks />
-      <ColorizeShowcaseSection />
-      <ColorizeFeaturesSection />
-      <ColorizeHowItWorksDeepDive />
-      <ColorizeQualitySection />
-      <ColorizeProfessionalService />
-      <ColorizeFAQSection />
-      <ProductCrossSell excludeHref="/colorize-photos" />
-      <CTA />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
+      <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
+        <Navbar />
+      </header>
+
+      <main>
+        {/* 1. Hero */}
+        <ColorizeHero />
+        {/* 2. Showcase */}
+        <ColorizeShowcaseSection />
+        {/* 3. 4-Step How It Works (Snippet-Winning Architecture) */}
+        <ColorizeHowItWorks />
+        {/* 4. Features */}
+        <ColorizeFeaturesSection />
+        {/* 5. Quality */}
+        <ColorizeQualitySection />
+        {/* 6. Pricing */}
+        <Pricing />
+        {/* 7. FAQ */}
+        <ColorizeFAQSection />
+        {/* 8. Product Cross Sell */}
+        <ProductCrossSell excludeHref="/colorize-photos" />
+        {/* 9. CTA */}
+        <CTA />
+      </main>
+
       <Footer />
     </div>
   )

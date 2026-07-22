@@ -1,213 +1,103 @@
+"use client"
 
-import React from 'react';
-import { ImagePlus, Wand2, Download, MousePointer2, CheckCircle2, UploadCloud, HardDriveDownload, FileCheck } from 'lucide-react';
+import React from "react"
+import { Upload, Sparkles, Sliders, Download, CheckCircle2 } from "lucide-react"
 
-const STEPS = [
+const RESTORE_STEPS = [
   {
-    id: 1,
-    title: "Upload Your Photo",
-    description: "Upload any scanned image (JPEG or PNG). We support high-resolution scans.",
-    icon: <ImagePlus size={24} className="text-brand-black" />,
-    visual: (
-      <div className="w-full h-full relative bg-gray-50 overflow-hidden group/visual">
-        {/* Dot Pattern Background */}
-        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-
-        {/* Upload UI */}
-        <div className="absolute inset-5 rounded-2xl border-2 border-dashed border-gray-300 bg-white shadow-sm flex flex-col items-center justify-center gap-3 transition-colors duration-300 group-hover/visual:border-brand-orange/50 group-hover/visual:bg-brand-orange/5">
-          <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover/visual:bg-white group-hover/visual:text-brand-orange transition-colors">
-            <UploadCloud size={24} />
-          </div>
-          <div className="space-y-1 text-center">
-            <div className="text-xs font-bold text-gray-400 group-hover/visual:text-brand-orange/80 uppercase tracking-wide">Click to upload</div>
-            <div className="text-[10px] text-gray-300 font-medium">JPG, PNG, WEBP</div>
-          </div>
-        </div>
-
-        {/* Animated Cursor & File */}
-        <div className="absolute top-1/2 left-1/2 z-20 animate-cursor-drop pointer-events-none">
-          <div className="relative">
-            <MousePointer2 className="w-6 h-6 text-brand-black fill-black absolute -right-1 -bottom-3 z-20 drop-shadow-md" />
-
-            <div className="w-14 h-16 bg-white rounded-lg shadow-xl border border-gray-100 flex items-center justify-center transform -rotate-6 origin-bottom-right">
-              <div className="w-full h-full p-1.5 flex flex-col gap-1">
-                <div className="w-full h-2/3 bg-gray-100 rounded-md overflow-hidden">
-                  <img src="/childhood-memories-black-and-white.webp" className="w-full h-full object-cover grayscale opacity-60" alt="file" />
-                </div>
-                <div className="space-y-1">
-                  <div className="w-2/3 h-1.5 bg-gray-200 rounded-full"></div>
-                  <div className="w-1/2 h-1.5 bg-gray-200 rounded-full"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+    number: "01",
+    stepTitle: "Upload Faded or Damaged Photo",
+    icon: <Upload className="w-6 h-6 text-brand-orange" />,
+    shortDesc: "Upload your scanned physical photo, wallet print, or smartphone snapshot.",
+    detail: "Handles scratches, rips, water stains, mold spots, and heavy yellow fading.",
   },
   {
-    id: 2,
-    title: "AI Restoration",
-    description: "Our engine analyzes the damage type—scratches, blur, or fading—and repairs it automatically in seconds.",
-    icon: <Wand2 size={24} className="text-brand-black" />,
-    visual: (
-      <div className="w-full h-full relative bg-gray-100 overflow-hidden flex items-center justify-center">
-        <div className="relative w-full h-full">
-          {/* Base Image (Damaged) */}
-          <img
-            src="/childhood-memories-black-and-white.webp"
-            alt="Original"
-            className="absolute inset-0 w-full h-full object-cover grayscale contrast-125 brightness-90 blur-[0.5px]"
-          />
-
-          {/* Restored Image (Revealed by clip-path animation) */}
-          <div className="absolute inset-0 w-full h-full animate-[clip-scan_4s_ease-in-out_infinite] overflow-hidden z-10">
-            <img
-              src="/childhood-memories-colorized.webp"
-              alt="Restored"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </div>
-
-          {/* Scanner Line & Glow */}
-          <div className="absolute top-0 bottom-0 w-0.5 bg-brand-orange animate-[scan-line_4s_ease-in-out_infinite] z-20 shadow-[0_0_15px_#FF4D00]"></div>
-        </div>
-
-        {/* Clean Status Badge */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur shadow-sm border border-gray-200 text-[10px] font-bold text-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 whitespace-nowrap z-20">
-          <div className="w-2 h-2 rounded-full border-2 border-brand-orange border-t-transparent animate-spin"></div>
-          Processing...
-        </div>
-
-        <style>{`
-            @keyframes clip-scan {
-                0%, 100% { clip-path: inset(0 100% 0 0); }
-                50% { clip-path: inset(0 0 0 0); }
-            }
-            @keyframes scan-line {
-                0%, 100% { left: 0%; }
-                50% { left: 100%; }
-            }
-         `}</style>
-      </div>
-    )
+    number: "02",
+    stepTitle: "Choose Restoration Settings",
+    icon: <Sliders className="w-6 h-6 text-indigo-500" />,
+    shortDesc: "Select restore-only to keep original B&W/sepia, or restore + colorize.",
+    detail: "Optionally turn on HD face sharpening for soft or out-of-focus portraits.",
   },
   {
-    id: 3,
-    title: "Download",
-    description: "Get your studio-quality digital photo, ready to print or share.",
-    icon: <Download size={24} className="text-brand-black" />,
-   visual: (
-      <div className="w-full h-full relative bg-[#F9F9F9] overflow-hidden flex items-center justify-center p-6">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
+    number: "03",
+    stepTitle: "AI Repairs Damage Automatically",
+    icon: <Sparkles className="w-6 h-6 text-amber-500" />,
+    shortDesc: "Our conservator engine removes scratches and fills missing paper fibers in seconds.",
+    detail: "Preserves natural film grain and original character without plastic smoothing.",
+  },
+  {
+    number: "04",
+    stepTitle: "Compare & Download High-Res",
+    icon: <Download className="w-6 h-6 text-emerald-500" />,
+    shortDesc: "Review your photo side-by-side with an interactive slider before downloading.",
+    detail: "Download print-ready resolution for wall framing or digital family keepsakes.",
+  },
+]
 
-        {/* Professional Wide File Card - Cleaner, Less Shadow */}
-        <div className="w-full max-w-[320px] bg-white rounded-xl border border-gray-200/80 p-4 flex items-center gap-4 relative z-10 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-           
-           {/* File Icon / Thumb */}
-           <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0 relative overflow-hidden">
-               <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop" className="w-full h-full object-cover opacity-90" alt="Thumb" />
-               <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-                  <FileCheck size={16} className="text-white drop-shadow-sm" />
-               </div>
-           </div>
-
-           {/* Metadata */}
-           <div className="flex-1 min-w-0 flex flex-col gap-1">
-               <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-gray-800 truncate">restored_final.jpg</span>
-                  <div className="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded border border-green-100 flex items-center gap-0.5">
-                      <CheckCircle2 size={8} /> Ready
-                  </div>
-               </div>
-               <div className="flex items-center gap-2 text-[10px] text-gray-400 font-medium uppercase tracking-wide">
-                  <span>5.2 MB</span>
-                  <span className="w-0.5 h-0.5 rounded-full bg-gray-300"></span>
-                  <span>300 DPI</span>
-               </div>
-               
-               {/* Progress Bar (Full) */}
-               <div className="w-full h-1 bg-gray-100 rounded-full mt-1 overflow-hidden">
-                  <div className="w-full h-full bg-green-500 rounded-full"></div>
-               </div>
-           </div>
-        </div>
-        
-        {/* Floating Action Button (Download) */}
-        <div className="absolute bottom-6 right-6 z-20">
-           <div className="w-10 h-10 bg-brand-black text-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform cursor-pointer">
-              <HardDriveDownload size={18} />
-           </div>
-        </div>
-
-      </div>
-    )
-  }
-];
-
-export const HowItWorks: React.FC = () => {
+export function HowItWorks() {
   return (
-    <section id="how-it-works" className="w-full max-w-[1320px] mx-auto px-4 sm:px-8 py-24 bg-brand-bg">
-
-      {/* Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
-        <div className="max-w-2xl">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-            <span className="text-brand-orange">//</span> How It Works <span className="text-brand-orange">//</span>
+    <section id="how-it-works" className="py-24 px-4 sm:px-8 bg-brand-bg">
+      <div className="max-w-[1320px] mx-auto">
+        {/* Featured-Snippet Target Header */}
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 mb-14">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
+              <span className="text-brand-orange">//</span> 4 Simple Steps <span className="text-brand-orange">//</span>
+            </div>
+            
+            {/* Snippet-Winning H2 */}
+            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
+              How to Restore Old Photos
+            </h2>
           </div>
 
-          {/* Title */}
-          <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
-            Restore memories <br />
-            <span className="text-gray-400/80">in 3 simple steps.</span>
-          </h2>
+          <div className="max-w-sm">
+            <p className="text-lg text-gray-600 font-medium leading-relaxed">
+              Follow these 4 simple steps to fix scratches, tears, fading, and blur on vintage family prints with AI.
+            </p>
+          </div>
         </div>
 
-        {/* Subtitle */}
-        <div className="max-w-sm">
-          <p className="text-lg text-gray-600 font-medium leading-relaxed">
-            No complex editing skills required. Our AI handles the restoration process completely automatically.
-          </p>
-        </div>
-      </div>
+        {/* Semantic Ordered List for Featured Snippets */}
+        <div className="bg-brand-surface p-3 sm:p-4 rounded-[2.2rem]">
+          <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 list-none">
+            {RESTORE_STEPS.map((step, idx) => (
+              <li
+                key={idx}
+                className="bg-white rounded-[1.8rem] p-6 sm:p-8 border border-gray-100 shadow-sm flex flex-col justify-between group hover:border-brand-orange/30 transition-all duration-300"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-3xl font-black text-brand-orange tracking-tight">
+                      {step.number}
+                    </span>
+                    <div className="w-11 h-11 rounded-2xl bg-brand-surface border border-gray-100 flex items-center justify-center">
+                      {step.icon}
+                    </div>
+                  </div>
 
-      {/* Steps Grid Container - Gray Background */}
-      <div className="bg-brand-surface p-2 rounded-[3rem]">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-          {STEPS.map((step) => (
-            <div
-              key={step.id}
-              className="bg-white rounded-[2.5rem] p-8 min-h-[420px] flex flex-col group hover:shadow-lg transition-all duration-300"
-            >
-              {/* Step Number & Icon */}
-              <div className="flex justify-between items-start mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-[#F2F2F0] flex items-center justify-center transition-colors group-hover:bg-brand-orange/10 group-hover:text-brand-orange">
-                  {step.icon}
+                  <h3 className="text-xl font-extrabold text-brand-black mb-3 leading-snug">
+                    {step.stepTitle}
+                  </h3>
+
+                  <p className="text-gray-700 font-semibold text-sm mb-3 leading-relaxed">
+                    {step.shortDesc}
+                  </p>
+
+                  <p className="text-gray-500 font-medium text-xs leading-relaxed">
+                    {step.detail}
+                  </p>
                 </div>
-                <span className="text-6xl font-[800] text-gray-100 leading-none select-none font-sans group-hover:text-gray-200 transition-colors">
-                  0{step.id}
-                </span>
-              </div>
 
-              {/* Content */}
-              <div className="mb-10 relative z-10">
-                <h3 className="text-2xl font-bold text-brand-black mb-3">{step.title}</h3>
-                <p className="text-gray-600 font-medium leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
-
-              {/* Visual "Mini App" Area */}
-              <div className="mt-auto h-[200px] rounded-3xl overflow-hidden border border-gray-100 relative shadow-inner transform group-hover:translate-y-[-5px] transition-transform duration-300">
-                {step.visual}
-              </div>
-            </div>
-          ))}
+                <div className="mt-6 pt-4 border-t border-gray-100 flex items-center gap-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                  <CheckCircle2 size={14} className="text-brand-orange" />
+                  Step {step.number} Complete
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
-
     </section>
-  );
-};
+  )
+}

@@ -141,7 +141,7 @@ export const Showcase: React.FC = () => {
           <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
             <span className="text-brand-orange">//</span> Capabilities <span className="text-brand-orange">//</span>
           </div>
-          <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
+          <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
             Specialized AI for <br />
             <span className="text-gray-400/80">Every Type of Damage</span>
           </h2>

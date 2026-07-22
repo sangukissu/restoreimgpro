@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { Navbar } from "@/components/landing/Navbar"
 import { AddPersonHero } from "@/components/add-person/hero"
+import { AddPersonRealExamples } from "@/components/add-person/real-examples"
 import { AddPersonHowItWorks } from "@/components/add-person/how-it-works"
 import { AddPersonGuide } from "@/components/add-person/guide"
-import { AddPersonUseCases } from "@/components/add-person/use-cases"
 import { AddPersonHarmonizationGuide } from "@/components/add-person/harmonization-guide"
 import { AddPersonComparison } from "@/components/add-person/comparison"
 import { AddPersonFAQ } from "@/components/add-person/faq"
@@ -14,16 +14,25 @@ import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Add a Person to a Family Photo | AI Photo Compositing | BringBack",
+  title: "Add Deceased Loved One to Photo AI | Combine Separate Family Photos | BringBack",
   description:
-    "Add missing relatives or loved ones into a family photo naturally with AI. Harmonizes lighting, color temperature, and film grain. 2 credits per run.",
+    "Add a deceased loved one, late parent, or missing family member into a wedding, memorial, or family portrait with AI. Natural lighting, matched skin tones, and real before & after results.",
+  keywords: [
+    "add deceased loved one to photo ai",
+    "add deceased loved one to wedding photo",
+    "add passed family member to portrait",
+    "add missing person to group photo",
+    "combine separate photos of deceased relatives into one portrait",
+    "how to add a person to a family photo",
+    "ai memorial family photo generator",
+  ],
   alternates: {
     canonical: "https://bringback.pro/add-person-to-photo",
   },
   openGraph: {
-    title: "Add a Person to a Family Photo | BringBack AI",
+    title: "Add Deceased Loved One to Photo AI | BringBack",
     description:
-      "Combine separate photos of relatives into a single cohesive group portrait with natural AI lighting harmonization.",
+      "Combine separate photos of relatives into a single cohesive family portrait with natural AI lighting and skin tone matching.",
     url: "https://bringback.pro/add-person-to-photo",
     siteName: "BringBack",
     type: "website",
@@ -32,7 +41,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Add person to family photo before and after composite",
+        alt: "Add deceased loved one to family photo before and after composite",
       },
     ],
   },
@@ -43,9 +52,9 @@ const webAppJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "@id": "https://bringback.pro/add-person-to-photo#webapp",
-  name: "BringBack Add Person to Photo",
+  name: "BringBack Add Deceased Loved One to Photo AI",
   description:
-    "Combine separate photos of relatives into a single cohesive group portrait with natural AI lighting harmonization.",
+    "Add a deceased loved one or missing relative into a wedding, memorial, or family portrait with matched lighting.",
   url: "https://bringback.pro/add-person-to-photo",
   applicationCategory: "PhotoEditingApplication",
   operatingSystem: "Web",
@@ -57,6 +66,43 @@ const webAppJsonLd = {
     price: "4.99",
     description: "4 credits — covers 2 Add Person compositing runs.",
   },
+}
+
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Add a Person to a Family Photo",
+  description: "Learn how to add a missing relative or deceased loved one into any family photo using AI in 4 simple steps.",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Upload Your Group Photo",
+      text: "Select the main family, wedding, or reunion snapshot where you want to add someone.",
+      url: "https://bringback.pro/add-person-to-photo#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Upload the Person's Photo",
+      text: "Choose a clear reference photo of the missing relative or deceased loved one.",
+      url: "https://bringback.pro/add-person-to-photo#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Position & Adjust (Optional)",
+      text: "Specify where they should stand or sit (e.g. next to the bride or on the living room sofa).",
+      url: "https://bringback.pro/add-person-to-photo#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Download Your Family Memory",
+      text: "Review the result side-by-side in your dashboard and download high-res print quality.",
+      url: "https://bringback.pro/add-person-to-photo#how-it-works",
+    },
+  ],
 }
 
 const faqJsonLd = {
@@ -81,6 +127,10 @@ export default function AddPersonToPhotoPage() {
       />
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
@@ -89,15 +139,15 @@ export default function AddPersonToPhotoPage() {
       </header>
 
       <main>
-        {/* 1. Hero (Static framed feature card) */}
+        {/* 1. Hero */}
         <AddPersonHero />
-        {/* 2. 4-Step How It Works Workflow */}
+        {/* 2. Real Before & After Photo Case Studies */}
+        <AddPersonRealExamples />
+        {/* 3. 4-Step How It Works Workflow (Featured-Snippet Target) */}
         <AddPersonHowItWorks />
-        {/* 3. Deep 200+ Line Technical Guide */}
+        {/* 4. Human-First Guide & Best Source Tips */}
         <AddPersonGuide />
-        {/* 4. Real-World Use Cases */}
-        <AddPersonUseCases />
-        {/* 5. 4 Pillars of Harmonization */}
+        {/* 5. 4 Pillars of Natural Blending */}
         <AddPersonHarmonizationGuide />
         {/* 6. Competitor Comparison Matrix */}
         <AddPersonComparison />

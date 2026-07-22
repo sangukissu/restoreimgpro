@@ -192,7 +192,7 @@ export const DamageTypes: React.FC = () => {
             </div>
             
             {/* Title */}
-            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
+            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
               Every Type of Photo Damage. <br />
               <span className="text-gray-400">Fixed Automatically.</span>
             </h2>

@@ -2,7 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import { CheckCircle2, AlertTriangle, Camera, ShieldAlert, Sparkles, ArrowRight, Layers, UserPlus } from "lucide-react"
+import { CheckCircle2, AlertTriangle, Camera, ShieldAlert, Sparkles, ArrowRight, UserPlus, Image as ImageIcon } from "lucide-react"
 import { FEATURE_CREDIT_COSTS, formatCredits } from "@/lib/pricing"
 import { PRIVACY_COPY } from "@/lib/site-copy"
 
@@ -14,18 +14,18 @@ export function AddPersonGuide() {
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 mb-16">
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Technical Compositing Guide <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> Practical Family Photo Guide <span className="text-brand-orange">//</span>
             </div>
 
-            <h2 className="text-[3.5rem] sm:text-[4rem] font-extrabold tracking-tight text-brand-black leading-[0.95]">
-              Two Compositing Approaches. <br />
-              <span className="text-gray-400">One Seamless Family Result.</span>
+            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
+              Two Easy Ways to Combine Photos. <br />
+              <span className="text-gray-400">One Lasting Family Memory.</span>
             </h2>
           </div>
 
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Each run uses {formatCredits(FEATURE_CREDIT_COSTS.addPerson.credits)}. Understand reference selection, lighting harmonization, and practical limitations.
+              Each run costs {formatCredits(FEATURE_CREDIT_COSTS.addPerson.credits)}. Learn how to pick the best source photos for the most authentic result.
             </p>
           </div>
         </div>
@@ -33,9 +33,9 @@ export function AddPersonGuide() {
         {/* Main Content: Nested Container Architecture */}
         <div className="bg-brand-surface p-2 sm:p-3 rounded-[2rem] space-y-3">
           
-          {/* Row 1: Compositing Modes */}
+          {/* Row 1: Plain English Ways to Edit */}
           <div className="grid md:grid-cols-2 gap-3">
-            {/* Mode 1 */}
+            {/* Way 1 */}
             <div className="bg-white rounded-[1.8rem] p-8 lg:p-10 border border-gray-100 shadow-sm flex flex-col justify-between group hover:border-gray-200 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-6">
@@ -43,60 +43,60 @@ export function AddPersonGuide() {
                     <UserPlus size={24} />
                   </div>
                   <span className="bg-gray-100 text-brand-black text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                    Workflow 1
+                    Option 1
                   </span>
                 </div>
-                <h3 className="text-2xl font-extrabold text-brand-black mb-3">Target Scene Insertion</h3>
+                <h3 className="text-2xl font-extrabold text-brand-black mb-3">Add a Person into an Existing Group Photo</h3>
                 <p className="text-gray-600 font-medium leading-relaxed text-base">
-                  Insert a missing person into an existing group photo (such as a wedding, reunion, or holiday snapshot). The AI scales the body, calculates ground shadow placement, and matches surrounding room lighting.
+                  Place a missing family member directly into an existing gathering shot (like a wedding, holiday dinner, or family reunion). The AI calculates height scaling and ground shadow placement automatically.
                 </p>
               </div>
               <div className="mt-8 pt-4 border-t border-gray-100 flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                 <CheckCircle2 size={14} className="text-brand-orange" />
-                Preserves Target Background Architecture
+                Keeps Original Room &amp; Background Intact
               </div>
             </div>
 
-            {/* Mode 2 */}
+            {/* Way 2 */}
             <div className="bg-white rounded-[1.8rem] p-8 lg:p-10 border border-gray-100 shadow-sm flex flex-col justify-between group hover:border-gray-200 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="w-12 h-12 rounded-2xl bg-brand-surface border border-gray-100 text-brand-orange flex items-center justify-center shadow-sm">
-                    <Layers size={24} />
+                    <ImageIcon size={24} />
                   </div>
                   <span className="bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                    Workflow 2
+                    Option 2
                   </span>
                 </div>
-                <h3 className="text-2xl font-extrabold text-brand-black mb-3">Multi-Portrait Synthesis</h3>
+                <h3 className="text-2xl font-extrabold text-brand-black mb-3">Create a New Family Photo from Separate Pictures</h3>
                 <p className="text-gray-600 font-medium leading-relaxed text-base">
-                  Combine separate individual studio portraits taken across different decades into a unified family portrait. Ideal for genealogy archives when no single group photo exists.
+                  When you don't have a single group photo, upload separate individual studio portraits taken across different years. BringBack assembles them into one unified, balanced family portrait.
                 </p>
               </div>
               <div className="mt-8 pt-4 border-t border-gray-100 flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                 <Sparkles size={14} className="text-brand-orange" />
-                Equalizes Film Noise Across Eras
+                Blends Vintage Film Grain &amp; Lighting
               </div>
             </div>
           </div>
 
-          {/* Row 2: 3-Column Guidelines & Expectations Grid */}
+          {/* Row 2: 3-Column Guidelines Grid */}
           <div className="grid lg:grid-cols-3 gap-3">
-            {/* Column 1: Best Practice Inputs */}
+            {/* Column 1: Best Source Photos */}
             <div className="bg-white rounded-[1.8rem] p-8 border border-gray-100 shadow-sm flex flex-col justify-between">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center mb-6">
                   <CheckCircle2 size={20} />
                 </div>
-                <h3 className="text-xl font-extrabold text-brand-black mb-4">Best Input Practices</h3>
+                <h3 className="text-xl font-extrabold text-brand-black mb-4">Best Source Photos to Upload</h3>
                 <ul className="space-y-3 text-gray-600 text-sm font-medium">
                   <li className="flex items-center gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                    Clear, front-facing reference face
+                    Clear, front-facing portrait of the person to add
                   </li>
                   <li className="flex items-center gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                    Target photo with natural physical gap
+                    Group photo with a natural gap or space
                   </li>
                   <li className="flex items-center gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
@@ -104,85 +104,85 @@ export function AddPersonGuide() {
                   </li>
                   <li className="flex items-center gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                    High resolution scans over 300 DPI
+                    Original high-resolution scans over blurry screenshots
                   </li>
                 </ul>
               </div>
             </div>
 
-            {/* Column 2: What AI Harmonizes */}
+            {/* Column 2: Automatic Blending Details */}
             <div className="bg-white rounded-[1.8rem] p-8 border border-gray-100 shadow-sm flex flex-col justify-between">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-6">
                   <AlertTriangle size={20} />
                 </div>
-                <h3 className="text-xl font-extrabold text-brand-black mb-4">What AI Harmonizes</h3>
+                <h3 className="text-xl font-extrabold text-brand-black mb-4">What Our AI Handles Automatically</h3>
                 <div className="space-y-3 text-gray-600 text-sm font-medium leading-relaxed">
                   <p className="bg-gray-50 p-3.5 rounded-xl border border-gray-100">
-                    Matches skin color spectrum and room lighting cast across all faces in the group.
+                    Matches skin color tones and room light brightness across all faces in the group.
                   </p>
                   <p className="bg-gray-50 p-3.5 rounded-xl border border-gray-100">
-                    Equalizes film noise and digital grain so the added subject does not look unrealistically smooth.
+                    Equalizes photo grain so the added subject looks like they were shot with the exact same camera.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Column 3: Scan & Resolution Tips */}
+            {/* Column 3: Quick Tips */}
             <div className="bg-white rounded-[1.8rem] p-8 border border-gray-100 shadow-sm flex flex-col justify-between">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6">
                   <Camera size={20} />
                 </div>
-                <h3 className="text-xl font-extrabold text-brand-black mb-4">Reference Prep Tips</h3>
+                <h3 className="text-xl font-extrabold text-brand-black mb-4">Quick Preparation Tips</h3>
                 <ul className="space-y-2.5 text-gray-600 text-sm font-medium mb-4">
                   <li className="flex items-start gap-2">
                     <span className="text-brand-orange font-bold">•</span>
-                    Restore damaged reference photos first
+                    If the source photo is damaged, restore it first
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-orange font-bold">•</span>
-                    Avoid low-resolution social media thumbnails
+                    Avoid tiny low-res social media thumbnails
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-orange font-bold">•</span>
-                    Ensure the face is not blocked by hats or hands
+                    Make sure the face isn't hidden by hands or hats
                   </li>
                 </ul>
               </div>
               <p className="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-3">
-                Always review the result side-by-side in your dashboard. If identity feels wrong, do not force a download.
+                Always review the side-by-side result in your private dashboard before downloading.
               </p>
             </div>
           </div>
 
-          {/* Row 3: Ethical & Memorial Guidelines */}
+          {/* Row 3: Respectful Memorial Guidelines */}
           <div className="bg-white rounded-[1.8rem] p-8 lg:p-10 border border-gray-100 shadow-sm">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center">
                 <ShieldAlert size={20} />
               </div>
               <div>
-                <h3 className="text-xl font-extrabold text-brand-black">Ethical &amp; Memorial Guidelines</h3>
-                <p className="text-xs text-gray-500 font-medium">Respectful family photo editing principles</p>
+                <h3 className="text-xl font-extrabold text-brand-black">Respectful Family &amp; Memorial Guidelines</h3>
+                <p className="text-xs text-gray-500 font-medium">Principles for creating meaningful family keepsakes</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-700 font-medium">
               <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100">
-                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Consent &amp; Family Respect</span>
-                Ensure surviving relatives are comfortable with memorial composites.
+                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Family Respect</span>
+                Ensure surviving family members feel comfortable with memorial portraits.
               </div>
               <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100">
-                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Non-Evidentiary Use</span>
-                Composites are for private family keepsakes—not legal records.
+                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Personal Keepsakes</span>
+                Composites are created for private family history books and frames.
               </div>
               <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100">
-                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Identity Safeguards</span>
-                AI preserves facial landmarks without synthetic face-swapping.
+                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Real Facial Features</span>
+                AI preserves genuine expressions without synthetic face-swaps.
               </div>
               <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100">
-                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Private Archiving</span>
-                Files remain private in your dashboard until you delete them.
+                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">100% Private</span>
+                Files are stored securely in your dashboard until you delete them.
               </div>
             </div>
             <p className="mt-6 text-xs text-gray-400 border-t border-gray-100 pt-4">{PRIVACY_COPY.short}</p>
@@ -227,12 +227,6 @@ export function AddPersonGuide() {
                 className="rounded-full bg-brand-surface border border-gray-200 px-4 py-2 text-sm font-bold text-brand-black hover:border-brand-orange hover:bg-white transition-all"
               >
                 Family Memory Book
-              </Link>
-              <Link
-                href="/guides/choose-source-photos-for-likeness"
-                className="rounded-full bg-brand-surface border border-gray-200 px-4 py-2 text-sm font-bold text-brand-black hover:border-brand-orange hover:bg-white transition-all"
-              >
-                Likeness Selection Guide
               </Link>
             </div>
           </div>

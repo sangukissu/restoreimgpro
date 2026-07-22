@@ -3,9 +3,9 @@ import { Navbar } from "@/components/landing/Navbar"
 import { RemovePersonHero } from "@/components/remove-person/hero"
 import { RemovePersonHowItWorks } from "@/components/remove-person/how-it-works"
 import { RemovePersonGuide } from "@/components/remove-person/guide"
-import { RemovePersonUseCases } from "@/components/remove-person/use-cases"
 import { RemovePersonInpaintingGuide } from "@/components/remove-person/inpainting-guide"
 import { RemovePersonComparison } from "@/components/remove-person/comparison"
+import { RemovePersonUseCases } from "@/components/remove-person/use-cases"
 import { RemovePersonFAQ } from "@/components/remove-person/faq"
 import { REMOVE_PERSON_FAQS } from "@/lib/feature-faqs"
 import { Pricing } from "@/components/landing/Pricing"
@@ -14,16 +14,23 @@ import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Remove a Person from a Photo | AI Object Eraser | BringBack",
+  title: "Remove Person from Photo AI | Object & Figure Eraser | BringBack",
   description:
-    "Erase unwanted photobombers, strangers, or figures from family photos with context-aware AI background inpainting. 2 credits per run.",
+    "Remove photobombers, strangers, exes, or unwanted objects from photos with AI. Rebuilds background foliage, brickwork, and shadows naturally. 1 credit per run.",
+  keywords: [
+    "remove person from photo ai",
+    "how to remove a person from a photo",
+    "erase photobombers from picture",
+    "ai object remover from photo",
+    "remove unwanted person from image",
+  ],
   alternates: {
     canonical: "https://bringback.pro/remove-person-from-photo",
   },
   openGraph: {
-    title: "Remove a Person from a Photo | BringBack AI",
+    title: "Remove Person from Photo AI | BringBack",
     description:
-      "Erase unwanted persons from family photos while context-aware AI seamlessly rebuilds background architecture, foliage, and textures.",
+      "Seamlessly erase photobombers or unwanted figures from photos while AI synthesizes matching background patterns.",
     url: "https://bringback.pro/remove-person-from-photo",
     siteName: "BringBack",
     type: "website",
@@ -32,7 +39,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Remove person from family photo before and after inpainting",
+        alt: "Remove person from photo AI before and after",
       },
     ],
   },
@@ -43,9 +50,9 @@ const webAppJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "@id": "https://bringback.pro/remove-person-from-photo#webapp",
-  name: "BringBack Remove Person from Photo",
+  name: "BringBack Remove Person from Photo AI",
   description:
-    "Erase unwanted figures from family photos while context-aware AI seamlessly rebuilds background architecture and textures.",
+    "Erase photobombers or unwanted figures from photos while AI synthesizes matching background patterns.",
   url: "https://bringback.pro/remove-person-from-photo",
   applicationCategory: "PhotoEditingApplication",
   operatingSystem: "Web",
@@ -55,8 +62,45 @@ const webAppJsonLd = {
     url: "https://bringback.pro/pricing",
     priceCurrency: "USD",
     price: "4.99",
-    description: "4 credits — covers 2 Remove Person inpainting runs.",
+    description: "4 credits — covers 4 Remove Person runs.",
   },
+}
+
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Remove a Person from a Photo",
+  description: "Learn how to erase photobombers or unwanted figures from any photo using AI in 4 simple steps.",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Upload Your Photo",
+      text: "Select the photo containing photobombers, strangers, or an unwanted person.",
+      url: "https://bringback.pro/remove-person-from-photo#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Highlight Person to Remove",
+      text: "Simply brush over or select the figure or object you want erased from the picture.",
+      url: "https://bringback.pro/remove-person-from-photo#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "AI Rebuilds the Background",
+      text: "BringBack erases the figure and synthesizes matching background patterns in seconds.",
+      url: "https://bringback.pro/remove-person-from-photo#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Download Clean Photo",
+      text: "Review your photo side-by-side in your dashboard and download high-res print quality.",
+      url: "https://bringback.pro/remove-person-from-photo#how-it-works",
+    },
+  ],
 }
 
 const faqJsonLd = {
@@ -81,6 +125,10 @@ export default function RemovePersonFromPhotoPage() {
       />
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
@@ -89,17 +137,17 @@ export default function RemovePersonFromPhotoPage() {
       </header>
 
       <main>
-        {/* 1. Hero (Static framed feature card) */}
+        {/* 1. Hero */}
         <RemovePersonHero />
-        {/* 2. 4-Step How It Works Workflow */}
+        {/* 2. 4-Step How It Works (Snippet-Winning Architecture) */}
         <RemovePersonHowItWorks />
-        {/* 3. Deep 200+ Line Technical Guide */}
+        {/* 3. Deep Inpainting Guide */}
         <RemovePersonGuide />
-        {/* 4. Real-World Use Cases */}
+        {/* 4. Use Cases */}
         <RemovePersonUseCases />
-        {/* 5. 4 Pillars of Inpainting */}
+        {/* 5. 4 Pillars of Background Synthesis */}
         <RemovePersonInpaintingGuide />
-        {/* 6. Competitor Comparison Matrix */}
+        {/* 6. Competitor Comparison */}
         <RemovePersonComparison />
         {/* 7. Pricing */}
         <Pricing />
@@ -107,7 +155,7 @@ export default function RemovePersonFromPhotoPage() {
         <RemovePersonFAQ />
         {/* 9. Product Cross Sell */}
         <ProductCrossSell excludeHref="/remove-person-from-photo" />
-        {/* 10. CTA Banner */}
+        {/* 10. CTA */}
         <CTA />
       </main>
 

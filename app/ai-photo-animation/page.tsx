@@ -1,217 +1,138 @@
-import { Navbar } from '@/components/landing/Navbar';
-import { Footer } from '@/components/landing/Footer';
 import type { Metadata } from "next"
-import AIAnimationHero from "@/components/ai-photo-animation/hero"
-import AnimationStylesGrid from "@/components/ai-photo-animation/styles-grid"
-import AIAnimationHowItWorks from "@/components/ai-photo-animation/how-it-works"
-import AIAnimationFeatures from "@/components/ai-photo-animation/features"
-import { CTA } from '@/components/landing/CTA';
-import AIAnimationFAQ from "@/components/ai-photo-animation/faq"
+import { Navbar } from "@/components/landing/Navbar"
+import { Hero } from "@/components/ai-photo-animation/hero"
+import { HowItWorks } from "@/components/ai-photo-animation/how-it-works"
+import { Features } from "@/components/ai-photo-animation/features"
+import { StylesGrid } from "@/components/ai-photo-animation/styles-grid"
+import { FAQ } from "@/components/ai-photo-animation/faq"
 import { Pricing } from "@/components/landing/Pricing"
-import { AIAnimationCrossSell } from "@/components/ai-photo-animation/cross-sell"
-import { AIAnimationUseCases } from "@/components/ai-photo-animation/use-cases"
-import { AIAnimationPrivacy } from "@/components/ai-photo-animation/privacy-shield"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
-
+import { CTA } from "@/components/old-photo-restoration/CTA"
+import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "AI Photo Animation Generator | Bring Old Photos to Life | BringBack",
+  title: "AI Photo Animation | Bring Old Photos to Life | BringBack",
   description:
-    "Animate old family photos with natural facial movement, gentle smiles, and realistic blinks. Upload any portrait to bring ancestors to life in under 60 seconds.",
+    "Animate old photos with realistic facial motion, natural blinks, and warm smiles using AI. Turn still family pictures into video memories. 2 credits per video.",
+  keywords: [
+    "ai photo animation",
+    "how to animate old photos with ai",
+    "bring old pictures to life",
+    "animate faces in vintage photos",
+    "make old photo smile video",
+  ],
   alternates: {
-    canonical: "/ai-photo-animation",
+    canonical: "https://bringback.pro/ai-photo-animation",
   },
   openGraph: {
-    title: "AI Photo Animation Generator | BringBack",
-    description:
-      "Animate old family photos with natural facial movement, gentle smiles, and realistic blinks. Bring ancestors to life in high definition.",
-    type: "website",
+    title: "AI Photo Animation | BringBack",
+    description: "Transform still family portraits into realistic moving video memories.",
     url: "https://bringback.pro/ai-photo-animation",
+    siteName: "BringBack",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AI Photo animation preview",
+      },
+    ],
   },
+  robots: { index: true, follow: true },
 }
 
-// WebApplication schema for the animation page (self-canonical URL + @id)
-const animationWebAppJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  '@id': 'https://bringback.pro/ai-photo-animation#webapp',
-  name: 'BringBack – AI Photo Animation',
-  description:
-    'Add a subtle smile or gentle movement to an old portrait. Best with clear faces; restore first when needed. 10 credits per animation.',
-  url: 'https://bringback.pro/ai-photo-animation',
-  applicationCategory: 'PhotoEditingApplication',
-  operatingSystem: 'Web',
-  offers: {
-    '@type': 'Offer',
-    name: 'BringBack Value Pack (animation-capable)',
-    url: 'https://bringback.pro/pricing',
-    priceCurrency: 'USD',
-    price: '9.99',
-    description: '20 credits — enough for up to 2 animations. Animation costs 10 credits; Starter 4-credit pack is not enough alone.',
-    eligibleRegion: {
-      '@type': 'Place',
-      name: 'Worldwide',
-    },
-  },
-  featureList: [
-    'AI-powered photo animation',
-    'Subtle, respectful motion (smiles, blinks, head tilts)',
-    'High‑definition MP4 output',
-    'Fast processing under 60 seconds',
-    'Privacy-first handling with auto-deletion',
-  ],
-  screenshot: 'https://bringback.pro/video-thumbnail.webp',
-}
-
-// VideoObject schemas for animation demos (mirrors homepage video schema)
-const animationHeroVideoJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'VideoObject',
-  name: 'AI Photo Animation Demo — BringBack AI (Hero)',
-  description:
-    'Quick demo of BringBack animating a portrait with gentle, lifelike motion.',
-  thumbnailUrl: 'https://bringback.pro/video-thumbnail.webp',
-  uploadDate: '2025-11-05T00:00:00Z',
-  contentUrl: 'https://bringback.pro/videos/blink-tilt-animation.mp4',
-  embedUrl: 'https://bringback.pro/ai-photo-animation#hero',
-  publisher: {
-    '@type': 'Organization',
-    name: 'BringBack',
-    url: 'https://bringback.pro/',
-  },
-  potentialAction: {
-    '@type': 'WatchAction',
-    target: 'https://bringback.pro/ai-photo-animation#hero',
-  },
-}
-
-const animationStylesVideoJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'VideoObject',
-  name: 'AI Photo Animation Styles Demo — BringBack AI',
-  description:
-    'Showcase of multiple animation presets including Smile + Wave, Subtle Blink + Tilt, and Smile + Look Around.',
-  thumbnailUrl: 'https://bringback.pro/video-thumbnail.webp',
-  uploadDate: '2025-11-05T00:00:00Z',
-  contentUrl: 'https://bringback.pro/videos/smile-and-look.mp4',
-  embedUrl: 'https://bringback.pro/ai-photo-animation#styles',
-  publisher: {
-    '@type': 'Organization',
-    name: 'BringBack',
-    url: 'https://bringback.pro/',
-  },
-  potentialAction: {
-    '@type': 'WatchAction',
-    target: 'https://bringback.pro/ai-photo-animation#styles',
-  },
-}
-
-const animationFAQPageJsonLd = {
+const webAppJsonLd = {
   "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Will it look weird or create the 'uncanny valley' effect?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "This is the most common concern. Our AI is specifically trained to produce gentle, respectful, and natural movements. We focus on subtle smiles, blinks, and head tilts—not exaggerated or unrealistic motion. The goal is a touching moment of recognition, not a deepfake."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What file types and image quality work best for AI photo animation?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You can upload JPG, PNG, and WEBP photos. Clear portraits with visible facial details produce the most realistic animations. If your image is blurry, torn, or faded, run it through restoration first to improve facial landmarks before animation."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Which animation styles can I choose from?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You can choose from several subtle styles such as Gentle Smile, Smile + Wave, Subtle Blink + Head Tilt, Smile + Look Around, Warm Gaze, Soft Nod, Peaceful Presence, Loving Recognition, and Gentle Talking. Each style is designed for natural, respectful movement."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I animate a photo with multiple people in it?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our AI is designed to focus on and animate one primary face in a photograph to ensure the highest quality and most natural result. For group photos, the AI will typically identify and animate the most prominent or clearest face."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What happens to my photos after I upload them? Is my data used for AI training?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Photos are processed securely for animation. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I animate low-quality, blurry, or very old photos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "For the best animation results, the AI needs to clearly identify facial features. We highly recommend using our Photo Restoration tool first to repair any damage, fix blurriness, and enhance clarity. Animating a restored photo yields dramatically more lifelike and beautiful results."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I choose which person in a group photo gets animated?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Currently, our AI automatically detects the most suitable face for animation in a photo. We recommend cropping the photo to focus on the individual you'd like to animate before uploading to ensure the best result."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I use the animated videos for commercial purposes?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Once you download the animated video, it is yours to use however you wish. This includes personal sharing, social media, and even commercial projects. You retain full ownership of your memories."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What's the difference between your service and free animation apps?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The difference lies in quality, privacy, and respect for the subject. Free tools often produce lower-quality, unnatural animations and may use your photos to train their AI models. Our service provides subtle, high-definition animations while guaranteeing the complete privacy and security of your cherished photos."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Will the animation add sound to my photo?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our service is focused purely on creating a silent, moving portrait. There is no audio added, which we believe creates a more timeless and respectful final video."
-      }
-    }
-  ]
+  "@type": "WebApplication",
+  "@id": "https://bringback.pro/ai-photo-animation#webapp",
+  name: "BringBack AI Photo Animation",
+  description: "Animate still family portraits with natural facial movements.",
+  url: "https://bringback.pro/ai-photo-animation",
+  applicationCategory: "PhotoEditingApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    name: "Animation Credit Pack",
+    url: "https://bringback.pro/pricing",
+    priceCurrency: "USD",
+    price: "4.99",
+    description: "4 credits — covers 2 Photo Animation runs.",
+  },
 }
 
-export default function Page() {
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Animate Old Photos with AI",
+  description: "Learn how to bring ancestral faces to life with natural video motion in 4 simple steps.",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Upload Still Photo",
+      text: "Upload a vintage black-and-white print, sepia portrait, or modern photo.",
+      url: "https://bringback.pro/ai-photo-animation#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Select Facial Motion Style",
+      text: "Choose gentle smiles, warm blinking, subtle head tilts, or realistic nostalgic hugs.",
+      url: "https://bringback.pro/ai-photo-animation#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "AI Generates Motion Video",
+      text: "BringBack animates facial expressions while preserving authentic identity and likeness.",
+      url: "https://bringback.pro/ai-photo-animation#how-it-works",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Preview & Download Video",
+      text: "Watch the generated video in your dashboard and download MP4 format for sharing.",
+      url: "https://bringback.pro/ai-photo-animation#how-it-works",
+    },
+  ],
+}
+
+export default function AIPhotoAnimationPage() {
   return (
-    <div className="min-h-screen bg-brand-bg">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationWebAppJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationFAQPageJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationHeroVideoJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(animationStylesVideoJsonLd) }} />
-      <Navbar />
-      <AIAnimationHero />
-      <AnimationStylesGrid />
-      <AIAnimationCrossSell />
-      <AIAnimationUseCases />
-      <AIAnimationHowItWorks />
-      <Pricing />
-      <AIAnimationFeatures />
-      <AIAnimationPrivacy />
-      <AIAnimationFAQ />
-      <ProductCrossSell excludeHref="/ai-photo-animation" />
-      <CTA />
+    <div className="min-h-screen bg-brand-bg text-brand-black font-sans selection:bg-brand-orange selection:text-white relative overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+      />
+
+      <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
+        <Navbar />
+      </header>
+
+      <main>
+        {/* 1. Hero */}
+        <Hero />
+        {/* 2. 4-Step How It Works (Snippet-Winning Architecture) */}
+        <HowItWorks />
+        {/* 3. Motion Styles Grid */}
+        <StylesGrid />
+        {/* 4. Deep Animation Features */}
+        <Features />
+        {/* 5. Pricing */}
+        <Pricing />
+        {/* 6. FAQ */}
+        <FAQ />
+        {/* 7. Product Cross Sell */}
+        <ProductCrossSell excludeHref="/ai-photo-animation" />
+        {/* 8. CTA */}
+        <CTA />
+      </main>
+
       <Footer />
     </div>
   )
