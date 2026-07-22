@@ -8,28 +8,28 @@ const USE_CASES = [
     icon: <Heart size={24} />,
     badge: "Memorial Portrait",
     title: "Combine Deceased & Living Relatives",
-    description: "Create a respectful, heartwarming memorial portrait placing a loved one who has passed away next to current family members. Upload a vintage or old photo of your relative alongside recent photos. Our AI harmonizes lighting, pose, and texture to unite family members across generations.",
+    description: "Create a respectful memorial portrait with a loved one who has passed away and relatives photographed today. Restore damaged source photos first, use a clear face reference, and review the generated likeness carefully.",
     dots: [true, true, true, false]
   },
   {
     icon: <Users size={24} />,
     badge: "Generational Reunion",
     title: "Merge Different Photos & Vintage Eras",
-    description: "Combine black-and-white historical prints with modern smartphone photos into one seamless studio portrait. BringBack automatically balances color palettes, film grain, and scale so the final image looks like everyone stood together in the exact same studio.",
+    description: "Combine a black-and-white historical print with modern smartphone portraits. BringBack creates one shared visual style, while you decide whether the older source should be restored before generation.",
     dots: [true, true, false, false]
   },
   {
     icon: <Globe size={24} />,
     badge: "Global Connection",
     title: "Long-Distance Family Reunions",
-    description: "Unite family members living in different countries or states without needing an expensive in-person photoshoot. Simply upload individual selfies or candid portraits, and our generator composes them into a balanced group photo.",
+    description: "Create one group portrait when relatives live in different countries or cannot meet for a photoshoot. Similar camera angles and clearly visible faces usually produce a more balanced result.",
     dots: [true, false, false, false]
   },
   {
     icon: <Gift size={24} />,
     badge: "Custom Keepsake",
     title: "Studio Backdrops & Flexible Canvas Ratios",
-    description: "Choose from matte black, warm beige, classic sepia, dark brown vignette, or soft bokeh lighting. Customize canvas ratios (1:1 square, 3:4 portrait, 4:3 classic, or 16:9 widescreen) to fit wall frames or family memory books.",
+    description: "Choose from matte black, neutral gray, warm beige, gradient, dark brown, or soft bokeh. Customize canvas ratios (1:1 square, 3:4 portrait, 4:3 classic, or 16:9 widescreen) to fit wall frames or family memory books.",
     dots: [true, true, true, true]
   },
 ];
@@ -44,7 +44,7 @@ export default function FamilyPortraitUseCases() {
           <div className="max-w-4xl">
             {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Use Cases & Clusters <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> Ways Families Use It <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
@@ -57,7 +57,7 @@ export default function FamilyPortraitUseCases() {
           {/* Subtitle */}
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Combine separate individual photos into one natural portrait with harmonized lighting, color, and scale.
+              Choose the workflow that matches your family story, then use the clearest references you have and review the generated details before sharing.
             </p>
           </div>
         </div>

@@ -9,28 +9,28 @@ const RESTORE_STEPS = [
     stepTitle: "Upload Faded or Damaged Photo",
     icon: <Upload className="w-6 h-6 text-brand-orange" />,
     shortDesc: "Upload your scanned physical photo, wallet print, or smartphone snapshot.",
-    detail: "Handles scratches, rips, water stains, mold spots, and heavy yellow fading.",
+    detail: "Clear scans give the model more information to work with when reducing scratches, tears, stains, and fading.",
   },
   {
     number: "02",
     stepTitle: "Choose Restoration Settings",
     icon: <Sliders className="w-6 h-6 text-indigo-500" />,
     shortDesc: "Select restore-only to keep original B&W/sepia, or restore + colorize.",
-    detail: "Optionally turn on HD face sharpening for soft or out-of-focus portraits.",
+    detail: "Color is optional, and any reconstructed facial detail should be compared with the original.",
   },
   {
     number: "03",
     stepTitle: "AI Repairs Damage Automatically",
     icon: <Sparkles className="w-6 h-6 text-amber-500" />,
-    shortDesc: "Our conservator engine removes scratches and fills missing paper fibers in seconds.",
-    detail: "Preserves natural film grain and original character without plastic smoothing.",
+    shortDesc: "BringBack generates a repaired digital version and reconstructs missing areas when needed.",
+    detail: "Results vary with the amount of surviving detail; reconstruction is not recovery of the exact original pixels.",
   },
   {
     number: "04",
     stepTitle: "Compare & Download High-Res",
     icon: <Download className="w-6 h-6 text-emerald-500" />,
     shortDesc: "Review your photo side-by-side with an interactive slider before downloading.",
-    detail: "Download print-ready resolution for wall framing or digital family keepsakes.",
+    detail: "Check the downloaded pixel dimensions before ordering a large print or wall frame.",
   },
 ]
 
@@ -53,7 +53,7 @@ export function HowItWorks() {
 
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Follow these 4 simple steps to fix scratches, tears, fading, and blur on vintage family prints with AI.
+              Upload the clearest scan you have, choose whether to preserve its original tone, and compare the repaired version before downloading.
             </p>
           </div>
         </div>

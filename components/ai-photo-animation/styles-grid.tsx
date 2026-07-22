@@ -14,55 +14,55 @@ type StyleItem = {
 const styles: StyleItem[] = [
   {
     name: "Gentle Smile",
-    description: "A warm, natural smile perfect for solemn ancestors or driver's license photos. Brings deceased relatives to life without exaggeration.",
+    description: "A gradual smile with restrained facial movement. Clear, front-facing portraits usually provide the best reference.",
     src: "/videos/gentle-smile.mp4",
     photoSrc: "/gentle-smile.webp",
   },
   {
     name: "Smile + Wave",
-    description: "Smiles warmly and waves their hand in a friendly greeting gesture. Ideal for creating video messages or digital family reunions from static portraits.",
+    description: "Adds a smile and attempts a short hand wave. Use a photo where the upper body and hands are visible for a more usable result.",
     src: "/videos/video-animation1.mp4",
     photoSrc: "/vintage-family-portraits-colorized.webp",
   },
   {
     name: "Subtle Blink + Head Tilt",
-    description: "Blinks naturally and tilts their head slightly with a gentle expression, making old photos feel alive without dramatic motion.",
+    description: "Adds a blink and small head tilt while keeping the rest of the frame relatively still.",
     src: "/videos/head-tilt.mp4",
     photoSrc: "/head-tilt.webp",
   },
   {
     name: "Smile + Look Around",
-    description: "Smiles and looks around curiously with natural eye movement, great for animating family portraits and storytelling slideshows.",
+    description: "Adds a smile with eye and head movement. Review eye direction and facial details before using the clip.",
     src: "/videos/smile-and-look.mp4",
     photoSrc: "/look-around.webp",
   },
   {
     name: "Warm Gaze",
-    description: "Maintains steady, warm eye contact with a loving, subtle smile, ideal for memorial videos and restored vintage portraits.",
+    description: "Uses restrained eye movement and a slight smile for a quieter portrait animation.",
     src: "/videos/warm-gaze.mp4",
     photoSrc: "/torn-restored.webp",
   },
   {
     name: "Soft Nod",
-    description: "Gives a single, slow, gentle nod of acknowledgment with a peaceful expression for respectful tributes and formal portraits.",
+    description: "Adds a small nod with limited background movement, suited to formal or tightly framed portraits.",
     src: "/videos/gentle-node.mp4",
     photoSrc: "/after-noise-removal.webp",
   },
   {
     name: "Peaceful Presence",
-    description: "Subtle, natural micro-movements that suggest life and presence, perfect for dignified ancestor photos and black-and-white portraits.",
+    description: "Uses minimal breathing and facial movement when you want less change from the source image.",
     src: "/videos/peaceful-presence.mp4",
     photoSrc: "/water-damage-restored.webp",
   },
   {
     name: "Loving Recognition",
-    description: "A moment of gentle recognition, with eyes softening and a hint of a smile for couples photos and family reunion keepsakes.",
+    description: "Adds soft eye movement and a small smile. Results are most predictable when faces are clear and similarly sized.",
     src: "/videos/loving.mp4",
     photoSrc: "/historical-wedding-photo-colorized.webp",
   },
   {
     name: "Gentle Talking",
-    description: "Calm, serene expression with minimal natural movement, as if speaking softly for oral history clips and family tree videos.",
+    description: "Adds speech-like mouth and facial movement without generating audio. It does not recreate the person's real voice or mannerisms.",
     src: "/videos/speaking.mp4",
     photoSrc: "/fade-restored.webp",
   },
@@ -158,10 +158,10 @@ export default function AnimationStylesGrid() {
 
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Each animation is carefully designed to be natural, realistic, and respectful, preserving the true character of the person in your photo.
+              Each preset guides a different kind of movement. Start with the smallest motion that fits the portrait and compare the face with the original.
             </p>
             <p className="text-lg text-gray-600 font-medium leading-relaxed mt-4">
-              These AI photo animation styles work especially well for old photos, restored portraits, and family images where you want subtle, human motion instead of flashy effects.
+              Clear, restored portraits usually animate more consistently than tiny, blurred, scratched, or heavily compressed faces.
             </p>
           </div>
         </div>

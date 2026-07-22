@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { LIMITATIONS_COPY, PRIVACY_COPY } from "@/lib/site-copy";
 
 interface FAQItem {
   question: string;
@@ -11,15 +12,15 @@ interface FAQItem {
 const FAQS: FAQItem[] = [
   {
     question: "Can I create a family photo from individual photos?",
-    answer: "Yes. Upload separate portraits of 2 to 4 people and BringBack composes them into one realistic studio-quality family photo. It is useful when relatives live far apart, when generations never met, or when you only have one good photo of each person."
+    answer: "Yes. Upload separate portraits of 2 to 4 people and BringBack generates one new group image with a shared studio style. It can help when relatives live far apart, generations never met, or you only have one clear photo of each person."
   },
   {
     question: "Will the final photo look fake or like a collage?",
-    answer: "BringBack is designed to avoid the cut-and-paste look. The AI creates a new studio portrait with consistent lighting, color, scale, texture, and perspective across the people you upload."
+    answer: "The result is generated as one new scene rather than assembled from pasted cutouts. This can make lighting and perspective more consistent, but the quality still depends on the references and every face should be reviewed."
   },
   {
     question: "Does the AI change what my family members look like?",
-    answer: "The family portrait generator is built to preserve recognizable facial likeness, age, expression, and key details from the uploaded references. Results still depend on photo quality, so clear face photos produce the strongest likeness."
+    answer: LIMITATIONS_COPY.faces
   },
   {
     question: "What are the best photos to upload?",
@@ -36,15 +37,15 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Can I combine black-and-white photos with color photos?",
-    answer: "Yes. You can combine black-and-white and color photos in one portrait. If the older photo is damaged, faded, scratched, or blurry, restoring it first gives the generator a much better likeness reference."
+    answer: "Yes. You can combine black-and-white and color photos in one portrait. If the older photo is damaged, faded, scratched, or blurry, restoring it first usually gives the generator a clearer likeness reference. The final color treatment remains an AI interpretation."
   },
   {
     question: "Can I add a deceased person to a family photo?",
-    answer: "Yes. Many families use BringBack to create respectful memorial portraits by combining a loved one who has passed with current family members. The goal is a warm keepsake, not a novelty edit."
+    answer: "Yes. A clear portrait of a loved one who has passed can be used with current family references to create a memorial keepsake. The result is a new AI-generated image, not a historical photograph."
   },
   {
     question: "Can I create a generational portrait with ancestors?",
-    answer: "Yes. You can combine a grandparent or ancestor from an old portrait with children or grandchildren from modern photos. This is one of the most meaningful uses of the tool because it creates a family image that was never physically possible."
+    answer: "Yes. You can combine a grandparent or ancestor from an older portrait with children or grandchildren photographed today. Restore severe damage first and check age, facial details, pose, and scale in the generated result."
   },
   {
     question: "Can I choose the background or aspect ratio?",
@@ -60,7 +61,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "What happens to my photos?",
-    answer: "Photos are processed securely for the portrait. Generated media stays in your account until you delete it from My Media. We do not use your family photos to train general-purpose AI models. See our Privacy Policy."
+    answer: PRIVACY_COPY.faq
   },
   {
     question: "When should I not use this tool?",
@@ -68,11 +69,11 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "How is this different from Photoshop or a manual artist?",
-    answer: "Manual compositing can take hours or days because the editor has to cut out people, balance lighting, repaint shadows, and match perspective. BringBack automates that workflow and creates a studio-style result in minutes for 2 credits."
+    answer: "A manual artist edits individual pixels and can make detailed, directed corrections. BringBack instead generates a new studio-style image automatically for 2 credits. Choose manual work when exact placement or historically precise details matter."
   },
   {
     question: "Is this better than free apps that merge photos?",
-    answer: "Free merge apps often create flat collages or obvious pasted composites. BringBack is built for family keepsakes, with likeness preservation, studio composition, canvas choices, and a private account workflow."
+    answer: "Some tools make collages, while others generate a new scene. BringBack focuses on 2–4-person family portraits with selectable canvas ratios and studio backgrounds, plus a My Media account where you can review and delete results."
   }
 ];
 

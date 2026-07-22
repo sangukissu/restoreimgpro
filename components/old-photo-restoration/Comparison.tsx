@@ -1,57 +1,57 @@
 ﻿
 import React from 'react';
-import { Check, X, Minus, Sparkles, ShieldCheck, Zap, Coins, Film, Maximize2, MousePointer2 } from 'lucide-react';
+import { Check, Sparkles, ShieldCheck, Zap, Coins, Film, Maximize2, MousePointer2 } from 'lucide-react';
 
 // Data Structure
 const FEATURES = [
   {
-    label: "Restoration Quality",
+    label: "Best Fit",
     icon: <Sparkles size={18} />,
-    bringback: "Natural, AI-powered",
-    manual: "High (Artist dependent)",
-    free: "Unnatural / Plastic"
+    bringback: "Common digital repairs",
+    manual: "Detailed, directed work",
+    free: "Simple cleanup"
   },
   {
-    label: "Privacy & Security",
+    label: "Media Handling",
     icon: <ShieldCheck size={18} />,
-    bringback: "100% Private (Auto-delete)",
-    manual: "Generally Private",
-    free: "Data Mining Risk"
+    bringback: "Stored in My Media",
+    manual: "Ask the provider",
+    free: "Check each policy"
   },
   {
     label: "Turnaround Time",
     icon: <Zap size={18} />,
-    bringback: "< 30 Seconds",
-    manual: "Days or Weeks",
-    free: "Fast"
+    bringback: "Generated after upload",
+    manual: "Depends on the artist",
+    free: "Usually immediate"
   },
   {
     label: "Cost Per Photo",
     icon: <Coins size={18} />,
-    bringback: "~$1 (Affordable)",
-    manual: "$50 - $200+",
-    free: "Free (Low Quality)"
+    bringback: "1 credit",
+    manual: "Quoted per project",
+    free: "Free or limited"
   },
   {
     label: "Photo Animation",
     icon: <Film size={18} />,
-    bringback: "Yes, Lifelike Motion",
-    manual: "Not possible",
-    free: "Limited / Glitchy"
+    bringback: "Separate 10-credit tool",
+    manual: "Depends on the service",
+    free: "Depends on the tool"
   },
   {
     label: "High-Res Output",
     icon: <Maximize2 size={18} />,
-    bringback: "Yes, Enhanced HD",
-    manual: "Yes",
-    free: "Low Res / Watermarked"
+    bringback: "Depends on the source",
+    manual: "Agree before work",
+    free: "Limits vary"
   },
   {
     label: "Ease of Use",
     icon: <MousePointer2 size={18} />,
-    bringback: "1-Click Automatic",
-    manual: "Consultation needed",
-    free: "Manual Upload"
+    bringback: "Choose mode and review",
+    manual: "Brief and revisions",
+    free: "Manual controls vary"
   }
 ];
 
@@ -68,14 +68,14 @@ export const Comparison: React.FC = () => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-            <span className="text-brand-orange">//</span> Benchmark <span className="text-brand-orange">//</span>
+            <span className="text-brand-orange">//</span> Compare Approaches <span className="text-brand-orange">//</span>
           </div>
           <h2 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-brand-black leading-[0.95] mb-6">
-            Why BringBack is the <br />
-            <span className="text-gray-400">smartest choice.</span>
+            Choose the Restoration <br />
+            <span className="text-gray-400">Approach That Fits.</span>
           </h2>
           <p className="text-lg text-gray-600 font-medium">
-            We compared the top restoration methods so you don't have to.
+            AI, manual restoration, and basic editors solve different problems. Use the level of control your photograph actually needs.
           </p>
         </div>
 
@@ -117,7 +117,7 @@ export const Comparison: React.FC = () => {
                 <span className="font-extrabold text-2xl tracking-tight text-brand-black">BringBack</span>
               </div>
               <div className="bg-green-100 text-green-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                Recommended
+                Automated Option
               </div>
             </div>
 
@@ -135,7 +135,7 @@ export const Comparison: React.FC = () => {
 
             {/* Footer */}
             <div className={`${FOOTER_HEIGHT} flex items-center justify-start pl-8`}>
-              <span className="font-extrabold text-xl text-brand-orange">Best Overall Value</span>
+              <span className="font-extrabold text-xl text-brand-orange">Fast, Reviewable Workflow</span>
             </div>
           </div>
 
@@ -155,7 +155,7 @@ export const Comparison: React.FC = () => {
 
             {/* Footer */}
             <div className={`${FOOTER_HEIGHT} flex items-center justify-start pl-6`}>
-              <span className="font-bold text-sm text-gray-500">Too Expensive</span>
+              <span className="font-bold text-sm text-gray-500">Best for Exact Control</span>
             </div>
           </div>
 
@@ -175,7 +175,7 @@ export const Comparison: React.FC = () => {
 
             {/* Footer */}
             <div className={`${FOOTER_HEIGHT} flex items-center justify-start pl-6`}>
-              <span className="font-bold text-sm text-gray-500">Low Quality</span>
+              <span className="font-bold text-sm text-gray-500">Best for Simple Edits</span>
             </div>
           </div>
 
@@ -193,7 +193,7 @@ export const Comparison: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-extrabold text-2xl text-brand-black leading-none">BringBack AI</h3>
-                <span className="text-xs font-bold text-green-600 uppercase tracking-wide">Winner</span>
+                <span className="text-xs font-bold text-green-600 uppercase tracking-wide">Automated option</span>
               </div>
             </div>
             <div className="space-y-5">
@@ -210,8 +210,8 @@ export const Comparison: React.FC = () => {
           <div className="bg-brand-surface rounded-[2rem] p-8 opacity-80 grayscale">
             <h3 className="font-bold text-xl text-gray-500 mb-6 text-center">Manual Services</h3>
             <div className="space-y-3 text-center">
-              <div className="text-sm text-gray-400">Expensive ($50+)</div>
-              <div className="text-sm text-gray-400">Slow Turnaround</div>
+              <div className="text-sm text-gray-400">More precise, directed editing</div>
+              <div className="text-sm text-gray-400">Price and timing vary by provider</div>
             </div>
           </div>
         </div>

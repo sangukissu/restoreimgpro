@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { PRIVACY_COPY } from "@/lib/site-copy";
 
 const faqs = [
   {
     question: "Will it look weird or create the 'uncanny valley' effect?",
     answer:
-      "This is the most common concern. Our AI is specifically trained to produce gentle, respectful, and natural movements. We focus on subtle smiles, blinks, and head tilts—not exaggerated or unrealistic motion. The goal is a touching moment of recognition, not a deepfake.",
+      "AI motion can sometimes change eyes, teeth, face shape, or expression. Choosing a subtle preset and a clear source photo usually reduces those changes, but you should always preview the face closely before sharing the video.",
   },
   {
     question: "What file types and image quality work best for AI photo animation?",
@@ -22,17 +23,17 @@ const faqs = [
   {
     question: "Can I animate a photo with multiple people in it?",
     answer:
-      "Our AI is designed to focus on and animate one primary face in a photograph to ensure the highest quality and most natural result. For group photos, the AI will typically identify and animate the most prominent or clearest face.",
+      "You can upload a group photo, but the result is less predictable than a portrait with one clear primary face. People may move differently or facial details may change, so review every visible person in the generated clip.",
   },
   {
     question: "What happens to my photos after I upload them? Is my data used for AI training?",
     answer:
-      "Absolutely not. Your privacy is our top priority. Photos are processed securely for the feature you request. Generated media stays in your account until you delete it. We do not use your family photos to train general-purpose AI models. See our Privacy Policy.",
+      PRIVACY_COPY.faq,
   },
   {
     question: "Can I animate low-quality, blurry, or very old photos?",
     answer:
-      "For the best animation results, the AI needs to clearly identify facial features. We highly recommend using our Photo Restoration tool first to repair any damage, fix blurriness, and enhance clarity. Animating a restored photo yields dramatically more lifelike and beautiful results.",
+      "The model needs visible facial features to guide movement. If scratches, blur, fading, or a very small face obscure those features, restore or crop the image first. Restoration can provide a clearer reference, but it cannot guarantee an exact animation.",
   },
   {
     question: "Can I choose which person in a group photo gets animated?",
@@ -42,7 +43,7 @@ const faqs = [
   {
     question: "Can I use the animated videos for commercial purposes?",
     answer:
-      "Yes. Once you download the animated video, it is yours to use however you wish. This includes personal sharing, social media, and even commercial projects. You retain full ownership of your memories.",
+      "BringBack's standard Terms cover personal, non-commercial use unless otherwise agreed. Only upload photos you own or have permission to use, and contact support before using an animation commercially.",
   },
   {
     question: "How many credits does animation cost?",
@@ -52,12 +53,12 @@ const faqs = [
   {
     question: "What's the difference between your service and free animation apps?",
     answer:
-      "We focus on subtle, respectful motion for family portraits and clear credit pricing without a forced subscription. Generated media stays in your account until you delete it. Free tools often push exaggerated motion or unclear data practices.",
+      "BringBack offers nine selectable motion presets, pay-once credits, and a My Media account where generated videos remain available until you delete them. Compare output quality, pricing, and each provider's privacy policy before choosing a tool.",
   },
   {
     question: "Will the animation add sound to my photo?",
     answer:
-      "Our service is focused purely on creating a silent, moving portrait. There is no audio added, which we believe creates a more timeless and respectful final video.",
+      "No. Photo Animation creates a silent five-second video. The Gentle Talking preset adds speech-like facial movement but does not generate or recreate a voice.",
   },
 ];
 

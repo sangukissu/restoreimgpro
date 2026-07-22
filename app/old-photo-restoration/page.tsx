@@ -11,9 +11,10 @@ import { Comparison } from "@/components/old-photo-restoration/Comparison"
 import { FAQ } from "@/components/old-photo-restoration/FAQ"
 import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
+import { FEATURE_CREDIT_COSTS, STARTER_PLAN } from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: "AI Old Photo Restoration Online | Fix Scratches & Fading | BringBack",
+  title: "AI Old Photo Restoration Online | Fix Scratches & Fading",
   description:
     "Restore scratched, torn, faded, and water-damaged old family photos with AI. Keep original sepia/B&W or colorize. Compare before downloading. 1 credit per photo.",
   keywords: [
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AI Old Photo Restoration | BringBack",
     description:
-      "Repair torn, faded, and scratched family photos while preserving authentic facial likeness.",
+      "Repair torn, faded, and scratched family photos while reviewing reconstructed facial and image details against the original.",
     url: "https://bringback.pro/old-photo-restoration",
     siteName: "BringBack",
     type: "website",
@@ -51,7 +52,7 @@ const webAppJsonLd = {
   "@id": "https://bringback.pro/old-photo-restoration#webapp",
   name: "BringBack AI Old Photo Restoration",
   description:
-    "Repair damaged, scratched, torn, or faded family photographs with advanced neural networks.",
+    "Generate a repaired digital version of a scratched, torn, stained, blurred, or faded family photograph.",
   url: "https://bringback.pro/old-photo-restoration",
   applicationCategory: "PhotoEditingApplication",
   operatingSystem: "Web",
@@ -60,8 +61,8 @@ const webAppJsonLd = {
     name: "Restoration Credit Pack",
     url: "https://bringback.pro/pricing",
     priceCurrency: "USD",
-    price: "4.99",
-    description: "4 credits — covers 4 photo restorations.",
+    price: STARTER_PLAN.priceUsd.toFixed(2),
+    description: `${STARTER_PLAN.credits} credits — covers ${Math.floor(STARTER_PLAN.credits / FEATURE_CREDIT_COSTS.restore.credits)} photo restorations.`,
   },
 }
 
@@ -69,7 +70,7 @@ const howToJsonLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
   name: "How to Restore Old Photos",
-  description: "Learn how to repair scratched, torn, faded, or blurry old family photos using AI in 4 simple steps.",
+  description: "Upload an old family photo, choose restore-only or restore and colorize, generate a repair, and compare it before downloading.",
   step: [
     {
       "@type": "HowToStep",
@@ -89,7 +90,7 @@ const howToJsonLd = {
       "@type": "HowToStep",
       position: 3,
       name: "AI Repairs Damage Automatically",
-      text: "Our conservator engine removes scratches and fills missing paper fibers in seconds.",
+      text: "BringBack generates a repaired digital version that reduces visible damage and reconstructs missing areas when needed.",
       url: "https://bringback.pro/old-photo-restoration#how-it-works",
     },
     {

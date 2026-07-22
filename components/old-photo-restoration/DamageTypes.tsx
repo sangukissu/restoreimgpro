@@ -13,10 +13,10 @@ const DAMAGE_TYPES = [
           Over decades, physical photographs naturally accumulate surface damage. Fine scratches from sliding against other prints, deep creases from being folded in wallets, and spiderweb cracks across the emulsion layer can obscure the faces of your loved ones.
         </p>
         <p className="mb-4">
-          Our AI photo restoration model acts as a digital conservator. It automatically identifies these non-natural artifacts—differentiating between a scratch and a physical feature like hair or clothing patterns.
+          BringBack generates a repaired digital version by interpreting damaged areas in the context of nearby pixels. Fine, isolated marks are usually easier to address than broad scratches crossing a face.
         </p>
         <p>
-          Instead of simply blurring the scratch, the AI analyzes the surrounding pixels to seamlessly stitch the photo back together. This reconstruction restores the original clarity without making the image look artificially smoothed or painted.
+          Reconstruction can introduce plausible details that were not visible in the scan. Use the comparison slider to check hair, clothing patterns, facial features, and texture against the original.
         </p>
       </>
     ),
@@ -31,13 +31,13 @@ const DAMAGE_TYPES = [
     description: (
       <>
         <p className="mb-4">
-          A ripped photograph doesn't mean the memory is lost forever. Whether a photo has a torn corner, a clean rip down the middle, or is missing small pieces along the edges, digital restoration can bridge those gaps.
+          Digital restoration can reduce the appearance of a torn corner, a clean rip, or small missing pieces along an edge when the surrounding image still provides enough context.
         </p>
         <p className="mb-4">
-          BringBack's "Tear Removal" AI maps the geometry of the tear and the missing data. It then uses context-aware synthesis to hallucinate and fill in the exact texture, grain, and content that belongs in that empty space.
+          The model estimates what may belong in a gap from the neighboring shapes, tones, and textures. That estimate is not the exact information that was physically lost.
         </p>
         <p>
-          For best results, scan the torn pieces as close together as possible. The AI will handle the rest, aligning the edges and eliminating the white paper fibers that usually show through a physical tear.
+          For the best starting point, place torn pieces as close to their original alignment as possible and scan them together on a flat, evenly lit surface.
         </p>
       </>
     ),
@@ -52,13 +52,13 @@ const DAMAGE_TYPES = [
     description: (
       <>
         <p className="mb-4">
-          Water damage, humidity, mold spots, and ink spills create complex stains that sit on top of the original photographic image. These stains often have uneven edges and varying opacities that make manual editing extremely difficult.
+          Water rings, humidity marks, mold spots, and ink stains can cover both the paper surface and important image detail. Light, localized marks are generally easier to reduce than opaque damage across a face.
         </p>
         <p className="mb-4">
-          Our AI is trained to separate the underlying photographic subject from the surface stain. It digitally lifts the discoloration, whether it's a dark mold spot or a faded water ring, while preserving the facial details underneath.
+          BringBack uses the visible surroundings to generate a cleaner version of stained areas. Where the original information is hidden, the output may contain reconstructed rather than recovered detail.
         </p>
         <p>
-          This process also neutralizes uneven contrast caused by water warping the photographic paper, resulting in a clean, flat-looking digital image ready for printing.
+          Compare the result at full size, especially around faces, text, jewelry, and patterned clothing, before deciding whether it is suitable for printing.
         </p>
       </>
     ),
@@ -76,10 +76,10 @@ const DAMAGE_TYPES = [
           Exposure to sunlight and the natural degradation of photographic chemicals cause old photos to lose their contrast and take on a faded, yellow, or reddish tint. Detail is lost in the shadows, and highlights become blown out.
         </p>
         <p className="mb-4">
-          The restoration engine performs deep tonal recovery. It redistributes the light and dark values (the histogram) to pull out hidden details from the faded areas, neutralizing the yellowing effect.
+          Restoration can rebalance contrast and reduce a strong color cast where detail is still present. Completely washed-out highlights and blocked shadows may not contain enough information to recover faithfully.
         </p>
         <p>
-          You can choose to keep the final image in high-contrast black-and-white, retain a rich sepia tone for historical character, or use our Colorizer to completely modernize the fading memory into vibrant color.
+          Choose restore-only to keep black-and-white or sepia character, or restore and colorize when you intentionally want interpreted color.
         </p>
       </>
     ),
@@ -97,10 +97,10 @@ const DAMAGE_TYPES = [
           Vintage cameras often had slow shutter speeds, resulting in motion blur or slightly out-of-focus subjects. When combined with the natural softness of old film stock, faces can lack the crispness we expect today.
         </p>
         <p className="mb-4">
-          Our specialized facial enhancement algorithms excel at unblurring old photos. By detecting facial landmarks (eyes, nose, mouth), the AI can reconstruct high-definition details even from a very soft original image.
+          AI can add definition to a soft face, but it cannot know details that the camera never captured. Strong blur and very small faces increase the chance of invented eyes, teeth, skin texture, or other features.
         </p>
         <p>
-          This upscaling process not only sharpens the face but also removes the heavy film grain, allowing you to take a small, blurry wallet-sized print and enlarge it for an 8x10 wall frame.
+          Use the clearest scan available and inspect the downloaded pixel dimensions and reconstructed facial details before ordering an enlargement.
         </p>
       </>
     ),
@@ -193,15 +193,15 @@ export const DamageTypes: React.FC = () => {
             
             {/* Title */}
             <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              Every Type of Photo Damage. <br />
-              <span className="text-gray-400">Fixed Automatically.</span>
+              Common Old-Photo Damage. <br />
+              <span className="text-gray-400">One Reviewable Workflow.</span>
             </h2>
           </div>
 
           {/* Subtitle */}
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              From deep scratches to severe water damage, our AI models are trained to handle specific types of degradation while preserving original facial likeness.
+              Explore how scratches, tears, stains, fading, and blur can respond differently—and what to check before accepting a generated repair.
             </p>
           </div>
         </div>

@@ -61,7 +61,7 @@ function HeroVideo({
 
 export default function AIAnimationHero() {
   return (
-    <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 pt-12 pb-24 overflow-visible">
+    <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 pt-32 sm:pt-36 pb-24 overflow-visible">
 
       {/* Background Pattern */}
       <div className="absolute inset-0 -z-10 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
@@ -71,7 +71,7 @@ export default function AIAnimationHero() {
 
         {/* Badge */}
         <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-8 shadow-lg shadow-black/10">
-          <span className="text-brand-orange">//</span> AI Photo Animation <span className="text-brand-orange">//</span>
+          <span className="text-brand-orange">//</span> Gentle Motion for Family Photos <span className="text-brand-orange">//</span>
         </div>
 
         {/* Heading */}
@@ -84,7 +84,7 @@ export default function AIAnimationHero() {
 
         {/* Subheading */}
         <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mb-12 font-medium leading-relaxed">
-          Animate vintage family portraits with natural facial movements, gentle blinks, and warm smiles. Uses Live Portrait AI to preserve authentic likeness without weird distortions.
+          Turn one clear portrait into a five-second silent video with a gentle smile, blink, nod, or head movement. AI motion can change facial details, so preview the result carefully before downloading.
         </p>
 
         {/* CTA Buttons */}

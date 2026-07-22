@@ -53,12 +53,12 @@ export function RestorationGuide() {
                 </div>
                 <h3 className="text-2xl font-extrabold text-brand-black mb-3">Restore Only</h3>
                 <p className="text-gray-600 font-medium leading-relaxed text-base">
-                  Keep the original black-and-white, sepia, or color look intact. Best when the historical memory resides in the authentic tonality itself — not a modern reinterpretation.
+                  Repair visible damage while keeping the source photo black-and-white, sepia, or in its existing color treatment. Choose this when preserving the familiar look matters more than adding color.
                 </p>
               </div>
               <div className="mt-8 pt-4 border-t border-gray-100 flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                 <CheckCircle2 size={14} className="text-brand-orange" />
-                Preserves Original Chemical Tint
+                Keeps the Source Color Treatment
               </div>
             </div>
 
@@ -75,12 +75,12 @@ export function RestorationGuide() {
                 </div>
                 <h3 className="text-2xl font-extrabold text-brand-black mb-3">Restore & Colorize</h3>
                 <p className="text-gray-600 font-medium leading-relaxed text-base">
-                  Repair surface damage, then apply AI color as a realistic interpretation — not historical proof of original dyes. Choose this to bring vivid life back to old family portraits.
+                  Repair visible damage, then add AI-generated color as an interpretation—not historical proof of the original clothing, skin, or background colors.
                 </p>
               </div>
               <div className="mt-8 pt-4 border-t border-gray-100 flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                 <Sparkles size={14} className="text-brand-orange" />
-                AI Tonal Spectrum Synthesis
+                Optional Interpreted Color
               </div>
             </div>
           </div>
@@ -93,7 +93,7 @@ export function RestorationGuide() {
                 <div className="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center mb-6">
                   <CheckCircle2 size={20} />
                 </div>
-                <h3 className="text-xl font-extrabold text-brand-black mb-4">Damage We Repair</h3>
+                <h3 className="text-xl font-extrabold text-brand-black mb-4">Damage the Tool Can Address</h3>
                 <ul className="space-y-3 text-gray-600 text-sm font-medium">
                   <li className="flex items-center gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>

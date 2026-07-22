@@ -2,31 +2,32 @@
 
 import React from "react";
 import { Heart, Shield, Award, Sparkles } from "lucide-react";
+import { PRIVACY_COPY } from "@/lib/site-copy";
 
 const PRINCIPLES = [
   {
     icon: <Sparkles size={24} />,
     title: "Natural Animation Styles",
     description:
-      "Pick from subtle styles like Gentle Smile, Smile + Wave, Blink + Head Tilt, and Warm Gaze to keep movement realistic and identity-safe.",
+      "Choose from presets such as Gentle Smile, Smile + Wave, Blink + Head Tilt, Warm Gaze, and Soft Nod. Preview the result because motion and likeness can vary.",
   },
   {
     icon: <Heart size={24} />,
     title: "Built for Family Memories",
     description:
-      "Designed for old portraits, memorial tributes, genealogy storytelling, and family keepsakes where authentic expression matters most.",
+      "Use a restored portrait in a family slideshow, memorial keepsake, genealogy project, or private Memory Book when a short motion clip suits the story.",
   },
   {
     icon: <Award size={24} />,
     title: "High-Resolution MP4 Output",
     description:
-      "Export clean, share-ready animation videos you can use in slideshows, social posts, digital frames, and family documentaries.",
+      "Download the generated five-second MP4 for personal slideshows, compatible digital displays, or family storytelling projects.",
   },
   {
     icon: <Shield size={24} />,
     title: "Private by Default",
     description:
-      "Uploaded photos are auto-deleted after processing, generated animations are auto-deleted after 24 hours, and personal photos are never used for AI training.",
+      PRIVACY_COPY.short,
   },
 ];
 
@@ -53,7 +54,7 @@ export default function AIAnimationFeatures() {
           {/* Subtitle */}
           <div className="max-w-md">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Everything is focused on practical outcomes: realistic motion, easy workflow, clean exports, and strong privacy controls for family photos.
+              Choose a motion style, understand where results can vary, and keep control of the generated video through your My Media account.
             </p>
           </div>
         </div>

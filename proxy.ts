@@ -3,6 +3,14 @@ import { updateSession } from "@/utils/supabase/middleware"
 import { securityMiddleware, validateOrigin, detectSuspiciousActivity, isProtectedMemoryBookCrawler } from "@/middleware/security"
 
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname === '/restore/animate-old-photos') {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/ai-photo-animation'
+    redirectUrl.search = ''
+
+    return Response.redirect(redirectUrl, 301)
+  }
+
   if (request.nextUrl.pathname === '/restore' || request.nextUrl.pathname.startsWith('/restore/')) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/old-photo-restoration'

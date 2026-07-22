@@ -8,11 +8,11 @@ const FAMILY_PORTRAIT_CASES = [
   {
     id: "case-1",
     category: "Separate Photos into One",
-    badgeKeyword: "Combine Separate Photos into One Family Portrait",
+    badgeKeyword: "Four individual portraits",
     icon: <Users className="w-5 h-5 text-indigo-500" />,
     title: "Combine 4 Separate Individual Portraits into One Family Picture",
     story:
-      "When family members live in different cities or only have separate selfie portraits, BringBack combines up to 4 individual photos into a single studio family portrait with matched room lighting and skin tones.",
+      "When family members live in different places, separate portraits can become one newly composed studio scene. Clear, similarly framed faces give the model better references; always compare the result with every source photo.",
     inputs: [
       { img: "/separate-family-portrait-father.jpg", label: "Input 1: Father" },
       { img: "/separate-family-portrait-mother.jpg", label: "Input 2: Mother" },
@@ -26,11 +26,11 @@ const FAMILY_PORTRAIT_CASES = [
   {
     id: "case-2",
     category: "3-Generation Reunion",
-    badgeKeyword: "Generational Family Portrait Generator",
+    badgeKeyword: "Three generations",
     icon: <Calendar className="w-5 h-5 text-purple-500" />,
     title: "Combine Grandparents, Parents, and Children into One Portrait",
     story:
-      "Reunite 3 generations into a single timeless family portrait. Upload photos of grandparents, parents, and children—our AI harmonizes height scales, lighting angles, and subtle 35mm film texture.",
+      "Bring grandparents, parents, and children into one portrait even when the source photos come from different years. The generated scene balances scale and lighting, but age, pose, and fine details can vary.",
     inputs: [
       { img: "/three-generation-reunion-son.jpg", label: "Input 1: Son" },
       { img: "/three-generation-reunion-daughter.jpg", label: "Input 2: Daughter" },
@@ -44,11 +44,11 @@ const FAMILY_PORTRAIT_CASES = [
   {
     id: "case-3",
     category: "Memorial Portrait",
-    badgeKeyword: "Add Deceased Relative to Family Portrait",
+    badgeKeyword: "Memorial keepsake",
     icon: <Heart className="w-5 h-5 text-rose-500" />,
     title: "Add a Deceased Grandfather to a Family Portrait",
     story:
-      "Preserve family legacies by including a loved one who passed away with new generations. BringBack matches a vintage portrait with modern photos so a late grandfather appears naturally beside his son and grandchildren.",
+      "Create a respectful memorial keepsake with a relative who could not be present for the original photograph. A clear restored portrait usually provides a stronger likeness reference than a damaged or very small face crop.",
     inputs: [
       { img: "/memorial-family-portrait-father.jpg", label: "Input 1: Father" },
       { img: "/memorial-family-portrait-son.jpg", label: "Input 2: Son" },
@@ -69,7 +69,7 @@ export function FamilyPortraitRealExamples() {
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-6 sm:gap-8 mb-12 sm:mb-16">
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-1.5 bg-brand-black text-white px-3.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 sm:mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Real 4-Photo Input Workflow <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> Source-to-Portrait Examples <span className="text-brand-orange">//</span>
             </div>
             <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
               Combine 4 Separate Photos <br />
@@ -78,7 +78,7 @@ export function FamilyPortraitRealExamples() {
           </div>
           <div className="max-w-sm">
             <p className="text-base sm:text-lg text-gray-600 font-medium leading-relaxed">
-              Every case study below shows the 4 individual portraits uploaded by users and the resulting combined family portrait created by BringBack.
+              Each example pairs separate source portraits with a generated group image, so you can see how different ages, settings, and generations may be brought into one scene.
             </p>
           </div>
         </div>
@@ -113,10 +113,10 @@ export function FamilyPortraitRealExamples() {
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-1.5">
                         <Layers size={14} className="text-brand-orange" />
-                        Step 1: Upload 4 Individual Photos
+                        Step 1: Upload Source Photos
                       </span>
                       <span className="text-[10px] sm:text-[11px] font-bold bg-brand-surface px-2.5 py-0.5 rounded-md text-gray-500">
-                        4 Inputs Required
+                        2–4 Inputs
                       </span>
                     </div>
 
@@ -147,10 +147,10 @@ export function FamilyPortraitRealExamples() {
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider text-brand-orange flex items-center gap-1.5">
                         <Sparkles size={14} />
-                        Step 2: AI Combined Family Portrait
+                        Step 2: Generated Family Portrait
                       </span>
                       <span className="text-[10px] sm:text-[11px] font-bold bg-brand-orange/10 px-2.5 py-0.5 rounded-md text-brand-orange">
-                        Studio Harmonized
+                        Shared Studio Style
                       </span>
                     </div>
 
@@ -163,11 +163,11 @@ export function FamilyPortraitRealExamples() {
 
                       <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-brand-orange text-white px-2.5 py-1 sm:px-3 sm:py-1 rounded-lg text-[10px] sm:text-xs font-bold tracking-widest uppercase shadow-md flex items-center gap-1.5 z-10">
                         <UserCheck size={13} />
-                        All 4 People Combined
+                        New Group Portrait
                       </div>
 
                       <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 bg-black/80 backdrop-blur text-white p-2.5 sm:p-3 rounded-xl border border-white/20 text-[11px] sm:text-xs font-semibold text-center z-10">
-                        Matched Room Sunlight, Skin Tones &amp; Perspective
+                        Review faces, pose, scale and fine details against the source photos
                       </div>
                     </div>
                   </div>

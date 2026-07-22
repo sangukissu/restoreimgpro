@@ -12,7 +12,7 @@ export default function AIAnimationHero() {
 
         {/* Badge */}
         <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-8 shadow-lg shadow-black/10">
-          <span className="text-brand-orange">//</span> AI Family Portrait Generator <span className="text-brand-orange">//</span>
+          <span className="text-brand-orange">//</span> Studio Family Portrait <span className="text-brand-orange">//</span>
         </div>
 
         {/* Heading */}
@@ -23,7 +23,7 @@ export default function AIAnimationHero() {
 
         {/* Subheading */}
         <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mb-12 font-medium leading-relaxed">
-          Combine separate photos of living or deceased family members into one studio group portrait. Upload 2–4 portraits, select a studio backdrop, and generate a seamless memory with harmonized lighting and realistic scale.
+          Upload 2–4 portraits of family members photographed at different times or places. BringBack creates a new group portrait with a shared backdrop, then lets you review likeness, pose, and scale before downloading.
         </p>
 
         {/* CTA Buttons - Exact Match */}

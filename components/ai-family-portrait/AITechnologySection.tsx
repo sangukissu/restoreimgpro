@@ -1,6 +1,7 @@
 "use client";
 
-import { Layers, Palette, Users, Camera, Sparkles } from "lucide-react";
+import { Layers, Palette, Users, Camera } from "lucide-react";
+import { LIMITATIONS_COPY } from "@/lib/site-copy";
 
 export default function AITechnologySection() {
   return (
@@ -12,20 +13,20 @@ export default function AITechnologySection() {
           <div className="max-w-2xl">
             {/* Badge */}
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Technology <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> What the AI Changes <span className="text-brand-orange">//</span>
             </div>
 
             {/* Title */}
             <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              The Art & Science <br />
-              <span className="text-gray-400">of AI Portraits.</span>
+              A Newly Composed Portrait, <br />
+              <span className="text-gray-400">Not a Pasted Collage.</span>
             </h2>
           </div>
 
           {/* Subtitle */}
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              More than a simple photo merge. Discover the intelligent technology that makes each composite family portrait a work of art.
+              The model rebuilds the scene around your references. That can unify the image, but it can also alter details that should be checked against the originals.
             </p>
           </div>
         </div>
@@ -36,9 +37,9 @@ export default function AITechnologySection() {
           {/* Left Column: The "How" - Visual & Engaging */}
           <div className="bg-brand-surface p-4 rounded-[1.8rem] h-full">
             <div className="bg-white rounded-[1.5rem] p-8 shadow-sm">
-              <h3 className="text-2xl font-bold text-brand-black mb-4">From Individuals to a Unified Whole</h3>
+              <h3 className="text-2xl font-bold text-brand-black mb-4">How separate references become one scene</h3>
               <p className="text-gray-600 font-medium leading-relaxed mb-8">
-                Our AI acts like a master portrait artist, analyzing each person's unique features, pose, and lighting. It then intelligently composes them in a virtual space to create a natural, balanced group photo that feels authentic.
+                BringBack uses the people in your source photos as references, then generates a new arrangement with a shared background, lighting direction, color treatment, and camera perspective.
               </p>
 
               <div className="space-y-6">
@@ -48,7 +49,7 @@ export default function AITechnologySection() {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-brand-black mb-1">Intelligent Composition</h4>
-                    <p className="text-gray-500 text-sm font-medium leading-relaxed">The AI determines the most pleasing arrangement, ensuring no one looks out of place.</p>
+                    <p className="text-gray-500 text-sm font-medium leading-relaxed">The model chooses a group arrangement for the selected canvas. Pose and relative height can change, so review them before downloading.</p>
                   </div>
                 </div>
 
@@ -58,7 +59,7 @@ export default function AITechnologySection() {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-brand-black mb-1">Harmonized Lighting & Color</h4>
-                    <p className="text-gray-500 text-sm font-medium leading-relaxed">It re-renders the entire scene with a consistent light source, making it look like everyone was photographed together.</p>
+                    <p className="text-gray-500 text-sm font-medium leading-relaxed">The generated scene applies a shared light and color treatment rather than preserving each source background.</p>
                   </div>
                 </div>
               </div>
@@ -75,7 +76,7 @@ export default function AITechnologySection() {
                 <h3 className="text-xl font-bold">Adding a Deceased Loved One</h3>
               </div>
               <p className="text-gray-300 font-medium leading-relaxed">
-                Creating a memorial portrait is a delicate task. Our AI respectfully integrates photos of those who have passed with current family pictures, allowing you to create a beautiful tribute that was never physically possible.
+                A memorial portrait is an interpretation created from the references you provide. Use the clearest available image, restore serious damage first, and treat the result as a keepsake rather than a historical record.
               </p>
             </div>
 
@@ -87,7 +88,7 @@ export default function AITechnologySection() {
                 <h3 className="text-xl font-bold text-brand-black">Blending Old Photos with New</h3>
               </div>
               <p className="text-gray-600 font-medium leading-relaxed">
-                Uniting a black-and-white photo of an ancestor with a modern color portrait of a child is a challenge. Our AI is trained to bridge this gap, creating a timeless, artistic style that makes the impossible reunion feel real.
+                Black-and-white and modern color sources can be used together. The older image may be interpreted to fit the selected style, and AI color is not proof of the original historical colors. {LIMITATIONS_COPY.faces}
               </p>
             </div>
           </div>

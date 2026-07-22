@@ -25,7 +25,7 @@ const STEPS = [
     number: "02",
     title: "Choose canvas and setting",
     description:
-      "Pick a 4:3, 16:9, or 3:4 canvas, then choose a studio, living-room, garden, or soft bokeh background.",
+      "Pick a 1:1, 3:4, 4:3, or 16:9 canvas, then choose matte black, neutral gray, warm beige, gradient, dark brown, or bokeh.",
     note: "You control format and atmosphere",
     icon: SlidersHorizontal,
   },
@@ -33,16 +33,16 @@ const STEPS = [
     number: "03",
     title: "AI composes one natural scene",
     description:
-      "BringBack balances face scale, perspective, lighting direction, skin tones, depth, and subtle texture across every reference.",
-    note: "No harsh cutouts or plastic smoothing",
+      "BringBack generates a new scene, using the references to balance face scale, perspective, lighting, color, and placement.",
+    note: "A generated portrait, not a pasted collage",
     icon: Sparkles,
   },
   {
     number: "04",
     title: "Review and download",
     description:
-      "Compare the result with every source face, regenerate if needed, and download a high-resolution portrait for sharing or framing.",
-    note: "Print-ready family keepsake",
+      "Compare the result with every source face, regenerate if needed, and check the downloaded dimensions before ordering a large print.",
+    note: "Review likeness before sharing or printing",
     icon: Download,
   },
 ]
@@ -58,7 +58,7 @@ const HARMONIZATION = [
   { icon: SunMedium, title: "Lighting", description: "Balanced exposure and direction" },
   { icon: Palette, title: "Color", description: "Unified tone and skin color" },
   { icon: LayoutTemplate, title: "Composition", description: "Natural scale and placement" },
-  { icon: Camera, title: "Finish", description: "Cohesive, print-ready detail" },
+  { icon: Camera, title: "Review", description: "Check faces and fine details" },
 ]
 
 export function FamilyPortrait() {
@@ -77,7 +77,7 @@ export function FamilyPortrait() {
             </h2>
           </div>
           <p className="max-w-md text-base font-medium leading-relaxed text-gray-600 sm:text-lg">
-            From source selection to final download, every stage is designed to preserve likeness while making separate moments feel like one photograph.
+            From choosing clear references to reviewing the result, the workflow helps you create one portrait while keeping realistic expectations about AI-generated details.
           </p>
         </div>
 
@@ -122,11 +122,11 @@ export function FamilyPortrait() {
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-orange">Visual workflow</span>
                   <h3 className="mt-1 text-xl font-[850] tracking-tight text-brand-black sm:text-2xl">
-                    Separate references, professionally unified
+                    Separate references, one generated scene
                   </h3>
                 </div>
                 <span className="inline-flex w-fit items-center gap-2 rounded-full bg-green-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-green-700">
-                  <span className="h-2 w-2 rounded-full bg-green-500" /> Likeness first
+                  <span className="h-2 w-2 rounded-full bg-green-500" /> Review likeness
                 </span>
               </div>
 
@@ -172,7 +172,7 @@ export function FamilyPortrait() {
                       className="object-cover"
                     />
                     <div className="absolute inset-x-3 bottom-3 rounded-xl border border-white/15 bg-black/70 px-3 py-2.5 text-center text-[10px] font-bold text-white backdrop-blur sm:inset-x-4 sm:bottom-4 sm:text-xs">
-                      Matched lighting · natural scale · cohesive depth
+                      Shared lighting · balanced scale · unified backdrop
                     </div>
                   </div>
                 </div>

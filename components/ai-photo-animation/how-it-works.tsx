@@ -8,22 +8,22 @@ const ANIMATION_STEPS = [
     number: "01",
     stepTitle: "Upload Still Photo",
     icon: <Upload className="w-6 h-6 text-brand-orange" />,
-    shortDesc: "Upload a vintage black-and-white print, sepia portrait, or modern photo.",
-    detail: "Our AI works on single portraits or family group snapshots.",
+    shortDesc: "Upload one JPG, PNG, GIF, or WebP image up to 10MB.",
+    detail: "A clear, prominent face usually gives the motion model the strongest reference.",
   },
   {
     number: "02",
     stepTitle: "Select Facial Motion Style",
     icon: <Smile className="w-6 h-6 text-indigo-500" />,
-    shortDesc: "Choose gentle smiles, warm blinking, subtle head tilts, or realistic nostaligic hugs.",
-    detail: "Motion vectors are generated specifically for the detected facial landmarks.",
+    shortDesc: "Choose a gentle smile, blink and head tilt, warm gaze, soft nod, or another motion preset.",
+    detail: "Each preset guides the expression and movement generated from your still image.",
   },
   {
     number: "03",
     stepTitle: "AI Generates Motion Video",
     icon: <Sparkles className="w-6 h-6 text-amber-500" />,
-    shortDesc: "BringBack animates facial expressions while preserving authentic identity and likeness.",
-    detail: "Generates smooth 60fps HD video without weird face distortion.",
+    shortDesc: "BringBack generates a five-second video from your image and selected preset.",
+    detail: "Movement and facial details can vary, especially when the source is blurry, damaged, or crowded.",
   },
   {
     number: "04",
@@ -53,7 +53,7 @@ export function HowItWorks() {
 
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Follow these 4 simple steps to bring ancestral faces to life with natural movements and realistic video motion.
+              Upload one portrait, choose the kind of movement you want, and review the generated five-second video before downloading it.
             </p>
           </div>
         </div>

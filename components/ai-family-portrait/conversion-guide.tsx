@@ -11,6 +11,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
+import { PRIVACY_COPY } from "@/lib/site-copy";
 
 const PROMISES = [
   {
@@ -21,17 +22,17 @@ const PROMISES = [
   {
     icon: <ScanFace className="h-5 w-5" />,
     title: "Likeness-first generation",
-    text: "The prompt is built around preserving each person's face, age, expression, and recognizable details instead of creating a generic family.",
+    text: "Clear face references help the model retain recognizable details. Because the output is newly generated, compare every face with the source before sharing or printing.",
   },
   {
     icon: <Frame className="h-5 w-5" />,
     title: "Studio-style output",
-    text: "Choose canvas ratios and refined backdrops so the final image feels ready for a frame, memorial table, holiday card, or family archive.",
+    text: "Choose a canvas ratio and one of six studio backdrops, then check the downloaded dimensions for the frame, card, or keepsake you plan to make.",
   },
   {
     icon: <Lock className="h-5 w-5" />,
     title: "Private family memories",
-    text: "Uploads are processed securely, saved to your account media, and handled with the privacy expectations sensitive family photos deserve.",
+    text: PRIVACY_COPY.short,
   },
 ];
 
@@ -84,7 +85,7 @@ const QUICK_ANSWERS = [
   {
     question: "Is this a free family portrait creator?",
     answer:
-      "BringBack is a premium AI family photo generator. It costs 2 credits because the workflow prioritizes realistic likeness, studio composition, high-resolution output, and private account storage.",
+      "Each family portrait generation costs 2 credits. The $4.99 Restoration Starter includes 4 credits, enough for up to two portrait generations; results remain in My Media until you delete them.",
   },
 ];
 
@@ -102,7 +103,7 @@ export default function FamilyPortraitConversionGuide() {
             </h2>
           </div>
           <p className="max-w-xl text-lg font-medium leading-relaxed text-gray-600">
-            Most merge-photo tools stop at a cut-and-paste collage. BringBack composes a new studio-quality family portrait, matching scale, light, color, and composition so your family looks photographed together.
+            BringBack does more than place cutouts side by side: it generates a new group scene from your references. That makes shared lighting and composition possible, but it also means pose and fine details may change.
           </p>
         </div>
 

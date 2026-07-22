@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
+import { LIMITATIONS_COPY, PRIVACY_COPY } from '@/lib/site-copy';
 
 interface FAQItem {
   question: string;
@@ -12,23 +13,23 @@ interface FAQItem {
 const FAQS: FAQItem[] = [
   {
     question: "Can AI restore photos with water damage or mold stains?",
-    answer: "Yes. BringBack’s AI is trained to distinguish between the original photo content and surface damage like water stains, ink spills, or mold spots. The tool digitally removes the stain and uses context-aware technology to reconstruct the missing parts of the image underneath."
+    answer: "BringBack can reduce some water marks, ink stains, and mold spots when enough surrounding detail remains. Opaque damage may hide information that cannot be recovered, so the model may reconstruct a plausible replacement that should be compared with the original."
   },
   {
     question: "My old photos are very blurry. Can you sharpen faces?",
-    answer: "Absolutely. We use specialized facial enhancement algorithms. The AI detects facial landmarks (eyes, nose, mouth) even in blurry or out-of-focus images and reconstructs high-definition details, making faces look sharp and clear as if they were taken with a modern camera."
+    answer: "The tool can add definition to a soft face, but strong blur or a very small face gives it less reliable information. Reconstructed eyes, teeth, skin texture, and other details may differ from the person you remember."
   },
   {
     question: "How do I repair a torn photo or one with scratches and creases?",
-    answer: "You don't need manual tools. Once you scan and upload your torn photo, our 'Scratch & Tear Removal' model automatically identifies cracks and white creases. It fills these gaps by analyzing the surrounding pixels, seamlessly stitching the photo back together digitally."
+    answer: "Scan torn pieces flat and as close to their original alignment as possible. The model uses surrounding shapes and texture to reduce cracks and fill gaps, but large missing areas may need a manual restoration specialist."
   },
   {
     question: "Can I restore a photo and colorize it at the same time?",
-    answer: "Yes. BringBack acts as an all-in-one restoration suite. You can repair the physical damage (scratches/tears) and then use our AI Colorizer to turn black-and-white photos into realistic color images in a single workflow."
+    answer: "Yes. Choose restore and colorize when you want damage repair plus interpreted color, or choose restore-only to retain black-and-white, sepia, or the source photo's existing color treatment."
   },
   {
     question: "Is it safe to upload my private family photos?",
-    answer: "Photos are processed securely for restoration. Generated files stay in your account until you delete them from My Media. We do not use your family photos to train general-purpose AI models. See our Privacy Policy for processors and retention."
+    answer: PRIVACY_COPY.faq
   },
   {
     question: "Can I restore without colorizing?",
@@ -36,7 +37,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Will AI change the face of someone I remember?",
-    answer: "When facial detail is missing, damaged, or very low resolution, AI may reconstruct plausible features rather than recover the exact original face. Always compare side-by-side before you download or print."
+    answer: LIMITATIONS_COPY.faces
   },
   {
     question: "How much does one restoration cost?",

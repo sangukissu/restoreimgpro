@@ -9,11 +9,12 @@ import { Pricing } from "@/components/landing/Pricing"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
+import { FEATURE_CREDIT_COSTS, PRO_PLAN } from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: "AI Photo Animation | Bring Old Photos to Life | BringBack",
+  title: "AI Photo Animation | Bring Old Photos to Life",
   description:
-    "Animate old photos with realistic facial motion, natural blinks, and warm smiles using AI. Turn still family pictures into video memories. 2 credits per video.",
+    "Animate old photos with gentle smiles, blinks, and head movements. Create a five-second silent video from one family portrait. 10 credits per animation.",
   keywords: [
     "ai photo animation",
     "how to animate old photos with ai",
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "AI Photo Animation | BringBack",
-    description: "Transform still family portraits into realistic moving video memories.",
+    description: "Turn one family portrait into a five-second silent video with a selectable motion preset.",
     url: "https://bringback.pro/ai-photo-animation",
     siteName: "BringBack",
     type: "website",
@@ -47,7 +48,7 @@ const webAppJsonLd = {
   "@type": "WebApplication",
   "@id": "https://bringback.pro/ai-photo-animation#webapp",
   name: "BringBack AI Photo Animation",
-  description: "Animate still family portraits with natural facial movements.",
+  description: "Create a five-second silent video from one portrait and a selectable facial-motion preset.",
   url: "https://bringback.pro/ai-photo-animation",
   applicationCategory: "PhotoEditingApplication",
   operatingSystem: "Web",
@@ -56,8 +57,8 @@ const webAppJsonLd = {
     name: "Animation Credit Pack",
     url: "https://bringback.pro/pricing",
     priceCurrency: "USD",
-    price: "4.99",
-    description: "4 credits — covers 2 Photo Animation runs.",
+    price: PRO_PLAN.priceUsd.toFixed(2),
+    description: `${PRO_PLAN.credits} credits — covers ${Math.floor(PRO_PLAN.credits / FEATURE_CREDIT_COSTS.animate.credits)} Photo Animation runs.`,
   },
 }
 
@@ -65,27 +66,27 @@ const howToJsonLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
   name: "How to Animate Old Photos with AI",
-  description: "Learn how to bring ancestral faces to life with natural video motion in 4 simple steps.",
+  description: "Upload one portrait, choose a subtle motion preset, generate a five-second silent video, and review it before downloading.",
   step: [
     {
       "@type": "HowToStep",
       position: 1,
       name: "Upload Still Photo",
-      text: "Upload a vintage black-and-white print, sepia portrait, or modern photo.",
+      text: "Upload one clear vintage, sepia, black-and-white, or modern portrait.",
       url: "https://bringback.pro/ai-photo-animation#how-it-works",
     },
     {
       "@type": "HowToStep",
       position: 2,
       name: "Select Facial Motion Style",
-      text: "Choose gentle smiles, warm blinking, subtle head tilts, or realistic nostalgic hugs.",
+      text: "Choose a gentle smile, blink and head tilt, warm gaze, soft nod, or another subtle motion preset.",
       url: "https://bringback.pro/ai-photo-animation#how-it-works",
     },
     {
       "@type": "HowToStep",
       position: 3,
       name: "AI Generates Motion Video",
-      text: "BringBack animates facial expressions while preserving authentic identity and likeness.",
+      text: "BringBack generates a five-second video from the photo and selected motion preset. Review the result because AI movement and likeness can vary.",
       url: "https://bringback.pro/ai-photo-animation#how-it-works",
     },
     {

@@ -25,10 +25,10 @@ export const PhotoAnimation: React.FC = () => {
           <div className="absolute bottom-8 left-8 right-8">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/10 text-white px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
               <Smile size={14} />
-              Live Portrait Technology
+              Five-Second Silent Video
             </div>
             <p className="text-white/80 text-sm font-medium leading-relaxed">
-              "Seeing my mother smile again was the most emotional moment of my life."
+              Choose a subtle motion preset and review the generated face against the restored portrait.
             </p>
           </div>
         </div>
@@ -54,7 +54,7 @@ export const PhotoAnimation: React.FC = () => {
               </h2>
 
               <p className="text-base sm:text-lg text-gray-600 font-medium leading-relaxed mb-8 max-w-xl">
-                Restoration repairs the past — animation lets you relive it. Once your photos are restored to pristine clarity, take an optional second step to see your ancestors smile, blink, and move naturally.
+                A clearer restored face can give the animation model a better reference. Photo Animation costs 10 credits and generates a short interpretation of movement, so check likeness and expression before sharing.
               </p>
 
               <a

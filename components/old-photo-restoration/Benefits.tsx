@@ -328,50 +328,50 @@ const VisualDamageCheck = () => (
 const BENEFITS = [
   {
     icon: <Sparkles size={24} />,
-    title: 'AI Photo Restorer Online',
-    description: 'Instantly repair old photos online, then optionally bring faces to life with our natural motion AI.',
+    title: 'Repair in Your Browser',
+    description: 'Upload a scan, generate a repaired version, and compare it with the original before downloading.',
     visual: <VisualRestore />
   },
   {
     icon: <Frame size={24} />,
-    title: 'Vintage Photo Restoration',
-    description: 'Showcase your restored vintage memories in stunning customizable digital frames before downloading.',
+    title: 'Keep the Vintage Character',
+    description: 'Choose restore-only when you want to retain the familiar black-and-white, sepia, or existing color treatment.',
     visual: <VisualFrames />
   },
   {
     icon: <Wrench size={24} />,
-    title: 'Restore Damaged Photos AI',
-    description: 'Scratches, tears, fading, or water damage—our AI old photo restoration model tackles it all.',
+    title: 'Address Common Damage',
+    description: 'Reduce visible scratches, tears, fading, stains, and creases when enough surrounding detail remains.',
     visual: <VisualDamage />
   },
   {
     icon: <Smile size={24} />,
     title: 'Facial Detail Enhancement',
-    description: "Advanced algorithms sharpen blurry facial features while preserving the true likeness of your ancestors.",
+    description: "The model may reconstruct soft or missing facial details. Compare the result closely because those details may not be historically exact.",
     visual: <VisualFaceMesh />
   },
   {
     icon: <Palette size={24} />,
-    title: 'AI Colorization Engine',
-    description: 'Automatically breathe vibrant, realistic color into your restored black-and-white family portraits.',
+    title: 'Optional AI Colorization',
+    description: 'Add interpreted color only when you want it; colorization is not evidence of the original historical colors.',
     visual: <VisualColor />
   },
   {
     icon: <Heart size={24} />,
-    title: 'Authentic Reconstructions',
-    description: 'Our AI prioritizes authentic facial expressions, ensuring repaired areas match the original emotional tone.',
+    title: 'Compare with the Original',
+    description: 'Use the before-and-after view to check faces, expressions, clothing, and reconstructed areas before sharing or printing.',
     visual: <VisualEmotion />
   },
   {
     icon: <Lock size={24} />,
-    title: 'Secure Online Restoration',
-    description: 'Your family memories remain private. Generated media stays securely in your account until deleted.',
+    title: 'Private Account Storage',
+    description: 'Generated media stays in My Media until you delete it, and family photos are not used to train general-purpose AI models.',
     visual: <VisualPrivacy />
   },
   {
     icon: <ScanLine size={24} />,
-    title: 'Deep Damage Repair Pass',
-    description: "If we detect heavy degradation, our AI automatically runs a free second pass for the highest quality repair.",
+    title: 'Results Depend on the Source',
+    description: "A clearer scan usually provides more usable detail. Very large missing areas or destroyed faces may require a manual restoration specialist.",
     visual: <VisualDamageCheck />
   }
 ];
@@ -398,7 +398,7 @@ export const Benefits: React.FC = () => {
           {/* Subtitle */}
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Our state-of-the-art AI technology transforms damaged old photos into pristine digital memories with complete privacy and precision.
+              The restoration workflow combines practical repair options with clear limits, so you can choose the treatment and judge the result for yourself.
             </p>
           </div>
         </div>

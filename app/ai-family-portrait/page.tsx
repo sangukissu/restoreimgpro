@@ -12,11 +12,12 @@ import AITechnologySection from "@/components/ai-family-portrait/AITechnologySec
 import { Pricing } from "@/components/landing/Pricing"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 import { CTA } from "@/components/old-photo-restoration/CTA"
+import { FEATURE_CREDIT_COSTS, STARTER_PLAN } from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: "AI Family Portrait Generator | Combine Separate Photos into One | BringBack",
+  title: "AI Family Portrait Generator | Combine Separate Photos into One",
   description:
-    "Combine separate family photos into one natural group portrait with AI. Merge individual photos, add deceased relatives, and compose 35mm studio portraits.",
+    "Create one family portrait from 2–4 separate photos. Choose a canvas and studio background, then review likeness, pose, and scale. 2 credits.",
   keywords: [
     "ai family portrait generator",
     "combine separate photos into one family portrait",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AI Family Portrait Generator | BringBack",
     description:
-      "Combine separate family photos into one natural group portrait with AI. Merge individual photos, add deceased relatives, and compose studio portraits.",
+      "Create one family portrait from 2–4 separate photos, choose a studio style, and review the generated likeness before downloading.",
     type: "website",
     url: "https://bringback.pro/ai-family-portrait",
     images: [
@@ -52,7 +53,7 @@ const familyPortraitWebAppJsonLd = {
   '@id': 'https://bringback.pro/ai-family-portrait#webapp',
   name: 'BringBack AI Family Portrait Generator',
   description:
-    'Combine separate family photos into one natural group portrait with matched lighting and skin tones.',
+    'Create one generated family portrait from 2 to 4 separate photos with selectable canvas ratios and studio backgrounds.',
   url: 'https://bringback.pro/ai-family-portrait',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
@@ -61,8 +62,8 @@ const familyPortraitWebAppJsonLd = {
     name: 'Family Portrait Credit Pack',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
-    price: '4.99',
-    description: '4 credits — covers 2 AI Family Portrait generations.',
+    price: STARTER_PLAN.priceUsd.toFixed(2),
+    description: `${STARTER_PLAN.credits} credits — covers ${Math.floor(STARTER_PLAN.credits / FEATURE_CREDIT_COSTS.familyPortrait.credits)} AI Family Portrait generations.`,
   },
 }
 
@@ -91,7 +92,7 @@ const familyPortraitHowToJsonLd = {
       '@type': 'HowToStep',
       position: 3,
       name: 'AI Matches Lighting & Scale',
-      text: 'BringBack re-composes everyone into one frame, matching lighting, skin tones, and perspective.',
+      text: 'BringBack generates one new scene with a shared background, lighting direction, color treatment, and perspective.',
       url: 'https://bringback.pro/ai-family-portrait#how-it-works',
     },
     {
