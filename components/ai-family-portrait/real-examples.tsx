@@ -13,7 +13,6 @@ const FAMILY_PORTRAIT_CASES = [
     title: "Combine 4 Separate Individual Portraits into One Family Picture",
     story:
       "When family members live in different cities or only have separate selfie portraits, BringBack combines up to 4 individual photos into a single studio family portrait with matched room lighting and skin tones.",
-    promptHint: 'Example request: "Combine individual portraits of father, mother, son, and daughter into a warm beige studio portrait."',
     inputs: [
       { img: "/separate-family-portrait-father.jpg", label: "Input 1: Father" },
       { img: "/separate-family-portrait-mother.jpg", label: "Input 2: Mother" },
@@ -32,7 +31,6 @@ const FAMILY_PORTRAIT_CASES = [
     title: "Combine Grandparents, Parents, and Children into One Portrait",
     story:
       "Reunite 3 generations into a single timeless family portrait. Upload photos of grandparents, parents, and children—our AI harmonizes height scales, lighting angles, and subtle 35mm film texture.",
-    promptHint: 'Example request: "Combine the grandparents, parents, son, and daughter into a classic studio portrait."',
     inputs: [
       { img: "/three-generation-reunion-son.jpg", label: "Input 1: Son" },
       { img: "/three-generation-reunion-daughter.jpg", label: "Input 2: Daughter" },
@@ -51,7 +49,6 @@ const FAMILY_PORTRAIT_CASES = [
     title: "Add a Deceased Grandfather to a Family Portrait",
     story:
       "Preserve family legacies by including a loved one who passed away with new generations. BringBack matches a vintage portrait with modern photos so a late grandfather appears naturally beside his son and grandchildren.",
-    promptHint: 'Example request: "Combine the late grandfather with his son, grandson, and granddaughter in a classic studio portrait."',
     inputs: [
       { img: "/memorial-family-portrait-father.jpg", label: "Input 1: Father" },
       { img: "/memorial-family-portrait-son.jpg", label: "Input 2: Son" },
@@ -181,12 +178,9 @@ export function FamilyPortraitRealExamples() {
                       <h3 className="text-lg sm:text-xl font-extrabold text-brand-black mb-1.5 sm:mb-2">
                         {ex.title}
                       </h3>
-                      <p className="text-gray-600 font-medium text-xs sm:text-sm leading-relaxed mb-3">
+                      <p className="text-gray-600 font-medium text-xs sm:text-sm leading-relaxed">
                         {ex.story}
                       </p>
-                      <div className="bg-gray-50 p-2.5 sm:p-3 rounded-xl border border-gray-100 text-[11px] sm:text-xs font-medium text-gray-500">
-                        {ex.promptHint}
-                      </div>
                     </div>
 
                     <Link href={ex.href} className="w-full md:w-auto shrink-0">

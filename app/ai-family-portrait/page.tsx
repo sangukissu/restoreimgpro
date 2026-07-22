@@ -6,7 +6,6 @@ import AIAnimationHero from "@/components/ai-family-portrait/hero"
 import { FamilyPortraitRealExamples } from "@/components/ai-family-portrait/real-examples"
 import { FamilyPortrait } from "@/components/ai-family-portrait/styles-grid"
 import FamilyPortraitConversionGuide from "@/components/ai-family-portrait/conversion-guide"
-import AIAnimationHowItWorks from "@/components/ai-family-portrait/how-it-works"
 import FamilyPortraitUseCases from "@/components/ai-family-portrait/features"
 import FamilyPortraitFAQ from "@/components/ai-family-portrait/faq"
 import AITechnologySection from "@/components/ai-family-portrait/AITechnologySection"
@@ -120,23 +119,21 @@ export default function Page() {
         <AIAnimationHero />
         {/* 2. Real Visual Use Cases with Input Photo Breakdown */}
         <FamilyPortraitRealExamples />
-        {/* 3. Style Grid */}
+        {/* 3. Detailed How It Works */}
         <FamilyPortrait />
-        {/* 4. 4-Step How It Works (Snippet-Winning Architecture) */}
-        <AIAnimationHowItWorks />
-        {/* 5. Deep Family Photo Creation Guide */}
+        {/* 4. Deep Family Photo Creation Guide */}
         <FamilyPortraitConversionGuide />
-        {/* 6. Pricing */}
+        {/* 5. Pricing */}
         <Pricing />
-        {/* 7. Features & Use Cases */}
+        {/* 6. Features & Use Cases */}
         <FamilyPortraitUseCases />
-        {/* 8. AI Technology Section */}
+        {/* 7. AI Technology Section */}
         <AITechnologySection />
-        {/* 9. FAQ */}
+        {/* 8. FAQ */}
         <FamilyPortraitFAQ />
-        {/* 10. Product Cross Sell */}
+        {/* 9. Product Cross Sell */}
         <ProductCrossSell excludeHref="/ai-family-portrait" />
-        {/* 11. CTA */}
+        {/* 10. CTA */}
         <CTA />
       </main>
 

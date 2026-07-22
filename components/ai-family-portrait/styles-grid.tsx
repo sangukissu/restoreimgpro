@@ -1,160 +1,199 @@
+import Image from "next/image"
+import {
+  ArrowRight,
+  Camera,
+  Check,
+  Download,
+  LayoutTemplate,
+  Palette,
+  SlidersHorizontal,
+  Sparkles,
+  SunMedium,
+  Upload,
+} from "lucide-react"
 
-import React from 'react';
-import Image from "next/image"; // Note: In standard React without Next.js, we use <img>. Adapting to standard <img> for this project environment.
-import { Wand2, SunMedium, Palette, LayoutList, Camera, ArrowRight, Sparkles } from "lucide-react";
+const STEPS = [
+  {
+    number: "01",
+    title: "Upload individual portraits",
+    description:
+      "Add 2 to 4 clear photos from phones, scans, or family albums. Front-facing faces with visible features give the strongest likeness.",
+    note: "JPG, PNG or WebP · up to 4 people",
+    icon: Upload,
+  },
+  {
+    number: "02",
+    title: "Choose canvas and setting",
+    description:
+      "Pick a 4:3, 16:9, or 3:4 canvas, then choose a studio, living-room, garden, or soft bokeh background.",
+    note: "You control format and atmosphere",
+    icon: SlidersHorizontal,
+  },
+  {
+    number: "03",
+    title: "AI composes one natural scene",
+    description:
+      "BringBack balances face scale, perspective, lighting direction, skin tones, depth, and subtle texture across every reference.",
+    note: "No harsh cutouts or plastic smoothing",
+    icon: Sparkles,
+  },
+  {
+    number: "04",
+    title: "Review and download",
+    description:
+      "Compare the result with every source face, regenerate if needed, and download a high-resolution portrait for sharing or framing.",
+    note: "Print-ready family keepsake",
+    icon: Download,
+  },
+]
 
-const InputMosaic = () => {
-  const images = [
-    { src: "/family-photo1.png", label: "Son" },
-    { src: "/family-photo2.jpg", label: "Grandpa" },
-    { src: "/family-photo3.png", label: "Father" },
-    { src: "/family-photo4.png", label: "Mother" },
-  ];
+const INPUTS = [
+  { src: "/family-photo1.png", label: "Son" },
+  { src: "/family-photo2.jpg", label: "Grandfather" },
+  { src: "/family-photo3.png", label: "Father" },
+  { src: "/family-photo4.png", label: "Mother" },
+]
 
+const HARMONIZATION = [
+  { icon: SunMedium, title: "Lighting", description: "Balanced exposure and direction" },
+  { icon: Palette, title: "Color", description: "Unified tone and skin color" },
+  { icon: LayoutTemplate, title: "Composition", description: "Natural scale and placement" },
+  { icon: Camera, title: "Finish", description: "Cohesive, print-ready detail" },
+]
+
+export function FamilyPortrait() {
   return (
-    <div className="bg-white rounded-[2.5rem] p-8 h-full flex flex-col min-h-[420px] md:min-h-[500px] shadow-sm border border-gray-100 group hover:shadow-md transition-all duration-300">
-      <div className="flex items-center justify-between mb-8">
-        <h3 className="text-2xl font-[850] text-brand-black tracking-tight">Input References</h3>
-        <span className="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">4 photos</span>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 flex-1">
-        {images.map((item, idx) => (
-          <figure key={idx} className="relative aspect-square rounded-2xl overflow-hidden border border-gray-100 group/img bg-gray-50">
-            <Image
-              src={item.src}
-              alt={item.label}
-              fill
-              className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110"
-            />
-            <figcaption className="absolute bottom-3 left-3 text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-white/90 backdrop-blur text-brand-black shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity translate-y-2 group-hover/img:translate-y-0 duration-300">
-              {item.label}
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-
-      <p className="text-sm text-gray-500 mt-8 font-medium leading-relaxed max-w-sm">
-        We harmonize lighting, style, and composition — preserving the true likeness of every family member.
-      </p>
-    </div>
-  );
-};
-
-const ProcessStrip = () => {
-  const items = [
-    { icon: <SunMedium className="w-5 h-5" />, title: "Match Lighting", desc: "Balance exposure and tone" },
-    { icon: <Palette className="w-5 h-5" />, title: "Unify Style", desc: "Align color and art style" },
-    { icon: <LayoutList className="w-5 h-5" />, title: "Compose Naturally", desc: "Respectful arrangement" },
-    { icon: <Camera className="w-5 h-5" />, title: "Print Ready", desc: "High-res output" },
-  ];
-  return (
-    <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm mt-3">
-      <h3 className="text-lg font-[850] text-brand-black mb-6 flex items-center gap-2">
-        <div className="bg-brand-orange/10 p-1.5 rounded-lg">
-          <Wand2 size={16} className="text-brand-orange" />
-        </div>
-        How We Harmonize
-      </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {items.map((item, i) => (
-          <div key={i} className="rounded-2xl bg-gray-50 p-5 border border-gray-100 hover:border-brand-orange/20 hover:bg-white hover:shadow-sm transition-all duration-300 group cursor-default">
-            <div className="flex items-center gap-3 text-brand-black mb-2 group-hover:text-brand-orange transition-colors">
-              {item.icon}
-              <span className="text-sm font-bold">{item.title}</span>
+    <section id="how-it-works" className="bg-brand-bg px-4 py-20 sm:px-8 sm:py-24">
+      <div className="mx-auto max-w-[1320px]">
+        <div className="mb-12 flex flex-col gap-7 lg:mb-16 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-4xl">
+            <div className="mb-5 inline-flex items-center gap-1 rounded-full bg-brand-black px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-black/10 sm:text-sm">
+              <span className="text-brand-orange">//</span> How It Works <span className="text-brand-orange">//</span>
             </div>
-            <p className="text-xs text-gray-500 font-medium leading-relaxed">{item.desc}</p>
+            <h2 className="text-[2.25rem] font-[850] leading-[1.03] tracking-tighter text-brand-black sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem]">
+              Four references become
+              <br />
+              <span className="text-gray-400">one believable family portrait.</span>
+            </h2>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const ResultPanel = () => {
-  return (
-    <div className="bg-white rounded-[2.5rem] p-8 h-full flex flex-col min-h-[420px] md:min-h-[500px] shadow-sm border border-gray-100 group hover:shadow-md transition-all duration-300 relative overflow-hidden">
-
-      {/* Background Gradient */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-brand-orange/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-
-      <div className="flex items-center justify-between mb-8">
-        <h3 className="text-2xl font-[850] text-brand-black tracking-tight">Final Composite</h3>
-        <span className="text-xs font-bold text-white bg-brand-black px-3 py-1.5 rounded-full flex items-center gap-1.5 uppercase tracking-wide">
-          <Wand2 size={12} /> Result
-        </span>
-      </div>
-
-      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 shadow-inner flex-grow group/result bg-gray-100">
-        <img
-          src="/family-portrait.png"
-          alt="Unified family portrait result"
-          className="w-full h-full object-cover"
-        />
-
-        {/* Floating Tags */}
-        <span className="absolute top-4 left-4 text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/90 backdrop-blur text-brand-black shadow-sm flex items-center gap-1.5 transform -translate-y-2 opacity-0 group-hover/result:translate-y-0 group-hover/result:opacity-100 transition-all duration-300">
-          <SunMedium size={10} /> Subtle re‑lighting
-        </span>
-        <span className="absolute bottom-4 right-4 text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/90 backdrop-blur text-brand-black shadow-sm flex items-center gap-1.5 transform translate-y-2 opacity-0 group-hover/result:translate-y-0 group-hover/result:opacity-100 transition-all duration-300 delay-75">
-          <Palette size={10} /> Color harmonized
-        </span>
-      </div>
-
-      <div className="mt-8 flex items-center justify-between border-t border-gray-100 pt-6">
-        <p className="text-sm text-gray-500 font-medium">Print‑ready, respectful composite.</p>
-        <button className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-orange group-hover:text-white transition-all duration-300 hover:scale-105">
-          <ArrowRight size={18} />
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export const FamilyPortrait: React.FC = () => {
-  return (
-    <section id="family-portrait" className="w-full max-w-[1320px] mx-auto px-4 sm:px-8 py-24 ">
-
-      {/* Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
-        <div className="max-w-2xl">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-            <span className="text-brand-orange">//</span> The Magic <span className="text-brand-orange">//</span>
-          </div>
-
-          {/* Title */}
-          <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-            Separate photos? <br />
-            <span className="text-gray-400/80">One Family Portrait.</span>
-          </h2>
-        </div>
-
-        {/* Subtitle */}
-        <div className="max-w-sm">
-          <p className="text-lg text-gray-600 font-medium leading-relaxed">
-            Upload up to four references. We harmonize lighting, color, and composition to create a realistic family photo — no gimmicks.
+          <p className="max-w-md text-base font-medium leading-relaxed text-gray-600 sm:text-lg">
+            From source selection to final download, every stage is designed to preserve likeness while making separate moments feel like one photograph.
           </p>
         </div>
-      </div>
 
-      {/* Main Content: Gray Surface Container */}
-      <div className="bg-brand-surface p-2 rounded-[3rem]">
+        <div className="rounded-[2rem] bg-brand-surface p-2 sm:rounded-[3rem] sm:p-3 lg:p-4">
+          <div className="grid gap-3 xl:grid-cols-[0.82fr_1.18fr]">
+            <ol className="grid list-none gap-2.5 sm:grid-cols-2 xl:grid-cols-1">
+              {STEPS.map((step) => {
+                const Icon = step.icon
+                return (
+                  <li
+                    key={step.number}
+                    className="group relative overflow-hidden rounded-[1.5rem] border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-orange/25 hover:shadow-md sm:p-6"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-black text-white transition-colors group-hover:bg-brand-orange">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-2 flex items-center justify-between gap-3">
+                          <span className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-orange">
+                            Step {step.number}
+                          </span>
+                          <span className="text-2xl font-black tracking-tighter text-gray-100">{step.number}</span>
+                        </div>
+                        <h3 className="mb-2 text-lg font-extrabold leading-tight text-brand-black sm:text-xl">
+                          {step.title}
+                        </h3>
+                        <p className="text-sm font-medium leading-relaxed text-gray-600">{step.description}</p>
+                        <div className="mt-4 flex items-center gap-2 border-t border-gray-100 pt-3 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                          <Check className="h-3.5 w-3.5 text-brand-orange" />
+                          {step.note}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
 
-        {/* Split: Inputs and Result */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch mb-3">
-          <div className="h-full">
-            <InputMosaic />
-          </div>
-          <div className="h-full">
-            <ResultPanel />
+            <div className="flex min-w-0 flex-col rounded-[1.6rem] border border-gray-100 bg-white p-4 shadow-sm sm:p-6 lg:p-8">
+              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-orange">Visual workflow</span>
+                  <h3 className="mt-1 text-xl font-[850] tracking-tight text-brand-black sm:text-2xl">
+                    Separate references, professionally unified
+                  </h3>
+                </div>
+                <span className="inline-flex w-fit items-center gap-2 rounded-full bg-green-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-green-700">
+                  <span className="h-2 w-2 rounded-full bg-green-500" /> Likeness first
+                </span>
+              </div>
+
+              <div className="grid flex-1 gap-3 lg:grid-cols-[0.72fr_auto_1.28fr] lg:items-center">
+                <div>
+                  <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    <span>Input references</span>
+                    <span>4 photos</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {INPUTS.map((input) => (
+                      <figure key={input.src} className="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 sm:rounded-2xl">
+                        <Image
+                          src={input.src}
+                          alt={`${input.label} input portrait`}
+                          fill
+                          sizes="(max-width: 1024px) 40vw, 12vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <figcaption className="absolute bottom-1.5 left-1.5 rounded-md bg-black/70 px-2 py-1 text-[9px] font-bold text-white backdrop-blur sm:bottom-2 sm:left-2">
+                          {input.label}
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-brand-orange text-white shadow-lg shadow-brand-orange/20 lg:flex">
+                  <ArrowRight className="h-4 w-4" />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    <span>Final composite</span>
+                    <span className="text-brand-orange">AI harmonized</span>
+                  </div>
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 shadow-inner sm:rounded-[1.6rem]">
+                    <Image
+                      src="/family-portrait.png"
+                      alt="Unified family portrait result"
+                      fill
+                      sizes="(max-width: 1024px) 90vw, 38vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-x-3 bottom-3 rounded-xl border border-white/15 bg-black/70 px-3 py-2.5 text-center text-[10px] font-bold text-white backdrop-blur sm:inset-x-4 sm:bottom-4 sm:text-xs">
+                      Matched lighting · natural scale · cohesive depth
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 grid grid-cols-2 gap-2 border-t border-gray-100 pt-5 sm:grid-cols-4">
+                {HARMONIZATION.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <div key={item.title} className="rounded-2xl bg-brand-surface p-3 sm:p-4">
+                      <Icon className="mb-3 h-4 w-4 text-brand-orange" />
+                      <h4 className="text-xs font-extrabold text-brand-black">{item.title}</h4>
+                      <p className="mt-1 text-[10px] font-medium leading-relaxed text-gray-500">{item.description}</p>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Process */}
-        <ProcessStrip />
-
       </div>
     </section>
-  );
-};
+  )
+}
