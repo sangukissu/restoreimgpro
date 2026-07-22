@@ -68,6 +68,70 @@ export const REMOVE_PERSON_FAQS: FAQItem[] = [
   },
 ]
 
+export const COLORIZE_FAQS: FAQItem[] = [
+  {
+    question: "How does AI photo colorization actually work?",
+    answer:
+      "Our AI analyzes the grayscale values, textures, and context in your black and white photo to predict realistic colors.",
+  },
+  {
+    question: "Are the colors historically accurate?",
+    answer:
+      "Yes! We analyze clothing styles, architectural elements, and cultural context to apply colors authentic to the time period.",
+  },
+  {
+    question: "What types of black and white photos work best?",
+    answer:
+      "We can colorize family portraits, wedding photos, military pictures, childhood photos, historical images, and vintage postcards.",
+  },
+  {
+    question: "How much does photo colorization cost?",
+    answer:
+      "We offer 4 high-quality photo colorizations for just $4.99 — no subscription required.",
+  },
+  {
+    question: "Will colorization damage or change my original photo?",
+    answer:
+      "Not at all! We work with a copy of your photo, leaving the original black and white image completely unchanged.",
+  },
+  {
+    question: "Is my family history safe during processing?",
+    answer: PRIVACY_COPY.faq,
+  },
+]
+
+export const DENOISE_FAQS: FAQItem[] = [
+  {
+    question: "How does AI photo denoising work?",
+    answer:
+      "Our AI analyzes the patterns of noise in your photo and distinguishes between unwanted grain and important image details.",
+  },
+  {
+    question: "What types of noise can BringBack remove?",
+    answer:
+      "We can remove high-ISO grain, color noise, digital artifacts, compression artifacts, and low-light noise.",
+  },
+  {
+    question: "Will denoising make my photos look plastic or fake?",
+    answer:
+      "No! Our AI is specifically designed to maintain natural texture and detail while removing noise.",
+  },
+  {
+    question: "How much does photo denoising cost?",
+    answer:
+      "We offer 4 high-quality photo denoising cleanups for just $4.99 — no subscription required.",
+  },
+  {
+    question: "Does BringBack preserve fine details when denoising?",
+    answer:
+      "Yes. Our AI is trained to remove noise while intelligently retaining key details like textures and edges.",
+  },
+  {
+    question: "Is my uploaded photo secure?",
+    answer: PRIVACY_COPY.faq,
+  },
+]
+
 export const MEMORY_BOOK_FAQS: FAQItem[] = [
   {
     question: "Does creating or editing a Memory Book cost credits?",

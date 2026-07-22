@@ -3,22 +3,31 @@ import { Footer } from '@/components/landing/Footer';
 import type { Metadata } from "next"
 
 import AIAnimationHero from "@/components/ai-family-portrait/hero"
+import { FamilyPortraitRealExamples } from "@/components/ai-family-portrait/real-examples"
 import { FamilyPortrait } from "@/components/ai-family-portrait/styles-grid"
 import FamilyPortraitConversionGuide from "@/components/ai-family-portrait/conversion-guide"
 import AIAnimationHowItWorks from "@/components/ai-family-portrait/how-it-works"
 import FamilyPortraitUseCases from "@/components/ai-family-portrait/features"
-import { CTA } from '@/components/landing/CTA';
 import FamilyPortraitFAQ from "@/components/ai-family-portrait/faq"
 import AITechnologySection from "@/components/ai-family-portrait/AITechnologySection"
 import { Pricing } from "@/components/landing/Pricing"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
+import { CTA } from "@/components/old-photo-restoration/CTA"
 
 export const metadata: Metadata = {
   title: "AI Family Portrait Generator | Combine Separate Photos into One | BringBack",
   description:
-    "Combine separate family photos into one natural group portrait with AI. Merge individual photos, add deceased relatives, and compose studio portraits. 2 credits.",
+    "Combine separate family photos into one natural group portrait with AI. Merge individual photos, add deceased relatives, and compose 35mm studio portraits.",
+  keywords: [
+    "ai family portrait generator",
+    "combine separate photos into one family portrait",
+    "how to create a family photo from individual photos",
+    "generational family portrait generator",
+    "add deceased relative to family portrait",
+    "merge multiple photos into one family picture",
+  ],
   alternates: {
-    canonical: "/ai-family-portrait",
+    canonical: "https://bringback.pro/ai-family-portrait",
   },
   openGraph: {
     title: "AI Family Portrait Generator | BringBack",
@@ -28,190 +37,109 @@ export const metadata: Metadata = {
     url: "https://bringback.pro/ai-family-portrait",
     images: [
       {
-        url: "https://bringback.pro/family-portrait.png",
+        url: "/og-image.png",
         width: 1200,
-        height: 800,
-        alt: "AI family portrait created from separate photos",
+        height: 630,
+        alt: "AI family portrait created from separate individual photos",
       },
     ],
   },
+  robots: { index: true, follow: true },
 }
 
 const familyPortraitWebAppJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   '@id': 'https://bringback.pro/ai-family-portrait#webapp',
-  name: 'BringBack AI Family Portrait',
+  name: 'BringBack AI Family Portrait Generator',
   description:
-    'Bring separate family photos into one natural portrait. 2 credits. Clear front-facing references work best; always compare likeness.',
+    'Combine separate family photos into one natural group portrait with matched lighting and skin tones.',
   url: 'https://bringback.pro/ai-family-portrait',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
-  image: 'https://bringback.pro/family-portrait.png',
   offers: {
     '@type': 'Offer',
-    name: 'BringBack Family Portrait',
+    name: 'Family Portrait Credit Pack',
     url: 'https://bringback.pro/pricing',
     priceCurrency: 'USD',
     price: '4.99',
-    eligibleRegion: {
-      '@type': 'Place',
-      name: 'Worldwide',
-    },
+    description: '4 credits — covers 2 AI Family Portrait generations.',
   },
-  featureList: [
-    'Separate photos into one family photo',
-    'Combine up to 4 individual portraits',
-    'Preserve original facial likeness and expression',
-    'Choose 1:1, 3:4, 4:3, or 16:9 canvas ratios',
-    'Choose matte black, neutral gray, warm beige, gradient, dark brown, or bokeh studio backdrops',
-    'High-resolution download',
-    'Private account media library',
-  ],
-  screenshot: 'https://bringback.pro/family-portrait.png',
-}
-
-const familyPortraitImageJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'ImageObject',
-  name: 'AI Family Portrait Example',
-  description:
-    'Example of a professional AI family portrait generated from separate individual photos.',
-  contentUrl: 'https://bringback.pro/family-portrait.png',
-  url: 'https://bringback.pro/ai-family-portrait#hero',
 }
 
 const familyPortraitHowToJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'How to create a family photo from individual photos',
+  name: 'How to Create a Family Photo from Individual Photos',
   description:
     'Upload separate portraits, choose a canvas and studio background, then generate one cohesive AI family portrait.',
-  totalTime: 'PT2M',
   step: [
     {
       '@type': 'HowToStep',
-      name: 'Upload individual portraits',
-      text: 'Add 2 to 4 clear JPG, PNG, or WebP photos with visible faces. Restore damaged or blurry old photos first for best results.',
+      position: 1,
+      name: 'Upload Individual Portraits',
+      text: 'Upload 2 to 4 separate photos of your family members from smartphone scans or old albums.',
+      url: 'https://bringback.pro/ai-family-portrait#how-it-works',
     },
     {
       '@type': 'HowToStep',
-      name: 'Choose canvas and backdrop',
-      text: 'Pick a square, portrait, classic, or wide aspect ratio, then choose a studio background such as matte black, gray, beige, brown, gradient, or bokeh.',
+      position: 2,
+      name: 'Choose Canvas & Background',
+      text: 'Select 4:3, 16:9, or 3:4 canvas aspect ratio and choose a studio or natural backdrop.',
+      url: 'https://bringback.pro/ai-family-portrait#how-it-works',
     },
     {
       '@type': 'HowToStep',
-      name: 'Generate and download',
-      text: 'BringBack composes the people into one studio-quality family portrait with harmonized lighting, color, scale, and perspective.',
-    },
-  ],
-}
-
-const familyPortraitFAQJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Can I create a family photo from individual photos?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. Upload separate portraits of 2 to 4 people and BringBack composes them into one realistic studio-quality family photo.',
-      },
+      position: 3,
+      name: 'AI Matches Lighting & Scale',
+      text: 'BringBack re-composes everyone into one frame, matching lighting, skin tones, and perspective.',
+      url: 'https://bringback.pro/ai-family-portrait#how-it-works',
     },
     {
-      '@type': 'Question',
-      name: 'How do I make a family photo with separate photos?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Upload 2 to 4 individual portraits, choose a 4:3 or 16:9 canvas for groups, select a studio background, and generate. BringBack re-composes the people into one new family portrait instead of placing photo cutouts side by side.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Will the final photo look fake or like a collage?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'BringBack is designed to avoid the cut-and-paste look. It creates a new studio portrait with consistent lighting, color, scale, and texture across the people you upload.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does the AI change what my family members look like?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'The family portrait generator is built to preserve recognizable facial likeness, age, and expression from the uploaded references. Results can vary by input quality, so clear face photos work best.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What are the best photos to upload?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Use JPG, PNG, or WebP images under 20MB each. Clear, well-lit, front-facing portraits with visible faces produce the most natural family photo.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I combine black-and-white photos with color photos?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. You can combine black-and-white photos with color photos. If the older photo is damaged, faded, or blurry, restore it first for the best likeness.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'How many people can I combine into one group photo?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'You can combine up to 4 individual photos into a single family portrait. For 3 to 4 people, wider ratios such as 4:3 or 16:9 usually create a more balanced composition.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I add a deceased person to a family photo?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. Many families use BringBack to create respectful memorial portraits by combining a loved one who has passed with current family members.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I choose the background or aspect ratio?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. BringBack supports 1:1, 3:4, 4:3, and 16:9 canvases plus studio backdrops including matte black, neutral gray, warm beige, subtle gradient, dark brown vignette, and gentle bokeh.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Is BringBack a free family portrait creator?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'BringBack is pay-once, not free unlimited. Family portrait costs 2 credits. The $4.99 Starter pack has 4 credits (up to two portraits). Credits never expire.',
-      },
+      '@type': 'HowToStep',
+      position: 4,
+      name: 'Download Family Portrait',
+      text: 'Preview your combined family portrait side-by-side and download high-res print quality.',
+      url: 'https://bringback.pro/ai-family-portrait#how-it-works',
     },
   ],
 }
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-brand-bg">
+    <div className="min-h-screen bg-brand-bg text-brand-black font-sans selection:bg-brand-orange selection:text-white relative overflow-x-hidden">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitWebAppJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitImageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitHowToJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitFAQJsonLd) }} />
-      <Navbar />
-      <AIAnimationHero />
-      <FamilyPortrait />
-      <FamilyPortraitConversionGuide />
-      <AIAnimationHowItWorks />
-      <Pricing />
-      <FamilyPortraitUseCases />
-      <AITechnologySection />
-      <FamilyPortraitFAQ />
-      <ProductCrossSell excludeHref="/ai-family-portrait" />
-      <CTA />
+
+      <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
+        <Navbar />
+      </header>
+
+      <main>
+        {/* 1. Hero */}
+        <AIAnimationHero />
+        {/* 2. 6 Real Visual Use Cases with Input Photo Breakdown & Comparison Sliders */}
+        <FamilyPortraitRealExamples />
+        {/* 3. Style Grid */}
+        <FamilyPortrait />
+        {/* 4. 4-Step How It Works (Snippet-Winning Architecture) */}
+        <AIAnimationHowItWorks />
+        {/* 5. Deep Family Photo Creation Guide */}
+        <FamilyPortraitConversionGuide />
+        {/* 6. Pricing */}
+        <Pricing />
+        {/* 7. Features & Use Cases */}
+        <FamilyPortraitUseCases />
+        {/* 8. AI Technology Section */}
+        <AITechnologySection />
+        {/* 9. FAQ */}
+        <FamilyPortraitFAQ />
+        {/* 10. Product Cross Sell */}
+        <ProductCrossSell excludeHref="/ai-family-portrait" />
+        {/* 11. CTA */}
+        <CTA />
+      </main>
+
       <Footer />
     </div>
   )

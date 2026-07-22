@@ -1,89 +1,103 @@
-"use client";
+"use client"
 
-import { Sparkles, UploadCloud, LayoutTemplate, Download } from "lucide-react";
+import React from "react"
+import { Upload, Sliders, Sparkles, Download, CheckCircle2 } from "lucide-react"
 
-const STEPS = [
+const HOW_IT_WORKS_STEPS = [
   {
-    id: 1,
-    title: "Upload Photos",
-    description: "Select 2 to 4 clear, front-facing photos of your family members. BringBack works with modern portraits, restored old photos, and black-and-white references.",
-    icon: <UploadCloud size={24} className="text-brand-black" />,
+    number: "01",
+    stepTitle: "Upload Individual Portraits",
+    icon: <Upload className="w-6 h-6 text-brand-orange" />,
+    shortDesc: "Upload 2 to 4 separate photos of your family members from smartphone scans or old albums.",
+    detail: "Clear, front-facing photos with visible faces work best for face matching.",
   },
   {
-    id: 2,
-    title: "Choose Canvas",
-    description: "Select the perfect aspect ratio. Choose a wider format for larger groups to ensure a balanced, natural composition.",
-    icon: <LayoutTemplate size={24} className="text-brand-black" />,
+    number: "02",
+    stepTitle: "Choose Canvas & Background",
+    icon: <Sliders className="w-6 h-6 text-indigo-500" />,
+    shortDesc: "Select 4:3, 16:9, or 3:4 canvas aspect ratio and choose a studio or natural backdrop.",
+    detail: "Options include matte black, beige, ambient living room, warm garden, or bokeh background.",
   },
   {
-    id: 3,
-    title: "Generate & Cherish",
-    description: "In about 1 to 2 minutes, BringBack composes a single, harmonious group photo. Download your high-resolution image, ready for sharing or printing.",
-    icon: <Download size={24} className="text-brand-black" />,
-  }
-];
+    number: "03",
+    stepTitle: "AI Matches Lighting & Scale",
+    icon: <Sparkles className="w-6 h-6 text-amber-500" />,
+    shortDesc: "BringBack re-composes everyone into one frame, matching lighting, skin tones, and perspective.",
+    detail: "No harsh cutouts or plastic AI smoothing. Natural film grain and depth of field retained.",
+  },
+  {
+    number: "04",
+    stepTitle: "Download Family Portrait",
+    icon: <Download className="w-6 h-6 text-emerald-500" />,
+    shortDesc: "Preview your combined family portrait side-by-side and download high-res print quality.",
+    detail: "Download print-ready resolution perfect for wall framing or family keepsakes.",
+  },
+]
 
 export default function AIAnimationHowItWorks() {
   return (
-    <section id="how-it-works" className="w-full px-4 sm:px-8 py-24 ">
+    <section id="how-it-works" className="py-24 px-4 sm:px-8 bg-brand-bg">
       <div className="max-w-[1320px] mx-auto">
-
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
-          <div className="max-w-2xl">
-            {/* Badge */}
+        {/* Featured-Snippet Target Header */}
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 mb-14">
+          <div className="max-w-4xl">
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Simple Workflow <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> 4 Simple Steps <span className="text-brand-orange">//</span>
             </div>
-
-            {/* Title */}
-            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black leading-[1.1]">
-              Your Family Portrait <br />
-              <span className="text-gray-400">in 3 Simple Steps.</span>
+            
+            {/* Snippet-Winning H2 */}
+            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
+              How to Create a Family Photo from Individual Photos
             </h2>
           </div>
 
-          {/* Subtitle */}
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Select 2 to 4 clear, front-facing photos. Choose your canvas and studio background. BringBack composes a single, harmonious group photo.
+              Follow these 4 simple steps to combine separate photos into one cohesive, studio-quality family portrait.
             </p>
           </div>
         </div>
 
-        {/* Steps Grid Container - Gray Background */}
-        <div className="bg-brand-surface p-2 rounded-[1.8rem]">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-            {STEPS.map((step) => (
-              <div
-                key={step.id}
-                className="bg-white rounded-[1.5rem] p-8 min-h-[320px] flex flex-col group relative overflow-hidden"
+        {/* Semantic Ordered List for Featured Snippet Parsing */}
+        <div className="bg-brand-surface p-3 sm:p-4 rounded-[2.2rem]">
+          <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 list-none">
+            {HOW_IT_WORKS_STEPS.map((step, idx) => (
+              <li
+                key={idx}
+                className="bg-white rounded-[1.8rem] p-6 sm:p-8 border border-gray-100 shadow-sm flex flex-col justify-between group hover:border-brand-orange/30 transition-all duration-300"
               >
-                {/* Step Number & Icon */}
-                <div className="flex justify-between items-start mb-8">
-                  <div className="w-14 h-14 rounded-2xl bg-[#F2F2F0] flex items-center justify-center transition-colors group-hover:bg-brand-orange/10 group-hover:text-brand-orange">
-                    {step.icon}
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-3xl font-black text-brand-orange tracking-tight">
+                      {step.number}
+                    </span>
+                    <div className="w-11 h-11 rounded-2xl bg-brand-surface border border-gray-100 flex items-center justify-center">
+                      {step.icon}
+                    </div>
                   </div>
-                  <span className="text-7xl font-[800] text-gray-100 leading-none select-none font-sans group-hover:text-gray-200 transition-colors absolute top-4 right-6">
-                    0{step.id}
-                  </span>
-                </div>
 
-                {/* Content */}
-                <div className="mt-auto relative z-10">
-                  <h3 className="text-2xl font-bold text-brand-black mb-3">{step.title}</h3>
-                  <p className="text-gray-600 font-medium leading-relaxed">
-                    {step.description}
+                  <h3 className="text-xl font-extrabold text-brand-black mb-3 leading-snug">
+                    {step.stepTitle}
+                  </h3>
+
+                  <p className="text-gray-700 font-semibold text-sm mb-3 leading-relaxed">
+                    {step.shortDesc}
+                  </p>
+
+                  <p className="text-gray-500 font-medium text-xs leading-relaxed">
+                    {step.detail}
                   </p>
                 </div>
 
-                {/* Hover Effect Decoration */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-              </div>
+                <div className="mt-6 pt-4 border-t border-gray-100 flex items-center gap-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                  <CheckCircle2 size={14} className="text-brand-orange" />
+                  Step {step.number} Complete
+                </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </div>
     </section>
-  );
+  )
 }

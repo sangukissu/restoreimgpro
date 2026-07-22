@@ -97,12 +97,12 @@ export default function FamilyPortraitConversionGuide() {
             <div className="mb-6 inline-flex items-center gap-1 rounded-full bg-brand-black px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-black/10 sm:text-sm">
               <span className="text-brand-orange">//</span> Built for Real Families <span className="text-brand-orange">//</span>
             </div>
-            <h2 className="text-[2.7rem] font-extrabold leading-[1] tracking-tight text-brand-black sm:text-[4rem]">
+            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
               Create a family photo from individual photos.
             </h2>
           </div>
           <p className="max-w-xl text-lg font-medium leading-relaxed text-gray-600">
-            Most merge-photo tools stop at a collage. BringBack creates a new studio-quality family portrait, matching scale, light, color, and composition so the people look photographed together.
+            Most merge-photo tools stop at a cut-and-paste collage. BringBack composes a new studio-quality family portrait, matching scale, light, color, and composition so your family looks photographed together.
           </p>
         </div>
 
