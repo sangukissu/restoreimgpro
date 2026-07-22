@@ -118,7 +118,7 @@ export default function Page() {
       <main>
         {/* 1. Hero */}
         <AIAnimationHero />
-        {/* 2. 6 Real Visual Use Cases with Input Photo Breakdown & Comparison Sliders */}
+        {/* 2. Real Visual Use Cases with Input Photo Breakdown */}
         <FamilyPortraitRealExamples />
         {/* 3. Style Grid */}
         <FamilyPortrait />

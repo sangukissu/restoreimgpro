@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function AIAnimationHero() {
   return (
-    <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 py-12 overflow-visible">
+    <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 pt-32 sm:pt-36 pb-12 overflow-visible">
 
       <div className="flex flex-col items-center text-center z-10 relative">
 

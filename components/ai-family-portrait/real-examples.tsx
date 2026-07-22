@@ -2,7 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import { Users, Heart, Gift, Award, Calendar, Sparkles, ArrowRight, Layers, UserCheck } from "lucide-react"
+import { Users, Heart, Calendar, Sparkles, ArrowRight, Layers, UserCheck } from "lucide-react"
 
 const FAMILY_PORTRAIT_CASES = [
   {
@@ -48,56 +48,18 @@ const FAMILY_PORTRAIT_CASES = [
     category: "Memorial Portrait",
     badgeKeyword: "Add Deceased Relative to Family Portrait",
     icon: <Heart className="w-5 h-5 text-rose-500" />,
-    title: "Add Deceased Grandparents to Living Room Family Sofa Portraits",
+    title: "Add a Deceased Grandfather to a Family Portrait",
     story:
-      "Preserve family legacies by including passed away loved ones with new generations. BringBack matches vintage sepia/B&W tone with modern room lighting so your late grandmother sits naturally beside family.",
-    promptHint: 'Example request: "Add late grandmother seated on sofa with mother, father, and child."',
+      "Preserve family legacies by including a loved one who passed away with new generations. BringBack matches a vintage portrait with modern photos so a late grandfather appears naturally beside his son and grandchildren.",
+    promptHint: 'Example request: "Combine the late grandfather with his son, grandson, and granddaughter in a classic studio portrait."',
     inputs: [
-      { img: "/fp-c3-p1.jpg", label: "Input 1: Late Grandmother" },
-      { img: "/fp-c3-p2.jpg", label: "Input 2: Mother" },
-      { img: "/fp-c3-p3.jpg", label: "Input 3: Father" },
-      { img: "/fp-c3-p4.jpg", label: "Input 4: Child" },
+      { img: "/memorial-family-portrait-father.jpg", label: "Input 1: Father" },
+      { img: "/memorial-family-portrait-son.jpg", label: "Input 2: Son" },
+      { img: "/memorial-family-portrait-daughter.jpg", label: "Input 3: Daughter" },
+      { img: "/memorial-family-portrait-grandfather.jpg", label: "Input 4: Late Grandfather" },
     ],
-    combinedImg: "/fp-c3-combined.jpg",
+    combinedImg: "/memorial-family-portrait-combined.jpg",
     ctaText: "Create Memorial Family Portrait",
-    href: "/dashboard/family-portrait",
-  },
-  {
-    id: "case-4",
-    category: "Holiday & Christmas",
-    badgeKeyword: "Merge Multiple Photos into One Family Picture",
-    icon: <Gift className="w-5 h-5 text-emerald-500" />,
-    title: "Merge Individual Photos into a Cozy Christmas Tree Family Snapshot",
-    story:
-      "When distance or travel prevents family members from gathering for Christmas, merge separate individual photos into one holiday portrait with glowing ambient tree lights.",
-    promptHint: 'Example request: "Merge grandfather, mother, father, and child around the Christmas tree."',
-    inputs: [
-      { img: "/fp-c4-p1.jpg", label: "Input 1: Grandfather" },
-      { img: "/fp-c4-p2.jpg", label: "Input 2: Mother" },
-      { img: "/fp-c4-p3.jpg", label: "Input 3: Father" },
-      { img: "/fp-c4-p4.jpg", label: "Input 4: Child" },
-    ],
-    combinedImg: "/fp-c4-combined.jpg",
-    ctaText: "Merge Photos into Christmas Portrait",
-    href: "/dashboard/family-portrait",
-  },
-  {
-    id: "case-5",
-    category: "Wedding & Milestone",
-    badgeKeyword: "Combine Photos into Milestone Portrait",
-    icon: <Award className="w-5 h-5 text-amber-500" />,
-    title: "Combine Separate Photos for Wedding & Milestone Family Keepsakes",
-    story:
-      "Complete major milestone moments like weddings or graduations so the entire family is represented in formal attire with natural outdoor sunlight and shadow matching.",
-    promptHint: 'Example request: "Combine late father, bride, groom, and mother into formal wedding portrait."',
-    inputs: [
-      { img: "/fp-c5-p1.jpg", label: "Input 1: Late Father" },
-      { img: "/fp-c5-p2.jpg", label: "Input 2: Bride" },
-      { img: "/fp-c5-p3.jpg", label: "Input 3: Groom" },
-      { img: "/fp-c5-p4.jpg", label: "Input 4: Mother" },
-    ],
-    combinedImg: "/fp-c5-combined.jpg",
-    ctaText: "Combine Wedding Family Photos",
     href: "/dashboard/family-portrait",
   },
 ]
