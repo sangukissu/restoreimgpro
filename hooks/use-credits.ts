@@ -96,9 +96,12 @@ export function useCredits(initialCredits?: number) {
   // Set up real-time subscription for credit updates
   useEffect(() => {
     const supabase = createClient()
+    // The current Realtime client reuses channels by topic, so each hook
+    // instance needs its own topic before registering postgres callbacks.
+    const channelName = `credits-updates-${crypto.randomUUID()}`
     
     const channel = supabase
-      .channel('credits-updates')
+      .channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -129,4 +132,4 @@ export function useCredits(initialCredits?: number) {
     checkCredits,
     refreshCredits,
   }
-} 
+}
