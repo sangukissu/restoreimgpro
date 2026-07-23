@@ -42,7 +42,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
           {/* Restore Photo - Large Card (Span 2) - Side by Side Layout */}
-          <Link href="/dashboard/restore" className="group md:col-span-2 bg-white rounded-[1.5rem] p-5 flex flex-col sm:flex-row gap-6 relative hover:scale-[1.01] transition-transform duration-300 items-center">
+          <Link href="/dashboard/restore" prefetch={false} className="group md:col-span-2 bg-white rounded-[1.5rem] p-5 flex flex-col sm:flex-row gap-6 relative hover:scale-[1.01] transition-transform duration-300 items-center">
             {/* Content (Left) */}
             <div className="flex flex-col gap-4 flex-1 h-full justify-between py-2">
               <div>
@@ -83,7 +83,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
           </Link>
 
           {/* Animate Photo - Standard Card (Span 1) */}
-          <Link href="/dashboard/animate" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+          <Link href="/dashboard/animate" prefetch={false} className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             {/* Visual Area - 4:3 Aspect Ratio */}
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-900">
               <video
@@ -121,7 +121,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
           </Link>
 
           {/* Family Portrait */}
-          <Link href="/dashboard/family-portrait" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+          <Link href="/dashboard/family-portrait" prefetch={false} className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             {/* Visual Area - 4:3 Aspect Ratio */}
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
               <img src="/family.webp" alt="Family portrait" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -152,7 +152,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
           </Link>
 
   {/* Add Person */}
-          <Link href="/dashboard/add-person" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+          <Link href="/dashboard/add-person" prefetch={false} className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
               <img src="/add-person.webp" alt="Add person preview" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20" />
@@ -184,7 +184,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
             </div>
           </Link>
           {/* Remove Person */}
-          <Link href="/dashboard/remove-person" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+          <Link href="/dashboard/remove-person" prefetch={false} className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
               <img src="/remove-person.webp" alt="Remove person preview" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute inset-0 bg-black/20" />
@@ -217,7 +217,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
             </div>
           </Link>
           {/* Family Heritage Book */}
-          <Link href="/dashboard/memory-book" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+          <Link href="/dashboard/memory-book" prefetch={false} className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             {/* Visual Area - 4:3 Aspect Ratio */}
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gradient-to-br from-[#f5ebd7] to-[#e6d5b8]">
               <img src="/digital-frame.webp" alt="Family Heritage book" className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" />
@@ -242,7 +242,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
           </Link>
 
           {/* Nostalgic Hug */}
-          <Link href="/dashboard/nostalgic-hug" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+          <Link href="/dashboard/nostalgic-hug" prefetch={false} className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             {/* Visual Area - 4:3 Aspect Ratio */}
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-900">
               <iframe
@@ -277,7 +277,7 @@ export default function MainDashboardClient({ user, initialCredits, isPaymentSuc
             </div>
           </Link>
                     {/* Digital Frame */}
-          <Link href="/dashboard/editor" className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
+          <Link href="/dashboard/editor" prefetch={false} className="group bg-white rounded-[1.5rem] p-5 flex flex-col gap-5 relative hover:scale-[1.01] transition-transform duration-300">
             {/* Visual Area - 4:3 Aspect Ratio */}
             <div className="w-full aspect-[4/3] rounded-[1.2rem] overflow-hidden border border-gray-100 shadow-inner relative bg-gray-50">
               <img src="/digital-frame.webp" alt="Digital frame" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />

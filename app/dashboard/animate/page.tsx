@@ -1,6 +1,7 @@
 import AnimateDashboardClient from "@/components/animate-dashboard-client"
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export default async function AnimatePage({ 
   searchParams, 
@@ -9,9 +10,7 @@ export default async function AnimatePage({
 }) {
   const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
 
   if (!user) {
     redirect("/login")

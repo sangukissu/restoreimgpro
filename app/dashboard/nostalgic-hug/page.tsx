@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 import NostalgicHugClient from "@/components/nostalgic-hug-client"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export default async function NostalgicHugPage({
     searchParams,
@@ -9,9 +10,7 @@ export default async function NostalgicHugPage({
 }) {
     const supabase = await createClient()
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
+    const user = await getDashboardIdentity()
 
     if (!user) {
         return redirect("/login")

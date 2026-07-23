@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import { DeleteAccountClient } from "@/components/account/delete-account-client"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export const metadata = {
   title: "Delete account | BringBack",
@@ -9,9 +10,7 @@ export const metadata = {
 
 export default async function DeleteAccountPage() {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
   if (!user || !user.email) {
     redirect("/login")
   }

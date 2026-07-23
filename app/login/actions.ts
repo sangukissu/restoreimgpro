@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
+import { sanitizeAuthDestination } from '@/lib/auth/redirect'
 
 export interface AuthState {
   error?: string
@@ -15,6 +16,9 @@ export async function signInWithMagicLink(
   const supabase = await createClient()
   const email = formData.get('email') as string
   const captchaToken = (formData.get('captchaToken') as string) || undefined
+  const nextPath = sanitizeAuthDestination(formData.get('next') as string | null)
+  const callbackUrl = new URL('/auth/callback', process.env.NEXT_PUBLIC_SITE_URL!)
+  callbackUrl.searchParams.set('next', nextPath)
 
   // Process magic link request
 
@@ -23,7 +27,7 @@ export async function signInWithMagicLink(
       email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/dashboard`,
+        emailRedirectTo: callbackUrl.toString(),
         captchaToken,
       },
     })
@@ -38,15 +42,18 @@ export async function signInWithMagicLink(
   }
 }
 
-export async function signInWithGoogle(): Promise<void> {
+export async function signInWithGoogle(next?: string): Promise<void> {
   const supabase = await createClient()
+  const nextPath = sanitizeAuthDestination(next)
+  const callbackUrl = new URL('/auth/callback', process.env.NEXT_PUBLIC_SITE_URL!)
+  callbackUrl.searchParams.set('next', nextPath)
 
   // Start Google OAuth
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/dashboard`,
+      redirectTo: callbackUrl.toString(),
     },
   })
 

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import DashboardClient from "@/components/dashboard-client"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export default async function Dashboard({
   searchParams,
@@ -9,9 +10,7 @@ export default async function Dashboard({
 }) {
   const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
 
   if (!user) {
     redirect("/login")

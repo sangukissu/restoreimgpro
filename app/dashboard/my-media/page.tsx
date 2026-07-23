@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import MyMediaClient from "@/components/my-media-client";
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity";
 
 export default async function MyMediaPage({
   searchParams,
@@ -9,8 +10,8 @@ export default async function MyMediaPage({
 }) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
+  const user = await getDashboardIdentity();
+  if (!user) {
     redirect("/login");
   }
 
@@ -18,7 +19,7 @@ export default async function MyMediaPage({
   const { data: profile } = await supabase
     .from("user_profiles")
     .select("credits")
-    .eq("user_id", data.user.id)
+    .eq("user_id", user.id)
     .single();
 
   const credits = profile?.credits || 0;
@@ -27,14 +28,14 @@ export default async function MyMediaPage({
   const { data: videos } = await supabase
     .from("video_generations")
     .select("id, video_url, preset_name, created_at, status")
-    .eq("user_id", data.user.id)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   // Fetch Nostalgic Hug videos
   const { data: nostalgicVideos } = await supabase
     .from("nostalgic_hug_generations")
     .select("id, video_url, created_at, status")
-    .eq("user_id", data.user.id)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   // Fetch Image Restorations — only completed rows with a real output URL.
@@ -42,7 +43,7 @@ export default async function MyMediaPage({
   const { data: restoredImages } = await supabase
     .from("image_restorations")
     .select("id, restored_image_url, created_at, status")
-    .eq("user_id", data.user.id)
+    .eq("user_id", user.id)
     .eq("status", "completed")
     .not("restored_image_url", "is", null)
     .order("created_at", { ascending: false });
@@ -51,21 +52,21 @@ export default async function MyMediaPage({
   const { data: familyPortraits } = await supabase
     .from("family_portraits")
     .select("id, composed_image_url, created_at, status")
-    .eq("user_id", data.user.id)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   // Fetch Add Person generations
   const { data: addPersonImages } = await supabase
     .from("add_person_generations")
     .select("id, composed_image_url, created_at, status")
-    .eq("user_id", data.user.id)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   // Fetch Remove Person/Object generations
   const { data: removePersonImages } = await supabase
     .from("remove_person_generations")
     .select("id, result_image_url, created_at, status")
-    .eq("user_id", data.user.id)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   // Combine and sort videos
@@ -115,7 +116,7 @@ export default async function MyMediaPage({
 
   return (
     <MyMediaClient
-      user={{ email: data.user.email || "", id: data.user.id }}
+      user={{ email: user.email, id: user.id }}
       initialCredits={credits}
       isPaymentSuccess={isPaymentSuccess}
       videos={allVideos}

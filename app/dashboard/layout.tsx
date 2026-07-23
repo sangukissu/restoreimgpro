@@ -6,6 +6,7 @@ import { Suspense } from "react"
 import { DashboardSkeleton } from "@/components/ui/skeleton"
 import PaymentController from "@/components/dashboard/payment-controller"
 import { ExitIntentPopup, TrustpilotReviewPrompt } from "@/components/exit-intent-popup"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 // Dashboard hosts interactive tool flows, chat/dialogue states and user sessions.
 // Keep these out of the index to prevent crawl leak / session indexing.
@@ -22,10 +23,9 @@ export default async function DashboardLayout({
 }) {
   const supabase = await createClient()
 
-  // Check if user is authenticated
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
 
-  if (error || !user) {
+  if (!user) {
     redirect("/login")
   }
 

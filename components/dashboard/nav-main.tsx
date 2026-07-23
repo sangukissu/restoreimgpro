@@ -27,7 +27,11 @@ export function NavMain({
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
-              <Link href={item.url} className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+              <Link
+                href={item.url}
+                prefetch={false}
+                className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+              >
                 <item.icon />
                 <span>{item.title}</span>
               </Link>

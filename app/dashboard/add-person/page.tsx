@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import AddPersonDashboardClient from "@/components/add-person-dashboard-client"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export const metadata = {
   title: "Add Person to Photo | BringBack",
@@ -13,9 +14,7 @@ export default async function AddPersonPage({
   searchParams: Promise<{ payment?: string }>
 }) {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
 
   if (!user) {
     redirect("/login")

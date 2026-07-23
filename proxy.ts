@@ -78,7 +78,8 @@ export async function proxy(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith('/dashboard') ||
     request.nextUrl.pathname.startsWith('/admin') ||
-    request.nextUrl.pathname.startsWith('/api/admin')
+    request.nextUrl.pathname.startsWith('/api/admin') ||
+    request.nextUrl.pathname === '/login'
   ) {
     return await updateSession(request)
   }

@@ -10,6 +10,7 @@ import { buildMemoryBookSharePath } from "@/lib/memory-book/share-slug"
 import { isMemoryBookEnabled } from "@/lib/memory-book/feature"
 import { createClient } from "@/utils/supabase/server"
 import { supabaseAdmin } from "@/utils/supabase/admin"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export default async function MemoryBookCuratorPage({
   params,
@@ -17,9 +18,7 @@ export default async function MemoryBookCuratorPage({
   params: Promise<{ id: string }>
 }) {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
   if (!user) redirect("/login")
   if (!isMemoryBookEnabled(user.id, user.email)) redirect("/dashboard")
 

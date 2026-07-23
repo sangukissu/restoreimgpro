@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import FamilyPortraitDashboardClient from "@/components/family-portrait-dashboard-client"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export const metadata = {
   title: "Family Portrait – Combine Individual Photos | BringBack",
@@ -15,9 +16,7 @@ export default async function FamilyPortraitPage({
 }) {
   const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
 
   if (!user) {
     redirect("/login")

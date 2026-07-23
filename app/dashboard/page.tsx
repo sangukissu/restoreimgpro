@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import MainDashboardClient from "@/components/main-dashboard-client"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export default async function DashboardPage({
   searchParams,
@@ -8,9 +9,7 @@ export default async function DashboardPage({
   searchParams: Promise<{ payment?: string }>
 }) {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
 
   if (!user) {
     redirect("/login")

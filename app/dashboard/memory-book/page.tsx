@@ -4,6 +4,7 @@ import { isMemoryBookEnabled } from "@/lib/memory-book/feature"
 import { buildMemoryBookSharePath } from "@/lib/memory-book/share-slug"
 import type { MemoryBookSummary } from "@/lib/memory-book/types"
 import { createClient } from "@/utils/supabase/server"
+import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export const metadata = {
   title: "Memory Books | BringBack Dashboard",
@@ -28,9 +29,7 @@ export default async function MemoryBookPage({
   }>
 }) {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getDashboardIdentity()
 
   if (!user) {
     redirect("/login")
