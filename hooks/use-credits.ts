@@ -97,7 +97,7 @@ export function useCredits(initialCredits?: number) {
   useEffect(() => {
     const supabase = createClient()
     // The current Realtime client reuses channels by topic, so each hook
-    // instance needs its own topic before registering postgres callbacks.
+    // instance needs its own topic before registering postgres callbacks safely.
     const channelName = `credits-updates-${crypto.randomUUID()}`
     
     const channel = supabase
