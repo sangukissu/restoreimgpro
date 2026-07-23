@@ -75,6 +75,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // Apply Supabase session middleware for protected routes
+  // Keep authentication routing centralized for every protected application surface.
   if (
     request.nextUrl.pathname.startsWith('/dashboard') ||
     request.nextUrl.pathname.startsWith('/admin') ||
