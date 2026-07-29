@@ -2,49 +2,58 @@
 
 import React from "react"
 import { Check, Sparkles, ShieldCheck, Zap, Coins, UserPlus, MousePointer2 } from "lucide-react"
+import { FEATURE_CREDIT_COSTS, PUBLIC_PLANS, formatCredits } from "@/lib/pricing"
+
+const starter = PUBLIC_PLANS.find((p) => p.tier === "starter")
+const addPersonCredits = FEATURE_CREDIT_COSTS.addPerson.credits
+/** Rough per-edit cost on the starter pack (2 credits per add-person run). */
+const approxPerEdit =
+  starter != null
+    ? `About $${((starter.priceUsd / starter.credits) * addPersonCredits).toFixed(2)}`
+    : "Paid credits"
 
 const FEATURES = [
   {
-    label: "Compositing Quality",
+    label: "How natural it looks",
     icon: <Sparkles size={18} />,
-    bringback: "Automated, AI Harmonized",
-    manual: "High (Skill Dependent)",
-    free: "Harsh Cutouts / Unnatural",
+    bringback: "Blends into the photo",
+    manual: "Great if you know Photoshop",
+    free: "Often looks pasted on",
   },
   {
-    label: "Lighting & Shadow Matching",
+    label: "Light and shadows",
     icon: <UserPlus size={18} />,
-    bringback: "Automatic Shadow Vectors",
-    manual: "Manual Layer Shading",
-    free: "None (Flat Pasted)",
+    bringback: "Matched for you",
+    manual: "You paint them by hand",
+    free: "Usually none",
   },
   {
-    label: "Film Grain Harmonization",
+    label: "Grain and texture",
     icon: <ShieldCheck size={18} />,
-    bringback: "ISO Noise Matching",
-    manual: "Manual Noise Filter",
-    free: "Mismatched Noise",
+    bringback: "Closer to the original print",
+    manual: "You add filters yourself",
+    free: "Often mismatches",
   },
   {
-    label: "Turnaround Time",
+    label: "How long it takes",
     icon: <Zap size={18} />,
-    bringback: "< 60 Seconds",
-    manual: "Hours to Days",
-    free: "Instant (Low Quality)",
+    bringback: "About a minute",
+    manual: "Hours to days",
+    free: "Instant, but rough",
   },
   {
-    label: "Cost Per Edit",
+    label: "Cost per edit",
     icon: <Coins size={18} />,
-    bringback: "~$2 (Affordable)",
-    manual: "$20 - $50+ Per Edit",
-    free: "Free (Watermarked)",
+    bringback: `${approxPerEdit} (${formatCredits(addPersonCredits)})`,
+    manual: "$20–$50+ if you hire someone",
+    free: "Free, often watermarked",
   },
   {
-    label: "Ease of Use",
+    label: "Skill needed",
     icon: <MousePointer2 size={18} />,
-    bringback: "Upload & Click",
-    manual: "Pro Software Needed",
-    free: "Manual Crop",
+    bringback: "Upload and go",
+    manual: "Pro software skill",
+    free: "Crop and paste",
   },
 ]
 
@@ -56,20 +65,23 @@ export function AddPersonComparison() {
   return (
     <section id="comparison" className="w-full px-4 sm:px-8 py-24 bg-brand-bg">
       <div className="max-w-[1320px] mx-auto">
-        {/* Left-Aligned Header System */}
+        {/* Header — same system as other add-person sections */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Competitor Analysis <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> Compare Options{" "}
+              <span className="text-brand-orange">//</span>
             </div>
             <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              Why BringBack is <br />
-              <span className="text-gray-400">the smartest choice.</span>
+              How this compares
+              <br />
+              <span className="text-gray-400">to other options</span>
             </h2>
           </div>
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              We compared multi-photo compositing options so you don't have to spend hours in complex software.
+              Side-by-side: BringBack, hiring a Photoshop editor, and free cutout apps—on quality,
+              time, cost, and how much skill you need.
             </p>
           </div>
         </div>
@@ -79,7 +91,7 @@ export function AddPersonComparison() {
           {/* Feature Labels */}
           <div className="w-[25%] flex flex-col">
             <div className={`${HEADER_HEIGHT} flex items-end pb-8 pl-8 border-b border-transparent`}>
-              <h4 className="text-gray-400 font-bold text-sm uppercase tracking-widest">Feature</h4>
+              <h4 className="text-gray-400 font-bold text-sm uppercase tracking-widest">What matters</h4>
             </div>
             {FEATURES.map((f, i) => (
               <div key={i} className={`${ROW_HEIGHT} flex items-center gap-3 pl-8 border-b border-gray-200/50`}>
@@ -88,11 +100,11 @@ export function AddPersonComparison() {
               </div>
             ))}
             <div className={`${FOOTER_HEIGHT} flex items-center pl-8`}>
-              <span className="font-extrabold text-xl text-gray-900">Final Verdict</span>
+              <span className="font-extrabold text-xl text-gray-900">Bottom line</span>
             </div>
           </div>
 
-          {/* BringBack AI */}
+          {/* BringBack */}
           <div className="w-[30%] bg-white rounded-[2.5rem] shadow-xs border border-gray-100 relative z-20">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-1.5 bg-brand-orange rounded-b-full"></div>
             <div className={`${HEADER_HEIGHT} flex flex-col items-start justify-end pb-8 border-b border-gray-100 pl-8`}>
@@ -100,7 +112,7 @@ export function AddPersonComparison() {
                 <div className="w-8 h-8 bg-brand-black rounded-lg flex items-center justify-center text-white">
                   <Sparkles size={16} fill="currentColor" />
                 </div>
-                <span className="font-extrabold text-2xl tracking-tight text-brand-black">BringBack AI</span>
+                <span className="font-extrabold text-2xl tracking-tight text-brand-black">BringBack</span>
               </div>
               <div className="bg-green-100 text-green-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                 Recommended
@@ -117,14 +129,14 @@ export function AddPersonComparison() {
               </div>
             ))}
             <div className={`${FOOTER_HEIGHT} flex items-center justify-start pl-8`}>
-              <span className="font-extrabold text-xl text-brand-orange">Fast &amp; Seamless</span>
+              <span className="font-extrabold text-xl text-brand-orange">Fast and simple</span>
             </div>
           </div>
 
           {/* Manual Photoshop */}
           <div className="w-[22.5%] flex flex-col opacity-60">
             <div className={`${HEADER_HEIGHT} flex items-end justify-start pb-8 border-b border-transparent pl-6`}>
-              <h4 className="font-bold text-lg text-brand-black">Photoshop / Forums</h4>
+              <h4 className="font-bold text-lg text-brand-black">Photoshop / a pro editor</h4>
             </div>
             {FEATURES.map((f, i) => (
               <div key={i} className={`${ROW_HEIGHT} flex items-center justify-start border-b border-gray-200/50 text-left pl-6 px-2`}>
@@ -132,14 +144,14 @@ export function AddPersonComparison() {
               </div>
             ))}
             <div className={`${FOOTER_HEIGHT} flex items-center justify-start pl-6`}>
-              <span className="font-bold text-sm text-gray-500">Slow &amp; Expensive</span>
+              <span className="font-bold text-sm text-gray-500">Best quality if you have time or budget</span>
             </div>
           </div>
 
           {/* Basic Cutout Apps */}
           <div className="w-[22.5%] flex flex-col opacity-60">
             <div className={`${HEADER_HEIGHT} flex items-end justify-start pb-8 border-b border-transparent pl-6`}>
-              <h4 className="font-bold text-lg text-brand-black">Basic Cutout Apps</h4>
+              <h4 className="font-bold text-lg text-brand-black">Basic cutout apps</h4>
             </div>
             {FEATURES.map((f, i) => (
               <div key={i} className={`${ROW_HEIGHT} flex items-center justify-start border-b border-gray-200/50 text-left pl-6 px-2`}>
@@ -147,7 +159,7 @@ export function AddPersonComparison() {
               </div>
             ))}
             <div className={`${FOOTER_HEIGHT} flex items-center justify-start pl-6`}>
-              <span className="font-bold text-sm text-gray-500">Unnatural Cutouts</span>
+              <span className="font-bold text-sm text-gray-500">Cheap, but usually looks fake</span>
             </div>
           </div>
         </div>
@@ -160,13 +172,18 @@ export function AddPersonComparison() {
                 <Sparkles size={20} fill="currentColor" />
               </div>
               <div>
-                <h3 className="font-extrabold text-2xl text-brand-black leading-none">BringBack AI</h3>
-                <span className="text-xs font-bold text-green-600 uppercase tracking-wide">Winner</span>
+                <h3 className="font-extrabold text-2xl text-brand-black leading-none">BringBack</h3>
+                <span className="text-xs font-bold text-green-600 uppercase tracking-wide">
+                  Recommended
+                </span>
               </div>
             </div>
             <div className="space-y-5">
               {FEATURES.map((f, i) => (
-                <div key={i} className="flex justify-between items-center border-b border-gray-100 pb-3 last:border-0">
+                <div
+                  key={i}
+                  className="flex justify-between items-center border-b border-gray-100 pb-3 last:border-0 gap-4"
+                >
                   <span className="text-gray-500 font-medium text-sm">{f.label}</span>
                   <span className="font-bold text-brand-black text-right text-sm">{f.bringback}</span>
                 </div>

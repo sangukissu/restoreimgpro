@@ -8,14 +8,12 @@ const REAL_EXAMPLES = [
   {
     id: "wedding",
     category: "Wedding Memorial",
-    badgeKeyword: "Wedding Photo Memorial",
     icon: <Heart className="w-5 h-5 text-rose-500" />,
     title: "Add a Passed Parent or Grandparent to Your Wedding Album",
     story:
       "When a parent or grandparent passes away before your wedding day, BringBack places them beside the bride or groom in their formal attire. We match outdoor sunlight, shadows, and camera angles so the memory feels complete.",
     beforeImg: "/wedding-before-exact.jpg",
     afterImg: "/wedding-composite.jpg",
-    personToAddImg: "/avatar-wedding-father.jpg",
     personToAddLabel: "Late Father's Photo",
     ctaText: "Add Loved One to Wedding Photo",
     href: "/dashboard/add-person",
@@ -23,14 +21,12 @@ const REAL_EXAMPLES = [
   {
     id: "reunion",
     category: "Family Reunion",
-    badgeKeyword: "Absent Relative Addition",
     icon: <Calendar className="w-5 h-5 text-amber-500" />,
     title: "Add Relatives Who Couldn't Attend the Family Gathering",
     story:
       "Work, travel, or distance shouldn't leave family members out of reunion group pictures. Upload their individual portrait and your porch snapshot—our AI integrates them seamlessly into the group shot.",
     beforeImg: "/reunion-before-exact.jpg",
     afterImg: "/reunion-after-exact.jpg",
-    personToAddImg: "/avatar-reunion-sibling.jpg",
     personToAddLabel: "Absent Sibling Photo",
     ctaText: "Add Relative to Reunion Photo",
     href: "/dashboard/add-person",
@@ -38,14 +34,12 @@ const REAL_EXAMPLES = [
   {
     id: "memorial",
     category: "Generational Keepsake",
-    badgeKeyword: "Multi-Generation Family Sofa",
     icon: <Users className="w-5 h-5 text-indigo-500" />,
     title: "Place Grandparents on the Living Room Sofa with Great-Grandchildren",
     story:
       "Reunite multi-generational families in a warm indoor setting. Place a late grandparent on the sofa alongside new family members, matching soft lamp lighting, skin tones, and natural seated postures.",
     beforeImg: "/memorial-before-exact.jpg",
     afterImg: "/memorial-composite.jpg",
-    personToAddImg: "/avatar-memorial-grandmother.jpg",
     personToAddLabel: "Grandmother's Portrait",
     ctaText: "Create Family Sofa Portrait",
     href: "/dashboard/add-person",
@@ -53,14 +47,12 @@ const REAL_EXAMPLES = [
   {
     id: "christmas",
     category: "Holiday Snapshot",
-    badgeKeyword: "Christmas Tree Family Merge",
     icon: <Gift className="w-5 h-5 text-emerald-500" />,
     title: "Merge Loved Ones into Christmas & Holiday Family Snapshots",
     story:
       "Holidays are when missing family members are remembered most. BringBack seamlessly places loved ones into Christmas tree snapshots, harmonizing warm ambient holiday lighting.",
     beforeImg: "/christmas-before-exact.jpg",
     afterImg: "/christmas-composite.jpg",
-    personToAddImg: "/avatar-christmas-grandfather.jpg",
     personToAddLabel: "Grandfather's Photo",
     ctaText: "Add Loved One to Holiday Photo",
     href: "/dashboard/add-person",
@@ -68,14 +60,12 @@ const REAL_EXAMPLES = [
   {
     id: "milestone",
     category: "Graduation & Milestone",
-    badgeKeyword: "Milestone Celebration",
     icon: <Award className="w-5 h-5 text-blue-500" />,
     title: "Complete Graduation & Milestone Photos with Both Parents Present",
     story:
       "Ensure major milestones like graduations feature both parents together. Our AI balances skin tones, clothing exposure, and shoulder angles automatically.",
     beforeImg: "/graduation-before-exact.jpg",
     afterImg: "/graduation-after-exact.jpg",
-    personToAddImg: "/avatar-graduation-father.jpg",
     personToAddLabel: "Parent's Photo",
     ctaText: "Combine Photos for Graduation",
     href: "/dashboard/add-person",
@@ -85,7 +75,6 @@ const REAL_EXAMPLES = [
 interface AddPersonSliderProps {
   beforeImg: string
   afterImg: string
-  personToAddImg: string
   personToAddLabel: string
   title: string
 }
@@ -93,8 +82,6 @@ interface AddPersonSliderProps {
 function AddPersonSlider({
   beforeImg,
   afterImg,
-  personToAddImg,
-  personToAddLabel,
   title,
 }: AddPersonSliderProps) {
   const [sliderPosition, setSliderPosition] = useState(50)
@@ -143,28 +130,17 @@ function AddPersonSlider({
       </div>
 
       {/* Badges */}
-      <div className="absolute top-4 left-4 bg-black/80 backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold tracking-widest uppercase z-20">
+      <div className="absolute top-4 left-4 bg-black/80 text-white px-3 py-1 rounded-md text-xs `tracking-widest uppercase z-20">
         Original Base Photo
       </div>
 
-      <div className="absolute top-4 right-4 bg-brand-orange backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold tracking-widest uppercase z-20 flex items-center gap-1.5 shadow-md">
-        <Sparkles size={13} />
+      <div className="absolute top-4 right-4 bg-brand-orange backdrop-blur text-white px-3 py-1 rounded-md text-xs tracking-widest uppercase z-20 flex items-center gap-1.5">
         Loved One Added
       </div>
 
-      {/* Reference Person to Add Avatar Pill */}
-      <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/80 shadow-md flex items-center gap-2.5 z-20">
-        <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-brand-orange shrink-0">
-          <img src={personToAddImg} alt={personToAddLabel} className="w-full h-full object-cover" />
-        </div>
-        <div className="text-left">
-          <span className="block text-[9px] font-bold text-brand-orange uppercase leading-none">Person to Add</span>
-          <span className="text-xs font-extrabold text-brand-black">{personToAddLabel}</span>
-        </div>
-      </div>
 
       {/* Interactive Hint */}
-      <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur text-white px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider z-20 pointer-events-none opacity-80 group-hover:opacity-0 transition-opacity">
+      <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur text-white px-3 py-1 rounded-lg text-xs uppercase tracking-wider z-20 pointer-events-none">
         Drag slider to compare
       </div>
     </div>
@@ -179,11 +155,11 @@ export function AddPersonRealExamples() {
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 mb-16">
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Interactive Comparison Sliders <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> USE CASES <span className="text-brand-orange">//</span>
             </div>
-            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              Add a Person to Family <br />
-              <span className="text-gray-400">Photos with AI</span>
+            <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
+             Common Uses of BringBack AI <br />
+              <span className="text-gray-400"> to Add People</span>
             </h2>
           </div>
           <div className="max-w-sm">
@@ -203,20 +179,7 @@ export function AddPersonRealExamples() {
                   key={ex.id}
                   className="bg-white rounded-[1.8rem] p-6 lg:p-10 border border-gray-100 shadow-sm transition-all hover:shadow-md"
                 >
-                  {/* Category & Targeted Keyword Badge */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-gray-100 pb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-brand-surface border border-gray-100 flex items-center justify-center">
-                        {ex.icon}
-                      </div>
-                      <span className="text-xs font-bold uppercase tracking-wider bg-brand-surface px-3 py-1 rounded-full text-gray-700">
-                        {ex.category}
-                      </span>
-                    </div>
-                    <span className="text-xs font-bold text-brand-orange bg-brand-orange/10 px-3 py-1 rounded-full">
-                      {ex.badgeKeyword}
-                    </span>
-                  </div>
+                  
 
                   <div className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} gap-8 lg:gap-12 items-center`}>
                     {/* Visual Interactive Comparison Slider - Spans Half Width */}
@@ -224,7 +187,6 @@ export function AddPersonRealExamples() {
                       <AddPersonSlider
                         beforeImg={ex.beforeImg}
                         afterImg={ex.afterImg}
-                        personToAddImg={ex.personToAddImg}
                         personToAddLabel={ex.personToAddLabel}
                         title={ex.title}
                       />
@@ -232,6 +194,14 @@ export function AddPersonRealExamples() {
 
                     {/* Story & CTA Content - Spans Half Width */}
                     <div className="flex-1 w-full text-left flex flex-col justify-between">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-9 h-9 rounded-xl bg-brand-surface border border-gray-100 flex items-center justify-center">
+                        {ex.icon}
+                      </div>
+                      <span className="text-xs font-bold uppercase tracking-wider bg-brand-surface px-3 py-1 rounded-full text-gray-700">
+                        {ex.category}
+                      </span>
+                    </div>
                       <div>
                         <h3 className="text-2xl font-extrabold text-brand-black mb-3 leading-tight">
                           {ex.title}

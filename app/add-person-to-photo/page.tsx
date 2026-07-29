@@ -14,7 +14,7 @@ import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Add Deceased Loved One to Photo AI | Combine Separate Family Photos | BringBack",
+  title: "Add a Person to Photo AI | Insert Missing Person in Family Photos | BringBack",
   description:
     "Add a deceased loved one, late parent, or missing family member into a wedding, memorial, or family portrait with AI. Natural lighting, matched skin tones, and real before & after results.",
   keywords: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     canonical: "https://bringback.pro/add-person-to-photo",
   },
   openGraph: {
-    title: "Add Deceased Loved One to Photo AI | BringBack",
+    title: "Add a Person to Photo AI | BringBack",
     description:
       "Combine separate photos of relatives into a single cohesive family portrait with natural AI lighting and skin tone matching.",
     url: "https://bringback.pro/add-person-to-photo",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Add deceased loved one to family photo before and after composite",
+        alt: "Add a person to family photo before and after composite",
       },
     ],
   },
@@ -52,9 +52,9 @@ const webAppJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "@id": "https://bringback.pro/add-person-to-photo#webapp",
-  name: "BringBack Add Deceased Loved One to Photo AI",
+  name: "BringBack Add a Person to Photo AI",
   description:
-    "Add a deceased loved one or missing relative into a wedding, memorial, or family portrait with matched lighting.",
+    "Add a missing person or deceased loved one into a wedding, memorial, or family portrait with matched lighting.",
   url: "https://bringback.pro/add-person-to-photo",
   applicationCategory: "PhotoEditingApplication",
   operatingSystem: "Web",
@@ -147,7 +147,7 @@ export default function AddPersonToPhotoPage() {
         <AddPersonHowItWorks />
         {/* 4. Human-First Guide & Best Source Tips */}
         <AddPersonGuide />
-        {/* 5. 4 Pillars of Natural Blending */}
+        {/* What we match so an added person looks natural */}
         <AddPersonHarmonizationGuide />
         {/* 6. Competitor Comparison Matrix */}
         <AddPersonComparison />
