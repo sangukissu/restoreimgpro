@@ -46,8 +46,8 @@ function buildPrompt(placement: Placement, context: string) {
 
   return `[TASK: TIGHT PROXIMITY IMAGE COMPOSITION & CONTEXTUAL INSERTION]
 
-INPUT_A (Base Scene Group Photo): {{BASE_IMAGE}}
-INPUT_B (Individual to Insert): {{INSERT_SUBJECT_IMAGE}}
+INPUT_A (Base Scene Group Photo)
+INPUT_B (Individual to Insert)
 Placement: ${placementDirective(placement)}. ${contextDirective}
 
 [1. COMPACT LAYOUT & SPATIAL ARCHITECTURE]
