@@ -86,7 +86,9 @@ export default function FamilyPortraitFAQ() {
             </h2>
 
             <p className="max-w-md text-lg font-medium leading-relaxed text-gray-600">
-              Practical answers for creating a natural AI family portrait from separate photos.
+              Practical answers about our{" "}
+              <strong className="font-extrabold text-brand-black">AI family photo generator</strong>
+              {" "}— how references work, styles, pets, pricing, and privacy.
             </p>
           </div>
 

@@ -18,7 +18,7 @@ const REASONS = [
     badge: "Likeness-first",
     title: "One composed scene — not a pasted collage",
     description:
-      "BringBack builds a true group portrait from your references — one shared scene with unified lighting, color, and perspective. Faces stay recognizable, and the result feels like a real family photo, not cutouts dropped on a background.",
+      "BringBack builds true AI family photos from your references — one shared scene with unified lighting, color, and perspective. Faces stay recognizable, and the result feels like a real family sitting together, not cutouts on a background.",
   },
   {
     icon: Frame,
@@ -55,14 +55,14 @@ export default function FamilyPortraitUseCases() {
             <h2 className="text-[2.25rem] font-[850] leading-[1.05] tracking-tighter text-brand-black sm:text-[3.25rem] sm:leading-[0.95] lg:text-[3.75rem] xl:text-[4rem]">
               Why choose BringBack for
               <br />
-              <span className="text-gray-400">AI family portraits.</span>
+              <span className="text-gray-400">AI family photos.</span>
             </h2>
           </div>
 
           <div className="max-w-sm">
             <p className="text-lg font-medium leading-relaxed text-gray-600">
               Not another generic merge app. True group composition, real creative controls,
-              transparent credits, and family photos that stay private under your account.
+              transparent credits, and private results you control in My Media.
             </p>
           </div>
         </div>

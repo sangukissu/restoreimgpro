@@ -22,13 +22,15 @@ import { FEATURE_CREDIT_COSTS, STARTER_PLAN } from "@/lib/pricing"
 const THEME_COUNT = FAMILY_PORTRAIT_THEMES.length
 
 export const metadata: Metadata = {
-  title: "AI Family Portrait Generator | Combine Up to 8 Photos",
+  title: "AI Family Portrait Generator | Combine Separate Photos into One",
   description:
     `Combine up to 8 separate family photos into one AI portrait. Choose from ${THEME_COUNT} curated themes, include pets, control clothing, and select the canvas.`,
   keywords: [
     "ai family portrait generator",
+    "ai family photo generator",
+    "ai family photos",
+    "family photo ai",
     "combine separate photos into one family portrait",
-    "generational family portrait generator",
     "create family photo from individual photos",
     "memorial family portrait",
   ],
@@ -43,7 +45,7 @@ export const metadata: Metadata = {
     url: "https://bringback.pro/ai-family-portrait",
     images: [
       {
-        url: "/og-image.png",
+        url: "/family-og.png",
         width: 1200,
         height: 630,
         alt: "AI family portrait created from separate individual photos",

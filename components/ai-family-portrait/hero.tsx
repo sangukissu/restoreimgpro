@@ -11,7 +11,7 @@ export default function AIAnimationHero() {
 
           {/* Badge */}
           <div className="mb-8 inline-flex items-center gap-1 rounded-full bg-brand-black px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-black/10 sm:text-sm">
-            <span className="text-brand-orange">//</span> Studio Family Portrait <span className="text-brand-orange">//</span>
+            <span className="text-brand-orange">//</span> FAMILY PHOTO AI <span className="text-brand-orange">//</span>
           </div>
 
           {/* Heading */}
@@ -22,7 +22,9 @@ export default function AIAnimationHero() {
 
           {/* Subheading */}
           <p className="mb-10 max-w-xl text-lg font-medium leading-relaxed text-gray-600 sm:text-xl">
-            Upload up to 8 family reference photos, choose from 24 curated portrait themes, and include the people and pets who belong in the scene. BringBack creates one new shared portrait rather than a pasted collage.
+            Upload up to 8 family reference photos, choose from 24 curated portrait themes, and include
+            the people and pets who belong in the scene. BringBack creates one new shared portrait
+            rather than a pasted collage.
           </p>
 
           {/* CTA Buttons - Exact Match */}

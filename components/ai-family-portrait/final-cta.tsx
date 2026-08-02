@@ -9,13 +9,15 @@ export function FamilyPortraitFinalCTA() {
         <div className="grid overflow-hidden rounded-[1.55rem] bg-white lg:grid-cols-[0.92fr_1.08fr] sm:rounded-[2.35rem]">
           <div className="flex flex-col justify-center px-6 py-12 sm:px-10 sm:py-16 lg:px-14 xl:px-16">
             <p className="mb-5 text-sm font-extrabold uppercase tracking-[0.16em] text-brand-orange">
-              AI Family Portrait Studio
+              Family Photo AI
             </p>
             <h2 className="max-w-xl text-[2.5rem] font-[850] leading-[0.98] tracking-tighter text-brand-black sm:text-[3.5rem] lg:text-[4rem]">
               Ready to Bring Everyone Into One Portrait?
             </h2>
             <p className="mt-6 max-w-lg text-lg font-medium leading-relaxed text-gray-600">
-              Upload separate family photos and create one shared portrait.
+              Upload separate photos and create one shared set of{" "}
+              <strong className="font-extrabold text-brand-black">AI family photos</strong>{" "}
+              you can download and print.
             </p>
             <Link
               href="/dashboard/family-portrait"
