@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useImageCrop } from "@/hooks/use-image-crop"
 import { getThemeById } from "@/lib/family-portrait/themes"
@@ -52,6 +52,14 @@ export default function FamilyPortraitClient({
   const [resultUrl, setResultUrl] = useState<string | null>(null)
   const [familyPortraitId, setFamilyPortraitId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+
+  const totalSubjectCount = personCount + petCount
+
+  useEffect(() => {
+    if (totalSubjectCount > 6 && aspectRatio !== "16:9") {
+      setAspectRatio("16:9")
+    }
+  }, [aspectRatio, totalSubjectCount])
 
   const { toast } = useToast()
 

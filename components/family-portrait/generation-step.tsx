@@ -47,6 +47,8 @@ export default function GenerationStep({
   onBack,
 }: GenerationStepProps) {
   const theme = getThemeById(themeId)
+  const totalSubjectCount = personCount + petCount
+  const isWideCanvasRequired = totalSubjectCount > 6
   const isNarrowDisabled = personCount >= 3
 
   return (
@@ -128,7 +130,9 @@ export default function GenerationStep({
               </label>
               <div className="grid grid-cols-4 gap-2">
                 {(["1:1", "3:4", "4:3", "16:9"] as AspectRatio[]).map((ratio) => {
-                  const disabled = (ratio === "1:1" || ratio === "3:4") && isNarrowDisabled
+                  const disabled = isWideCanvasRequired
+                    ? ratio !== "16:9"
+                    : (ratio === "1:1" || ratio === "3:4") && isNarrowDisabled
                   const selected = aspectRatio === ratio
                   return (
                     <button
@@ -147,7 +151,9 @@ export default function GenerationStep({
                 })}
               </div>
               <p className="text-xs text-gray-500">
-                {isNarrowDisabled
+                {isWideCanvasRequired
+                  ? `16:9 is required for ${totalSubjectCount} people and pets so the group has enough horizontal space.`
+                  : isNarrowDisabled
                   ? "For 3 or more people, wider ratios (4:3 or 16:9) provide optimal group composition."
                   : "Square (1:1) and Portrait (3:4) work best for 1–2 individuals."}
               </p>

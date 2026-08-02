@@ -11,12 +11,21 @@ export interface PromptBuilderOptions {
 
 /**
  * Builds the exact proven BringBack.pro family portrait prompt.
- * Restores the exact 6-month production template verbatim, swapping ONLY
- * the background/scene and clothing lines for preset themes.
+ * Keeps the production template stable while injecting the selected subject
+ * counts, background/scene, and clothing direction.
  */
 export function buildAdvancedFamilyPortraitPrompt(options: PromptBuilderOptions): string {
-  const { themeId, petCount = 0, clothingMode = "preserve" } = options
+  const { themeId, clothingMode = "preserve" } = options
   const theme = getThemeById(themeId)
+
+  const personCount =
+    typeof options.personCount === "number" && Number.isFinite(options.personCount) && options.personCount > 0
+      ? Math.floor(options.personCount)
+      : 0
+  const petCount =
+    typeof options.petCount === "number" && Number.isFinite(options.petCount) && options.petCount > 0
+      ? Math.floor(options.petCount)
+      : 0
 
   // 1. Background scene
   const background = theme.environment
@@ -32,16 +41,27 @@ export function buildAdvancedFamilyPortraitPrompt(options: PromptBuilderOptions)
     }
   }
 
-  // 4. Pet clause
-  const petClause = petCount > 0 ? ` Include exactly ${petCount} pet(s) naturally positioned near the family.` : ""
+  // 4. Explicit subject counts
+  const peopleIdentityTarget = personCount > 0
+    ? `all ${personCount} unique human individual${personCount === 1 ? "" : "s"}`
+    : "every unique individual"
+  const peopleCompositionTarget = personCount > 0
+    ? `all ${personCount} identified human individual${personCount === 1 ? "" : "s"}`
+    : "all identified individuals"
+  const petClause = petCount > 0
+    ? ` Include exactly ${petCount} pet${petCount === 1 ? "" : "s"} from the provided input images.`
+    : ""
+  const petCompositionClause = petCount > 0
+    ? ` and exactly ${petCount} pet${petCount === 1 ? "" : "s"}`
+    : ""
 
   // 5. Pose & Composition hint
   const compositionPose = theme.compositionHint || "Generate new, appropriate, three-quarter (half-body) or full-body studio poses for all subjects. Subjects should be posed naturally as a group, oriented toward the camera."
 
   return `You are an experienced, expert photographer and compositor.
 Generate a single, high-resolution, photorealistic family portrait.
-Identity & Subjects: Identify every unique individual from the provided input images. Use the exact facial identity of each person.${petClause}
-Scene & Composition: Place all identified individuals together in a classic, cohesive group portrait arrangement against ${background}
+Identity & Subjects: Identify ${peopleIdentityTarget} from the provided input images. Use the exact facial identity of each person.${petClause}
+Scene & Composition: Place ${peopleCompositionTarget}${petCompositionClause} together in a classic, cohesive group portrait arrangement against ${background}
 ${compositionPose}
 Synthesis Requirements (Critical): Apply ${lighting} Style must be studio-quality, high-detail, and photorealistic.
 Constraints & Negative Prompts: CRITICAL: IGNORE all original poses, backgrounds, props, and lighting from the input images. DO NOT create a collage, "cut-and-paste," or "photoshop" composite. AVOID mismatched lighting, shadows, scale, or perspective. The final output must be a single, newly synthesized photograph. ${clothingLine}`

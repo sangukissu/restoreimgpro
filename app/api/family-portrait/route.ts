@@ -22,6 +22,21 @@ const legacyBackgroundToThemeMap: Record<string, string> = {
   bokeh: 'studio-bokeh',
 }
 
+const FAMILY_PORTRAIT_MODEL = 'openai/gpt-image-2/edit' as const
+
+const IMAGE_SIZE_BY_ASPECT_RATIO = {
+  '1:1': 'square_hd',
+  '3:4': 'portrait_4_3',
+  '4:3': 'landscape_4_3',
+  '16:9': 'landscape_16_9',
+} as const
+
+type SupportedAspectRatio = keyof typeof IMAGE_SIZE_BY_ASPECT_RATIO
+
+function isSupportedAspectRatio(value: unknown): value is SupportedAspectRatio {
+  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(IMAGE_SIZE_BY_ASPECT_RATIO, value)
+}
+
 export async function POST(req: NextRequest) {
   try {
     const supabase = await createClient()
@@ -52,7 +67,7 @@ export async function POST(req: NextRequest) {
     // Parse request body robustly: support JSON, formdata, and x-www-form-urlencoded
     const contentType = req.headers.get('content-type') || ''
     let images: Array<string | File> = []
-    let aspectRatio: string = '4:3'
+    let requestedAspectRatio: unknown = '4:3'
     let themeId: string = 'studio-matte-black'
     let personCount: number = 0
     let petCount: number = 0
@@ -61,7 +76,7 @@ export async function POST(req: NextRequest) {
     if (contentType.includes('application/json')) {
       const body = await req.json()
       images = Array.isArray(body?.images) ? body.images.slice(0, 8) : []
-      aspectRatio = body?.aspectRatio || aspectRatio
+      requestedAspectRatio = body?.aspectRatio || requestedAspectRatio
       themeId = body?.themeId || (body?.backgroundStyle ? legacyBackgroundToThemeMap[body.backgroundStyle] : themeId)
       personCount = typeof body?.personCount === 'number' && body.personCount > 0 ? body.personCount : images.length
       petCount = typeof body?.petCount === 'number' && body.petCount >= 0 ? body.petCount : 0
@@ -71,7 +86,7 @@ export async function POST(req: NextRequest) {
       const params = new URLSearchParams(raw)
       const imgParams = params.getAll('images')
       images = imgParams.slice(0, 8)
-      aspectRatio = params.get('aspectRatio') || aspectRatio
+      requestedAspectRatio = params.get('aspectRatio') || requestedAspectRatio
       themeId = params.get('themeId') || (params.get('backgroundStyle') ? legacyBackgroundToThemeMap[params.get('backgroundStyle')!] : themeId)
       personCount = params.get('personCount') ? parseInt(params.get('personCount')!, 10) : images.length
       petCount = params.get('petCount') ? parseInt(params.get('petCount')!, 10) : 0
@@ -79,7 +94,7 @@ export async function POST(req: NextRequest) {
       const form = await req.formData()
       const imgEntries = form.getAll('images')
       images = imgEntries.slice(0, 8) as Array<string | File>
-      aspectRatio = (form.get('aspectRatio') as string) || aspectRatio
+      requestedAspectRatio = form.get('aspectRatio') || requestedAspectRatio
       themeId = (form.get('themeId') as string) || themeId
       personCount = form.get('personCount') ? parseInt(form.get('personCount') as string, 10) : images.length
       petCount = form.get('petCount') ? parseInt(form.get('petCount') as string, 10) : 0
@@ -88,7 +103,7 @@ export async function POST(req: NextRequest) {
         const raw = await req.text()
         const body = JSON.parse(raw)
         images = Array.isArray(body?.images) ? body.images.slice(0, 8) : []
-        aspectRatio = body?.aspectRatio || aspectRatio
+        requestedAspectRatio = body?.aspectRatio || requestedAspectRatio
         themeId = body?.themeId || themeId
         personCount = typeof body?.personCount === 'number' && body.personCount > 0 ? body.personCount : images.length
         petCount = typeof body?.petCount === 'number' && body.petCount >= 0 ? body.petCount : 0
@@ -101,6 +116,21 @@ export async function POST(req: NextRequest) {
 
     if (images.length === 0) {
       return NextResponse.json({ error: 'Provide at least 1 image for synthesis.' }, { status: 400 })
+    }
+
+    if (!isSupportedAspectRatio(requestedAspectRatio)) {
+      return NextResponse.json({
+        error: 'Unsupported aspect ratio. Choose 1:1, 3:4, 4:3, or 16:9.',
+      }, { status: 400 })
+    }
+    const aspectRatio = requestedAspectRatio
+    const imageSize = IMAGE_SIZE_BY_ASPECT_RATIO[aspectRatio]
+
+    if (!Number.isInteger(personCount) || personCount < 1 || personCount > 12) {
+      return NextResponse.json({ error: 'Person count must be an integer from 1 to 12.' }, { status: 400 })
+    }
+    if (!Number.isInteger(petCount) || petCount < 0 || petCount > 5) {
+      return NextResponse.json({ error: 'Pet count must be an integer from 0 to 5.' }, { status: 400 })
     }
 
     if (!process.env.FAL_KEY) {
@@ -170,17 +200,17 @@ export async function POST(req: NextRequest) {
       imageCount: uploadedUrls.length,
     })
 
-    // Call Fal nano-banana edit model to compose images
+    // Compose the uploaded identity references with GPT Image 2.
     let falOutput: any
     try {
-      const result = await fal.subscribe('fal-ai/nano-banana-2/edit', {
+      const result = await fal.subscribe(FAMILY_PORTRAIT_MODEL, {
         input: {
           prompt,
           image_urls: uploadedUrls,
           num_images: 1,
           output_format: 'png',
-          aspect_ratio: aspectRatio,
-          resolution: '1K'
+          quality: 'medium',
+          image_size: imageSize,
         },
         logs: true,
         onQueueUpdate: () => {},
