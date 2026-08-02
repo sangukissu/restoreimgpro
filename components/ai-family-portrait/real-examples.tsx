@@ -8,11 +8,10 @@ const FAMILY_PORTRAIT_CASES = [
   {
     id: "case-1",
     category: "Separate Photos into One",
-    badgeKeyword: "Four individual portraits",
     icon: <Users className="w-5 h-5 text-indigo-500" />,
-    title: "Combine 4 Separate Individual Portraits into One Family Picture",
+    title: "Combine Up to 8 Separate Photos into One Family Portrait",
     story:
-      "When family members live in different places, separate portraits can become one newly composed studio scene. Clear, similarly framed faces give the model better references; always compare the result with every source photo.",
+      "Create one family photo from individual pictures taken in different countries, at different events, or years apart. It is useful for long-distance families and occasions when everyone could not be photographed together.",
     inputs: [
       { img: "/separate-family-portrait-father.jpg", label: "Input 1: Father" },
       { img: "/separate-family-portrait-mother.jpg", label: "Input 2: Mother" },
@@ -20,35 +19,33 @@ const FAMILY_PORTRAIT_CASES = [
       { img: "/separate-family-portrait-son.jpg", label: "Input 4: Son" },
     ],
     combinedImg: "/separate-family-portrait-combined.jpg",
-    ctaText: "Combine 4 Separate Photos",
+    ctaText: "Create From Separate Photos",
     href: "/dashboard/family-portrait",
   },
   {
     id: "case-2",
     category: "3-Generation Reunion",
-    badgeKeyword: "Three generations",
     icon: <Calendar className="w-5 h-5 text-purple-500" />,
     title: "Combine Grandparents, Parents, and Children into One Portrait",
     story:
-      "Bring grandparents, parents, and children into one portrait even when the source photos come from different years. The generated scene balances scale and lighting, but age, pose, and fine details can vary.",
+      "Build a multi-generation family portrait from separate grandparent, parent, and child photos—even when the generations never shared a camera. Restored ancestor photos can be combined with modern portraits in one family keepsake.",
     inputs: [
       { img: "/three-generation-reunion-son.jpg", label: "Input 1: Son" },
       { img: "/three-generation-reunion-daughter.jpg", label: "Input 2: Daughter" },
       { img: "/three-generation-reunion-parents.jpg", label: "Input 3: Parents" },
       { img: "/three-generation-reunion-grandparents.jpg", label: "Input 4: Grandparents" },
     ],
-    combinedImg: "/three-generation-reunion-combined.jpg",
+    combinedImg: "/three-generation-reunion-combined.png",
     ctaText: "Create Generational Family Portrait",
     href: "/dashboard/family-portrait",
   },
   {
     id: "case-3",
     category: "Memorial Portrait",
-    badgeKeyword: "Memorial keepsake",
     icon: <Heart className="w-5 h-5 text-rose-500" />,
     title: "Add a Deceased Grandfather to a Family Portrait",
     story:
-      "Create a respectful memorial keepsake with a relative who could not be present for the original photograph. A clear restored portrait usually provides a stronger likeness reference than a damaged or very small face crop.",
+      "Create a memorial family portrait that brings a deceased parent or grandparent together with children and grandchildren. The result is a new commemorative portrait made from the family photos you provide, not a historical photograph.",
     inputs: [
       { img: "/memorial-family-portrait-father.jpg", label: "Input 1: Father" },
       { img: "/memorial-family-portrait-son.jpg", label: "Input 2: Son" },
@@ -69,16 +66,16 @@ export function FamilyPortraitRealExamples() {
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-6 sm:gap-8 mb-12 sm:mb-16">
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-1.5 bg-brand-black text-white px-3.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 sm:mb-6 shadow-lg shadow-black/10">
-              <span className="text-brand-orange">//</span> Source-to-Portrait Examples <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> Common Use Cases <span className="text-brand-orange">//</span>
             </div>
             <h2 className="text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-brand-black">
-              Combine 4 Separate Photos <br />
-              <span className="text-gray-400"> into One Family Portrait.</span>
+              See Separate Source Photos <br />
+              <span className="text-gray-400"> Become One Family Portrait.</span>
             </h2>
           </div>
           <div className="max-w-sm">
             <p className="text-base sm:text-lg text-gray-600 font-medium leading-relaxed">
-              Each example pairs separate source portraits with a generated group image, so you can see how different ages, settings, and generations may be brought into one scene.
+              Explore practical examples for long-distance families, multi-generation reunions, restored ancestor photos, and memorial family keepsakes.
             </p>
           </div>
         </div>
@@ -101,9 +98,6 @@ export function FamilyPortraitRealExamples() {
                       {ex.category}
                     </span>
                   </div>
-                  <span className="text-[11px] sm:text-xs font-bold text-brand-orange bg-brand-orange/10 px-3 py-1 rounded-full">
-                    {ex.badgeKeyword}
-                  </span>
                 </div>
 
                 {/* Main Split Grid (Fully Responsive Flex & Grid Layout) */}
@@ -116,7 +110,7 @@ export function FamilyPortraitRealExamples() {
                         Step 1: Upload Source Photos
                       </span>
                       <span className="text-[10px] sm:text-[11px] font-bold bg-brand-surface px-2.5 py-0.5 rounded-md text-gray-500">
-                        2–4 Inputs
+                        upload up to 8 photos
                       </span>
                     </div>
 
@@ -131,9 +125,7 @@ export function FamilyPortraitRealExamples() {
                             alt={input.label}
                             className="w-full h-full object-cover group-hover/inp:scale-105 transition-transform duration-300"
                           />
-                          <div className="absolute top-2 left-2 bg-black/80 backdrop-blur text-white text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">
-                            Photo {i + 1}
-                          </div>
+
                           <div className="absolute bottom-2 left-2 right-2 bg-white/95 backdrop-blur text-[10px] sm:text-xs font-extrabold text-brand-black px-2 py-1 rounded-lg truncate text-center shadow-sm">
                             {input.label}
                           </div>
@@ -150,7 +142,7 @@ export function FamilyPortraitRealExamples() {
                         Step 2: Generated Family Portrait
                       </span>
                       <span className="text-[10px] sm:text-[11px] font-bold bg-brand-orange/10 px-2.5 py-0.5 rounded-md text-brand-orange">
-                        Shared Studio Style
+                        Shared Portrait Style
                       </span>
                     </div>
 
@@ -161,13 +153,10 @@ export function FamilyPortraitRealExamples() {
                         className="w-full h-full object-cover"
                       />
 
-                      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-brand-orange text-white px-2.5 py-1 sm:px-3 sm:py-1 rounded-lg text-[10px] sm:text-xs font-bold tracking-widest uppercase shadow-md flex items-center gap-1.5 z-10">
-                        <UserCheck size={13} />
-                        New Group Portrait
-                      </div>
+
 
                       <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 bg-black/80 backdrop-blur text-white p-2.5 sm:p-3 rounded-xl border border-white/20 text-[11px] sm:text-xs font-semibold text-center z-10">
-                        Review faces, pose, scale and fine details against the source photos
+                        Composed Family Portrait created by BringBack AI
                       </div>
                     </div>
                   </div>

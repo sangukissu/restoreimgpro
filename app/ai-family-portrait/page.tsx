@@ -5,26 +5,32 @@ import type { Metadata } from "next"
 import AIAnimationHero from "@/components/ai-family-portrait/hero"
 import { FamilyPortraitRealExamples } from "@/components/ai-family-portrait/real-examples"
 import { FamilyPortrait } from "@/components/ai-family-portrait/styles-grid"
-import FamilyPortraitConversionGuide from "@/components/ai-family-portrait/conversion-guide"
+import { PetFamilyPortraits } from "@/components/ai-family-portrait/pet-family-portraits"
 import FamilyPortraitUseCases from "@/components/ai-family-portrait/features"
 import FamilyPortraitFAQ from "@/components/ai-family-portrait/faq"
-import AITechnologySection from "@/components/ai-family-portrait/AITechnologySection"
 import { Pricing } from "@/components/landing/Pricing"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
-import { CTA } from "@/components/old-photo-restoration/CTA"
+import { FamilyPortraitFinalCTA } from "@/components/ai-family-portrait/final-cta"
+import {
+  FAMILY_PORTRAIT_HOW_TO,
+  FAMILY_PORTRAIT_HOW_TO_STEPS,
+} from "@/lib/family-portrait/how-to-steps"
+import { FAMILY_PORTRAIT_THEMES } from "@/lib/family-portrait/themes"
+import { FAMILY_PORTRAIT_FAQS, faqAnswerText } from "@/lib/feature-faqs"
 import { FEATURE_CREDIT_COSTS, STARTER_PLAN } from "@/lib/pricing"
 
+const THEME_COUNT = FAMILY_PORTRAIT_THEMES.length
+
 export const metadata: Metadata = {
-  title: "AI Family Portrait Generator | Combine Separate Photos into One",
+  title: "AI Family Portrait Generator | Combine Up to 8 Photos",
   description:
-    "Create one family portrait from 2–4 separate photos. Choose a canvas and studio background, then review likeness, pose, and scale. 2 credits.",
+    `Combine up to 8 separate family photos into one AI portrait. Choose from ${THEME_COUNT} curated themes, include pets, control clothing, and select the canvas.`,
   keywords: [
     "ai family portrait generator",
     "combine separate photos into one family portrait",
-    "how to create a family photo from individual photos",
     "generational family portrait generator",
-    "add deceased relative to family portrait",
-    "merge multiple photos into one family picture",
+    "create family photo from individual photos",
+    "memorial family portrait",
   ],
   alternates: {
     canonical: "https://bringback.pro/ai-family-portrait",
@@ -32,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AI Family Portrait Generator | BringBack",
     description:
-      "Create one family portrait from 2–4 separate photos, choose a studio style, and review the generated likeness before downloading.",
+      `Bring separate family photos into one shared portrait with up to 8 references, ${THEME_COUNT} curated themes, pet support, clothing control, and four canvas ratios.`,
     type: "website",
     url: "https://bringback.pro/ai-family-portrait",
     images: [
@@ -53,10 +59,17 @@ const familyPortraitWebAppJsonLd = {
   '@id': 'https://bringback.pro/ai-family-portrait#webapp',
   name: 'BringBack AI Family Portrait Generator',
   description:
-    'Create one generated family portrait from 2 to 4 separate photos with selectable canvas ratios and studio backgrounds.',
+    `Create one generated family portrait from up to 8 separate reference photos with ${THEME_COUNT} curated themes, people and pet counts, clothing control, and selectable canvas ratios.`,
   url: 'https://bringback.pro/ai-family-portrait',
   applicationCategory: 'PhotoEditingApplication',
   operatingSystem: 'Web',
+  featureList: [
+    'Upload and crop up to 8 reference photos',
+    `${THEME_COUNT} curated family portrait themes`,
+    'People and pet count controls',
+    'Preserve original clothing or coordinate it with the theme',
+    '1:1, 3:4, 4:3, and 16:9 canvas ratios',
+  ],
   offers: {
     '@type': 'Offer',
     name: 'Family Portrait Credit Pack',
@@ -70,39 +83,30 @@ const familyPortraitWebAppJsonLd = {
 const familyPortraitHowToJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'How to Create a Family Photo from Individual Photos',
-  description:
-    'Upload separate portraits, choose a canvas and studio background, then generate one cohesive AI family portrait.',
-  step: [
-    {
-      '@type': 'HowToStep',
-      position: 1,
-      name: 'Upload Individual Portraits',
-      text: 'Upload 2 to 4 separate photos of your family members from smartphone scans or old albums.',
-      url: 'https://bringback.pro/ai-family-portrait#how-it-works',
+  '@id': 'https://bringback.pro/ai-family-portrait#how-it-works',
+  name: FAMILY_PORTRAIT_HOW_TO.name,
+  description: FAMILY_PORTRAIT_HOW_TO.description,
+  step: FAMILY_PORTRAIT_HOW_TO_STEPS.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+    url: FAMILY_PORTRAIT_HOW_TO.url,
+  })),
+}
+
+const familyPortraitFaqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  '@id': 'https://bringback.pro/ai-family-portrait#faq',
+  mainEntity: FAMILY_PORTRAIT_FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faqAnswerText(faq.answer),
     },
-    {
-      '@type': 'HowToStep',
-      position: 2,
-      name: 'Choose Canvas & Background',
-      text: 'Select 4:3, 16:9, or 3:4 canvas aspect ratio and choose a studio or natural backdrop.',
-      url: 'https://bringback.pro/ai-family-portrait#how-it-works',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 3,
-      name: 'AI Matches Lighting & Scale',
-      text: 'BringBack generates one new scene with a shared background, lighting direction, color treatment, and perspective.',
-      url: 'https://bringback.pro/ai-family-portrait#how-it-works',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 4,
-      name: 'Download Family Portrait',
-      text: 'Preview your combined family portrait side-by-side and download high-res print quality.',
-      url: 'https://bringback.pro/ai-family-portrait#how-it-works',
-    },
-  ],
+  })),
 }
 
 export default function Page() {
@@ -110,6 +114,7 @@ export default function Page() {
     <div className="min-h-screen bg-brand-bg text-brand-black font-sans selection:bg-brand-orange selection:text-white relative overflow-x-hidden">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitWebAppJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitHowToJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(familyPortraitFaqJsonLd) }} />
 
       <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
         <Navbar />
@@ -122,20 +127,18 @@ export default function Page() {
         <FamilyPortraitRealExamples />
         {/* 3. Detailed How It Works */}
         <FamilyPortrait />
-        {/* 4. Deep Family Photo Creation Guide */}
-        <FamilyPortraitConversionGuide />
-        {/* 5. Pricing */}
-        <Pricing />
-        {/* 6. Features & Use Cases */}
+        {/* 4. Family portraits with pets */}
+        <PetFamilyPortraits />
+        {/* 5. Why choose BringBack */}
         <FamilyPortraitUseCases />
-        {/* 7. AI Technology Section */}
-        <AITechnologySection />
-        {/* 8. FAQ */}
+        {/* 6. Pricing */}
+        <Pricing />
+        {/* 7. FAQ */}
         <FamilyPortraitFAQ />
-        {/* 9. Product Cross Sell */}
+        {/* 8. Product Cross Sell */}
         <ProductCrossSell excludeHref="/ai-family-portrait" />
-        {/* 10. CTA */}
-        <CTA />
+        {/* 9. Family Portrait CTA */}
+        <FamilyPortraitFinalCTA />
       </main>
 
       <Footer />

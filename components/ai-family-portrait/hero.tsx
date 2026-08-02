@@ -1,81 +1,107 @@
-"use client";
-
 import Link from "next/link";
 import { ArrowRight, Play, Star } from "lucide-react";
 import Image from "next/image";
+import { FamilyPortraitStyleShowcase } from "@/components/ai-family-portrait/style-showcase";
 
 export default function AIAnimationHero() {
   return (
-    <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 pt-32 sm:pt-36 pb-12 overflow-visible">
+    <section className="relative mx-auto w-full max-w-[1320px] overflow-visible px-4 pb-12 pt-32 sm:px-8 sm:pt-36">
+      <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
+        <div className="relative z-10 flex flex-col items-start lg:col-span-6">
 
-      <div className="flex flex-col items-center text-center z-10 relative">
+          {/* Badge */}
+          <div className="mb-8 inline-flex items-center gap-1 rounded-full bg-brand-black px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-black/10 sm:text-sm">
+            <span className="text-brand-orange">//</span> Studio Family Portrait <span className="text-brand-orange">//</span>
+          </div>
 
-        {/* Badge */}
-        <div className="inline-flex items-center gap-1 bg-brand-black text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-8 shadow-lg shadow-black/10">
-          <span className="text-brand-orange">//</span> Studio Family Portrait <span className="text-brand-orange">//</span>
-        </div>
+          {/* Heading */}
+          <h1 className="mb-6 max-w-2xl text-[2.7rem] font-[850] leading-[0.98] tracking-tighter text-brand-black sm:text-[3.5rem] lg:text-[3.75rem] xl:text-[4rem]">
+            AI Family Portrait Generator <br className="hidden sm:block" />
+            <span className="text-gray-400">from Separate Photos</span>
+          </h1>
 
-        {/* Heading */}
-        <h1 className="max-w-5xl text-[3.2rem] sm:text-[4rem] xl:text-[4.5rem] font-extrabold tracking-tight leading-[0.95] text-brand-black mb-8">
-          AI Family Portrait Generator <br />
-          <span className="text-gray-400">Combine Separate Photos into One.</span>
-        </h1>
+          {/* Subheading */}
+          <p className="mb-10 max-w-xl text-lg font-medium leading-relaxed text-gray-600 sm:text-xl">
+            Upload up to 8 family reference photos, choose from 24 curated portrait themes, and include the people and pets who belong in the scene. BringBack creates one new shared portrait rather than a pasted collage.
+          </p>
 
-        {/* Subheading */}
-        <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mb-12 font-medium leading-relaxed">
-          Upload 2–4 portraits of family members photographed at different times or places. BringBack creates a new group portrait with a shared backdrop, then lets you review likeness, pose, and scale before downloading.
-        </p>
+          {/* CTA Buttons - Exact Match */}
+          <div className="mb-10 flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
 
-        {/* CTA Buttons - Exact Match */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-16 w-full justify-center">
+            {/* Primary Button */}
+            <Link href="/dashboard/family-portrait">
+              <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_20px_40px_-12px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
+                <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Create Family Photo</span>
+                <div className="w-8 h-8 sm:w-11 sm:h-11 bg-[#111111] rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
+                  <ArrowRight className="text-[#FF4D00] w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+                </div>
+              </button>
+            </Link>
 
-          {/* Primary Button */}
-          <Link href="/dashboard/family-portrait">
-            <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_20px_40px_-12px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
-              <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Create Family Photo</span>
-              <div className="w-8 h-8 sm:w-11 sm:h-11 bg-[#111111] rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
-                <ArrowRight className="text-[#FF4D00] w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+            {/* Secondary Button */}
+            <Link href="#how-it-works">
+              <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
+                <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">See How It Works</span>
+                <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
+                  <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+              </button>
+            </Link>
+          </div>
+
+          {/* Social Proof - Avatar Stack (Rotated Squircles) */}
+          <div className="flex items-center gap-6 pl-2">
+            <div className="flex items-center relative h-12 w-[140px]">
+              {[1, 2, 3].map((i, index) => (
+                <div
+                  key={i}
+                  className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
+                    ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
+                    ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
+                    ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
+                  `}
+                >
+                  <img
+                    src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
+                    alt="User"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+              <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
+                3.1K+
               </div>
-            </button>
-          </Link>
+            </div>
 
-          {/* Secondary Button */}
-          <Link href="#how-it-works">
-            <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
-              <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">See How It Works</span>
-              <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
-                <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
+            <div className="flex flex-col justify-center">
+              <div className="flex gap-0.5 mb-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
+                ))}
               </div>
-            </button>
-          </Link>
-        </div>
-
-        {/* Visual - Professional Container */}
-        <div className="relative w-full max-w-5xl mx-auto">
-          <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white bg-gray-100 aspect-[3/2]">
-            <Image
-              src="/family-portrait.png"
-              alt="Professional family portrait"
-              fill
-              className="object-cover"
-              priority
-            />
-            {/* Professional Badge Overlay */}
-            <div className="absolute bottom-6 right-6 bg-black/40 backdrop-blur-md border border-white/10 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-              Created from 4 separate photos
+              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 3.1K+ Families</span>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center gap-2 text-center max-w-lg mx-auto">
-          <span className="text-sm font-bold text-gray-600 uppercase tracking-wide">2 credits · clear face references work best</span>
-          <p className="text-sm text-gray-500 font-medium">
-            Always compare likeness to your source photos. AI may adjust pose, lighting, and scale to form one portrait.
-          </p>
+        {/* Right Column: Family Portrait */}
+        <div className="flex w-full items-center justify-center lg:col-span-6">
+          <div className="w-full rounded-[2rem] bg-brand-surface p-2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.55rem] bg-gray-100">
+              <Image
+                src="/family-portrait.png"
+                alt="Four family members brought together from separate photos in one unified studio portrait"
+                fill
+                sizes="(max-width: 1024px) 92vw, 48vw"
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+          </div>
         </div>
-
       </div>
+
+      <FamilyPortraitStyleShowcase />
     </section>
   );
 }

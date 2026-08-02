@@ -475,3 +475,61 @@ body {
     opacity: 0.8;
   }
 }
+
+/* Family portrait style rail: continuous left-to-right motion with an accessible static fallback. */
+.family-portrait-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+}
+
+.family-portrait-marquee-track {
+  display: flex;
+  width: max-content;
+  transform: translateX(-50%);
+  animation: family-portrait-marquee-right 52s linear infinite;
+  will-change: transform;
+}
+
+.family-portrait-marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 1rem;
+  padding-right: 1rem;
+}
+
+.family-portrait-marquee:hover .family-portrait-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes family-portrait-marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .family-portrait-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+    scroll-snap-type: x mandatory;
+  }
+
+  .family-portrait-marquee-track {
+    transform: none;
+    animation: none;
+  }
+
+  .family-portrait-marquee-group[aria-hidden="true"] {
+    display: none;
+  }
+
+  .family-portrait-marquee-card {
+    scroll-snap-align: start;
+  }
+}

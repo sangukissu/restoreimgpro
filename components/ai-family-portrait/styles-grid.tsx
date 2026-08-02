@@ -1,65 +1,229 @@
 import Image from "next/image"
 import {
-  ArrowRight,
-  Camera,
   Check,
   Download,
-  LayoutTemplate,
-  Palette,
+  Maximize2,
+  Shirt,
   SlidersHorizontal,
   Sparkles,
-  SunMedium,
   Upload,
+  Users,
 } from "lucide-react"
+import {
+  FAMILY_PORTRAIT_HOW_TO,
+  FAMILY_PORTRAIT_HOW_TO_STEPS,
+} from "@/lib/family-portrait/how-to-steps"
 
-const STEPS = [
+const INPUT_REFS = [
+  { img: "/separate-family-portrait-father.jpg", label: "Input 1: Father" },
+  { img: "/separate-family-portrait-mother.jpg", label: "Input 2: Mother" },
+  { img: "/separate-family-portrait-daughter.jpg", label: "Input 3: Daughter" },
+  { img: "/separate-family-portrait-son.jpg", label: "Input 4: Son" },
+] as const
+
+const STEP_UI = [
   {
-    number: "01",
-    title: "Upload individual portraits",
-    description:
-      "Add 2 to 4 clear photos from phones, scans, or family albums. Front-facing faces with visible features give the strongest likeness.",
-    note: "JPG, PNG or WebP · up to 4 people",
     icon: Upload,
+    visual: (
+      <div className="relative h-full w-full overflow-hidden bg-gray-50">
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: "radial-gradient(#000 1px, transparent 1px)",
+            backgroundSize: "16px 16px",
+          }}
+        />
+        <div className="absolute inset-3 grid grid-cols-2 gap-2 sm:inset-4">
+          {INPUT_REFS.map((input) => (
+            <figure
+              key={input.img}
+              className="relative h-full min-h-0 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm"
+            >
+              <Image
+                src={input.img}
+                alt={input.label}
+                fill
+                sizes="120px"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-1.5 pb-1.5 pt-5">
+                <span className="block truncate text-[8px] font-bold uppercase tracking-wider text-white sm:text-[9px]">
+                  {input.label}
+                </span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    ),
   },
   {
-    number: "02",
-    title: "Choose canvas and setting",
-    description:
-      "Pick a 1:1, 3:4, 4:3, or 16:9 canvas, then choose matte black, neutral gray, warm beige, gradient, dark brown, or bokeh.",
-    note: "You control format and atmosphere",
     icon: SlidersHorizontal,
+    visual: (
+      <div className="relative flex h-full w-full flex-col justify-center gap-3 overflow-hidden bg-gray-50 p-4">
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: "radial-gradient(#000 1px, transparent 1px)",
+            backgroundSize: "16px 16px",
+          }}
+        />
+        <div className="relative grid grid-cols-3 gap-2">
+          {[
+            { name: "Studio", active: true },
+            { name: "Meadow", active: false },
+            { name: "Urban", active: false },
+            { name: "Winter", active: false },
+            { name: "Poolside", active: false },
+            { name: "Rooftop", active: false },
+          ].map((style) => (
+            <div
+              key={style.name}
+              className={`flex flex-col items-center gap-1.5 rounded-xl border px-1.5 py-2.5 shadow-sm transition-all duration-300 ${
+                style.active
+                  ? "border-brand-orange bg-white ring-2 ring-brand-orange/20"
+                  : "border-gray-100 bg-white group-hover:border-gray-200"
+              }`}
+            >
+              <div
+                className={`h-7 w-7 rounded-lg ${
+                  style.active
+                    ? "bg-brand-orange/15 text-brand-orange"
+                    : "bg-gray-100 text-gray-400"
+                } flex items-center justify-center`}
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+              </div>
+              <span
+                className={`text-[9px] font-bold ${
+                  style.active ? "text-brand-black" : "text-gray-400"
+                }`}
+              >
+                {style.name}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="relative flex items-center gap-2 rounded-xl border border-gray-100 bg-white px-3 py-2 shadow-sm">
+          <Shirt className="h-3.5 w-3.5 text-brand-orange" />
+          <span className="text-[10px] font-bold text-gray-600">Match outfit to style</span>
+          <span className="ml-auto h-4 w-7 rounded-full bg-brand-orange/90 p-0.5">
+            <span className="block h-3 w-3 translate-x-3 rounded-full bg-white shadow-sm" />
+          </span>
+        </div>
+      </div>
+    ),
   },
   {
-    number: "03",
-    title: "AI composes one natural scene",
-    description:
-      "BringBack generates a new scene, using the references to balance face scale, perspective, lighting, color, and placement.",
-    note: "A generated portrait, not a pasted collage",
     icon: Sparkles,
+    visual: (
+      <div className="relative flex h-full w-full flex-col justify-center gap-3 overflow-hidden bg-gray-50 p-4">
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: "radial-gradient(#000 1px, transparent 1px)",
+            backgroundSize: "16px 16px",
+          }}
+        />
+        <div className="relative flex items-center justify-between rounded-xl border border-gray-100 bg-white px-3 py-2.5 shadow-sm">
+          <div className="flex items-center gap-2">
+            <Users className="h-3.5 w-3.5 text-brand-orange" />
+            <span className="text-[10px] font-bold text-gray-600">People</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-gray-100 text-[11px] font-bold text-gray-400">
+              −
+            </span>
+            <span className="w-5 text-center text-sm font-extrabold text-brand-black">4</span>
+            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-brand-orange text-[11px] font-bold text-white">
+              +
+            </span>
+          </div>
+        </div>
+        <div className="relative">
+          <div className="mb-2 flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-gray-400">
+            <Maximize2 className="h-3 w-3" />
+            Canvas
+          </div>
+          <div className="grid grid-cols-4 gap-1.5">
+            {[
+              { label: "1:1", w: "w-6", h: "h-6", active: false },
+              { label: "3:4", w: "w-5", h: "h-7", active: false },
+              { label: "4:3", w: "w-7", h: "h-5", active: true },
+              { label: "16:9", w: "w-8", h: "h-4", active: false },
+            ].map((ratio) => (
+              <div
+                key={ratio.label}
+                className={`flex flex-col items-center gap-1.5 rounded-xl border py-2.5 shadow-sm transition-all ${
+                  ratio.active
+                    ? "border-brand-orange bg-white ring-2 ring-brand-orange/20"
+                    : "border-gray-100 bg-white"
+                }`}
+              >
+                <div
+                  className={`${ratio.w} ${ratio.h} rounded-sm ${
+                    ratio.active ? "bg-brand-orange" : "bg-gray-200"
+                  }`}
+                />
+                <span
+                  className={`text-[9px] font-bold ${
+                    ratio.active ? "text-brand-black" : "text-gray-400"
+                  }`}
+                >
+                  {ratio.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
-    number: "04",
-    title: "Review and download",
-    description:
-      "Compare the result with every source face, regenerate if needed, and check the downloaded dimensions before ordering a large print.",
-    note: "Review likeness before sharing or printing",
     icon: Download,
+    visual: (
+      <div className="relative flex h-full w-full flex-col items-center justify-center gap-3 overflow-hidden bg-gray-50 p-4">
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: "radial-gradient(#000 1px, transparent 1px)",
+            backgroundSize: "16px 16px",
+          }}
+        />
+        <div className="relative w-full rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+          <div className="mb-3 flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+              Generating
+            </span>
+            <span className="text-[10px] font-extrabold text-brand-orange">72%</span>
+          </div>
+          <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-gray-100">
+            <div className="h-full w-[72%] rounded-full bg-brand-orange transition-all group-hover:w-[88%]" />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 animate-pulse rounded-full bg-brand-orange" />
+            <span className="text-[10px] font-medium text-gray-500">Matching lighting & likeness…</span>
+          </div>
+        </div>
+        <div className="relative flex w-full items-center gap-2 rounded-xl border border-green-100 bg-green-50/80 px-3 py-2.5 shadow-sm">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-green-500 text-white">
+            <Check className="h-3.5 w-3.5" strokeWidth={3} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-extrabold text-brand-black">Ready to download</p>
+            <p className="text-[9px] font-medium text-gray-500">Review faces, then save</p>
+          </div>
+          <Download className="h-4 w-4 shrink-0 text-green-600" />
+        </div>
+      </div>
+    ),
   },
-]
+] as const
 
-const INPUTS = [
-  { src: "/family-photo1.png", label: "Son" },
-  { src: "/family-photo2.jpg", label: "Grandfather" },
-  { src: "/family-photo3.png", label: "Father" },
-  { src: "/family-photo4.png", label: "Mother" },
-]
-
-const HARMONIZATION = [
-  { icon: SunMedium, title: "Lighting", description: "Balanced exposure and direction" },
-  { icon: Palette, title: "Color", description: "Unified tone and skin color" },
-  { icon: LayoutTemplate, title: "Composition", description: "Natural scale and placement" },
-  { icon: Camera, title: "Review", description: "Check faces and fine details" },
-]
+const STEPS = FAMILY_PORTRAIT_HOW_TO_STEPS.map((step, index) => ({
+  ...step,
+  ...STEP_UI[index],
+}))
 
 export function FamilyPortrait() {
   return (
@@ -68,129 +232,58 @@ export function FamilyPortrait() {
         <div className="mb-12 flex flex-col gap-7 lg:mb-16 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-4xl">
             <div className="mb-5 inline-flex items-center gap-1 rounded-full bg-brand-black px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-black/10 sm:text-sm">
-              <span className="text-brand-orange">//</span> How It Works <span className="text-brand-orange">//</span>
+              <span className="text-brand-orange">//</span> How It Works{" "}
+              <span className="text-brand-orange">//</span>
             </div>
             <h2 className="text-[2.25rem] font-[850] leading-[1.03] tracking-tighter text-brand-black sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem]">
-              Four references become
+              How BringBack AI creates
               <br />
-              <span className="text-gray-400">one believable family portrait.</span>
+              <span className="text-gray-400">believable AI family portraits.</span>
             </h2>
           </div>
           <p className="max-w-md text-base font-medium leading-relaxed text-gray-600 sm:text-lg">
-            From choosing clear references to reviewing the result, the workflow helps you create one portrait while keeping realistic expectations about AI-generated details.
+            {FAMILY_PORTRAIT_HOW_TO.description}
           </p>
         </div>
 
-        <div className="rounded-[2rem] bg-brand-surface p-2 sm:rounded-[3rem] sm:p-3 lg:p-4">
-          <div className="grid gap-3 xl:grid-cols-[0.82fr_1.18fr]">
-            <ol className="grid list-none gap-2.5 sm:grid-cols-2 xl:grid-cols-1">
-              {STEPS.map((step) => {
-                const Icon = step.icon
-                return (
-                  <li
-                    key={step.number}
-                    className="group relative overflow-hidden rounded-[1.5rem] border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-orange/25 hover:shadow-md sm:p-6"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-black text-white transition-colors group-hover:bg-brand-orange">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="mb-2 flex items-center justify-between gap-3">
-                          <span className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-orange">
-                            Step {step.number}
-                          </span>
-                          <span className="text-2xl font-black tracking-tighter text-gray-100">{step.number}</span>
-                        </div>
-                        <h3 className="mb-2 text-lg font-extrabold leading-tight text-brand-black sm:text-xl">
-                          {step.title}
-                        </h3>
-                        <p className="text-sm font-medium leading-relaxed text-gray-600">{step.description}</p>
-                        <div className="mt-4 flex items-center gap-2 border-t border-gray-100 pt-3 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                          <Check className="h-3.5 w-3.5 text-brand-orange" />
-                          {step.note}
-                        </div>
-                      </div>
+        <div className="rounded-[1.8rem] bg-brand-surface p-2 sm:rounded-[2.5rem] sm:p-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {STEPS.map((step) => {
+              const Icon = step.icon
+              return (
+                <article
+                  key={step.number}
+                  className="group flex min-h-[420px] flex-col rounded-[1.5rem] bg-white p-6 sm:p-7"
+                >
+                  <div className="mb-4 flex items-start justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F2F2F0] text-brand-black transition-colors group-hover:bg-brand-orange/10 group-hover:text-brand-orange">
+                      <Icon className="h-5 w-5" />
                     </div>
-                  </li>
-                )
-              })}
-            </ol>
-
-            <div className="flex min-w-0 flex-col rounded-[1.6rem] border border-gray-100 bg-white p-4 shadow-sm sm:p-6 lg:p-8">
-              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-brand-orange">Visual workflow</span>
-                  <h3 className="mt-1 text-xl font-[850] tracking-tight text-brand-black sm:text-2xl">
-                    Separate references, one generated scene
-                  </h3>
-                </div>
-                <span className="inline-flex w-fit items-center gap-2 rounded-full bg-green-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-green-700">
-                  <span className="h-2 w-2 rounded-full bg-green-500" /> Review likeness
-                </span>
-              </div>
-
-              <div className="grid flex-1 gap-3 lg:grid-cols-[0.72fr_auto_1.28fr] lg:items-center">
-                <div>
-                  <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    <span>Input references</span>
-                    <span>4 photos</span>
+                    <span className="select-none text-5xl font-[800] leading-none text-gray-100 transition-colors group-hover:text-gray-200 sm:text-6xl">
+                      {step.number}
+                    </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {INPUTS.map((input) => (
-                      <figure key={input.src} className="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 sm:rounded-2xl">
-                        <Image
-                          src={input.src}
-                          alt={`${input.label} input portrait`}
-                          fill
-                          sizes="(max-width: 1024px) 40vw, 12vw"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <figcaption className="absolute bottom-1.5 left-1.5 rounded-md bg-black/70 px-2 py-1 text-[9px] font-bold text-white backdrop-blur sm:bottom-2 sm:left-2">
-                          {input.label}
-                        </figcaption>
-                      </figure>
-                    ))}
-                  </div>
-                </div>
 
-                <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-brand-orange text-white shadow-lg shadow-brand-orange/20 lg:flex">
-                  <ArrowRight className="h-4 w-4" />
-                </div>
-
-                <div className="min-w-0">
-                  <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    <span>Final composite</span>
-                    <span className="text-brand-orange">AI harmonized</span>
+                  <div className="relative z-10 mb-4">
+                    <h3 className="mb-2 text-xl font-bold leading-tight text-brand-black sm:text-2xl">
+                      {step.name}
+                    </h3>
+                    <p className="text-sm font-medium leading-relaxed text-gray-600">
+                      {step.text}
+                    </p>
                   </div>
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 shadow-inner sm:rounded-[1.6rem]">
-                    <Image
-                      src="/family-portrait.png"
-                      alt="Unified family portrait result"
-                      fill
-                      sizes="(max-width: 1024px) 90vw, 38vw"
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-x-3 bottom-3 rounded-xl border border-white/15 bg-black/70 px-3 py-2.5 text-center text-[10px] font-bold text-white backdrop-blur sm:inset-x-4 sm:bottom-4 sm:text-xs">
-                      Shared lighting · balanced scale · unified backdrop
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-2 border-t border-gray-100 pt-5 sm:grid-cols-4">
-                {HARMONIZATION.map((item) => {
-                  const Icon = item.icon
-                  return (
-                    <div key={item.title} className="rounded-2xl bg-brand-surface p-3 sm:p-4">
-                      <Icon className="mb-3 h-4 w-4 text-brand-orange" />
-                      <h4 className="text-xs font-extrabold text-brand-black">{item.title}</h4>
-                      <p className="mt-1 text-[10px] font-medium leading-relaxed text-gray-500">{item.description}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
+                  <div className="mt-auto h-[200px] overflow-hidden rounded-2xl border border-gray-100 shadow-inner transition-transform duration-300 group-hover:-translate-y-1 sm:h-[220px] sm:rounded-3xl">
+                    {step.visual}
+                  </div>
+
+                  <div className="mt-4 flex items-center gap-2 border-t border-gray-100 pt-3 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    <Check className="h-3.5 w-3.5 shrink-0 text-brand-orange" />
+                    {step.note}
+                  </div>
+                </article>
+              )
+            })}
           </div>
         </div>
       </div>

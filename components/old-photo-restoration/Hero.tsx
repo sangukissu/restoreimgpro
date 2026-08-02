@@ -178,12 +178,38 @@ export const Hero: React.FC = () => {
 
           </div>
 
-          {/* Social Proof - Avatar Stack (Rotated Squircles) */}
-          <div className="flex flex-col gap-2 pl-1 max-w-md">
-            <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">1 credit · compare before download</span>
-            <p className="text-sm text-gray-500 font-medium">
-              Missing facial detail may be reconstructed, not recovered. Keep black-and-white when that is the memory.
-            </p>
+             {/* Social Proof - Avatar Stack (Rotated Squircles) */}
+          <div className="flex items-center gap-6 pl-2">
+            <div className="flex items-center relative h-12 w-[140px]">
+              {[1, 2, 3].map((i, index) => (
+                <div
+                  key={i}
+                  className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
+                    ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
+                    ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
+                    ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
+                  `}
+                >
+                  <img
+                    src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
+                    alt="User"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+              <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
+                3.1K+
+              </div>
+            </div>
+
+            <div className="flex flex-col justify-center">
+              <div className="flex gap-0.5 mb-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
+                ))}
+              </div>
+              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 3.1K+ Families</span>
+            </div>
           </div>
         </div>
 

@@ -1,9 +1,15 @@
-import { FEATURE_CREDIT_COSTS } from "@/lib/pricing"
-import { PRIVACY_COPY } from "@/lib/site-copy"
+import { FEATURE_CREDIT_COSTS, STARTER_PLAN } from "@/lib/pricing"
+import { LIMITATIONS_COPY, PRIVACY_COPY } from "@/lib/site-copy"
 
 export interface FAQItem {
   question: string
-  answer: string
+  /** Plain string, or bullet points rendered as a list in the UI */
+  answer: string | string[]
+}
+
+/** Flatten FAQ answers for JSON-LD / FAQPage schema text. */
+export function faqAnswerText(answer: string | string[]): string {
+  return Array.isArray(answer) ? answer.join(" ") : answer
 }
 
 export const ADD_PERSON_FAQS: FAQItem[] = [
@@ -129,6 +135,89 @@ export const DENOISE_FAQS: FAQItem[] = [
   {
     question: "Is my uploaded photo secure?",
     answer: PRIVACY_COPY.faq,
+  },
+]
+
+export const FAMILY_PORTRAIT_FAQS: FAQItem[] = [
+  {
+    question: "Can I create a family photo from individual photos?",
+    answer:
+      "Yes. Upload up to 8 reference photos and BringBack generates one new group image with a shared setting, lighting direction, and composition. It can help when relatives live far apart, generations never met, or each person was photographed at a different time.",
+  },
+  {
+    question: "Will the final photo look fake or like a collage?",
+    answer:
+      "The result is generated as one new scene rather than assembled from pasted cutouts. This can make lighting and perspective more consistent, but the quality still depends on the references and every face should be reviewed.",
+  },
+  {
+    question: "Does the AI change what my family members look like?",
+    answer: LIMITATIONS_COPY.faces,
+  },
+  {
+    question: "What are the best photos to upload?",
+    answer: [
+      "Use JPG, PNG, or WebP images under 20MB each.",
+      "Choose clear, well-lit face photos where the person is looking toward the camera.",
+      "Avoid heavy shadows, sunglasses, covered faces, or very tiny faces in a large group photo.",
+      "For old, torn, faded, or blurry images, run Old Photo Restoration first and upload the restored version.",
+    ],
+  },
+  {
+    question: "How many people can I combine into one group photo?",
+    answer:
+      "You can upload up to 8 reference photos, then specify a group of up to 12 people and up to 5 pets across those references. A single reference may contain more than one subject. Larger groups are more demanding, so use clear faces, choose 4:3 or 16:9, and review every identity carefully.",
+  },
+  {
+    question: "Can I include my dog, cat, or another pet in the family portrait?",
+    answer:
+      "Yes. Upload clear pet photos with the family references, then set Number of Pets from 1 to 5 before generating. Keep the eyes, ears, muzzle, and distinctive coat markings visible, and use a wider canvas for a large mixed group. Because the result is newly generated, check the pet's markings, eye color, size, paws, and collar against the source photo.",
+  },
+  {
+    question: "Can I combine black-and-white photos with color photos?",
+    answer:
+      "Yes. You can combine black-and-white and color photos in one portrait. If the older photo is damaged, faded, scratched, or blurry, restoring it first usually gives the generator a clearer likeness reference. The final color treatment remains an AI interpretation.",
+  },
+  {
+    question: "Can I add a deceased person to a family photo?",
+    answer:
+      "Yes. A clear portrait of a loved one who has passed can be used with current family references to create a memorial keepsake. The result is a new AI-generated image, not a historical photograph.",
+  },
+  {
+    question: "Can I create a generational portrait with ancestors?",
+    answer:
+      "Yes. You can combine a grandparent or ancestor from an older portrait with children or grandchildren photographed today. Restore severe damage first and check age, facial details, pose, and scale in the generated result.",
+  },
+  {
+    question: "Can I choose the background or aspect ratio?",
+    answer:
+      "Yes. BringBack supports 1:1, 3:4, 4:3, and 16:9 canvases plus 24 curated themes across studio, formal, cozy, outdoor, lifestyle, retro, holiday, royal, and fine-art categories. You can also preserve the clothing in the references or let the chosen theme coordinate it.",
+  },
+  {
+    question: "Does this replace Old Photo Restoration?",
+    answer:
+      "No. Family Portrait is for composing people into one new image. Old Photo Restoration is for repairing scratches, tears, fading, blur, and damage. If your source image is old or low quality, restore it first, then use it here.",
+  },
+  {
+    question: "Is BringBack a free family portrait creator?",
+    answer: `BringBack is a pay-once credit product, not a free unlimited generator. Family portrait costs ${FEATURE_CREDIT_COSTS.familyPortrait.credits} credits. The ${STARTER_PLAN.priceDisplay} ${STARTER_PLAN.name} includes ${STARTER_PLAN.credits} credits (enough for up to ${Math.floor(STARTER_PLAN.credits / FEATURE_CREDIT_COSTS.familyPortrait.credits)} portraits). Credits never expire.`,
+  },
+  {
+    question: "What happens to my photos?",
+    answer: PRIVACY_COPY.faq,
+  },
+  {
+    question: "When should I not use this tool?",
+    answer:
+      "Skip it for legal or forensic identification, when you only have tiny or heavily damaged face crops, or when a simple side-by-side collage is enough. For inserting someone into an existing scene (not a new studio portrait), use Add Person instead.",
+  },
+  {
+    question: "How is this different from Photoshop or a manual artist?",
+    answer: `A manual artist edits individual pixels and can make detailed, directed corrections. BringBack instead generates a new themed family portrait automatically for ${FEATURE_CREDIT_COSTS.familyPortrait.credits} credits. Choose manual work when exact placement or historically precise details matter.`,
+  },
+  {
+    question: "Is this better than free apps that merge photos?",
+    answer:
+      "Some tools make collages, while others generate a new scene. BringBack is built around identity references, explicit people and pet counts, 24 curated portrait themes, clothing control, four canvas ratios, and a My Media account where you can review and delete results.",
   },
 ]
 
