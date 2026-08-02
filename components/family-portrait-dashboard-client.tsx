@@ -1,7 +1,7 @@
 "use client"
 
 import FamilyPortraitClient from "@/components/family-portrait-client"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 interface Props {
   user: { email: string; id: string }
@@ -9,16 +9,13 @@ interface Props {
   isPaymentSuccess: boolean
 }
 
-export default function FamilyPortraitDashboardClient({ user, initialCredits, isPaymentSuccess }: Props) {
-  const [userCredits, setUserCredits] = useState(initialCredits)
-
-
-
+export default function FamilyPortraitDashboardClient({ user, initialCredits }: Props) {
+  const [userCredits] = useState(initialCredits)
 
   return (
-    <div className="min-h-screen relative">
+    <div className="relative h-[calc(100dvh-4rem)] min-h-0 overflow-hidden bg-slate-50/50">
       {/* Dotted Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div
           className="w-full h-full"
           style={{
@@ -29,51 +26,30 @@ export default function FamilyPortraitDashboardClient({ user, initialCredits, is
         />
       </div>
 
-
-
       {/* Main Content */}
-      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="space-y-8">
-          {/* Page intro */}
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-inter font-bold text-3xl md:text-4xl text-black mb-2">Family Portrait</h1>
-            <p className="text-lg text-gray-600">
-              Combine up to 4 individual portraits into a single family photo with consistent lighting and color.
+      <main className="relative z-10 mx-auto flex h-full max-w-6xl flex-col px-3 py-3 sm:px-6 sm:py-5 lg:px-8">
+        <div className="flex min-h-0 flex-1 flex-col gap-4 sm:gap-6">
+          {/* Page Header */}
+          <div className="mx-auto shrink-0 space-y-1.5 text-center sm:max-w-3xl sm:space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-[#FF4D00] text-xs font-bold uppercase tracking-wider">
+              ✨ Advanced AI Studio Synthesis
+            </div>
+            <h1 className="font-inter text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">
+              AI Family Portrait Studio
+            </h1>
+            <p className="text-sm text-gray-600 sm:text-base md:text-lg">
+              Combine separate individual photos of family members and pets into cohesive, thematic group portraits with harmonized lighting and wardrobe styling.
             </p>
           </div>
 
-          {/* Main content */}
-          <div className="space-y-6">
-            <div className="border-6 border-gray-200 p-6 bg-white rounded-xl">
-
-              <div>
-                <FamilyPortraitClient userCredits={userCredits} user={user} />
-              </div>
-            </div>
+          {/* Main Wizard Container */}
+          <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-gray-200 bg-white p-3 sm:p-5">
+            <FamilyPortraitClient userCredits={userCredits} user={user} />
           </div>
 
-          {/* Info Cards (Bottom) */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="border rounded-2xl p-5 bg-white shadow-sm">
-              <h3 className="text-lg font-semibold text-black">Tips for Best Results</h3>
-              <ul className="mt-3 space-y-2 text-sm text-gray-700 list-disc list-inside">
-                <li>Use well-lit, front-facing portraits with minimal occlusions.</li>
-                <li>Upload similar head sizes to simplify composition.</li>
-                <li>Choose 4:3 or 16:9 for 3–4 people to avoid tight cropping.</li>
-                <li>Keep backgrounds simple to maintain a cohesive look.</li>
-              </ul>
-            </div>
-            <div className="border rounded-2xl p-5 bg-white shadow-sm">
-              <h3 className="text-lg font-semibold text-black">What You Get</h3>
-              <p className="mt-2 text-sm text-gray-700">
-                A high‑quality composite image suitable for printing and sharing. No facial swapping — identities preserved.
-              </p>
-            </div>
-          </div>
+
         </div>
       </main>
-
-
     </div>
   )
 }

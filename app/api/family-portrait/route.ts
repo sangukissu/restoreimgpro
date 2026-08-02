@@ -3,41 +3,23 @@ import { fal } from '@fal-ai/client'
 import mime from 'mime'
 import { createClient } from '@/utils/supabase/server'
 import { getR2SignedUrl, deleteR2Object, uploadImageToR2 } from '@/lib/r2'
+import { buildAdvancedFamilyPortraitPrompt } from '@/lib/family-portrait/prompt-builder'
+import type { ClothingMode } from '@/lib/family-portrait/themes'
+import { getThemeById } from '@/lib/family-portrait/themes'
 
 // Configure Fal AI client
 fal.config({
   credentials: process.env.FAL_KEY,
 })
 
-// Map of allowed background styles to prescriptive prompt text
-const backgroundStyleMap: Record<string, string> = {
-  black:
-    "a matte charcoal seamless backdrop with soft falloff to near‑black background.",
-  gray:
-    "a neutral mid‑gray seamless paper; evenly lit; slight vignette background.",
-  beige:
-    "a light warm beige background; high‑key look; soft shadows only.",
-  gradient:
-    "a very faint center‑weighted gradient from dark to light; avoid banding background.",
-  brown:
-    "a classic dark brown background with a gentle vignette.",
-  bokeh:
-    "an abstract shallow depth‑of‑field bokeh background with soft circular highlights.",
-}
-
-function buildPrompt(subjectCount: number, aspectRatio: string, backgroundStyleText: string) {
-  const arrangement = subjectCount <= 2
-    ? 'Place subjects side-by-side, shoulder-level, gently angled toward center.'
-    : 'Generate new, appropriate, three-quarter (half-body) or full-body studio poses for all subjects. Subjects should be posed naturally as a group, oriented toward the camera.'
-
-  return `You are an experienced, expert photographer and compositor.
-Generate a single, high-resolution, photorealistic family portrait.
-Identity & Subjects: Identify every unique individual from the provided input images. Use the exact facial identity of each person.
-Scene & Composition: Place all identified individuals together in a classic, cohesive group portrait arrangement. 
-against ${backgroundStyleText}
-${arrangement}
-Synthesis Requirements (Critical):  Apply unified, professional studio lighting (e.g., softbox) consistently across all subjects. Style must be studio-quality, high-detail, and photorealistic.
-Constraints & Negative Prompts: CRITICAL: IGNORE all original poses, backgrounds, props, and lighting from the input images. DO NOT create a collage, "cut-and-paste," or "photoshop" composite. AVOID mismatched lighting, shadows, scale, or perspective. The final output must be a single, newly synthesized photograph. Ensure facial identities and clothing are preserved accurately.`
+// Fallback legacy background style mapping
+const legacyBackgroundToThemeMap: Record<string, string> = {
+  black: 'studio-matte-black',
+  gray: 'studio-neutral-gray',
+  beige: 'studio-warm-beige',
+  gradient: 'studio-gradient',
+  brown: 'studio-dark-brown',
+  bokeh: 'studio-bokeh',
 }
 
 export async function POST(req: NextRequest) {
@@ -67,61 +49,63 @@ export async function POST(req: NextRequest) {
       }, { status: 402 })
     }
 
-    // Parse request body robustly: support JSON and x-www-form-urlencoded
+    // Parse request body robustly: support JSON, formdata, and x-www-form-urlencoded
     const contentType = req.headers.get('content-type') || ''
     let images: Array<string | File> = []
     let aspectRatio: string = '4:3'
-    let backgroundStyle: string = 'black'
+    let themeId: string = 'studio-matte-black'
+    let personCount: number = 0
+    let petCount: number = 0
+    let clothingMode: ClothingMode = 'preserve'
 
     if (contentType.includes('application/json')) {
       const body = await req.json()
-      images = Array.isArray(body?.images) ? body.images.slice(0, 4) : []
+      images = Array.isArray(body?.images) ? body.images.slice(0, 8) : []
       aspectRatio = body?.aspectRatio || aspectRatio
-      backgroundStyle = body?.backgroundStyle || backgroundStyle
+      themeId = body?.themeId || (body?.backgroundStyle ? legacyBackgroundToThemeMap[body.backgroundStyle] : themeId)
+      personCount = typeof body?.personCount === 'number' && body.personCount > 0 ? body.personCount : images.length
+      petCount = typeof body?.petCount === 'number' && body.petCount >= 0 ? body.petCount : 0
+      clothingMode = body?.clothingMode === 'restyle' ? 'restyle' : (body?.clothingMode === 'preserve' ? 'preserve' : getThemeById(themeId).defaultClothingMode)
     } else if (contentType.includes('application/x-www-form-urlencoded')) {
       const raw = await req.text()
       const params = new URLSearchParams(raw)
       const imgParams = params.getAll('images')
-      images = imgParams.slice(0, 4)
+      images = imgParams.slice(0, 8)
       aspectRatio = params.get('aspectRatio') || aspectRatio
-      backgroundStyle = params.get('backgroundStyle') || backgroundStyle
+      themeId = params.get('themeId') || (params.get('backgroundStyle') ? legacyBackgroundToThemeMap[params.get('backgroundStyle')!] : themeId)
+      personCount = params.get('personCount') ? parseInt(params.get('personCount')!, 10) : images.length
+      petCount = params.get('petCount') ? parseInt(params.get('petCount')!, 10) : 0
     } else if (contentType.includes('multipart/form-data')) {
-      // Support both string URLs/data URLs and File objects
       const form = await req.formData()
       const imgEntries = form.getAll('images')
-      images = imgEntries.slice(0, 4) as Array<string | File>
+      images = imgEntries.slice(0, 8) as Array<string | File>
       aspectRatio = (form.get('aspectRatio') as string) || aspectRatio
-      backgroundStyle = (form.get('backgroundStyle') as string) || backgroundStyle
+      themeId = (form.get('themeId') as string) || themeId
+      personCount = form.get('personCount') ? parseInt(form.get('personCount') as string, 10) : images.length
+      petCount = form.get('petCount') ? parseInt(form.get('petCount') as string, 10) : 0
     } else {
-      // Fallback: try to parse as JSON text, else return helpful error
       try {
         const raw = await req.text()
         const body = JSON.parse(raw)
-        images = Array.isArray(body?.images) ? body.images.slice(0, 4) : []
+        images = Array.isArray(body?.images) ? body.images.slice(0, 8) : []
         aspectRatio = body?.aspectRatio || aspectRatio
-        backgroundStyle = body?.backgroundStyle || backgroundStyle
+        themeId = body?.themeId || themeId
+        personCount = typeof body?.personCount === 'number' && body.personCount > 0 ? body.personCount : images.length
+        petCount = typeof body?.petCount === 'number' && body.petCount >= 0 ? body.petCount : 0
       } catch {
         return NextResponse.json({
-          error: 'Unsupported payload format. Send JSON (Content-Type: application/json) or x-www-form-urlencoded with fields: images[], aspectRatio, backgroundStyle.',
+          error: 'Unsupported payload format. Send JSON (Content-Type: application/json).',
         }, { status: 415 })
       }
     }
 
-    const bgText = backgroundStyleMap[backgroundStyle] || backgroundStyleMap['black']
-
     if (images.length === 0) {
-      return NextResponse.json({ error: 'Provide 1–4 images (base64 data URLs or URLs).' }, { status: 400 })
+      return NextResponse.json({ error: 'Provide at least 1 image for synthesis.' }, { status: 400 })
     }
 
-    // Ensure Fal API key configured
     if (!process.env.FAL_KEY) {
       return NextResponse.json({ error: 'Fal AI API key not configured' }, { status: 500 })
     }
-
-    // Build prompt for composition
-    const prompt = buildPrompt(images.length, aspectRatio, bgText)
-
-    // Debug logging removed for security and privacy
 
     // Upload all input images to Fal storage to obtain stable URLs
     const uploadedUrls: string[] = []
@@ -140,12 +124,10 @@ export async function POST(req: NextRequest) {
             let fetchUrl = img
             let tempKey: string | null = null
             if (!img.startsWith('http') && !img.startsWith('data:')) {
-              // It's an R2 key, generate a temporary signed GET URL
               fetchUrl = await getR2SignedUrl(img)
               tempKey = img
             }
 
-            // Fetch remote URL and re-upload to Fal storage for reliability
             const resp = await fetch(fetchUrl)
             if (!resp.ok) {
               throw new Error(`Failed to fetch image: ${resp.status}`)
@@ -156,10 +138,6 @@ export async function POST(req: NextRequest) {
             const url = await fal.storage.upload(blob)
             uploadedUrls.push(url)
 
-            // The temp staging object is now consumed (bytes live in Fal
-            // storage); remove it so it doesn't accumulate in R2. Best-effort:
-            // never let cleanup break a successful upload — the cron sweep
-            // catches any stragglers.
             if (tempKey) {
               try {
                 await deleteR2Object(tempKey)
@@ -169,7 +147,6 @@ export async function POST(req: NextRequest) {
             }
           }
         } else {
-          // File object from multipart form-data
           const fileLike: any = img
           const arrayBuf = await fileLike.arrayBuffer()
           const contentType = fileLike.type || 'image/png'
@@ -182,6 +159,16 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: `Failed to prepare image: ${message}` }, { status: 400 })
       }
     }
+
+    // Build advanced prompt with explicit indexed reference image binding (Input Image 1..N)
+    const prompt = buildAdvancedFamilyPortraitPrompt({
+      themeId,
+      personCount: personCount > 0 ? personCount : Math.max(1, uploadedUrls.length),
+      petCount,
+      aspectRatio,
+      clothingMode,
+      imageCount: uploadedUrls.length,
+    })
 
     // Call Fal nano-banana edit model to compose images
     let falOutput: any
@@ -196,14 +183,11 @@ export async function POST(req: NextRequest) {
           resolution: '1K'
         },
         logs: true,
-        onQueueUpdate: () => {
-          // No-op: logs suppressed in production
-        },
+        onQueueUpdate: () => {},
       })
       falOutput = result.data
     } catch (falError: any) {
       const msg = falError?.message || 'Fal generation failed'
-      // Map common failure modes
       if (msg.includes('authentication') || msg.includes('401')) {
         return NextResponse.json({ error: 'Authentication failed with generation service.' }, { status: 401 })
       }
@@ -219,7 +203,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Generation service temporarily unavailable. Please try again.' }, { status: 503 })
     }
 
-    // Validate Fal output
     if (!falOutput || !falOutput.images || !Array.isArray(falOutput.images) || falOutput.images.length === 0) {
       return NextResponse.json({ error: 'No image returned from generation service' }, { status: 502 })
     }
@@ -229,8 +212,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid generation response' }, { status: 502 })
     }
 
-    // Download generated image and store the final output in Cloudflare R2.
-    // The database stores the private R2 key; the client receives a proxied URL.
     let finalImageUrl: string
     let responseImageUrl: string
     try {
@@ -247,12 +228,10 @@ export async function POST(req: NextRequest) {
       finalImageUrl = await uploadImageToR2(buf, fileName, user.id, contentType)
       responseImageUrl = `/api/image-proxy?key=${encodeURIComponent(finalImageUrl)}`
     } catch (storageError) {
-      // Fallback: return Fal URL directly if R2 has a transient issue.
       finalImageUrl = generatedImageUrl
       responseImageUrl = generatedImageUrl
     }
 
-    // Persist a record in the dedicated family_portraits table
     const { data: fpRows, error: insertError } = await supabase
       .from('family_portraits')
       .insert({
@@ -264,18 +243,13 @@ export async function POST(req: NextRequest) {
       })
       .select('id')
     const familyPortraitId = fpRows?.[0]?.id
-    if (insertError) {
-      // Non-fatal: still return image to user
-    }
 
-    // Deduct 2 credits after successful generation and save
     const remaining = (userProfile.credits ?? 0) - 2
-    const { error: updateError } = await supabase
+    await supabase
       .from('user_profiles')
       .update({ credits: remaining })
       .eq('user_id', user.id)
 
-    // Return response even if credits update failed (avoid blocking user on non-critical error)
     return NextResponse.json({ imageUrl: responseImageUrl, familyPortraitId, creditsRemaining: remaining, success: true, creditsDeducted: 2 })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
