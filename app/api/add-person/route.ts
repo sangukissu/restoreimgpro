@@ -65,7 +65,8 @@ Placement: ${placementDirective(placement)}. ${contextDirective}
 - MICRO-SHADOWING: Generate tight, realistic contact and occlusion shadows where the inserted subject interacts with the floor plane and where their profile sits adjacent to the original subjects.
 
 [4. IDENTITY & STRUCTURE GUARDRAILS]
-- FIXED SUBJECT METRICS: Lock all facial features, bone structure, expressions, and clothing textures of every individual across both input images. Prevent any pixel morphing, feature softening, or AI hallucinations.`
+- FIXED SUBJECT METRICS: Lock all facial features, bone structure, expressions, and clothing textures of every individual across both input images. Prevent any pixel morphing, feature softening, or AI hallucinations.
+do not chnage the poses and faces of persons form base photo. identity must be kept intact. and the person from second image must not loose it's facial identity. apply consistent skin brightness as per base photo.`
 }
 
 function getFalErrorDetails(error: any) {
