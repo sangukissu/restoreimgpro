@@ -63,6 +63,7 @@ Generate a single, high-resolution, photorealistic family portrait.
 Identity & Subjects: Identify ${peopleIdentityTarget} from the provided input images. Use the exact facial identity of each person.${petClause}
 Scene & Composition: Place ${peopleCompositionTarget}${petCompositionClause} together in a classic, cohesive group portrait arrangement against ${background}
 ${compositionPose}
+Anatomy & Limb Ownership (Critical): When people overlap in a source photo, first determine which face, torso, clothing, arm, and hand belongs to each person. Use the source images to bind visible features and limbs to the correct person, not to reuse pose or limb placement. Re-pose every subject with anatomically connected limbs and unambiguous hand ownership. keep hands away from other subjects' faces and necks. Never create floating, detached, duplicated, fused, or transferred arms or hands.
 Synthesis Requirements (Critical): Apply ${lighting} Style must be studio-quality, high-detail, and photorealistic.
 Constraints & Negative Prompts: CRITICAL: IGNORE all original poses, backgrounds, props, and lighting from the input images. DO NOT create a collage, "cut-and-paste," or "photoshop" composite. AVOID mismatched lighting, shadows, scale, or perspective. The final output must be a single, newly synthesized photograph. ${clothingLine}`
 }
