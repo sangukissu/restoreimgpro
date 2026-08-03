@@ -61,7 +61,7 @@ Placement: ${placementDirective(placement)}. ${contextDirective}
 
 [3. PHOTOREALISTIC INTEGRATION & SCALE]
 - RELATIVE DIMENSIONALITY: Programmatically calculate the scale metrics of nearby adult subjects in INPUT_A. Match the height, head-to-shoulder proportions, and physical volume of the subject from INPUT_B to the existing subjects to maintain flawless human perspective.
-- MATRIX LIGHTING MATCH: Extract the precise light vectors (angle, direction, diffusion/hardness, color temperature, and color cast) from INPUT_A and apply them directly to the subject from INPUT_B.
+- MATRIX LIGHTING MATCH: Extract the precise light vectors (angle, direction, diffusion/hardness, color temperature, and color cast) from INPUT_A and apply them directly to the subject from INPUT_B for consistent, cohesive lighting for all subjects.
 - MICRO-SHADOWING: Generate tight, realistic contact and occlusion shadows where the inserted subject interacts with the floor plane and where their profile sits adjacent to the original subjects.
 
 [4. IDENTITY & STRUCTURE GUARDRAILS]
