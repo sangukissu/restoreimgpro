@@ -6,7 +6,7 @@ import { SiteBreadcrumb } from "@/components/seo/site-breadcrumb"
 import { BRAND } from "@/lib/site-copy"
 
 export const metadata: Metadata = {
-  title: "Methodology | BringBack",
+  title: "Methodology",
   description:
     "How BringBack evaluates product quality, writes public claims, and sources preservation guidance. Links to benchmark, editorial policy, and primary archives.",
   alternates: { canonical: "/methodology" },

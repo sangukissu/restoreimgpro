@@ -5,7 +5,7 @@ import { Footer } from "@/components/landing/Footer"
 import { BRAND } from "@/lib/site-copy"
 
 export const metadata: Metadata = {
-  title: "Editorial policy | BringBack",
+  title: "Editorial policy",
   description:
     "How BringBack writes product claims, examples, comparisons, and privacy language. No invented testimonials or unverifiable benchmarks.",
   alternates: { canonical: "/editorial-policy" },

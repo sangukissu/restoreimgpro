@@ -13,7 +13,7 @@ import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Colorize Black and White Photos AI | BringBack",
+  title: "Colorize Black and White Photos AI",
   description:
     "Colorize black and white photos online with AI. Era-accurate color tones, skin color precision, and high resolution. Try free preview.",
   keywords: [

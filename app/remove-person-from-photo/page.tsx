@@ -14,7 +14,7 @@ import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Remove Person from Photo AI | Object & Figure Eraser | BringBack",
+  title: "Remove Person from Photo AI | Object & Figure Eraser",
   description:
     "Remove photobombers, strangers, exes, or unwanted objects from photos with AI. Rebuilds background foliage, brickwork, and shadows naturally. 1 credit per run.",
   keywords: [

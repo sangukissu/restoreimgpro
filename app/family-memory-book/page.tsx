@@ -10,7 +10,7 @@ import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Digital Family Memory Book — Private Keepsake | BringBack",
+  title: "Digital Family Memory Book — Private Keepsake",
   description:
     "Organize restored family photos with names, dates, locations, and oral stories into a private digital keepsake. Included with the Family plan.",
   alternates: {

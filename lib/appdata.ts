@@ -204,7 +204,7 @@ export const appData: Record<string, AppPageData> = {
   "make-pictures-smile": {
     slug: "/app/make-pictures-smile",
     meta: {
-      title: "App That Makes Pictures Move and Smile | BringBack AI",
+      title: "App That Makes Pictures Move and Smile",
       description: "Discover the best app to make old photos move and smile. Turn static portraits into lifelike animations instantly. Try our online tool now.",
       keywords: [
         "app that makes pictures move and smile",
@@ -467,7 +467,7 @@ export const appData: Record<string, AppPageData> = {
   "sharpen-wedding-photos": {
     slug: "/app/sharpen-wedding-photos",
     meta: {
-      title: "Simple Steps to Sharpen Old Wedding Photos on Mobile | BringBack AI",
+      title: "Simple Steps to Sharpen Old Wedding Photos on Mobile",
       description: "Learn simple steps to sharpen old wedding photos on mobile. Our AI app restores clarity, details, and color to cherished wedding memories instantly.",
       keywords: [
         "sharpen wedding photos app",

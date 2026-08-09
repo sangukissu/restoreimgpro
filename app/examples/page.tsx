@@ -5,7 +5,7 @@ import { Footer } from "@/components/landing/Footer"
 import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Restoration examples — before and after family photos | BringBack",
+  title: "Restoration examples — before and after family photos",
   description:
     "Real BringBack demo repairs: scratches, tears, water damage, fade, and blur. Each example notes the damage type and mode. Results vary by input.",
   alternates: { canonical: "/examples" },

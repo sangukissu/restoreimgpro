@@ -13,40 +13,40 @@ const PRIVATE_PATHS = [
   "/admin/",
 ]
 
-// GEO-friendly discovery engines: these power real-time AI search & answer
-// experiences. Blocking them would remove bringback.pro from Perplexity,
-// ChatGPT search, Claude URL analysis, etc. Allow broadly, but keep private
-// paths off-limits.
+// Live answer engines: these fetch at query time to build AI answers. Blocking
+// them removes bringback.pro from Perplexity, ChatGPT Search and Claude — where
+// a large share of "how do I add my late father to a photo" demand now lands.
 const GEO_DISCOVERY_BOTS = [
   "OAI-SearchBot",
   "PerplexityBot",
   "Perplexity-User",
   "ChatGPT-User",
   "Claude-Web",
+  "ClaudeBot",
 ]
 
-// Legacy/extended assistants: control whether our content feeds their AI
-// training and conversational surfaces. Allow so we surface cleanly in their
-// next-gen search UIs, while still keeping private paths off-limits.
-const LEGACY_ASSISTANT_BOTS = [
+// Knowledge-layer crawlers: these feed the corpora assistants answer from when
+// they are NOT doing a live fetch. Absent here, assistants recommend
+// competitors from memory even when we are the better answer. CCBot (Common
+// Crawl) additionally underpins most open AI datasets and many SEO tools.
+const KNOWLEDGE_LAYER_BOTS = [
+  "GPTBot",
+  "anthropic-ai",
+  "CCBot",
+  "cohere-ai",
   "Google-Extended",
   "Applebot-Extended",
   "meta-externalagent",
   "Amazonbot",
 ]
 
-// Aggressive, zero-ROI scrapers: vacuum content for bulk training or
-// commercial arbitrage, send no traffic, and can spike serverless costs.
-// Block site-wide.
+// Genuinely zero-ROI scrapers: these feed no answer engine and send no traffic.
+// They resell content/images or crawl aggressively enough to inflate serverless
+// billing. Blocking these costs us nothing in SEO or AEO terms.
 const BLOCKED_SCRAPER_BOTS = [
-  "CCBot",
   "Bytespider",
   "Diffbot",
   "ImagesiftBot",
-  "GPTBot",
-  "ClaudeBot",
-  "anthropic-ai",
-  "cohere-ai",
 ]
 
 export default function robots(): MetadataRoute.Robots {
@@ -58,19 +58,19 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: PRIVATE_PATHS,
       },
-      // GEO discovery engines: full access minus private paths.
+      // Live answer engines: full access minus private paths.
       ...GEO_DISCOVERY_BOTS.map((userAgent) => ({
         userAgent,
         allow: "/",
         disallow: PRIVATE_PATHS,
       })),
-      // Legacy assistants: same as above.
-      ...LEGACY_ASSISTANT_BOTS.map((userAgent) => ({
+      // Knowledge-layer crawlers: same as above.
+      ...KNOWLEDGE_LAYER_BOTS.map((userAgent) => ({
         userAgent,
         allow: "/",
         disallow: PRIVATE_PATHS,
       })),
-      // Block scrapers site-wide.
+      // Zero-ROI scrapers: blocked site-wide.
       ...BLOCKED_SCRAPER_BOTS.map((userAgent) => ({
         userAgent,
         disallow: "/",

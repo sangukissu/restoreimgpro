@@ -6,7 +6,7 @@ import { SiteBreadcrumb } from "@/components/seo/site-breadcrumb"
 import { ArrowRight, BookOpen, Sparkles, ScanLine, Users, Heart, ShieldCheck } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Guides — restore, reunite, animate, preserve | BringBack",
+  title: "Guides — restore, reunite, animate, preserve",
   description:
     "Practical guides for family photo projects: scanning safely, restore-only vs colorize, identity drift, and preserving stories in a Memory Book.",
   alternates: { canonical: "/guides" },

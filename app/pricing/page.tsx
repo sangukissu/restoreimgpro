@@ -11,7 +11,7 @@ import Guarantees from "@/components/Guarantee"
 import { PUBLIC_PLANS, schemaOffers, FEATURE_CREDIT_COSTS } from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: "Pricing — Credit packs for family photo tools | BringBack",
+  title: "Pricing — Credit packs for family photo tools",
   description:
     "Pay once, no subscription. Restoration Starter $4.99 (4 credits), Value Pack $9.99 (20), Family Pack $21.99 (60 + Memory Book). Exact credit costs per feature.",
   robots: { index: true, follow: true },

@@ -141,9 +141,12 @@ export default function AIAnimationHero() {
                   `}
                 >
                   <img
-                    src={`https://randomuser.me/api/portraits/thumb/men/${i * 12 + 8}.jpg`}
-                    alt="User"
+                    src={['/avatar1.webp', '/avatar2.webp', '/avatar3.webp'][index]}
+                    alt="Real BringBack restoration result"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    width={48}
+                    height={48}
                   />
                 </div>
               ))}

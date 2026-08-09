@@ -103,74 +103,35 @@ const nextConfig = {
     ]
   },
 
-  // 301 redirects: consolidate thin SEO clusters + deleted blog posts
+  // 301 redirects: true duplicates + genuinely deleted blog posts only.
+  //
+  // 2026-08-09 — REVERTED the /features/* and /app/* consolidation added on
+  // 2026-07-19. Those 11 URLs were not thin duplicates; they were hand-written
+  // pages ranking on distinct keywords, and redirecting them cost 909 clicks
+  // (16.6% of sitewide) and 55,305 impressions over 6 months. The worst case,
+  // /features/add-deceased-loved-one-to-photo, held position 5.96 at 5.08% CTR
+  // — the best-converting page on the site — and was sent to a page at
+  // position 10.97. See SEO_DIAGNOSIS_2026-08.md §2.1.
+  //
+  // Rule going forward: never redirect a URL with clicks in the last 90 days
+  // unless it targets the SAME query as the destination. Distinct keyword =
+  // distinct page.
   async redirects() {
     return [
-      // --- Feature keyword cluster → real money pages ---
-      {
-        source: '/features/individual-photos-into-group',
-        destination: '/ai-family-portrait',
-        permanent: true,
-      },
-      {
-        source: '/features/add-deceased-loved-one-to-photo',
-        destination: '/add-person-to-photo',
-        permanent: true,
-      },
-      {
-        source: '/features/black-and-white-composite',
-        destination: '/colorize-photos',
-        permanent: true,
-      },
-      {
-        source: '/features/father-and-child-portrait',
-        destination: '/add-person-to-photo',
-        permanent: true,
-      },
-      {
-        source: '/features/merge-images',
-        destination: '/ai-family-portrait',
-        permanent: true,
-      },
-      {
-        source: '/features/ai-image-combiner',
-        destination: '/ai-family-portrait',
-        permanent: true,
-      },
+      // --- True duplicate: same primary query as the destination ---
+      // /features/add-person-to-photo sat at position 16.94 / 0.69% CTR while
+      // /add-person-to-photo sat at 10.97 / 4.06% on the same query. This one
+      // was real cannibalisation, so the consolidation stays.
       {
         source: '/features/add-person-to-photo',
         destination: '/add-person-to-photo',
         permanent: true,
       },
-      {
-        source: '/features/photo-joiner',
-        destination: '/ai-family-portrait',
-        permanent: true,
-      },
 
-      // --- App keyword cluster → animation (or restoration) ---
-      {
-        source: '/app/back-to-life-photo-app',
-        destination: '/ai-photo-animation',
-        permanent: true,
-      },
-      {
-        source: '/app/make-pictures-smile',
-        destination: '/ai-photo-animation',
-        permanent: true,
-      },
-      {
-        source: '/app/animate-old-photos',
-        destination: '/ai-photo-animation',
-        permanent: true,
-      },
-      {
-        source: '/app/sharpen-wedding-photos',
-        destination: '/old-photo-restoration',
-        permanent: true,
-      },
-
-      // Deleted low-quality blog posts → most relevant feature/page
+      // Deleted low-quality blog posts → most relevant feature/page.
+      // Verified 2026-08-09: none of these slugs are still returned by the
+      // WordPress API, so the underlying posts really are gone and these
+      // redirects are correct.
       {
         source: '/blog/can-ai-truly-restore-original-colors-to-old-photos',
         destination: '/colorize-photos',
@@ -202,8 +163,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        // Retargeted 2026-08-09: this post was about RESTORING old wedding
+        // photos, not adding a person. Pointing it at /add-person-to-photo was
+        // a topical mismatch, which Google treats as a soft 404 and passes no
+        // equity through.
         source: '/blog/how-to-restore-great-grandparents-wedding-photos-with-ai',
-        destination: '/add-person-to-photo',
+        destination: '/old-photo-restoration',
         permanent: true,
       },
       // Redirect HTTP to HTTPS in production

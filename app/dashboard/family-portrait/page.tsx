@@ -4,7 +4,7 @@ import FamilyPortraitDashboardClient from "@/components/family-portrait-dashboar
 import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export const metadata = {
-  title: "Family Portrait – Combine Individual Photos | BringBack",
+  title: "Family Portrait – Combine Individual Photos",
   description:
     "Combine up to 4 individual portraits into one cohesive family photo using BringBack's AI compositor. Choose aspect ratio and get a high‑quality image in seconds.",
 }

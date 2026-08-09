@@ -4,7 +4,7 @@ import RemovePersonDashboardClient from "@/components/remove-person-dashboard-cl
 import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export const metadata = {
-  title: "Remove Person or Object | BringBack",
+  title: "Remove Person or Object",
   description: "Brush over a person or object and remove it from a photo with BringBack's AI retoucher.",
 }
 

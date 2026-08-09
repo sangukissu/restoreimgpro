@@ -4,7 +4,7 @@ import AddPersonDashboardClient from "@/components/add-person-dashboard-client"
 import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export const metadata = {
-  title: "Add Person to Photo | BringBack",
+  title: "Add Person to Photo",
   description: "Seamlessly add a person into an existing photo with BringBack's AI compositor.",
 }
 

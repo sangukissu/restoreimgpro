@@ -7,7 +7,7 @@ import { DASHBOARD_CTA, POSITIONING } from "@/lib/site-copy"
 import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Features — Family Photo Preservation Tools | BringBack",
+  title: "Features — Family Photo Preservation Tools",
   description:
     "Restore damage, reunite people, add subtle motion, and preserve stories. See credit costs and open each BringBack tool.",
   alternates: { canonical: "/features" },
@@ -77,6 +77,44 @@ const FEATURES = [
   },
 ]
 
+/**
+ * Keyword-specific landing pages, re-linked 2026-08-09.
+ *
+ * These were orphaned on 2026-07-19 when they were 301'd to the money pages
+ * above. The redirects are now reverted (see next.config.js), so the hub links
+ * to them again — without internal links they would be sitemap-only, which
+ * starves them of crawl priority and internal PageRank. Anchor text matches
+ * each page's target query on purpose.
+ */
+const USE_CASE_PAGES = [
+  {
+    href: "/features/add-deceased-loved-one-to-photo",
+    label: "Add a deceased loved one to a photo",
+  },
+  { href: "/features/photo-joiner", label: "Join photos together online" },
+  {
+    href: "/features/individual-photos-into-group",
+    label: "Create a group photo from individual photos",
+  },
+  { href: "/features/merge-images", label: "Merge images online with AI" },
+  { href: "/features/ai-image-combiner", label: "AI image combiner" },
+  {
+    href: "/features/father-and-child-portrait",
+    label: "Father and child portrait",
+  },
+  {
+    href: "/features/black-and-white-composite",
+    label: "Black and white family portrait from separate photos",
+  },
+  { href: "/app/back-to-life-photo-app", label: "Back to life photo app" },
+  { href: "/app/animate-old-photos", label: "App for animating old photos" },
+  { href: "/app/make-pictures-smile", label: "Make pictures move and smile" },
+  {
+    href: "/app/sharpen-wedding-photos",
+    label: "Sharpen old wedding photos on mobile",
+  },
+]
+
 export default function FeaturesHubPage() {
   return (
     <div className="min-h-screen bg-brand-bg">
@@ -135,6 +173,28 @@ export default function FeaturesHubPage() {
             </article>
           ))}
         </div>
+
+        <section className="mt-20">
+          <h2 className="text-2xl sm:text-3xl font-[850] tracking-tight">
+            Specific use cases
+          </h2>
+          <p className="mt-3 text-gray-600 max-w-2xl font-medium">
+            Detailed walkthroughs for the situations people ask about most.
+          </p>
+          <ul className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
+            {USE_CASE_PAGES.map((p) => (
+              <li key={p.href}>
+                <Link
+                  href={p.href}
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-black hover:text-brand-orange"
+                >
+                  {p.label}
+                  <ArrowRight size={13} className="shrink-0" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
       <Footer />
     </div>

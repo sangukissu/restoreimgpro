@@ -65,7 +65,7 @@ export const featuresData: Record<string, FeaturePageData> = {
   "individual-photos-into-group": {
     slug: "/features/individual-photos-into-group",
     meta: {
-      title: "Create Group Photo from Individual Photos AI | BringBack AI",
+      title: "Create Group Photo from Individual Photos AI",
       description: "Create a group photo from individual photos online with AI. BringBack AI blends lighting, scale, and perspective to generate realistic family portraits and large group shots from separate pictures.",
       keywords: [
         "create group photo from individual photos ai",
@@ -226,7 +226,7 @@ export const featuresData: Record<string, FeaturePageData> = {
   "add-deceased-loved-one-to-photo": {
     slug: "/features/add-deceased-loved-one-to-photo",
     meta: {
-      title: "Add Deceased Loved One to Photo AI | BringBack AI",
+      title: "Add Deceased Loved One to Photo AI",
       description: "Respectfully add a deceased loved one to a current family photo. Our AI blends old and new photos with matched lighting and perspective.",
       keywords: [
         "add deceased loved one to photo ai free online",
@@ -362,7 +362,7 @@ export const featuresData: Record<string, FeaturePageData> = {
   "black-and-white-composite": {
     slug: "/features/black-and-white-composite",
     meta: {
-      title: "Black and White Family Portrait from Separate Photos | BringBack AI",
+      title: "Black and White Family Portrait from Separate Photos",
       description: "Turn separate photos into a timeless black and white family portrait. Merge old and new pictures, match tones, repair damage, and create vintage wall art.",
       keywords: [
         "black and white family portrait from separate photos",
@@ -524,7 +524,7 @@ export const featuresData: Record<string, FeaturePageData> = {
   "father-and-child-portrait": {
     slug: "/features/father-and-child-portrait",
     meta: {
-      title: "Create Realistic Father and Child Portrait AI | BringBack AI",
+      title: "Create Realistic Father and Child Portrait AI",
       description: "Merge photos of father and child into a single, heartwarming portrait. Perfect for gifts or when you don't have a recent photo together.",
       keywords: [
         "i want a realistic photo me and my father",
@@ -660,7 +660,7 @@ export const featuresData: Record<string, FeaturePageData> = {
   "merge-images": {
     slug: "/features/merge-images",
     meta: {
-      title: "Merge Images Online with AI | BringBack AI",
+      title: "Merge Images Online with AI",
       description: "Seamlessly merge two or more images into one. Our AI handles blending, lighting, and perspective for natural-looking results.",
       keywords: [
         "merge images online",
@@ -1056,7 +1056,7 @@ export const featuresData: Record<string, FeaturePageData> = {
   "add-person-to-photo": {
     slug: "/features/add-person-to-photo",
     meta: {
-      title: "Add Person to Photo AI | BringBack AI",
+      title: "Add Person to Photo AI",
       description: "Add a person to an existing photo naturally using AI. Perfect for when someone missed the group shot.",
       keywords: ["add person to photo", "include someone in photo ai", "add me to photo", "ai photo manipulation"],
     },

@@ -4,7 +4,7 @@ import { DeleteAccountClient } from "@/components/account/delete-account-client"
 import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 export const metadata = {
-  title: "Delete account | BringBack",
+  title: "Delete account",
   description: "Permanently delete your BringBack account and all associated data.",
 }
 

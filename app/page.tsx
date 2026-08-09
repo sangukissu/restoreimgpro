@@ -17,7 +17,7 @@ import { CTA } from '@/components/landing/CTA';
 
 
 export const metadata: Metadata = {
-  title: "AI Old Photo Restoration, Family Portraits & Photo Animation | BringBack",
+  title: "AI Old Photo Restoration, Family Portraits & Photo Animation",
   description:
     "Restore torn and faded family photos, combine separate relatives into group portraits, and animate old faces with realistic motion. Preserve ancestral memories in a private keepsake. Pay once — no subscription.",
   keywords:

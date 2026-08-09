@@ -14,7 +14,7 @@ import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Add a Person to Photo AI | Insert Missing Person in Family Photos | BringBack",
+  title: "Add a Person to Photo AI | Insert Missing Person in Family Photos",
   description:
     "Add a deceased loved one, late parent, or missing family member into a wedding, memorial, or family portrait with AI. Natural lighting, matched skin tones, and real before & after results.",
   keywords: [

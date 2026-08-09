@@ -13,7 +13,7 @@ import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Unblur & Sharpen Old Photos AI | Face Enhancer | BringBack",
+  title: "Unblur & Sharpen Old Photos AI | Face Enhancer",
   description:
     "Unblur out-of-focus faces, sharpen soft vintage prints, and remove heavy film noise with AI. Compare before downloading.",
   keywords: [

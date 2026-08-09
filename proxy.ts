@@ -2,18 +2,59 @@ import { type NextRequest } from "next/server"
 import { updateSession } from "@/utils/supabase/middleware"
 import { securityMiddleware, validateOrigin, detectSuspiciousActivity, isProtectedMemoryBookCrawler } from "@/middleware/security"
 
+/**
+ * The retired /restore/* pSEO cluster (149 pages, deleted 2026-06-08).
+ *
+ * 2026-08-09 — replaced the blanket "everything → /old-photo-restoration" rule.
+ * Pointing 149 URLs at a single page is a many-to-one redirect that Google
+ * treats as a soft 404, so none of the retained equity transferred. These slugs
+ * carry real impressions in GSC and have a genuinely equivalent destination, so
+ * they now redirect somewhere topically honest. Everything else still falls
+ * through to /old-photo-restoration, which IS the correct match for the
+ * "fix-<damage>-<subject>-photo" permutations that made up the bulk of the set.
+ */
+const RESTORE_SLUG_REDIRECTS: Record<string, string> = {
+  // Animation intent — 1,770 impressions at position 5.61.
+  'animate-old-photos': '/ai-photo-animation',
+
+  // Competitor comparison intent — we have real alternative pages for these.
+  // /restore/nero-ai-photo-restoration alone held 1,004 impressions at 7.73.
+  'nero-ai-photo-restoration': '/compare/nero-ai-alternative',
+  'gemini-photo-restoration': '/compare',
+  'chatgpt-photo-restoration': '/compare',
+  'best-photo-restoration-app': '/compare',
+
+  // Scanning / digitising intent — matches the existing guide exactly.
+  'how-to-scan-old-photos-for-the-best-resolution': '/guides/scan-family-photos-safely',
+  'how-to-scan-old-pictures': '/guides/scan-family-photos-safely',
+  'best-way-to-scan-photos': '/guides/scan-family-photos-safely',
+  'best-way-to-digitize-photos': '/guides/scan-family-photos-safely',
+  'how-can-i-digitize-old-photos': '/guides/scan-family-photos-safely',
+  'convert-pictures-to-digital': '/guides/scan-family-photos-safely',
+
+  // Colour intent.
+  'colorize-black-and-white': '/colorize-photos',
+  'old-photo-color-restoration-online': '/colorize-photos',
+
+  // Sharpness / resolution intent.
+  'enhance-photo-quality': '/denoise-photos',
+}
+
+/** Blur and low-resolution permutations belong on the unblur/sharpen page. */
+const SHARPNESS_SLUG_PATTERN = /^fix-(blurry|low-resolution)-/
+
+function resolveRestoreDestination(pathname: string): string {
+  const slug = pathname.replace(/^\/restore\/?/, '').replace(/\/$/, '')
+  if (!slug) return '/old-photo-restoration'
+  if (RESTORE_SLUG_REDIRECTS[slug]) return RESTORE_SLUG_REDIRECTS[slug]
+  if (SHARPNESS_SLUG_PATTERN.test(slug)) return '/denoise-photos'
+  return '/old-photo-restoration'
+}
+
 export async function proxy(request: NextRequest) {
-  if (request.nextUrl.pathname === '/restore/animate-old-photos') {
-    const redirectUrl = request.nextUrl.clone()
-    redirectUrl.pathname = '/ai-photo-animation'
-    redirectUrl.search = ''
-
-    return Response.redirect(redirectUrl, 301)
-  }
-
   if (request.nextUrl.pathname === '/restore' || request.nextUrl.pathname.startsWith('/restore/')) {
     const redirectUrl = request.nextUrl.clone()
-    redirectUrl.pathname = '/old-photo-restoration'
+    redirectUrl.pathname = resolveRestoreDestination(request.nextUrl.pathname)
     redirectUrl.search = ''
 
     return Response.redirect(redirectUrl, 301)

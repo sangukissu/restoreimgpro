@@ -8,7 +8,7 @@ import { supabaseAdmin } from "@/utils/supabase/admin"
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
-  title: "A private Family Heritage keepsake | BringBack",
+  title: "A private Family Heritage keepsake",
   description: "A private family keepsake protected by a PIN.",
   robots: {
     index: false,

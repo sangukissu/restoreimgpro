@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ScanLine, Camera, AlertTriangle, ShieldCheck, ArrowRight, CheckCircle2, ExternalLink, HardDrive, FileText, Image as ImageIcon } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "How to Scan Family Photos Safely: DPI Settings & Glare Prevention | BringBack",
+  title: "How to Scan Family Photos Safely: DPI Settings & Glare Prevention",
   description:
     "Master the safest techniques for scanning old family photos for AI restoration. Recommended DPI settings table, flatbed vs smartphone setup, stuck glass print guide, and archival 3-2-1 backups.",
   alternates: { canonical: "/guides/scan-family-photos-safely" },

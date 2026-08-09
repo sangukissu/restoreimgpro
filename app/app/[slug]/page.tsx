@@ -26,12 +26,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {};
   }
 
+  // `title` picks up the root layout's "%s | BringBack" template, so meta.title
+  // must NOT carry the brand itself. openGraph/twitter titles bypass that
+  // template, so they get the brand appended explicitly.
+  const socialTitle = `${page.meta.title} | BringBack`;
+
   return {
     title: page.meta.title,
     description: page.meta.description,
     keywords: page.meta.keywords.join(', '),
     openGraph: {
-      title: page.meta.title,
+      title: socialTitle,
       description: page.meta.description,
       type: 'website',
       url: `https://bringback.pro${page.slug}`,
@@ -40,7 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     twitter: {
       card: 'summary_large_image',
-      title: page.meta.title,
+      title: socialTitle,
       description: page.meta.description,
     },
     alternates: {

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Restore-Only vs AI Colorization: Which Workflow Should You Choose? | BringBack",
+  title: "Restore-Only vs AI Colorization: Which Workflow Should You Choose?",
   description:
     "Should you keep your old photo in black-and-white or colorize it? Compare AI restoration vs colorization accuracy, limitations, and when each workflow is the right choice.",
   alternates: { canonical: "/guides/restore-only-vs-colorize" },

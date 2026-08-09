@@ -1,11 +1,45 @@
 import { MetadataRoute } from "next"
 import { getAllPostSlugs } from "@/lib/wordpress"
 import { listComparePages } from "@/lib/comparedata"
+import { featuresData } from "@/lib/featuresdata"
+import { appData } from "@/lib/appdata"
+import { countryPages } from "@/lib/countrypages"
 
 const BASE = "https://bringback.pro"
 
 /** Stable lastModified so every crawl does not look like a full-site rewrite. */
-const SITE_LAST_MODIFIED = new Date("2026-07-19T00:00:00.000Z")
+const SITE_LAST_MODIFIED = new Date("2026-08-09T00:00:00.000Z")
+
+/**
+ * Keyword URLs that are still 301'd in next.config.js and must stay out of the
+ * sitemap. Only true duplicates belong here — a redirected URL in the sitemap
+ * is a contradictory signal (crawl this / go away).
+ */
+const REDIRECTED_KEYWORD_PATHS = new Set(["/features/add-person-to-photo"])
+
+/**
+ * Feature and app keyword pages, restored to the sitemap on 2026-08-09 after
+ * the 2026-07-19 consolidation was reverted. These target distinct queries from
+ * the money pages and were ranking positions 5–9 before being redirected away.
+ */
+function keywordPageEntries(): MetadataRoute.Sitemap {
+  return [...Object.values(featuresData), ...Object.values(appData)]
+    .map((page) => page.slug)
+    .filter((slug) => !REDIRECTED_KEYWORD_PATHS.has(slug))
+    .map((slug) => entry(slug, 0.75))
+}
+
+/**
+ * Localized landing pages (es, pt-br, id, de, ru), restored 2026-08-09.
+ *
+ * These return 200, carry hand-written localized copy (not machine
+ * translation), and still earn "Translated results" impressions in GSC — but
+ * they were dropped from the sitemap on 2026-07-19 and are not linked from
+ * anywhere, leaving them fully orphaned.
+ */
+function localizedPageEntries(): MetadataRoute.Sitemap {
+  return Object.values(countryPages).map((page) => entry(page.slug, 0.6))
+}
 
 function entry(
   path: string,
@@ -21,8 +55,8 @@ function entry(
 }
 
 /**
- * Indexable product, guide, and comparison pages.
- * Login, referral, and orphaned feature/app keyword URLs stay out.
+ * Indexable product, guide, comparison, and feature/app keyword pages.
+ * Login, referral, dashboard, and genuinely redirected URLs stay out.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const comparePages = listComparePages()
@@ -58,6 +92,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/refunds", 0.3, "monthly"),
     // All comparison tools (hub + every alternative page)
     ...comparePages.map((p) => entry(p.href, 0.6, "monthly")),
+    // Feature/app keyword pages (restored 2026-08-09)
+    ...keywordPageEntries(),
+    // Localized landing pages (restored 2026-08-09)
+    ...localizedPageEntries(),
   ]
 
   let blogPages: MetadataRoute.Sitemap = []

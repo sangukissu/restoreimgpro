@@ -6,7 +6,7 @@ import { SiteBreadcrumb } from "@/components/seo/site-breadcrumb"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 
 export const metadata: Metadata = {
-  title: "Restoration benchmark methodology | BringBack",
+  title: "Restoration benchmark methodology",
   description:
     "Transparent evaluation method for BringBack photo restoration: sample, scoring dimensions, failure display, and update policy. Demo results are labeled — not fabricated competitor rankings.",
   alternates: { canonical: "/restoration-benchmark" },
