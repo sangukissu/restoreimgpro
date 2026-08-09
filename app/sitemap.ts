@@ -12,14 +12,25 @@ const BASE = "https://bringback.pro"
 const SITE_LAST_MODIFIED = new Date("2026-08-09T00:00:00.000Z")
 
 /**
- * Retired URLs, read from the same file next.config.js builds its redirects
- * from. A redirected URL sitting in the sitemap is a contradictory signal
- * (crawl this / go away), so these two must never drift apart — hence the
- * shared source rather than a hand-maintained list here.
+ * Every retired URL — keyword pages AND deleted blog posts — read from the same
+ * file next.config.js builds its redirects from. A redirected URL sitting in the
+ * sitemap is a contradictory signal (crawl this / go away), so these must never
+ * drift apart; hence the shared source rather than a hand-maintained list.
+ *
+ * Both maps are included deliberately. The blog paths currently cannot appear
+ * anyway because the WordPress API no longer returns those slugs, but that is a
+ * property of the CMS, not a guarantee — republishing one of those posts would
+ * otherwise put a 301'd URL straight back into the sitemap.
  */
-const REDIRECTED_KEYWORD_PATHS = new Set(
-  Object.keys(urlPolicy.retiredKeywordPaths)
-)
+const RETIRED_PATHS = new Set([
+  ...Object.keys(urlPolicy.retiredKeywordPaths),
+  ...Object.keys(urlPolicy.retiredBlogPaths),
+])
+
+/** True if `path` is 301'd and must never be emitted as a sitemap entry. */
+function isRetired(path: string): boolean {
+  return RETIRED_PATHS.has(path)
+}
 
 /**
  * Feature and app keyword pages, restored to the sitemap on 2026-08-09 after
@@ -29,7 +40,7 @@ const REDIRECTED_KEYWORD_PATHS = new Set(
 function keywordPageEntries(): MetadataRoute.Sitemap {
   return [...Object.values(featuresData), ...Object.values(appData)]
     .map((page) => page.slug)
-    .filter((slug) => !REDIRECTED_KEYWORD_PATHS.has(slug))
+    .filter((slug) => !isRetired(slug))
     .map((slug) => entry(slug, 0.75))
 }
 
@@ -108,8 +119,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const slugs = await getAllPostSlugs()
     blogPages = slugs
       .filter((slug) => !slug.includes("#") && !slug.includes("?") && slug.trim() === slug)
-      // Exclude known empty/deleted WP stubs if they reappear in the API
       .filter((slug) => slug.length > 2)
+      // Deleted posts that are 301'd in next.config.js. The WP API does not
+      // return these today, but if one is ever republished this stops the
+      // sitemap from advertising a URL that redirects away.
+      .filter((slug) => !isRetired(`/blog/${slug}`))
       .map((slug) => ({
         url: `${BASE}/blog/${slug}`,
         lastModified: SITE_LAST_MODIFIED,

@@ -23,6 +23,9 @@
     "/features/add-person-to-photo": "/add-person-to-photo",
     "/features/ai-image-combiner": "/features/photo-joiner",
     "/features/black-and-white-composite": "/ai-family-portrait",
+    "/features/merge-images": "/features/photo-joiner",
+    "/features/individual-photos-into-group": "/ai-family-portrait",
+    "/features/father-and-child-portrait": "/ai-family-portrait",
     "/app/make-pictures-smile": "/ai-photo-animation",
     "/app/animate-old-photos": "/ai-photo-animation",
     "/app/sharpen-wedding-photos": "/denoise-photos"

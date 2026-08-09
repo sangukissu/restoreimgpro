@@ -68,8 +68,8 @@ export const appData: Record<string, AppPageData> = {
   "back-to-life-photo-app": {
     slug: "/app/back-to-life-photo-app",
     meta: {
-      title: "Best Back to Life App | Bring Your Loved Ones Back to Life Instantly",
-      description: "Looking for a back to life app? Our advanced AI web app lets you animate old family photos instantly without downloading anything. Bring your loved ones back to life today.",
+      title: "Back to Life Photo App — Animate Old Family Photos in Your Browser",
+      description: "Bring old family photos back to life with gentle, realistic motion. Runs in your phone browser — no app store download, no subscription. 10 credits per animation.",
       keywords: [
         "back to life app",
         "backtolife app",
@@ -77,40 +77,38 @@ export const appData: Record<string, AppPageData> = {
         "bring photos to life app",
         "animate old photos app",
         "photo animator app",
-        "ai photo animator",
-        "moving photos app",
         "bring pictures to life"
       ],
     },
     hero: {
-      h1: "The Ultimate Back to Life App for Your Cherished Memories",
+      h1: "A back to life photo app that runs in your browser",
       heading: {
-        primary: "Bring Your Loved Ones",
-        secondary: "Back to Life Instantly"
+        primary: "Bring your loved ones",
+        secondary: "back to life"
       },
-      subheadline: "Instantly animate faces, restore faded colors, and bring your loved ones back to life. App downloads are a thing of the pastâ€”use our powerful AI directly from your mobile browser.",
+      subheadline: "Turn a still portrait into a short, gentle video — a blink, a soft smile, a small turn of the head. It runs in Safari or Chrome on your phone, so there is nothing to install.",
       ctaText: "Animate Your First Photo",
       trustBadge: "Pay once — no subscription",
     },
     appStoreFriction: {
-      heading: "Why search the app store for a \"BacktoLife app\"?",
-      body: "You want to see your grandparents smile again, not wait for a 200MB download to finish. Our tool is engineered as a Progressive Web App (PWA). This means you get the full power of a dedicated mobile application right in your Safari or Chrome browser. No storage space wasted, no hidden subscription traps from app storesâ€”just pure, instant photo restoration."
+      heading: "Why there is no app to download",
+      body: "Most \"back to life\" tools ship as a native app: a few hundred megabytes, an account, and a subscription before you see a single result. BringBack runs as a web app instead. You open a link, upload one photo, and get your animation back. Nothing is installed on your phone, and nothing keeps billing you after you stop using it."
     },
     qualityAnalysis: {
-      heading: "How the Magic Happens",
-      subheading: "Our AI doesn't just move pixels. It understands the emotion behind every smile.",
+      heading: "What the animation actually does",
+      subheading: "Small, believable motion — not a puppet show.",
       features: [
         {
-          title: "AI Facial Mapping",
-          description: "To truly create a realistic back to life app experience, our AI identifies over 100 micro-expressions on the human face. By analyzing the unique geometry of your ancestor's features, it generates lifelike blinks, subtle smiles, and natural head tilts."
+          title: "Subtle facial motion",
+          description: "The model animates the face it can see: eyes blink, the mouth shifts into a soft smile, the head turns slightly. It works from the single frame you upload, so motion stays within what the original portrait supports."
         },
         {
-          title: "Historical Colorization",
-          description: "Black and white photos lack the warmth of real life. Before animating, our neural network applies deep-learning colorization, matching the exact skin tones and environmental lighting of the era."
+          title: "Restore first, then animate",
+          description: "Damage and blur get amplified once a photo starts moving. Running restoration before animation gives the model cleaner facial detail to work from, which is why the two steps live in the same workflow here."
         },
         {
-          title: "Privacy First",
-          description: "Family photos are deeply personal. We process your images securely. Unlike some native apps that scrape your phone's camera roll, our web application only accesses the specific photo you choose to upload."
+          title: "Your photos stay yours",
+          description: "You upload one photo at a time — we never read your camera roll. Results stay in your account until you delete them, and we do not use your family photos to train general-purpose AI models."
         }
       ],
       visuals: {
@@ -133,43 +131,43 @@ export const appData: Record<string, AppPageData> = {
       }
     ],
     howItWorks: {
-      heading: "How to Use the App to Bring Old Photos to Life",
-      subheading: "Three simple steps to animate your family history.",
+      heading: "How to bring an old photo back to life",
+      subheading: "Three steps, about a minute end to end.",
       steps: [
         {
           step: 1,
-          title: "Upload directly from your camera roll",
-          description: "Tap the upload button below. Choose a clear, front-facing portrait of your family member from your phone's gallery."
+          title: "Upload one portrait",
+          description: "Pick the clearest front-facing photo you have. A sharp face matters far more than a large file — a good phone snapshot of a print beats a blurry high-resolution scan."
         },
         {
           step: 2,
-          title: "Let the AI analyze the features",
-          description: "In seconds, our cloud servers process the image, sharpening blurred edges and mapping the facial structure."
+          title: "Restore it first if it is damaged",
+          description: "If the photo is torn, faded, or soft, run restoration before animating. Motion exaggerates whatever damage is already there, so the cleanup step is worth it."
         },
         {
           step: 3,
-          title: "Watch them smile again",
-          description: "Hit \"Animate.\" The final video will seamlessly loop, showing your loved one looking around and smiling. Save the MP4 directly to your device to share with your family group chat."
+          title: "Animate and download",
+          description: "You get a short silent MP4 that loops. Save it to your phone and share it. Compare it against the original before you send it on — AI reconstructs detail it cannot recover."
         }
       ]
     },
     benefits: {
-      heading: "More Than Just a Photo App",
-      subheading: "Preserve your family legacy with emotional depth.",
+      heading: "What people use it for",
+      subheading: "Mostly family history, and mostly for someone who is gone.",
       items: [
         {
-          title: "Ancestry & Genealogy",
-          description: "Connect with your roots in a way that static documents can't match. See your ancestors as they lived.",
+          title: "Ancestry & genealogy",
+          description: "Put a moving face to a name in your family tree. Seeing a great-grandparent blink lands differently than reading a census record.",
           icon: "History"
         },
         {
-          title: "Memorial Tributes",
-          description: "Create touching video memorials for funerals or anniversaries that celebrate a life well-lived.",
+          title: "Memorial tributes",
+          description: "A short animated clip for a funeral slideshow or an anniversary — a way to include someone who is no longer here.",
           icon: "Heart"
         },
         {
-          title: "Share the Emotion",
-          description: "Instantly share these moving moments on WhatsApp or social media to bring the whole family together.",
+          title: "Sharing with family",
+          description: "The output is a plain MP4, so it sends over WhatsApp or a family group chat without anyone needing an account.",
           icon: "Users"
         }
       ]
@@ -177,27 +175,27 @@ export const appData: Record<string, AppPageData> = {
     faq: [
       {
         question: "What is the best app to bring pictures to life?",
-        answer: "A strong solution should combine restoration quality, natural motion, and privacy controls. BringBack is built for family-photo restoration and realistic animation in one workflow, so you can upload a vintage photo and get a polished result without switching tools."
+        answer: "For old family photos, look for a tool that restores damage before it animates — motion exaggerates scratches, blur, and fading. BringBack does both in one workflow and runs in the browser, so there is no download. Tools built for selfies or generic video effects tend to struggle with vintage prints."
       },
       {
-        question: "Can I use this to bring my loved ones back to life (app feature)?",
-        answer: "Yes. This tool was specifically designed with genealogy and family history in mind. Our \"nostalgia engine\" is calibrated to treat vintage, damaged, or faded photos with care, allowing you to bring your loved ones back to life with respectful, natural-looking animations."
+        question: "Can I use this to animate a photo of someone who has died?",
+        answer: "Yes, and that is what most people use it for. The animation is deliberately restrained — a blink, a small smile, a slight head turn — because exaggerated motion tends to feel wrong on a memorial photo. You can preview the result before you share it."
       },
       {
-        question: "Is BringBack a free or trial tool?",
-        answer: "No. BringBack is a premium paid service. Every restoration and animation run uses compute-intensive AI processing, so access is offered through paid credits and plans."
+        question: "Do I need to install anything?",
+        answer: "No. It runs in Safari, Chrome, or any modern browser on iPhone, Android, tablet, or desktop. There is no app store download and no account required from a phone's app store."
       },
       {
-        question: "How does this compare to free animation apps?",
-        answer: "Most free tools focus only on basic motion effects. BringBack combines restoration and animation with stronger facial detail recovery, cleaner motion, and privacy-focused processing for important family memories."
+        question: "Is BringBack free?",
+        answer: "No. BringBack is a paid service. Animation costs 10 credits per run because each one is compute-intensive. Credits are bought once and never expire — there is no subscription."
       },
       {
-        question: "Can this replace hiring a photo editor for old family photos?",
-        answer: "For many common restoration and animation jobs, yes. BringBack is designed to deliver professional-grade results quickly for damaged, faded, or low-quality portraits without a long manual editing process."
+        question: "How good does my original photo need to be?",
+        answer: "The face needs to be recognisable and roughly front-facing. Heavy blur, deep creases across the face, or a subject turned far to one side will limit what the model can do. Restoring the photo first usually improves the animation noticeably."
       },
       {
-        question: "Does it work on iPhone and Android?",
-        answer: "Absolutely. Because it's a web app, it works perfectly on any device with a browserâ€”iPhone, iPad, Android phones, tablets, and desktop computers."
+        question: "Will it look like the real person?",
+        answer: "It reconstructs plausible motion from one still frame, so it is an interpretation, not footage. Faces generally stay recognisable, but always compare the result against your original before sharing it — especially for a memorial."
       }
     ]
   },
@@ -222,7 +220,7 @@ export const appData: Record<string, AppPageData> = {
         primary: "Make Your Pictures",
         secondary: "Move and Smile"
       },
-      subheadline: "Turn static portraits into heartwarming animations. Our AI adds natural smiles, blinks, and head movements to any photo in secondsâ€”no download required.",
+      subheadline: "Turn static portraits into heartwarming animations. Our AI adds natural smiles, blinks, and head movements to any photo in seconds—no download required.",
       ctaText: "Make a Photo Smile",
       trustBadge: "Pay once — no subscription",
     },

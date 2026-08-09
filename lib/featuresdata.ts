@@ -230,7 +230,8 @@ export const featuresData: Record<string, FeaturePageData> = {
       description: "Respectfully add a deceased loved one to a current family photo. Our AI blends old and new photos with matched lighting and perspective.",
       keywords: [
         "add deceased loved one to photo ai free online",
-        "e possivel ter um retrato falado do meu avo que nunca conhecemos",
+        "add deceased father to wedding photo",
+        "memorial portrait with late parent",
         "add person to photo",
         "memorial family portrait"
       ],
@@ -244,7 +245,6 @@ export const featuresData: Record<string, FeaturePageData> = {
       subheadline: "Bridge the generational gap. Upload an old photo of a lost family member and a current family portrait, and our AI will carefully combine them into a unified, high-resolution memory.",
       ctaText: "Create a Memorial Portrait",
       trustBadge: "Memorial Portraits",
-     
     },
     qualityAnalysis: {
       heading: "Respectful & Realistic Memorial Portraits",
@@ -315,8 +315,8 @@ export const featuresData: Record<string, FeaturePageData> = {
       subheading: "Honoring a loved one is more than just editing a photo. It's about preserving their presence in your family's story.",
       items: [
         {
-          title: "The Most Impactful Gift",
-          description: "There is no more emotional gift for a wedding, anniversary, or memorial service than a portrait showing the entire family together across time. It brings tears of joy and comfort.",
+          title: "A gift for the days that miss them most",
+          description: "Weddings, milestone anniversaries, and memorial services are when an absence is felt hardest. A portrait with everyone in it gives the family something to put on the wall for those days.",
           icon: "Heart",
         },
         {
@@ -335,6 +335,14 @@ export const featuresData: Record<string, FeaturePageData> = {
       {
         question: "Can I add a deceased loved one if their photo is black and white?",
         answer: "Yes. The AI will automatically colorize the older black-and-white photo to match the natural skin tones and lighting of the modern family photo.",
+      },
+      {
+        question: "Will it really look like them?",
+        answer: "It reconstructs the face from the photo you upload, so the result is an interpretation rather than a photograph. Likeness is usually strong from a clear, front-facing source and weaker from a damaged or angled one. Compare the result against your original before you print or share it — with a face you love, you will notice things a stranger would not.",
+      },
+      {
+        question: "What does it cost?",
+        answer: "2 credits per portrait. Credits are bought once and never expire, and there is no subscription. You can regenerate if a likeness is not right.",
       },
       {
         question: "What if the old photo is low quality or blurry?",
@@ -925,131 +933,143 @@ export const featuresData: Record<string, FeaturePageData> = {
   "photo-joiner": {
     slug: "/features/photo-joiner",
     meta: {
-      title: "Photo Joiner AI | Join Photos Together Online",
-      description: "Join photos together side-by-side or vertically with AI. Create seamless panoramas or before/after comparisons easily.",
-      keywords: ["photo joiner", "join photos online", "stitch photos together", "ai panorama stitcher"],
+      title: "Old Photo Joiner — Put People From Separate Photos Into One Portrait",
+      description: "Join old family photos into a single natural portrait. Upload separate pictures of each person and get one shot that looks like they were photographed together — not a collage.",
+      keywords: [
+        "old photo joiner",
+        "photo joiner",
+        "photo joiner online",
+        "ai photo joiner",
+        "pic joiner old",
+        "join old photos together",
+        "join family photos into one"
+      ],
     },
     hero: {
-      h1: "Join photos together effortlessly with AI",
+      h1: "Old photo joiner: put separate people into one portrait",
       heading: {
-        primary: "Join photos together",
-        secondary: "effortlessly with AI"
+        primary: "Join old photos",
+        secondary: "into one real portrait"
       },
-      subheadline: "Whether it's a panorama, a before/after shot, or a photo strip, join your images perfectly in seconds.",
-      ctaText: "Join Photos Now",
-      trustBadge: "Seamless Join",
+      subheadline: "Upload a separate photo of each person and get back a single portrait that looks like one sitting — matched lighting, consistent scale, shared background. Not a side-by-side collage.",
+      ctaText: "Join Your Photos",
+      trustBadge: "2 credits per portrait",
       images: {
-        inputs: ["/vintage-street.webp", "/vintage-street.webp"],
-        output: "/vintage-street.webp"
+        inputs: ["/fam-case1-inputA.jpg", "/fam-case1-inputB.jpg"],
+        output: "/fam-case1-combined.jpg"
       }
     },
     qualityAnalysis: {
-      heading: "Seamless Panoramic Stitching",
-      subheading: "Creating a wide shot from multiple photos used to be hard. Our AI finds the overlap and stitches them invisibly.",
+      heading: "Joined into one scene, not pasted side by side",
+      subheading: "The hard part is not putting two photos next to each other. It is making them look like they were taken at the same moment.",
       features: [
         {
-          title: "Overlap Detection",
-          description: "We analyze common features between photos to align them perfectly, even if they were shot handheld."
+          title: "One shared light source",
+          description: "Two photos taken decades apart almost never match. Faces are relit to a single direction and colour temperature, which is what stops a joined portrait from reading as a cut-and-paste job."
         },
         {
-          title: "Exposure Compensation",
-          description: "Variations in brightness between shots are smoothed out so the sky doesn't change color halfway through."
+          title: "Consistent scale and eye line",
+          description: "People are resized against each other and placed on a common eye line, so nobody is floating, oversized, or standing at the wrong depth in the frame."
         },
         {
-          title: "Distortion Correction",
-          description: "Lens distortion is corrected at the edges to prevent the 'fish-eye' warping common in wide panoramas."
+          title: "Works from imperfect originals",
+          description: "Most old photos are faded, soft, or damaged. Restoration runs as part of the same workflow, so you are not joining a sharp modern photo to a blurred 1950s print."
         },
         {
-          title: "Ghost Removal",
-          description: "If moving objects (like cars or people) appear in the overlap, we intelligently remove the ghosting artifacts."
+          title: "Review before you keep it",
+          description: "Every result is shown against your originals. AI reconstructs detail it cannot recover, so likeness is something you check rather than assume — especially on a face you know well."
         }
       ],
       visuals: {
         inputs: [
-          { src: "/vintage-street.webp", label: "Left View" },
-          { src: "/vintage-street.webp", label: "Right View" }
+          { src: "/fam-case1-inputA.jpg", label: "Photo 1" },
+          { src: "/fam-case1-inputB.jpg", label: "Photo 2" }
         ],
-        output: { src: "/vintage-street.webp", label: "Wide Panorama" }
+        output: { src: "/fam-case1-combined.jpg", label: "Joined Portrait" }
       }
     },
     showcaseCaptions: [
       {
-        beforeLabel: "Part 1 + Part 2",
-        afterLabel: "Joined Photo",
-        caption: "Stitching two overlapping photos into a wide panorama.",
+        beforeLabel: "Two separate photos",
+        afterLabel: "One portrait",
+        caption: "Two relatives photographed years apart, joined into a single seated portrait.",
       },
       {
-        beforeLabel: "Left + Right",
-        afterLabel: "Side-by-Side",
-        caption: "Creating a clean side-by-side comparison image.",
+        beforeLabel: "Faded print + phone photo",
+        afterLabel: "Matched portrait",
+        caption: "An old print and a recent phone snapshot brought to the same tone and sharpness.",
       },
     ],
     howItWorks: {
-      heading: "Join Photos Seamlessly in Seconds",
-      subheading: "Whether you're making a panorama or a side-by-side comparison, our AI handles the alignment for you.",
+      heading: "How to join old photos into one picture",
+      subheading: "Three steps. Around a minute.",
       steps: [
         {
           step: 1,
-          title: "Upload Your Sequence",
-          description: "Upload two or more overlapping photos or distinct images you want to place side-by-side.",
+          title: "Upload one photo per person",
+          description: "A separate picture of each person, up to eight. Front-facing and clearly lit works best — a good phone photo of a print beats a dark high-resolution scan.",
         },
         {
           step: 2,
-          title: "Select Your Mode",
-          description: "Choose 'Panorama' for seamless stitching or 'Grid' for clean, structured layouts.",
+          title: "Pick the scene",
+          description: "Choose the setting, era and clothing style you want everyone placed into. This is what the faces get matched to.",
         },
         {
           step: 3,
-          title: "Download High-Res",
-          description: "Get a wide, high-quality image that captures the full view without distortion.",
+          title: "Compare, then download",
+          description: "Check each face against the photo you uploaded before you keep it. Regenerate if a likeness is off — it costs 2 credits per portrait, and credits never expire.",
         },
       ]
     },
     benefits: {
-      heading: "See the Whole Picture",
-      subheading: "Capture wide landscapes, before-and-after comparisons, and panoramic views without distortion.",
+      heading: "What people join photos for",
+      subheading: "Almost always a portrait that was never possible to take.",
       items: [
         {
-          title: "Flawless Panoramas",
-          description: "Our AI finds the perfect stitching points and blends exposure differences for a seamless wide shot.",
-          icon: "Minimize",
+          title: "Relatives who never met",
+          description: "A grandparent who died before the grandchildren were born, placed in one portrait with them.",
+          icon: "History",
         },
         {
-          title: "Creative Comparisons",
-          description: "Perfectly align 'before' and 'after' shots to show progress, changes, or transformations side-by-side.",
-          icon: "Grid",
+          title: "Family scattered across countries",
+          description: "Everyone in one frame without booking a flight or a studio for a reunion that keeps getting postponed.",
+          icon: "Users",
         },
         {
-          title: "No Technical Skills Needed",
-          description: "Don't worry about focal lengths or lens distortion. Just upload, and we handle the geometry.",
-          icon: "Mouse",
+          title: "Someone missing from the day",
+          description: "A parent absent from a wedding or graduation photo, joined into the picture that should have had them in it.",
+          icon: "Heart",
         },
       ]
     },
     faq: [
       {
-        question: "Can I join photos of different sizes?",
-        answer: "Yes, our tool automatically handles resizing to make edges match perfectly.",
+        question: "Is this a collage maker or a panorama stitcher?",
+        answer: "Neither. This joins people from separate photos into one shared scene, so the result looks like a single photograph rather than several images placed next to each other. If you want a side-by-side grid, a panorama, or a photo strip with borders, a standard collage or panorama app is the right tool — this is not that.",
       },
       {
-        question: "Is it good for panoramas?",
-        answer: "Yes, the AI is excellent at finding overlap and stitching panoramic shots.",
+        question: "Can I join old photos with recent ones?",
+        answer: "Yes, and it is the most common use. A 1950s print and a phone photo taken last week get brought to the same sharpness, grain and colour temperature so they sit together naturally in one portrait.",
       },
       {
-        question: "Can I stitch photos vertically?",
-        answer: "Yes, you can choose between horizontal (side-by-side) or vertical (top-to-bottom) stacking.",
+        question: "How many photos can I join at once?",
+        answer: "Up to eight people, one photo per person. Fewer people generally gives a stronger likeness on each face, so for a large group it is worth reviewing the result carefully.",
       },
       {
-        question: "Will the final image be blurry?",
-        answer: "No, we preserve the original quality and can even upscale the result if needed.",
+        question: "What makes a good source photo?",
+        answer: "A clear, front-facing, well-lit face. Sunglasses, heavy shadow across the face, extreme angles, and very low resolution all reduce likeness. The face matters far more than the file size.",
       },
       {
-        question: "Can I add a border between joined photos?",
-        answer: "Yes, you can add a customizable border with any color or thickness.",
+        question: "Will it actually look like the real person?",
+        answer: "It reconstructs each face from the photo you provide, so it is an interpretation rather than a photograph. Likeness is usually strong from a clear source and weaker from a damaged or angled one. Always compare against your original before sharing it, particularly for a memorial portrait.",
       },
       {
-        question: "Is my data safe?",
-        answer: "Yes, all images are deleted when you delete them or per our retention policy.",
+        question: "What does it cost?",
+        answer: "2 credits per portrait. Credits are bought once and never expire — there is no subscription. There is no free tier because each generation is compute-intensive.",
+      },
+      {
+        question: "What happens to my photos?",
+        answer: "Uploads are processed to produce your portrait and results stay in your account until you delete them. We do not use your family photos to train general-purpose AI models.",
       },
     ]
   },

@@ -2,7 +2,7 @@
 
 **Purpose:** one place that answers "is this URL live or redirected, and who decided that?"
 **Machine-readable source:** [`config/url-policy.json`](config/url-policy.json) — edit that, never `next.config.js`.
-**Last updated:** 2026-08-09
+**Last updated:** 2026-08-09 (revision 5)
 
 ---
 
@@ -12,12 +12,17 @@
 
 ```
 config/url-policy.json
-   ├─→ next.config.js        builds redirects()
-   ├─→ app/sitemap.ts        excludes retired paths from the sitemap
+   │   retiredKeywordPaths  +  retiredBlogPaths
+   ├─→ next.config.js        builds redirects() from BOTH maps
+   ├─→ app/sitemap.ts        excludes BOTH maps — keyword pages and blog slugs
    └─→ app/features/page.tsx excludes retired paths from internal links
 ```
 
 Add a path to `retiredKeywordPaths` → it redirects, leaves the sitemap, and loses its internal link **in one edit**. Remove it → it comes back everywhere.
+
+**Both maps are excluded from the sitemap**, including `retiredBlogPaths`. Those blog slugs cannot appear today because the WordPress API no longer returns them — but that is a property of the CMS, not a guarantee. Republishing one of those posts would otherwise put a 301'd URL straight back into the sitemap. `app/sitemap.ts` filters WordPress slugs through `isRetired('/blog/' + slug)` for exactly that reason.
+
+> Fixed 2026-08-09 (rev 5). The first implementation excluded only `retiredKeywordPaths`; the blog filter it relied on was `slug.length > 2`, which despite its comment excluded nothing. Caught on review.
 
 The July 2026 incident happened because these three were maintained by hand and drifted apart.
 
@@ -47,18 +52,73 @@ For the "low volume but distinct query" case, ask: *does an existing page alread
 
 ## Decision log
 
-### 2026-08-09 · Reverted the July consolidation (6 URLs back live)
+### 2026-08-09 · Final state — 3 keyword pages live
 
-Restored because each targets a query no money page targets, and they were ranking positions 5–9 when redirected.
+After two rounds of review, only pages backed by a **distinct query cluster with real demand** survive. Decided by pulling the query cluster for each page from `Queries.csv`, not by page-level impressions (which credit a page for queries a money page actually owns).
 
-| URL | Status | 6-mo clicks | Impr | Pos | Rationale |
-|---|---|---:|---:|---:|---|
-| `/features/add-deceased-loved-one-to-photo` | 🟢 **live** | 569 | 11,206 | 5.96 | Was the #4 page sitewide at 5.08% CTR. Competitors all run a dedicated page for this term. |
-| `/app/back-to-life-photo-app` | 🟢 **live** | 146 | 3,680 | 6.90 | "back to life app" is its own query (630 impr) |
-| `/features/photo-joiner` | 🟢 **live** | 69 | 4,157 | 8.52 | "photo joiner" cluster = 2,052 impr across variants |
-| `/features/individual-photos-into-group` | 🟢 **live** | 15 | 875 | 7.82 | "create group photo from individual photos" — task query, distinct |
-| `/features/merge-images` | 🟢 **live** | 14 | 553 | 11.97 | "merge images" — distinct tool-name query |
-| `/features/father-and-child-portrait` | 🟢 **live** | 8 | 301 | 5.26 | Distinct niche, healthy position |
+| URL | Status | Own query cluster | Page clicks | Rationale |
+|---|---|---:|---:|---|
+| `/features/add-deceased-loved-one-to-photo` | 🟢 **live** | — | 569 | Was the #4 page sitewide at 5.08% CTR / pos 5.96. Every competitor runs a dedicated page for this term. |
+| `/features/photo-joiner` | 🟢 **live** | **2,786 impr**, 15 queries, wPos 7.35 | 69 | "photo joiner" / "pic joiner" is tool-category language, not family-portrait language. "old photo joiner" alone = 1,624 impr at pos 6.38. No money page targets it. |
+| `/app/back-to-life-photo-app` | 🟢 **live** | **900 impr**, 9 queries, wPos 5.64 | 146 | "back to life app" = 630 impr at pos 5.33. Distinct product-category query. |
+
+#### Round 2 — 3 more retired on query-cluster evidence
+
+Challenged on the grounds that duplication applied to these too. **Correct.** The query data settled it:
+
+| URL | Own query cluster | Verdict |
+|---|---|---|
+| `/features/merge-images` | **25 impr**, 2 queries, wPos 24.80 | Retired — essentially zero demand for "merge" language. Its 553 page impressions came from queries it does not own. |
+| `/features/individual-photos-into-group` | cluster is **5,687 impr** but `/ai-family-portrait` already ranks pos 5.00–6.01 on every head term in it | Retired — competing against a money page that is already winning. Only "create a group photo from individual photos" (164 impr) was uniquely its own. |
+| `/features/father-and-child-portrait` | **0 queries** in the entire 1,000-row export | Retired — no measurable demand at all. |
+
+**Kept `/features/photo-joiner` against the same challenge.** Its query cluster is **2,786 impressions — 111× `merge-images`** — and "photo joiner" is a different search vocabulary from "family portrait", so `/ai-family-portrait` does not and will not rank for it. Retiring it would forfeit a distinct category with no page to inherit it. ⚠️ Was ~205 words and described a product that does not exist — **rewritten 2026-08-09**, now 532 words describing the real one. See the content section below.
+
+### 2026-08-09 · Content defects found in the keyword pages
+
+Investigating a report of keyword-spammed copy on `/app/back-to-life-photo-app` surfaced three measurable problems across the whole keyword-page set:
+
+| Defect | Measurement | Action |
+|---|---|---|
+| **Image duplication** | Only **12 distinct images across 12 pages**. `/family-photo1.png` appeared on 7 pages, `/family-photo2.jpg` on 6. | Resolved as a side effect of the retirements — the 3 surviving pages now share **0 assets**. Verified. |
+| **Encoding corruption** | 4 instances of UTF-8 em-dash mis-decoded as Windows-1252 (`â€"`) plus one U+FFFD replacement char, rendering as visible mojibake in the hero copy. | Fixed in `lib/appdata.ts`. 0 remaining sitewide. |
+| **Keyword stuffing / fabricated claims** | See rewrite below. | `/app/back-to-life-photo-app` rewritten. |
+| **Thin content** | Surviving pages ran 205–332 words of prose. | Rewritten: `photo-joiner` 205→532, `back-to-life` rewritten. `add-deceased-loved-one-to-photo` (299 words) still open. |
+
+Notably, **text similarity between pages was under 35% for every pair** — the prose was genuinely distinct, not spun. The duplication was in the *images and template*, not the words. That distinction matters: this was not doorway-page spam, it was thin pages sharing a stock asset pool.
+
+#### `/app/back-to-life-photo-app` rewrite
+
+Removed:
+- `"To truly create a realistic back to life app experience, our AI identifies over 100 micro-expressions"` — keyword inserted mid-sentence, and the "100 micro-expressions" figure is fabricated specificity
+- `"Unlike some native apps that scrape your phone's camera roll"` — unsubstantiated accusation against unnamed competitors
+- `"The Ultimate Back to Life App for Your Cherished Memories"` (H1) and `Why search the app store for a "BacktoLife app"?` (H2) — exact-match keyword bait
+- `"Can I use this to bring my loved ones back to life (app feature)?"` — the `(app feature)` parenthetical was a stuffing artifact that read as broken English
+
+Added: honest capability limits ("it reconstructs plausible motion from one still frame, so it is an interpretation, not footage"), the restore-before-animate guidance that is genuinely useful, and direct first-sentence answers in the FAQ so the page is quotable by AI Overviews.
+
+#### 🚨 `/features/photo-joiner` was advertising a product that does not exist
+
+The most serious content finding of the whole audit. The page described, in detail, a **panorama-stitching and collage tool**:
+
+> "Seamless Panoramic Stitching" · "Overlap Detection" · "Exposure Compensation" · "Distortion Correction" · "Ghost Removal" · "Choose 'Panorama' for seamless stitching or 'Grid' for clean, structured layouts" · "you can add a customizable border with any color or thickness" · "we can even upscale the result"
+
+**None of it exists.** A codebase search for panorama/stitch/collage/grid functionality returns exactly two hits, and both are prompt instructions doing the opposite:
+
+```
+lib/family-portrait/prompt-builder.ts:68
+  DO NOT create a collage, "cut-and-paste," or "photoshop" composite.
+```
+
+On top of that, all three images on the page — `Left View`, `Right View`, and `Wide Panorama` — were **the same file** (`/vintage-street.webp`).
+
+This is worse than keyword stuffing. Someone arriving from "photo joiner online" was promised a panorama stitcher and handed a family-portrait generator. It explains the page's 1.66% CTR and why 4,157 impressions produced only 69 clicks: the traffic was real, the promise was not, and it almost certainly bounced.
+
+**Rewritten** to describe the actual product, with the intent mismatch handled head-on rather than papered over — the first FAQ is *"Is this a collage maker or a panorama stitcher?"* answered "Neither", and points people wanting a grid or panorama to a different class of tool. Expected effect: fewer impressions (the panorama queries will drop away) but materially better CTR and conversion on the "old photo joiner" intent, which is 58% of the cluster and is genuinely this product.
+
+Prose 205 → 532 words. Images now three real composites (`fam-case1-inputA/inputB/combined`), unique to this page.
+
+**Lesson for the registry:** before keeping a page on demand data, check that the page describes something you actually sell. Query demand justifies the URL; it does not justify the copy.
 
 ### 2026-08-09 · Re-retired 5 URLs after review
 
@@ -119,7 +179,7 @@ Current mapping in `proxy.ts` (`RESTORE_SLUG_REDIRECTS`):
 
 ## Live URL inventory
 
-**Sitemap total: 83** (was 72 before 2026-08-09)
+**Sitemap total: ~70** (was 72 before 2026-08-09; 9 keyword pages retired, 5 localized pages restored)
 
 | Group | Count | Notes |
 |---|---:|---|
@@ -129,7 +189,7 @@ Current mapping in `proxy.ts` (`RESTORE_SLUG_REDIRECTS`):
 | Compare — alternative pages | 14 | incl. `pixreunion-alternative`, `kinpict-alternative` |
 | Trust & legal | 6 | about, methodology, editorial policy, privacy, terms, refunds |
 | Benchmark | 1 | |
-| **Feature/app keyword pages** | **6** | restored 2026-08-09 |
+| **Feature/app keyword pages** | **3** | restored 2026-08-09, narrowed to those with their own query cluster |
 | **Localized pages** | **5** | `/es/`, `/pt-br/`, `/id/`, `/de/`, `/ru/` — restored 2026-08-09, were orphaned |
 | Blog (from WordPress) | ~31 | dynamic |
 

@@ -92,16 +92,7 @@ const USE_CASE_PAGES = [
     href: "/features/add-deceased-loved-one-to-photo",
     label: "Add a deceased loved one to a photo",
   },
-  { href: "/features/photo-joiner", label: "Join photos together online" },
-  {
-    href: "/features/individual-photos-into-group",
-    label: "Create a group photo from individual photos",
-  },
-  { href: "/features/merge-images", label: "Merge images online with AI" },
-  {
-    href: "/features/father-and-child-portrait",
-    label: "Father and child portrait",
-  },
+  { href: "/features/photo-joiner", label: "Join old photos together online" },
   { href: "/app/back-to-life-photo-app", label: "Back to life photo app" },
   // Retired paths are filtered out below so this list can never link to a
   // redirect. Adding a path to config/url-policy.json removes it from here
