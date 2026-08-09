@@ -4,6 +4,7 @@ import { listComparePages } from "@/lib/comparedata"
 import { featuresData } from "@/lib/featuresdata"
 import { appData } from "@/lib/appdata"
 import { countryPages } from "@/lib/countrypages"
+import urlPolicy from "@/config/url-policy.json"
 
 const BASE = "https://bringback.pro"
 
@@ -11,11 +12,14 @@ const BASE = "https://bringback.pro"
 const SITE_LAST_MODIFIED = new Date("2026-08-09T00:00:00.000Z")
 
 /**
- * Keyword URLs that are still 301'd in next.config.js and must stay out of the
- * sitemap. Only true duplicates belong here — a redirected URL in the sitemap
- * is a contradictory signal (crawl this / go away).
+ * Retired URLs, read from the same file next.config.js builds its redirects
+ * from. A redirected URL sitting in the sitemap is a contradictory signal
+ * (crawl this / go away), so these two must never drift apart — hence the
+ * shared source rather than a hand-maintained list here.
  */
-const REDIRECTED_KEYWORD_PATHS = new Set(["/features/add-person-to-photo"])
+const REDIRECTED_KEYWORD_PATHS = new Set(
+  Object.keys(urlPolicy.retiredKeywordPaths)
+)
 
 /**
  * Feature and app keyword pages, restored to the sitemap on 2026-08-09 after

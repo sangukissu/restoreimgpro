@@ -1,0 +1,40 @@
+{
+  "_readme": [
+    "SINGLE SOURCE OF TRUTH for retired URLs. Read by three consumers:",
+    "  1. next.config.js      -> builds the redirects() array",
+    "  2. app/sitemap.ts      -> excludes these paths from the sitemap",
+    "  3. app/features/page.tsx -> excludes these from the use-case link list",
+    "",
+    "Adding a path here retires it everywhere at once. Removing it revives it",
+    "everywhere at once. Never hand-edit redirects in next.config.js again --",
+    "that drift is what produced the July 2026 incident, where URLs were",
+    "redirected but left in the sitemap and internal links.",
+    "",
+    "RULE before adding anything here: a URL may only be retired if it targets",
+    "the SAME primary query as its destination. Do NOT retire a URL because it",
+    "has low CTR -- sitewide CTR is suppressed by AI Overviews (see",
+    "SEO_DIAGNOSIS_2026-08.md section 2.3), so low CTR at a good position means",
+    "the SERP changed, not that the page is bad. Duplication is the criterion.",
+    "",
+    "Full decision history: SEO_URL_REGISTRY.md"
+  ],
+
+  "retiredKeywordPaths": {
+    "/features/add-person-to-photo": "/add-person-to-photo",
+    "/features/ai-image-combiner": "/features/photo-joiner",
+    "/features/black-and-white-composite": "/ai-family-portrait",
+    "/app/make-pictures-smile": "/ai-photo-animation",
+    "/app/animate-old-photos": "/ai-photo-animation",
+    "/app/sharpen-wedding-photos": "/denoise-photos"
+  },
+
+  "retiredBlogPaths": {
+    "/blog/can-ai-truly-restore-original-colors-to-old-photos": "/colorize-photos",
+    "/blog/are-ai-upscalers-making-up-details": "/old-photo-restoration",
+    "/blog/photoshop-generative-fill-vs-purpose-built-ai": "/old-photo-restoration",
+    "/blog/what-is-ai-photo-restoration": "/old-photo-restoration",
+    "/blog/why-bringback-ai-is-the-ultimate-choice-for-precious-family-photo-restoration-animation": "/old-photo-restoration",
+    "/blog/upscale-old-photos-for-prints-the-2026-guide-to-perfect-canvas-with-ai": "/old-photo-restoration",
+    "/blog/how-to-restore-great-grandparents-wedding-photos-with-ai": "/old-photo-restoration"
+  }
+}

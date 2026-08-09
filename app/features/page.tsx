@@ -5,6 +5,7 @@ import { Footer } from "@/components/landing/Footer"
 import { FEATURE_CREDIT_COSTS, formatCredits } from "@/lib/pricing"
 import { DASHBOARD_CTA, POSITIONING } from "@/lib/site-copy"
 import { ArrowRight } from "lucide-react"
+import urlPolicy from "@/config/url-policy.json"
 
 export const metadata: Metadata = {
   title: "Features — Family Photo Preservation Tools",
@@ -97,23 +98,15 @@ const USE_CASE_PAGES = [
     label: "Create a group photo from individual photos",
   },
   { href: "/features/merge-images", label: "Merge images online with AI" },
-  { href: "/features/ai-image-combiner", label: "AI image combiner" },
   {
     href: "/features/father-and-child-portrait",
     label: "Father and child portrait",
   },
-  {
-    href: "/features/black-and-white-composite",
-    label: "Black and white family portrait from separate photos",
-  },
   { href: "/app/back-to-life-photo-app", label: "Back to life photo app" },
-  { href: "/app/animate-old-photos", label: "App for animating old photos" },
-  { href: "/app/make-pictures-smile", label: "Make pictures move and smile" },
-  {
-    href: "/app/sharpen-wedding-photos",
-    label: "Sharpen old wedding photos on mobile",
-  },
-]
+  // Retired paths are filtered out below so this list can never link to a
+  // redirect. Adding a path to config/url-policy.json removes it from here
+  // automatically.
+].filter((p) => !(p.href in urlPolicy.retiredKeywordPaths))
 
 export default function FeaturesHubPage() {
   return (

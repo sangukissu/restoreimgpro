@@ -2,27 +2,30 @@
 
 **Date applied:** 2026-08-09
 **Diagnosis this implements:** [SEO_DIAGNOSIS_2026-08.md](SEO_DIAGNOSIS_2026-08.md)
-**Files changed:** 34 · **Deployed:** ❌ not yet — see [§ What you must do manually](#what-you-must-do-manually)
+**URL decision log:** [SEO_URL_REGISTRY.md](SEO_URL_REGISTRY.md)
+**Files changed:** 35 · **Deployed:** ❌ not yet — see [§ What you must do manually](#what-you-must-do-manually)
 
 ---
 
 ## Summary
 
-Reverses the self-inflicted deindexing that ran from 2026-06-08 to 2026-07-22 and fixes the technical defects found in the audit. The single biggest item: **11 URLs that were 301'd away on 2026-07-19 are now live again**, including the page that was carrying 569 clicks at 5.08% CTR.
+Reverses the self-inflicted deindexing that ran from 2026-06-08 to 2026-07-22 and fixes the technical defects found in the audit. The single biggest item: **6 URLs that were 301'd away on 2026-07-19 are now live again**, including the page that was carrying 569 clicks at 5.08% CTR.
 
 Nothing here is speculative. Every change is tied to a measured number in the GSC export.
+
+> **Revision, same day:** the first pass restored 11 URLs. Five of those were re-retired after review — they had produced 10 clicks between them in 6 months and each duplicated an intent an existing page already owns. Detail in [§1b](#1b-re-retired-5-of-those-after-review). All retirement decisions now live in `config/url-policy.json`.
 
 ---
 
 ## Changes
 
-### 1. Restored 11 wrongly-redirected keyword pages 🔴 highest impact
+### 1. Restored 6 wrongly-redirected keyword pages 🔴 highest impact
 
-**File:** `next.config.js`
+**Files:** `config/url-policy.json`, `next.config.js`
 
 Removed the `/features/*` and `/app/*` redirect block added on 2026-07-19.
 
-**Why:** Those URLs carried **909 clicks (16.6% of sitewide) and 55,305 impressions** over the last 6 months. They were not thin duplicates — they are hand-written pages targeting distinct queries, and they were ranking positions 5–9 when they were redirected. Weighted CTR of the redirected set was **1.64%** vs **1.34%** for the pages that were kept: the consolidation systematically removed the above-average performers.
+**Why:** Those URLs carried **909 clicks (16.6% of sitewide) and 55,305 impressions** over the last 6 months. Weighted CTR of the redirected set was **1.64%** vs **1.34%** for the pages that were kept: the consolidation systematically removed the above-average performers.
 
 | Restored URL | Was earning | Position |
 |---|---|---|
@@ -32,15 +35,47 @@ Removed the `/features/*` and `/app/*` redirect block added on 2026-07-19.
 | `/features/individual-photos-into-group` | 15 clicks, 875 impr | 7.82 |
 | `/features/merge-images` | 14 clicks, 553 impr | 11.97 |
 | `/features/father-and-child-portrait` | 8 clicks, 301 impr, 2.66% CTR | 5.26 |
-| `/features/ai-image-combiner` | 4 clicks, 115 impr | 9.59 |
-| `/features/black-and-white-composite` | 3 clicks, 509 impr | 5.25 |
-| `/app/make-pictures-smile` | 3 clicks, 293 impr | 5.71 |
-| `/app/animate-old-photos` | (targets "animate old photos", 603 impr query) | — |
-| `/app/sharpen-wedding-photos` | (targets "sharpen wedding photos") | — |
+
+Together: **821 clicks, 20,772 impressions** — **90% of the clicks** lost to the July consolidation, recovered with 6 URLs instead of 11. (The remaining 5 URLs held 10 clicks; the rest of the 55,305 lost impressions sat on the redirected blog posts, which stay retired because their content really is deleted.)
 
 **Verified before reverting:** the page components (`app/features/[slug]/page.tsx`, `app/app/[slug]/page.tsx`) and their content (`lib/featuresdata.ts`, `lib/appdata.ts`) were never deleted — only shadowed by the redirects. Each page still ships correct canonical, `WebApplication` + `FAQPage` JSON-LD, and `generateStaticParams`. So these come back fully formed, not as stubs.
 
 **Deliberately NOT reverted:** `/features/add-person-to-photo` → `/add-person-to-photo`. This one *was* genuine cannibalisation — same primary query, and the `/features/` version sat at position 16.94 / 0.69% CTR against 10.97 / 4.06% for the destination. Correct consolidation, kept.
+
+---
+
+### 1b. Re-retired 5 of those after review
+
+The first pass restored 11. Five were reversed on the same day after the call was challenged: they had earned **10 clicks between them in 6 months**, and each duplicates an intent an existing page already owns.
+
+| Re-retired URL | Clicks | Redirects to | Reason |
+|---|---:|---|---|
+| `/features/ai-image-combiner` | 4 | `/features/photo-joiner` | 3rd page competing for "combine/join photos" |
+| `/features/black-and-white-composite` | 3 | `/ai-family-portrait` | Dominant intent is portrait-from-separate-photos |
+| `/app/make-pictures-smile` | 3 | `/ai-photo-animation` | Same intent as the animation page |
+| `/app/animate-old-photos` | ~0 | `/ai-photo-animation` | Direct duplicate |
+| `/app/sharpen-wedding-photos` | ~0 | `/denoise-photos` | Same intent as unblur/sharpen |
+
+Two destinations are **better than the original July mapping**: `black-and-white-composite` → `/ai-family-portrait` (was `/colorize-photos`) and `sharpen-wedding-photos` → `/denoise-photos` (was `/old-photo-restoration`). Closer topical matches, which matters because a mismatched redirect is read as a soft 404 and passes no equity.
+
+⚠️ **Important nuance recorded in the registry:** these were retired for **duplication**, not for low CTR. Low CTR is not a valid retirement criterion on this site — sitewide non-brand CTR is at 0.09x–0.68x of benchmark at *every* position because of AI Overviews, so a page at position 5 with 0.6% CTR looks exactly like every other page including the money pages. Judging pages on CTR right now would delete good pages.
+
+---
+
+### 1c. Single source of truth for retired URLs 🟠 prevents recurrence
+
+**New file:** `config/url-policy.json`
+
+Every retired URL now lives in one JSON file, read by all three consumers:
+
+```
+config/url-policy.json
+   ├─→ next.config.js         builds redirects()
+   ├─→ app/sitemap.ts         excludes retired paths
+   └─→ app/features/page.tsx  excludes retired paths from internal links
+```
+
+**Why:** the July incident happened partly because these three were hand-maintained and drifted — URLs were redirected but left in the sitemap and internal links, sending Google contradictory signals. One edit now retires or revives a URL everywhere at once. Verified: 13 redirects generated, **0 chains**.
 
 ---
 
@@ -108,9 +143,9 @@ The "Trusted by 3.1K+ Families" face pile was loading **stock strangers from `ra
 
 ### 6. Rebuilt the sitemap 🟠
 
-**File:** `app/sitemap.ts` — **72 → 88 URLs**
+**File:** `app/sitemap.ts` — **72 → 83 URLs**
 
-- Added the 11 restored feature/app pages (derived from `featuresData`/`appData`, filtered through a `REDIRECTED_KEYWORD_PATHS` set so a redirected URL can never leak back in)
+- Added the 6 restored feature/app pages (derived from `featuresData`/`appData`, filtered through `config/url-policy.json` so a redirected URL can never leak back in)
 - Added the 5 localized pages (`/es/`, `/pt-br/`, `/id/`, `/de/`, `/ru/`) — these return 200, have hand-written localized copy, and still earn "Translated results" impressions, but were dropped from the sitemap on 2026-07-19 and linked from nowhere
 - Bumped `SITE_LAST_MODIFIED` to `2026-08-09` so the recrawl is signalled
 
@@ -120,7 +155,7 @@ The "Trusted by 3.1K+ Families" face pile was loading **stock strangers from `ra
 
 **File:** `app/features/page.tsx`
 
-Added a **"Specific use cases"** section linking all 11 restored pages with keyword-matched anchor text.
+Added a **"Specific use cases"** section linking the 6 restored pages with keyword-matched anchor text. The list is filtered through `config/url-policy.json`, so a retired path can never be linked by accident.
 
 **Why:** without this they'd be sitemap-only. Sitemap presence alone gives weak crawl priority and passes no internal PageRank — the restore would have been half a fix.
 
@@ -140,11 +175,11 @@ Added a **"Specific use cases"** section linking all 11 restored pages with keyw
 
 | Check | Result |
 |---|---|
-| `npx tsc --noEmit` on all 34 changed files | ✅ clean |
+| `npx tsc --noEmit` on all 35 changed files | ✅ clean |
 | Turbopack production compile | ✅ `Compiled successfully in 24.8s` |
 | `/restore/*` redirect resolver unit tests | ✅ 14/14 |
-| Redirect chain audit (no target is also a source) | ✅ none |
-| Sitemap composition | ✅ 88 URLs, 1 correctly excluded |
+| Redirect chain audit (no target is also a source) | ✅ none (13 redirects) |
+| Sitemap composition | ✅ 83 URLs, 6 correctly excluded |
 | `randomuser.me` references remaining | ✅ 0 |
 | OG/Twitter titles still branded | ✅ verified against live HTML |
 

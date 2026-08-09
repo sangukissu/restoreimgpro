@@ -1,3 +1,5 @@
+const urlPolicy = require('./config/url-policy.json')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -105,72 +107,25 @@ const nextConfig = {
 
   // 301 redirects: true duplicates + genuinely deleted blog posts only.
   //
-  // 2026-08-09 — REVERTED the /features/* and /app/* consolidation added on
-  // 2026-07-19. Those 11 URLs were not thin duplicates; they were hand-written
-  // pages ranking on distinct keywords, and redirecting them cost 909 clicks
-  // (16.6% of sitewide) and 55,305 impressions over 6 months. The worst case,
-  // /features/add-deceased-loved-one-to-photo, held position 5.96 at 5.08% CTR
-  // — the best-converting page on the site — and was sent to a page at
-  // position 10.97. See SEO_DIAGNOSIS_2026-08.md §2.1.
+  // DO NOT hand-edit this list. Every retired URL lives in
+  // config/url-policy.json, which app/sitemap.ts and app/features/page.tsx read
+  // from the same file. Editing here alone recreates the July 2026 bug where
+  // URLs were redirected but left in the sitemap and internal links.
   //
-  // Rule going forward: never redirect a URL with clicks in the last 90 days
-  // unless it targets the SAME query as the destination. Distinct keyword =
-  // distinct page.
+  // Rule before retiring anything: the URL must target the SAME primary query
+  // as its destination. Low CTR is NOT a reason -- sitewide CTR is suppressed
+  // by AI Overviews, so a low CTR at a good position means the SERP changed,
+  // not that the page is bad. See SEO_URL_REGISTRY.md for the decision log.
   async redirects() {
     return [
-      // --- True duplicate: same primary query as the destination ---
-      // /features/add-person-to-photo sat at position 16.94 / 0.69% CTR while
-      // /add-person-to-photo sat at 10.97 / 4.06% on the same query. This one
-      // was real cannibalisation, so the consolidation stays.
-      {
-        source: '/features/add-person-to-photo',
-        destination: '/add-person-to-photo',
+      ...Object.entries({
+        ...urlPolicy.retiredKeywordPaths,
+        ...urlPolicy.retiredBlogPaths,
+      }).map(([source, destination]) => ({
+        source,
+        destination,
         permanent: true,
-      },
-
-      // Deleted low-quality blog posts → most relevant feature/page.
-      // Verified 2026-08-09: none of these slugs are still returned by the
-      // WordPress API, so the underlying posts really are gone and these
-      // redirects are correct.
-      {
-        source: '/blog/can-ai-truly-restore-original-colors-to-old-photos',
-        destination: '/colorize-photos',
-        permanent: true,
-      },
-      {
-        source: '/blog/are-ai-upscalers-making-up-details',
-        destination: '/old-photo-restoration',
-        permanent: true,
-      },
-      {
-        source: '/blog/photoshop-generative-fill-vs-purpose-built-ai',
-        destination: '/old-photo-restoration',
-        permanent: true,
-      },
-      {
-        source: '/blog/what-is-ai-photo-restoration',
-        destination: '/old-photo-restoration',
-        permanent: true,
-      },
-      {
-        source: '/blog/why-bringback-ai-is-the-ultimate-choice-for-precious-family-photo-restoration-animation',
-        destination: '/old-photo-restoration',
-        permanent: true,
-      },
-      {
-        source: '/blog/upscale-old-photos-for-prints-the-2026-guide-to-perfect-canvas-with-ai',
-        destination: '/old-photo-restoration',
-        permanent: true,
-      },
-      {
-        // Retargeted 2026-08-09: this post was about RESTORING old wedding
-        // photos, not adding a person. Pointing it at /add-person-to-photo was
-        // a topical mismatch, which Google treats as a soft 404 and passes no
-        // equity through.
-        source: '/blog/how-to-restore-great-grandparents-wedding-photos-with-ai',
-        destination: '/old-photo-restoration',
-        permanent: true,
-      },
+      })),
       // Redirect HTTP to HTTPS in production
       process.env.NODE_ENV === 'production' ? {
         source: '/(.*)',
