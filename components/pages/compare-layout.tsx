@@ -3,17 +3,151 @@
 import React from 'react';
 import Link from 'next/link';
 import { Check, X, ArrowRight, Zap, PlayCircle, UploadCloud, Download, CheckCircle, Users, ChevronDown, ChevronUp } from 'lucide-react';
-import { ComparePageData, listComparePages } from '@/lib/comparedata';
+import { ComparePageData, COMPARE_CLAIM, compareLastUpdated, listComparePages } from '@/lib/comparedata';
 import { Compare } from "@/components/ui/compare";
 import { useState } from 'react';
 import { SiteBreadcrumb } from '@/components/seo/site-breadcrumb';
 
+function formatDisplayDate(iso: string): string {
+  const d = new Date(`${iso}T00:00:00Z`)
+  if (Number.isNaN(d.getTime())) return iso
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  })
+}
+
+/** Supporting guides selected by comparison category. */
+const RELATED_GUIDES: Record<
+  ComparePageData["niche"],
+  { href: string; title: string; blurb: string }[]
+> = {
+  restoration: [
+    {
+      href: "/guides/scan-family-photos-safely",
+      title: "Scan family photos safely",
+      blurb: "DPI, glare, stuck glass, and a ready-for-AI acceptance check.",
+    },
+    {
+      href: "/guides/why-ai-changes-faces",
+      title: "Why AI changes faces",
+      blurb: "Identity drift risks before you print or share a restore.",
+    },
+    {
+      href: "/guides/restore-only-vs-colorize",
+      title: "Restore-only vs colorize",
+      blurb: "When to keep monochrome character vs interpret color.",
+    },
+    {
+      href: "/restoration-benchmark",
+      title: "Restoration benchmark",
+      blurb: "How we score identity, damage, texture, and artifacts.",
+    },
+  ],
+  animation: [
+    {
+      href: "/guides/subtle-vs-exaggerated-animation",
+      title: "Subtle vs exaggerated animation",
+      blurb: "How to choose restrained presets and spot common motion artifacts.",
+    },
+    {
+      href: "/guides/choose-source-photos-for-likeness",
+      title: "Source photos for likeness",
+      blurb: "Angle, resolution, and lighting that keep identity stable.",
+    },
+    {
+      href: "/old-photo-restoration",
+      title: "Restore before you animate",
+      blurb: "Clean landmarks first so motion does not stretch damage.",
+    },
+    {
+      href: "/ai-photo-animation",
+      title: "AI photo animation",
+      blurb: "Product path for restrained face motion (10 credits).",
+    },
+  ],
+  merging: [
+    {
+      href: "/guides/choose-source-photos-for-likeness",
+      title: "Source photos for likeness",
+      blurb: "Front/three-quarter rules and the 200px face minimum.",
+    },
+    {
+      href: "/guides/scan-family-photos-safely",
+      title: "Scan family photos safely",
+      blurb: "Better scans before multi-era composites.",
+    },
+    {
+      href: "/ai-family-portrait",
+      title: "AI family portrait",
+      blurb: "Merge separate photos into one studio-style group.",
+    },
+    {
+      href: "/add-person-to-photo",
+      title: "Add person to photo",
+      blurb: "Memorial and missing-relative inserts into an existing shot.",
+    },
+  ],
+}
+
+/** Renders plain text with optional markdown-style links: [label](/path) or [label](https://...) */
+function RichText({
+  text,
+  className = "text-lg text-gray-600 font-medium leading-relaxed",
+}: {
+  text: string
+  className?: string
+}) {
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g)
+  return (
+    <p className={className}>
+      {parts.map((part, i) => {
+        const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
+        if (!m) return <React.Fragment key={i}>{part}</React.Fragment>
+        const [, label, href] = m
+        if (href.startsWith("/")) {
+          return (
+            <Link
+              key={i}
+              href={href}
+              className="underline font-semibold text-gray-900 hover:text-[#FF4D00]"
+            >
+              {label}
+            </Link>
+          )
+        }
+        return (
+          <a
+            key={i}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline font-semibold text-gray-900 hover:text-[#FF4D00]"
+          >
+            {label}
+          </a>
+        )
+      })}
+    </p>
+  )
+}
+
 export default function CompareLayout({ page }: { page: ComparePageData }) {
   
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-  const related = listComparePages()
+  const allCompare = listComparePages()
+  const related = allCompare
     .filter((p) => p.slug !== page.slug)
     .sort((a, b) => a.competitor.localeCompare(b.competitor));
+  const lastUpdated = compareLastUpdated(page)
+  const hasEssays = Boolean(page.contextEssays && page.contextEssays.length > 0)
+  const hasScenario = Boolean(page.scenario)
+  const relatedGuides = RELATED_GUIDES[page.niche] ?? RELATED_GUIDES.restoration
+  const nicheRelated = related
+    .filter((p) => p.niche === page.niche)
+    .slice(0, 6)
 
   return (
     <div className="w-full">
@@ -50,8 +184,15 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
             <p className="text-lg sm:text-xl text-gray-600 font-medium leading-relaxed max-w-2xl">
               {page.hero.subheadline}
             </p>
-            
-          
+
+            <p className="text-sm text-gray-500 font-medium">
+              Last updated {formatDisplayDate(lastUpdated)}
+              {page.readingMinutes ? ` · ${page.readingMinutes} min read` : ""}
+              {" · "}
+              <Link href="/methodology" className="underline hover:text-[#FF4D00]">
+                How we compare
+              </Link>
+            </p>
             
             <div className="pt-2">
               <Link href={page.ctaLink}>
@@ -130,17 +271,33 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
         {/* LEFT SIDEBAR: Sticky TOC */}
         <div className="hidden lg:block w-[240px] shrink-0">
           <div className="sticky top-28 pt-2">
-            <h4 className="font-bold text-gray-400 mb-6 uppercase tracking-widest text-xs">On this page</h4>
+            <h4 className="font-bold text-gray-400 mb-6 uppercase tracking-wider text-xs">On this page</h4>
             <nav className="flex flex-col gap-4">
               <a href="#verdict" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Quick verdict</a>
+              {hasEssays && page.contextEssays!.map((essay) => (
+                <a
+                  key={essay.id}
+                  href={`#${essay.id}`}
+                  className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all"
+                >
+                  {essay.title}
+                </a>
+              ))}
               <a href="#about" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">About {page.competitor}</a>
               <a href="#why-switch" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Why people switch</a>
+              {hasScenario && (
+                <a href={`#${page.scenario!.id}`} className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">
+                  In practice
+                </a>
+              )}
               <a href="#how-to-switch" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">How to switch</a>
               <a href="#matrix" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Side-by-side comparison</a>
               <a href="#semantic-capabilities" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Capabilities</a>
               <a href="#unique-advantage" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Unique advantage</a>
               <a href="#which-to-choose" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Which to pick</a>
               <a href="#final-thoughts" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Final thoughts</a>
+              <a href="#methodology" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Methodology</a>
+              <a href="#related-guides" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">Related guides</a>
               <a href="#faq" className="text-gray-500 font-medium hover:text-[#FF4D00] hover:font-bold text-sm transition-all">FAQ</a>
             </nav>
           </div>
@@ -188,7 +345,7 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
                 <div className="grid md:grid-cols-3 gap-6">
                    <div className="flex flex-col gap-2">
                       <p className="text-gray-700 font-semibold text-sm">Pay once</p>
-                      <p className="text-gray-600 font-medium text-sm">Credit packs without a forced subscription. Credits never expire.</p>
+                      <p className="text-gray-600 font-medium text-sm">{COMPARE_CLAIM.payOnce}</p>
                    </div>
                    <div className="flex flex-col gap-2">
                       <p className="text-gray-700 font-semibold text-sm">Compare before download</p>
@@ -198,10 +355,14 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
                       <p className="text-gray-700 font-semibold text-sm">Method, not invented stars</p>
                       <p className="text-gray-600 font-medium text-sm">
                         No fabricated ratings here. See{" "}
-                        <a href="/restoration-benchmark" className="underline font-semibold text-gray-900">
+                        <Link href="/restoration-benchmark" className="underline font-semibold text-gray-900">
                           restoration benchmark
-                        </a>{" "}
-                        and Trustpilot for third-party reviews.
+                        </Link>
+                        {", "}
+                        <Link href="/methodology" className="underline font-semibold text-gray-900">
+                          methodology
+                        </Link>
+                        , and Trustpilot for third-party reviews.
                       </p>
                    </div>
                 </div>
@@ -232,12 +393,34 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
             </div>
           </section>
 
+          {/* Optional background sections */}
+          {hasEssays && page.contextEssays!.map((essay) => (
+            <section key={essay.id} id={essay.id} className="mb-20 scroll-mt-28">
+              <h2 className="text-3xl font-extrabold text-[#111111] mb-6">{essay.title}</h2>
+              <div className="space-y-4">
+                {essay.paragraphs.map((p, i) => (
+                  <RichText key={i} text={p} />
+                ))}
+              </div>
+              {essay.subsections && essay.subsections.length > 0 && (
+                <div className="mt-10 space-y-8">
+                  {essay.subsections.map((sub, i) => (
+                    <div key={i} className="border-l-2 border-[#FF4D00]/30 pl-5">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">{sub.heading}</h3>
+                      <RichText text={sub.text} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          ))}
+
           {/* Section 3: About Competitor & Pros/Cons */}
           <section id="about" className="mb-24 scroll-mt-28">
             <h2 className="text-3xl font-extrabold text-[#111111] mb-6">{page.aboutCompetitor.title}</h2>
             <div className="space-y-4 mb-10">
                {page.aboutCompetitor.content.map((p, i) => (
-                  <p key={i} className="text-lg text-gray-600 font-medium leading-relaxed">{p}</p>
+                  <RichText key={i} text={p} />
                ))}
             </div>
 
@@ -275,7 +458,7 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
              
              <div className="space-y-4 mb-12">
                {page.whySwitch.intro.map((p, i) => (
-                  <p key={i} className="text-lg text-gray-600 font-medium leading-relaxed">{p}</p>
+                  <RichText key={i} text={p} />
                ))}
              </div>
 
@@ -283,16 +466,33 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
                 {page.whySwitch.points.map((point, i) => (
                    <div key={i}>
                       <h3 className="text-xl font-bold text-gray-900 mb-2">{point.title}</h3>
-                      <p className="text-lg text-gray-600 font-medium leading-relaxed">{point.description}</p>
+                      <RichText text={point.description} />
                    </div>
                 ))}
-             </div>
+              </div>
           </section>
+
+          {/* Optional real-world scenario */}
+          {hasScenario && page.scenario && (
+            <section id={page.scenario.id} className="mb-20 scroll-mt-28">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6 md:p-10 shadow-sm">
+                <p className="text-[#FF4D00] font-bold text-sm uppercase tracking-wider mb-3">In practice</p>
+                <h2 className="text-3xl font-extrabold text-[#111111] mb-6">{page.scenario.title}</h2>
+                <div className="space-y-4">
+                  {page.scenario.paragraphs.map((p, i) => (
+                    <RichText key={i} text={p} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* Section 4.5: How to Switch / Step-by-Step */}
           <section id="how-to-switch" className="mb-12 scroll-mt-28">
              <h2 className="text-3xl font-extrabold text-[#111111] mb-6">{page.howToSwitch.title}</h2>
-             <p className="text-lg text-gray-600 font-medium leading-relaxed mb-12">{page.howToSwitch.description}</p>
+             <div className="mb-12">
+               <RichText text={page.howToSwitch.description} />
+             </div>
              
              <div className="grid md:grid-cols-3 gap-8 relative">
                 {/* Connecting line for desktop */}
@@ -304,7 +504,10 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
                          {step.stepNumber}
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-4">{step.title}</h3>
-                      <p className="text-gray-600 font-medium leading-relaxed">{step.description}</p>
+                      <RichText
+                        text={step.description}
+                        className="text-gray-600 font-medium leading-relaxed text-base"
+                      />
                    </div>
                 ))}
              </div>
@@ -384,18 +587,21 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
           {/* Section 5.6: Unique Advantage */}
           <section id="unique-advantage" className="mb-12 scroll-mt-28">
              <h2 className="text-3xl font-extrabold text-[#111111] mb-6">{page.uniqueAdvantage.title}</h2>
-             <p className="text-lg text-gray-600 font-medium leading-relaxed mb-12 max-w-3xl">
-               {page.uniqueAdvantage.description}
-             </p>
+             <div className="mb-12 max-w-3xl">
+               <RichText text={page.uniqueAdvantage.description} />
+             </div>
              
              <div className="grid md:grid-cols-2 gap-8">
                 {page.uniqueAdvantage.features.map((feature, i) => (
-                   <div key={i} className="bg-gray-50 border border-gray-200 rounded-3xl p-8 hover:bg-white hover:shadow-lg transition-all">
+                   <div key={i} className="bg-gray-50 border border-gray-200 rounded-3xl p-8">
                       <div className="w-12 h-12 rounded-2xl bg-[#FF4D00]/10 flex items-center justify-center mb-6">
                          <Zap size={24} className="text-[#FF4D00]" />
                       </div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-4">{feature.heading}</h3>
-                      <p className="text-gray-600 font-medium leading-relaxed">{feature.text}</p>
+                      <RichText
+                        text={feature.text}
+                        className="text-gray-600 font-medium leading-relaxed"
+                      />
                    </div>
                 ))}
              </div>
@@ -435,9 +641,71 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
              <h2 className="text-3xl font-extrabold text-[#111111] mb-6">{page.finalThoughts.title}</h2>
              <div className="space-y-4">
                {page.finalThoughts.content.map((p, i) => (
-                  <p key={i} className="text-lg text-gray-600 font-medium leading-relaxed">{p}</p>
+                  <RichText key={i} text={p} />
                ))}
              </div>
+          </section>
+
+          {/* Methodology / trust — always rendered from page data + shared claim helpers */}
+          <section id="methodology" className="mb-12 scroll-mt-28">
+            <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6 md:p-8">
+              <h2 className="text-2xl font-extrabold text-[#111111] mb-4">
+                {page.trustAndMethodology?.title || "How we compare"}
+              </h2>
+              <div className="mb-4">
+                <RichText
+                  text={page.trustAndMethodology?.content || COMPARE_CLAIM.methodologyNote}
+                  className="text-gray-600 font-medium leading-relaxed"
+                />
+              </div>
+              <div className="mb-4">
+                <RichText
+                  text={COMPARE_CLAIM.privacyShort}
+                  className="text-gray-600 font-medium leading-relaxed"
+                />
+              </div>
+              <p className="text-sm text-gray-500 font-medium mb-3">
+                {COMPARE_CLAIM.packSummary}
+              </p>
+              <p className="text-sm text-gray-500 font-medium">
+                Last reviewed {formatDisplayDate(lastUpdated)}. Pricing and competitor features change — verify on their site before buying.{" "}
+                <Link href="/methodology" className="underline font-semibold text-gray-800 hover:text-[#FF4D00]">
+                  Editorial methodology
+                </Link>
+                {" · "}
+                <Link href="/restoration-benchmark" className="underline font-semibold text-gray-800 hover:text-[#FF4D00]">
+                  Restoration benchmark
+                </Link>
+                {" · "}
+                <Link href="/privacy" className="underline font-semibold text-gray-800 hover:text-[#FF4D00]">
+                  Privacy Policy
+                </Link>
+                {" · "}
+                <Link href="/pricing" className="underline font-semibold text-gray-800 hover:text-[#FF4D00]">
+                  Pricing
+                </Link>
+              </p>
+            </div>
+          </section>
+
+          {/* Related guides */}
+          <section id="related-guides" className="mb-12 scroll-mt-28">
+            <h2 className="text-3xl font-extrabold text-[#111111] mb-3">Related guides</h2>
+            <p className="text-gray-600 font-medium mb-8 max-w-2xl">
+              Practical guidance for preparing source photos, reviewing results, and choosing the next step.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {relatedGuides.map((g) => (
+                <Link
+                  key={g.href}
+                  href={g.href}
+                  className="rounded-2xl border border-gray-200 bg-white p-5 hover:border-[#FF4D00]/40 transition-colors"
+                >
+                  <h3 className="font-bold text-gray-900 mb-1">{g.title}</h3>
+                  <p className="text-sm text-gray-600 font-medium leading-relaxed">{g.blurb}</p>
+                </Link>
+              ))}
+            </div>
           </section>
 
           {/* Section 8: Premium FAQ Accordion */}
@@ -466,13 +734,14 @@ export default function CompareLayout({ page }: { page: ComparePageData }) {
                   </button>
                   
                   <div 
-                    className={`transition-all duration-300 ease-in-out origin-top ${openFaqIndex === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
+                    className={`transition-all duration-300 ease-in-out origin-top ${openFaqIndex === i ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
                   >
                     <div className="px-6 pb-6 pt-0">
                       <div className="w-12 h-1 bg-gray-100 rounded-full mb-4"></div>
-                      <p className="text-gray-600 font-medium leading-relaxed text-[15px]">
-                        {faq.a}
-                      </p>
+                      <RichText
+                        text={faq.a}
+                        className="text-gray-600 font-medium leading-relaxed text-[15px]"
+                      />
                     </div>
                   </div>
                 </div>

@@ -4,28 +4,32 @@ import Link from "next/link"
 import { ScanLine, Camera, AlertTriangle, ShieldCheck, ArrowRight, CheckCircle2, ExternalLink, HardDrive, FileText, Image as ImageIcon } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "How to Scan Family Photos Safely: DPI Settings & Glare Prevention",
+  title: "How to Scan Old Family Photos Without Damaging Them (DPI, Glare, Stuck Glass)",
   description:
-    "Master the safest techniques for scanning old family photos for AI restoration. Recommended DPI settings table, flatbed vs smartphone setup, stuck glass print guide, and archival 3-2-1 backups.",
+    "Scan old family photos safely for AI restoration: DPI table, glare and Newton rings fixes, phone-scan failure checklist, stuck glass prints, 3-2-1 backup, and a good-enough-for-AI acceptance test. NARA/FADGI-aligned safety notes.",
   alternates: { canonical: "/guides/scan-family-photos-safely" },
 }
 
 const TOC_ITEMS = [
-  { id: "pre-scan-handling", title: "1. Pre-Scan Physical Handling & Cleaning" },
-  { id: "dpi-matrix", title: "2. DPI Resolution & Format Table" },
-  { id: "software-rules", title: "3. Crucial Scanner Software Settings" },
-  { id: "hardware-setup", title: "4. Flatbed vs. Smartphone Macro Setup" },
-  { id: "stuck-photos", title: "5. Photos Stuck to Glass & Sticky Albums" },
-  { id: "archival-backup", title: "6. Physical Archiving & 3-2-1 Backup" },
-  { id: "restore-next", title: "7. Preparing Scans for BringBack AI" },
+  { id: "pre-scan-handling", title: "1. Pre-scan handling & cleaning" },
+  { id: "dpi-matrix", title: "2. DPI & format table" },
+  { id: "software-rules", title: "3. Scanner software settings" },
+  { id: "hardware-setup", title: "4. Flatbed vs phone" },
+  { id: "phone-failure", title: "5. Phone-scan failure checklist" },
+  { id: "glare-troubleshoot", title: "6. Glare: prints vs film" },
+  { id: "stuck-photos", title: "7. Stuck glass & sticky albums" },
+  { id: "acceptance-test", title: "8. Good enough for AI restore" },
+  { id: "archival-backup", title: "9. 3-2-1 backup" },
+  { id: "restore-next", title: "10. Next: restore" },
+  { id: "faq", title: "FAQ" },
 ]
 
 export default function ScanGuidePage() {
   return (
     <GuideLayout
-      title="How to Scan Family Photos Safely for AI Restoration"
-      description="Protecting physical prints is paramount. Learn how to achieve high-DPI digital captures without peeling stuck photos, flexing fragile emulsion, or causing scanner glass scratches."
-      updated="July 22, 2026"
+      title="How to scan old family photos without damaging them (DPI, glare, stuck glass)"
+      description="Protect fragile prints while capturing enough detail for AI restoration. DPI table, phone pitfalls, glare fixes, stuck-glass rules, and a simple acceptance test before you spend credits."
+      updated="August 12, 2026"
       crumbs={[{ name: "Scan family photos safely" }]}
       toc={TOC_ITEMS}
     >
@@ -152,7 +156,7 @@ export default function ScanGuidePage() {
         {/* 4. Flatbed vs Smartphone Setup */}
         <section id="hardware-setup" className="scroll-mt-36 space-y-6 border-t border-gray-100 pt-10">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
-            4. Flatbed Scanner vs. Smartphone Macro Camera Setup
+            4. Flatbed scanner vs smartphone copy setup
           </h2>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -160,19 +164,19 @@ export default function ScanGuidePage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2.5">
                 <ScanLine size={20} className="text-brand-orange" />
-                <h3 className="text-xl font-extrabold text-brand-black">Flatbed Scanner (Gold Standard)</h3>
+                <h3 className="text-xl font-extrabold text-brand-black">Flatbed scanner for loose prints</h3>
               </div>
               <p className="text-sm text-gray-600 font-medium leading-relaxed">
-                Flatbed scanners (e.g. Epson Perfection V600, Canon CanoScan LiDE 400) provide uniform CCD lighting without ambient room glare or lens curvature.
+                A flatbed gives even lighting and consistent alignment when a loose print fits fully on the glass and can lie flat without force.
               </p>
               <ul className="space-y-2.5 text-sm text-gray-600 font-medium">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                  <span>Place photo face-down gently in center of glass.</span>
+                  <span>Place the print face-down gently and keep the entire original inside the scanner bed.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                  <span>Prevent Newton's Rings (rainbow patterns) on glossy prints by placing thin 1mm cardstock spacers on non-image margins.</span>
+                  <span>Do not press a curled, brittle, or oversized print flat with the lid. Photograph it with a copy setup if closing the scanner could crease or crush it.</span>
                 </li>
               </ul>
             </div>
@@ -181,15 +185,15 @@ export default function ScanGuidePage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2.5">
                 <Camera size={20} className="text-brand-orange" />
-                <h3 className="text-xl font-extrabold text-brand-black">Smartphone Camera Macro Setup</h3>
+                <h3 className="text-xl font-extrabold text-brand-black">Smartphone copy setup</h3>
               </div>
               <p className="text-sm text-gray-600 font-medium leading-relaxed">
-                If using a modern smartphone camera (iPhone 15 Pro, Pixel 8 Macro), follow these macro studio lighting rules:
+                A phone can make a usable copy when it is held stable and parallel and the print is lit evenly. The result matters more than the phone model or camera label.
               </p>
               <ul className="space-y-2.5 text-sm text-gray-600 font-medium">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                  <span>Use indirect 5000K daylight from a side window—never direct overhead tungsten lamp light.</span>
+                  <span>Use indirect daylight or two matching diffused lights. Avoid mixed light colours and direct reflections.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
@@ -197,17 +201,62 @@ export default function ScanGuidePage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 size={16} className="text-brand-orange shrink-0 mt-0.5" />
-                  <span>Use 2x optical telephoto lens mode to eliminate wide-angle barrel distortion. Turn OFF flash and beauty filters.</span>
+                  <span>Use the sharpest optical camera available without digital zoom. Fill the frame, then turn off flash, portrait effects, and beauty filters.</span>
                 </li>
               </ul>
             </div>
           </div>
         </section>
 
-        {/* 5. Photos Stuck to Glass & Sticky Albums */}
+        <section id="phone-failure" className="scroll-mt-36 space-y-4 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            5. Phone-scan failure checklist
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            A phone copy is usable only when the important detail is sharp, evenly lit, and square to the camera. Reshoot if any of these problems hides a face or damaged area you want restored:
+          </p>
+          <ul className="list-disc pl-6 space-y-2 text-gray-700 font-medium text-sm">
+            <li>Print not filling the frame (lots of table/background = fewer face pixels).</li>
+            <li>Perspective skew (phone not parallel → trapezoid print).</li>
+            <li>Uneven light or hard shadow across the face.</li>
+            <li>Visible glare hotspots on glossy paper.</li>
+            <li>Motion blur or focus on the table instead of emulsion.</li>
+            <li>Beauty mode / HDR ghosting / heavy JPEG recompression from messaging apps.</li>
+            <li>Finger over the edge or curved album page without holding flat safely.</li>
+          </ul>
+        </section>
+
+        <section id="glare-troubleshoot" className="scroll-mt-36 space-y-4 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            6. Glare on prints and Newton rings on film
+          </h2>
+          <div className="space-y-5 text-gray-700 font-medium text-sm">
+            <div>
+              <h3 className="font-extrabold text-brand-black">Glossy photographic prints</h3>
+              <p className="mt-1 leading-relaxed">For a phone copy, turn off flash and place two matching diffused lights at roughly 45° on opposite sides. Keep the camera parallel. If a print cannot lie on scanner glass safely, do not add pressure or improvised spacers; photograph it instead.</p>
+            </div>
+            <div>
+              <h3 className="font-extrabold text-brand-black">Negatives, slides, and transparency film</h3>
+              <p className="mt-1 leading-relaxed">Newton rings are a common film-scanning problem when curled transparency material contacts glass. Use the scanner&apos;s film holder and follow its orientation instructions. Some manufacturers recommend reversing the film orientation when rings appear. Anti-Newton-ring glass or fluid mounting belongs to a specialist film workflow, not routine print scanning.</p>
+            </div>
+            <div>
+              <h3 className="font-extrabold text-brand-black">Prints stuck to frame glass</h3>
+              <p className="mt-1 leading-relaxed">Do not peel the photograph away. Photograph or scan through the existing glass if it can be done without disturbing the object, and consult a photograph conservator when separation matters.</p>
+            </div>
+          </div>
+          <p className="text-sm text-gray-600 font-medium">
+            Primary safety references:{" "}
+            <a href="https://www.archives.gov/preservation/family-archives/digitizing" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline font-bold">NARA digitizing family papers</a>
+            {" "}and{" "}
+            <a href="https://www.digitizationguidelines.gov/guidelines/digitize-technical.html" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline font-bold">FADGI technical guidelines</a>.
+            We are not a paper conservation lab—when in doubt, stop and consult a conservator.
+          </p>
+        </section>
+
+        {/* 7. Photos Stuck to Glass & Sticky Albums */}
         <section id="stuck-photos" className="scroll-mt-36 space-y-6 border-t border-gray-100 pt-10">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
-            5. Handling Photos Stuck to Glass &amp; Sticky Albums
+            7. Handling Photos Stuck to Glass &amp; Sticky Albums
           </h2>
 
           <div className="space-y-4">
@@ -236,7 +285,7 @@ export default function ScanGuidePage() {
         {/* 6. Physical Archiving & 3-2-1 Backup */}
         <section id="archival-backup" className="scroll-mt-36 space-y-6 border-t border-gray-100 pt-10">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
-            6. Physical Storage &amp; 3-2-1 Digital Backup
+            9. Physical storage &amp; 3-2-1 digital backup
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -277,22 +326,72 @@ export default function ScanGuidePage() {
           </div>
         </section>
 
-        {/* 7. Preparing Scans for BringBack AI */}
+        <section id="acceptance-test" className="scroll-mt-36 space-y-4 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            8. “Good enough for AI restore” acceptance test
+          </h2>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            Only spend restore credits when the digital file passes this bar:
+          </p>
+          <ol className="list-decimal pl-6 space-y-2 text-gray-700 font-medium text-sm">
+            <li>File opens and is not corrupt (if not, use file repair—not BringBack).</li>
+            <li>At 100% zoom, eyes and mouth edges are visible—not pure blur.</li>
+            <li>No large white glare blob covering the face.</li>
+            <li>Print fills most of the frame; faces for portraits ideally 200px+ tall when cropped.</li>
+            <li>You kept a raw/high-quality master (TIFF/PNG or high-quality JPEG) plus a 3-2-1 backup plan.</li>
+          </ol>
+          <p className="text-sm text-gray-600 font-medium">
+            Then restore (1 credit). For likeness-sensitive merges, also read{" "}
+            <Link href="/guides/choose-source-photos-for-likeness" className="text-brand-orange underline font-bold">
+              source photos for likeness
+            </Link>
+            {" "}and{" "}
+            <Link href="/guides/family-photo-metadata-checklist" className="text-brand-orange underline font-bold">
+              metadata checklist
+            </Link>.
+          </p>
+        </section>
+
+        {/* Preparing Scans for BringBack AI — CTA only after ready criteria */}
         <section id="restore-next" className="scroll-mt-36 space-y-4 border-t border-gray-100 pt-10">
           <div className="bg-brand-black text-white p-8 sm:p-10 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
             <div>
-              <h3 className="text-2xl font-extrabold mb-2">Done Scanning? Restore Your Photo Now</h3>
+              <h3 className="text-2xl font-extrabold mb-2">Scan ready? Restore next</h3>
               <p className="text-gray-300 font-medium text-sm max-w-md">
-                Upload your clean 600 DPI scan into BringBack's AI restoration engine to repair scratches, water stains, and sepia fading in seconds.
+                Only after the acceptance test above. Upload a clean scan to repair scratches, stains, and fade—then compare identity side by side.
               </p>
             </div>
             <Link
               href="/old-photo-restoration"
               className="inline-flex items-center gap-2 bg-brand-orange text-white px-6 py-3.5 rounded-full font-bold text-sm hover:bg-white hover:text-brand-black transition-colors shrink-0 shadow-md"
             >
-              <span>Start Restoration Tool</span>
+              <span>Open restoration tool</span>
               <ArrowRight size={16} />
             </Link>
+          </div>
+        </section>
+
+        <section id="faq" className="scroll-mt-36 space-y-4 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            Frequently asked questions
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-bold text-brand-black">What DPI should I scan old photos for AI restoration?</h3>
+              <p className="text-sm text-gray-600 font-medium mt-1">For a standard 4×6&quot; print intended for restoration or enlargement, 600 DPI is a practical target. A 300 DPI scan can be adequate for same-size viewing but records less facial and surface detail.</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-brand-black">Can I scan with my phone instead of a flatbed?</h3>
+              <p className="text-sm text-gray-600 font-medium mt-1">Yes if the print fills the frame, lighting is even, and there is no glare. Use the phone failure checklist above.</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-brand-black">What if the photo is stuck to the glass?</h3>
+              <p className="text-sm text-gray-600 font-medium mt-1">Do not peel. Scan or photograph through the glass with care, or consult a conservator for separation.</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-brand-black">Will AI fix a bad scan?</h3>
+              <p className="text-sm text-gray-600 font-medium mt-1">AI can repair some damage but cannot invent true detail missing from a tiny, blurry, or glare-blown face. Rescan first when possible.</p>
+            </div>
           </div>
         </section>
 

@@ -4,41 +4,79 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "How to Choose Source Photos for Perfect AI Likeness | BringBack Guide",
+  title: "Choose Source Photos for AI Family Portraits & Add-Person (Likeness Checklist)",
   description:
-    "Practical rules for selecting reference photos that preserve facial identity in AI family portraits and photo composites. Covers angle, resolution, lighting, and what to avoid.",
+    "Choose source photos for AI family portraits, memorial composites, and add-person edits. Check face angle, resolution, lighting, obstructions, expression, and when to rescan.",
   alternates: { canonical: "/guides/choose-source-photos-for-likeness" },
 }
 
 const TOC_ITEMS = [
-  { id: "why-selection-matters", title: "Why Photo Selection Matters" },
+  { id: "intended-result", title: "Choose for the intended result" },
+  { id: "why-selection-matters", title: "Why selection caps likeness" },
   { id: "angle", title: "Rule 1: Camera Angle" },
   { id: "resolution", title: "Rule 2: Face Resolution" },
   { id: "lighting", title: "Rule 3: Lighting" },
   { id: "obstructions", title: "Rule 4: No Obstructions" },
   { id: "expression", title: "Rule 5: Expression" },
+  { id: "by-outcome", title: "Checklists by outcome" },
   { id: "vintage-modern", title: "Mixing Vintage & Modern Photos" },
   { id: "quick-reference", title: "Quick Reference Table" },
+  { id: "faq", title: "FAQ" },
 ]
 
 export default function SourcePhotosGuidePage() {
   return (
     <GuideLayout
-      title="How to Choose Source Photos for Perfect AI Likeness"
-      description="The quality of your output is capped by the quality of your input. Here are the concrete rules for selecting reference photos that give the AI enough facial data to preserve identity."
-      updated="July 22, 2026"
+      title="Choose source photos for AI family portraits & add-person (likeness checklist)"
+      description="A practical source-photo checklist for family portraits, memorial composites, add-person edits, and photo animation. Better references improve the chance of a recognizable result."
+      updated="August 12, 2026"
       crumbs={[{ name: "Source photos for likeness" }]}
       toc={TOC_ITEMS}
     >
       <div className="space-y-12 text-brand-black">
 
+        <section id="intended-result" className="scroll-mt-36 space-y-5">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            Choose photos for the intended result
+          </h2>
+          <p className="text-gray-700 font-medium text-base sm:text-lg leading-relaxed">
+            The best reference depends on what you are creating:
+          </p>
+          <ul className="list-disc pl-6 space-y-2 text-gray-700 font-medium">
+            <li>
+              <Link href="/ai-family-portrait" className="text-brand-orange underline font-bold">
+                AI family portrait
+              </Link>{" "}
+              — separate people into one photoreal group (including multi-generation).
+            </li>
+            <li>
+              <Link href="/add-person-to-photo" className="text-brand-orange underline font-bold">
+                Add person to photo
+              </Link>{" "}
+              — place someone (often memorial) into an existing scene.
+            </li>
+            <li>
+              A clear single-face source for{" "}
+              <Link href="/ai-photo-animation" className="text-brand-orange underline font-bold">
+                animation
+              </Link>{" "}
+              after restoring the still, because motion makes blur and facial errors more visible.
+            </li>
+          </ul>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            A BringBack studio family portrait or add-person edit uses <strong>2 credits</strong>.
+            If the face is very small, blurred, covered, or shown at an extreme angle, choose a
+            better source or rescan before generating.
+          </p>
+        </section>
+
         {/* 1. Why Selection Matters */}
         <section id="why-selection-matters" className="scroll-mt-36 space-y-5">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
-            Why Photo Selection Matters
+            Why the source image limits likeness
           </h2>
           <p className="text-gray-700 font-medium text-base sm:text-lg leading-relaxed">
-            When you upload a photo for{" "}
+            When you upload a reference for{" "}
             <Link
               href="/ai-family-portrait"
               className="text-brand-orange underline font-bold hover:text-brand-black transition-colors"
@@ -52,29 +90,34 @@ export default function SourcePhotosGuidePage() {
             >
               adding someone into a photo
             </Link>,
-            the AI needs to detect specific facial landmarks — the exact positions of the eyes,
-            nose bridge, mouth corners, jawline, and eyebrows. Industry-standard models map{" "}
+            the model needs visible facial structure: eyes, nose bridge, mouth corners, jawline,
+            and brows. Face-alignment research illustrates why those structures matter (for example,{" "}
             <a
               href="https://ibug.doc.ic.ac.uk/resources/300-W/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-brand-orange underline font-bold hover:text-brand-black transition-colors"
             >
-              68 landmark points
-            </a>{" "}
-            across the face to build a geometric mesh.
-          </p>
-          <p className="text-gray-700 font-medium leading-relaxed">
-            If the reference photo is blurry, badly angled, or too small, the model cannot
-            reliably detect these landmarks. It fills the gaps with guesses from its training
-            data — other people&apos;s faces — which causes{" "}
+              300-W / 68-point schemes
+            </a>
+            ). When the source does not contain enough usable detail, generated features can depart
+            from the person in the reference, a failure known as{" "}
             <Link
               href="/guides/why-ai-changes-faces"
               className="text-brand-orange underline font-bold hover:text-brand-black transition-colors"
             >
               identity drift
-            </Link>.
-            Your output is always capped by the quality of your input.
+            </Link>
+            .
+          </p>
+          <p className="text-gray-700 font-medium leading-relaxed">
+            <strong>Practical check:</strong> aim for a face at least 200 pixels tall in the source.
+            Smaller faces may work, but the risk of identity drift rises quickly as real detail
+            disappears. If possible, rescan the original or choose a closer portrait first (see{" "}
+            <Link href="/guides/scan-family-photos-safely" className="text-brand-orange underline font-bold">
+              scan family photos safely
+            </Link>
+            ).
           </p>
         </section>
 
@@ -301,6 +344,48 @@ export default function SourcePhotosGuidePage() {
           </p>
         </section>
 
+        {/* By outcome */}
+        <section id="by-outcome" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            Checklists by outcome (so you do not waste credits)
+          </h2>
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-gray-200 p-5 bg-white">
+              <h3 className="font-extrabold text-brand-black text-lg">Memorial composite / person who passed</h3>
+              <ul className="mt-3 list-disc pl-5 space-y-1.5 text-sm text-gray-700 font-medium">
+                <li>One clear face photo of the deceased (not a tiny crop from a crowd).</li>
+                <li>Restore scratched/faded prints before merge.</li>
+                <li>Prefer neutral expression; avoid funeral candids with extreme emotion if you have alternatives.</li>
+                <li>Path: restore →{" "}
+                  <Link href="/ai-family-portrait" className="text-brand-orange underline font-bold">portrait</Link>
+                  {" "}or{" "}
+                  <Link href="/add-person-to-photo" className="text-brand-orange underline font-bold">add person</Link>
+                  {" "}(2 credits per result).</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-gray-200 p-5 bg-white">
+              <h3 className="font-extrabold text-brand-black text-lg">Multi-generation group</h3>
+              <ul className="mt-3 list-disc pl-5 space-y-1.5 text-sm text-gray-700 font-medium">
+                <li>Each person gets their own best face source (do not crop five faces from one blurry picnic).</li>
+                <li>Match approximate life stage when possible (do not force “everyone at 25” from mixed decades unless intentional).</li>
+                <li>Kids: use recent clear photos; avoid heavy filters and stickers.</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-gray-200 p-5 bg-white">
+              <h3 className="font-extrabold text-brand-black text-lg">Animate after restore</h3>
+              <ul className="mt-3 list-disc pl-5 space-y-1.5 text-sm text-gray-700 font-medium">
+                <li>Restore first; animation amplifies scratches and blur.</li>
+                <li>Need a single clear face, front-ish, eyes visible (animation is 10 credits).</li>
+                <li>See{" "}
+                  <Link href="/guides/subtle-vs-exaggerated-animation" className="text-brand-orange underline font-bold">
+                    subtle vs exaggerated animation for old family photos
+                  </Link>.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
         {/* 7. Mixing Vintage & Modern */}
         <section id="vintage-modern" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
@@ -411,6 +496,26 @@ export default function SourcePhotosGuidePage() {
           </div>
         </section>
 
+        <section id="faq" className="scroll-mt-36 space-y-5 border-t border-gray-100 pt-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-black tracking-tight">
+            FAQ
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-bold text-brand-black">Can I use a group photo as a source for one person?</h3>
+              <p className="text-gray-600 font-medium text-sm mt-1">Only if their face is large and sharp when cropped (ideally 200px+). Otherwise find a dedicated portrait.</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-brand-black">Should I upscale a tiny face before uploading?</h3>
+              <p className="text-gray-600 font-medium text-sm mt-1">Upscaling cannot invent true identity detail. Prefer a better original or rescan. Blind upscale often adds plastic texture that still drifts.</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-brand-black">How many credits if likeness fails?</h3>
+              <p className="text-gray-600 font-medium text-sm mt-1">Each studio portrait attempt uses 2 credits. If repeated results miss the likeness, change the reference photo rather than repeating the same input.</p>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="border-t border-gray-100 pt-10">
           <div className="grid sm:grid-cols-2 gap-4">
@@ -418,14 +523,21 @@ export default function SourcePhotosGuidePage() {
               href="/ai-family-portrait"
               className="inline-flex items-center justify-between w-full bg-gray-50 hover:bg-brand-black hover:text-white px-5 py-3.5 rounded-xl text-sm font-bold text-brand-black transition-colors border border-gray-200"
             >
-              <span>Family Portrait Generator</span>
+              <span>Create AI family portrait</span>
               <ArrowRight size={16} />
             </Link>
             <Link
               href="/add-person-to-photo"
               className="inline-flex items-center justify-between w-full bg-gray-50 hover:bg-brand-black hover:text-white px-5 py-3.5 rounded-xl text-sm font-bold text-brand-black transition-colors border border-gray-200"
             >
-              <span>Add Person to Photo</span>
+              <span>Add person to a photo</span>
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/guides/why-ai-changes-faces"
+              className="inline-flex items-center justify-between w-full bg-gray-50 hover:bg-brand-black hover:text-white px-5 py-3.5 rounded-xl text-sm font-bold text-brand-black transition-colors border border-gray-200 sm:col-span-2"
+            >
+              <span>Why AI changes faces (identity drift)</span>
               <ArrowRight size={16} />
             </Link>
           </div>

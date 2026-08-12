@@ -6,14 +6,14 @@ import { SiteBreadcrumb } from "@/components/seo/site-breadcrumb"
 import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 
 export const metadata: Metadata = {
-  title: "Restoration benchmark methodology",
+  title: "Photo Restoration Quality Benchmark: Identity Drift & Scoring Rubric | BringBack",
   description:
-    "Transparent evaluation method for BringBack photo restoration: sample, scoring dimensions, failure display, and update policy. Demo results are labeled — not fabricated competitor rankings.",
+    "BringBack’s restoration quality rubric for identity drift, damage repair, texture, unwanted colorization, and artifacts, with owned demos, examples, limitations, and a changelog.",
   alternates: { canonical: "/restoration-benchmark" },
   openGraph: {
-    title: "Restoration benchmark methodology | BringBack",
+    title: "Restoration quality benchmark | BringBack",
     description:
-      "How we evaluate restoration quality: identity drift, damage repair, texture, unwanted colorization, and artifacts.",
+      "How we score BringBack restoration outputs: identity drift, damage repair, texture, colorization, artifacts—with demo cases.",
     url: "https://bringback.pro/restoration-benchmark",
     type: "website",
   },
@@ -83,13 +83,13 @@ export default function RestorationBenchmarkPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    headline: "BringBack restoration evaluation methodology",
+    headline: "BringBack photo restoration quality benchmark",
     datePublished: "2026-07-19",
-    dateModified: "2026-07-19",
+    dateModified: "2026-08-12",
     author: { "@type": "Organization", name: "BringBack", url: "https://bringback.pro" },
     publisher: { "@type": "Organization", name: "BringBack", url: "https://bringback.pro" },
     description:
-      "Transparent method for evaluating AI photo restoration: sample disclosure, scoring dimensions, failure display, and model change dating.",
+      "Scoring rubric and owned demos for AI photo restoration: identity drift, damage repair, texture, unwanted colorization, artifacts.",
     mainEntityOfPage: "https://bringback.pro/restoration-benchmark",
   }
 
@@ -109,20 +109,61 @@ export default function RestorationBenchmarkPage() {
             ]}
           />
           <h1 className="text-4xl sm:text-5xl font-[850] tracking-tight leading-[1.05]">
-            Restoration benchmark methodology
+            Photo restoration quality benchmark
           </h1>
           <p className="mt-4 text-sm text-gray-500 font-medium">
-            Published 19 July 2026 · Last updated 19 July 2026
+            Published 19 July 2026 · Last updated 12 August 2026
           </p>
           <p className="mt-6 text-lg text-gray-600 font-medium leading-relaxed">
-            This page defines <strong>how</strong> we evaluate restoration quality so claims stay
-            checkable. Demo rows below use owned sample assets. They are{" "}
-            <strong>not</strong> a ranked “winner table” against unnamed competitors and not a claim
-            of historical color accuracy.
+            This page explains how we evaluate BringBack restoration demos made from images we own.
+            Research standards for competitor comparisons are documented separately in our{" "}
+            <Link href="/methodology" className="underline font-semibold text-brand-black">
+              methodology
+            </Link>
+            . The demo rows do not compare multiple vendors and cannot establish historical color accuracy.
           </p>
 
           <section className="mt-12 space-y-4">
-            <h2 className="text-2xl font-extrabold">Evaluation dimensions</h2>
+            <h2 className="text-2xl font-extrabold">Quality dimension glossary</h2>
+            <dl className="space-y-4 text-gray-700 font-medium">
+              <div>
+                <dt className="font-extrabold text-brand-black">Identity drift</dt>
+                <dd>
+                  The restored face no longer matches the person in the input—for example, age,
+                  expression, eye shape, or jawline changes. Compare the result with the source before printing or sharing.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-extrabold text-brand-black">Damage repair</dt>
+                <dd>
+                  The extent to which scratches, tears, stains, and fading are reduced. Content added
+                  to a missing area is a plausible reconstruction, not recovered evidence.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-extrabold text-brand-black">Texture preservation</dt>
+                <dd>
+                  Whether useful paper or film texture remains without turning skin into an unnaturally smooth surface.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-extrabold text-brand-black">Unwanted colorization</dt>
+                <dd>
+                  Whether restore-only adds color that was not requested. Colorize mode is an interpretation,
+                  not proof of the original dyes or scene colors.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-extrabold text-brand-black">Artifacts</dt>
+                <dd>
+                  Warping, double edges, mushy regions, color bleed, seam lines at fill boundaries.
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <section className="mt-12 space-y-4">
+            <h2 className="text-2xl font-extrabold">Evaluation dimensions (rubric)</h2>
             <ol className="list-decimal pl-6 space-y-3 text-gray-700 font-medium leading-relaxed">
               <li>
                 <strong>Identity drift</strong> — Does the person still look like the input face, or
@@ -227,17 +268,19 @@ export default function RestorationBenchmarkPage() {
           </section>
 
           <section className="mt-12 space-y-3">
-            <h2 className="text-2xl font-extrabold">What this page is not</h2>
+            <h2 className="text-2xl font-extrabold">Limitations — what this page is not</h2>
             <ul className="list-disc pl-6 text-gray-700 font-medium space-y-2">
               <li>Not a promise that every family photo will match these demos</li>
               <li>Not forensic recovery of missing faces</li>
               <li>Not proof of original film dye colors</li>
               <li>Not a substitute for a paper conservator on unique physical objects</li>
+              <li>Not a controlled comparison of multiple restoration products</li>
+              <li>Not the place for full competitor pricing/privacy editorial rules (see methodology)</li>
             </ul>
             <p className="text-gray-600 font-medium pt-4">
               Related:{" "}
               <Link href="/methodology" className="underline font-semibold text-brand-black">
-                Methodology
+                Methodology (claims &amp; research protocol)
               </Link>
               ,{" "}
               <Link href="/guides/restore-only-vs-colorize" className="underline font-semibold text-brand-black">
@@ -246,6 +289,10 @@ export default function RestorationBenchmarkPage() {
               ,{" "}
               <Link href="/examples" className="underline font-semibold text-brand-black">
                 Examples
+              </Link>
+              ,{" "}
+              <Link href="/old-photo-restoration" className="underline font-semibold text-brand-black">
+                Old photo restoration
               </Link>
               .
             </p>
