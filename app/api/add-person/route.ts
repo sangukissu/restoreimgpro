@@ -16,10 +16,8 @@ const aspectRatios = ["1:1", "4:3", "3:4", "16:9", "auto"] as const
 const publicFigureError =
   "We can't edit photos that include recognizable public figures or restricted content. Please use personal photos where you have permission to create this edit."
 
-// Returned when the model refuses to generate because the second image doesn't
-// contain exactly one person. The prompt instructs the model to produce no
-// output in that case, so the typical signal is a successful call with no
-// images in the response (or an explicit refusal text).
+// Returned when the pre-check detects that the second image doesn't contain
+// exactly one person.
 const multiPersonSecondImageError =
   "The 'person to add' photo must contain exactly one person, captured alone. Please upload a clear solo portrait of the missing person and try again."
 
@@ -46,22 +44,22 @@ function buildPrompt(placement: Placement, context: string) {
 
   return `[TASK: TIGHT PROXIMITY IMAGE COMPOSITION & CONTEXTUAL INSERTION]
 
-INPUT_A (Base Scene Group Photo)
-INPUT_B (Individual to Insert)
+#Image1 (Base Scene Group Photo)
+#Image2 (Individual to Insert)
 Placement: ${placementDirective(placement)}. ${contextDirective}
 
 [1. COMPACT LAYOUT & SPATIAL ARCHITECTURE]
 - ANTI-GAP CONSTRAINT: Do not create wide-angle panoramas, auxiliary open spaces, or empty background voids on the flanks of the image. Avoid zooming out the lens perspective.
-- MINIMAL WIDTH ADAPTATION: Adjust the overall canvas width strictly by the exact physical shoulder-width volume required to accommodate the profile from INPUT_B. The resulting framing must remain a tight, focused group portrait.
-- CONTIGUOUS POSITIONING: Seamlessly insert the individual from INPUT_B into immediate shoulder-to-shoulder or arm's-length proximity with the subjects in INPUT_A. They must blend directly into the existing human cluster as a natural, interconnected family member, minimizing any spatial gap between bodies.
+- MINIMAL WIDTH ADAPTATION: Adjust the overall canvas width strictly by the exact physical shoulder-width volume required to accommodate the profile from #Image2. The resulting framing must remain a tight, focused group portrait.
+- CONTIGUOUS POSITIONING: Seamlessly insert the individual from #Image2 into immediate shoulder-to-shoulder or arm's-length proximity with the subjects in #Image1. They must blend directly into the existing human cluster as a natural, interconnected family member, minimizing any spatial gap between bodies. They must not overlap. Make them visible like a Normal photoshoot.
 
 [2. DYNAMIC ENVIRONMENT HARMONIZATION]
-- CONTEXTUAL SURFACE CONTINUATION: Analyze the immediate background, flooring, and environmental vectors directly surrounding the insertion point in INPUT_A. Extend those structural lines, patterns, and textures natively behind and beneath the newly inserted subject without altering the original background layout of the rest of the scene.
-- PERSPECTIVE ALIGNMENT: Maintain the exact camera focal height, lens compression, and vanishing points of INPUT_A. The inserted individual must share the identical horizon line and depth plane as the adjacent subjects.
+- CONTEXTUAL SURFACE CONTINUATION: Analyze the immediate background, flooring, and environmental vectors directly surrounding the insertion point in #Image1. Extend those structural lines, patterns, and textures natively behind and beneath the newly inserted subject without altering the original background layout of the rest of the scene.
+- PERSPECTIVE ALIGNMENT: Maintain the exact camera focal height, lens compression, and vanishing points of #Image1. The inserted individual must share the identical horizon line and depth plane as the adjacent subjects.
 
 [3. PHOTOREALISTIC INTEGRATION & SCALE]
-- RELATIVE DIMENSIONALITY: Programmatically calculate the scale metrics of nearby adult subjects in INPUT_A. Match the height, head-to-shoulder proportions, and physical volume of the subject from INPUT_B to the existing subjects to maintain flawless human perspective.
-- MATRIX LIGHTING MATCH: Extract the precise light vectors (angle, direction, diffusion/hardness, color temperature, and color cast) from INPUT_A and apply them directly to the subject from INPUT_B for consistent, cohesive lighting for all subjects.
+- RELATIVE DIMENSIONALITY: Programmatically calculate the scale metrics of nearby adult subjects in #Image1. Match the height, head-to-shoulder proportions, and physical volume of the subject from #Image2 to the existing subjects to maintain flawless human perspective.
+- MATRIX LIGHTING MATCH: Extract the precise light vectors (angle, direction, diffusion/hardness, color temperature, and color cast) from #Image1 and apply them directly to the subject from #Image2 for consistent, cohesive lighting for all subjects.
 - MICRO-SHADOWING: Generate tight, realistic contact and occlusion shadows where the inserted subject interacts with the floor plane and where their profile sits adjacent to the original subjects.
 
 [4. IDENTITY & STRUCTURE GUARDRAILS]
@@ -81,38 +79,6 @@ function getFalErrorDetails(error: any) {
   }
 }
 
-// Inspect a successful Fal response for explicit refusal text the model may
-// emit when it decides to refuse the edit. Returns a code describing the
-// refusal cause, or null if there's no refusal signal.
-function detectRefusal(result: any): "multi_person" | "public_figure" | null {
-  const text = JSON.stringify(result ?? {}).toLowerCase()
-  if (!text || text === "{}") return null
-
-  const multiPersonSignals = [
-    "second image must contain exactly one person",
-    "more than one person in the second image",
-    "second image contains",
-    "two or more people",
-    "multiple people in the second",
-    "must be a solo",
-    "solo portrait",
-  ]
-  if (multiPersonSignals.some((s) => text.includes(s))) {
-    return "multi_person"
-  }
-
-  const publicFigureSignals = [
-    "public figure",
-    "celebrity",
-    "politician",
-    "prominent real person",
-    "restricted content",
-  ]
-  if (publicFigureSignals.some((s) => text.includes(s))) {
-    return "public_figure"
-  }
-  return null
-}
 
 // Lazy-initialize the Gemini client only when the pre-check actually runs.
 // We avoid constructing it at module load so that a missing GEMINI_API_KEY in
@@ -434,17 +400,20 @@ export async function POST(req: NextRequest) {
 
     let falOutput: any
     try {
-      const result = await fal.subscribe("fal-ai/nano-banana-2/edit", {
+      const result = await fal.subscribe("openai/gpt-image-2.5/sunburst/edit", {
         input: {
           prompt: buildPrompt(placement, context),
           image_urls: uploadedUrls,
+          quality: "medium",
           num_images: 1,
           output_format: "png",
-          aspect_ratio: aspectRatio,
-          resolution: "1K",
         },
         logs: true,
-        onQueueUpdate: () => {},
+        onQueueUpdate: (update: any) => {
+          if (update.status === "IN_PROGRESS") {
+            update.logs?.map((log: any) => log.message).forEach(console.log)
+          }
+        },
       })
       falOutput = result.data
     } catch (falError: any) {
@@ -478,23 +447,6 @@ export async function POST(req: NextRequest) {
 
     const generatedImageUrl = falOutput?.images?.[0]?.url
     if (!generatedImageUrl || typeof generatedImageUrl !== "string") {
-      // The model produced no image. The most likely reasons (per the prompt)
-      // are that the second image didn't contain exactly one person, or a
-      // public-figure / safety refusal. Inspect the response for the refusal
-      // text and return a clean error to the user.
-      const refusal = detectRefusal(falOutput)
-      if (refusal === "multi_person") {
-        return NextResponse.json(
-          { error: multiPersonSecondImageError, code: "MULTIPLE_PEOPLE_IN_SECOND_IMAGE" },
-          { status: 422 },
-        )
-      }
-      if (refusal === "public_figure") {
-        return NextResponse.json(
-          { error: publicFigureError, code: "PUBLIC_FIGURE_OR_RESTRICTED_CONTENT" },
-          { status: 422 },
-        )
-      }
       return NextResponse.json({ error: "No image returned from generation service" }, { status: 502 })
     }
 
