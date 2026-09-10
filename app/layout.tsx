@@ -157,6 +157,14 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
+        {process.env.NEXT_PUBLIC_OA_TRACKING_KEY && (
+          <script
+            async
+            src="https://c.ecompin.com/oa.js"
+            data-key={process.env.NEXT_PUBLIC_OA_TRACKING_KEY}
+            data-collector={process.env.NEXT_PUBLIC_OA_COLLECTOR_URL || "https://c.ecompin.com"}
+          />
+        )}
       </head>
       <body className={`antialiased`}>
         {children}

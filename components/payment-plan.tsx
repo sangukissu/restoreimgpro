@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { X, Check } from "lucide-react"
+import { trackEvent } from "@/lib/analytics"
 
 interface PaymentPlanProps {
   onSuccess: (newCredits: number) => void
@@ -100,25 +101,12 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
 
     const planAnalytics = getPlanAnalytics(selectedPlan);
 
-    try {
-      if (typeof window !== "undefined" && (window as any).gtag) {
-        (window as any).gtag("event", "view_item", {
-          currency: "USD",
-          value: planAnalytics.amount,
-          items: [
-            {
-              item_id: selectedPlan.id,
-              item_name: selectedPlan.name,
-              price: planAnalytics.amount,
-              quantity: 1,
-              credits: selectedPlan.credits,
-            }
-          ]
-        })
-      }
-    } catch (e) {
-      // Ignore analytics errors
-    }
+    trackEvent("plan_viewed", {
+      plan_id: selectedPlan.id,
+      plan_name: selectedPlan.name,
+      price: planAnalytics.amount,
+      credits: selectedPlan.credits,
+    })
     lastTrackedPlanIdRef.current = selectedPlanId
   }, [plans, selectedPlanId])
 
@@ -146,11 +134,14 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
       if (response.ok) {
         setReferralApplied(true)
         toast.success(data.message || "Referral code applied successfully!")
+        trackEvent("referral_code_applied", { status: "success" })
       } else {
         toast.error(data.error || "Failed to apply referral code")
+        trackEvent("referral_code_applied", { status: "failure" })
       }
     } catch (error) {
       toast.error("Failed to apply referral code. Please try again.")
+      trackEvent("referral_code_applied", { status: "failure" })
     } finally {
       setIsApplyingReferral(false)
     }
@@ -179,23 +170,12 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         startedAt: new Date().toISOString(),
       })
 
-
-
-      if ((window as any).gtag) {
-        (window as any).gtag("event", "begin_checkout", {
-          value: planAnalytics.amount,
-          currency: "USD",
-          items: [
-            {
-              item_id: selectedPlan.id,
-              item_name: selectedPlan.name,
-              price: planAnalytics.amount,
-              quantity: 1,
-              credits: selectedPlan.credits,
-            }
-          ]
-        })
-      }
+      trackEvent("checkout_started", {
+        plan_id: selectedPlan.id,
+        plan_name: selectedPlan.name,
+        price: planAnalytics.amount,
+        credits: selectedPlan.credits,
+      })
     } catch {
       // Ignore analytics errors so checkout can continue.
     }
@@ -242,20 +222,10 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
   const handleClose = () => {
     try {
       const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
-      if (selectedPlan && typeof window !== "undefined" && (window as any).gtag) {
-        const planAnalytics = getPlanAnalytics(selectedPlan);
-        (window as any).gtag("event", "checkout_abandoned", {
-          currency: "USD",
-          value: planAnalytics.amount,
-          items: [
-            {
-              item_id: selectedPlan.id,
-              item_name: selectedPlan.name,
-              price: planAnalytics.amount,
-              quantity: 1,
-              credits: selectedPlan.credits,
-            }
-          ]
+      if (selectedPlan) {
+        trackEvent("checkout_cancelled", {
+          plan_id: selectedPlan.id,
+          plan_name: selectedPlan.name,
         })
       }
     } catch (e) {

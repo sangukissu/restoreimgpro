@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useFeedback } from "@/hooks/use-feedback"
 import { DemoVideoModal } from "./demo-video-modal"
 import { createClient as createSupabaseClient } from "@/utils/supabase/client"
+import { trackEvent, identifyUser } from "@/lib/analytics"
 
 type AppState = "upload" | "loading" | "comparison" | "batch" | "error"
 type RestoreStatus = "selected" | "uploading" | "processing" | "completed" | "failed"
@@ -122,6 +123,18 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       isRestoringRef.current = false
     }
   }, [])
+
+  useEffect(() => {
+    if (user?.id) {
+      identifyUser(user.id)
+      try {
+        if (!sessionStorage.getItem("oa_auth_tracked")) {
+          sessionStorage.setItem("oa_auth_tracked", "1")
+          trackEvent("auth_completed")
+        }
+      } catch {}
+    }
+  }, [user?.id])
 
   useEffect(() => {
     try {
@@ -310,6 +323,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
         if (!trackedCompletionIds.current.has(record.id)) {
           trackedCompletionIds.current.add(record.id)
           await trackRestoration()
+          trackEvent("restoration_completed", { restoration_id: record.id })
           toast.success("Image restored successfully")
         }
       }
@@ -496,6 +510,10 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
     setError(null)
     setActiveItemId(freshSelectedItems[0]?.clientId || null)
     setAppState(freshSelectedItems.length > 1 ? "batch" : "loading")
+    trackEvent("restoration_started", {
+      count: freshSelectedItems.length,
+      preserve_colors: freshSelectedItems.some((i) => i.preserveOriginalColors === true),
+    })
     setItems((current) =>
       current.map((item) =>
         freshSelectedItems.some((selected) => selected.clientId === item.clientId)
@@ -672,6 +690,7 @@ export default function DashboardClient({ user, initialCredits }: DashboardClien
       document.body.removeChild(a)
       window.URL.revokeObjectURL(url)
 
+      trackEvent("image_downloaded", { tool: "photo_restoration" })
       await trackFirstDownload()
 
       const feedbackResponse = await fetch("/api/feedback")

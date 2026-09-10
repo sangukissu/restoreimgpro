@@ -1,6 +1,7 @@
 "use client"
 
 import { Zap, Layers, Heart, Users } from "lucide-react"
+import { trackEvent } from "@/lib/analytics"
 
 export default function AIPhotoRestorationSection() {
   const benefits = [
@@ -49,12 +50,10 @@ export default function AIPhotoRestorationSection() {
                 playsInline
                 poster="/torn-tear.webp"
                 onPlay={() => {
-                  if (typeof window !== "undefined" && (window as any).gtag) {
-                    (window as any).gtag("event", "video_play", {
-                      feature: "torn_restoration",
-                      location: "technology_section",
-                    })
-                  }
+                  trackEvent("demo_video_played", {
+                    feature: "torn_restoration",
+                    location: "technology_section",
+                  })
                 }}
               />
             </div>

@@ -10,6 +10,7 @@ import PaymentSuccessModal from "@/components/payment-success-modal"
 import { useSearchParams } from "next/navigation"
 import { useCredits } from "@/hooks/use-credits"
 import { Separator } from "@/components/ui/separator"
+import { trackConversion } from "@/lib/analytics"
 
 interface PaymentControllerProps {
   user: {
@@ -64,26 +65,19 @@ export default function PaymentController({ user, initialCreditBalance, children
       const marker = readCheckoutMarker()
       if (marker) {
         const completedKey = marker.sessionId || marker.startedAt || "payment-success"
-        const dedupeKey = `ga_payment_completed:${completedKey}`
+        const dedupeKey = `oa_payment_completed:${completedKey}`
 
         try {
           if (!sessionStorage.getItem(dedupeKey)) {
-            if (typeof window !== "undefined" && (window as any).gtag) {
-              (window as any).gtag("event", "purchase", {
-                transaction_id: marker.sessionId || completedKey,
-                value: marker.amount,
-                currency: marker.currency || "USD",
-                items: [
-                  {
-                    item_id: marker.planId,
-                    item_name: marker.planName,
-                    price: marker.amount,
-                    quantity: 1,
-                    credits: marker.credits,
-                  }
-                ]
-              })
-            }
+            trackConversion("purchase", {
+              order_id: marker.sessionId || completedKey,
+              plan_id: marker.planId,
+              plan_name: marker.planName,
+              plan_tier: marker.planTier,
+              credits: marker.credits,
+              amount: marker.amount,
+              currency: marker.currency || "USD",
+            })
             sessionStorage.setItem(dedupeKey, "1")
           }
         } catch (e) {

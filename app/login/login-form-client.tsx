@@ -15,6 +15,7 @@ import Link from "next/link"
 import { signInWithMagicLink, signInWithGoogle, type AuthState } from "./actions"
 import { createClient } from "@/utils/supabase/client"
 import { isAuthRetryableFetchError } from "@supabase/supabase-js"
+import { trackEvent } from "@/lib/analytics"
 
 // Route-level metadata is defined in app/login/head.tsx to avoid exporting
 // metadata from a client component. This page remains a client component
@@ -34,13 +35,13 @@ function GoogleSignInButton({ nextPath }: { nextPath: string }) {
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true)
+    trackEvent("auth_started", { method: "google" })
     try {
       // Persist last used method for UX badge
       document.cookie = 'last_auth=google; path=/; max-age=31536000; SameSite=Lax'
       await signInWithGoogle(nextPath)
-    } catch (error) {
+    } catch {
       setIsLoading(false)
-      console.error('Google sign-in error:', error)
     }
   }
 
@@ -179,6 +180,7 @@ function LoginFormWithSearchParams({ nextPath }: { nextPath: string }) {
               onSubmit={() => {
                 // Persist last used method for UX badge
                 document.cookie = 'last_auth=magic; path=/; max-age=31536000; SameSite=Lax'
+                trackEvent("auth_started", { method: "magic_link" })
               }}
               className="space-y-6"
             >
@@ -202,7 +204,7 @@ function LoginFormWithSearchParams({ nextPath }: { nextPath: string }) {
               <div className="relative">
                 <MagicLinkSubmit />
                 {lastUsed === 'magic' && (
-                  <span className="absolute -top-2 right-3 bg-white text-black text-xs px-2  rounded-full border border-purple-600 text-sm">Last used</span>
+                  <span className="absolute -top-2 right-3 bg-white text-black text-xs px-2 rounded-full border border-purple-600 text-sm">Last used</span>
                 )}
               </div>
             </form>

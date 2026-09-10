@@ -5,6 +5,7 @@ import { useState, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, Check, Coins, Paperclip, Trash2, UploadCloud } from "lucide-react"
 import { useImageCrop } from "@/hooks/use-image-crop"
+import { trackEvent } from "@/lib/analytics"
 
 export interface SelectedRestoreFile {
   clientId: string
@@ -167,6 +168,10 @@ export default function ImageUpload({
         if (validFiles.length > 0) {
           uploadAttempts.current++
           lastUploadTime.current = Date.now()
+          trackEvent("image_selected", {
+            count: validFiles.length,
+            batch_total: selectedItems.length + validFiles.length,
+          })
           startCropping(validFiles)
         }
 

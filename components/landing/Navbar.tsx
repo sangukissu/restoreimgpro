@@ -5,6 +5,7 @@ import { Menu, X, Sparkles } from 'lucide-react';
 import { NavLink } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
+import { trackEvent } from '@/lib/analytics';
 
 const NAV_LINKS: NavLink[] = [
   { label: 'Features', href: '/features' },
@@ -50,7 +51,7 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex">
-            <Link href="/dashboard/restore">
+            <Link href="/dashboard/restore" onClick={() => trackEvent("cta_click", { section: "navbar", label: "restore_photo" })}>
               <button className="group flex items-center gap-3 bg-brand-black text-white pl-5 pr-2 py-2 rounded-full hover:scale-105 transition-transform duration-200 shadow-lg">
                 <span className="text-sm font-medium">Restore Photo</span>
                 <div className="bg-brand-orange rounded-full p-2 text-white group-hover:bg-white group-hover:text-brand-orange transition-colors">
@@ -86,7 +87,7 @@ export const Navbar: React.FC = () => {
                 {link.label}
               </Link>
             ))}
-            <Link href="/dashboard/restore">
+            <Link href="/dashboard/restore" onClick={() => trackEvent("cta_click", { section: "navbar_mobile", label: "restore_photo" })}>
               <button className="w-full flex items-center justify-center gap-2 bg-brand-orange text-white py-4 rounded-full font-bold mt-2">
                 Restore Photo <Sparkles size={18} />
               </button>

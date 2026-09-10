@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { trackEvent } from '@/lib/analytics'
 
 interface FeedbackTracking {
   total_restorations: number
@@ -143,14 +144,7 @@ export function useFeedback(): UseFeedbackReturn {
   // Show feedback modal
   const showFeedbackModal = () => {
     setIsModalOpen(true)
-    // GA4: track feedback promotion when modal opens
-    try {
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'view_promotion', {
-          promotion_name: 'Feedback Modal',
-        })
-      }
-    } catch {}
+    trackEvent("feedback_modal_opened")
   }
 
   // Hide feedback modal

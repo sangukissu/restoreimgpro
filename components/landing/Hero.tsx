@@ -4,6 +4,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowRight, Upload, Star, Sparkles, ScanLine, CheckCircle2, Play, Plus } from 'lucide-react';
 import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 
 const RestorationDemo: React.FC = () => {
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -154,7 +155,7 @@ export const Hero: React.FC = () => {
           <div className="flex flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-12 w-full max-w-full overflow-visible">
 
             {/* Primary: Orange Button with Black Circle Arrow */}
-            <Link href="/dashboard/restore">
+            <Link href="/dashboard/restore" onClick={() => trackEvent("cta_click", { section: "hero", label: "restore_photos" })}>
 
               <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_0px_1px_rgba(255,255,255,0.3),0_6px_20px_-6px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
                 <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Restore Photos</span>
@@ -165,7 +166,7 @@ export const Hero: React.FC = () => {
             </Link>
 
             {/* Secondary: Black Button with Orange Circle Play */}
-            <Link href="/ai-family-portrait">
+            <Link href="/ai-family-portrait" onClick={() => trackEvent("cta_click", { section: "hero", label: "reunite_family" })}>
 
               <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
                 <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Reunite Family</span>

@@ -10,6 +10,7 @@ import SceneSelector from "@/components/family-portrait/scene-selector"
 import UploadStep from "@/components/family-portrait/upload-step"
 import QuantitySelector from "@/components/family-portrait/quantity-selector"
 import GenerationStep, { AspectRatio } from "@/components/family-portrait/generation-step"
+import { trackEvent, identifyUser } from "@/lib/analytics"
 
 const ACCEPTED_IMAGE_TYPES = new Set([
   "image/jpeg",
@@ -60,6 +61,12 @@ export default function FamilyPortraitClient({
       setAspectRatio("16:9")
     }
   }, [aspectRatio, totalSubjectCount])
+
+  useEffect(() => {
+    if (user?.id) {
+      identifyUser(user.id)
+    }
+  }, [user?.id])
 
   const { toast } = useToast()
 
@@ -205,6 +212,13 @@ export default function FamilyPortraitClient({
 
       setUploadStatus("Composing your family portrait (this may take 1-2 minutes)...")
 
+      trackEvent("portrait_generation_started", {
+        theme_id: themeId,
+        person_count: personCount,
+        pet_count: petCount,
+        aspect_ratio: aspectRatio,
+      })
+
       // 2. Trigger AI synthesis with the structured parameters & prompt builder
       const res = await fetch("/api/family-portrait", {
         method: "POST",
@@ -245,6 +259,10 @@ export default function FamilyPortraitClient({
 
       setResultUrl(payload.imageUrl)
       setFamilyPortraitId(payload.familyPortraitId || null)
+      trackEvent("portrait_generation_completed", {
+        theme_id: themeId,
+        portrait_id: payload.familyPortraitId || "",
+      })
       toast.success("Family portrait generated!")
     } catch (err: any) {
       const msg = err?.message || "Unexpected error during generation"
@@ -271,6 +289,7 @@ export default function FamilyPortraitClient({
       a.click()
       document.body.removeChild(a)
       window.URL.revokeObjectURL(url)
+      trackEvent("portrait_downloaded", { tool: "family_portrait" })
     } catch (error) {
       console.error("Error downloading image:", error)
       alert("Failed to download image")
@@ -310,7 +329,10 @@ export default function FamilyPortraitClient({
           files={files}
           onAddFiles={handleAddFiles}
           onRemoveFile={handleRemoveFile}
-          onContinue={() => setCurrentStep(3)}
+          onContinue={() => {
+            trackEvent("portrait_images_uploaded", { count: files.length })
+            setCurrentStep(3)
+          }}
           onBack={() => setCurrentStep(1)}
           />
         )}

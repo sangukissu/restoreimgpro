@@ -4,6 +4,7 @@ import { useState } from "react"
 import { FAMILY_PORTRAIT_THEMES, ThemeCategory } from "@/lib/family-portrait/themes"
 import { Button } from "@/components/ui/button"
 import { Check } from "lucide-react"
+import { trackEvent } from "@/lib/analytics"
 
 interface SceneSelectorProps {
   selectedThemeId: string
@@ -68,7 +69,14 @@ export default function SceneSelector({
           return (
             <div
               key={theme.id}
-              onClick={() => onSelectTheme(theme.id)}
+              onClick={() => {
+                onSelectTheme(theme.id)
+                trackEvent("portrait_style_selected", {
+                  style_id: theme.id,
+                  style_name: theme.name,
+                  category: theme.category,
+                })
+              }}
               className={`group relative border rounded-2xl p-5 transition-all flex flex-col justify-between overflow-hidden bg-white shadow-none ${isSelected
                 ? "border-[#FF4D00] ring-1 ring-[#FF4D00]/30"
                 : "border-gray-200 hover:border-gray-300"
