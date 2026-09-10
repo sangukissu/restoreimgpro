@@ -167,7 +167,7 @@ export async function POST(req: NextRequest) {
                     image_urls: uploadedUrls,
                     num_images: 1,
                     output_format: 'png',
-                    aspect_ratio: aspectRatio,
+                    aspect_ratio: aspectRatio as "auto" | "1:1" | "4:3" | "3:4" | "16:9" | "2:3" | "3:2" | "4:5" | "5:4" | "9:16" | "21:9",
                     resolution: '1K'
                 },
                 logs: true,
