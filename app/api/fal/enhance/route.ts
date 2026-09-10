@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
       input: {
         image_url: falInputImageUrl,
         fidelity: 0.5,
+        // @ts-expect-error — upscaling is accepted by the API but not declared in the SDK types
         upscaling: 2,
         face_upscale: true,
       },
