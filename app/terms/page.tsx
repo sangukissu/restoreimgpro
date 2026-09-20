@@ -44,8 +44,8 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-bold text-brand-black mb-4">Acceptance of Terms</h2>
                   <div className="text-gray-600 space-y-4">
                     <p>
-                      By accessing and using BringBack ("Service"), you accept and agree to be bound by the terms and
-                      provision of this agreement. If you do not agree to abide by the above, please do not use this
+                      By accessing and using BringBack through our website (bringback.pro) or our official Android mobile application (pro.bringback.app) (collectively, the &quot;Service&quot;), you accept and agree to be bound by the terms and
+                      provisions of this agreement. If you do not agree to abide by the above, please do not use this
                       service.
                     </p>
                   </div>
@@ -55,15 +55,16 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-bold text-brand-black mb-4">Service Description</h2>
                   <div className="text-gray-600 space-y-4">
                     <p>
-                      BringBack provides AI-powered photo restoration services that enhance, repair, and restore damaged,
+                      BringBack provides AI-powered photo restoration services that enhance, repair, upscale, animate, and restore damaged,
                       faded, or low-quality photographs. Our service includes:
                     </p>
                     <ul className="list-disc pl-6 space-y-2">
                       <li>Automated photo restoration using artificial intelligence</li>
                       <li>Damage repair (tears, scratches, water damage)</li>
-                      <li>Color restoration and enhancement</li>
-                      <li>Quality improvement and sharpening</li>
-                      <li>Digital delivery of restored images</li>
+                      <li>Color restoration and vintage photograph colorization</li>
+                      <li>Resolution upscaling and facial detail enhancement</li>
+                      <li>Portrait animation and creative multi-photo reunions</li>
+                      <li>Digital delivery of restored images and videos</li>
                     </ul>
                   </div>
                 </section>
@@ -76,28 +77,36 @@ export default function TermsPage() {
                       <li>Only upload photos you own or have permission to restore</li>
                       <li>Not upload illegal, offensive, or copyrighted content</li>
                       <li>Use the service for personal, non-commercial purposes unless otherwise agreed</li>
-                      <li>Provide accurate payment information</li>
+                      <li>Provide accurate account and payment information</li>
                       <li>Not attempt to reverse engineer or misuse our AI technology</li>
                     </ul>
                   </div>
                 </section>
 
                 <section>
-                  <h2 className="text-2xl font-bold text-brand-black mb-4">Payment Terms</h2>
+                  <h2 className="text-2xl font-bold text-brand-black mb-4">Payment Terms &amp; In-App Credits</h2>
                   <div className="bg-green-50 border border-green-100 rounded-2xl p-8 mb-6">
                     <h3 className="font-semibold text-green-900 mb-2 flex items-center gap-2">
-                      <span>💳</span> Simple Pricing
+                      <span>💳</span> Simple Credit Pricing
                     </h3>
                     <p className="text-green-800">
-                      Restoration Starter: $4.99 for 4 credits. Value Pack: $9.99 for 20 credits. Family Pack: $21.99 for 60 credits (includes Memory Book access). One-time payments, no subscriptions. Feature costs: restore 1 credit; family portrait / add / remove person 2 credits; animation and hug video 10 credits each.
+                      Credits are purchased as one-time consumable packs with no recurring subscriptions. Feature costs: photo restoration 1 credit; colorize / enhance / upscale 1 credit; family portrait / add person 2 credits; portrait animation 10 credits.
                     </p>
                   </div>
                   <div className="text-gray-600 space-y-4">
                     <ul className="list-disc pl-6 space-y-2">
-                      <li>All payments are processed securely through third-party providers</li>
-                      <li>Prices are subject to change with 30 days notice</li>
-                      <li>Credits do not expire</li>
-                      <li>Refunds available within 30 days (see Refund Policy)</li>
+                      <li>
+                        <strong>Web Payments:</strong> Purchases on our website are processed securely via third-party checkout providers (such as Dodo Payments).
+                      </li>
+                      <li>
+                        <strong>Google Play In-App Purchases (Android):</strong> Purchases made in the BringBack Android mobile app are processed exclusively via Google Play In-App Billing and are subject to Google Play's Terms of Service and refund policies.
+                      </li>
+                      <li>
+                        <strong>Credit Validity:</strong> Purchased credits are consumable digital items tied to your BringBack account. Credits do not expire, but are non-transferable and cannot be redeemed for cash.
+                      </li>
+                      <li>
+                        <strong>Refunds:</strong> Web purchases are backed by our 30-day money-back guarantee; Android purchases follow Google Play's standard refund procedures (see our <a href="/refunds" className="underline font-medium text-brand-black">Refund Policy</a>).
+                      </li>
                     </ul>
                   </div>
                 </section>
@@ -137,6 +146,21 @@ export default function TermsPage() {
                       damages, including without limitation, loss of profits, data, use, goodwill, or other intangible
                       losses.
                     </p>
+                  </div>
+                </section>
+
+                <section>
+                  <h2 className="text-2xl font-bold text-brand-black mb-4">Mobile Application &amp; App Stores</h2>
+                  <div className="text-gray-600 space-y-4">
+                    <p>
+                      If you download or access the BringBack AI mobile application through the Google Play Store or any third-party app marketplace:
+                    </p>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li>These Terms are concluded solely between you and BringBack, not Google LLC or any marketplace operator.</li>
+                      <li>Google LLC has no obligation to furnish maintenance or customer support services regarding the application.</li>
+                      <li>You agree to comply with all applicable third-party terms (including the Google Play Terms of Service) when using the application.</li>
+                      <li>Google LLC and its subsidiaries are third-party beneficiaries of these Terms and have the right to enforce them against you as a third-party beneficiary.</li>
+                    </ul>
                   </div>
                 </section>
 

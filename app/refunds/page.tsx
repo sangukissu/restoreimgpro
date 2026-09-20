@@ -129,7 +129,7 @@ export default function RefundsPage() {
                   <div className="text-gray-600 space-y-4">
                     <p>
                       When a generation fails in a way the system can detect (for example restoration pipeline failure
-                      or a failed nostalgic hug video job after credits were reserved), we refund the feature credits
+                      or a provider timeout after credits were reserved), we refund the feature credits
                       to your account automatically so you can try again.
                     </p>
                     <p>
@@ -140,16 +140,61 @@ export default function RefundsPage() {
                       with the approximate time and feature used.
                     </p>
                     <ul className="list-disc pl-6 space-y-2">
-                      <li>Photo restoration: 1 credit (auto-refund path on detected failure)</li>
-                      <li>Photo animation: 10 credits</li>
+                      <li>Photo restoration, colorize, enhance &amp; upscale: 1 credit (auto-refund on detected failure)</li>
+                      <li>Photo animation: 10 credits (auto-refund on provider error)</li>
                       <li>Family portrait / add / remove person: 2 credits</li>
-                      <li>Nostalgic hug video: 19 credits (refunded on provider ERROR after start)</li>
+                      <li>Nostalgic hug video: 19 credits (refunded on provider error after start)</li>
                     </ul>
                   </div>
                 </section>
 
                 <section>
-                  <h2 className="text-2xl font-bold text-brand-black mb-4">Refund Eligibility</h2>
+                  <h2 className="text-2xl font-bold text-brand-black mb-4 flex items-center gap-2">
+                    <span>📱</span> Android &amp; Google Play In-App Purchases
+                  </h2>
+                  <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-8 mb-6">
+                    <h3 className="font-semibold text-emerald-900 mb-2">Google Play Billing Compliance</h3>
+                    <p className="text-emerald-800">
+                      If you purchased credit packs inside our Android mobile application (BringBack AI), your transaction was processed directly by Google Play In-App Billing and is governed by Google Play&apos;s official refund policies.
+                    </p>
+                  </div>
+                  <div className="text-gray-600 space-y-4">
+                    <p><strong>How to request a refund for Google Play purchases:</strong></p>
+                    <ul className="list-disc pl-6 space-y-2">
+                      <li>
+                        <strong>Within 48 hours of purchase:</strong> You can request a refund directly from Google via your{" "}
+                        <a
+                          href="https://play.google.com/store/account/orderhistory"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline font-semibold text-brand-black"
+                        >
+                          Google Play Order History
+                        </a>{" "}
+                        or via Google&apos;s{" "}
+                        <a
+                          href="https://support.google.com/googleplay/answer/2479637"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline font-semibold text-brand-black"
+                        >
+                          refund request tool
+                        </a>
+                        . Google typically processes automated requests quickly.
+                      </li>
+                      <li>
+                        <strong>Developer Support:</strong> You can also email us directly at{" "}
+                        <a href="mailto:support@bringback.pro" className="underline font-semibold text-brand-black">
+                          support@bringback.pro
+                        </a>{" "}
+                        with your Google Play Order Number (e.g. <code>GPA.XXXX-XXXX-XXXX-XXXXX</code> found in your Google Play receipt). If an issue or service dissatisfaction occurred, we will review and issue a refund or credit adjustment promptly.
+                      </li>
+                    </ul>
+                  </div>
+                </section>
+
+                <section>
+                  <h2 className="text-2xl font-bold text-brand-black mb-4">Refund Eligibility (Web Purchases)</h2>
                   <div className="text-gray-600 space-y-4">
                     <p>You're eligible for a full refund if:</p>
                     <ul className="list-disc pl-6 space-y-2">
