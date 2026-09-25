@@ -21,8 +21,9 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 function extractFirstName(fullName: string | null | undefined): string | null {
     if (typeof fullName !== 'string') return null
     const trimmed = fullName.trim()
-    if (!trimmed) return null
+    if (!trimmed || trimmed.includes('@')) return null
     const first = trimmed.split(/\s+/)[0]
+    if (first.includes('@')) return null
     return first.length > 24 ? first.slice(0, 24) : first
 }
 
@@ -70,52 +71,32 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
     }
 }
 
-// Winback Email 2 — sent 7 days after Email 1 to users who have NOT bought
-// the Plus or Family plan. (Starter buyers are excluded — they already
-// converted at the entry tier and we don't keep pushing them.)
-//
-// Structure (loss-aversion + hypnotic future-regret + bigger offer):
-//   1. Time acknowledgement (it's been a week)
-//   2. Hypnotic line: "your photos are still where you left them"
-//   3. Future-regret: who will see them in 5 years if you do nothing?
-//   4. The Memory Book hook (your restored photos, made into a book)
-//   5. Specific offer: 15% off Plus or Family, expires in 72 hours
-//   6. Single CTA
-//   7. P.S. with founder name + reply-promise
-//
-// This is the last touchpoint. After this, we don't email non-buyers again.
+// Winback Email 2 — sent 2 days (48h) after Email 1 to users who have NOT bought
+// the Plus or Family plan.
+// Combines restoration + family photo creator use cases.
+// Addresses price objection cleanly with our best discount, zero melodrama.
 
-const EMAIL_SUBJECT = 'Your photos are still waiting'
+const EMAIL_SUBJECT = 'one last check-in'
 
 const getEmailBody = (firstName: string | null): string => {
-    const greeting = firstName ? `Hi ${firstName},` : 'Hi,'
+    const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
     return `${greeting}
 
-It’s been a week since you signed up for BringBack, and I’ve been thinking about you a little more than I should admit.
+It’s been a few days since you signed up, so this is the last email I'll send you.
 
-I don’t usually write a second email. But I checked, and the photo you opened when you signed up — the one that brought you to us in the first place — is still exactly where you left it. On your phone. In a camera roll. In a drawer somewhere. Maybe in an envelope in a closet.
+Whether you wanted to restore a faded memory or bring family members together into a photo who never got to share the frame — no rush at all if the timing just wasn't right.
 
-Here’s the thing I keep thinking about, and I’ll say it straight: in five years, that photo is going to be in the same place. The faces in it will be a little older. The people around you will start forgetting small details — the year, the occasion, the name of the person standing next to your grandmother.
+But if you held off purely because of the cost, I wanted to leave you with our best discount before stepping away:
 
-You came to BringBack for a reason. Whatever that reason was, it didn’t go away because a week passed. If anything, it got a little heavier.
+Code WELCOME15 takes 15% off any plan. That brings the Plus Plan down to $8.49 (one-time payment, no recurring billing).
 
-So I made you a code. A real one — bigger than the one I sent last time.
+Open BringBack:
+${APP_URL}/dashboard
 
-    Code: WELCOME15
-    15% off the Plus Plan or the Family Plan
-    Expires in 72 hours
+If you don't need it right now, no hard feelings at all — thanks for checking out the site either way.
 
-The Family Plan is what unlocks the Memory Book — the thing I keep hearing about from customers who tell me it changed how their family talks about the past. 60 restorations. Every feature. Priority support. ${APP_URL}/dashboard
-
-The Plus Plan is $8.49 with the code applied. The Family Plan is $18.69. Both unlock what brought you here in the first place.
-
-I’m not going to email you again about this. This is it. If the photo matters, this is the moment. If it doesn’t, no hard feelings — I hope the email wasn’t a bother.
-
-If you try and something feels off, reply to this email. I read every one personally. Not a support team. Me.
-
-P.S. — The Memory Book feature is the part I’m proudest of. If you only try one thing this year, make it that.
-
-— Harvansh
+Best,
+Harvansh
 Founder, BringBack`
 }
 
@@ -131,14 +112,14 @@ serve(async (req: Request) => {
 
         console.log('Starting win-back email 2 job...')
 
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+        const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
 
         const { data: eligibleUsers, error: usersError } = await supabase
             .from('user_profiles')
             .select('user_id, email, name')
             .not('winback_email_1_sent_at', 'is', null)
             .is('winback_email_2_sent_at', null)
-            .lte('winback_email_1_sent_at', sevenDaysAgo)
+            .lte('winback_email_1_sent_at', twoDaysAgo)
 
         if (usersError) {
             console.error('Error fetching users:', usersError)

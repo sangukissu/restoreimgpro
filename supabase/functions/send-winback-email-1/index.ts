@@ -23,8 +23,9 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 function extractFirstName(fullName: string | null | undefined): string | null {
     if (typeof fullName !== 'string') return null
     const trimmed = fullName.trim()
-    if (!trimmed) return null
+    if (!trimmed || trimmed.includes('@')) return null
     const first = trimmed.split(/\s+/)[0]
+    if (first.includes('@')) return null
     // Cap at 24 chars so a runaway name doesn't break email layout
     return first.length > 24 ? first.slice(0, 24) : first
 }
@@ -76,45 +77,30 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
 // Email template
 //
 // Winback Email 1 — sent 4–24h after signup to non-buyers.
-//
-// Structure (PAS-lite, single CTA, founder voice):
-//   1. Acknowledge without guilt
-//   2. Hook: the new Memory Book feature (emotionally unique)
-//   3. Specific, concrete offer (Family Plan, not a vague % off)
-//   4. Single CTA
-//   5. P.S. with founder name (the most-read part of any email)
-//
-// Personalization: we use the user's first name if we have it. Falling back
-// to "there" reads as cold, so we never do that — we just sign as Harvansh.
+// Combines restoration + family photo creator use cases.
+// Addresses pricing hesitation, subscription fear, and satisfaction guarantee directly.
 
-const EMAIL_SUBJECT = 'One photo you haven’t restored yet'
+const EMAIL_SUBJECT = 'quick question about BringBack'
 
 const getEmailBody = (firstName: string | null): string => {
-    const greeting = firstName ? `Hi ${firstName},` : 'Hi,'
+    const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
     return `${greeting}
 
-I noticed you signed up to BringBack yesterday but haven’t restored a photo yet. I won’t pretend to know why — could be timing, could be you opened the page, looked at the pricing, and closed the tab. Both are fair.
+Noticed you created an account on BringBack yesterday, but haven’t had a chance to try it yet — whether you came to restore an old picture or create a combined family portrait.
 
-I just wanted you to know about something we launched this week that I’m especially proud of: Memory Books.
+I won’t pretend to know why — could be you got busy, or you looked at the pricing and decided it wasn’t worth it right now. Both are completely fair.
 
-It’s a way to take the photos you’ve restored and turn them into a private, paginated keepsake — a real book, with your family’s names and stories woven in. The pages turn. The book gets a private link. The people you love can open it, scroll through, and read the memories you wrote for them.
+If you were on the fence about the price, I just wanted to clear up two quick things that people usually ask me:
 
-Most of our users tell us it ends up being the most meaningful thing they’ve ever made online. One customer told me her dad cried. (I’m not making that up.)
+1. It's not a subscription: You aren't getting locked into recurring monthly charges. It's a simple, one-time payment.
+2. Money-back guarantee: If the facial details look unnatural, blurry, or the final photo just doesn't feel right, reply to this email and I’ll refund you. No hassle.
 
-If you want to try it, the Family Plan is what unlocks it. Right now I’ve made a small discount code just for people who are still on the fence:
-
-    Code: COMEBACK10
-    10% off the Family Plan or the Pro Plan
-    Expires in 48 hours
-
-The Family Plan is $21.99 (about the cost of two coffees) and comes with 60 credits, the Memory Book, every feature we make, and priority support.
-
-Open BringBack and try the first photo. It takes 30 seconds:
+Whenever you're ready to restore or create that family photo, you can jump back in here:
 ${APP_URL}/dashboard
 
-If you try and don’t love the result, reply to this email. I read every one.
+(You can use code COMEBACK10 for 10% off if you decide to try it).
 
-P.S. — One photo is all you need to start. You don’t have to know who it’s for yet. That part comes later.
+If something didn't work or the price is still too high for what you need, hit reply and let me know. I read every message.
 
 — Harvansh
 Founder, BringBack`
