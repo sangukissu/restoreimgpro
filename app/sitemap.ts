@@ -25,6 +25,7 @@ const SITE_LAST_MODIFIED = new Date("2026-08-09T00:00:00.000Z")
 const RETIRED_PATHS = new Set([
   ...Object.keys(urlPolicy.retiredKeywordPaths),
   ...Object.keys(urlPolicy.retiredBlogPaths),
+  ...(urlPolicy.gone410Paths || []),
 ])
 
 /** True if `path` is 301'd and must never be emitted as a sitemap entry. */

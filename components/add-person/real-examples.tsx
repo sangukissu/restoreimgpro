@@ -6,19 +6,6 @@ import { Heart, Calendar, Users, Award, ArrowRight, Sparkles, ScanLine, Gift } f
 
 const REAL_EXAMPLES = [
   {
-    id: "wedding",
-    category: "Wedding Memorial",
-    icon: <Heart className="w-5 h-5 text-rose-500" />,
-    title: "Add a Passed Parent or Grandparent to Your Wedding Album",
-    story:
-      "When a parent or grandparent passes away before your wedding day, BringBack places them beside the bride or groom in their formal attire. We match outdoor sunlight, shadows, and camera angles so the memory feels complete.",
-    beforeImg: "/wedding-before-exact.jpg",
-    afterImg: "/wedding-composite.jpg",
-    personToAddLabel: "Late Father's Photo",
-    ctaText: "Add Loved One to Wedding Photo",
-    href: "/dashboard/add-person",
-  },
-  {
     id: "reunion",
     category: "Family Reunion",
     icon: <Calendar className="w-5 h-5 text-amber-500" />,
@@ -32,29 +19,16 @@ const REAL_EXAMPLES = [
     href: "/dashboard/add-person",
   },
   {
-    id: "memorial",
-    category: "Generational Keepsake",
-    icon: <Users className="w-5 h-5 text-indigo-500" />,
-    title: "Place Grandparents on the Living Room Sofa with Great-Grandchildren",
+    id: "wedding",
+    category: "Wedding Group Photo",
+    icon: <Heart className="w-5 h-5 text-rose-500" />,
+    title: "Add a Missing Friend or Relative to Your Wedding Album",
     story:
-      "Reunite multi-generational families in a warm indoor setting. Place a late grandparent on the sofa alongside new family members, matching soft lamp lighting, skin tones, and natural seated postures.",
-    beforeImg: "/memorial-before-exact.jpg",
-    afterImg: "/memorial-composite.jpg",
-    personToAddLabel: "Grandmother's Portrait",
-    ctaText: "Create Family Sofa Portrait",
-    href: "/dashboard/add-person",
-  },
-  {
-    id: "christmas",
-    category: "Holiday Snapshot",
-    icon: <Gift className="w-5 h-5 text-emerald-500" />,
-    title: "Merge Loved Ones into Christmas & Holiday Family Snapshots",
-    story:
-      "Holidays are when missing family members are remembered most. BringBack seamlessly places loved ones into Christmas tree snapshots, harmonizing warm ambient holiday lighting.",
-    beforeImg: "/christmas-before-exact.jpg",
-    afterImg: "/christmas-composite.jpg",
-    personToAddLabel: "Grandfather's Photo",
-    ctaText: "Add Loved One to Holiday Photo",
+      "When flight delays, illness, or travel keep an important guest from attending your ceremony, BringBack places them naturally into the bridal party or family group with matched sunlight and shadows.",
+    beforeImg: "/wedding-before-exact.jpg",
+    afterImg: "/wedding-composite.jpg",
+    personToAddLabel: "Guest Reference Photo",
+    ctaText: "Add Person to Wedding Photo",
     href: "/dashboard/add-person",
   },
   {
@@ -63,12 +37,40 @@ const REAL_EXAMPLES = [
     icon: <Award className="w-5 h-5 text-blue-500" />,
     title: "Complete Graduation & Milestone Photos with Both Parents Present",
     story:
-      "Ensure major milestones like graduations feature both parents together. Our AI balances skin tones, clothing exposure, and shoulder angles automatically.",
+      "Ensure major milestones like graduations feature both parents together even if one had to be behind the camera. Our AI balances skin tones, lighting, and shoulder angles automatically.",
     beforeImg: "/graduation-before-exact.jpg",
     afterImg: "/graduation-after-exact.jpg",
     personToAddLabel: "Parent's Photo",
     ctaText: "Combine Photos for Graduation",
     href: "/dashboard/add-person",
+  },
+  {
+    id: "christmas",
+    category: "Holiday Snapshot",
+    icon: <Gift className="w-5 h-5 text-emerald-500" />,
+    title: "Include Absent Family Members in Holiday Pictures",
+    story:
+      "When family members can't make it home for holiday gatherings, integrate them naturally into the snapshot around the dinner table, harmonizing warm ambient indoor lighting.",
+    beforeImg: "/christmas-before-exact.jpg",
+    afterImg: "/christmas-composite.jpg",
+    personToAddLabel: "Family Member's Photo",
+    ctaText: "Add Person to Holiday Photo",
+    href: "/dashboard/add-person",
+  },
+  {
+    id: "memorial",
+    category: "Memorial Keepsake",
+    icon: <Users className="w-5 h-5 text-indigo-500" />,
+    title: "Add a Passed Parent or Grandparent to a Cherished Portrait",
+    story:
+      "Honor a late parent or grandparent by placing them alongside family members, matching soft ambient light and natural seated postures. Learn more about how to",
+    linkText: "add a deceased loved one to a photo",
+    linkHref: "/features/add-deceased-loved-one-to-photo",
+    beforeImg: "/memorial-before-exact.jpg",
+    afterImg: "/memorial-composite.jpg",
+    personToAddLabel: "Grandparent's Portrait",
+    ctaText: "Create Memorial Portrait",
+    href: "/features/add-deceased-loved-one-to-photo",
   },
 ]
 
@@ -130,12 +132,12 @@ function AddPersonSlider({
       </div>
 
       {/* Badges */}
-      <div className="absolute top-4 left-4 bg-black/80 text-white px-3 py-1 rounded-md text-xs `tracking-widest uppercase z-20">
+      <div className="absolute top-4 left-4 bg-black/80 text-white px-3 py-1 rounded-md text-xs tracking-widest uppercase z-20">
         Original Base Photo
       </div>
 
       <div className="absolute top-4 right-4 bg-brand-orange backdrop-blur text-white px-3 py-1 rounded-md text-xs tracking-widest uppercase z-20 flex items-center gap-1.5">
-        Loved One Added
+        Person Added
       </div>
 
 
@@ -164,7 +166,7 @@ export function AddPersonRealExamples() {
           </div>
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Drag the interactive slider on each photo to see how BringBack seamlessly inserts missing relatives into family memories.
+              Drag the interactive slider on each photo to see how BringBack seamlessly inserts missing people into existing memories.
             </p>
           </div>
         </div>
@@ -208,7 +210,16 @@ export function AddPersonRealExamples() {
                         </h3>
 
                         <p className="text-gray-600 font-medium leading-relaxed text-sm sm:text-base mb-4">
-                          {ex.story}
+                          {ex.story}{" "}
+                          {"linkText" in ex && "linkHref" in ex && ex.linkText && ex.linkHref ? (
+                            <Link
+                              href={ex.linkHref as string}
+                              className="text-brand-orange font-bold hover:underline"
+                            >
+                              {ex.linkText as string}
+                            </Link>
+                          ) : null}
+                          {"linkText" in ex && "linkHref" in ex && ex.linkText ? "." : ""}
                         </p>
                       </div>
 

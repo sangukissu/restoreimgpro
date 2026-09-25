@@ -15,7 +15,7 @@ const HOW_IT_WORKS_STEPS = [
     number: "02",
     stepTitle: "Upload the Person's Photo",
     icon: <UserPlus className="w-6 h-6 text-indigo-500" />,
-    shortDesc: "Choose a clear reference photo of the missing relative or deceased loved one.",
+    shortDesc: "Choose a clear reference photo of the missing friend, colleague, or family member.",
     detail: "Old scanned portraits or smartphone photos are fine. Front-facing faces give the most natural result.",
   },
   {
@@ -55,7 +55,7 @@ export function AddPersonHowItWorks() {
 
           <div className="max-w-sm">
             <p className="text-lg text-gray-600 font-medium leading-relaxed">
-              Follow these 4 simple steps to merge a missing relative or deceased loved one into any group photo with natural AI lighting.
+              Follow these 4 simple steps to insert a missing person into any group or family photo with natural AI lighting.
             </p>
           </div>
         </div>

@@ -26,7 +26,7 @@ export const PAGE_H1 = {
   restoration: "Repair old photos while keeping their original character.",
   animation: "Add a subtle smile or movement to an old photo.",
   familyPortrait: "Bring separate family photos into one natural portrait.",
-  addPerson: "Add someone you love to a family photo.",
+  addPerson: "Add a person to an existing photo.",
   removePerson: "Remove an unwanted person and rebuild the background.",
   memoryBook: "Turn restored photos and family stories into a private keepsake.",
   colorize: "Colorize a black-and-white photo only when you choose to.",
@@ -65,21 +65,13 @@ export const LIMITATIONS_COPY = {
     "If a result does not look like the person you remember, do not force a download—adjust inputs, try again, or keep the original.",
 } as const
 
-/** Feature URLs being consolidated away (301 targets live in next.config). */
-export const CONSOLIDATED_FEATURE_SLUGS = [
-  "individual-photos-into-group",
-  "add-deceased-loved-one-to-photo",
-  "black-and-white-composite",
-  "father-and-child-portrait",
-  "merge-images",
-  "ai-image-combiner",
-  "photo-joiner",
-  "add-person-to-photo",
-] as const
+import urlPolicy from "@/config/url-policy.json"
 
-export const CONSOLIDATED_APP_SLUGS = [
-  "back-to-life-photo-app",
-  "make-pictures-smile",
-  "animate-old-photos",
-  "sharpen-wedding-photos",
-] as const
+/** Feature URLs retired via config/url-policy.json (derived directly from SSOT to prevent drift). */
+export const CONSOLIDATED_FEATURE_SLUGS = Object.keys(urlPolicy.retiredKeywordPaths)
+  .filter((path) => path.startsWith("/features/"))
+  .map((path) => path.replace("/features/", ""))
+
+export const CONSOLIDATED_APP_SLUGS = Object.keys(urlPolicy.retiredKeywordPaths)
+  .filter((path) => path.startsWith("/app/"))
+  .map((path) => path.replace("/app/", ""))

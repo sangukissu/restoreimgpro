@@ -13,26 +13,29 @@ import { ProductCrossSell } from "@/components/seo/product-cross-sell"
 import { CTA } from "@/components/old-photo-restoration/CTA"
 import { Footer } from "@/components/landing/Footer"
 
+import { schemaOffers } from "@/lib/pricing"
+
 export const metadata: Metadata = {
-  title: "Add a Person to Photo AI | Insert Missing Person in Family Photos",
+  title: "Add a Person to a Photo with AI",
   description:
-    "Add a deceased loved one, late parent, or missing family member into a wedding, memorial, or family portrait with AI. Natural lighting, matched skin tones, and real before & after results.",
+    "Add one person to an existing family, group, wedding, or event photo. Choose placement and BringBack matches lighting, scale, perspective, color, and shadows.",
   keywords: [
-    "add deceased loved one to photo ai",
-    "add deceased loved one to wedding photo",
-    "add passed family member to portrait",
-    "add missing person to group photo",
-    "combine separate photos of deceased relatives into one portrait",
-    "how to add a person to a family photo",
-    "ai memorial family photo generator",
+    "add person to photo",
+    "add someone to group photo",
+    "insert person into existing photo",
+    "add missing person to family photo",
+    "add absent relative to group photo",
+    "how to add a person to a photo",
+    "ai add person to photo",
+    "add person to picture online",
   ],
   alternates: {
     canonical: "https://bringback.pro/add-person-to-photo",
   },
   openGraph: {
-    title: "Add a Person to Photo AI | BringBack",
+    title: "Add a Person to a Photo with AI | BringBack",
     description:
-      "Combine separate photos of relatives into a single cohesive family portrait with natural AI lighting and skin tone matching.",
+      "Add one person to an existing family, group, wedding, or event photo with AI matched lighting, scale, perspective, and shadows.",
     url: "https://bringback.pro/add-person-to-photo",
     siteName: "BringBack",
     type: "website",
@@ -54,25 +57,18 @@ const webAppJsonLd = {
   "@id": "https://bringback.pro/add-person-to-photo#webapp",
   name: "BringBack Add a Person to Photo AI",
   description:
-    "Add a missing person or deceased loved one into a wedding, memorial, or family portrait with matched lighting.",
+    "Add one person to an existing family, group, wedding, or event photo with AI matched lighting, scale, perspective, and shadows.",
   url: "https://bringback.pro/add-person-to-photo",
   applicationCategory: "PhotoEditingApplication",
   operatingSystem: "Web",
-  offers: {
-    "@type": "Offer",
-    name: "Add Person Credit Pack",
-    url: "https://bringback.pro/pricing",
-    priceCurrency: "USD",
-    price: "4.99",
-    description: "4 credits — covers 2 Add Person compositing runs.",
-  },
+  offers: schemaOffers(),
 }
 
 const howToJsonLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
   name: "How to Add a Person to a Family Photo",
-  description: "Learn how to add a missing relative or deceased loved one into any family photo using AI in 4 simple steps.",
+  description: "Learn how to add a missing person into an existing family or group photo using AI in 4 simple steps.",
   step: [
     {
       "@type": "HowToStep",
@@ -85,7 +81,7 @@ const howToJsonLd = {
       "@type": "HowToStep",
       position: 2,
       name: "Upload the Person's Photo",
-      text: "Choose a clear reference photo of the missing relative or deceased loved one.",
+      text: "Choose a clear reference photo of the missing friend, relative, or colleague.",
       url: "https://bringback.pro/add-person-to-photo#how-it-works",
     },
     {

@@ -46,7 +46,7 @@ const FEATURES = [
     href: "/add-person-to-photo",
     dashboard: DASHBOARD_CTA.addPerson,
     cost: FEATURE_CREDIT_COSTS.addPerson.credits,
-    blurb: "Insert a loved one into an existing family photo.",
+    blurb: "Insert a person into an existing group, wedding, or family photo.",
   },
   {
     title: "Remove person from photo",
@@ -92,7 +92,6 @@ const USE_CASE_PAGES = [
     href: "/features/add-deceased-loved-one-to-photo",
     label: "Add a deceased loved one to a photo",
   },
-  { href: "/features/photo-joiner", label: "Join old photos together online" },
   { href: "/app/back-to-life-photo-app", label: "Back to life photo app" },
   // Retired paths are filtered out below so this list can never link to a
   // redirect. Adding a path to config/url-policy.json removes it from here

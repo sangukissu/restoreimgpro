@@ -32,7 +32,7 @@ export function AddPersonGuide() {
 
         {/* Main Content: Nested Container Architecture */}
         <div className="bg-brand-surface p-2 sm:p-3 rounded-[2rem] space-y-3">
-          
+
           {/* Row 1: Plain English Ways to Edit */}
           <div className="grid md:grid-cols-2 gap-3">
             {/* Way 1 */}
@@ -57,7 +57,7 @@ export function AddPersonGuide() {
               </div>
             </div>
 
-            {/* Way 2 */}
+            {/* Alternative Workflow: AI Family Portrait */}
             <div className="bg-white rounded-[1.8rem] p-8 lg:p-10 border border-gray-100 shadow-sm flex flex-col justify-between group hover:border-gray-200 transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between mb-6">
@@ -65,17 +65,22 @@ export function AddPersonGuide() {
                     <ImageIcon size={24} />
                   </div>
                   <span className="bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                    Option 2
+                    Separate Tool
                   </span>
                 </div>
-                <h3 className="text-2xl font-extrabold text-brand-black mb-3">Create a New Family Photo from Separate Pictures</h3>
-                <p className="text-gray-600 font-medium leading-relaxed text-base">
-                  When you don't have a single group photo, upload separate individual studio portraits taken across different years. BringBack assembles them into one unified, balanced family portrait.
+                <h3 className="text-2xl font-extrabold text-brand-black mb-3">Need to Combine Multiple Separate Pictures?</h3>
+                <p className="text-gray-600 font-medium leading-relaxed text-base mb-4">
+                  If you don&apos;t have an existing group scene and want to combine several individual portraits into an entirely new group portrait from scratch, use our dedicated AI Family Portrait generator.
                 </p>
               </div>
-              <div className="mt-8 pt-4 border-t border-gray-100 flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                <Sparkles size={14} className="text-brand-orange" />
-                Blends Vintage Film Grain &amp; Lighting
+              <div className="mt-6 pt-4 border-t border-gray-100">
+                <Link
+                  href="/ai-family-portrait"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-brand-black transition-colors"
+                >
+                  <span>Explore AI Family Portrait</span>
+                  <ArrowRight size={16} />
+                </Link>
               </div>
             </div>
           </div>
@@ -156,33 +161,47 @@ export function AddPersonGuide() {
             </div>
           </div>
 
-          {/* Row 3: Respectful Memorial Guidelines */}
+          {/* Row 3: Adding Someone Who Has Passed Away? (Contextual Memorial Section) */}
           <div className="bg-white rounded-[1.8rem] p-8 lg:p-10 border border-gray-100 shadow-sm">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center">
-                <ShieldAlert size={20} />
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+                  <ShieldAlert size={24} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-extrabold text-brand-black">Adding someone who has passed away?</h3>
+                  <p className="text-sm text-gray-500 font-medium">Respectful guidelines and dedicated memorial workflows</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-extrabold text-brand-black">Respectful Family &amp; Memorial Guidelines</h3>
-                <p className="text-xs text-gray-500 font-medium">Principles for creating meaningful family keepsakes</p>
-              </div>
+
             </div>
+
+            <p className="text-gray-600 font-medium leading-relaxed text-base mb-6 max-w-4xl">
+              Adding a late parent or grandparent to an existing wedding, holiday, or family photo is one of the most meaningful uses of BringBack. If your source photo is vintage or worn, restore damaged prints first to preserve a true likeness before insertion. For step-by-step guidance on honoring lost relatives with balanced lighting and respectful likeness preservation, learn how to{" "}
+              <Link
+                href="/features/add-deceased-loved-one-to-photo"
+                className="text-brand-orange font-bold hover:underline"
+              >
+                add a deceased loved one to a photo
+              </Link>.
+            </p>
+
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-700 font-medium">
               <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100">
-                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Family Respect</span>
-                Ensure surviving family members feel comfortable with memorial portraits.
+                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Family Consent</span>
+                Ensure family members are comfortable with creating memorial keepsakes.
               </div>
               <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100">
-                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Personal Keepsakes</span>
-                Composites are created for private family history books and frames.
+                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Likeness Check</span>
+                Compare results side-by-side in your dashboard before downloading or printing.
               </div>
               <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100">
-                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Real Facial Features</span>
-                AI preserves genuine expressions without synthetic face-swaps.
+                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Restore Damaged First</span>
+                Run torn or blurry old prints through restoration first for sharp facial features.
               </div>
               <div className="bg-brand-surface p-4 rounded-2xl border border-gray-100">
-                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">100% Private</span>
-                Files are stored securely in your dashboard until you delete them.
+                <span className="block text-brand-orange font-bold text-xs uppercase mb-1">Private &amp; Secure</span>
+                Photos remain private to your account and are never used to train public AI models.
               </div>
             </div>
             <p className="mt-6 text-xs text-gray-400 border-t border-gray-100 pt-4">{PRIVACY_COPY.short}</p>
@@ -199,7 +218,7 @@ export function AddPersonGuide() {
                 href="/examples"
                 className="inline-flex items-center gap-2 rounded-full bg-brand-black text-white px-5 py-2.5 text-sm font-bold hover:bg-gray-800 transition-colors self-start sm:self-auto"
               >
-                <span>See Example Composites</span>
+                <span>See Use Cases</span>
                 <ArrowRight size={16} />
               </Link>
             </div>
@@ -221,6 +240,12 @@ export function AddPersonGuide() {
                 className="rounded-full bg-brand-surface border border-gray-200 px-4 py-2 text-sm font-bold text-brand-black hover:border-brand-orange hover:bg-white transition-all"
               >
                 AI Family Portrait
+              </Link>
+              <Link
+                href="/features/add-deceased-loved-one-to-photo"
+                className="rounded-full bg-brand-surface border border-gray-200 px-4 py-2 text-sm font-bold text-brand-black hover:border-brand-orange hover:bg-white transition-all"
+              >
+                Add Deceased Loved One
               </Link>
               <Link
                 href="/family-memory-book"

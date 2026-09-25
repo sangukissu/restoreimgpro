@@ -51,7 +51,33 @@ function resolveRestoreDestination(pathname: string): string {
   return '/old-photo-restoration'
 }
 
+const GONE_410_PATHS = new Set([
+  '/features/individual-photos-into-group',
+  '/features/black-and-white-composite',
+  '/features/father-and-child-portrait',
+  '/features/merge-images',
+  '/features/ai-image-combiner',
+  '/features/photo-joiner',
+])
+
 export async function proxy(request: NextRequest) {
+  const normalizedPath = request.nextUrl.pathname.replace(/\/+$/, '') || '/'
+
+  if (GONE_410_PATHS.has(normalizedPath)) {
+    return new Response(
+      '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>410 Gone</title><meta name="robots" content="noindex, nofollow, noarchive"/></head><body style="font-family:system-ui,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#111;color:#eee;"><div style="text-align:center;"><h1 style="font-size:3rem;margin:0 0 1rem;color:#FF4D00;">410</h1><h2 style="margin:0 0 1rem;">Resource Permanently Removed</h2><p style="color:#888;">This page has been permanently removed.</p></div></body></html>',
+      {
+        status: 410,
+        statusText: 'Gone',
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'X-Robots-Tag': 'noindex, nofollow, noarchive',
+          'Cache-Control': 'public, max-age=604800, immutable',
+        },
+      }
+    )
+  }
+
   if (request.nextUrl.pathname === '/restore' || request.nextUrl.pathname.startsWith('/restore/')) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = resolveRestoreDestination(request.nextUrl.pathname)

@@ -1,5 +1,4 @@
 URL,Last crawled
-https://bringback.pro/features/black-and-white-composite,2026-05-06
 https://bringback.pro/restore/fix-blurry-holiday-snap,2026-04-27
 https://bringback.pro/restore/fix-stained-holiday-snap,2026-04-25
 https://bringback.pro/restore/fix-dusty-childhood-photo,2026-04-10
@@ -11,7 +10,6 @@ https://bringback.pro/restore/fix-yellowed-ancestor-photo,2026-03-27
 https://bringback.pro/restore/fix-yellowed-wedding-photo,2026-03-26
 https://bringback.pro/restore/fix-creased-wedding-photo,2026-03-23
 https://bringback.pro/restore/fix-blurry-childhood-photo,2026-03-19
-https://bringback.pro/features/photo-joiner,2026-03-16
 https://bringback.pro/features/add-deceased-loved-one-to-photo,2026-03-16
 https://bringback.pro/restore/fix-low-resolution-graduation-photo,2026-03-12
 https://bringback.pro/restore/fix-low-resolution-wedding-photo,2026-03-11

@@ -51,9 +51,9 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex">
-            <Link href="/dashboard/restore" onClick={() => trackEvent("cta_click", { section: "navbar", label: "restore_photo" })}>
+            <Link href="/login" onClick={() => trackEvent("cta_click", { section: "navbar", label: "restore_photo" })}>
               <button className="group flex items-center gap-3 bg-brand-black text-white pl-5 pr-2 py-2 rounded-full hover:scale-105 transition-transform duration-200 shadow-lg">
-                <span className="text-sm font-medium">Restore Photo</span>
+                <span className="text-sm font-medium">Login</span>
                 <div className="bg-brand-orange rounded-full p-2 text-white group-hover:bg-white group-hover:text-brand-orange transition-colors">
                   <Sparkles size={14} fill="currentColor" />
                 </div>
@@ -72,7 +72,7 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        
+
 
         {/* Mobile Menu Dropdown */}
         {isMenuOpen && (
@@ -87,9 +87,9 @@ export const Navbar: React.FC = () => {
                 {link.label}
               </Link>
             ))}
-            <Link href="/dashboard/restore" onClick={() => trackEvent("cta_click", { section: "navbar_mobile", label: "restore_photo" })}>
+            <Link href="/login" onClick={() => trackEvent("cta_click", { section: "navbar_mobile", label: "restore_photo" })}>
               <button className="w-full flex items-center justify-center gap-2 bg-brand-orange text-white py-4 rounded-full font-bold mt-2">
-                Restore Photo <Sparkles size={18} />
+                Login <Sparkles size={18} />
               </button>
             </Link>
           </div>
