@@ -1,228 +1,186 @@
-
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { ArrowRight, Upload, Star, Sparkles, ScanLine, CheckCircle2, Play, Plus } from 'lucide-react';
-import Link from 'next/link';
-import { trackEvent } from '@/lib/analytics';
-
-const RestorationDemo: React.FC = () => {
-  const [sliderPosition, setSliderPosition] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Image logic:
-  const BEFORE_IMAGE_URL = "/ripped.webp";
-  const AFTER_IMAGE_URL = "/ripped-restored.webp";
-
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
-    };
-
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
-
-  const handleMouseMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!containerRef.current) return;
-
-    const { left, width } = containerRef.current.getBoundingClientRect();
-    let clientX;
-
-    if ('touches' in e) {
-      clientX = e.touches[0].clientX;
-    } else {
-      clientX = (e as React.MouseEvent).clientX;
-    }
-
-    const relativeX = clientX - left;
-    const percentage = Math.min(Math.max((relativeX / width) * 100, 0), 100);
-
-    setSliderPosition(percentage);
-  };
-
-  return (
-    <div
-      className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-[1.8rem] overflow-hidden select-none group cursor-ew-resize"
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleMouseMove}
-      onMouseEnter={() => setIsDragging(true)}
-      onMouseLeave={() => setIsDragging(false)}
-    >
-     
-
-      {/* Background Layer (The "After" / Restored Image) */}
-      <div className="absolute inset-0 w-full h-full">
-        <img
-          src={AFTER_IMAGE_URL}
-          alt="Restored photo with bringback ai"
-          className="w-full h-full object-cover"
-        />
-        {/* AI UI Overlay on Restored Side */}
-        <div className="absolute bottom-8 right-8 flex flex-col gap-2 items-end">
-          <div className="bg-brand-gray text-black text-xs font-bold px-2 py-1 rounded-lg">
-            RESTORED
-          </div>
-
-        </div>
-      </div>
-
-      {/* Foreground Layer (The "Before" / Damaged Image) - Clipped */}
-      <div
-        className="absolute inset-0 w-full h-full overflow-hidden bg-gray-200"
-        style={{ width: `${sliderPosition}%` }}
-      >
-        <div className="relative w-full h-full">
-          {/* The Image - Needs to be same size/position as background to line up */}
-          <img
-            src={BEFORE_IMAGE_URL}
-            alt="Damaged photo before restoration"
-            className={`absolute top-0 left-0 h-full max-w-none object-cover transition-opacity duration-300 ${containerWidth ? 'opacity-100' : 'opacity-0'}`}
-            style={{
-              width: containerWidth ? `${containerWidth}px` : '100%'
-            }}
-          />
-
-          <div className="absolute bottom-6 left-6 bg-brand-black/80 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider">
-            Original
-          </div>
-        </div>
-      </div>
-
-      {/* The Slider Handle */}
-      <div
-        className="absolute top-0 bottom-0 w-1 bg-white/50 backdrop-blur-sm z-20 cursor-ew-resize"
-        style={{ left: `${sliderPosition}%` }}
-      >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-[0_0_20px_rgba(0,0,0,0.2)] flex items-center justify-center text-brand-orange">
-          <div className="absolute inset-0 rounded-full border-2 border-brand-orange opacity-20 animate-ping"></div>
-          <ScanLine size={20} strokeWidth={2.5} />
-        </div>
-      </div>
-
-      {/* Interaction Hint (Only shows when not interacting) */}
-      {!isDragging && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none animate-fade-out opacity-0 lg:opacity-100 transition-opacity duration-1000 delay-1000">
-          <div className="bg-black/50 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-medium">
-            Hover to compare
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+import React, { useRef } from "react";
+import Link from "next/link";
+import { ArrowRight, Play, Star } from "lucide-react";
+import { HeroFilm, HeroFilmHandle } from "./HeroFilm";
+import { trackEvent } from "@/lib/analytics";
 
 export const Hero: React.FC = () => {
+  const filmRef = useRef<HeroFilmHandle>(null);
+
   return (
-    <section className="relative w-full max-w-[1320px] mx-auto px-4 sm:px-8 overflow-visible h-auto lg:min-h-screen pt-32 pb-24  lg:pb-32">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center h-full">
+    <section className="relative w-full overflow-hidden pt-28 sm:pt-36 pb-20 sm:pb-28">
+      {/* Top Header Container */}
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        {/* Announcement Pill Badge */}
+        <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-3 py-1.5 rounded-full mb-8 shadow-sm shadow-black/5 border border-white/10">
+          <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+          <span className="text-xs font-semibold tracking-wide">Family photo preservation</span>
+        </div>
 
-        {/* Left Column: Content - Increased to 6 cols */}
-        <div className="lg:col-span-6 flex flex-col items-start z-10 justify-center h-full relative">
+        {/* Centered Heading */}
+        <h1 className="relative z-10 text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-[#111111] mb-6">
+          Restore Damaged Photos, <br className="hidden sm:inline" />
+          Combine Relatives <br className="hidden sm:inline" />
+          <span className="text-gray-400">&amp; Animate Faces.</span>
+        </h1>
 
-          {/* Available Badge */}
-          {/* Available Badge */}
-          <Link href="/dashboard/restore">
-            <div className="inline-flex items-center gap-2 bg-[#111111] text-white px-4 py-2 rounded-full mb-8 shadow-lg shadow-black/5 hover:scale-105 transition-transform cursor-pointer border border-white/10">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
-              <span className="text-sm font-semibold tracking-wide">Family photo preservation</span>
-            </div>
+        {/* Centered Subtitle */}
+        <p className="max-w-2xl mx-auto mb-9 text-lg text-gray-600 font-medium leading-normal">
+          Repair scratches, tears, fading, and water stains with AI. Combine separate photos into unified family portraits, bring ancestral faces to life with subtle motion, and preserve stories in a private digital keepsake. Pay once &amp; own forever. No subscription.
+        </p>
+
+        {/* Centered Dual CTA Buttons */}
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12">
+          {/* Primary CTA */}
+          <Link
+            href="/login"
+            onClick={() => trackEvent("cta_click", { section: "hero", label: "restore_photos" })}
+          >
+            <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-6 pr-2 py-2 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_0px_1px_rgba(255,255,255,0.3),0_8px_25px_-6px_rgba(255,77,0,0.55)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_20px_45px_-10px_rgba(255,77,0,0.65)] shrink-0">
+              <span className="font-bold text-sm sm:text-base tracking-tight whitespace-nowrap">Restore Photos</span>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#111111] rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
+                <ArrowRight className="text-[#FF4D00] w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+              </div>
+            </button>
           </Link>
 
+          {/* Secondary CTA */}
+          <Link
+            href="/ai-family-portrait"
+            className="group relative flex items-center justify-between gap-3 sm:gap-5 bg-white text-brand-black pl-5 pr-2 py-2 sm:pl-6 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_10px_25px_-8px_rgba(0,0,0,0.08)] hover:shadow-[0_15px_35px_-8px_rgba(0,0,0,0.12)] ring-1 ring-black/8 shrink-0"
+          >
+            <span className="font-bold text-sm sm:text-base tracking-tight whitespace-nowrap">Create Family Portrait</span>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-brand-orange/10 rounded-full flex items-center justify-center group-hover:bg-brand-orange/20 transition-colors">
+              <Play className="text-[#FF4D00] fill-[#FF4D00] ml-0.5 w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </div>
+          </Link>
+        </div>
 
-
-          {/* Heading */}
-          <h1 className="relative z-10 text-[2.25rem] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4rem] font-[850] tracking-tighter leading-[1.05] sm:leading-[0.95] text-[#111111] mb-6">
-            Restore Damaged Photos, <br className="hidden sm:block" />
-            Combine Relatives <br className="hidden sm:block" />
-            <span className="text-gray-400 relative">
-              &amp; Animate Faces.
-            </span>
-          </h1>
-
-          {/* Subheading */}
-          <p className="text-lg sm:text-xl text-gray-600 max-w-xl mb-10 font-medium leading-relaxed">
-            Repair scratches, tears, fading, and water stains with AI. Combine separate photos into unified family portraits, bring ancestral faces to life with subtle motion, and preserve stories in a private digital keepsake. Pay once — no subscription.
-          </p>
-
-          {/* CTA Buttons - Matches Formix Design */}
-          <div className="flex flex-row items-center gap-3 sm:gap-4 mb-10 sm:mb-12 w-full max-w-full overflow-visible">
-
-            {/* Primary: Orange Button with Black Circle Arrow */}
-            <Link href="/dashboard/restore" onClick={() => trackEvent("cta_click", { section: "hero", label: "restore_photos" })}>
-
-              <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-[#FF4D00] text-white pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_0px_1px_rgba(255,255,255,0.3),0_6px_20px_-6px_rgba(255,77,0,0.6)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_25px_50px_-12px_rgba(255,77,0,0.7)] shrink-0">
-                <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Restore Photos</span>
-                <div className="w-8 h-8 sm:w-11 sm:h-11 bg-[#111111] rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
-                  <ArrowRight className="text-[#FF4D00] w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-                </div>
-              </button>
-            </Link>
-
-            {/* Secondary: Black Button with Orange Circle Play */}
-            <Link href="/ai-family-portrait" onClick={() => trackEvent("cta_click", { section: "hero", label: "reunite_family" })}>
-
-              <button className="group relative flex items-center justify-between gap-3 sm:gap-6 bg-white text-brand-black pl-5 pr-1.5 py-1.5 sm:pl-8 sm:pr-2 sm:py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 shrink-0">
-                <span className="font-bold text-sm sm:text-lg tracking-tight whitespace-nowrap">Reunite Family</span>
-                <div className="w-8 h-8 sm:w-11 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center">
-                  <Play className="text-brand-black fill-brand-black ml-0.5 w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-              </button>
-            </Link>
-
-          </div>
-
-            {/* Social Proof - Avatar Stack (Rotated Squircles) */}
-          <div className="flex items-center gap-6 pl-2">
-            <div className="flex items-center relative h-12 w-[140px]">
-              {[1, 2, 3].map((i, index) => (
-                <div
-                  key={i}
-                  className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
-                    ${index === 0 ? 'left-0 z-30 -rotate-6' : ''}
-                    ${index === 1 ? 'left-8 z-20 rotate-6' : ''}
-                    ${index === 2 ? 'left-16 z-10 -rotate-3' : ''}
+        {/* Social Proof - Avatar Stack (Rotated Squircles) */}
+        <div className="flex items-center justify-center gap-6 pl-2 mb-8">
+          <div className="flex items-center relative h-12 w-[140px]">
+            {[1, 2, 3].map((i, index) => (
+              <div
+                key={i}
+                className={`absolute top-0 w-12 h-12 rounded-2xl border-2 border-[#F2F2F0] overflow-hidden shadow-sm transition-transform duration-300 hover:z-50 hover:scale-110
+                    ${index === 0 ? "left-0 z-30 -rotate-6" : ""}
+                    ${index === 1 ? "left-8 z-20 rotate-6" : ""}
+                    ${index === 2 ? "left-16 z-10 -rotate-3" : ""}
                   `}
-                >
-                  <img
-                    src={['/avatar1.webp', '/avatar2.webp', '/avatar3.webp'][index]}
-                    alt="Real BringBack restoration result"
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    width={48}
-                    height={48}
-                  />
-                </div>
+              >
+                <img
+                  src={["/avatar1.webp", "/avatar2.webp", "/avatar3.webp"][index]}
+                  alt="Real BringBack restoration result"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  width={48}
+                  height={48}
+                />
+              </div>
+            ))}
+            <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
+              3.1K+
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center text-left">
+            <div className="flex gap-0.5 mb-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
               ))}
-              <div className="absolute left-24 top-0 w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center text-xs font-bold border-2 border-[#F2F2F0] shadow-sm z-40 rotate-12 hover:rotate-0 transition-transform">
-                3.1K+
-              </div>
             </div>
+            <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">
+              Trusted by 3.1K+ Families
+            </span>
+          </div>
+        </div>
+      </div>
 
-            <div className="flex flex-col justify-center">
-              <div className="flex gap-0.5 mb-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} size={14} className="fill-[#FF4D00] text-[#FF4D00]" />
-                ))}
-              </div>
-              <span className="text-xs font-bold text-gray-600 uppercase tracking-wide">Trusted by 3.1K+ Families</span>
+      {/* Hero Showcase with Brand-Themed Dither Canvas */}
+      <div className="w-full max-w-[1240px] mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="relative rounded-[2rem] sm:rounded-[2.75rem] p-3 sm:p-6 lg:p-10 overflow-hidden shadow-[0_40px_100px_-25px_rgba(0,0,0,0.5)] ring-1 ring-black/10">
+          {/* Brand Themed Dark Dither Backdrop */}
+          <div className="absolute inset-0 bg-[#0E0E0D] overflow-hidden">
+            {/* Deep Warm Carbon Gradient Base */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#181817] via-[#111110] to-[#0A0A09]" />
+
+            {/* Glowing Brand Orange & Amber Backlight Aura */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_48%,rgba(255,77,0,0.24)_0%,rgba(245,158,11,0.12)_35%,rgba(14,14,13,0)_72%)] pointer-events-none" />
+
+            {/* Soft Edge Vignette */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_35%,rgba(10,10,10,0.75)_100%)] pointer-events-none" />
+
+            {/* SVG Bayer Dither Pattern Matrix */}
+            <svg
+              className="absolute inset-0 w-full h-full pointer-events-none opacity-45 mix-blend-screen"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                {/* 10x10 Bayer Dither Pattern */}
+                <pattern
+                  id="brand-bayer-dither"
+                  width="10"
+                  height="10"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <circle cx="0" cy="0" r="1.1" fill="#FF4D00" fillOpacity="0.85" />
+                  <circle cx="5" cy="5" r="1.1" fill="#FF4D00" fillOpacity="0.85" />
+                  <circle cx="5" cy="0" r="0.8" fill="#F59E0B" fillOpacity="0.6" />
+                  <circle cx="0" cy="5" r="0.8" fill="#F59E0B" fillOpacity="0.6" />
+                  <circle cx="2.5" cy="2.5" r="0.6" fill="#F2F2F0" fillOpacity="0.4" />
+                  <circle cx="7.5" cy="7.5" r="0.6" fill="#F2F2F0" fillOpacity="0.4" />
+                  <circle cx="2.5" cy="7.5" r="0.5" fill="#F2F2F0" fillOpacity="0.25" />
+                  <circle cx="7.5" cy="2.5" r="0.5" fill="#F2F2F0" fillOpacity="0.25" />
+                </pattern>
+              </defs>
+
+              {/* Repeating Dither Field */}
+              <rect width="100%" height="100%" fill="url(#brand-bayer-dither)" />
+
+              {/* Dithered Light Aperture Rings */}
+              <circle
+                cx="50%"
+                cy="50%"
+                r="300"
+                fill="none"
+                stroke="#FF4D00"
+                strokeWidth="1"
+                strokeDasharray="2 6"
+                opacity="0.3"
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r="440"
+                fill="none"
+                stroke="#F59E0B"
+                strokeWidth="1"
+                strokeDasharray="3 9"
+                opacity="0.2"
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r="600"
+                fill="none"
+                stroke="#F2F2F0"
+                strokeWidth="1"
+                strokeDasharray="2 12"
+                opacity="0.12"
+              />
+            </svg>
+          </div>
+
+          {/* Floating Studio Application Window */}
+          <div className="relative z-10 w-full max-w-5xl mx-auto bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-[0_30px_90px_-20px_rgba(0,0,0,0.65)] ring-1 ring-white/70 p-2 sm:p-4 text-left transition-all">
+            {/* Video Player Display */}
+            <div className="overflow-hidden rounded-xl sm:rounded-2xl">
+              <HeroFilm ref={filmRef} />
             </div>
           </div>
         </div>
-
-        {/* Right Column: Interactive Demo - Decreased to 6 cols */}
-        <div className="lg:col-span-6 flex items-center justify-center w-full lg:h-full pt-12 lg:pt-0">
-          <div className="bg-brand-surface p-2 rounded-[2rem] w-full">
-            <RestorationDemo />
-          </div>
-        </div>
-
       </div>
     </section>
   );
