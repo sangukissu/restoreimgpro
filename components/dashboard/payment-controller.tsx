@@ -54,6 +54,7 @@ function clearCheckoutMarker() {
 
 export default function PaymentController({ user, initialCreditBalance, children }: PaymentControllerProps) {
   const [showPaymentModal, setShowPaymentModal] = useState(false)
+  const [requestedPlanId, setRequestedPlanId] = useState<string | null>(null)
   const [isProcessingPayment, setIsProcessingPayment] = useState(false)
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(false)
   const [checkoutMessage, setCheckoutMessage] = useState("")
@@ -61,6 +62,16 @@ export default function PaymentController({ user, initialCreditBalance, children
   const cancelledAttemptId = searchParams.get("checkout") === "cancelled" ? searchParams.get("attempt") : null
 
   const { credits } = useCredits(initialCreditBalance)
+
+  useEffect(() => {
+    const planId = searchParams.get("buyPlan")
+    if (!planId) return
+    setRequestedPlanId(planId)
+    setShowPaymentModal(true)
+    const url = new URL(window.location.href)
+    url.searchParams.delete("buyPlan")
+    window.history.replaceState(null, "", url.pathname + url.search + url.hash)
+  }, [searchParams])
 
   useEffect(() => {
     if (searchParams.get("payment") !== "success") return
@@ -111,6 +122,7 @@ export default function PaymentController({ user, initialCreditBalance, children
   }, [searchParams])
 
   const handleBuyCredits = () => {
+    setRequestedPlanId(null)
     setShowPaymentModal(true)
   }
 
@@ -167,6 +179,7 @@ export default function PaymentController({ user, initialCreditBalance, children
         {/* Payment Modal */}
         <PaymentModal
           isOpen={showPaymentModal}
+          initialPlanId={requestedPlanId}
           onClose={() => setShowPaymentModal(false)}
           onSkip={handlePaymentSkip}
           onSuccess={handlePaymentSuccess}

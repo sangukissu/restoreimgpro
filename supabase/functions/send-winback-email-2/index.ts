@@ -77,7 +77,15 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
 
 const EMAIL_SUBJECT = 'one last check-in'
 
-const getEmailBody = (firstName: string | null): string => {
+function getCheckoutUrl(planId: string): string {
+    const loginUrl = new URL('/login', APP_URL)
+    const dashboardUrl = new URL('/dashboard', APP_URL)
+    dashboardUrl.searchParams.set('buyPlan', planId)
+    loginUrl.searchParams.set('next', dashboardUrl.pathname + dashboardUrl.search)
+    return loginUrl.toString()
+}
+
+const getEmailBody = (firstName: string | null, planId: string): string => {
     const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
     return `${greeting}
 
@@ -89,8 +97,8 @@ If cost was the issue, use code WELCOME15 for 15% off the Pro or Family pack at 
 
 If a payment method didn't work, please reply and tell me. I read every reply and it helps me make BringBack better. There's no subscription, and credits don't expire.
 
-Open BringBack:
-${APP_URL}/dashboard
+Continue with the pack you chose:
+${getCheckoutUrl(planId)}
 
 If you don't need it right now, no hard feelings at all — thanks for checking out the site either way.
 
@@ -166,10 +174,22 @@ serve(async (req: Request) => {
 
         for (const user of usersWithoutPayments) {
             try {
+                const { data: latestAttempt, error: attemptError } = await supabase
+                    .from('checkout_attempts')
+                    .select('plan_id')
+                    .eq('user_id', user.user_id)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .maybeSingle()
+                if (attemptError || !latestAttempt?.plan_id) {
+                    errors.push(`${user.email}: checkout plan unavailable`)
+                    continue
+                }
+
                 const sendResult = await sendEmailWithRetry(
                     user.email,
                     EMAIL_SUBJECT,
-                    getEmailBody(extractFirstName(user.name))
+                    getEmailBody(extractFirstName(user.name), latestAttempt.plan_id)
                 )
 
                 if (!sendResult.ok) {

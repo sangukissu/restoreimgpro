@@ -4,6 +4,7 @@ import PaymentPlan from "./payment-plan"
 
 interface PaymentModalProps {
   isOpen: boolean
+  initialPlanId?: string | null
   onClose: () => void
   onSkip: () => void
   onSuccess: (newCredits: number) => void
@@ -14,6 +15,7 @@ interface PaymentModalProps {
 
 export default function PaymentModal({
   isOpen,
+  initialPlanId,
   onClose,
   onSkip,
   onSuccess,
@@ -28,6 +30,7 @@ export default function PaymentModal({
       <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-auto overflow-hidden">
         <PaymentPlan
           onSuccess={onSuccess}
+          initialPlanId={initialPlanId}
           onError={onError}
           isProcessing={isProcessing}
           setIsProcessing={setIsProcessing}

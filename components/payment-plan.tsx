@@ -8,6 +8,7 @@ import { trackEvent } from "@/lib/analytics"
 
 interface PaymentPlanProps {
   onSuccess: (newCredits: number) => void
+  initialPlanId?: string | null
   onError: (error: string) => void
   isProcessing: boolean
   setIsProcessing: (processing: boolean) => void
@@ -64,7 +65,7 @@ function saveCheckoutMarker(marker: CheckoutMarker) {
   }
 }
 
-export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsProcessing, onClose }: PaymentPlanProps) {
+export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsProcessing, onClose, initialPlanId }: PaymentPlanProps) {
   const { toast, loading } = useToast()
   const [plans, setPlans] = useState<PaymentPlanOption[]>([])
   const [selectedPlanId, setSelectedPlanId] = useState<string>("")
@@ -83,16 +84,16 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         const data = await res.json()
         setPlans(data || [])
         if (data && data.length > 0) {
-          // Prefer selecting the 4-credit Starter plan by default if present
-          const starter = data.find((p: any) => p.credits === 4)
-          setSelectedPlanId((starter?.id as string) || data[0].id)
+          const requestedPlan = data.find((plan: PaymentPlanOption) => plan.id === initialPlanId)
+          const starter = data.find((plan: PaymentPlanOption) => plan.credits === 4)
+          setSelectedPlanId(requestedPlan?.id || starter?.id || data[0].id)
         }
       } catch (e) {
         onError("Failed to load plans. Please try again later.")
       }
     }
     fetchPlans()
-  }, [onError])
+  }, [onError, initialPlanId])
 
   useEffect(() => {
     if (!selectedPlanId || !plans.length) return

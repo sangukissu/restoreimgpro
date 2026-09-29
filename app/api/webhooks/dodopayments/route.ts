@@ -262,42 +262,52 @@ async function handlePaymentSucceeded(webhookData: any, webhookId: string) {
 
 async function handlePaymentFailed(webhookData: any, webhookId: string) {
   try {
-    const paymentData = webhookData.data
+    const paymentData = webhookData.data || {}
     const paymentId = paymentData.id || paymentData.payment_id
+    const attemptId = paymentData.metadata?.checkout_attempt_id
+    const checkoutUserId = paymentData.metadata?.user_id
 
-    // Find the payment in our database
-    const { data: payment, error: paymentError } = await supabase
-      .from("payments")
-      .select("id")
-      .eq("dodo_payment_id", paymentId)
-      .single()
-
-    if (paymentError || !payment) {
-      return
+    // Failed payments often have no row in payments yet. Track the checkout attempt directly.
+    if (typeof attemptId === "string" && typeof checkoutUserId === "string") {
+      const { error: attemptError } = await supabase
+        .from("checkout_attempts")
+        .update({ failed_at: new Date().toISOString() })
+        .eq("id", attemptId)
+        .eq("user_id", checkoutUserId)
+        .is("completed_at", null)
+      if (attemptError) throw attemptError
     }
 
-    // Update payment status to failed
-    const { error: updateError } = await supabase
-      .from("payments")
-      .update({
-        status: "failed",
-      })
-      .eq("dodo_payment_id", paymentId)
+    let paymentRecordId: string | null = null
+    if (paymentId) {
+      const { data: payment, error: paymentError } = await supabase
+        .from("payments")
+        .select("id, status")
+        .eq("dodo_payment_id", paymentId)
+        .maybeSingle()
+      if (paymentError) throw paymentError
 
-    if (updateError) {
-      return
+      if (payment) {
+        paymentRecordId = payment.id
+        if (payment.status !== "completed" && payment.status !== "succeeded") {
+          const { error: updateError } = await supabase
+            .from("payments")
+            .update({ status: "failed" })
+            .eq("id", payment.id)
+          if (updateError) throw updateError
+        }
+      }
     }
 
-    // Log the webhook event for tracking
     await logWebhookEvent(
       webhookId,
       (typeof webhookData.type === "string" ? webhookData.type.replace(/\./g, "_") : "payment_failed"),
-      payment.id,
+      paymentRecordId,
       webhookData.business_id
     )
-
   } catch (error) {
-    // Payment failed handling error
+    console.error("Failed to process payment failure", error)
+    throw error
   }
 }
 
@@ -364,7 +374,7 @@ async function processReferralReward(userId: string, amountCents: number) {
 }
 
 // Helper function to log webhook events consistently
-async function logWebhookEvent(eventId: string, eventType: string, paymentId: string, businessId?: string) {
+async function logWebhookEvent(eventId: string, eventType: string, paymentId: string | null, businessId?: string) {
   try {
     const { error: logError } = await supabase.from("webhook_events").insert({
       event_id: eventId,

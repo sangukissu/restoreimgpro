@@ -112,7 +112,8 @@ export async function POST(request: NextRequest) {
       ],
       return_url: `${appURL}/dashboard?payment=success`,
       cancel_url: `${appURL}/dashboard?checkout=cancelled&attempt=${attemptId}`,
-      // Collect customer and billing on hosted checkout (no prefill)
+      ...(user.email ? { customer: { email: user.email } } : {}),
+      feature_flags: { allow_discount_code: true, allow_customer_editing_email: true },
       metadata: {
         user_id: user.id,
         plan_id: plan.id,
@@ -121,10 +122,6 @@ export async function POST(request: NextRequest) {
         region_country: country,
         checkout_attempt_id: attemptId,
       },
-      // Do not pre-apply any discount code from site; enable entry on hosted checkout via feature_flags below
-      // Enable hosted page inputs; keep flags to supported minimal set per docs
-      // Optionally enforce SCA in higher-risk scenarios:
-      // force_3ds: true,
     };
 
     const resp = await fetch(`${baseURL}/checkouts`, {

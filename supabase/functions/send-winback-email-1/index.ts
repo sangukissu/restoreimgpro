@@ -81,7 +81,15 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
 
 const EMAIL_SUBJECT = 'Any questions before you decide?'
 
-const getEmailBody = (firstName: string | null): string => {
+function getCheckoutUrl(planId: string): string {
+    const loginUrl = new URL('/login', APP_URL)
+    const dashboardUrl = new URL('/dashboard', APP_URL)
+    dashboardUrl.searchParams.set('buyPlan', planId)
+    loginUrl.searchParams.set('next', dashboardUrl.pathname + dashboardUrl.search)
+    return loginUrl.toString()
+}
+
+const getEmailBody = (firstName: string | null, planId: string): string => {
     const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
     return `${greeting}
 
@@ -93,8 +101,8 @@ If you decide to try it, credit packs are a one-time purchase with no subscripti
 
 If price was the hesitation, use code COMEBACK10 for 10% off the Pro or Family pack at checkout. The $4.99 Starter pack isn't included.
 
-You can choose your plan again here:
-${APP_URL}/dashboard
+Continue with the pack you chose:
+${getCheckoutUrl(planId)}
 
 Best,
 Harvansh
@@ -120,7 +128,7 @@ serve(async (req: Request) => {
         // Use the latest attempt for each user so a retry resets the clock.
         const { data: attempts, error: usersError } = await supabase
             .from('checkout_attempts')
-            .select('id, user_id, created_at, completed_at, reminder_sent_at')
+            .select('id, user_id, plan_id, created_at, completed_at, reminder_sent_at')
             .gte('created_at', oneDayAgo)
             .order('created_at', { ascending: false })
 
@@ -166,7 +174,7 @@ serve(async (req: Request) => {
                 const sendResult = await sendEmailWithRetry(
                     user.email.trim(),
                     EMAIL_SUBJECT,
-                    getEmailBody(extractFirstName(user.name))
+                    getEmailBody(extractFirstName(user.name), attempt.plan_id)
                 )
 
                 if (!sendResult.ok) {
