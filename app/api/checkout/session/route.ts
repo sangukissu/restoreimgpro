@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/utils/supabase/server";
+import { supabaseAdmin } from "@/utils/supabase/admin";
 
 // Infer Dodo Payments base URL by environment
 function getDodoBaseURL() {
@@ -22,32 +23,8 @@ function getCountryFromHeaders(req: NextRequest) {
     req.headers.get("x-vercel-ip-country") ||
     req.headers.get("cf-ipcountry") ||
     req.headers.get("x-country-code") ||
-    "US"
+    "ZZ"
   ).toUpperCase();
-}
-
-// Resolve region-specific payment method preferences
-function resolveAllowedPaymentMethods(countryCode: string): string[] {
-  const defaults = ["credit", "debit", "apple_pay", "google_pay"];
-
-  // India: UPI support (collect/intent)
-  if (countryCode === "IN") {
-    return [...defaults, "upi_collect", "upi_intent"];
-  }
-
-  // EU localized methods (note: often EUR-only and one-time only)
-  if (["NL", "BE", "PL", "AT"].includes(countryCode)) {
-    const euMap: Record<string, string[]> = {
-      NL: ["ideal"],
-      BE: ["bancontact"],
-      PL: ["p24"],
-      AT: ["eps"],
-    };
-    return [...defaults, ...(euMap[countryCode] || [])];
-  }
-
-  // Default global
-  return defaults;
 }
 
 export async function POST(request: NextRequest) {
@@ -82,8 +59,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => ({} as any));
     const selectedPlanId =
       typeof body?.planId === "string" ? body.planId.trim() : "";
-    const discountCode: string =
-      typeof body?.discountCode === "string" ? body.discountCode.trim() : "";
     if (!selectedPlanId) {
       return NextResponse.json({ error: "planId is required" }, { status: 400 });
     }
@@ -120,7 +95,7 @@ export async function POST(request: NextRequest) {
     }
 
     const country = getCountryFromHeaders(request);
-    const allowed_payment_method_types = resolveAllowedPaymentMethods(country);
+    const attemptId = crypto.randomUUID();
 
     const baseURL = getDodoBaseURL();
 
@@ -136,6 +111,7 @@ export async function POST(request: NextRequest) {
         },
       ],
       return_url: `${appURL}/dashboard?payment=success`,
+      cancel_url: `${appURL}/dashboard?checkout=cancelled&attempt=${attemptId}`,
       // Collect customer and billing on hosted checkout (no prefill)
       metadata: {
         user_id: user.id,
@@ -143,6 +119,7 @@ export async function POST(request: NextRequest) {
         credits: String(plan.credits),
         amount_cents: String(plan.price_cents),
         region_country: country,
+        checkout_attempt_id: attemptId,
       },
       // Do not pre-apply any discount code from site; enable entry on hosted checkout via feature_flags below
       // Enable hosted page inputs; keep flags to supported minimal set per docs
@@ -182,8 +159,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Note: We skip DB insert here and rely on webhooks for authoritative state.
-    // If desired, you could insert a pending record keyed by session id.
+    const { error: attemptError } = await supabaseAdmin.from("checkout_attempts").insert({
+      id: attemptId,
+      user_id: user.id,
+      session_id: id,
+      plan_id: plan.id,
+      price_cents: plan.price_cents,
+      country_code: country,
+    });
+    // Checkout must remain available if tracking has a temporary outage.
+    if (attemptError) console.error("Failed to save checkout attempt", attemptError);
 
     return NextResponse.json({ id, url });
   } catch (err) {

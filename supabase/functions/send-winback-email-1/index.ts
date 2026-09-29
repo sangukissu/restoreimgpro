@@ -2,7 +2,7 @@
 // @ts-nocheck - Deno types not available in Node.js project
 
 // Supabase Edge Function: send-winback-email-1
-// Sends "Inspiration" email to users 4+ hours after signup who haven't purchased
+// Sends a checkout reminder 2+ hours after a hosted checkout starts without purchase
 // Triggered by cron every hour
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
@@ -76,33 +76,28 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
 
 // Email template
 //
-// Winback Email 1 — sent 4–24h after signup to non-buyers.
-// Combines restoration + family photo creator use cases.
-// Addresses pricing hesitation, subscription fear, and satisfaction guarantee directly.
+// Email 1: two hours after a checkout attempt, while the user has not purchased.
+// The hourly cron may add up to one hour of delay.
 
-const EMAIL_SUBJECT = 'quick question about BringBack'
+const EMAIL_SUBJECT = 'Any questions before you decide?'
 
 const getEmailBody = (firstName: string | null): string => {
     const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
     return `${greeting}
 
-Noticed you created an account on BringBack yesterday, but haven’t had a chance to try it yet — whether you came to restore an old picture or create a combined family portrait.
+You started checkout on BringBack earlier but didn't finish. If something got in the way, just reply to this email — I read the replies myself.
 
-I won’t pretend to know why — could be you got busy, or you looked at the pricing and decided it wasn’t worth it right now. Both are completely fair.
+Was it the price, uncertainty about how your photo would turn out, or a payment problem? A short reply would help me improve the experience.
 
-If you were on the fence about the price, I just wanted to clear up two quick things that people usually ask me:
+If you decide to try it, credit packs are a one-time purchase with no subscription, and your credits don't expire. Web purchases are covered by our 30-day refund policy: ${APP_URL}/refunds
 
-1. It's not a subscription: You aren't getting locked into recurring monthly charges. It's a simple, one-time payment.
-2. Money-back guarantee: If the facial details look unnatural, blurry, or the final photo just doesn't feel right, reply to this email and I’ll refund you. No hassle.
+If price was the hesitation, use code COMEBACK10 for 10% off the Pro or Family pack at checkout. The $4.99 Starter pack isn't included.
 
-Whenever you're ready to restore or create that family photo, you can jump back in here:
+You can choose your plan again here:
 ${APP_URL}/dashboard
 
-(You can use code COMEBACK10 for 10% off if you decide to try it).
-
-If something didn't work or the price is still too high for what you need, hit reply and let me know. I read every message.
-
-— Harvansh
+Best,
+Harvansh
 Founder, BringBack`
 }
 
@@ -119,71 +114,57 @@ serve(async (req: Request) => {
 
         console.log('Starting win-back email 1 job...')
 
-        // Query users who:
-        // 1. Signed up 4-24 hours ago
-        // 2. Have NOT received win-back email 1 yet
-        // 3. Have NO successful payment in the payments table
-        const fourHoursAgo = new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
-        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+        const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+        const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
 
-        // First, get users who haven't received email 1 and signed up 4-24h ago
-        const { data: eligibleUsers, error: usersError } = await supabase
-            .from('user_profiles')
-            .select('user_id, email, name')
-            .is('winback_email_1_sent_at', null)
-            .lte('created_at', fourHoursAgo)
-            .gte('created_at', twentyFourHoursAgo)
+        // Use the latest attempt for each user so a retry resets the clock.
+        const { data: attempts, error: usersError } = await supabase
+            .from('checkout_attempts')
+            .select('id, user_id, created_at, completed_at, reminder_sent_at')
+            .gte('created_at', oneDayAgo)
+            .order('created_at', { ascending: false })
 
         if (usersError) {
             console.error('Error fetching users:', usersError)
             return new Response(JSON.stringify({ error: usersError.message }), { status: 500 })
         }
 
-        if (!eligibleUsers || eligibleUsers.length === 0) {
+        if (!attempts || attempts.length === 0) {
             console.log('No eligible users found for win-back email 1')
             return new Response(JSON.stringify({ message: 'No eligible users', sent: 0 }), { status: 200 })
         }
 
-        console.log(`Found ${eligibleUsers.length} potentially eligible users`)
-
-        // Filter out users who have any successful payment
-        const usersWithoutPayments: typeof eligibleUsers = []
-
-        for (const user of eligibleUsers) {
-            const email = typeof user.email === 'string' ? user.email.trim() : ''
-            if (!email) {
-                continue
-            }
-
-            const { data: payments, error: paymentsError } = await supabase
-                .from('payments')
-                .select('id')
-                .eq('user_id', user.user_id)
-                .in('status', ['completed', 'succeeded'])
-                .limit(1)
-
-            if (paymentsError) {
-                console.error(`Error checking payments for user ${user.user_id}:`, paymentsError)
-                continue
-            }
-
-            // Only include users with NO successful payments
-            if (!payments || payments.length === 0) {
-                usersWithoutPayments.push({ ...user, email })
-            }
+        const latestByUser = new Map<string, typeof attempts[number]>()
+        for (const attempt of attempts) {
+            if (!latestByUser.has(attempt.user_id)) latestByUser.set(attempt.user_id, attempt)
         }
-
-        console.log(`${usersWithoutPayments.length} users have no successful payments`)
 
         let sentCount = 0
         const sentUserIds: string[] = []
         const errors: string[] = []
 
-        // Send emails
-        for (const user of usersWithoutPayments) {
+        for (const attempt of latestByUser.values()) {
             try {
+                if (attempt.completed_at || attempt.reminder_sent_at || attempt.created_at > twoHoursAgo) continue
+
+                const { data: user, error: profileError } = await supabase
+                    .from('user_profiles')
+                    .select('email, name, winback_email_1_sent_at')
+                    .eq('user_id', attempt.user_id)
+                    .single()
+                if (profileError || !user || user.winback_email_1_sent_at || !user.email?.trim()) continue
+
+                // Recheck payment at send time in case the checkout webhook was delayed.
+                const { data: payments, error: paymentsError } = await supabase
+                    .from('payments')
+                    .select('id')
+                    .eq('user_id', attempt.user_id)
+                    .in('status', ['completed', 'succeeded'])
+                    .limit(1)
+                if (paymentsError || (payments && payments.length > 0)) continue
+
                 const sendResult = await sendEmailWithRetry(
-                    user.email,
+                    user.email.trim(),
                     EMAIL_SUBJECT,
                     getEmailBody(extractFirstName(user.name))
                 )
@@ -194,25 +175,27 @@ serve(async (req: Request) => {
                     continue
                 }
 
-                // Mark email as sent
-                const { error: updateError } = await supabase
+                const sentAt = new Date().toISOString()
+                const { error: attemptUpdateError } = await supabase
+                    .from('checkout_attempts')
+                    .update({ reminder_sent_at: sentAt })
+                    .eq('id', attempt.id)
+                const { error: profileUpdateError } = await supabase
                     .from('user_profiles')
-                    .update({ winback_email_1_sent_at: new Date().toISOString() })
-                    .eq('user_id', user.user_id)
+                    .update({ winback_email_1_sent_at: sentAt })
+                    .eq('user_id', attempt.user_id)
 
-                if (updateError) {
-                    console.error(`Failed to update user ${user.user_id}:`, updateError)
-                    errors.push(`${user.email}: update failed ${updateError.message}`)
-                    continue
+                if (attemptUpdateError || profileUpdateError) {
+                    errors.push(`${user.email}: sent, but tracking update failed`)
                 }
 
                 sentCount++
-                sentUserIds.push(user.user_id)
+                sentUserIds.push(attempt.user_id)
                 console.log(`Sent win-back email 1 to ${user.email}`)
                 await sleep(250)
             } catch (err) {
-                console.error(`Error processing user ${user.email}:`, err)
-                errors.push(`${user.email}: ${err}`)
+                console.error(`Error processing checkout ${attempt.id}:`, err)
+                errors.push(`${attempt.id}: ${err}`)
             }
         }
 

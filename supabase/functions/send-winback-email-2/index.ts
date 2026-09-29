@@ -71,10 +71,9 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
     }
 }
 
-// Winback Email 2 — sent 2 days (48h) after Email 1 to users who have NOT bought
-// the Plus or Family plan.
+// Winback Email 2 — sent 2 days (48h) after Email 1 to non-buyers.
 // Combines restoration + family photo creator use cases.
-// Addresses price objection cleanly with our best discount, zero melodrama.
+// A final check-in with the Pro and Family discount.
 
 const EMAIL_SUBJECT = 'one last check-in'
 
@@ -82,13 +81,13 @@ const getEmailBody = (firstName: string | null): string => {
     const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
     return `${greeting}
 
-It’s been a few days since you signed up, so this is the last email I'll send you.
+It's been a couple of days since my last note, so this is the last checkout reminder I'll send you.
 
 Whether you wanted to restore a faded memory or bring family members together into a photo who never got to share the frame — no rush at all if the timing just wasn't right.
 
-But if you held off purely because of the cost, I wanted to leave you with our best discount before stepping away:
+If cost was the issue, use code WELCOME15 for 15% off the Pro or Family pack at checkout. The $4.99 Starter pack isn't included.
 
-Code WELCOME15 takes 15% off any plan. That brings the Plus Plan down to $8.49 (one-time payment, no recurring billing).
+If a payment method didn't work, please reply and tell me. I read every reply and it helps me make BringBack better. There's no subscription, and credits don't expire.
 
 Open BringBack:
 ${APP_URL}/dashboard
@@ -141,15 +140,11 @@ serve(async (req: Request) => {
                 continue
             }
 
-            // Exclude users who have already bought the Plus or Family plan.
-            // We want to nudge non-buyers and Starter-only buyers toward a
-            // bigger plan — not keep emailing people who already converted.
             const { data: qualifyingPayments, error: paymentsError } = await supabase
                 .from('payments')
-                .select('id, payment_plan_id')
+                .select('id')
                 .eq('user_id', user.user_id)
                 .in('status', ['completed', 'succeeded'])
-                .in('payment_plan_id', ['plus-plan', 'family-plan'])
                 .limit(1)
 
             if (paymentsError) {
@@ -157,7 +152,7 @@ serve(async (req: Request) => {
                 continue
             }
 
-            // Skip users who have Plus or Family. Send to everyone else.
+            // Skip every buyer, including Starter buyers.
             if (!qualifyingPayments || qualifyingPayments.length === 0) {
                 usersWithoutPayments.push({ ...user, email })
             }

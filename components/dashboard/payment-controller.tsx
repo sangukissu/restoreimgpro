@@ -7,6 +7,7 @@ import { HeaderUser } from "@/components/dashboard/header-user"
 import { DynamicBreadcrumb } from "@/components/dashboard/dynamic-breadcrumb"
 import PaymentModal from "@/components/payment-modal"
 import PaymentSuccessModal from "@/components/payment-success-modal"
+import { CheckoutFeedback } from "@/components/dashboard/checkout-feedback"
 import { useSearchParams } from "next/navigation"
 import { useCredits } from "@/hooks/use-credits"
 import { Separator } from "@/components/ui/separator"
@@ -55,41 +56,58 @@ export default function PaymentController({ user, initialCreditBalance, children
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [isProcessingPayment, setIsProcessingPayment] = useState(false)
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(false)
+  const [checkoutMessage, setCheckoutMessage] = useState("")
   const searchParams = useSearchParams()
+  const cancelledAttemptId = searchParams.get("checkout") === "cancelled" ? searchParams.get("attempt") : null
 
   const { credits } = useCredits(initialCreditBalance)
 
   useEffect(() => {
-    const paymentStatus = searchParams.get("payment")
-    if (paymentStatus === "success") {
-      const marker = readCheckoutMarker()
-      if (marker) {
-        const completedKey = marker.sessionId || marker.startedAt || "payment-success"
-        const dedupeKey = `oa_payment_completed:${completedKey}`
+    if (searchParams.get("payment") !== "success") return
+    const marker = readCheckoutMarker()
+    if (!marker?.sessionId) return
+    let cancelled = false
 
+    async function verifyPayment() {
+      for (let i = 0; i < 5 && !cancelled; i++) {
         try {
-          if (!sessionStorage.getItem(dedupeKey)) {
-            trackConversion("purchase", {
-              order_id: marker.sessionId || completedKey,
-              plan_id: marker.planId,
-              plan_name: marker.planName,
-              plan_tier: marker.planTier,
-              credits: marker.credits,
-              amount: marker.amount,
-              currency: marker.currency || "USD",
-            })
-            sessionStorage.setItem(dedupeKey, "1")
+          const response = await fetch(`/api/dodopayments/checkout?session_id=${encodeURIComponent(marker!.sessionId!)}`, { cache: "no-store" })
+          if (!response.ok) throw new Error("Status unavailable")
+          const status = await response.json()
+          if (cancelled) return
+          if (status.completed || status.payment_status === "succeeded") {
+            const dedupeKey = `oa_payment_completed:${marker!.sessionId}`
+            try {
+              if (!sessionStorage.getItem(dedupeKey)) {
+                trackConversion("purchase", {
+                  order_id: marker!.sessionId!,
+                  plan_id: marker!.planId,
+                  plan_name: marker!.planName,
+                  plan_tier: marker!.planTier,
+                  credits: marker!.credits,
+                  amount: marker!.amount,
+                  currency: marker!.currency || "USD",
+                })
+                sessionStorage.setItem(dedupeKey, "1")
+              }
+            } catch { /* Analytics should never block checkout. */ }
+            clearCheckoutMarker()
+            setCheckoutMessage("")
+            setShowPaymentSuccess(true)
+            setTimeout(() => setShowPaymentSuccess(false), 5000)
+            return
           }
-        } catch (e) {
-          // Ignore analytics/storage errors
-        }
+          if (["failed", "cancelled", "requires_payment_method"].includes(status.payment_status)) {
+            setCheckoutMessage("Payment wasn't completed. You can try again or contact support@bringback.pro.")
+            return
+          }
+        } catch { /* Retry while payment status settles. */ }
+        await new Promise((resolve) => setTimeout(resolve, 2000))
       }
-
-      clearCheckoutMarker()
-      setShowPaymentSuccess(true)
-      const timer = setTimeout(() => setShowPaymentSuccess(false), 5000)
-      return () => clearTimeout(timer)
+      if (!cancelled) setCheckoutMessage("We're confirming your payment. Your credits will update when it completes.")
     }
+    void verifyPayment()
+    return () => { cancelled = true }
   }, [searchParams])
 
   const handleBuyCredits = () => {
@@ -141,6 +159,8 @@ export default function PaymentController({ user, initialCreditBalance, children
         </header>
 
         <div className="flex flex-1 flex-col gap-4 p-0">
+          {checkoutMessage && <p className="mx-4 rounded-lg border border-gray-200 bg-white p-3 text-sm sm:mx-6" role="status">{checkoutMessage}</p>}
+          {cancelledAttemptId && <CheckoutFeedback attemptId={cancelledAttemptId} />}
           {children}
         </div>
 

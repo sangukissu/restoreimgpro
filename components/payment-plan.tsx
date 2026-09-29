@@ -158,28 +158,6 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     setIsProcessing(true)
     const loadingToastId = loading("Creating checkout session...")
 
-    // Step 2: the user intentionally starts the hosted checkout flow.
-    try {
-      saveCheckoutMarker({
-        planId: selectedPlan.id,
-        planName: selectedPlan.name,
-        planTier: getPlanTier(selectedPlan),
-        credits: selectedPlan.credits,
-        amount: planAnalytics.amount,
-        currency: "USD",
-        startedAt: new Date().toISOString(),
-      })
-
-      trackEvent("checkout_started", {
-        plan_id: selectedPlan.id,
-        plan_name: selectedPlan.name,
-        price: planAnalytics.amount,
-        credits: selectedPlan.credits,
-      })
-    } catch {
-      // Ignore analytics errors so checkout can continue.
-    }
-
     try {
       const response = await fetch("/api/checkout/session", {
         method: "POST",
@@ -205,8 +183,16 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
         startedAt: new Date().toISOString(),
         sessionId: session_id,
       })
-
-
+      try {
+        trackEvent("checkout_started", {
+          plan_id: selectedPlan.id,
+          plan_name: selectedPlan.name,
+          price: planAnalytics.amount,
+          credits: selectedPlan.credits,
+        })
+      } catch {
+        // Analytics must not prevent checkout.
+      }
 
       toast.dismiss(loadingToastId)
       window.location.href = url
@@ -223,7 +209,7 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
     try {
       const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
       if (selectedPlan) {
-        trackEvent("checkout_cancelled", {
+        trackEvent("plan_modal_closed", {
           plan_id: selectedPlan.id,
           plan_name: selectedPlan.name,
         })
@@ -390,7 +376,13 @@ export default function PaymentPlan({ onSuccess, onError, isProcessing, setIsPro
             {isProcessing ? "Processing..." : "Continue to Checkout"}
           </Button>
         </div>
-        <p className="text-xs text-gray-500">Secure payments by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer" className="underline text-green-700">dodopayments</a></p>
+        <p className="text-xs text-gray-600">
+          Pay once. No subscription. Credits don&apos;t expire. Your final total is shown before payment.
+        </p>
+        <p className="mt-1 text-xs text-gray-500">
+          Secure checkout by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer" className="underline text-green-700">Dodo Payments</a>
+          {" · "}<a href="/refunds" target="_blank" rel="noopener noreferrer" className="underline">30-day refund policy</a>
+        </p>
       </div>
     </div>
   )

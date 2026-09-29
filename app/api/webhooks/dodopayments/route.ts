@@ -120,6 +120,19 @@ async function handlePaymentSucceeded(webhookData: any, webhookId: string) {
   try {
     const paymentData = webhookData.data
     const paymentId = paymentData.id || paymentData.payment_id
+    const attemptId = paymentData.metadata?.checkout_attempt_id
+    const checkoutUserId = paymentData.metadata?.user_id
+
+    // This is the authoritative conversion signal for checkout recovery.
+    if (typeof attemptId === "string" && typeof checkoutUserId === "string") {
+      const { error: attemptError } = await supabase
+        .from("checkout_attempts")
+        .update({ completed_at: new Date().toISOString() })
+        .eq("id", attemptId)
+        .eq("user_id", checkoutUserId)
+        .is("completed_at", null)
+      if (attemptError) console.error("Failed to mark checkout complete", attemptError)
+    }
 
     // Find the payment in our database using the DodoPayments payment ID
     let payment: any

@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server"
 import { Suspense } from "react"
 import { DashboardSkeleton } from "@/components/ui/skeleton"
 import PaymentController from "@/components/dashboard/payment-controller"
-import { ExitIntentPopup, TrustpilotReviewPrompt } from "@/components/exit-intent-popup"
+import { TrustpilotReviewPrompt } from "@/components/trustpilot-review-prompt"
 import { getDashboardIdentity } from "@/lib/auth/dashboard-identity"
 
 // Dashboard hosts interactive tool flows, chat/dialogue states and user sessions.
@@ -60,7 +60,6 @@ export default async function DashboardLayout({
       <Suspense fallback={<DashboardSkeleton />}>
         {children}
       </Suspense>
-      <ExitIntentPopup hasPurchased={hasPurchased} />
       <TrustpilotReviewPrompt hasPurchased={hasPurchased} />
     </PaymentController>
   )
