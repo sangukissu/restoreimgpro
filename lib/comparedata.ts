@@ -2952,45 +2952,54 @@ export const compareData: Record<string, ComparePageData> = {
     "slug": "kinpict-alternative",
     "competitor": "Kinpict",
     "niche": "merging",
-    "lastUpdated": "2026-08-12",
-    "readingMinutes": 13,
-    "ctaLink": "https://bringback.pro/ai-family-portrait",
-    "ctaLink2": "https://bringback.pro/login",
+    "lastUpdated": "2026-09-29",
+    "readingMinutes": 14,
+    "ctaLink": "https://bringback.pro/old-photo-restoration",
+    "ctaLink2": "https://bringback.pro/pricing",
     "meta": {
-      "title": "Kinpict Alternative for Photoreal AI Family Portraits | BringBack",
-      "description": "Compare Kinpict and BringBack for realistic family photos from separate pictures, credit use, free previews, pets and styles, restoration, animation, and privacy.",
-      "keywords": ["kinpict alternative", "kinpict family portrait alternative", "kinpict vs bringback", "ai family portrait generator alternative", "photoreal family portrait from separate photos"]
+      "title": "Kinpict Alternative for Family Memories | Restore, Hug & Save | BringBack",
+      "description": "Compare Kinpict’s family portraits, memorial tools, New Animate preview, and current plans with BringBack’s deep photo restoration, nostalgic hug videos, Memory Book, and $4.99 entry.",
+      "keywords": ["kinpict alternative", "kinpict family portrait alternative", "kinpict vs bringback", "kinpict animate alternative", "memorial photo restoration", "family memory book"]
     },
     "hero": {
-      "h1": "Kinpict alternative for realistic family portraits from separate photos",
-      "subheadline": "Kinpict and BringBack both create family portraits from separate photos. Kinpict offers a first free preview, lower published per-generation pricing, pets, and realistic or illustrated styles; BringBack has a lower $4.99 paid entry and connects portraits to restoration and animation tools.",
+      "h1": "A Kinpict alternative for restoring and preserving family memories",
+      "subheadline": "Kinpict now spans family portraits, memorial edits, and a New Animate feature still in preview, alongside $15.90 and $29.90 credit packs and $19.90/month VIP. BringBack starts at $4.99 and links detailed old-photo restoration to reunion hugs, animation, and a private Family Memory Book.",
       "visuals": {
         "inputImages": ["/family-photo1.png", "/family-photo2.jpg", "/family-photo3.png", "/family-photo4.png"],
         "outputImage": "/family-portrait.png"
       }
     },
     "verdict": {
-      "text": "Choose Kinpict if you want a first preview without signing in, pets or illustrated styles, or the lower published cost per generation. Choose BringBack if you want a $4.99 starting pack and a workflow that also restores, adds people, or animates family photos. Both sell non-expiring credits; compare the same source faces before deciding.",
+      "text": "Choose Kinpict for its broad family-photo generator, dedicated add-deceased memorial portrait workflow, pet and style options, and current 120-credit ($15.90), 280-credit ($29.90), or $19.90/month VIP plans. Its New Animate feature is marked as a preview, so check availability before planning around it. Choose BringBack when the job starts with repairing an old print: restore, colorize, or denoise first, then make a 19-credit Nostalgic Hug or 10-credit animation, and preserve the story in a Family Memory Book. BringBack’s one-time entry is $4.99 for 4 credits.",
       "ourPickTitle": "Choose BringBack AI",
-      "ourPickDesc": "for photoreal, printable multi-person portraits with restore-first multi-era workflows.",
+      "ourPickDesc": "for a complete heirloom workflow: detailed old-photo repair, reunion hugs, and a Family Memory Book, starting with a $4.99 one-time pack.",
       "altPickTitle": "Choose Kinpict",
-      "altPickDesc": "for a first free preview, pets, prompt guidance, and a broader set of realistic and illustrated family styles."
+      "altPickDesc": "for a family-photo creation suite with dedicated memorial composites, themed styles, and a New Animate feature currently presented as a preview."
     },
     "testimonials": [],
     "contextEssays": [
       {
         id: "generator-vs-heirloom",
-        title: "Two direct family-portrait generators with different workflows",
+        title: "Family-photo suite vs. restore-to-keepsake workflow",
         paragraphs: [
-          "Kinpict presents a family-specific generator for combining separate photos, adding a missing person, including pets, and creating realistic or illustrated results. Its current interface accepts one to six source photos and charges 4 credits after a first free guest preview.",
-          "BringBack’s [AI family portrait](/ai-family-portrait) is also a direct generator rather than a fundamentally different category. It charges 2 credits per studio portrait and sits beside dedicated restoration, add-person, remove-person, and animation tools.",
-          "For a printable heirloom, product labels are not enough. Compare facial likeness, scale, light direction, hands, hair edges, and contact shadows in the actual results. A relative who knows the people is often the best reviewer."
+          "Kinpict has expanded beyond its family-photo generator: its menu now includes an add-deceased memorial portrait, family video and kiss tools, and New Animate, which is still presented as a preview. Kinpict’s editor lists standard generations at 4 credits and an enhanced mode at 8 credits; the live pricing page lists 120 credits for $15.90 and 280 for $29.90.",
+          "BringBack’s [old-photo restoration](/old-photo-restoration) is built for repairing scratches, tears, fading, stains, and other age-related damage, with restore-only or colorize choices and a before/after review. From there, [Nostalgic Hug](/dashboard/nostalgic-hug) creates a reunion video, while the [Family Memory Book](/family-memory-book) keeps restored images with names, dates, locations, and stories.",
+          "Both services now address memorial keepsakes. Kinpict focuses on composing a deceased relative into a family portrait; BringBack adds an end-to-end archival path around the source image. Compare likeness, texture, scale, light, and shadow on the same photos before choosing."
         ],
         subsections: [
           {
-            heading: "What Kinpict currently publishes",
-            text: "Kinpict currently accepts one to six JPG, PNG, or WEBP files up to 5 MB each. A paid generation uses 4 credits; paid packs unlock watermark-free HD downloads, and failed paid generations are refunded automatically. Signed-in users can return to saved generations in My Records."
+            heading: "Current Kinpict pricing and feature status",
+            text: "The pricing page lists 120 credits for $15.90, 280 for $29.90, and Pro Monthly VIP at $19.90/month. VIP advertises 160 credits in month one and 200 credits per month from month two, plus a priority queue. The add-deceased page describes a static memorial portrait workflow; New Animate is marked New/preview, so its production availability and credit cost are not yet clear from the public pages."
           }
+        ]
+      },
+      {
+        id: "memorial-tools-animation",
+        title: "Memorial portraits, animation previews, and reunion hugs",
+        paragraphs: [
+          "Kinpict’s memorial tool is a direct composition job: add a late relative to a family photo, with options described for colorizing old scans and matching light and shadows. It also lists a family-video maker, kiss generator, and New Animate. Since New Animate is still marked preview, treat the feature as emerging and confirm what is usable before buying credits for it.",
+          "BringBack offers two different motion outcomes: [photo animation](/ai-photo-animation) for an individual portrait (10 credits) and [Nostalgic Hug](/dashboard/nostalgic-hug) for a fuller reunion hug video (19 credits). The hug is a dedicated product flow, not just a short still-photo animation. Both work best after checking the restored still for recognizable features and consent from the family sharing it.",
+          "If you want the memories to remain organized after generating media, the [Family Memory Book](/family-memory-book) stores photos with names, dates, locations, and family stories. Editing is included once the Family Pack is unlocked."
         ]
       },
       {
@@ -3006,9 +3015,9 @@ export const compareData: Record<string, ComparePageData> = {
         id: "economics-finished-portrait",
         title: "Economics of a finished portrait (cost per result)",
         paragraphs: [
-          "Budget per acceptable finished portrait, including regenerations. BringBack uses 2 credits per studio family portrait. On the Family Pack ($21.99 for 60), that is about $0.73 per attempt; three attempts use 6 credits, or about $2.20 at that pack rate.",
-          "Kinpict currently lists 120 credits for $15.90 (about 30 generations, roughly $0.53 each) and 280 credits for $29.90 (about 70 generations, roughly $0.43 each). Its credits do not expire. On published unit price, Kinpict costs less per portrait attempt; BringBack’s advantage is the lower $4.99 starting purchase and a balance shared with restoration and animation.",
-          "Animation is a separate BringBack operation at 10 credits. If motion matters to the project, include that later step when comparing the total budget."
+          "Compare the upfront commitment as well as the cost per attempt. BringBack starts at $4.99 for 4 credits; one restoration costs 1 credit, a studio family portrait 2, animation 10, and a Nostalgic Hug 19. The $21.99 Family Pack has 60 credits and unlocks Memory Book editing.",
+          "Kinpict lists 120 credits for $15.90 (~30 standard 4-credit generations), 280 for $29.90 (~70), and Pro Monthly VIP at $19.90/month. VIP advertises 160 credits in month one and 200 per month from month two. Its enhanced portrait mode uses 8 credits, so the count of results depends on which mode and workflow you choose.",
+          "Kinpict’s pack pricing is lower per credit at scale; BringBack’s strengths are the $4.99 low-commitment entry and the ability to spend across repair, portraits, animation, hugs, and a family archive. Count retries and the actual finished outcome, not just a single generation."
         ]
       }
     ],
@@ -3017,49 +3026,48 @@ export const compareData: Record<string, ComparePageData> = {
       title: "1950s print + modern kids → one printable portrait",
       paragraphs: [
         "A parent has one precious standing portrait of a grandparent from the 1950s and clear iPhone photos of two children. Goal: one printable image for a hallway frame—not anime, not oil paint.",
-        "BringBack path: scan the print safely → restore the still → confirm the grandparent’s likeness → generate a family portrait with the children → review scale and light → print. Kinpict offers a comparable composition workflow, a first free preview, and lower published per-generation pricing. For either product, budget for retries and review the result at print size before ordering."
+        "BringBack path: scan the print safely → restore or colorize it → verify face detail against the original → create a family portrait or reunion hug → save the photo and story in the Memory Book. Kinpict offers a dedicated deceased-relative composite and family-photo generator; New Animate is currently marked preview. Its $15.90/$29.90 packs and $19.90 monthly VIP suit people expecting to make more generations. For either product, budget for retries and review a print at full size."
       ]
     },
     matrix: {
-      description: "Public family-generator features reviewed in August 2026. Verify current credit packs, limits, and privacy terms in the live products.",
+      description: "Public product pages and pricing reviewed September 29, 2026. Kinpict marks New Animate as a preview; verify current availability and credit costs before purchase.",
       rows: [
-        { feature: "Product shape", competitor: "AI family photo generator / editor", bringBack: "Family history studio (restore, portrait, animate)", winner: "tie" },
-        { feature: "Realistic family-photo style", competitor: "Recommended default", bringBack: "Studio family-portrait default", winner: "tie" },
-        { feature: "Illustrated / themed looks", competitor: "Anime, holiday, awkward-family and other options", bringBack: "More studio-oriented", winner: "competitor" },
-        { feature: "Vintage damage handling", competitor: "Repair language on marketing—verify quality", bringBack: "Dedicated restore tool before merge", winner: "bringBack" },
-        { feature: "Published cost per portrait attempt", competitor: "~$0.43–$0.53 by current pack", bringBack: "~$0.73–$2.50 by current pack", winner: "competitor" },
-        { feature: "Lowest paid entry", competitor: "$15.90 for 120 credits", bringBack: "$4.99 for 4 credits", winner: "bringBack" },
-        { feature: "Try before sign-in", competitor: "First free preview advertised", bringBack: "Account flow", winner: "competitor" },
-        { feature: "Credits never expire", competitor: "Yes", bringBack: "Yes", winner: "tie" },
-        { feature: "Failed paid generation", competitor: "Credits automatically returned", bringBack: "Check current support/refund terms", winner: "competitor" },
-        { feature: "Animation path", competitor: "Not a memorial animation suite", bringBack: "Yes (10 credits)", winner: "bringBack" },
-        { feature: "Saved results and deletion", competitor: "My Records; deletion requests via support", bringBack: "My Media; user can delete", winner: "tie" }
+        { feature: "Core workflow", competitor: "Family generator, editor, memorial composite, video tools", bringBack: "Repair old photos, make portraits/hugs, archive memories", winner: "tie" },
+        { feature: "Vintage photo restoration", competitor: "Memorial page describes cleanup/color blend", bringBack: "Dedicated restore, colorize, denoise, and compare workflow", winner: "bringBack" },
+        { feature: "Add a deceased loved one", competitor: "Dedicated memorial portrait tool", bringBack: "Add-person workflow plus restoration-first prep", winner: "tie" },
+        { feature: "New Animate", competitor: "Listed as New / preview; availability and price unclear", bringBack: "Photo animation available (10 credits)", winner: "bringBack" },
+        { feature: "Reunion hug video", competitor: "Family video / kiss tools listed", bringBack: "Nostalgic Hug (19 credits)", winner: "bringBack" },
+        { feature: "Family archive", competitor: "My Records for saved generations", bringBack: "Memory Book with names, dates, locations, and stories", winner: "bringBack" },
+        { feature: "Smallest one-time purchase", competitor: "$15.90 for 120 credits", bringBack: "$4.99 for 4 credits", winner: "bringBack" },
+        { feature: "Larger credit options", competitor: "$29.90 for 280 credits; VIP $19.90/mo", bringBack: "$9.99/20 or $21.99/60, one time", winner: "tie" },
+        { feature: "Credit policy", competitor: "Packs never expire; monthly VIP credits recur", bringBack: "One-time pack credits never expire", winner: "tie" },
+        { feature: "Failed paid generation", competitor: "Pricing page says failed runs auto-refund", bringBack: "Check current support/refund terms", winner: "competitor" }
       ]
     },
     aboutCompetitor: {
       title: "About Kinpict",
       content: [
         "Kinpict markets an AI family photo generator that creates, edits, and repairs family images from photos you already have—combining separate people into one group picture and aiming for warmer, complete family scenes.",
-        "Kinpict is a direct competitor to BringBack’s family-portrait flow. It publicly identifies FLUX.1 and SDXL-based components hosted through fal.ai. The meaningful buyer differences are source limits, styles, preview experience, finished-generation cost, surrounding tools, storage controls, and the output produced from your own references."
+        "Kinpict is now a broader family-photo suite, with separate pages for memorial portraits, family video, kisses, and New Animate. The memorial page describes a still composite; the main menu marks Animate as new and the feature is still in preview. The buyer differences include the maturity of the workflow, restore depth, ways to make a motion keepsake, archive features, and the total cost for your intended project."
       ],
       pros: [
         "Simple mental model: generate a family photo from what you have",
         "Create / edit / repair messaging for casual users",
         "Realistic, holiday, anime, pet, and missing-person workflows",
-        "First free preview without sign-in"
+        "Published 120-credit and 280-credit one-time packs, plus monthly VIP"
       ],
       cons: [
-        "Current generator recommends one to six source photos",
-        "Each creation currently uses 4 credits after the free preview",
-        "The smallest current paid pack starts at $15.90",
-        "Dedicated animation is not presented as part of the same workflow"
+        "Current standard generation costs 4 credits; enhanced mode costs 8",
+        "Smallest listed one-time pack is $15.90 for 120 credits",
+        "The New Animate feature is still marked as a preview",
+        "Monthly VIP renews at $19.90/month; compare recurring credits with one-time packs"
       ]
     },
     whySwitch: {
       title: "Why people choose BringBack over Kinpict for heirlooms",
       intro: [
-        "They want a lower $4.99 starting purchase and one balance shared with restoration and animation.",
-        "Kinpict may be preferable for its lower published per-generation cost, first free preview, pet support, prompt controls, or illustrated styles."
+        "They want to begin with a $4.99 one-time purchase, restore a damaged original in depth, or create a reunion hug and preserve context in a Memory Book.",
+        "Kinpict may fit better for its dedicated static memorial composite, themed portrait workflows, or larger-volume credit packs and VIP subscription."
       ],
       points: [
         {
@@ -3067,16 +3075,16 @@ export const compareData: Record<string, ComparePageData> = {
           description: "Use a studio-oriented workflow and inspect likeness, scale, and lighting before printing."
         },
         {
-          title: "Multi-era with restore",
-          description: "Damaged 1950s sources get a real restore pass before they enter a group portrait."
+          title: "Restore the source, not just the composite",
+          description: "Repair scratches, tears, stains, and fading; keep black-and-white character or colorize; compare the repaired still before it becomes a new portrait or video."
         },
         {
           title: "Lower starting purchase",
           description: "Start at $4.99 instead of buying Kinpict’s current $15.90 pack; Kinpict is cheaper per generation once a pack is purchased."
         },
         {
-          title: "Same account for the rest of the archive",
-          description: "Animation, add person, and still restore when the project expands."
+          title: "A hug and a place for the story",
+          description: "Make a 19-credit Nostalgic Hug, then keep restored photos with names, dates, places, and family stories in the Memory Book."
         }
       ]
     },
@@ -3085,89 +3093,93 @@ export const compareData: Record<string, ComparePageData> = {
       bringBackPoints: [
         "You are printing or framing a photoreal portrait",
         "You mix vintage damaged prints with modern photos",
-        "You want restore + portrait + optional animation together",
-        "You want the lower $4.99 paid entry and permanent credits",
+        "You want a detailed repair workflow before making a memorial keepsake",
+        "You want a reunion hug and a Memory Book alongside portraits and animation",
+        "You want the lower $4.99 one-time entry and permanent credits",
         "You need likeness checklists and identity-aware guidance"
       ],
       competitorTitle: "Pick Kinpict if",
       competitorPoints: [
-        "You want to try a first free preview before signing in",
+        "You want a dedicated deceased-relative portrait composite",
         "You want pets, anime, holiday, or other family-specific styles",
-        "One to six source photos covers your group",
-        "Its lower published per-generation pricing fits your project"
+        "You expect to use the 120/$15.90 or 280/$29.90 credit packs often",
+        "The $19.90/month VIP subscription and recurring allowance suit your use",
+        "You are willing to wait for New Animate to move beyond preview"
       ]
     },
     finalThoughts: {
       title: "Final thoughts",
       content: [
-        "Kinpict and BringBack are direct alternatives for creating a family photo from separate pictures. Kinpict offers a broader style menu, a first free preview, and lower published cost per generation; BringBack has a lower paid entry and connects the project to restoration and animation.",
-        "For a multi-era or memorial portrait, prepare the vintage source first and test both services on the same faces when possible. The more faithful result matters more than the marketing label."
+        "Kinpict has grown into a family-photo and memorial suite, with a static add-deceased workflow, a range of themed tools, and New Animate still marked as preview. Its current offers are $15.90/120 credits, $29.90/280, or $19.90/month VIP. BringBack’s differentiator is the path around the image: repair the original, create a reunion hug or animation, then keep the family context in a Memory Book—with a $4.99 one-time starting pack.",
+        "If your source is scratched, faded, torn, or stained, compare each tool on restoration before judging the memorial composite. If you mainly want family-scene creation at volume, compare Kinpict’s pack and VIP math to your expected usage."
       ]
     },
     howToSwitch: {
-      title: "Photoreal portrait path on BringBack",
-      description: "Prepare strong source photos, generate the portrait, and review each person before downloading or printing.",
+      title: "Restore-to-keepsake path on BringBack",
+      description: "Repair the old source, make the keepsake you need, then preserve the photo and its context.",
       steps: [
         {
           stepNumber: 1,
-          title: "Prepare sources",
-          description: "Clear faces; restore vintage damage first; read the likeness guide."
+          title: "Restore the original",
+          description: "Repair scratches, tears, and fading; choose restore-only or colorize and compare against the scan."
         },
         {
           stepNumber: 2,
-          title: "Generate studio portrait",
-          description: "Combine separate photos. Inspect every identity at 100% zoom."
+          title: "Create the memory",
+          description: "Make a family portrait, 10-credit animation, or 19-credit Nostalgic Hug; inspect identity and motion before sharing."
         },
         {
           stepNumber: 3,
-          title: "Accept (2 credits) or regenerate",
-          description: "Budget regenerations. Credits remain for the next family event."
+          title: "Save its story",
+          description: "Keep the restored photo with names, dates, places, and stories in the Family Memory Book. The Family Pack includes editing access."
         }
       ]
     },
     semanticCapabilities: {
-      title: "Heirloom portrait capabilities",
-      description: "Where we push beyond casual generation:",
+      title: "A deeper family-memory workflow",
+      description: "From damaged source to moving keepsake and organized archive:",
       capabilities: [
-        "Photoreal studio family portraits from separate photos",
-        "Restore-first multi-era preparation",
-        "Add person / remove person adjacent tools",
-        "Optional animation after still quality is solid",
-        "Permanent credits for iterative likeness work"
+        "Repair scratches, tears, stains, fading, and other old-photo damage",
+        "Choose restore-only or colorize, then compare before downloading",
+        "Create a 19-credit reunion hug or 10-credit portrait animation",
+        "Keep photos, names, dates, places, and stories in a Family Memory Book",
+        "Start with a $4.99 one-time pack; unused credits do not expire"
       ]
     },
     uniqueAdvantage: {
-      title: "Why BringBack may fit a longer family-photo project",
-      description: "BringBack uses one credit balance across restoration, portraits, add-person edits, and animation.",
+      title: "Why BringBack may fit a memorial or family-history project",
+      description: "BringBack connects detailed still restoration to motion keepsakes and a lasting family archive.",
       features: [
         {
-          heading: "One balance for a longer project",
-          text: "BringBack is not cheaper per portrait at current pack rates. Its advantage is a $4.99 entry and credits that can also fund restoration and animation."
+          heading: "Start small, spend across tools",
+          text: "The $4.99 Starter gives 4 credits for restoration or other still-photo work. Move up only if you need a longer project; one-time credits work across the suite and do not expire."
         },
         {
-          heading: "Restore before composition, animate afterward",
-          text: "Prepare a damaged vintage source with restoration, then keep the completed project in the same account for optional animation."
+          heading: "Restore, hug, remember",
+          text: "Clean the original before generating a hug or animation, then preserve the restored image and its family context in the Memory Book. The $21.99 Family Pack includes 60 credits and unlocks Memory Book editing."
         }
       ]
     },
     trustAndMethodology: {
       title: "How we compared BringBack to Kinpict",
-      content: "We reviewed Kinpict’s [family photo editor](https://kinpict.com/family-photo-editor/), [pricing](https://kinpict.com/pricing/), and [privacy policy](https://kinpict.com/privacy-policy/) in August 2026. Kinpict currently lists one to six uploads, a first free preview, 4 credits per generation, non-expiring packs, watermark-free paid downloads, My Records for signed-in users, and deletion requests through support. Its editor says photos are not used for AI training; its privacy policy describes processing by service providers and retention as needed to operate the service."
+      content: "We reviewed Kinpict’s [family photo editor](https://kinpict.com/family-photo-editor/), [memorial portrait page](https://kinpict.com/add-deceased-loved-one-to-family-photo/), and [pricing](https://kinpict.com/pricing/) on September 29, 2026. Its public pricing lists 120 credits for $15.90, 280 for $29.90, and Pro Monthly VIP at $19.90/month (160 credits in month one and 200/month from month two). The editor lists standard generations at 4 credits and enhanced mode at 8. The navigation marks New Animate as a preview; its final availability and credit cost are not clear on the pages reviewed."
     },
     faqs: [
-      { q: "How do you make a family portrait in Kinpict vs BringBack?", a: "Both start from individual photos. BringBack emphasizes photoreal studio harmonization, restore-first multi-era prep, and a fixed 2-credit studio portrait cost. Kinpict emphasizes generator create/edit/repair convenience—compare outputs on your faces." },
+      { q: "How do Kinpict and BringBack handle memorial photos?", a: "Kinpict has a dedicated static tool to add a deceased loved one to a family photo. BringBack is strongest when you need to repair an old scan first, then create a portrait, reunion hug, or animation and preserve the photo with names, dates, places, and stories in a Memory Book." },
+      { q: "Is Kinpict New Animate available now?", a: "Kinpict currently labels Animate as New/preview in its navigation. Confirm current access and credit cost on Kinpict before relying on it for a finished project. BringBack photo animation is available at 10 credits; Nostalgic Hug costs 19 credits." },
       { q: "Is Kinpict good for realistic prints?", a: "Kinpict explicitly offers a realistic family-photo style and print-oriented output. As with BringBack, inspect faces, hands, scale, light, and edges at the intended print size before ordering." },
-      { q: "Can I mix black and white with color?", a: "Yes on BringBack—restore/colorize vintage sources carefully so they match modern inputs." },
+      { q: "Can I mix black and white with color?", a: "Yes. BringBack lets you choose restore-only or colorize for a vintage source before creating a portrait or video. Kinpict’s memorial page also describes colorizing old scans as part of its blending workflow." },
       { q: "Why do AI family portraits look fake?", a: "Mismatched light, missing contact shadows, scale errors, and identity drift. Better sources and photoreal-focused tools reduce—but do not eliminate—the risk." },
-      { q: "How much does a BringBack portrait cost?", a: "2 credits per studio family portrait. Packs from $4.99/4 credits to $21.99/60. Credits never expire." },
+      { q: "What does BringBack cost to get started?", a: "The one-time Starter is $4.99 for 4 credits. Restoration is 1 credit, studio portraits 2, photo animation 10, and Nostalgic Hug 19 credits. The $21.99 Family Pack includes 60 credits and Memory Book editing." },
       { q: "Do you delete my photos automatically after generate?", a: "No. Generated media stays in My Media until you delete it so you can re-download. Temporary staging uploads are cleaned when processing completes. See Privacy Policy." },
       { q: "Is BringBack a subscription?", a: "No." },
-      { q: "Can BringBack animate the portrait afterward?", a: "Animate individual clear faces (10 credits). For groups, prioritize a perfect still first." },
+      { q: "Can BringBack animate a portrait or make a hug?", a: "Yes. Photo animation is 10 credits. Nostalgic Hug is a separate reunion-video workflow and costs 19 credits." },
+      { q: "What is the BringBack Family Memory Book?", a: "It is a private keepsake for organizing restored family photos with names, dates, locations, and family stories. Editing access is included with the $21.99 Family Pack (60 credits)." },
       { q: "Does BringBack support pets?", a: "Family projects sometimes include pets depending on the flow and references—check the family portrait product UI for current subject guidance." },
-      { q: "Kinpict vs PixReunion vs BringBack?", a: "All three create family portraits from separate photos. Kinpict currently supports one to six sources and a first free preview; PixReunion advertises up to 12 faces and two 4K outputs per portrait run; BringBack uses 2 credits per studio portrait and shares credits with restoration and animation. Compare the same faces in the products that fit your group size." },
+      { q: "Kinpict vs PixReunion vs BringBack?", a: "All three can create family portraits from separate photos. Compare Kinpict’s current packs and VIP plan, PixReunion’s advertised group size and output limits, and BringBack’s $4.99 entry with restoration and keepsake tools. Test the same faces in the products that fit your project." },
       { q: "What sources should I upload?", a: "Front-facing, well-lit, large faces, minimal obstruction—see choose source photos for likeness." },
       { q: "Does Kinpict store uploaded photos and results?", a: "Kinpict’s editor says it does not store photos or use them for AI training, while signed-in users can access saved results in My Records. Its privacy policy says uploaded images may be collected, processed by service providers, and retained as needed to operate the service. Contact Kinpict support for deletion or a project-specific retention answer." },
-      { q: "How much does a Kinpict family portrait cost?", a: "Kinpict currently charges 4 credits per paid generation. Its $15.90 pack supports about 30 generations (~$0.53 each), and its $29.90 pack supports about 70 (~$0.43 each). Credits do not expire; verify live prices before buying." }
+      { q: "How much does Kinpict cost?", a: "Its pricing page lists 120 credits for $15.90, 280 credits for $29.90, and Pro Monthly VIP for $19.90/month. VIP advertises 160 credits in month one and 200 credits per month from month two. Its editor lists 4 credits for standard generation and 8 for Enhanced Mode; check the current page before purchase." }
     ]
   }
 };

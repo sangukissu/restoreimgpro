@@ -28,7 +28,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "How much do photo restoration and animation cost?",
-    answer: "Restoration Starter is $4.99 for 4 credits (up to 4 restorations). Value Pack is $9.99 for 20 credits. Family Pack is $21.99 for 60 credits and Memory Book access. Restore costs 1 credit; family portrait / add / remove person cost 2; animation and hug video cost 10 each. The Starter pack cannot fund an animation. Credits never expire."
+    answer: "Restoration Starter is $4.99 for 4 credits (up to 4 restorations). Value Pack is $9.99 for 20 credits. Family Pack is $21.99 for 60 credits and Memory Book access. Restore costs 1 credit; family portrait / add / remove person cost 2; animation and hug video cost 19 each. The Starter pack cannot fund an animation. Credits never expire."
   },
   {
     question: "Is my personal data and photos safe?",
