@@ -172,9 +172,10 @@ export default function PaymentController({ user, initialCreditBalance, children
 
         <div className="flex flex-1 flex-col gap-4 p-0">
           {checkoutMessage && <p className="mx-4 rounded-lg border border-gray-200 bg-white p-3 text-sm sm:mx-6" role="status">{checkoutMessage}</p>}
-          {cancelledAttemptId && <CheckoutFeedback attemptId={cancelledAttemptId} />}
           {children}
         </div>
+
+        {cancelledAttemptId && <CheckoutFeedback key={cancelledAttemptId} attemptId={cancelledAttemptId} />}
 
         {/* Payment Modal */}
         <PaymentModal
