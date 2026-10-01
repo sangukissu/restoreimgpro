@@ -85,20 +85,27 @@ function getCheckoutUrl(planId: string): string {
     return loginUrl.toString()
 }
 
-const getEmailBody = (firstName: string | null, planId: string): string => {
+const getEmailBody = (firstName: string | null, planId: string | null): string => {
     const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
+    const paymentNote = planId
+        ? "If a payment method didn't work, please reply and tell me. I read every reply and it helps me make BringBack better."
+        : 'If something held you back, please reply and tell me. I read every reply and it helps me make BringBack better.'
+    const action = planId
+        ? `Continue with the pack you chose:
+${getCheckoutUrl(planId)}`
+        : `Take another look when you're ready:
+${new URL('/login?next=%2Fdashboard', APP_URL).toString()}`
     return `${greeting}
 
-It's been a couple of days since my last note, so this is the last checkout reminder I'll send you.
+It's been a couple of days since my last note, so this is the last reminder I'll send you.
 
 Whether you wanted to restore a faded memory or bring family members together into a photo who never got to share the frame — no rush at all if the timing just wasn't right.
 
 If cost was the issue, use code WELCOME15 for 15% off the Pro or Family pack at checkout. The $4.99 Starter pack isn't included.
 
-If a payment method didn't work, please reply and tell me. I read every reply and it helps me make BringBack better. There's no subscription, and credits don't expire.
+${paymentNote} There's no subscription, and credits don't expire.
 
-Continue with the pack you chose:
-${getCheckoutUrl(planId)}
+${action}
 
 If you don't need it right now, no hard feelings at all — thanks for checking out the site either way.
 
@@ -181,15 +188,15 @@ serve(async (req: Request) => {
                     .order('created_at', { ascending: false })
                     .limit(1)
                     .maybeSingle()
-                if (attemptError || !latestAttempt?.plan_id) {
-                    errors.push(`${user.email}: checkout plan unavailable`)
+                if (attemptError) {
+                    errors.push(`${user.user_id}: checkout lookup failed`)
                     continue
                 }
 
                 const sendResult = await sendEmailWithRetry(
                     user.email,
                     EMAIL_SUBJECT,
-                    getEmailBody(extractFirstName(user.name), latestAttempt.plan_id)
+                    getEmailBody(extractFirstName(user.name), latestAttempt?.plan_id || null)
                 )
 
                 if (!sendResult.ok) {
@@ -228,7 +235,7 @@ serve(async (req: Request) => {
                 sent_user_ids: sentUserIds.length > 0 ? sentUserIds : undefined,
                 errors: errors.length > 0 ? errors : undefined,
             }),
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
+            { status: errors.length && !sentCount ? 502 : 200, headers: { 'Content-Type': 'application/json' } }
         )
     } catch (error) {
         console.error('Unexpected error:', error)

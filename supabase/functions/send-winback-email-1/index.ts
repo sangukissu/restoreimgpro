@@ -2,7 +2,7 @@
 // @ts-nocheck - Deno types not available in Node.js project
 
 // Supabase Edge Function: send-winback-email-1
-// Sends a checkout reminder 2+ hours after a hosted checkout starts without purchase
+// Sends a checkout reminder after 2 hours, or a signup follow-up after 4 hours
 // Triggered by cron every hour
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
@@ -76,7 +76,7 @@ async function sendEmailWithRetry(email: string, subject: string, text: string) 
 
 // Email template
 //
-// Email 1: two hours after a checkout attempt, while the user has not purchased.
+// Email 1: two hours after checkout, or four hours after signup without checkout.
 // The hourly cron may add up to one hour of delay.
 
 const EMAIL_SUBJECT = 'Any questions before you decide?'
@@ -89,20 +89,30 @@ function getCheckoutUrl(planId: string): string {
     return loginUrl.toString()
 }
 
-const getEmailBody = (firstName: string | null, planId: string): string => {
+const getEmailBody = (firstName: string | null, planId: string | null): string => {
     const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
+    const context = planId
+        ? "You started checkout on BringBack earlier but didn't finish. If something got in the way, just reply to this email — I read the replies myself."
+        : "You signed up for BringBack but haven't made a purchase yet. If something is holding you back, just reply to this email — I read the replies myself."
+    const question = planId
+        ? 'Was it the price, uncertainty about how your photo would turn out, or a payment problem? A short reply would help me improve the experience.'
+        : 'Was it the price or uncertainty about how your photo would turn out? A short reply would help me improve the experience.'
+    const action = planId
+        ? `Continue with the pack you chose:
+${getCheckoutUrl(planId)}`
+        : `Take another look when you're ready:
+${new URL('/login?next=%2Fdashboard', APP_URL).toString()}`
     return `${greeting}
 
-You started checkout on BringBack earlier but didn't finish. If something got in the way, just reply to this email — I read the replies myself.
+${context}
 
-Was it the price, uncertainty about how your photo would turn out, or a payment problem? A short reply would help me improve the experience.
+${question}
 
 If you decide to try it, credit packs are a one-time purchase with no subscription, and your credits don't expire. Web purchases are covered by our 30-day refund policy: ${APP_URL}/refunds
 
 If price was the hesitation, use code COMEBACK10 for 10% off the Pro or Family pack at checkout. The $4.99 Starter pack isn't included.
 
-Continue with the pack you chose:
-${getCheckoutUrl(planId)}
+${action}
 
 Best,
 Harvansh
@@ -123,101 +133,117 @@ serve(async (req: Request) => {
         console.log('Starting win-back email 1 job...')
 
         const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-        const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+        const fourHoursAgo = new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
+        // Keep a short catch-up window for signups affected by a temporary mail outage.
+        const threeDaysAgo = new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString()
 
-        // Use the latest attempt for each user so a retry resets the clock.
-        const { data: attempts, error: usersError } = await supabase
+        const { data: attempts, error: attemptsError } = await supabase
             .from('checkout_attempts')
             .select('id, user_id, plan_id, created_at, completed_at, reminder_sent_at')
-            .gte('created_at', oneDayAgo)
+            .gte('created_at', threeDaysAgo)
             .order('created_at', { ascending: false })
-
-        if (usersError) {
-            console.error('Error fetching users:', usersError)
-            return new Response(JSON.stringify({ error: usersError.message }), { status: 500 })
-        }
-
-        if (!attempts || attempts.length === 0) {
-            console.log('No eligible users found for win-back email 1')
-            return new Response(JSON.stringify({ message: 'No eligible users', sent: 0 }), { status: 200 })
+            .limit(1000)
+        if (attemptsError) {
+            console.error('Error fetching checkout attempts:', attemptsError)
+            return new Response(JSON.stringify({ error: attemptsError.message }), { status: 500 })
         }
 
         const latestByUser = new Map<string, typeof attempts[number]>()
-        for (const attempt of attempts) {
+        for (const attempt of attempts || []) {
             if (!latestByUser.has(attempt.user_id)) latestByUser.set(attempt.user_id, attempt)
         }
 
+        const { data: signupProfiles, error: profilesError } = await supabase
+            .from('user_profiles')
+            .select('user_id, email, name, winback_email_1_sent_at')
+            .is('winback_email_1_sent_at', null)
+            .gte('created_at', threeDaysAgo)
+            .lte('created_at', fourHoursAgo)
+            .order('created_at', { ascending: true })
+            .limit(1000)
+        if (profilesError) {
+            console.error('Error fetching signup profiles:', profilesError)
+            return new Response(JSON.stringify({ error: profilesError.message }), { status: 500 })
+        }
+
         let sentCount = 0
-        const sentUserIds: string[] = []
         const errors: string[] = []
 
-        for (const attempt of latestByUser.values()) {
-            try {
-                if (attempt.completed_at || attempt.reminder_sent_at || attempt.created_at > twoHoursAgo) continue
+        async function sendReminder(userId: string, email: string, name: string | null, planId: string | null, attemptId: string | null) {
+            const { data: payments, error: paymentsError } = await supabase
+                .from('payments')
+                .select('id')
+                .eq('user_id', userId)
+                .in('status', ['completed', 'succeeded'])
+                .limit(1)
+            if (paymentsError) {
+                errors.push(`${userId}: payment check failed`)
+                return
+            }
+            if (payments?.length) return
 
+            const sendResult = await sendEmailWithRetry(
+                email, EMAIL_SUBJECT, getEmailBody(extractFirstName(name), planId)
+            )
+            if (!sendResult.ok) {
+                console.error(`Win-back email 1 failed for ${userId}:`, sendResult.errorText)
+                errors.push(`${userId}: send failed (${sendResult.status}) ${sendResult.errorText}`)
+                return
+            }
+
+            const sentAt = new Date().toISOString()
+            const { error: profileUpdateError } = await supabase
+                .from('user_profiles')
+                .update({ winback_email_1_sent_at: sentAt })
+                .eq('user_id', userId)
+            if (profileUpdateError) {
+                errors.push(`${userId}: sent, but profile tracking failed`)
+            }
+            if (attemptId) {
+                const { error: attemptUpdateError } = await supabase
+                    .from('checkout_attempts')
+                    .update({ reminder_sent_at: sentAt })
+                    .eq('id', attemptId)
+                if (attemptUpdateError) errors.push(`${userId}: sent, but checkout tracking failed`)
+            }
+            sentCount++
+            await sleep(250)
+        }
+
+        // An attempted checkout takes precedence over the generic signup message.
+        for (const attempt of latestByUser.values()) {
+            if (attempt.completed_at || attempt.reminder_sent_at || attempt.created_at > twoHoursAgo) continue
+            try {
                 const { data: user, error: profileError } = await supabase
                     .from('user_profiles')
                     .select('email, name, winback_email_1_sent_at')
                     .eq('user_id', attempt.user_id)
-                    .single()
-                if (profileError || !user || user.winback_email_1_sent_at || !user.email?.trim()) continue
-
-                // Recheck payment at send time in case the checkout webhook was delayed.
-                const { data: payments, error: paymentsError } = await supabase
-                    .from('payments')
-                    .select('id')
-                    .eq('user_id', attempt.user_id)
-                    .in('status', ['completed', 'succeeded'])
-                    .limit(1)
-                if (paymentsError || (payments && payments.length > 0)) continue
-
-                const sendResult = await sendEmailWithRetry(
-                    user.email.trim(),
-                    EMAIL_SUBJECT,
-                    getEmailBody(extractFirstName(user.name), attempt.plan_id)
-                )
-
-                if (!sendResult.ok) {
-                    console.error(`Failed to send email to ${user.email}:`, sendResult.errorText)
-                    errors.push(`${user.email}: send failed (${sendResult.status}) ${sendResult.errorText}`)
+                    .maybeSingle()
+                if (profileError) {
+                    errors.push(`${attempt.user_id}: profile lookup failed`)
                     continue
                 }
+                if (!user || user.winback_email_1_sent_at || !user.email?.trim()) continue
+                await sendReminder(attempt.user_id, user.email.trim(), user.name, attempt.plan_id, attempt.id)
+            } catch (error) {
+                errors.push(`${attempt.user_id}: ${String(error)}`)
+            }
+        }
 
-                const sentAt = new Date().toISOString()
-                const { error: attemptUpdateError } = await supabase
-                    .from('checkout_attempts')
-                    .update({ reminder_sent_at: sentAt })
-                    .eq('id', attempt.id)
-                const { error: profileUpdateError } = await supabase
-                    .from('user_profiles')
-                    .update({ winback_email_1_sent_at: sentAt })
-                    .eq('user_id', attempt.user_id)
-
-                if (attemptUpdateError || profileUpdateError) {
-                    errors.push(`${user.email}: sent, but tracking update failed`)
-                }
-
-                sentCount++
-                sentUserIds.push(attempt.user_id)
-                console.log(`Sent win-back email 1 to ${user.email}`)
-                await sleep(250)
-            } catch (err) {
-                console.error(`Error processing checkout ${attempt.id}:`, err)
-                errors.push(`${attempt.id}: ${err}`)
+        // Signups who never reached checkout still receive the original follow-up.
+        for (const user of signupProfiles || []) {
+            if (latestByUser.has(user.user_id) || !user.email?.trim()) continue
+            try {
+                await sendReminder(user.user_id, user.email.trim(), user.name, null, null)
+            } catch (error) {
+                errors.push(`${user.user_id}: ${String(error)}`)
             }
         }
 
         console.log(`Win-back email 1 job complete. Sent: ${sentCount}, Errors: ${errors.length}`)
-
-        
         return new Response(
-            JSON.stringify({
-                message: 'Win-back email 1 job complete',
-                sent: sentCount,
-                sent_user_ids: sentUserIds.length > 0 ? sentUserIds : undefined,
-                errors: errors.length > 0 ? errors : undefined,
-            }),
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
+            JSON.stringify({ message: 'Win-back email 1 job complete', sent: sentCount, errors: errors.length ? errors : undefined }),
+            { status: errors.length && !sentCount ? 502 : 200, headers: { 'Content-Type': 'application/json' } }
         )
     } catch (error) {
         console.error('Unexpected error:', error)

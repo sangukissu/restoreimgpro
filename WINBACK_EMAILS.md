@@ -8,19 +8,19 @@ truth for the funnel; browser analytics can be blocked by consent or navigation.
 ## Reminder sequence
 
 - **Email 1:** The hourly job sends about 2–3 hours after the user's latest
-  checkout start, if no successful payment exists. It asks what got in the way
-  and offers `COMEBACK10` for 10% off Pro or Family. It runs only for attempts
-  less than 24 hours old.
+  checkout start, or about 4–5 hours after signup if they never started checkout.
+  It asks what got in the way and offers `COMEBACK10` for 10% off Pro or Family.
+  A 72-hour eligibility window catches up after brief mail outages.
 - **Email 2:** 48 hours after Email 1, if the user still has no successful
   payment. It offers `WELCOME15` for 15% off Pro or Family. Neither coupon
   applies to the $4.99 Starter pack.
 - The existing `winback_email_1_sent_at` and `winback_email_2_sent_at` profile
-  fields keep each message to one per user. Signups who never start checkout no
-  longer receive Email 1.
+  fields keep each message to one per user. Signups without a checkout attempt
+  receive general links and wording.
 
-Reminder links pass the saved plan through sign-in and reopen the plan picker
-with that pack selected. The hosted checkout receives the signed-in email and
-explicitly allows discount-code entry; the codes remain restricted to Pro and
+For people who started checkout, reminder links pass the saved plan through
+sign-in and reopen the plan picker with that pack selected. The hosted
+checkout receives the signed-in email and explicitly allows discount-code entry; the codes remain restricted to Pro and
 Family in Dodo.
 
 The Dodo cancel/back link returns to the dashboard with a short, optional reason
